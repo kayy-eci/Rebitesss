@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: '__Inter_VariableFallback';
+  src: local('Inter');
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* ReBites design tokens */
+    --background: 0 0% 100%;          /* #FFFFFF */
+    --foreground: 50 5% 11%;          /* #1C1C1A charcoal */
+    --card: 0 0% 100%;
+    --card-foreground: 50 5% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 50 5% 11%;
+
+    --primary: 135 21% 26%;           /* #345039 deep green */
+    --primary-foreground: 40 30% 96%; /* #F1EEE5 warm cream */
+    --primary-foreground-strong: 0 0% 100%;
+
+    --secondary: 40 30% 96%;          /* #F1EEE5 warm cream */
+    --secondary-foreground: 135 21% 26%;
+
+    --muted: 40 24% 92%;
+    --muted-foreground: 50 5% 36%;
+
+    --accent: 135 21% 26%;
+    --accent-foreground: 40 30% 96%;
+
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 98%;
+
+    --warning: 35 90% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --success: 135 30% 30%;
+    --success-foreground: 40 30% 96%;
+
+    --border: 40 14% 88%;
+    --input: 40 14% 86%;
+    --ring: 135 21% 26%;
+
+    --chart-1: 135 21% 26%;  /* deep green */
+    --chart-2: 135 24% 42%;  /* mid green */
+    --chart-3: 40 30% 60%;   /* warm muted */
+    --chart-4: 135 18% 58%;  /* soft green */
+    --chart-5: 50 5% 30%;    /* charcoal */
+
+    --radius: 0.25rem;
+
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'ss02';
+  }
+
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .grain-overlay {
+    position: relative;
+  }
+  .grain-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+  .duotone-green {
+    filter: grayscale(100%) contrast(1.05) brightness(0.95);
+    mix-blend-mode: multiply;
+  }
+  .duotone-green::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.4));
+    mix-blend-mode: color;
+    pointer-events: none;
+  }
+  .text-shadow-cream {
+    text-shadow: 0 1px 0 hsl(var(--secondary));
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.5);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: hsl(var(--secondary));
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: var(--radius);
+}
+.leaflet-popup-content {
+  margin: 10px 14px;
+  font-size: 13px;
+}
+.leaflet-control-zoom a {
+  background: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+}
