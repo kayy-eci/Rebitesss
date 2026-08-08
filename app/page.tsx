@@ -814,7 +814,10 @@ export default function Home() {
       </section>
 
       {/* ── CTA PENUTUP ──────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-primary py-28 text-primary-foreground lg:py-40">
+      <section
+        id="cta"
+        className="relative overflow-hidden bg-primary py-28 text-primary-foreground lg:py-40"
+      >
         <div className="grain-overlay absolute inset-0" />
         {/* animated blobs */}
         <motion.div

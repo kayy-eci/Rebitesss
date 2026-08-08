@@ -25,11 +25,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'ReBites — Selamatkan Makanan Surplus, Kurangi Food Waste',
+  title: 'ReBites - Selamatkan Makanan Surplus, Kurangi Food Waste',
   description:
     'Marketplace yang mempertemukan pelaku UMKM kuliner dengan pembeli untuk menyelamatkan makanan surplus yang masih layak konsumsi. Dari dapur UMKM, ke piring yang butuh.',
   openGraph: {
-    title: 'ReBites — Selamatkan Makanan Surplus',
+    title: 'ReBites - Selamatkan Makanan Surplus',
     description:
       'Marketplace makanan surplus untuk UMKM kuliner. Kurangi food waste, hemat pengeluaran.',
     type: 'website',

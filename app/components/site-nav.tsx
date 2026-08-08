@@ -14,9 +14,12 @@ const links = [
   { href: '/#langganan', label: 'Langganan' },
 ];
 
+const DARK_SECTIONS = ['masalah', 'cta'];
+
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [overDark, setOverDark] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -25,25 +28,60 @@ export function SiteNav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    const sections = DARK_SECTIONS.map((id) =>
+      document.getElementById(id)
+    ).filter((el): el is HTMLElement => Boolean(el));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setOverDark(entries.some((e) => e.isIntersecting));
+      },
+      { rootMargin: '0px 0px -55% 0px' }
+    );
+
+    sections.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <header
         className={cn(
           'fixed inset-x-0 top-0 z-[100] transition-all duration-500',
-          scrolled
-            ? 'bg-background/85 backdrop-blur-md border-b border-border/60'
-            : 'bg-transparent'
+          overDark
+            ? scrolled
+              ? 'bg-primary/85 backdrop-blur-md border-b border-primary-foreground/10'
+              : 'bg-transparent'
+            : scrolled
+              ? 'bg-background/85 backdrop-blur-md border-b border-border/60'
+              : 'bg-transparent'
         )}
       >
         <nav className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 sm:px-8 lg:h-20 lg:px-12">
           <Link href="/" className="group flex items-baseline gap-0.5">
-            <span className="font-display text-2xl font-medium tracking-tight text-primary lg:text-[26px]">
+            <span
+              className={cn(
+                'font-display text-2xl font-medium tracking-tight lg:text-[26px] transition-colors',
+                overDark ? 'text-primary-foreground' : 'text-primary'
+              )}
+            >
               Re
             </span>
-            <span className="font-display text-2xl font-light italic tracking-tight text-primary lg:text-[26px]">
+            <span
+              className={cn(
+                'font-display text-2xl font-light italic tracking-tight lg:text-[26px] transition-colors',
+                overDark ? 'text-primary-foreground' : 'text-primary'
+              )}
+            >
               Bites
             </span>
-            <Leaf className="ml-1 h-4 w-4 text-primary/60 transition-transform duration-500 group-hover:rotate-12" />
+            <Leaf
+              className={cn(
+                'ml-1 h-4 w-4 transition-transform duration-500 group-hover:rotate-12',
+                overDark ? 'text-primary-foreground/70' : 'text-primary/60'
+              )}
+            />
           </Link>
 
           <ul className="hidden items-center gap-8 lg:flex">
@@ -51,10 +89,20 @@ export function SiteNav() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="group relative font-sans text-[13px] font-medium tracking-tight text-foreground/80 transition-colors hover:text-primary"
+                  className={cn(
+                    'group relative font-sans text-[13px] font-medium tracking-tight transition-colors',
+                    overDark
+                      ? 'text-primary-foreground/85 hover:text-primary-foreground'
+                      : 'text-foreground/80 hover:text-primary'
+                  )}
                 >
                   {l.label}
-                  <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100" />
+                  <span
+                    className={cn(
+                      'absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100',
+                      overDark ? 'bg-primary-foreground' : 'bg-primary'
+                    )}
+                  />
                 </Link>
               </li>
             ))}
@@ -63,7 +111,12 @@ export function SiteNav() {
           <div className="hidden items-center gap-3 lg:flex">
             <Link
               href="/login"
-              className="font-sans text-[13px] font-medium text-foreground/80 transition-colors hover:text-primary"
+              className={cn(
+                'font-sans text-[13px] font-medium transition-colors',
+                overDark
+                  ? 'text-primary-foreground/85 hover:text-primary-foreground'
+                  : 'text-foreground/80 hover:text-primary'
+              )}
             >
               Masuk
             </Link>
@@ -77,7 +130,10 @@ export function SiteNav() {
           </div>
 
           <button
-            className="flex h-10 w-10 items-center justify-center text-primary lg:hidden"
+            className={cn(
+              'flex h-10 w-10 items-center justify-center transition-colors lg:hidden',
+              overDark ? 'text-primary-foreground' : 'text-primary'
+            )}
             onClick={() => setOpen(true)}
             aria-label="Buka menu"
           >
