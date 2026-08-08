@@ -77,14 +77,10 @@ export default function Home() {
       <SiteNav />
 
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className="grain-overlay relative min-h-[100svh] overflow-hidden bg-secondary pt-28 pb-16 lg:pt-32">
-        {/* editorial asymmetric grid */}
-        <div className="mx-auto grid max-w-[1400px] grid-cols-12 gap-4 px-5 sm:px-8 lg:px-12">
-          {/* left: headline */}
-          <motion.div
-            style={{ y: heroY, opacity: heroOpacity }}
-            className="col-span-12 lg:col-span-7 lg:pt-8"
-          >
+      <section className="grain-overlay relative flex min-h-[100svh] items-center overflow-hidden bg-secondary pt-28 pb-16 lg:pt-32">
+        {/* centered headline */}
+        <div className="mx-auto w-full max-w-[1100px] px-5 text-center sm:px-8 lg:px-12">
+          <motion.div style={{ y: heroY, opacity: heroOpacity }}>
             <RevealStagger stagger={0.06}>
               <RevealItem>
                 <Badge variant="outline" className="mb-7">
@@ -92,7 +88,7 @@ export default function Home() {
                   Marketplace makanan surplus Indonesia
                 </Badge>
               </RevealItem>
-              <h1 className="font-display text-[clamp(2.8rem,8vw,7.5rem)] font-light leading-[0.92] tracking-[-0.03em] text-primary">
+              <h1 className="mx-auto max-w-5xl font-display text-[clamp(2.8rem,8vw,7.5rem)] font-light leading-[0.92] tracking-[-0.03em] text-primary">
                 <RevealWords text="Selamatkan" />
                 <br />
                 <RevealWords text="makanan" delay={0.1} />{" "}
@@ -103,16 +99,9 @@ export default function Home() {
                 <RevealWords text="terbuang." delay={0.3} />
               </h1>
               <RevealItem>
-                <p className="mt-8 max-w-md font-sans text-base leading-relaxed text-foreground/70 lg:text-lg">
-                  ReBites mempertemukan pelaku UMKM kuliner dengan pembeli untuk
-                  menyelamatkan makanan surplus yang masih layak konsumsi —
-                  lebih hemat, lebih hijau.
-                </p>
-              </RevealItem>
-              <RevealItem>
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <MagneticButton href="/register" variant="default">
-                    Jual di ReBites
+                <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                  <MagneticButton href="/register" variant="default" className="text-white">
+                    Daftar ReBites
                     <ArrowRight className="h-4 w-4" />
                   </MagneticButton>
                   <MagneticButton href="/#pembeli" variant="cream">
@@ -122,50 +111,6 @@ export default function Home() {
                 </div>
               </RevealItem>
             </RevealStagger>
-          </motion.div>
-
-          {/* right: overlapping images */}
-          <motion.div
-            className="col-span-12 mt-10 lg:col-span-5 lg:mt-0"
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: loaded ? 1 : 0, scale: loaded ? 1 : 1.05 }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="relative grid grid-cols-2 gap-4">
-              <div className="relative col-span-1 mt-12 aspect-[3/4] overflow-hidden rounded-[var(--radius)]">
-                <img
-                  src={HERO_IMG}
-                  alt="Nasi goreng surplus"
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-primary/30 mix-blend-multiply" />
-              </div>
-              <div className="relative col-span-1 aspect-[3/4] overflow-hidden rounded-[var(--radius)]">
-                <img
-                  src={HERO_IMG_2}
-                  alt="Satay surplus"
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-primary/25 mix-blend-multiply" />
-              </div>
-              {/* floating stat card */}
-              <motion.div
-                className="absolute -bottom-6 left-1/2 z-10 w-44 -translate-x-1/2 rounded-[var(--radius)] border border-border bg-background p-4 shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.4)]"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: loaded ? 1 : 0, y: loaded ? 0 : 20 }}
-                transition={{ duration: 0.7, delay: 0.9 }}
-              >
-                <p className="font-sans text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Potensi hemat
-                </p>
-                <p className="mt-1 font-display text-2xl font-medium text-primary">
-                  <Counter to={70} suffix="%" />
-                </p>
-                <p className="mt-0.5 font-sans text-[11px] text-muted-foreground">
-                  dari harga asli
-                </p>
-              </motion.div>
-            </div>
           </motion.div>
         </div>
 
