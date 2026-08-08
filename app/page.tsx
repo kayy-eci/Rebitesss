@@ -88,7 +88,7 @@ export default function Home() {
                   Marketplace makanan surplus Indonesia
                 </Badge>
               </RevealItem>
-              <h1 className="mx-auto max-w-5xl font-display text-[clamp(2.8rem,8vw,7.5rem)] font-light leading-[0.92] tracking-[-0.03em] text-primary">
+              <h1 className="mx-auto max-w-5xl pb-[0.12em] font-display text-[clamp(2.8rem,8vw,7.5rem)] font-light leading-[1.11] tracking-[-0.03em] text-primary">
                 <RevealWords text="Selamatkan" />
                 <br />
                 <RevealWords text="makanan" delay={0.1} />{" "}
