@@ -22,6 +22,7 @@ const config: Config = {
       fontFamily: {
         display: ['var(--font-display)'],
         sans: ['var(--font-sans)'],
+        inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

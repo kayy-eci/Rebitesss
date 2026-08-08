@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
 import {
   ArrowRight,
   Search,
@@ -16,43 +16,48 @@ import {
   Sparkles,
   ArrowUpRight,
   CircleDot,
-} from 'lucide-react';
-import { SmoothScroll } from '@/components/smooth-scroll';
-import { CustomCursor } from '@/components/custom-cursor';
-import { Preloader } from '@/components/preloader';
-import { SiteNav } from '@/components/site-nav';
-import { SiteFooter } from '@/components/site-footer';
-import { Reveal, RevealStagger, RevealItem, RevealWords } from '@/components/reveal';
-import { Counter } from '@/components/counter';
-import { Marquee } from '@/components/marquee';
-import { MagneticButton, ArrowLink } from '@/components/magnetic-button';
-import { Badge } from '@/components/ui/badge';
+} from "lucide-react";
+import { SmoothScroll } from "@/app/components/smooth-scroll";
+import { CustomCursor } from "@/app/components/custom-cursor";
+import { Preloader } from "@/app/components/preloader";
+import { SiteNav } from "@/app/components/site-nav";
+import { SiteFooter } from "@/app/components/site-footer";
+import {
+  Reveal,
+  RevealStagger,
+  RevealItem,
+  RevealWords,
+} from "@/app/components/reveal";
+import { Counter } from "@/app/components/counter";
+import { Marquee } from "@/app/components/marquee";
+import { MagneticButton, ArrowLink } from "@/app/components/magnetic-button";
+import { Badge } from "@/app/components/ui/badge";
 
 const HERO_IMG =
-  'https://images.pexels.com/photos/32938736/pexels-photo-32938736.jpeg?auto=compress&cs=tinysrgb&h=900&w=600';
+  "https://images.pexels.com/photos/32938736/pexels-photo-32938736.jpeg?auto=compress&cs=tinysrgb&h=900&w=600";
 const HERO_IMG_2 =
-  'https://images.pexels.com/photos/37189123/pexels-photo-37189123.jpeg?auto=compress&cs=tinysrgb&h=900&w=600';
+  "https://images.pexels.com/photos/37189123/pexels-photo-37189123.jpeg?auto=compress&cs=tinysrgb&h=900&w=600";
 
 const CATEGORIES = [
-  'Makanan Rumahan',
-  'Roti & Bakeri',
-  'Kue & Dessert',
-  'Jajanan Pasar',
-  'Sayuran Segar',
-  'Minuman',
-  'Seafood',
-  'Satay & Grill',
+  "Makanan Rumahan",
+  "Roti & Bakeri",
+  "Kue & Dessert",
+  "Jajanan Pasar",
+  "Sayuran Segar",
+  "Minuman",
+  "Seafood",
+  "Satay & Grill",
 ];
 
 const PARTNERS = [
-  'Warung Nusantara',
-  'Roti Subuh',
-  'Dapur Ibu Tini',
-  'Kue Mbok Ndari',
-  'Segar Bahari',
-  'Satay Pak Budi',
-  'Toko Sehat Jaya',
-  'Kopi Pagi',
+  "Warung Nusantara",
+  "Roti Subuh",
+  "Dapur Ibu Tini",
+  "Kue Mbok Ndari",
+  "Segar Bahari",
+  "Satay Pak Budi",
+  "Toko Sehat Jaya",
+  "Kopi Pagi",
 ];
 
 export default function Home() {
@@ -62,7 +67,7 @@ export default function Home() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
 
   useEffect(() => {
-    if (loaded) document.body.style.overflow = '';
+    if (loaded) document.body.style.overflow = "";
   }, [loaded]);
 
   return (
@@ -90,7 +95,7 @@ export default function Home() {
               <h1 className="font-display text-[clamp(2.8rem,8vw,7.5rem)] font-light leading-[0.92] tracking-[-0.03em] text-primary">
                 <RevealWords text="Selamatkan" />
                 <br />
-                <RevealWords text="makanan" delay={0.1} />{' '}
+                <RevealWords text="makanan" delay={0.1} />{" "}
                 <span className="italic font-extralight">
                   <RevealWords text="sebelum" delay={0.2} />
                 </span>
@@ -99,7 +104,9 @@ export default function Home() {
               </h1>
               <RevealItem>
                 <p className="mt-8 max-w-md font-sans text-base leading-relaxed text-foreground/70 lg:text-lg">
-                  ReBites keren
+                  ReBites mempertemukan pelaku UMKM kuliner dengan pembeli untuk
+                  menyelamatkan makanan surplus yang masih layak konsumsi —
+                  lebih hemat, lebih hijau.
                 </p>
               </RevealItem>
               <RevealItem>
@@ -175,7 +182,7 @@ export default function Home() {
           <motion.div
             className="h-10 w-px bg-primary/40"
             animate={{ scaleY: [0.3, 1, 0.3] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             style={{ originY: 0 }}
           />
         </motion.div>
@@ -211,7 +218,8 @@ export default function Home() {
               </Reveal>
               <Reveal delay={0.1}>
                 <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em]">
-                  Setiap hari, jutaan porsi <span className="italic">terbuang</span> begitu saja.
+                  Setiap hari, jutaan porsi{" "}
+                  <span className="italic">terbuang</span> begitu saja.
                 </h2>
               </Reveal>
               <Reveal delay={0.2}>
@@ -329,8 +337,8 @@ export default function Home() {
                   Pembeli cari &amp; pesan
                 </h3>
                 <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-muted-foreground">
-                  Pembeli menelusuri makanan surplus terdekat, memfilter kategori
-                  dan lokasi, lalu memesan dengan catatan.
+                  Pembeli menelusuri makanan surplus terdekat, memfilter
+                  kategori dan lokasi, lalu memesan dengan catatan.
                 </p>
               </div>
             </Reveal>
@@ -365,10 +373,13 @@ export default function Home() {
                     Makanan terselamatkan
                   </h3>
                   <p className="mt-3 max-w-md font-sans text-sm leading-relaxed text-primary-foreground/70">
-                    Satu pesanan = satu porsi yang tidak jadi sampah. UMKM
-                    dapat pemasukan tambahan, pembeli hemat, bumi lega.
+                    Satu pesanan = satu porsi yang tidak jadi sampah. UMKM dapat
+                    pemasukan tambahan, pembeli hemat, bumi lega.
                   </p>
-                  <ArrowLink href="/#dampak" className="mt-5 text-primary-foreground">
+                  <ArrowLink
+                    href="/#dampak"
+                    className="mt-5 text-primary-foreground"
+                  >
                     Lihat dampaknya
                   </ArrowLink>
                 </div>
@@ -431,33 +442,33 @@ export default function Home() {
               {[
                 {
                   icon: Store,
-                  title: 'Profil usaha',
-                  desc: 'Kelola nama, deskripsi, logo, dan lokasi dapur yang terlihat di marketplace.',
+                  title: "Profil usaha",
+                  desc: "Kelola nama, deskripsi, logo, dan lokasi dapur yang terlihat di marketplace.",
                 },
                 {
                   icon: ShoppingCart,
-                  title: 'Stok, harga & status',
-                  desc: 'Atur stok harian, harga surplus, status ketersediaan, dan waktu jual.',
+                  title: "Stok, harga & status",
+                  desc: "Atur stok harian, harga surplus, status ketersediaan, dan waktu jual.",
                 },
                 {
                   icon: Sparkles,
-                  title: 'Langganan dengan trial',
-                  desc: 'Coba 1 bulan gratis, lalu pilih paket sesuai skala usaha.',
+                  title: "Langganan dengan trial",
+                  desc: "Coba 1 bulan gratis, lalu pilih paket sesuai skala usaha.",
                 },
                 {
                   icon: Check,
-                  title: 'Kelola pesanan masuk',
-                  desc: 'Terima, proses, dan tandai pesanan siap diambil atau dikirim.',
+                  title: "Kelola pesanan masuk",
+                  desc: "Terima, proses, dan tandai pesanan siap diambil atau dikirim.",
                 },
                 {
                   icon: TrendingDown,
-                  title: 'Riwayat penjualan',
-                  desc: 'Pantau performa produk dan pemasukan dari makanan yang diselamatkan.',
+                  title: "Riwayat penjualan",
+                  desc: "Pantau performa produk dan pemasukan dari makanan yang diselamatkan.",
                 },
                 {
                   icon: MapPin,
-                  title: 'Peta pickup',
-                  desc: 'Tampilkan titik lokasi agar pembeli mudah menemukan dapur Anda.',
+                  title: "Peta pickup",
+                  desc: "Tampilkan titik lokasi agar pembeli mudah menemukan dapur Anda.",
                 },
               ].map((f, i) => (
                 <Reveal key={i} delay={i * 0.08}>
@@ -563,23 +574,29 @@ export default function Home() {
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="mt-6 max-w-md font-sans text-sm leading-relaxed text-foreground/70">
-                  Telusuri makanan surplus dari UMKM terdekat, pesan dalam hitungan
-                  menit, dan ambil atau terima pengantaran.
+                  Telusuri makanan surplus dari UMKM terdekat, pesan dalam
+                  hitungan menit, dan ambil atau terima pengantaran.
                 </p>
               </Reveal>
 
-              <RevealStagger className="mt-10 space-y-px bg-border" stagger={0.08}>
+              <RevealStagger
+                className="mt-10 space-y-px bg-border"
+                stagger={0.08}
+              >
                 {[
-                  ['Cari & filter', 'Kategori, lokasi, dan harga'],
-                  ['Detail produk', 'Foto, deskripsi, stok, opsi pengambilan'],
-                  ['Checkout Midtrans', 'Pembayaran aman dalam Rupiah'],
-                  ['Catatan pesanan', 'Tambah instruksi khusus untuk UMKM'],
-                  ['Riwayat transaksi', 'Pantau setiap makanan yang terselamatkan'],
+                  ["Cari & filter", "Kategori, lokasi, dan harga"],
+                  ["Detail produk", "Foto, deskripsi, stok, opsi pengambilan"],
+                  ["Checkout Midtrans", "Pembayaran aman dalam Rupiah"],
+                  ["Catatan pesanan", "Tambah instruksi khusus untuk UMKM"],
+                  [
+                    "Riwayat transaksi",
+                    "Pantau setiap makanan yang terselamatkan",
+                  ],
                 ].map(([title, desc], i) => (
                   <RevealItem key={i}>
                     <div className="flex items-center gap-5 bg-background px-5 py-4 transition-colors duration-300 hover:bg-secondary">
                       <span className="font-display text-2xl font-light text-primary/30">
-                        {(i + 1).toString().padStart(2, '0')}
+                        {(i + 1).toString().padStart(2, "0")}
                       </span>
                       <div>
                         <p className="font-sans text-sm font-medium text-primary">
@@ -616,25 +633,25 @@ export default function Home() {
           <div className="grid gap-12 lg:grid-cols-3">
             {[
               {
-                tag: 'Ekonomi',
-                title: 'Pemasukan tambahan untuk UMKM',
-                desc: 'Makanan yang tadinya terbuang berubah menjadi pendapatan. Pembeli mendapat harga lebih terjangkau.',
+                tag: "Ekonomi",
+                title: "Pemasukan tambahan untuk UMKM",
+                desc: "Makanan yang tadinya terbuang berubah menjadi pendapatan. Pembeli mendapat harga lebih terjangkau.",
                 stat: <Counter to={30} suffix="%" />,
-                statLabel: 'potensi tambahan pendapatan UMKM',
+                statLabel: "potensi tambahan pendapatan UMKM",
               },
               {
-                tag: 'Sosial',
-                title: 'Pangan terjangkau untuk lebih banyak orang',
-                desc: 'Makanan layak konsumsi tersedia dengan harga diskon, memperluas akses pangan bagi lebih banyak keluarga.',
+                tag: "Sosial",
+                title: "Pangan terjangkau untuk lebih banyak orang",
+                desc: "Makanan layak konsumsi tersedia dengan harga diskon, memperluas akses pangan bagi lebih banyak keluarga.",
                 stat: <Counter to={125} suffix=" jt" />,
-                statLabel: 'potensi porsi yang bisa diselamatkan',
+                statLabel: "potensi porsi yang bisa diselamatkan",
               },
               {
-                tag: 'Lingkungan',
-                title: 'Mengurangi emsi dari food waste',
-                desc: 'Setiap porsi yang tidak jadi sampah mengurangi emisi gas rumah kaca dari tempat pembuangan akhir.',
+                tag: "Lingkungan",
+                title: "Mengurangi emsi dari food waste",
+                desc: "Setiap porsi yang tidak jadi sampah mengurangi emisi gas rumah kaca dari tempat pembuangan akhir.",
                 stat: <Counter to={8} suffix="%" />,
-                statLabel: 'emisi global berasal dari food waste',
+                statLabel: "emisi global berasal dari food waste",
               },
             ].map((d, i) => (
               <Reveal key={i} delay={i * 0.12}>
@@ -692,7 +709,7 @@ export default function Home() {
               <div className="flex items-center gap-3 rounded-[var(--radius)] border border-primary/20 bg-secondary px-5 py-3">
                 <Clock className="h-5 w-5 text-primary" />
                 <p className="font-sans text-sm text-primary">
-                  Semua paket dimulai dengan{' '}
+                  Semua paket dimulai dengan{" "}
                   <span className="font-medium">trial gratis 1 bulan</span>.
                 </p>
               </div>
@@ -702,40 +719,40 @@ export default function Home() {
           <div className="mt-14 grid gap-4 lg:grid-cols-3">
             {[
               {
-                name: 'Starter',
+                name: "Starter",
                 monthly: 0,
                 yearly: 0,
                 features: [
-                  'Maksimal 5 produk',
-                  'Kelola stok & harga',
-                  'Riwayat penjualan 30 hari',
-                  'Dasbor UMKM',
+                  "Maksimal 5 produk",
+                  "Kelola stok & harga",
+                  "Riwayat penjualan 30 hari",
+                  "Dasbor UMKM",
                 ],
                 popular: false,
               },
               {
-                name: 'Berkembang',
+                name: "Berkembang",
                 monthly: 49000,
                 yearly: 490000,
                 features: [
-                  'Maksimal 25 produk',
-                  'Riwayat tanpa batas',
-                  'Prioritas tampil di marketplace',
-                  'Laporan penjualan lanjutan',
-                  'Lencana UMKM Terverifikasi',
+                  "Maksimal 25 produk",
+                  "Riwayat tanpa batas",
+                  "Prioritas tampil di marketplace",
+                  "Laporan penjualan lanjutan",
+                  "Lencana UMKM Terverifikasi",
                 ],
                 popular: true,
               },
               {
-                name: 'Premium',
+                name: "Premium",
                 monthly: 99000,
                 yearly: 990000,
                 features: [
-                  'Produk tak terbatas',
-                  'Semua fitur Berkembang',
-                  'Promosi posisi unggulan',
-                  'Analitik tren permintaan',
-                  'Dukungan prioritas',
+                  "Produk tak terbatas",
+                  "Semua fitur Berkembang",
+                  "Promosi posisi unggulan",
+                  "Analitik tren permintaan",
+                  "Dukungan prioritas",
                 ],
                 popular: false,
               },
@@ -744,8 +761,8 @@ export default function Home() {
                 <div
                   className={`relative flex h-full flex-col rounded-[var(--radius)] border p-8 transition-all duration-300 hover:-translate-y-1 ${
                     plan.popular
-                      ? 'border-primary bg-primary text-primary-foreground shadow-[0_30px_60px_-25px_hsl(var(--primary)/0.5)]'
-                      : 'border-border bg-secondary hover:border-primary/30'
+                      ? "border-primary bg-primary text-primary-foreground shadow-[0_30px_60px_-25px_hsl(var(--primary)/0.5)]"
+                      : "border-border bg-secondary hover:border-primary/30"
                   }`}
                 >
                   {plan.popular && (
@@ -757,7 +774,7 @@ export default function Home() {
                   )}
                   <h3
                     className={`font-display text-2xl font-medium ${
-                      plan.popular ? 'text-primary-foreground' : 'text-primary'
+                      plan.popular ? "text-primary-foreground" : "text-primary"
                     }`}
                   >
                     {plan.name}
@@ -766,20 +783,20 @@ export default function Home() {
                     <span
                       className={`font-display text-4xl font-light ${
                         plan.popular
-                          ? 'text-primary-foreground'
-                          : 'text-primary'
+                          ? "text-primary-foreground"
+                          : "text-primary"
                       }`}
                     >
                       {plan.monthly === 0
-                        ? 'Gratis'
-                        : `Rp${plan.monthly.toLocaleString('id-ID')}`}
+                        ? "Gratis"
+                        : `Rp${plan.monthly.toLocaleString("id-ID")}`}
                     </span>
                     {plan.monthly !== 0 && (
                       <span
                         className={`font-sans text-sm ${
                           plan.popular
-                            ? 'text-primary-foreground/60'
-                            : 'text-muted-foreground'
+                            ? "text-primary-foreground/60"
+                            : "text-muted-foreground"
                         }`}
                       >
                         /bulan
@@ -789,20 +806,20 @@ export default function Home() {
                   <p
                     className={`mt-2 font-sans text-xs ${
                       plan.popular
-                        ? 'text-primary-foreground/60'
-                        : 'text-muted-foreground'
+                        ? "text-primary-foreground/60"
+                        : "text-muted-foreground"
                     }`}
                   >
                     {plan.yearly !== 0
-                      ? `atau Rp${plan.yearly.toLocaleString('id-ID')}/tahun`
-                      : 'tanpa biaya, selamanya'}
+                      ? `atau Rp${plan.yearly.toLocaleString("id-ID")}/tahun`
+                      : "tanpa biaya, selamanya"}
                   </p>
 
                   <div
                     className={`mt-6 flex items-center gap-2 rounded-[var(--radius)] px-3 py-2.5 text-xs ${
                       plan.popular
-                        ? 'bg-primary-foreground/10 text-primary-foreground'
-                        : 'bg-primary/10 text-primary'
+                        ? "bg-primary-foreground/10 text-primary-foreground"
+                        : "bg-primary/10 text-primary"
                     }`}
                   >
                     <Sparkles className="h-3.5 w-3.5" />
@@ -815,15 +832,15 @@ export default function Home() {
                         key={j}
                         className={`flex items-start gap-3 font-sans text-sm ${
                           plan.popular
-                            ? 'text-primary-foreground/85'
-                            : 'text-foreground/75'
+                            ? "text-primary-foreground/85"
+                            : "text-foreground/75"
                         }`}
                       >
                         <Check
                           className={`mt-0.5 h-4 w-4 shrink-0 ${
                             plan.popular
-                              ? 'text-primary-foreground'
-                              : 'text-primary'
+                              ? "text-primary-foreground"
+                              : "text-primary"
                           }`}
                         />
                         {f}
@@ -836,8 +853,8 @@ export default function Home() {
                       href="/register"
                       className={`flex items-center justify-center gap-2 rounded-[var(--radius)] py-3 font-sans text-sm font-medium transition-all duration-300 ${
                         plan.popular
-                          ? 'bg-secondary text-primary hover:bg-secondary/80'
-                          : 'bg-primary text-primary-foreground-strong hover:bg-primary/90'
+                          ? "bg-secondary text-primary hover:bg-secondary/80"
+                          : "bg-primary text-primary-foreground-strong hover:bg-primary/90"
                       }`}
                     >
                       Mulai trial gratis
@@ -875,7 +892,9 @@ export default function Home() {
             <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2.4rem,6vw,5rem)] font-light leading-[0.98] tracking-[-0.03em]">
               Setiap makanan punya cerita.
               <br />
-              <span className="italic font-extralight">Bantu agar tidak usai di tempat sampah.</span>
+              <span className="italic font-extralight">
+                Bantu agar tidak usai di tempat sampah.
+              </span>
             </h2>
           </Reveal>
           <Reveal delay={0.2}>

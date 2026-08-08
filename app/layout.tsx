@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Fraunces, Space_Grotesk } from 'next/font/google';
+import { Fraunces, Inter, Space_Grotesk } from 'next/font/google';
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -15,6 +15,13 @@ const spaceGrotesk = Space_Grotesk({
   variable: '--font-sans',
   display: 'swap',
   weight: ['300', '400', '500', '600', '700'],
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  weight: ['400', '500', '600'],
 });
 
 export const metadata: Metadata = {
