@@ -99,9 +99,7 @@ export default function Home() {
               </h1>
               <RevealItem>
                 <p className="mt-8 max-w-md font-sans text-base leading-relaxed text-foreground/70 lg:text-lg">
-                  ReBites mempertemukan pelaku UMKM kuliner dengan pembeli untuk
-                  menyelamatkan makanan surplus yang masih layak konsumsi — lebih
-                  hemat, lebih hijau.
+                  ReBites keren
                 </p>
               </RevealItem>
               <RevealItem>
