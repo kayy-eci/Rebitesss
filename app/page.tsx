@@ -17,6 +17,11 @@ import {
   Sparkles,
   ArrowUpRight,
   CircleDot,
+  Heart,
+  Globe,
+  Pizza,
+  ShoppingBag,
+  type LucideIcon,
 } from "lucide-react";
 import { SmoothScroll } from "@/app/components/smooth-scroll";
 import { Preloader } from "@/app/components/preloader";
@@ -58,6 +63,30 @@ const PARTNERS = [
   "Satay Pak Budi",
   "Toko Sehat Jaya",
   "Kopi Pagi",
+];
+
+const WHY_FEATURES: {
+  icon: LucideIcon;
+  heartBadge?: boolean;
+  title: string;
+}[] = [
+  {
+    icon: ShoppingBag,
+    heartBadge: true,
+    title: "Nikmati makanan enak dengan harga ½ atau kurang",
+  },
+  {
+    icon: Globe,
+    title: "Bantu lingkungan dengan mengurangi food waste",
+  },
+  {
+    icon: Pizza,
+    title: "Selamatkan makanan di dekatmu",
+  },
+  {
+    icon: Store,
+    title: "Coba hal baru dari kafe, toko roti, atau restoran lokal",
+  },
 ];
 
 export default function Home() {
@@ -447,126 +476,66 @@ export default function Home() {
         </Marquee>
       </section>
 
-      {/* ── UNTUK PEMBELI ────────────────────────────────── */}
+      {/* ── KENAPA REBITES ───────────────────────────────── */}
       <section
         id="pembeli"
-        className="grain-overlay relative overflow-hidden bg-background py-24 lg:py-32"
+        className="grain-overlay relative overflow-hidden bg-secondary py-24 lg:py-32"
       >
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
-            {/* visual-first column */}
+        {/* soft radial glow */}
+        <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-3xl" />
+
+        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          {/* centered header */}
+          <div className="mx-auto max-w-3xl text-center">
             <Reveal>
-              <div className="relative">
-                <div className="relative aspect-[5/4] overflow-hidden rounded-[var(--radius)]">
-                  <Image
-                    src="https://images.pexels.com/photos/7543099/pexels-photo-7543099.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-                    alt="Roti surplus"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-primary/20 mix-blend-multiply" />
-                </div>
-                {/* floating product card mockup */}
-                <motion.div
-                  className="absolute -bottom-8 -right-4 w-60 rounded-[var(--radius)] border border-border bg-background p-4 shadow-[0_24px_60px_-20px_hsl(var(--primary)/0.4)] sm:-right-8"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: 0.3 }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="relative h-12 w-12 overflow-hidden rounded-[var(--radius)]">
-                      <Image
-                        src="https://images.pexels.com/photos/11570705/pexels-photo-11570705.jpeg?auto=compress&cs=tinysrgb&h=120&w=120"
-                        alt="Roti"
-                        fill
-                        sizes="48px"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="font-sans text-[13px] font-medium text-primary">
-                        Roti Surplus Subuh
-                      </p>
-                      <p className="font-sans text-[11px] text-muted-foreground">
-                        Roti &amp; Bakeri
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex items-end justify-between">
-                    <div>
-                      <span className="font-sans text-[10px] text-muted-foreground line-through">
-                        Rp25.000
-                      </span>
-                      <p className="font-display text-lg font-medium text-primary">
-                        Rp8.000
-                      </p>
-                    </div>
-                    <Badge variant="success">Hemat 68%</Badge>
-                  </div>
-                </motion.div>
-              </div>
+              <Badge variant="outline" className="mb-5">
+                04 - Kenapa ReBites
+              </Badge>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
+                Kenapa <span className="italic font-extralight">ReBites?</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
+                Satu platform untuk makan enak, menyelamatkan surplus, dan
+                membantu lingkungan — sekaligus.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* fitur mengelilingi tas belanja */}
+          <div className="mt-16 grid items-center gap-14 lg:mt-24 lg:grid-cols-[1fr_auto_1fr] lg:gap-10 xl:gap-16">
+            {/* tas belanja sentral */}
+            <Reveal className="order-first mx-auto w-full max-w-[320px] sm:max-w-[380px] lg:order-none lg:max-w-[420px]">
+              <GroceryBag />
             </Reveal>
 
-            <div className="lg:pt-8">
-              <Reveal>
-                <Badge variant="outline" className="mb-5">
-                  04 - Untuk Pembeli
-                </Badge>
-              </Reveal>
-              <Reveal delay={0.1}>
-                <h2 className="font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
-                  Makan enak, hemat, berdampak.
-                </h2>
-              </Reveal>
-              <Reveal delay={0.2}>
-                <p className="mt-6 max-w-md font-sans text-sm leading-relaxed text-foreground/70">
-                  Telusuri makanan surplus dari UMKM terdekat, pesan dalam
-                  hitungan menit, dan ambil atau terima pengantaran.
-                </p>
-              </Reveal>
+            {/* kolom kiri */}
+            <div className="flex flex-col items-center gap-12 text-center sm:grid sm:grid-cols-2 sm:items-start sm:justify-items-center sm:gap-10 lg:flex lg:items-start lg:gap-16 lg:text-left">
+              {WHY_FEATURES.slice(0, 2).map((f, i) => (
+                <WhyFeature
+                  key={i}
+                  icon={f.icon}
+                  heartBadge={f.heartBadge}
+                  title={f.title}
+                  delay={0.1 + i * 0.08}
+                />
+              ))}
+            </div>
 
-              <RevealStagger
-                className="mt-10 space-y-px bg-border"
-                stagger={0.08}
-              >
-                {[
-                  ["Cari & filter", "Kategori, lokasi, dan harga"],
-                  ["Detail produk", "Foto, deskripsi, stok, opsi pengambilan"],
-                  ["Checkout Midtrans", "Pembayaran aman dalam Rupiah"],
-                  ["Catatan pesanan", "Tambah instruksi khusus untuk UMKM"],
-                  [
-                    "Riwayat transaksi",
-                    "Pantau setiap makanan yang terselamatkan",
-                  ],
-                ].map(([title, desc], i) => (
-                  <RevealItem key={i}>
-                    <div className="flex items-center gap-5 bg-background px-5 py-4 transition-colors duration-300 hover:bg-secondary">
-                      <span className="font-display text-2xl font-light text-primary/30">
-                        {(i + 1).toString().padStart(2, "0")}
-                      </span>
-                      <div>
-                        <p className="font-sans text-sm font-medium text-primary">
-                          {title}
-                        </p>
-                        <p className="font-sans text-xs text-muted-foreground">
-                          {desc}
-                        </p>
-                      </div>
-                    </div>
-                  </RevealItem>
-                ))}
-              </RevealStagger>
-
-              <Reveal delay={0.1}>
-                <div className="mt-8">
-                  <MagneticButton href="/register" variant="cream">
-                    Mulai berbelanja
-                    <ArrowRight className="h-4 w-4" />
-                  </MagneticButton>
-                </div>
-              </Reveal>
+            {/* kolom kanan */}
+            <div className="flex flex-col items-center gap-12 text-center sm:grid sm:grid-cols-2 sm:items-start sm:justify-items-center sm:gap-10 lg:flex lg:items-end lg:gap-16 lg:text-right">
+              {WHY_FEATURES.slice(2, 4).map((f, i) => (
+                <WhyFeature
+                  key={i}
+                  icon={f.icon}
+                  heartBadge={f.heartBadge}
+                  title={f.title}
+                  delay={0.1 + i * 0.08}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -867,6 +836,194 @@ export default function Home() {
 
       <SiteFooter />
     </SmoothScroll>
+  );
+}
+
+function WhyFeature({
+  icon: Icon,
+  heartBadge = false,
+  title,
+  delay = 0,
+}: {
+  icon: LucideIcon;
+  heartBadge?: boolean;
+  title: string;
+  delay?: number;
+}) {
+  return (
+    <Reveal delay={delay}>
+      <div className="group max-w-[280px]">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-background text-primary shadow-[0_10px_28px_-14px_hsl(var(--primary)/0.45)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/40 group-hover:bg-primary group-hover:text-primary-foreground-strong">
+          <span className="relative">
+            <Icon className="h-7 w-7" strokeWidth={1.5} />
+            {heartBadge && (
+              <Heart className="absolute -bottom-2 -right-2.5 h-3.5 w-3.5 fill-primary stroke-background transition-colors duration-300 group-hover:fill-primary-foreground-strong group-hover:stroke-primary" />
+            )}
+          </span>
+        </div>
+        <h3 className="mt-4 font-sans text-sm font-bold uppercase leading-snug tracking-[0.06em] text-primary">
+          {title}
+        </h3>
+      </div>
+    </Reveal>
+  );
+}
+
+function GroceryBag() {
+  return (
+    <motion.div
+      className="relative w-full"
+      animate={{ y: [0, -10, 0] }}
+      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      aria-hidden
+    >
+      <svg
+        viewBox="0 0 360 430"
+        className="h-auto w-full drop-shadow-[0_24px_40px_-20px_hsl(var(--primary)/0.35)]"
+      >
+        {/* sayuran di belakang tas */}
+        {/* daun bawang */}
+        <g
+          stroke="#2f5d43"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          fill="none"
+        >
+          <path d="M112 205 C110 155 106 115 100 88" />
+          <path d="M128 205 C127 155 124 115 120 82" />
+          <path d="M144 205 C144 157 142 117 140 90" />
+        </g>
+        {/* brokoli */}
+        <rect x="157" y="150" width="11" height="55" rx="5" fill="#3e7d57" />
+        <g fill="#2c5e42">
+          <circle cx="152" cy="146" r="13" />
+          <circle cx="173" cy="142" r="14" />
+          <circle cx="162" cy="130" r="14" />
+          <circle cx="182" cy="148" r="12" />
+        </g>
+        <g fill="#4c8f66">
+          <circle cx="160" cy="137" r="5" />
+          <circle cx="174" cy="149" r="5" />
+        </g>
+        {/* wortel */}
+        <path d="M205 205 L188 100 L222 100 Z" fill="#e2793b" />
+        <g stroke="#3e7d57" strokeWidth="3" strokeLinecap="round">
+          <path d="M191 100 L183 80" />
+          <path d="M205 100 L205 76" />
+          <path d="M219 100 L227 80" />
+        </g>
+        {/* paprika merah */}
+        <path
+          d="M250 205 C246 168 254 140 275 129 C296 140 304 168 300 205 Z"
+          fill="#cf5340"
+        />
+        <path
+          d="M273 131 L273 116"
+          stroke="#2f5d43"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        {/* bawang merah */}
+        <circle cx="316" cy="158" r="33" fill="#b06b8f" />
+        <path
+          d="M316 129 A 26 26 0 0 0 313 186"
+          stroke="#8a4f6d"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M316 192 L316 205"
+          stroke="#8a4f6d"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+
+        {/* bayangan */}
+        <ellipse
+          cx="190"
+          cy="404"
+          rx="95"
+          ry="8"
+          fill="hsl(135 21% 26%)"
+          opacity="0.12"
+        />
+
+        {/* badan tas */}
+        <path
+          d="M70 195
+             L90 181 L110 195 L130 181 L150 195 L170 181 L190 195 L210 181 L230 195 L250 181 L270 195 L290 181 L310 195
+             L310 352
+             Q310 400 262 400
+             L118 400
+             Q70 400 70 352
+             Z"
+          className="fill-primary"
+        />
+
+        {/* kerutan tas */}
+        <g
+          className="stroke-primary-foreground"
+          strokeOpacity="0.12"
+          strokeWidth="1.5"
+          fill="none"
+        >
+          <path d="M95 210 C92 280 96 340 100 382" />
+          <path d="M132 205 C127 272 134 334 142 384" />
+          <path d="M185 200 C185 262 182 324 187 386" />
+          <path d="M245 205 C243 280 248 340 254 384" />
+          <path d="M290 212 C292 268 288 330 292 378" />
+        </g>
+        {/* lipatan samping */}
+        <g
+          className="stroke-primary-foreground"
+          strokeOpacity="0.1"
+          strokeWidth="1.5"
+          fill="none"
+        >
+          <path d="M108 202 C104 260 110 320 112 392" />
+          <path d="M252 202 C256 260 250 320 248 392" />
+        </g>
+
+        {/* emblem */}
+        <circle
+          cx="190"
+          cy="282"
+          r="54"
+          fill="hsl(40 30% 96%)"
+          fillOpacity="0.06"
+          stroke="hsl(40 30% 96%)"
+          strokeOpacity="0.85"
+          strokeWidth="2.5"
+        />
+        {/* daun */}
+        <g
+          stroke="hsl(40 30% 96%)"
+          strokeOpacity="0.9"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        >
+          <path d="M190 240 C210 250 216 268 190 290 C164 268 170 250 190 240 Z" />
+          <path d="M190 244 C190 262 190 272 190 286" />
+        </g>
+        {/* teks melengkung */}
+        <defs>
+          <path id="rebites-arc" d="M150 306 A50 50 0 0 0 230 306" />
+        </defs>
+        <text
+          fontSize="14"
+          fontWeight="600"
+          letterSpacing="3"
+          fill="hsl(40 30% 96%)"
+          style={{ fontFamily: "var(--font-sans)" }}
+        >
+          <textPath href="#rebites-arc" startOffset="50%" textAnchor="middle">
+            REBITES
+          </textPath>
+        </text>
+      </svg>
+    </motion.div>
   );
 }
 

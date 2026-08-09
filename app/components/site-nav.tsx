@@ -10,7 +10,7 @@ const links = [
   { href: '/#masalah', label: 'Food Waste' },
   { href: '/#cara-kerja', label: 'Cara Kerja' },
   { href: '/#umkm', label: 'UMKM' },
-  { href: '/#pembeli', label: 'Pembeli' },
+  { href: '/#pembeli', label: 'Kenapa ReBites' },
   { href: '/#langganan', label: 'Langganan' },
 ];
 
