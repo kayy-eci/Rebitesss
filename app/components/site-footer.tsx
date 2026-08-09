@@ -134,7 +134,7 @@ export function SiteFooter() {
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-primary-foreground/15 pt-8 sm:flex-row sm:items-center">
           <p className="font-sans text-xs text-primary-foreground/50">
             © {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
-            <span className="text-primary-foreground/80">Tim Sixquit</span> —
+            <span className="text-primary-foreground/80">Tim Sixquit</span> -
             SMK Taruna Bhakti.
           </p>
           <div className="flex items-center gap-2 font-sans text-xs text-primary-foreground/50">

@@ -157,7 +157,7 @@ export default function Home() {
             <div>
               <Reveal>
                 <Badge className="mb-6 bg-primary-foreground/10 text-primary-foreground">
-                  01 — Masalah
+                  01 - Masalah
                 </Badge>
               </Reveal>
               <Reveal delay={0.1}>
@@ -169,7 +169,7 @@ export default function Home() {
               <Reveal delay={0.2}>
                 <p className="mt-6 max-w-sm font-sans text-sm leading-relaxed text-primary-foreground/70">
                   Data Bappenas mencatat skala food loss &amp; food waste di
-                  Indonesia mencapai angka yang sulit diabaikan — berdampak pada
+                  Indonesia mencapai angka yang sulit diabaikan - berdampak pada
                   ekonomi, ketahanan pangan, dan lingkungan.
                 </p>
               </Reveal>
@@ -207,7 +207,7 @@ export default function Home() {
 
           <Reveal delay={0.15}>
             <p className="mt-16 max-w-2xl border-l-2 border-primary-foreground/30 pl-6 font-display text-xl font-light italic leading-relaxed text-primary-foreground/80">
-              &ldquo;Makanan yang terbuang bukan hanya uang yang hilang — tapi
+              &ldquo;Makanan yang terbuang bukan hanya uang yang hilang - tapi
               tenaga, lahan, dan kesempatan untuk mengenyangkan sesama.&rdquo;
             </p>
           </Reveal>
@@ -230,7 +230,7 @@ export default function Home() {
             <div>
               <Reveal>
                 <Badge variant="outline" className="mb-5">
-                  02 — Cara Kerja
+                  02 - Cara Kerja
                 </Badge>
               </Reveal>
               <Reveal delay={0.1}>
@@ -249,7 +249,7 @@ export default function Home() {
 
           {/* bento grid */}
           <div className="mt-14 grid gap-4 md:grid-cols-6 md:grid-rows-[auto_auto]">
-            {/* step 1 — large */}
+            {/* step 1 - large */}
             <Reveal className="md:col-span-3" delay={0.05}>
               <div className="group h-full rounded-[var(--radius)] border border-border bg-secondary p-8 transition-colors duration-300 hover:border-primary/30">
                 <div className="flex items-center justify-between">
@@ -303,7 +303,7 @@ export default function Home() {
               </div>
             </Reveal>
 
-            {/* step 4 — accent */}
+            {/* step 4 - accent */}
             <Reveal className="md:col-span-4" delay={0.2}>
               <div className="group flex h-full flex-col justify-between rounded-[var(--radius)] bg-primary p-8 text-primary-foreground">
                 <div className="flex items-center justify-between">
@@ -343,7 +343,7 @@ export default function Home() {
             <div className="lg:sticky lg:top-28 lg:self-start">
               <Reveal>
                 <Badge variant="outline" className="mb-5">
-                  03 — Untuk UMKM
+                  03 - Untuk UMKM
                 </Badge>
               </Reveal>
               <Reveal delay={0.1}>
@@ -512,7 +512,7 @@ export default function Home() {
             <div className="lg:pt-8">
               <Reveal>
                 <Badge variant="outline" className="mb-5">
-                  04 — Untuk Pembeli
+                  04 - Untuk Pembeli
                 </Badge>
               </Reveal>
               <Reveal delay={0.1}>
@@ -644,7 +644,7 @@ export default function Home() {
             <div>
               <Reveal>
                 <Badge variant="outline" className="mb-5">
-                  05 — Paket Langganan
+                  05 - Paket Langganan
                 </Badge>
               </Reveal>
               <Reveal delay={0.1}>
