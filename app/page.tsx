@@ -19,7 +19,6 @@ import {
   CircleDot,
 } from "lucide-react";
 import { SmoothScroll } from "@/app/components/smooth-scroll";
-import { CustomCursor } from "@/app/components/custom-cursor";
 import { Preloader } from "@/app/components/preloader";
 import { SiteNav } from "@/app/components/site-nav";
 import { SiteFooter } from "@/app/components/site-footer";
@@ -74,7 +73,6 @@ export default function Home() {
   return (
     <SmoothScroll>
       <Preloader onDone={() => setLoaded(true)} />
-      <CustomCursor />
       <SiteNav />
 
       {/* ── HERO ─────────────────────────────────────────── */}
