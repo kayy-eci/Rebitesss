@@ -124,7 +124,7 @@ export function SiteNav() {
               href="/register"
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-[var(--radius)] bg-primary px-5 py-2.5 font-sans text-[13px] font-medium text-primary-foreground-strong transition-all duration-300 hover:shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.5)]"
             >
-              <span className="relative z-10">Mulai Gratis</span>
+              <span className="relative z-10">Register</span>
               <span className="relative z-10 h-1.5 w-1.5 rounded-full bg-primary-foreground-strong transition-transform duration-300 group-hover:scale-150" />
             </Link>
           </div>

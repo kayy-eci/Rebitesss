@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -458,11 +459,13 @@ export default function Home() {
             {/* visual-first column */}
             <Reveal>
               <div className="relative">
-                <div className="aspect-[5/4] overflow-hidden rounded-[var(--radius)]">
-                  <img
+                <div className="relative aspect-[5/4] overflow-hidden rounded-[var(--radius)]">
+                  <Image
                     src="https://images.pexels.com/photos/7543099/pexels-photo-7543099.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
                     alt="Roti surplus"
-                    className="h-full w-full object-cover"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    className="object-cover"
                   />
                   <div className="absolute inset-0 bg-primary/20 mix-blend-multiply" />
                 </div>
@@ -475,11 +478,13 @@ export default function Home() {
                   transition={{ duration: 0.7, delay: 0.3 }}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 overflow-hidden rounded-[var(--radius)]">
-                      <img
+                    <div className="relative h-12 w-12 overflow-hidden rounded-[var(--radius)]">
+                      <Image
                         src="https://images.pexels.com/photos/11570705/pexels-photo-11570705.jpeg?auto=compress&cs=tinysrgb&h=120&w=120"
                         alt="Roti"
-                        className="h-full w-full object-cover"
+                        fill
+                        sizes="48px"
+                        className="object-cover"
                       />
                     </div>
                     <div>
