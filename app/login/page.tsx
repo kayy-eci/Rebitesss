@@ -1,9 +1,3 @@
-
-
 export default function LoginPublic() {
-    return (
-        <div>
-            HALOOO
-        </div>
-    )
+  return <div>HALOOO</div>;
 }
