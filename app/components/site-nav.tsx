@@ -46,19 +46,19 @@ export function SiteNav() {
 
   return (
     <>
-      <header
-        className={cn(
-          'fixed inset-x-0 top-0 z-[100] transition-all duration-500',
-          overDark
-            ? scrolled
-              ? 'bg-primary/85 backdrop-blur-md border-b border-primary-foreground/10'
-              : 'bg-transparent'
-            : scrolled
-              ? 'bg-background/85 backdrop-blur-md border-b border-border/60'
-              : 'bg-transparent'
-        )}
-      >
-        <nav className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 sm:px-8 lg:h-20 lg:px-12">
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-[100]">
+        <nav
+          className={cn(
+            'pointer-events-auto mx-auto mt-3 flex h-14 max-w-[1100px] items-center justify-between rounded-full border px-4 backdrop-blur-md transition-all duration-500 sm:px-6 lg:mt-5 lg:h-16',
+            overDark
+              ? scrolled
+                ? 'border-primary-foreground/15 bg-primary/90 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.45)]'
+                : 'border-primary-foreground/10 bg-primary/60'
+              : scrolled
+                ? 'border-border/60 bg-background/90 shadow-[0_8px_30px_-12px_hsl(var(--primary)/0.18)]'
+                : 'border-border/50 bg-background/60'
+          )}
+        >
           <Link href="/" className="group flex items-baseline gap-0.5">
             <span
               className={cn(
@@ -84,7 +84,7 @@ export function SiteNav() {
             />
           </Link>
 
-          <ul className="hidden items-center gap-8 lg:flex">
+          <ul className="hidden items-center gap-6 lg:flex xl:gap-8">
             {links.map((l) => (
               <li key={l.href}>
                 <Link
@@ -108,13 +108,13 @@ export function SiteNav() {
             ))}
           </ul>
 
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             <Link
               href="/login"
               className={cn(
-                'font-sans text-[13px] font-medium transition-colors',
+                'rounded-full px-4 py-2 font-sans text-[13px] font-medium transition-colors',
                 overDark
-                  ? 'text-primary-foreground'
+                  ? 'text-primary-foreground/90 hover:text-primary-foreground'
                   : 'text-foreground/80 hover:text-primary'
               )}
             >
@@ -122,7 +122,7 @@ export function SiteNav() {
             </Link>
             <Link
               href="/register"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-[var(--radius)] bg-primary px-5 py-2.5 font-sans text-[13px] font-medium text-primary-foreground-strong transition-all duration-300 hover:shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.5)]"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-primary px-5 py-2.5 font-sans text-[13px] font-medium text-primary-foreground-strong transition-all duration-300 hover:shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.5)]"
             >
               <span className="relative z-10e text-white">Register</span>
               <span className="relative z-10 h-1.5 w-1.5 rounded-full bg-primary-foreground-strong transition-transform duration-300 group-hover:scale-150" />
