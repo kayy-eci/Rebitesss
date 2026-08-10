@@ -96,6 +96,13 @@ export default function Home() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
 
   useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  useEffect(() => {
     if (loaded) document.body.style.overflow = "";
   }, [loaded]);
 
@@ -109,7 +116,7 @@ export default function Home() {
         {/* centered headline */}
         <div className="mx-auto w-full max-w-[1100px] px-5 text-center sm:px-8 lg:px-12">
           <motion.div style={{ y: heroY, opacity: heroOpacity }}>
-            <RevealStagger stagger={0.06}>
+            <RevealStagger stagger={0.06} start={loaded}>
               <RevealItem>
                 <Badge variant="outline" className="mb-7">
                   <CircleDot className="h-2.5 w-2.5" />
@@ -117,14 +124,14 @@ export default function Home() {
                 </Badge>
               </RevealItem>
               <h1 className="mx-auto max-w-5xl pb-[0.12em] font-display text-[clamp(2.8rem,8vw,7.5rem)] font-light leading-[1.11] tracking-[-0.03em] text-primary">
-                <RevealWords text="Selamatkan" />
+                <RevealWords text="Selamatkan" start={loaded} />
                 <br />
-                <RevealWords text="makanan" delay={0.1} />{" "}
+                <RevealWords text="makanan" delay={0.1} start={loaded} />{" "}
                 <span className="italic font-extralight">
-                  <RevealWords text="sebelum" delay={0.2} />
+                  <RevealWords text="sebelum" delay={0.2} start={loaded} />
                 </span>
                 <br />
-                <RevealWords text="terbuang." delay={0.3} />
+                <RevealWords text="terbuang." delay={0.3} start={loaded} />
               </h1>
               <RevealItem>
                 <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
