@@ -721,54 +721,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA PENUTUP ──────────────────────────────────── */}
-      <section
-        id="cta"
-        className="relative overflow-hidden bg-primary py-28 text-primary-foreground lg:py-40"
-      >
-        <div className="grain-overlay absolute inset-0" />
-        {/* animated blobs */}
-        <motion.div
-          className="absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-primary-foreground/5 blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -right-20 bottom-1/4 h-80 w-80 rounded-full bg-primary-foreground/5 blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.2, 0.4] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <div className="relative mx-auto max-w-[1400px] px-5 text-center sm:px-8 lg:px-12">
-          <Reveal>
-            <p className="font-sans text-[11px] uppercase tracking-[0.35em] text-primary-foreground/50">
-              Bergabung sekarang
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2.4rem,6vw,5rem)] font-light leading-[0.98] tracking-[-0.03em]">
-              Setiap makanan punya cerita.
-              <br />
-              <span className="italic font-extralight">
-                Bantu agar tidak usai di tempat sampah.
-              </span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <MagneticButton href="/register" variant="cream">
-                Daftar gratis sekarang
-                <ArrowUpRight className="h-4 w-4" />
-              </MagneticButton>
-              <Link
-                href="/login"
-                className="font-sans text-sm text-primary-foreground/70 underline-offset-4 transition-colors hover:text-primary-foreground hover:underline"
-              >
-                Sudah punya akun? Masuk
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
 
       <SiteFooter />
     </SmoothScroll>
