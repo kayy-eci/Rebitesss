@@ -1,39 +1,18 @@
-import './globals.css';
-import type { Metadata } from 'next';
-import { Fraunces, Inter, Space_Grotesk } from 'next/font/google';
-
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-  weight: ['300', '400', '500', '600', '700', '900'],
-  style: ['normal', 'italic'],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-  weight: ['400', '500', '600'],
-});
+import "./globals.css";
+import type { Metadata } from "next";
+import { AuthProvider } from "@/app/components/auth-provider";
+import { Toaster } from "@/app/components/ui/toaster";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://rebitesss.netlify.app'),
-  title: 'ReBites - Selamatkan Makanan Surplus, Kurangi Food Waste',
+  metadataBase: new URL("https://rebitesss.netlify.app"),
+  title: "ReBites - Selamatkan Makanan Surplus, Kurangi Food Waste",
   description:
-    'Marketplace yang mempertemukan pelaku UMKM kuliner dengan pembeli untuk menyelamatkan makanan surplus yang masih layak konsumsi. Dari dapur UMKM, ke piring yang butuh.',
+    "Marketplace yang mempertemukan pelaku UMKM kuliner dengan pembeli untuk menyelamatkan makanan surplus yang masih layak konsumsi. Dari dapur UMKM, ke piring yang butuh.",
   openGraph: {
-    title: 'ReBites - Selamatkan Makanan Surplus',
+    title: "ReBites - Selamatkan Makanan Surplus",
     description:
-      'Marketplace makanan surplus untuk UMKM kuliner. Kurangi food waste, hemat pengeluaran.',
-    type: 'website',
+      "Marketplace makanan surplus untuk UMKM kuliner. Kurangi food waste, hemat pengeluaran.",
+    type: "website",
   },
 };
 
@@ -43,8 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`${fraunces.variable} ${spaceGrotesk.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="id">
+      <body className="font-sans antialiased">
+        <AuthProvider>
+          {children}
+          <Toaster />
+        </AuthProvider>
+      </body>
     </html>
   );
 }
