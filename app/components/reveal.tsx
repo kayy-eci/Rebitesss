@@ -16,6 +16,7 @@ export function Reveal({
   variants = defaultVariants,
   once = true,
   as = 'div',
+  start = true,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -24,6 +25,7 @@ export function Reveal({
   variants?: Variants;
   once?: boolean;
   as?: React.ElementType;
+  start?: boolean;
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once, margin: '-12% 0px -12% 0px' });
@@ -35,7 +37,7 @@ export function Reveal({
       className={className}
       variants={variants}
       initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
+      animate={start && inView ? 'visible' : 'hidden'}
       transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
@@ -48,11 +50,13 @@ export function RevealStagger({
   className,
   stagger = 0.08,
   delay = 0,
+  start = true,
 }: {
   children: React.ReactNode;
   className?: string;
   stagger?: number;
   delay?: number;
+  start?: boolean;
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-10% 0px' });
@@ -62,7 +66,7 @@ export function RevealStagger({
       ref={ref}
       className={className}
       initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
+      animate={start && inView ? 'visible' : 'hidden'}
       variants={{
         hidden: {},
         visible: { transition: { staggerChildren: stagger, delayChildren: delay } },
@@ -103,12 +107,14 @@ export function RevealWords({
   wordClassName,
   stagger = 0.08,
   delay = 0,
+  start = true,
 }: {
   text: string;
   className?: string;
   wordClassName?: string;
   stagger?: number;
   delay?: number;
+  start?: boolean;
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-10%' });
@@ -120,7 +126,9 @@ export function RevealWords({
           <motion.span
             className={`inline-block ${wordClassName ?? ''}`}
             initial={{ y: '110%', opacity: 0 }}
-            animate={inView ? { y: '0%', opacity: 1 } : { y: '110%', opacity: 0 }}
+            animate={
+              start && inView ? { y: '0%', opacity: 1 } : { y: '110%', opacity: 0 }
+            }
             transition={{
               duration: 0.6,
               delay: delay + i * stagger,

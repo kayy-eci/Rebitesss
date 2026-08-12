@@ -1,0 +1,87 @@
+
+> nextjs@0.1.0 dev
+> next dev
+
+  ▲ Next.js 13.5.1
+  - Local:        http://localhost:3000
+
+ ✓ Ready in 2.8s
+ ○ compiling /page ...
+ ✓ Compiled /page in 17.3s (1357 modules)
+ ✓ Compiled in 747ms (692 modules)
+ ✓ Compiled /not-found in 1054ms (1348 modules)
+ ✓ Compiled /login/page in 1444ms (1458 modules)
+ ✓ Compiled in 1077ms (1465 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 623ms (1463 modules)
+ ✓ Compiled in 536ms (1463 modules)
+ X ./app/components/auth/auth-form.tsx
+Error: 
+  [31mx[0m Unexpected token `motion`. Expected jsx identifier
+     ,-[[36;1;4mC:\Users\Wildan D.A. Darmawan\Rebitesss\app\components\auth\auth-form.tsx[0m:157:1]
+ [2m157[0m |   }
+ [2m158[0m | 
+ [2m159[0m |   return (
+ [2m160[0m |     <motion.div variants={containerVariants} initial="hidden" animate="show">
+     : [31;1m     ^^^^^^[0m
+ [2m161[0m |       {/* logo — hanya tampil di mobile */}
+ [2m162[0m |       <motion.div
+ [2m163[0m |         variants={itemVariants}
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/components/auth/auth-form.tsx
+./app/components/auth/auth-split.tsx
+./app/login/page.tsx
+ X ./app/components/auth/auth-form.tsx
+Error: 
+  [31mx[0m Unexpected token `motion`. Expected jsx identifier
+     ,-[[36;1;4mC:\Users\Wildan D.A. Darmawan\Rebitesss\app\components\auth\auth-form.tsx[0m:157:1]
+ [2m157[0m |   }
+ [2m158[0m | 
+ [2m159[0m |   return (
+ [2m160[0m |     <motion.div variants={containerVariants} initial="hidden" animate="show">
+     : [31;1m     ^^^^^^[0m
+ [2m161[0m |       {/* logo — hanya tampil di mobile */}
+ [2m162[0m |       <motion.div
+ [2m163[0m |         variants={itemVariants}
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/components/auth/auth-form.tsx
+./app/components/auth/auth-split.tsx
+./app/login/page.tsx
+ ○ compiling /_error ...
+ ✓ Compiled /not-found in 1055ms (1610 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled /register/page in 643ms (1612 modules)
+ ✓ Compiled in 1150ms (1623 modules)
+ ✓ Compiled in 684ms (1621 modules)
+ ✓ Compiled in 882ms (1621 modules)
+ ✓ Compiled in 600ms (1621 modules)
+ ✓ Compiled in 668ms (1621 modules)
+ ✓ Compiled in 666ms (1621 modules)
+ ✓ Compiled in 694ms (1621 modules)
+ ✓ Compiled in 1927ms (1621 modules)
+ ✓ Compiled in 1390ms (1621 modules)
+ ✓ Compiled in 1365ms (1621 modules)
+ ✓ Compiled in 1122ms (1621 modules)
+ ✓ Compiled in 1036ms (1621 modules)
+ ✓ Compiled in 661ms (1621 modules)
+ ✓ Compiled in 1320ms (1621 modules)
+ ✓ Compiled in 1378ms (1623 modules)
+ ✓ Compiled in 1026ms (1621 modules)
+ ✓ Compiled in 763ms (1621 modules)
+ ✓ Compiled in 790ms (1621 modules)
+ ✓ Compiled in 1135ms (863 modules)
+ ✓ Compiled in 1323ms (1622 modules)
+ ✓ Compiled in 802ms (863 modules)
+ ✓ Compiled in 1804ms (1608 modules)
+ ✓ Compiled in 1426ms (1622 modules)
+ ✓ Compiled /forgot-password/page in 1045ms (1621 modules)

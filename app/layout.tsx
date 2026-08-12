@@ -1,7 +1,28 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { AuthProvider } from "@/app/components/auth-provider";
-import { Toaster } from "@/app/components/ui/toaster";
+import './globals.css';
+import type { Metadata } from 'next';
+import { Fraunces, Inter, Space_Grotesk } from 'next/font/google';
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '900'],
+  style: ['normal', 'italic'],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rebitesss.netlify.app"),
@@ -22,13 +43,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id">
-      <body className="font-sans antialiased">
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
-      </body>
+    <html
+      lang="id"
+      className={`${fraunces.variable} ${spaceGrotesk.variable} ${inter.variable}`}
+    >
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }

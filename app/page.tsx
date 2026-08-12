@@ -1,22 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
   Search,
   Store,
   ShoppingCart,
-  Trash2,
   TrendingDown,
   MapPin,
   Clock,
   Check,
   Sparkles,
   ArrowUpRight,
-  CircleDot,
   Heart,
   Globe,
   Pizza,
@@ -25,23 +22,13 @@ import {
 } from "lucide-react";
 import { SmoothScroll } from "@/app/components/smooth-scroll";
 import { Preloader } from "@/app/components/preloader";
-import { SiteNav } from "@/app/components/site-nav";
 import { SiteFooter } from "@/app/components/site-footer";
-import {
-  Reveal,
-  RevealStagger,
-  RevealItem,
-  RevealWords,
-} from "@/app/components/reveal";
+import { Reveal } from "@/app/components/reveal";
 import { Counter } from "@/app/components/counter";
 import { Marquee } from "@/app/components/marquee";
 import { MagneticButton, ArrowLink } from "@/app/components/magnetic-button";
 import { Badge } from "@/app/components/ui/badge";
-
-const HERO_IMG =
-  "https://images.pexels.com/photos/32938736/pexels-photo-32938736.jpeg?auto=compress&cs=tinysrgb&h=900&w=600";
-const HERO_IMG_2 =
-  "https://images.pexels.com/photos/37189123/pexels-photo-37189123.jpeg?auto=compress&cs=tinysrgb&h=900&w=600";
+import { HeroSection } from "@/app/components/hero-section";
 
 const CATEGORIES = [
   "Makanan Rumahan",
@@ -91,9 +78,13 @@ const WHY_FEATURES: {
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.15], [0, -120]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   useEffect(() => {
     if (loaded) document.body.style.overflow = "";
@@ -102,64 +93,9 @@ export default function Home() {
   return (
     <SmoothScroll>
       <Preloader onDone={() => setLoaded(true)} />
-      <SiteNav />
 
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className="grain-overlay relative flex min-h-[100svh] items-center overflow-hidden bg-secondary pt-28 pb-16 lg:pt-32">
-        {/* centered headline */}
-        <div className="mx-auto w-full max-w-[1100px] px-5 text-center sm:px-8 lg:px-12">
-          <motion.div style={{ y: heroY, opacity: heroOpacity }}>
-            <RevealStagger stagger={0.06}>
-              <RevealItem>
-                <Badge variant="outline" className="mb-7">
-                  <CircleDot className="h-2.5 w-2.5" />
-                  Marketplace makanan surplus Indonesia
-                </Badge>
-              </RevealItem>
-              <h1 className="mx-auto max-w-5xl pb-[0.12em] font-display text-[clamp(2.8rem,8vw,7.5rem)] font-light leading-[1.11] tracking-[-0.03em] text-primary">
-                <RevealWords text="Selamatkan" />
-                <br />
-                <RevealWords text="makanan" delay={0.1} />{" "}
-                <span className="italic font-extralight">
-                  <RevealWords text="sebelum" delay={0.2} />
-                </span>
-                <br />
-                <RevealWords text="terbuang." delay={0.3} />
-              </h1>
-              <RevealItem>
-                <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-                  <MagneticButton href="/register" variant="default" className="text-white">
-                    Daftar ReBites
-                    <ArrowRight className="h-4 w-4" />
-                  </MagneticButton>
-                  <MagneticButton href="/#pembeli" variant="cream">
-                    Cari Makanan
-                    <Search className="h-4 w-4" />
-                  </MagneticButton>
-                </div>
-              </RevealItem>
-            </RevealStagger>
-          </motion.div>
-        </div>
-
-        {/* scroll cue */}
-        <motion.div
-          className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: loaded ? 1 : 0 }}
-          transition={{ delay: 1.2 }}
-        >
-          <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-            Gulir
-          </span>
-          <motion.div
-            className="h-10 w-px bg-primary/40"
-            animate={{ scaleY: [0.3, 1, 0.3] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            style={{ originY: 0 }}
-          />
-        </motion.div>
-      </section>
+      <HeroSection />
 
       {/* ── MARQUEE: kategori ────────────────────────────── */}
       <section className="border-y border-border/60 bg-background py-5">
@@ -500,7 +436,7 @@ export default function Home() {
             <Reveal delay={0.15}>
               <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
                 Satu platform untuk makan enak, menyelamatkan surplus, dan
-                membantu lingkungan — sekaligus.
+                membantu lingkungan - sekaligus.
               </p>
             </Reveal>
           </div>
@@ -883,12 +819,7 @@ function GroceryBag() {
       >
         {/* sayuran di belakang tas */}
         {/* daun bawang */}
-        <g
-          stroke="#2f5d43"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          fill="none"
-        >
+        <g stroke="#2f5d43" strokeWidth="3.5" strokeLinecap="round" fill="none">
           <path d="M112 205 C110 155 106 115 100 88" />
           <path d="M128 205 C127 155 124 115 120 82" />
           <path d="M144 205 C144 157 142 117 140 90" />
