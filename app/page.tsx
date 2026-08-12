@@ -1,29 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
-  ArrowLeft,
   Search,
   Store,
   ShoppingCart,
-  Trash2,
   TrendingDown,
   MapPin,
   Clock,
-  Clock3,
   Check,
   Sparkles,
   ArrowUpRight,
-  CircleDot,
   Heart,
   Globe,
   Pizza,
@@ -32,66 +22,13 @@ import {
 } from "lucide-react";
 import { SmoothScroll } from "@/app/components/smooth-scroll";
 import { Preloader } from "@/app/components/preloader";
-import { SiteNav } from "@/app/components/site-nav";
 import { SiteFooter } from "@/app/components/site-footer";
-import {
-  Reveal,
-  RevealStagger,
-  RevealItem,
-  RevealWords,
-} from "@/app/components/reveal";
+import { Reveal } from "@/app/components/reveal";
 import { Counter } from "@/app/components/counter";
 import { Marquee } from "@/app/components/marquee";
 import { MagneticButton, ArrowLink } from "@/app/components/magnetic-button";
 import { Badge } from "@/app/components/ui/badge";
-
-const HERO_ITEMS = [
-  {
-    image:
-      "https://images.pexels.com/photos/8697516/pexels-photo-8697516.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    label: "Italian Pasta",
-    title: "With Special",
-    accent: "Sauce",
-    priceOld: "$9.90",
-    price: "$7.90",
-  },
-  {
-    image:
-      "https://images.pexels.com/photos/32938736/pexels-photo-32938736.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    label: "Truffle Pasta",
-    title: "Rich Truffle",
-    accent: "Cream",
-    priceOld: "$11.90",
-    price: "$9.40",
-  },
-  {
-    image:
-      "https://images.pexels.com/photos/37189123/pexels-photo-37189123.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    label: "Mushroom Risotto",
-    title: "Creamy",
-    accent: "Forest",
-    priceOld: "$10.90",
-    price: "$8.40",
-  },
-  {
-    image:
-      "https://images.pexels.com/photos/5602477/pexels-photo-5602477.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    label: "Spicy Penne",
-    title: "Fiery",
-    accent: "Arrabbiata",
-    priceOld: "$8.90",
-    price: "$6.90",
-  },
-  {
-    image:
-      "https://images.pexels.com/photos/8697516/pexels-photo-8697516.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    label: "Carbonara",
-    title: "Classic",
-    accent: "Roman",
-    priceOld: "$12.90",
-    price: "$9.90",
-  },
-];
+import { HeroSection } from "@/app/components/hero-section";
 
 const CATEGORIES = [
   "Makanan Rumahan",
@@ -141,33 +78,6 @@ const WHY_FEATURES: {
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  const [notice, setNotice] = useState("");
-  const [heroIndex, setHeroIndex] = useState(0);
-  const [heroPaused, setHeroPaused] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.15], [0, -120]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
-
-  const heroItem = HERO_ITEMS[heroIndex];
-
-  const heroGoTo = (i: number) =>
-    setHeroIndex((i + HERO_ITEMS.length) % HERO_ITEMS.length);
-  const heroNext = () => heroGoTo(heroIndex + 1);
-  const heroPrev = () => heroGoTo(heroIndex - 1);
-
-  useEffect(() => {
-    if (heroPaused) return;
-    const id = window.setInterval(
-      () => setHeroIndex((i) => (i + 1) % HERO_ITEMS.length),
-      4000,
-    );
-    return () => window.clearInterval(id);
-  }, [heroPaused]);
-
-  const handleBuy = () => {
-    setNotice(`${heroItem.label} ditambahkan ke pesanan.`);
-    window.setTimeout(() => setNotice(""), 3000);
-  };
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -183,143 +93,9 @@ export default function Home() {
   return (
     <SmoothScroll>
       <Preloader onDone={() => setLoaded(true)} />
-      <SiteNav />
 
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section id="top" className="relative grid min-h-[760px] overflow-hidden border-t border-[#1b2d2a]/10 bg-[#f3efe8]">
-        <div className="absolute inset-0 opacity-80 [background-image:radial-gradient(rgba(18,31,28,0.08)_0.7px,transparent_0.7px)] [background-size:12px_12px]" />
-
-        <div className="relative z-10 grid lg:grid-cols-[1.12fr_1fr]">
-          <div className="flex flex-col justify-center pb-8 pl-6 pt-20 md:pl-12 lg:pl-20 xl:pl-28">
-
-
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={heroIndex}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.35 }}
-                className="mt-4 font-[var(--font-display)] text-[clamp(1.2rem,2vw,2rem)] italic font-medium text-[#1b2d2a]/85"
-              >
-                {heroItem.label}
-              </motion.p>
-            </AnimatePresence>
-
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={heroIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="mt-2 max-w-[620px] font-[var(--font-display)] text-[clamp(4.5rem,6vw,9.1rem)] font-extrabold leading-[0.88] tracking-[-0.06em] text-[#12312e]"
-              >
-                {heroItem.title}
-                <span className="mt-1 block text-[#d0af4f]">{heroItem.accent}</span>
-              </motion.h1>
-            </AnimatePresence>
-
-            <p className="mt-6 max-w-[420px] text-[1.05rem] leading-[1.7] tracking-[-0.01em] text-[#1b2d2a]/70">
-              Italian pasta with special sauce is a
-              <br className="hidden lg:block" /> Price you can find only in <b className="font-bold text-[#12312e]">ReBites.</b>
-            </p>
-
-            <div className="mt-7 flex items-center gap-7">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={heroIndex}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.35 }}
-                  className="flex items-end gap-3 font-[var(--font-display)] text-[#12312e]"
-                >
-                  <del className="mb-1 text-[1.1rem] font-semibold text-[#12312e]/40">{heroItem.priceOld}</del>
-                  <strong className="text-[clamp(2.4rem,2vw,3.5rem)] font-extrabold tracking-[-0.05em]">{heroItem.price}</strong>
-                </motion.div>
-              </AnimatePresence>
-
-              <button
-                type="button"
-                onClick={handleBuy}
-                className="inline-flex items-center gap-3 rounded-full bg-[#0d2d2b] px-5 py-3.5 text-[1.15rem] font-semibold text-[#f5f0e7] shadow-[0_10px_18px_rgba(10,36,30,0.18)] transition-transform duration-200 hover:-translate-y-0.5"
-              >
-                <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white/10">
-                  <ShoppingBag size={17} />
-                </span>
-                Buy Now
-              </button>
-            </div>
-          </div>
-
-          <div
-            className="relative flex min-h-[760px] items-start justify-center pt-6 pr-0"
-            onMouseEnter={() => setHeroPaused(true)}
-            onMouseLeave={() => setHeroPaused(false)}
-          >
-            <div className="absolute -right-28 top-0 h-[110%] w-[110%] bg-[linear-gradient(130deg,#0c2f2f_0%,#183f3a_42%,#102f2d_100%)] [clip-path:polygon(28%_0,_100%_0,_100%_100%,_0_100%)] shadow-[inset_-30px_20px_40px_rgba(0,0,0,0.12)]" />
-            <div className="absolute right-[120px] top-[60px] h-[220px] w-[220px] rotate-[-12deg] rounded-full border border-[#d4af4d]/70" />
-            <div className="absolute bottom-14 left-[10%] h-[82px] w-[520px] translate-x-[30px] rounded-full bg-[#12312e]/20 blur-[20px]" />
-
-            <div className="relative z-10 mt-6 mr-4 aspect-square w-[min(460px,58%)] translate-x-2 translate-y-36 overflow-hidden rounded-full border-[12px] border-[#d9b55d] bg-[#f2e8d8] shadow-[0_0_0_18px_rgba(217,181,93,0.16)]">
-              <AnimatePresence>
-                <motion.img
-                  key={heroIndex}
-                  src={heroItem.image}
-                  alt={heroItem.label}
-                  initial={{ opacity: 0, scale: 1.08 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </AnimatePresence>
-
-              <button
-                type="button"
-                onClick={heroPrev}
-                aria-label="Makanan sebelumnya"
-                className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#d9b55d]/60 bg-[#0d2d2b]/70 text-[#f5f0e7] backdrop-blur-sm transition-colors hover:bg-[#0d2d2b]"
-              >
-                <ArrowLeft size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={heroNext}
-                aria-label="Makanan berikutnya"
-                className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#d9b55d]/60 bg-[#0d2d2b]/70 text-[#f5f0e7] backdrop-blur-sm transition-colors hover:bg-[#0d2d2b]"
-              >
-                <ArrowRight size={18} />
-              </button>
-            </div>
-
-            <div className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
-              {HERO_ITEMS.map((item, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-label={`Slide ${i + 1} dari ${HERO_ITEMS.length}`}
-                  aria-current={i === heroIndex}
-                  onClick={() => heroGoTo(i)}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${
-                    i === heroIndex
-                      ? "w-8 bg-[#d9b55d]"
-                      : "w-2.5 bg-white/35 hover:bg-white/60"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {notice && (
-        <div className="toast" role="status">
-          {notice}
-        </div>
-      )}
+      <HeroSection />
 
       {/* ── MARQUEE: kategori ────────────────────────────── */}
       <section className="border-y border-border/60 bg-background py-5">
@@ -1043,12 +819,7 @@ function GroceryBag() {
       >
         {/* sayuran di belakang tas */}
         {/* daun bawang */}
-        <g
-          stroke="#2f5d43"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          fill="none"
-        >
+        <g stroke="#2f5d43" strokeWidth="3.5" strokeLinecap="round" fill="none">
           <path d="M112 205 C110 155 106 115 100 88" />
           <path d="M128 205 C127 155 124 115 120 82" />
           <path d="M144 205 C144 157 142 117 140 90" />

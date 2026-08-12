@@ -9,6 +9,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -25,6 +26,13 @@ const config: Config = {
         inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
+        forest: '#3B5240',
+        'forest-dark': '#2F4235',
+        cream: '#F7F5EF',
+        stone: '#6B6A63',
+        hairline: '#DEDACF',
+        sage: '#AEB89B',
+        amber: '#D6A54A',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
