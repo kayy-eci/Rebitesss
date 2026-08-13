@@ -73,8 +73,8 @@ const OptionWheel = ({
   activeColor = '#ffffff',
   side = 'left',
   fontSize = 3,
-  spacing = 1.4,
-  curve = 1,
+  spacing = 3,
+  curve = 4,
   tilt = 6,
   blur = 2,
   fade = 0.25,
@@ -87,7 +87,8 @@ const OptionWheel = ({
   soundVolume = 0.5,
   className = '',
   renderItem,
-  plateSize = 200,
+  // 1. Mengubah default plateSize jadi lebih besar (misal 440)
+  plateSize = 440, 
   autoRotate = false,
   autoRotateInterval = 2600
 }: OptionWheelProps) => {
@@ -111,14 +112,18 @@ const OptionWheel = ({
   const [isDragging, setIsDragging] = useState(false);
 
   const remPx = typeof window !== 'undefined' ? parseFloat(getComputedStyle(document.documentElement).fontSize) || 16 : 16;
+  const isPlateMode = renderItem != null;
 
   onChangeRef.current = onChange;
   cfgRef.current = {
     count: items.length,
     items,
-    rowH: Math.max(fontSize * spacing * remPx, 1),
+    // 2. LOGIKA BARU: Jika isi foto, hitung jarak antar frame (rowH) berdasarkan besar plateSize.
+    // Jika sekadar teks, gunakan rumus default. Ini mencegah foto saling dempet.
+    rowH: isPlateMode ? (plateSize * spacing * 0.7) : Math.max(fontSize * spacing * remPx, 1),
     curve,
-    tilt,
+    // 3. LOGIKA BARU: Kurangi kemiringan (tilt) saat mode foto agar lengkungan tidak membuat foto bersinggungan.
+    tilt: isPlateMode ? (tilt * 0.6) : tilt,
     blur,
     fade,
     minOpacity,
@@ -129,12 +134,9 @@ const OptionWheel = ({
     soundUrl,
     soundVolume,
     plateSize,
-    plateMode: renderItem != null
+    plateMode: isPlateMode
   };
 
-  // Single rAF loop that eases the wheel position toward its target with
-  // frame-rate independent exponential smoothing, then lays every option out
-  // along the curve based on its distance from the current position.
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -152,8 +154,7 @@ const OptionWheel = ({
     const els = itemRefs.current;
     const n = cfg.count;
     const mirror = cfg.side === 'right' ? -1 : 1;
-    // Options sit on a circle whose radius keeps the arc length between two
-    // neighbors equal to one row height, so tilt controls how tightly it curls.
+    
     const tiltRad = (cfg.tilt * Math.PI) / 180;
     const R = tiltRad > 0.0005 ? cfg.rowH / tiltRad : 0;
     for (let i = 0; i < n; i++) {
@@ -177,7 +178,7 @@ const OptionWheel = ({
       const p = Math.max(0, 1 - Math.min(dist, 1));
       let transform = `translate(${x.toFixed(2)}px, calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`;
       if (cfg.plateMode) {
-        const scale = 0.68 + 0.32 * p;
+        const scale = 0.82 + 0.18 * p;
         transform += ` scale(${scale.toFixed(4)})`;
         el.style.zIndex = String(Math.round(p * 10));
       }
@@ -198,8 +199,6 @@ const OptionWheel = ({
     rafRef.current = requestAnimationFrame(runFrame);
   }, [runFrame]);
 
-  // Optional tick on selection change, throttled so fast scrolling can't spam
-  // it, and with playback failures (e.g. autoplay policies) silently ignored.
   const playTick = useCallback(() => {
     const { soundUrl, soundVolume } = cfgRef.current;
     if (!soundUrl) return;
@@ -255,13 +254,11 @@ const OptionWheel = ({
     }
   }, []);
 
-  // Auto-rotate: keep advancing the wheel so plates keep "spinning".
   useEffect(() => {
     resetAutoTimer();
     return pauseAutoTimer;
   }, [resetAutoTimer, pauseAutoTimer]);
 
-  // Wheel / touchpad scrolling, registered manually so it can be non-passive.
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
@@ -269,8 +266,6 @@ const OptionWheel = ({
       e.preventDefault();
       const cfg = cfgRef.current;
       const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
-      // Cap each event at one step so notchy mouse wheels move exactly one
-      // option per click, while touchpads still scroll continuously.
       const step = Math.max(-1, Math.min(1, delta / cfg.rowH));
       applyTarget(targetRef.current + step, false);
       resetAutoTimer();
@@ -299,8 +294,6 @@ const OptionWheel = ({
       const dy = e.clientY - drag.y;
       if (!dragMovedRef.current && Math.abs(dy) > 4) {
         dragMovedRef.current = true;
-        // Capture only once a real drag starts, so plain clicks still reach
-        // the items and navigate to them.
         rootRef.current?.setPointerCapture(drag.id);
       }
       if (dragMovedRef.current) applyTarget(drag.start - dy / cfgRef.current.rowH, false);

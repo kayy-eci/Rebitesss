@@ -7,7 +7,7 @@ import { ArrowRight, Leaf, Lock, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const HERO_IMAGE =
-  "https://images.pexels.com/photos/16134564/pexels-photo-16134564.jpeg?auto=compress&cs=tinysrgb&w=1000";
+  "/hero-makanan.jpeg";
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
@@ -299,9 +299,9 @@ export function HeroSection() {
             =================================================== */}
             <div className="relative z-10 max-w-[560px]">
               <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-bold leading-[1.02] tracking-[-0.03em]">
-                <span className="text-forest-dark">Makanan Keren</span>
+                <span className="text-forest-dark">Selamatkan Makanan,</span>
 
-                <span className="block text-forest">Keren Makanan</span>
+                <span className="block text-forest">Selamatkan Bumi.</span>
               </h1>
 
               <div className="mt-9 flex flex-wrap items-center gap-4">

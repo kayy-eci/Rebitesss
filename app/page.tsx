@@ -49,36 +49,36 @@ const PARTNERS = [
 
 const FOODS = [
   {
-    name: "Pizza Sayap Zaitun",
-    desc: "Pizza tipis dengan mozzarella leleh, arugula segar, dan zaitun hitam di atas saus tomat rumahan.",
+    name: "Ayam Geprek",
+    desc: "Ayam geprek crispy dengan sambal pedas, disajikan bersama mi goreng yang gurih.",
     price: 45000,
     original: 95000,
     image: "/makanan1.jpeg",
   },
   {
-    name: "Sayap Ayam Panggang",
-    desc: "Sayap ayam panggang renyah dengan bumbu rosemary dan bawang putih, cocok untuk lauk atau cemilan.",
+    name: "Nasi Goreng Mantap",
+    desc: "Nasi goreng gurih dengan bumbu rempah harum, dilengkapi telur dan sayuran, nikmat disantap coy",
     price: 28000,
     original: 58000,
     image: "/makanan2.jpeg",
   },
   {
-    name: "Pasta Basil Tomat",
-    desc: "Pasta gandum utuh dengan tomat ceri, bayam, dan feta yang dimasak dengan minyak zaitun.",
+    name: "Soto Mie Bogor",
+    desc: "Soto mie khas Bogor dengan kuah gurih yang hangat, dilengkapi mie, risol, dan potongan daging yang lezat bangat.",
     price: 32000,
     original: 65000,
     image: "/makanan3.jpeg",
   },
   {
-    name: "Kari & Naan Hangat",
-    desc: "Perpaduan kari rempah khas India dengan roti naan lembut dan pakora renyah dalam satu set.",
+    name: "Sate Ayam Pak Tigiset",
+    desc: "Sate ayam dengan bumbu kacang gurih dan aroma bakaran yang harum.",
     price: 38000,
     original: 75000,
     image: "/makanan4.jpeg",
   },
   {
-    name: "Pancake Stroberi",
-    desc: "Pancake lembut bertumpuk dengan stroberi segar, sirup, dan taburan kacang untuk akhir yang manis.",
+    name: "Rendang Pandang Karindang",
+    desc: "Rendang daging sapi empuk dengan bumbu rempah kaya dan gurih yang meresap sempurna.",
     price: 25000,
     original: 52000,
     image: "/makanan5.jpeg",
@@ -130,7 +130,7 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
-            <div>
+            <div> 
               <Reveal>
                 <Badge className="mb-6 bg-primary-foreground/10 text-primary-foreground">
                   01 - Masalah
@@ -452,7 +452,7 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="mt-16 grid items-center gap-14 lg:mt-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 xl:gap-20">
+          <div className="mt-12 grid items-center gap-14 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 xl:gap-20">
             {/* info makanan terpilih */}
             <div className="mx-auto w-full max-w-[520px] text-center lg:max-w-none lg:text-left">
               <AnimatePresence mode="wait">
@@ -493,16 +493,16 @@ export default function Home() {
             </div>
 
             {/* piring berputar */}
-            <div className="mx-auto w-full max-w-[560px]">
-              <div className="relative h-[480px] w-full sm:h-[540px]">
+            <div className="relative mx-auto w-full max-w-[560px] -mr-5 sm:-mr-8 lg:-mt-6 lg:-mr-[calc((100vw-min(100vw-6rem,1400px))/2+7.25rem)]">
+              <div className="relative h-[560px] w-full sm:h-[640px]">
                 <OptionWheel
                   items={FOODS.map((f) => f.name)}
                   defaultSelected={0}
                   side="right"
                   fontSize={8}
                   spacing={1.4}
-                  curve={1}
-                  tilt={7}
+                  curve={20}
+                  tilt={6}
                   blur={3}
                   fade={0.32}
                   minOpacity={0.02}
@@ -511,7 +511,7 @@ export default function Home() {
                   draggable
                   autoRotate
                   autoRotateInterval={2600}
-                  plateSize={210}
+                  plateSize={330}
                   onChange={(index) => setFoodIndex(index)}
                   renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
                 />
@@ -789,7 +789,7 @@ function FoodPlate({ image }: { image: string }) {
           <stop offset="100%" stopColor="#D5D2C1" />
         </radialGradient>
         <clipPath id={clipId}>
-          <circle cx="100" cy="100" r="62" />
+          <circle cx="100" cy="100" r="84" />
         </clipPath>
       </defs>
 
@@ -800,10 +800,10 @@ function FoodPlate({ image }: { image: string }) {
       <circle cx="100" cy="100" r="92" fill="none" stroke="#C8C5B5" strokeWidth="2.5" />
 
       {/* Inner rim */}
-      <circle cx="100" cy="100" r="78" fill="none" stroke="#D8D5C6" strokeWidth="1.5" />
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#D8D5C6" strokeWidth="1.5" />
 
       {/* Inner plate */}
-      <circle cx="100" cy="100" r="66" fill="#F5F3E9" />
+      <circle cx="100" cy="100" r="86" fill="#F5F3E9" />
 
       {/* Food image */}
       <image
@@ -817,7 +817,7 @@ function FoodPlate({ image }: { image: string }) {
       />
 
       {/* Foto border */}
-      <circle cx="100" cy="100" r="62" fill="none" stroke="#F5F3E9" strokeWidth="4" />
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#F5F3E9" strokeWidth="4" />
 
       {/* Plate highlight */}
       <ellipse cx="80" cy="66" rx="46" ry="22" fill="#FFFFFF" opacity="0.16" />
