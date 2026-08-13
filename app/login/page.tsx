@@ -4,7 +4,7 @@ import AuthSplit from "@/app/components/auth/auth-split";
 export const metadata: Metadata = {
   title: "Masuk - ReBites",
   description:
-    "Masuk ke akun ReBites untuk mengakses dasbor kurasi marketplace kuliner surplus.",
+    "Masuk ke akun ReBites untuk mengakses marketplace kuliner surplus.",
 };
 
 export default function LoginPage() {
@@ -18,9 +18,9 @@ export default function LoginPage() {
           Kembali
         </>
       }
-      subtitle="Enter your credentials to access your curated dashboard."
+      subtitle="Masuk menggunakan email dan kata sandi akun ReBites kamu."
       submitLabel="Sign In"
-      redirectTo="/"
+      redirectTo="/home"
       bottomHint={{
         text: "Belum punya akun?",
         linkText: "Daftar di sini",

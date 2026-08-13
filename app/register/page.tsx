@@ -11,6 +11,7 @@ export default function RegisterPage() {
   return (
     <AuthSplit
       mode="signup"
+      
       title={
         <>
           Buat Akun
@@ -20,7 +21,7 @@ export default function RegisterPage() {
       }
       subtitle="Create your account to join our curated marketplace."
       submitLabel="Buat Akun"
-      redirectTo="/"
+      redirectTo="/home"
       bottomHint={{
         text: "Sudah punya akun?",
         linkText: "Masuk",

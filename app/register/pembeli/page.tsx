@@ -10,33 +10,33 @@ export const metadata: Metadata = {
 export default function RegisterPembeliPage() {
   return (
     <AuthSplit
-      mode="signup"
-      title={
-        <>
-          Daftar
-          <br />
-          Pembeli
-        </>
-      }
-      subtitle="Create your account to start saving surplus food near you."
-      submitLabel="Buat Akun"
-      redirectTo="/"
-      bottomHint={{
-        text: "Sudah punya akun?",
-        linkText: "Masuk",
-        href: "/login",
-      }}
-      brand={{
-        title: (
-          <>
-            Fresh finds,
-            <br />
-            less waste.
-          </>
-        ),
-        description:
-          "Discover discounted meals from local kitchens — saving money and the planet.",
-      }}
-    />
+  mode="signup"
+  title={
+    <>
+      Daftar
+      <br />
+      Pembeli
+    </>
+  }
+  subtitle="Create your account to start saving surplus food near you."
+  submitLabel="Buat Akun"
+  redirectTo="/home"
+  bottomHint={{
+    text: "Sudah punya akun?",
+    linkText: "Masuk",
+    href: "/login",
+  }}
+  brand={{
+    title: (
+      <>
+        Fresh finds,
+        <br />
+        less waste.
+      </>
+    ),
+    description:
+      "Discover discounted meals from local kitchens — saving money and the planet.",
+  }}
+/>
   );
 }
