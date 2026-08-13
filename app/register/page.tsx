@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import AuthSplit from "@/app/components/auth/auth-split";
 
 export const metadata: Metadata = {

@@ -22,8 +22,6 @@ export interface OptionWheelProps {
   inset?: number;
   loop?: boolean;
   draggable?: boolean;
-  soundUrl?: string;
-  soundVolume?: number;
   className?: string;
   renderItem?: (index: number, item: string) => ReactNode;
   plateSize?: number;
@@ -44,26 +42,11 @@ interface WheelConfig {
   loop: boolean;
   smoothing: number;
   draggable: boolean;
-  soundUrl: string;
-  soundVolume: number;
   plateSize: number;
   plateMode: boolean;
 }
 
-const DEFAULT_ITEMS = [
-  'Ambient',
-  'House',
-  'Techno',
-  'Jazz',
-  'Lo-Fi',
-  'Synthwave',
-  'Trance',
-  'Funk',
-  'Disco',
-  'Hip-Hop',
-  'Chillwave',
-  'Drum & Bass'
-];
+const DEFAULT_ITEMS: string[] = [];
 
 const OptionWheel = ({
   items = DEFAULT_ITEMS,
@@ -83,8 +66,6 @@ const OptionWheel = ({
   inset = 80,
   loop = false,
   draggable = true,
-  soundUrl = '',
-  soundVolume = 0.5,
   className = '',
   renderItem,
   // 1. Mengubah default plateSize jadi lebih besar (misal 440)
@@ -104,9 +85,6 @@ const OptionWheel = ({
   const wheelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dragRef = useRef<{ y: number; start: number; id: number } | null>(null);
   const dragMovedRef = useRef(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioUrlRef = useRef('');
-  const lastTickRef = useRef(0);
   const autoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected);
   const [isDragging, setIsDragging] = useState(false);
@@ -131,8 +109,6 @@ const OptionWheel = ({
     loop,
     smoothing,
     draggable,
-    soundUrl,
-    soundVolume,
     plateSize,
     plateMode: isPlateMode
   };
@@ -199,40 +175,26 @@ const OptionWheel = ({
     rafRef.current = requestAnimationFrame(runFrame);
   }, [runFrame]);
 
-  const playTick = useCallback(() => {
-    const { soundUrl, soundVolume } = cfgRef.current;
-    if (!soundUrl) return;
-    const now = performance.now();
-    if (now - lastTickRef.current < 70) return;
-    lastTickRef.current = now;
-    if (!audioRef.current || audioUrlRef.current !== soundUrl) {
-      audioRef.current = new Audio(soundUrl);
-      audioRef.current.preload = 'auto';
-      audioUrlRef.current = soundUrl;
-    }
-    const audio = audioRef.current;
-    audio.volume = Math.min(Math.max(soundVolume, 0), 1);
-    audio.currentTime = 0;
-    audio.play()?.catch(() => {});
-  }, []);
-
   const applyTarget = useCallback(
     (value: number, snap: boolean) => {
       const cfg = cfgRef.current;
       let v = value;
       if (!cfg.loop) v = Math.min(Math.max(v, 0), Math.max(cfg.count - 1, 0));
       if (snap) v = Math.round(v);
+      if (snap && cfg.count > 0 && v !== targetRef.current) {
+        const delta = v - targetRef.current;
+        posRef.current += Math.sign(delta) * Math.min(0.5, Math.abs(delta) * 0.2);
+      }
       targetRef.current = v;
       const idx = ((Math.round(v) % cfg.count) + cfg.count) % cfg.count;
       if (idx !== selectedRef.current) {
         selectedRef.current = idx;
         setSelectedIndex(idx);
         onChangeRef.current?.(idx, cfg.items[idx]);
-        playTick();
       }
       startLoop();
     },
-    [startLoop, playTick]
+    [startLoop]
   );
 
   const resetAutoTimer = useCallback(() => {
@@ -241,10 +203,12 @@ const OptionWheel = ({
       autoTimerRef.current = null;
     }
     if (!autoRotate) return;
+    const jitter = (Math.random() - 0.5) * 2;
+    const delay = Math.max(1000, autoRotateInterval + autoRotateInterval * 0.3 * jitter);
     autoTimerRef.current = setTimeout(() => {
       applyTarget(Math.round(targetRef.current) + 1, true);
       resetAutoTimer();
-    }, autoRotateInterval);
+    }, delay);
   }, [autoRotate, autoRotateInterval, applyTarget]);
 
   const pauseAutoTimer = useCallback(() => {
@@ -345,7 +309,6 @@ const OptionWheel = ({
     () => () => {
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
-      audioRef.current?.pause();
       if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
     },
     []
@@ -356,7 +319,7 @@ const OptionWheel = ({
       ref={rootRef}
       role="listbox"
       tabIndex={0}
-      aria-label="Option wheel"
+      aria-label="Pilihan menu makanan"
       className={`relative h-full w-full select-none overflow-hidden outline-none [touch-action:none] ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}${className ? ` ${className}` : ''}`}
       style={
         {
