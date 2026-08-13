@@ -85,3 +85,154 @@ Import trace for requested module:
  ✓ Compiled in 1804ms (1608 modules)
  ✓ Compiled in 1426ms (1622 modules)
  ✓ Compiled /forgot-password/page in 1045ms (1621 modules)
+ ✓ Compiled in 1447ms (1633 modules)
+ ✓ Compiled in 606ms (1633 modules)
+ ✓ Compiled in 657ms (1633 modules)
+ ✓ Compiled in 635ms (1633 modules)
+ ✓ Compiled in 1205ms (867 modules)
+ ✓ Compiled in 774ms (867 modules)
+ ✓ Compiled in 1430ms (1633 modules)
+ ✓ Compiled in 871ms (1627 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ X app\page.tsx (57:10) @ ShoppingBag
+ X ReferenceError: ShoppingBag is not defined
+    at eval (./app/page.tsx:67:15)
+    at (ssr)/./app/page.tsx (C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\page.js:228:1)
+    at __webpack_require__ (C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\webpack-runtime.js:33:42)
+[0m [90m 55 | [39m}[] [33m=[39m [[0m
+[0m [90m 56 | [39m  {[0m
+[0m[31m[1m>[22m[39m[90m 57 | [39m    icon[33m:[39m [33mShoppingBag[39m[33m,[39m[0m
+[0m [90m    | [39m         [31m[1m^[22m[39m[0m
+[0m [90m 58 | [39m    heartBadge[33m:[39m [36mtrue[39m[33m,[39m[0m
+[0m [90m 59 | [39m    title[33m:[39m [32m"Nikmati makanan enak dengan harga ½ atau kurang"[39m[33m,[39m[0m
+[0m [90m 60 | [39m  }[33m,[39m[0m
+ ✓ Compiled in 644ms (1625 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ X app\page.tsx (425:15) @ WHY_FEATURES
+ X ReferenceError: WHY_FEATURES is not defined
+    at Home (./app/page.tsx:988:51)
+[0m [90m 423 | [39m            {[90m/* kolom kiri */[39m}[0m
+[0m [90m 424 | [39m            [33m<[39m[33mdiv[39m className[33m=[39m[32m"flex flex-col items-center gap-12 text-center sm:grid sm:grid-cols-2 sm:items-start sm:justify-items-center sm:gap-10 lg:flex lg:items-start lg:gap-16 lg:text-left"[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 425 | [39m              {[33mWHY_FEATURES[39m[33m.[39mslice([35m0[39m[33m,[39m [35m2[39m)[33m.[39mmap((f[33m,[39m i) [33m=>[39m ([0m
+[0m [90m     | [39m              [31m[1m^[22m[39m[0m
+[0m [90m 426 | [39m                [33m<[39m[33mWhyFeature[39m[0m
+[0m [90m 427 | [39m                  key[33m=[39m{i}[0m
+[0m [90m 428 | [39m                  icon[33m=[39m{f[33m.[39micon}[0m
+ X app\page.tsx (425:15) @ WHY_FEATURES
+ X ReferenceError: WHY_FEATURES is not defined
+    at Home (./app/page.tsx:988:51)
+[0m [90m 423 | [39m            {[90m/* kolom kiri */[39m}[0m
+[0m [90m 424 | [39m            [33m<[39m[33mdiv[39m className[33m=[39m[32m"flex flex-col items-center gap-12 text-center sm:grid sm:grid-cols-2 sm:items-start sm:justify-items-center sm:gap-10 lg:flex lg:items-start lg:gap-16 lg:text-left"[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 425 | [39m              {[33mWHY_FEATURES[39m[33m.[39mslice([35m0[39m[33m,[39m [35m2[39m)[33m.[39mmap((f[33m,[39m i) [33m=>[39m ([0m
+[0m [90m     | [39m              [31m[1m^[22m[39m[0m
+[0m [90m 426 | [39m                [33m<[39m[33mWhyFeature[39m[0m
+[0m [90m 427 | [39m                  key[33m=[39m{i}[0m
+[0m [90m 428 | [39m                  icon[33m=[39m{f[33m.[39micon}[0m
+ ✓ Compiled in 941ms (1637 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 837ms (1635 modules)
+ ✓ Compiled in 976ms (1635 modules)
+ ✓ Compiled in 1269ms (1635 modules)
+ ✓ Compiled in 1274ms (1635 modules)
+ ✓ Compiled in 1234ms (1635 modules)
+ ✓ Compiled /not-found in 700ms (1626 modules)
+ ✓ Compiled in 1036ms (1635 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/not-found_client-reference-manifest' in C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js', but to 'Error: Can't resolve '../../../../.next/server/app/not-found_client-reference-manifest' in 'C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/not-found_client-reference-manifest (expected C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js)
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server\load-components.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server\load-components.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\utils.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\utils.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\worker.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\worker.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+<w>  at resolve commonjs C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+ ✓ Compiled in 997ms (1635 modules)
+ ✓ Compiled in 774ms (1635 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\1.pack.gz_' -> 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\1.pack.gz'
+ ✓ Compiled in 746ms (1635 modules)
+ ✓ Compiled in 1082ms (1635 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\0.pack.gz_' -> 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\0.pack.gz'
+ ✓ Compiled in 1226ms (1635 modules)
+ ✓ Compiled in 1226ms (1635 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\0.pack.gz_' -> 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\0.pack.gz'
+ ✓ Compiled in 848ms (1635 modules)
+ ✓ Compiled in 714ms (1635 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\0.pack.gz_' -> 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/not-found_client-reference-manifest' in C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js', but to 'Error: Can't resolve '../../../../.next/server/app/not-found_client-reference-manifest' in 'C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/not-found_client-reference-manifest (expected C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js)
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server\load-components.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server\load-components.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\utils.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\utils.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\worker.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\worker.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+<w>  at resolve commonjs C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+ ✓ Compiled /not-found in 675ms (1626 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/not-found_client-reference-manifest' in C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js', but to 'Error: Can't resolve '../../../../.next/server/app/not-found_client-reference-manifest' in 'C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/not-found_client-reference-manifest (expected C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\server\app\not-found_client-reference-manifest.js)
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server\load-components.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\server\load-components.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\utils.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\utils.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\worker.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\worker.js
+<w>  at file dependencies C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+<w>  at file C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+<w>  at resolve commonjs C:\Users\Wildan D.A. Darmawan\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-route-loader\index.js
+ ✓ Compiled in 1582ms (1635 modules)
+ ✓ Compiled /not-found in 349ms (1626 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 1080ms (1640 modules)
+ ✓ Compiled in 1849ms (1640 modules)
+ ✓ Compiled in 1204ms (1640 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\2.pack.gz_' -> 'C:\Users\Wildan D.A. Darmawan\Rebitesss\.next\cache\webpack\client-development\2.pack.gz'
+ ✓ Compiled in 1331ms (1640 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ X app\components\hero-section.tsx (293:11) @ Sprout
+ X ReferenceError: Sprout is not defined
+    at HeroSection (./app/components/hero-section.tsx:439:105)
+[0m [90m 291 | [39m[0m
+[0m [90m 292 | [39m          {[90m/* tunas daun */[39m}[0m
+[0m[31m[1m>[22m[39m[90m 293 | [39m          [33m<[39m[33mSprout[39m className[33m=[39m[32m"absolute -right-6 -top-6 hidden w-64 opacity-80 lg:block"[39m [33m/[39m[33m>[39m[0m
+[0m [90m     | [39m          [31m[1m^[22m[39m[0m
+[0m [90m 294 | [39m          [33m<[39m[33mSprout[39m className[33m=[39m[32m"absolute -left-6 bottom-4 hidden w-44 -scale-x-100 opacity-50 md:block"[39m [33m/[39m[33m>[39m[0m
+[0m [90m 295 | [39m        [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+[0m [90m 296 | [39m[0m
+ ✓ Compiled in 1109ms (1640 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ X app\components\hero-section.tsx (293:11) @ Sprout
+ X ReferenceError: Sprout is not defined
+    at HeroSection (./app/components/hero-section.tsx:439:105)
+[0m [90m 291 | [39m[0m
+[0m [90m 292 | [39m          {[90m/* tunas daun */[39m}[0m
+[0m[31m[1m>[22m[39m[90m 293 | [39m          [33m<[39m[33mSprout[39m className[33m=[39m[32m"absolute -right-6 -top-6 hidden w-64 opacity-80 lg:block"[39m [33m/[39m[33m>[39m[0m
+[0m [90m     | [39m          [31m[1m^[22m[39m[0m
+[0m [90m 294 | [39m          [33m<[39m[33mSprout[39m className[33m=[39m[32m"absolute -left-6 bottom-4 hidden w-44 -scale-x-100 opacity-50 md:block"[39m [33m/[39m[33m>[39m[0m
+[0m [90m 295 | [39m        [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+[0m [90m 296 | [39m[0m
+ X app\components\hero-section.tsx (293:11) @ Sprout
+ X ReferenceError: Sprout is not defined
+    at HeroSection (./app/components/hero-section.tsx:439:105)
+[0m [90m 291 | [39m[0m
+[0m [90m 292 | [39m          {[90m/* tunas daun */[39m}[0m
+[0m[31m[1m>[22m[39m[90m 293 | [39m          [33m<[39m[33mSprout[39m className[33m=[39m[32m"absolute -right-6 -top-6 hidden w-64 opacity-80 lg:block"[39m [33m/[39m[33m>[39m[0m
+[0m [90m     | [39m          [31m[1m^[22m[39m[0m
+[0m [90m 294 | [39m          [33m<[39m[33mSprout[39m className[33m=[39m[32m"absolute -left-6 bottom-4 hidden w-44 -scale-x-100 opacity-50 md:block"[39m [33m/[39m[33m>[39m[0m
+[0m [90m 295 | [39m        [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+[0m [90m 296 | [39m[0m
+ ✓ Compiled in 1172ms (1640 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 1133ms (1640 modules)
+ ✓ Compiled in 1639ms (1635 modules)
+ ✓ Compiled in 1305ms (1635 modules)
+ ✓ Compiled in 1653ms (1635 modules)
+ ✓ Compiled in 1221ms (1635 modules)
+ ✓ Compiled in 1176ms (1635 modules)
+ ✓ Compiled in 1574ms (1635 modules)
