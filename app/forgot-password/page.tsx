@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import AuthShell from "@/app/components/auth/auth-shell";
-import ForgotPasswordForm from "@/app/components/auth/forgot-password-form";
+import AuthShell from "@/app/auth/auth-shell";
+import ForgotPasswordForm from "@/app/auth/forgot-password-form";
 
 export const metadata: Metadata = {
   title: "Lupa Kata Sandi - ReBites",
