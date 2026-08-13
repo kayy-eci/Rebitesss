@@ -4,6 +4,7 @@ import { ArrowRight, SearchX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { FoodCard } from './FoodCard';
+import { DotPattern, SoftBlob } from './Ornaments';
 import type { FoodItem } from '../lib/types';
 
 const FOCUS_RING =
@@ -16,8 +17,10 @@ interface FoodGridProps {
 
 export function FoodGrid({ items, onShowAll }: FoodGridProps) {
   return (
-    <section className="scroll-mt-24 bg-cream-50 pb-16 pt-10 lg:pb-20 lg:pt-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden scroll-mt-24 bg-cream-50 pb-16 pt-10 lg:pb-20 lg:pt-12">
+      <SoftBlob className="-right-24 top-16 h-72 w-72 bg-sage-100/70" />
+      <DotPattern className="bottom-16 right-10 hidden h-24 w-24 text-sage-500/25 lg:block" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">

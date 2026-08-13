@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { vendors } from '../lib/data';
 import { VendorCard } from './VendorCard';
+import { SoftBlob } from './Ornaments';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
@@ -13,9 +14,10 @@ export function VendorSection() {
   return (
     <section
       id="umkm"
-      className="scroll-mt-24 bg-cream-50 pb-16 pt-2 lg:pb-20"
+      className="relative overflow-hidden scroll-mt-24 bg-cream-50 pb-16 pt-2 lg:pb-20"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <SoftBlob className="-right-24 top-1/4 h-80 w-80 bg-sage-100/60" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">

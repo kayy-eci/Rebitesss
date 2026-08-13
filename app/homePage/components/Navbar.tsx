@@ -31,18 +31,11 @@ const FOCUS_RING =
 
 export function Navbar() {
   const { itemCount } = useCart();
-  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('home');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState(LOCATIONS[0]);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const [overDark, setOverDark] = useState(false);
 
   useEffect(() => {
     const ids = NAV_LINKS.map((l) => l.id);
@@ -60,6 +53,22 @@ export function Navbar() {
     );
 
     sections.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const darkIds = ['dampak', 'footer'];
+    const darkEls = darkIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (darkEls.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => setOverDark(entries.some((e) => e.isIntersecting)),
+      { rootMargin: '0px 0px -65% 0px' }
+    );
+
+    darkEls.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -85,13 +94,21 @@ export function Navbar() {
       aria-label={label}
       onClick={onClick}
       className={cn(
-        'relative flex h-10 w-10 items-center justify-center rounded-full text-charcoal-500 transition-colors duration-200 hover:bg-cream-100 hover:text-green-700',
+        'relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200',
+        overDark
+          ? 'text-white/80 hover:bg-white/10 hover:text-white'
+          : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
         FOCUS_RING
       )}
     >
       {children}
       {badge !== undefined && badge > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-green-700 px-1 text-[10px] font-bold text-white">
+        <span
+          className={cn(
+            'absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-colors duration-500',
+            overDark ? 'bg-gold-500 text-charcoal-900' : 'bg-green-700 text-white'
+          )}
+        >
           {badge}
         </span>
       )}
@@ -99,169 +116,197 @@ export function Navbar() {
   );
 
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-50 transition-all duration-300',
-        scrolled
-          ? 'bg-cream-50/85 shadow-[0_8px_30px_-18px_rgba(15,46,31,0.45)] backdrop-blur-xl'
-          : 'bg-cream-50'
-      )}
-    >
-      <nav className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <a
-          href="#home"
-          onClick={(e) => {
-            e.preventDefault();
-            handleNav('home');
-          }}
-          className={cn(
-            'flex shrink-0 items-center gap-2 rounded-full focus-visible:outline-none',
-            FOCUS_RING
-          )}
-          aria-label="ReBites beranda"
-        >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-700 text-white shadow-md shadow-green-700/25">
-            <Leaf className="h-4 w-4" />
-          </span>
-          <span className="font-sans text-xl font-bold tracking-tight text-green-700">
-            ReBites
-          </span>
-        </a>
-
-        {/* Nav links */}
-        <ul className="mx-auto hidden items-center gap-1 lg:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.id}>
-              <a
-                href={`#${link.id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNav(link.id);
-                }}
-                aria-current={active === link.id ? 'page' : undefined}
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
+        <div className="mx-auto w-full max-w-[1200px]">
+          <nav
+            className={cn(
+              'flex h-16 items-center justify-between rounded-full border px-4 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-5 lg:px-7',
+              overDark
+                ? 'border-white/15 bg-forest-dark/75 text-white'
+                : 'border-hairline/70 bg-cream/80 text-forest-dark'
+            )}
+          >
+            {/* Logo */}
+            <a
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNav('home');
+              }}
+              aria-label="ReBites beranda"
+              className={cn('flex shrink-0 items-center gap-2 rounded-full', FOCUS_RING)}
+            >
+              <span
                 className={cn(
-                  'rounded-full px-4 py-2 font-inter text-sm transition-colors duration-200',
-                  active === link.id
-                    ? 'bg-cream-100 font-semibold text-green-700'
-                    : 'text-charcoal-500 hover:text-green-700',
+                  'flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500',
+                  overDark ? 'bg-white text-forest-dark' : 'bg-green-700 text-white'
+                )}
+              >
+                <Leaf className="h-4 w-4" />
+              </span>
+              <span
+                className={cn(
+                  'font-sans text-xl font-bold tracking-tight transition-colors duration-500',
+                  overDark ? 'text-white' : 'text-green-700'
+                )}
+              >
+                ReBites
+              </span>
+            </a>
+
+            {/* Nav links */}
+            <ul className="hidden items-center gap-1 lg:flex">
+              {NAV_LINKS.map((link) => (
+                <li key={link.id}>
+                  <a
+                    href={`#${link.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNav(link.id);
+                    }}
+                    aria-current={active === link.id ? 'page' : undefined}
+                    className={cn(
+                      'rounded-full px-3 py-2 font-inter text-sm transition-colors duration-200 xl:px-4',
+                      active === link.id
+                        ? overDark
+                          ? 'bg-white/15 font-semibold text-white'
+                          : 'bg-cream-100 font-semibold text-green-700'
+                        : overDark
+                          ? 'text-white/75 hover:text-white'
+                          : 'text-charcoal-500 hover:text-green-700',
+                      FOCUS_RING
+                    )}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            {/* Actions */}
+            <div className="flex items-center gap-1 sm:gap-0.5">
+              {/* Location selector */}
+              <div className="relative hidden lg:block">
+                <button
+                  type="button"
+                  aria-label="Pilih lokasi"
+                  aria-expanded={locationOpen}
+                  onClick={() => setLocationOpen((v) => !v)}
+                  className={cn(
+                    'flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200',
+                    overDark
+                      ? 'text-white/80 hover:bg-white/10 hover:text-white'
+                      : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
+                    FOCUS_RING
+                  )}
+                >
+                  <MapPin
+                    className={cn(
+                      'h-4 w-4 transition-colors duration-500',
+                      overDark ? 'text-gold-500' : 'text-green-700'
+                    )}
+                  />
+                  <span className="max-w-[100px] truncate">{location}</span>
+                  <ChevronDown
+                    className={cn(
+                      'h-4 w-4 transition-transform duration-200',
+                      locationOpen && 'rotate-180'
+                    )}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {locationOpen && (
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-40"
+                        onClick={() => setLocationOpen(false)}
+                      />
+                      <motion.ul
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-sage-100 bg-white p-1.5 text-forest-dark shadow-xl"
+                      >
+                        {LOCATIONS.map((loc) => (
+                          <li key={loc}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setLocation(loc);
+                                setLocationOpen(false);
+                              }}
+                              className={cn(
+                                'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150',
+                                loc === location
+                                  ? 'bg-cream-100 font-semibold text-green-700'
+                                  : 'text-charcoal-500 hover:bg-cream-50 hover:text-green-700'
+                              )}
+                            >
+                              <MapPin className="h-3.5 w-3.5 shrink-0" />
+                              {loc}
+                            </button>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Icon actions */}
+              <div className="hidden items-center gap-0.5 sm:flex">
+                <IconButton label="Cari makanan">
+                  <Search className="h-5 w-5" />
+                </IconButton>
+                <IconButton label="Keranjang belanja" badge={itemCount}>
+                  <ShoppingCart className="h-5 w-5" />
+                </IconButton>
+                <IconButton label="Notifikasi">
+                  <Bell className="h-5 w-5" />
+                </IconButton>
+                <IconButton label="Profil saya">
+                  <User className="h-5 w-5" />
+                </IconButton>
+              </div>
+
+              {/* CTA */}
+              <Link
+                href="/login"
+                className={cn(
+                  'hidden rounded-full px-5 py-2.5 font-inter text-sm font-semibold transition-colors duration-300 md:block',
+                  overDark
+                    ? 'bg-white text-forest-dark hover:bg-white/90'
+                    : 'bg-green-700 text-white hover:bg-green-600',
                   FOCUS_RING
                 )}
               >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+                Masuk / Daftar
+              </Link>
 
-        <div className="ml-auto flex items-center gap-1 lg:ml-0">
-          {/* Location selector */}
-          <div className="relative hidden md:block">
-            <button
-              type="button"
-              aria-label="Pilih lokasi"
-              aria-expanded={locationOpen}
-              onClick={() => setLocationOpen((v) => !v)}
-              className={cn(
-                'flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-charcoal-500 transition-colors duration-200 hover:bg-cream-100 hover:text-green-700',
-                FOCUS_RING
-              )}
-            >
-              <MapPin className="h-4 w-4 text-green-700" />
-              <span className="max-w-[120px] truncate">{location}</span>
-              <ChevronDown
+              {/* Hamburger */}
+              <button
+                type="button"
+                aria-label="Buka menu navigasi"
+                aria-expanded={drawerOpen}
+                onClick={() => setDrawerOpen((v) => !v)}
                 className={cn(
-                  'h-4 w-4 transition-transform duration-200',
-                  locationOpen && 'rotate-180'
+                  'flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden',
+                  overDark ? 'text-white' : 'text-forest-dark',
+                  FOCUS_RING
                 )}
-              />
-            </button>
-
-            <AnimatePresence>
-              {locationOpen && (
-                <>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-40"
-                    onClick={() => setLocationOpen(false)}
-                  />
-                  <motion.ul
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.18 }}
-                    className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-sage-100 bg-white p-1.5 shadow-xl"
-                  >
-                    {LOCATIONS.map((loc) => (
-                      <li key={loc}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setLocation(loc);
-                            setLocationOpen(false);
-                          }}
-                          className={cn(
-                            'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150',
-                            loc === location
-                              ? 'bg-cream-100 font-semibold text-green-700'
-                              : 'text-charcoal-500 hover:bg-cream-50 hover:text-green-700'
-                          )}
-                        >
-                          <MapPin className="h-3.5 w-3.5 shrink-0" />
-                          {loc}
-                        </button>
-                      </li>
-                    ))}
-                  </motion.ul>
-                </>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Icon actions */}
-          <div className="hidden items-center gap-0.5 sm:flex">
-            <IconButton label="Cari makanan">
-              <Search className="h-5 w-5" />
-            </IconButton>
-            <IconButton label="Keranjang belanja" badge={itemCount}>
-              <ShoppingCart className="h-5 w-5" />
-            </IconButton>
-            <IconButton label="Notifikasi">
-              <Bell className="h-5 w-5" />
-            </IconButton>
-            <IconButton label="Profil saya">
-              <User className="h-5 w-5" />
-            </IconButton>
-          </div>
-
-          {/* CTA */}
-          <Link
-            href="/login"
-            className={cn(
-              'hidden rounded-full bg-green-700 px-5 py-2.5 font-inter text-sm font-semibold text-white shadow-md shadow-green-700/25 transition-colors duration-200 hover:bg-green-600 md:block',
-              FOCUS_RING
-            )}
-          >
-            Masuk / Daftar
-          </Link>
-
-          {/* Hamburger */}
-          <button
-            type="button"
-            aria-label="Buka menu navigasi"
-            aria-expanded={drawerOpen}
-            onClick={() => setDrawerOpen((v) => !v)}
-            className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-full text-charcoal-900 transition-colors duration-200 hover:bg-cream-100 lg:hidden',
-              FOCUS_RING
-            )}
-          >
-            {drawerOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+              >
+                {drawerOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
+          </nav>
         </div>
-      </nav>
+      </header>
 
       {/* Mobile drawer */}
       <AnimatePresence>
@@ -272,14 +317,14 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setDrawerOpen(false)}
-              className="fixed inset-0 z-40 bg-forest-900/40 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-[55] bg-forest-900/40 backdrop-blur-sm lg:hidden"
             />
             <motion.aside
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed right-0 top-0 z-50 flex h-full w-72 flex-col bg-cream-50 p-5 shadow-2xl lg:hidden"
+              className="fixed right-0 top-0 z-[60] flex h-full w-72 flex-col bg-cream-50 p-5 shadow-2xl lg:hidden"
             >
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2">
@@ -353,21 +398,31 @@ export function Navbar() {
                   Masuk / Daftar
                 </Link>
                 <div className="flex items-center justify-around border-t border-sage-100 pt-3 text-charcoal-500">
-                  <IconButton label="Cari makanan">
-                    <Search className="h-5 w-5" />
-                  </IconButton>
-                  <IconButton label="Keranjang belanja" badge={itemCount}>
-                    <ShoppingCart className="h-5 w-5" />
-                  </IconButton>
-                  <IconButton label="Notifikasi">
-                    <Bell className="h-5 w-5" />
-                  </IconButton>
+                  {[
+                    { label: 'Cari makanan', icon: Search, badge: 0 },
+                    { label: 'Keranjang belanja', icon: ShoppingCart, badge: itemCount },
+                    { label: 'Notifikasi', icon: Bell, badge: 0 },
+                  ].map(({ label, icon: Icon, badge }) => (
+                    <button
+                      key={label}
+                      type="button"
+                      aria-label={label}
+                      className="relative flex h-10 w-10 items-center justify-center rounded-full text-charcoal-500 transition-colors duration-200 hover:bg-cream-100 hover:text-green-700"
+                    >
+                      <Icon className="h-5 w-5" />
+                      {badge > 0 && (
+                        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-green-700 px-1 text-[10px] font-bold text-white">
+                          {badge}
+                        </span>
+                      )}
+                    </button>
+                  ))}
                 </div>
               </div>
             </motion.aside>
           </>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

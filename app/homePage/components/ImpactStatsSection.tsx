@@ -4,11 +4,19 @@ import { motion } from 'framer-motion';
 import { Leaf } from 'lucide-react';
 import { impactStats } from '../lib/data';
 import { Counter } from '@/app/components/counter';
+import { DotPattern, FloatingLeaf, SoftBlob } from './Ornaments';
 
 export function ImpactStatsSection() {
   return (
-    <section className="scroll-mt-24 bg-forest-900">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+    <section
+      id="dampak"
+      className="grain-overlay relative scroll-mt-24 overflow-hidden bg-forest-900"
+    >
+      <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/5" />
+      <SoftBlob className="-right-28 bottom-10 h-96 w-96 bg-green-700/20" />
+      <DotPattern className="right-12 top-12 hidden h-24 w-24 text-white/10 lg:block" />
+      <FloatingLeaf className="left-10 top-10 hidden h-6 w-6 text-gold-500/60 lg:block" />
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -8,6 +8,7 @@ import { useCountdown, formatCountdown } from '../lib/useCountdown';
 import { useCart } from '../lib/cart-store';
 import { Badge } from './ui/Badge';
 import { SmartImage } from './ui/SmartImage';
+import { SoftBlob } from './Ornaments';
 import type { UrgentItem } from '../lib/types';
 
 const FOCUS_RING =
@@ -136,8 +137,9 @@ function UrgentCard({ item }: { item: UrgentItem }) {
 
 export function UrgentDealsSection() {
   return (
-    <section className="bg-cream-50 pb-16 pt-2 lg:pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-cream-50 pb-16 pt-2 lg:pb-20">
+      <SoftBlob className="-left-24 top-1/3 h-72 w-72 bg-gold-100/50" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="flex items-center gap-2.5 font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">

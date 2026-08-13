@@ -7,6 +7,7 @@ import {
   Search,
   type LucideIcon,
 } from 'lucide-react';
+import { DotPattern, LeafSprig, SoftBlob } from './Ornaments';
 
 interface Step {
   icon: LucideIcon;
@@ -39,9 +40,12 @@ export function HowItWorksSection() {
   return (
     <section
       id="how-it-works"
-      className="scroll-mt-24 bg-cream-50 pb-20 pt-2 lg:pb-24"
+      className="relative overflow-hidden scroll-mt-24 bg-cream-50 pb-20 pt-2 lg:pb-24"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <SoftBlob className="-right-28 top-10 h-80 w-80 bg-sage-100/60" />
+      <DotPattern className="left-8 top-16 hidden h-24 w-24 text-sage-500/25 lg:block" />
+      <LeafSprig className="-right-4 bottom-0 hidden h-44 w-44 rotate-12 text-sage-500/25 lg:block" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
             Cara Kerja ReBites

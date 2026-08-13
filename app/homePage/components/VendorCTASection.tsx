@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, BadgeCheck } from 'lucide-react';
 import { Button } from './ui/Button';
 import { SmartImage } from './ui/SmartImage';
+import { DotPattern, FloatingLeaf, SoftBlob } from './Ornaments';
 import { scrollToId } from '../lib/scroll';
 
 const CTA_IMAGE =
@@ -13,9 +14,16 @@ export function VendorCTASection() {
   return (
     <section
       id="umkm-cta"
-      className="scroll-mt-24 bg-cream-50 px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+      className="relative overflow-hidden scroll-mt-24 bg-cream-50 px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
     >
-      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <SoftBlob className="-left-24 top-16 h-80 w-80 bg-sage-100/70" />
+      <SoftBlob className="-right-24 bottom-0 h-72 w-72 bg-gold-100/50" />
+      <FloatingLeaf
+        className="right-10 top-12 hidden h-5 w-5 text-sage-500/50 lg:block"
+        delay={1}
+      />
+      <DotPattern className="bottom-10 left-10 hidden h-24 w-24 text-green-700/15 lg:block" />
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
         {/* Foto */}
         <motion.div
           initial={{ opacity: 0, x: -28 }}

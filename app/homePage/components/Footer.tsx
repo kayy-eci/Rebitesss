@@ -9,6 +9,7 @@ import {
   Twitter,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { SoftBlob } from './Ornaments';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-forest-800';
@@ -18,8 +19,13 @@ const LINK_CLASS =
 
 export function Footer() {
   return (
-    <footer className="bg-forest-800 text-cream-50">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <footer
+      id="footer"
+      className="relative overflow-hidden bg-forest-800 text-cream-50"
+    >
+      <SoftBlob className="-left-24 -bottom-24 h-96 w-96 bg-white/5" />
+      <SoftBlob className="-right-20 -top-24 h-80 w-80 bg-green-700/30" />
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
           {/* Brand */}
           <div>

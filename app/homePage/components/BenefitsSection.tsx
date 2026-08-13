@@ -8,6 +8,7 @@ import {
   Store,
   type LucideIcon,
 } from 'lucide-react';
+import { FloatingLeaf, SoftBlob } from './Ornaments';
 
 interface Benefit {
   icon: LucideIcon;
@@ -44,8 +45,14 @@ const BENEFITS: Benefit[] = [
 
 export function BenefitsSection() {
   return (
-    <section className="bg-cream-50 pb-16 pt-2 lg:pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-cream-50 pb-16 pt-2 lg:pb-20">
+      <SoftBlob className="-left-28 bottom-10 h-80 w-80 bg-green-700/5" />
+      <SoftBlob className="-right-20 top-8 h-64 w-64 bg-gold-100/60" />
+      <FloatingLeaf
+        className="right-10 top-16 hidden h-5 w-5 text-gold-500/45 lg:block"
+        delay={0.8}
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
             Belanja Hemat. Selamatkan Makanan.

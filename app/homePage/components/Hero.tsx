@@ -5,6 +5,13 @@ import { ArrowRight, Recycle, Sparkles, Store } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { SmartImage } from './ui/SmartImage';
+import {
+  ArcLines,
+  DotPattern,
+  FloatingLeaf,
+  LeafSprig,
+  SoftBlob,
+} from './Ornaments';
 import { scrollToId } from '../lib/scroll';
 
 const HERO_IMAGE =
@@ -28,13 +35,25 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="scroll-mt-24 bg-cream-50 px-4 pb-16 pt-8 sm:px-6 lg:px-8 lg:pb-24 lg:pt-12"
+      className="relative overflow-hidden scroll-mt-24 bg-cream-50 px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pb-24 lg:pt-28"
     >
+      {/* Ornamen latar */}
+      <SoftBlob className="-left-28 -top-28 h-80 w-80 bg-sage-100/70" />
+      <SoftBlob className="-right-24 top-36 h-96 w-96 bg-green-700/10" />
+      <ArcLines className="right-0 top-6 hidden h-[420px] w-[720px] text-sage-500/25 md:block" />
+      <DotPattern className="bottom-12 left-6 hidden h-28 w-28 text-green-700/15 lg:block" />
+      <FloatingLeaf className="left-10 top-40 hidden h-6 w-6 text-sage-500/50 lg:block" />
+      <FloatingLeaf
+        className="right-16 top-72 hidden h-5 w-5 text-gold-500/50 lg:block"
+        delay={1.4}
+      />
+      <LeafSprig className="-left-6 bottom-6 hidden h-48 w-48 -rotate-12 text-sage-500/30 lg:block" />
+
       <motion.div
         variants={container}
         initial="hidden"
         animate="visible"
-        className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.55fr_1fr]"
+        className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.55fr_1fr]"
       >
         {/* ── Card utama ─────────────────────────────── */}
         <motion.div
