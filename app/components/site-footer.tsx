@@ -84,38 +84,6 @@ export function SiteFooter() {
 
           <div>
             <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
-              Akun
-            </h4>
-            <ul className="mt-5 space-y-3">
-              <li>
-                <Link
-                  href="/login"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
-                >
-                  Masuk
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/register"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
-                >
-                  Daftar UMKM
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/register"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
-                >
-                  Daftar Pembeli
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
               Kontak
             </h4>
             <ul className="mt-5 space-y-3 font-sans text-sm text-primary-foreground/80">
@@ -125,7 +93,7 @@ export function SiteFooter() {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-foreground/60" />
-                SMK Taruna Bhakti, Kota Bogor
+                SMK Taruna Bhakti, Jl. Pekapuran, RT.02/RW.06, Curug, Kec. Cimanggis, Kota Depok, Jawa Barat 16953
               </li>
             </ul>
           </div>

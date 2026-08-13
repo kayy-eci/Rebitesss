@@ -1,34 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useId } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
-  Search,
   Store,
-  ShoppingCart,
-  TrendingDown,
-  MapPin,
   Clock,
   Check,
   Sparkles,
-  ArrowUpRight,
-  Heart,
-  Globe,
-  Pizza,
-  ShoppingBag,
-  type LucideIcon,
+  Scale,
+  Wallet,
+  Users,
 } from "lucide-react";
 import { SmoothScroll } from "@/app/components/smooth-scroll";
 import { Preloader } from "@/app/components/preloader";
 import { SiteFooter } from "@/app/components/site-footer";
-import { Reveal } from "@/app/components/reveal";
+import { Reveal, RevealWords } from "@/app/components/reveal";
 import { Counter } from "@/app/components/counter";
 import { Marquee } from "@/app/components/marquee";
-import { MagneticButton, ArrowLink } from "@/app/components/magnetic-button";
+import { MagneticButton } from "@/app/components/magnetic-button";
+import HowItWorks from "@/app/components/HowItWorks";
 import { Badge } from "@/app/components/ui/badge";
 import { HeroSection } from "@/app/components/hero-section";
+import OptionWheel from "@/app/components/ui/korosel";
 
 const CATEGORIES = [
   "Makanan Rumahan",
@@ -42,62 +37,126 @@ const CATEGORIES = [
 ];
 
 const PARTNERS = [
-  "Warung Nusantara",
-  "Roti Subuh",
-  "Dapur Ibu Tini",
-  "Kue Mbok Ndari",
-  "Segar Bahari",
-  "Satay Pak Budi",
+  "Warung Mang Teten",
+  "Roti Boy",
+  "Dapur Ibu Sri",
+  "Kue Mbok Darmi",
+  "Segar Sigit",
+  "Satay Pak Tigiset",
   "Toko Sehat Jaya",
   "Kopi Pagi",
 ];
 
-const WHY_FEATURES: {
-  icon: LucideIcon;
-  heartBadge?: boolean;
-  title: string;
-}[] = [
+type Food = {
+  name: string;
+  desc: string;
+  price: number;
+  original?: number;
+  tag?: string;
+  image: string;
+};
+
+const FOODS: Food[] = [
   {
-    icon: ShoppingBag,
-    heartBadge: true,
-    title: "Nikmati makanan enak dengan harga ½ atau kurang",
+    name: "Geprek Sambal Bawang",
+    desc: "Ayamnya digoreng kering, sambal bawangnya pedes bikin keringetan. Kalau nggak kuat level asli, boleh minta dibikin sopan.",
+    price: 20000,
+    original: 24000,
+    image: "/makanan1.jpeg",
   },
   {
-    icon: Globe,
-    title: "Bantu lingkungan dengan mengurangi food waste",
+    name: "Nasi Goreng Kampung",
+    desc: "Nasgor ala rumahan: telur dadar, kerupuk, dan acar. Enak dimakan nasi anget pas jam istirahat.",
+    price: 25000,
+    image: "/makanan2.jpeg",
   },
   {
-    icon: Pizza,
-    title: "Selamatkan makanan di dekatmu",
+    name: "Soto Mie Bogor",
+    desc: "Kuah kaldu hangat, lengkap sama mie, risol, dan potongan daging sapi. Paling pas dimakan pas hujan.",
+    price: 30000,
+    original: 34000,
+    image: "/makanan3.jpeg",
   },
   {
-    icon: Store,
-    title: "Coba hal baru dari kafe, toko roti, atau restoran lokal",
+    name: "Sate Ayam Bumbu Kacang",
+    desc: "Sepuluh tusuk sate bakaran arang, bumbu kacang kental dari kacang sangrai sendiri. Lontongnya minta dua juga nggak nolak.",
+    price: 32000,
+    tag: "Favorit",
+    image: "/makanan4.jpeg",
+  },
+  {
+    name: "Rendang Sapi Rumahan",
+    desc: "Dimasak pelan sampai bumbunya nyerap bener, dagingnya empuk tapi nggak lembek. Diduetin sama nasi anget, habis satu piring.",
+    price: 38000,
+    tag: "Terlaris",
+    image: "/makanan5.jpeg",
+  },
+  {
+    name: "Kari Ayam Kuning",
+    desc: "Kuah kari kental dari santan segar, ayamnya empuk meresap kunyit dan rempah. Paling enak disantap sama ketupat atau nasi anget.",
+    price: 27000,
+    original: 30000,
+    image: "/makanan6.jpeg",
+  },
+  {
+    name: "Gado-Gado Ibu",
+    desc: "Sayuran rebus segar disiram bumbu kacang gurih, telur, tahu, tempe, dan kerupuk. Dijamin bikin nambah terus.",
+    price: 19000,
+    tag: "Sehat",
+    image: "/makanan7.jpg",
+  },
+  {
+    name: "Nasi Uduk Komplit",
+    desc: "Nasi uduk wangi santan dan daun pandan, lengkap sama orek tempe, telur balado, bihun, dan sambal kacang.",
+    price: 21000,
+    original: 24000,
+    image: "/makanan8.webp",
+  },
+  {
+    name: "Ikan Bakar Sambal Matah",
+    desc: "Ikan bakar bumbu kecap manis, dipadu sambal matah segar yang bikin nagih. Dimakan sama nasi putih hangat, mantap.",
+    price: 33000,
+    tag: "Favorit",
+    image: "/makanan9.webp",
+  },
+  {
+    name: "Rawon Daging",
+    desc: "Semangkuk rawon kuah hitam khas keluak yang gurih, dagingnya empuk dengan tauge dan sambal terasi. Pas buat makan siang.",
+    price: 35000,
+    original: 39000,
+    image: "/makanan10.webp",
   },
 ];
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
+  const [foodIndex, setFoodIndex] = useState(0);
+  const food = FOODS[foodIndex];
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
+
     return () => {
       document.body.style.overflow = "";
     };
   }, []);
 
   useEffect(() => {
-    if (loaded) document.body.style.overflow = "";
+    if (loaded) {
+      document.body.style.overflow = "";
+    }
   }, [loaded]);
 
   return (
     <SmoothScroll>
       <Preloader onDone={() => setLoaded(true)} />
 
-      {/* ── HERO ─────────────────────────────────────────── */}
-      <HeroSection />
+      {/* ── HERO / BERANDA ─────────────────────────────────── */}
+      <div id="top">
+        <HeroSection />
+      </div>
 
-      {/* ── MARQUEE: kategori ────────────────────────────── */}
+      {/* ── MARQUEE: KATEGORI ──────────────────────────────── */}
       <section className="border-y border-border/60 bg-background py-5">
         <Marquee pauseOnHover>
           {CATEGORIES.map((c, i) => (
@@ -112,292 +171,154 @@ export default function Home() {
         </Marquee>
       </section>
 
-      {/* ── MASALAH: Food Waste ──────────────────────────── */}
+      {/* ── INFO: FOOD WASTE ───────────────────────────────── */}
       <section
-        id="masalah"
+        id="info"
         className="grain-overlay relative overflow-hidden bg-primary py-24 text-primary-foreground lg:py-36"
       >
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr]">
+        {/* Watermark outline angka */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -top-8 right-0 select-none font-display text-[clamp(10rem,24vw,22rem)] font-extralight leading-none text-transparent"
+          style={{
+            WebkitTextStroke: "1px hsl(var(--primary-foreground) / 0.12)",
+          }}
+        >
+          48
+        </span>
+
+        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+            {/* Kiri: judul + ticker live */}
             <div>
-              <Reveal>
-                <Badge className="mb-6 bg-primary-foreground/10 text-primary-foreground">
-                  01 - Masalah
-                </Badge>
+              <Reveal delay={0.05}>
+                <p className="flex items-center gap-3 font-sans text-[11px] font-medium uppercase tracking-[0.28em] text-primary-foreground/50">
+                  Fakta food loss &amp; food waste
+                  <span className="h-px w-8 bg-primary-foreground/30" />
+                </p>
               </Reveal>
+
               <Reveal delay={0.1}>
-                <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em]">
-                  Setiap hari, jutaan porsi{" "}
-                  <span className="italic">terbuang</span> begitu saja.
+                <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em]">
+                  <RevealWords text="Setiap hari, jutaan porsi" />{" "}
+                  <span className="italic">
+                    <RevealWords text="terbuang" />
+                  </span>{" "}
+                  <RevealWords text="begitu saja." />
                 </h2>
               </Reveal>
+
               <Reveal delay={0.2}>
                 <p className="mt-6 max-w-sm font-sans text-sm leading-relaxed text-primary-foreground/70">
                   Data Bappenas mencatat skala food loss &amp; food waste di
-                  Indonesia mencapai angka yang sulit diabaikan - berdampak pada
-                  ekonomi, ketahanan pangan, dan lingkungan.
+                  Indonesia mencapai angka yang sulit diabaikan. Hal ini
+                  berdampak pada ekonomi, ketahanan pangan, dan lingkungan.
                 </p>
               </Reveal>
-            </div>
 
-            <div className="grid gap-px bg-primary-foreground/15 sm:grid-cols-2">
-              <StatCard
-                prefix=""
-                to={48}
-                suffix=" jt"
-                label="ton food loss & food waste per tahun"
-                sub="23–48 juta ton"
-              />
-              <StatCard
-                to={184}
-                suffix=" kg"
-                label="per kapita per tahun"
-                sub="115–184 kg/kapita/tahun"
-              />
-              <StatCard
-                prefix="Rp "
-                to={551}
-                suffix=" T"
-                label="kerugian ekonomi per tahun"
-                sub="Rp213–551 triliun"
-              />
-              <StatCard
-                to={125}
-                suffix=" jt"
-                label="setara kebutuhan pangan penduduk"
-                sub="61–125 juta penduduk"
-              />
-            </div>
-          </div>
-
-          <Reveal delay={0.15}>
-            <p className="mt-16 max-w-2xl border-l-2 border-primary-foreground/30 pl-6 font-display text-xl font-light italic leading-relaxed text-primary-foreground/80">
-              &ldquo;Makanan yang terbuang bukan hanya uang yang hilang - tapi
-              tenaga, lahan, dan kesempatan untuk mengenyangkan sesama.&rdquo;
-            </p>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="mt-4 font-sans text-xs text-primary-foreground/40">
-              Sumber: Studi Bappenas &amp; Ministry of National Development
-              Planning (2023)
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── CARA KERJA ───────────────────────────────────── */}
-      <section
-        id="cara-kerja"
-        className="grain-overlay relative overflow-hidden bg-background py-24 lg:py-32"
-      >
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <Reveal>
-                <Badge variant="outline" className="mb-5">
-                  02 - Cara Kerja
-                </Badge>
-              </Reveal>
-              <Reveal delay={0.1}>
-                <h2 className="max-w-2xl font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
-                  Empat langkah, dari dapur ke piring.
-                </h2>
-              </Reveal>
-            </div>
-            <Reveal delay={0.15}>
-              <p className="max-w-xs font-sans text-sm leading-relaxed text-muted-foreground">
-                Sederhana, transparan, dan dirancang untuk pelaku UMKM kuliner
-                skala kecil hingga menengah.
-              </p>
-            </Reveal>
-          </div>
-
-          {/* bento grid */}
-          <div className="mt-14 grid gap-4 md:grid-cols-6 md:grid-rows-[auto_auto]">
-            {/* step 1 - large */}
-            <Reveal className="md:col-span-3" delay={0.05}>
-              <div className="group h-full rounded-[var(--radius)] border border-border bg-secondary p-8 transition-colors duration-300 hover:border-primary/30">
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-5xl font-light text-primary/30">
-                    01
-                  </span>
-                  <Store className="h-7 w-7 text-primary/40 transition-transform duration-500 group-hover:scale-110" />
-                </div>
-                <h3 className="mt-10 font-display text-2xl font-medium text-primary">
-                  UMKM daftar &amp; unggah surplus
-                </h3>
-                <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-muted-foreground">
-                  Pelaku usaha membuat akun, melengkapi profil, lalu mengunggah
-                  makanan surplus beserta stok, harga diskon, dan waktu jual.
-                </p>
-              </div>
-            </Reveal>
-
-            {/* step 2 */}
-            <Reveal className="md:col-span-3" delay={0.1}>
-              <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-8 transition-colors duration-300 hover:border-primary/30">
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-5xl font-light text-primary/30">
-                    02
-                  </span>
-                  <Search className="h-7 w-7 text-primary/40 transition-transform duration-500 group-hover:scale-110" />
-                </div>
-                <h3 className="mt-10 font-display text-2xl font-medium text-primary">
-                  Pembeli cari &amp; pesan
-                </h3>
-                <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-muted-foreground">
-                  Pembeli menelusuri makanan surplus terdekat, memfilter
-                  kategori dan lokasi, lalu memesan dengan catatan.
-                </p>
-              </div>
-            </Reveal>
-
-            {/* step 3 */}
-            <Reveal className="md:col-span-2" delay={0.15}>
-              <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-8 transition-colors duration-300 hover:border-primary/30">
-                <span className="font-display text-5xl font-light text-primary/30">
-                  03
-                </span>
-                <MapPin className="mt-6 h-6 w-6 text-primary/40" />
-                <h3 className="mt-6 font-display text-xl font-medium text-primary">
-                  Ambil atau diantar
-                </h3>
-                <p className="mt-2 font-sans text-[13px] leading-relaxed text-muted-foreground">
-                  Pembeli memilih pickup di lokasi atau diantar.
-                </p>
-              </div>
-            </Reveal>
-
-            {/* step 4 - accent */}
-            <Reveal className="md:col-span-4" delay={0.2}>
-              <div className="group flex h-full flex-col justify-between rounded-[var(--radius)] bg-primary p-8 text-primary-foreground">
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-5xl font-light text-primary-foreground/30">
-                    04
-                  </span>
-                  <Sparkles className="h-7 w-7 text-primary-foreground/60 transition-transform duration-500 group-hover:rotate-12" />
-                </div>
-                <div className="mt-10">
-                  <h3 className="font-display text-2xl font-medium">
-                    Makanan terselamatkan
-                  </h3>
-                  <p className="mt-3 max-w-md font-sans text-sm leading-relaxed text-primary-foreground/70">
-                    Satu pesanan = satu porsi yang tidak jadi sampah. UMKM dapat
-                    pemasukan tambahan, pembeli hemat, bumi lega.
+              <Reveal delay={0.25}>
+                <div className="mt-8 rounded-[var(--radius)] border border-primary-foreground/15 bg-primary-foreground/[0.05] p-6">
+                  <p className="font-sans text-[11px] font-medium uppercase tracking-[0.22em] text-primary-foreground/50">
+                    Food loss &amp; waste Indonesia per tahun
                   </p>
-                  <ArrowLink
-                    href="/#dampak"
-                    className="mt-5 text-primary-foreground"
-                  >
-                    Lihat dampaknya
-                  </ArrowLink>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
 
-      {/* ── UNTUK UMKM ───────────────────────────────────── */}
-      <section
-        id="umkm"
-        className="grain-overlay relative overflow-hidden bg-secondary py-24 lg:py-32"
-      >
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
-            <div className="lg:sticky lg:top-28 lg:self-start">
-              <Reveal>
-                <Badge variant="outline" className="mb-5">
-                  03 - Untuk UMKM
-                </Badge>
+                  <p className="mt-3 flex items-baseline gap-1.5 font-display text-[clamp(2.1rem,4vw,3.2rem)] font-light leading-none tracking-tight">
+                    <Counter
+                      to={46_350_000}
+                      className="tabular-nums"
+                      duration={10}
+                    />
+                    <span className="font-sans text-sm text-primary-foreground/50">
+                      ton
+                    </span>
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1 border-t border-dashed border-primary-foreground/15 pt-4 font-sans text-xs text-primary-foreground/50">
+                    <span>≈ 91 ton / menit</span>
+                    <span>≈ 1,5 ton / detik</span>
+                  </div>
+                </div>
               </Reveal>
+            </div>
+
+            {/* Kanan: statistik */}
+            <div className="grid gap-4">
               <Reveal delay={0.1}>
-                <h2 className="font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
-                  Kelola surplus, tambah pemasukan.
-                </h2>
-              </Reveal>
-              <Reveal delay={0.2}>
-                <p className="mt-6 max-w-md font-sans text-sm leading-relaxed text-foreground/70">
-                  Alat yang dirancang khusus untuk pelaku kuliner skala kecil.
-                  Kelola produk, stok, pesanan, dan langganan dari satu dasbor.
-                </p>
-              </Reveal>
-              <Reveal delay={0.3}>
-                <div className="mt-8 flex items-center gap-4 rounded-[var(--radius)] border border-primary/15 bg-background p-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground-strong">
-                    <Sparkles className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-sans text-sm font-medium text-primary">
-                      Trial gratis 1 bulan
-                    </p>
-                    <p className="font-sans text-xs text-muted-foreground">
-                      Tanpa kartu kredit. Batalkan kapan saja.
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-              <Reveal delay={0.35}>
-                <div className="mt-8">
-                  <MagneticButton href="/register" variant="default">
-                    Daftar sebagai UMKM
-                    <ArrowRight className="h-4 w-4" />
-                  </MagneticButton>
-                </div>
-              </Reveal>
-            </div>
+                <div className="flex flex-col items-center gap-8 rounded-[var(--radius)] border border-primary-foreground/15 bg-primary-foreground/[0.04] p-8 sm:flex-row sm:items-center lg:p-10">
+                  <WasteRing progress={0.82}>
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <p className="font-display text-[clamp(2.6rem,4vw,3.6rem)] font-light leading-none tracking-tight text-center">
+                        <Counter
+                          to={7.3}
+                          decimals={1}
+                          suffix="%"
+                          duration={5}
+                        />
+                      </p>
+                    </div>
+                  </WasteRing>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                {
-                  icon: Store,
-                  title: "Profil usaha",
-                  desc: "Kelola nama, deskripsi, logo, dan lokasi dapur yang terlihat di marketplace.",
-                },
-                {
-                  icon: ShoppingCart,
-                  title: "Stok, harga & status",
-                  desc: "Atur stok harian, harga surplus, status ketersediaan, dan waktu jual.",
-                },
-                {
-                  icon: Sparkles,
-                  title: "Langganan dengan trial",
-                  desc: "Coba 1 bulan gratis, lalu pilih paket sesuai skala usaha.",
-                },
-                {
-                  icon: Check,
-                  title: "Kelola pesanan masuk",
-                  desc: "Terima, proses, dan tandai pesanan siap diambil atau dikirim.",
-                },
-                {
-                  icon: TrendingDown,
-                  title: "Riwayat penjualan",
-                  desc: "Pantau performa produk dan pemasukan dari makanan yang diselamatkan.",
-                },
-                {
-                  icon: MapPin,
-                  title: "Peta pickup",
-                  desc: "Tampilkan titik lokasi agar pembeli mudah menemukan dapur Anda.",
-                },
-              ].map((f, i) => (
-                <Reveal key={i} delay={i * 0.08}>
-                  <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_40px_-20px_hsl(var(--primary)/0.3)]">
-                    <f.icon className="h-6 w-6 text-primary/50 transition-transform duration-500 group-hover:scale-110 group-hover:text-primary" />
-                    <h3 className="mt-5 font-display text-lg font-medium text-primary">
-                      {f.title}
+                  <div className="text-center sm:text-left">
+                    <h3 className="font-display text-2xl font-medium">
+                      Emisi gas rumah kaca
                     </h3>
-                    <p className="mt-2 font-sans text-[13px] leading-relaxed text-muted-foreground">
-                      {f.desc}
+
+                    <p className="mt-3 font-sans text-sm leading-relaxed text-primary-foreground/70">
+                      Sisa pangan yang terbuang ikut menyumbang emisi gas rumah
+                      kaca yang mempercepat perubahan iklim.
+                    </p>
+
+                    <p className="mt-4 font-sans text-xs text-primary-foreground/40">
+                      Setara 1.702 juta ton CO₂e per tahun
                     </p>
                   </div>
+                </div>
+              </Reveal>
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Reveal delay={0.15}>
+                  <StatTile
+                    icon={<Scale className="h-5 w-5" />}
+                    counter={<Counter to={184} suffix=" kg" duration={2.4} />}
+                    label="per kapita per tahun"
+                    sub="115–184 kg/kapita/tahun"
+                  />
                 </Reveal>
-              ))}
+
+                <Reveal delay={0.2}>
+                  <StatTile
+                    icon={<Wallet className="h-5 w-5" />}
+                    counter={
+                      <Counter
+                        prefix="Rp "
+                        to={551}
+                        suffix=" T"
+                        duration={2.4}
+                      />
+                    }
+                    label="kerugian ekonomi per tahun"
+                    sub="Rp213–551 triliun"
+                  />
+                </Reveal>
+
+                <Reveal delay={0.25}>
+                  <StatTile
+                    icon={<Users className="h-5 w-5" />}
+                    counter={<Counter to={125} suffix=" jt" duration={2.4} />}
+                    label="setara kebutuhan pangan penduduk"
+                    sub="61–125 juta penduduk"
+                  />
+                </Reveal>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── MARQUEE: mitra UMKM ──────────────────────────── */}
+      {/* ── CARA KERJA ─────────────────────────────────────── */}
+      <HowItWorks />
+
+      {/* ── MARQUEE: MITRA UMKM ─────────────────────────────── */}
       <section className="border-y border-border/60 bg-background py-5">
         <Marquee reverse pauseOnHover>
           {PARTNERS.map((p, i) => (
@@ -412,155 +333,145 @@ export default function Home() {
         </Marquee>
       </section>
 
-      {/* ── KENAPA REBITES ───────────────────────────────── */}
+      {/* ── REKOMENDASI MAKANAN ────────────────────────────── */}
       <section
-        id="pembeli"
+        id="rekomendasi"
         className="grain-overlay relative overflow-hidden bg-secondary py-24 lg:py-32"
       >
-        {/* soft radial glow */}
+        {/* Soft radial glow */}
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-3xl" />
 
         <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          {/* centered header */}
+          {/* Header */}
           <div className="mx-auto max-w-3xl text-center">
-            <Reveal>
-              <Badge variant="outline" className="mb-5">
-                04 - Kenapa ReBites
-              </Badge>
-            </Reveal>
             <Reveal delay={0.1}>
               <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
-                Kenapa <span className="italic font-extralight">ReBites?</span>
+                Rekomendasi{" "}
+                <span className="italic font-extralight">Makanan</span>
               </h2>
             </Reveal>
+
             <Reveal delay={0.15}>
               <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
-                Satu platform untuk makan enak, menyelamatkan surplus, dan
-                membantu lingkungan - sekaligus.
+                Yang lagi laris dari dapur tetangga
               </p>
             </Reveal>
           </div>
 
-          {/* fitur mengelilingi tas belanja */}
-          <div className="mt-16 grid items-center gap-14 lg:mt-24 lg:grid-cols-[1fr_auto_1fr] lg:gap-10 xl:gap-16">
-            {/* tas belanja sentral */}
-            <Reveal className="order-first mx-auto w-full max-w-[320px] sm:max-w-[380px] lg:order-none lg:max-w-[420px]">
-              <GroceryBag />
-            </Reveal>
+          <div className="mt-12 grid items-center gap-14 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 xl:gap-20">
+            {/* Info makanan terpilih */}
+            <div className="mx-auto w-full max-w-[520px] text-center lg:max-w-none lg:text-left">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={foodIndex}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -18 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {(food.original || food.tag) && (
+                    <Badge variant="outline" className="mb-5">
+                      <Sparkles className="h-3 w-3" />
+                      {food.original
+                        ? `Hemat ${Math.round((1 - food.price / food.original) * 100)}%`
+                        : food.tag}
+                    </Badge>
+                  )}
 
-            {/* kolom kiri */}
-            <div className="flex flex-col items-center gap-12 text-center sm:grid sm:grid-cols-2 sm:items-start sm:justify-items-center sm:gap-10 lg:flex lg:items-start lg:gap-16 lg:text-left">
-              {WHY_FEATURES.slice(0, 2).map((f, i) => (
-                <WhyFeature
-                  key={i}
-                  icon={f.icon}
-                  heartBadge={f.heartBadge}
-                  title={f.title}
-                  delay={0.1 + i * 0.08}
-                />
-              ))}
-            </div>
-
-            {/* kolom kanan */}
-            <div className="flex flex-col items-center gap-12 text-center sm:grid sm:grid-cols-2 sm:items-start sm:justify-items-center sm:gap-10 lg:flex lg:items-end lg:gap-16 lg:text-right">
-              {WHY_FEATURES.slice(2, 4).map((f, i) => (
-                <WhyFeature
-                  key={i}
-                  icon={f.icon}
-                  heartBadge={f.heartBadge}
-                  title={f.title}
-                  delay={0.1 + i * 0.08}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── DAMPAK ──────────────────────────────────────── */}
-      <section
-        id="dampak"
-        className="grain-overlay relative overflow-hidden bg-secondary py-24 lg:py-32"
-      >
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-3">
-            {[
-              {
-                tag: "Ekonomi",
-                title: "Pemasukan tambahan untuk UMKM",
-                desc: "Makanan yang tadinya terbuang berubah menjadi pendapatan. Pembeli mendapat harga lebih terjangkau.",
-                stat: <Counter to={30} suffix="%" />,
-                statLabel: "potensi tambahan pendapatan UMKM",
-              },
-              {
-                tag: "Sosial",
-                title: "Pangan terjangkau untuk lebih banyak orang",
-                desc: "Makanan layak konsumsi tersedia dengan harga diskon, memperluas akses pangan bagi lebih banyak keluarga.",
-                stat: <Counter to={125} suffix=" jt" />,
-                statLabel: "potensi porsi yang bisa diselamatkan",
-              },
-              {
-                tag: "Lingkungan",
-                title: "Mengurangi emsi dari food waste",
-                desc: "Setiap porsi yang tidak jadi sampah mengurangi emisi gas rumah kaca dari tempat pembuangan akhir.",
-                stat: <Counter to={8} suffix="%" />,
-                statLabel: "emisi global berasal dari food waste",
-              },
-            ].map((d, i) => (
-              <Reveal key={i} delay={i * 0.12}>
-                <div className="h-full rounded-[var(--radius)] border border-border bg-background p-8">
-                  <Badge variant="secondary" className="mb-6">
-                    {d.tag}
-                  </Badge>
-                  <h3 className="font-display text-2xl font-medium leading-snug text-primary">
-                    {d.title}
+                  <h3 className="font-display text-[clamp(2.2rem,3.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.02em] text-primary">
+                    {food.name}
                   </h3>
-                  <p className="mt-4 font-sans text-sm leading-relaxed text-muted-foreground">
-                    {d.desc}
+
+                  <p className="mx-auto mt-5 max-w-[46ch] font-sans text-sm leading-relaxed text-muted-foreground lg:mx-0">
+                    {food.desc}
                   </p>
-                  <div className="mt-8 border-t border-border pt-6">
-                    <p className="font-display text-4xl font-light text-primary">
-                      {d.stat}
-                    </p>
-                    <p className="mt-1 font-sans text-xs text-muted-foreground">
-                      {d.statLabel}
+
+                  <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 lg:justify-start">
+                    <span className="font-display text-4xl font-light tracking-tight text-primary lg:text-5xl">
+                      Rp{food.price.toLocaleString("id-ID")}
+                    </span>
+
+                    {food.original && (
+                      <span className="font-sans text-sm text-muted-foreground line-through">
+                        Rp{food.original.toLocaleString("id-ID")}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-8 flex flex-wrap items-center justify-center gap-5 lg:justify-start">
+                    <Link
+                      href="/#cta"
+                      className="group inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-6 py-3 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(47,66,53,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-forest/40 hover:text-forest"
+                    >
+                      Pesan Sekarang
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+
+                    <p className="font-sans text-xs tabular-nums text-muted-foreground/70">
+                      {foodIndex + 1} / {FOODS.length}
                     </p>
                   </div>
-                </div>
-              </Reveal>
-            ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Roda piring berputar */}
+            <div className="relative mx-auto w-full max-w-[560px]">
+              <div className="relative h-[520px] w-full sm:h-[600px]">
+                <OptionWheel
+                  items={FOODS.map((f) => f.name)}
+                  defaultSelected={0}
+                  side="right"
+                  fontSize={8}
+                  spacing={1.4}
+                  curve={20}
+                  tilt={6}
+                  blur={3}
+                  fade={0.32}
+                  minOpacity={0.02}
+                  smoothing={160}
+                  loop
+                  draggable
+                  autoRotate
+                  autoRotateInterval={3000}
+                  plateSize={330}
+                  onChange={(index) => setFoodIndex(index)}
+                  renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
+                />
+
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-secondary to-transparent sm:h-24"
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-secondary to-transparent sm:h-24"
+                />
+              </div>
+            </div>
           </div>
-          <Reveal delay={0.2}>
-            <p className="mt-10 font-sans text-xs text-muted-foreground">
-              * Angka merupakan proyeksi potensi dampak berdasarkan data food
-              waste nasional, bukan klaim data riil ReBites.
-            </p>
-          </Reveal>
         </div>
       </section>
 
-      {/* ── PAKET LANGGANAN ──────────────────────────────── */}
+      {/* ── LANGGANAN / DAMPAK ─────────────────────────────── */}
       <section
-        id="langganan"
+        id="dampak"
         className="grain-overlay relative overflow-hidden bg-background py-24 lg:py-32"
       >
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <Reveal>
-                <Badge variant="outline" className="mb-5">
-                  05 - Paket Langganan
-                </Badge>
-              </Reveal>
               <Reveal delay={0.1}>
                 <h2 className="max-w-2xl font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
                   Pilih paket yang tumbuh bersama usaha Anda.
                 </h2>
               </Reveal>
             </div>
+
             <Reveal delay={0.15}>
               <div className="flex items-center gap-3 rounded-[var(--radius)] border border-primary/20 bg-secondary px-5 py-3">
                 <Clock className="h-5 w-5 text-primary" />
+
                 <p className="font-sans text-sm text-primary">
                   Semua paket dimulai dengan{" "}
                   <span className="font-medium">trial gratis 1 bulan</span>.
@@ -621,10 +532,12 @@ export default function Home() {
                   {plan.popular && (
                     <div className="absolute -top-3 left-8">
                       <Badge className="bg-secondary text-primary">
-                        <Sparkles className="h-3 w-3" /> Paling populer
+                        <Sparkles className="h-3 w-3" />
+                        Paling populer
                       </Badge>
                     </div>
                   )}
+
                   <h3
                     className={`font-display text-2xl font-medium ${
                       plan.popular ? "text-primary-foreground" : "text-primary"
@@ -632,6 +545,7 @@ export default function Home() {
                   >
                     {plan.name}
                   </h3>
+
                   <div className="mt-5 flex items-baseline gap-1">
                     <span
                       className={`font-display text-4xl font-light ${
@@ -644,6 +558,7 @@ export default function Home() {
                         ? "Gratis"
                         : `Rp${plan.monthly.toLocaleString("id-ID")}`}
                     </span>
+
                     {plan.monthly !== 0 && (
                       <span
                         className={`font-sans text-sm ${
@@ -656,6 +571,7 @@ export default function Home() {
                       </span>
                     )}
                   </div>
+
                   <p
                     className={`mt-2 font-sans text-xs ${
                       plan.popular
@@ -696,6 +612,7 @@ export default function Home() {
                               : "text-primary"
                           }`}
                         />
+
                         {f}
                       </li>
                     ))}
@@ -721,265 +638,161 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA PENUTUP ──────────────────────────────────── */}
-      <section
-        id="cta"
-        className="relative overflow-hidden bg-primary py-28 text-primary-foreground lg:py-40"
-      >
-        <div className="grain-overlay absolute inset-0" />
-        {/* animated blobs */}
-        <motion.div
-          className="absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-primary-foreground/5 blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -right-20 bottom-1/4 h-80 w-80 rounded-full bg-primary-foreground/5 blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.2, 0.4] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <div className="relative mx-auto max-w-[1400px] px-5 text-center sm:px-8 lg:px-12">
-          <Reveal>
-            <p className="font-sans text-[11px] uppercase tracking-[0.35em] text-primary-foreground/50">
-              Bergabung sekarang
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2.4rem,6vw,5rem)] font-light leading-[0.98] tracking-[-0.03em]">
-              Setiap makanan punya cerita.
-              <br />
-              <span className="italic font-extralight">
-                Bantu agar tidak usai di tempat sampah.
-              </span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <MagneticButton href="/register" variant="cream">
-                Daftar gratis sekarang
-                <ArrowUpRight className="h-4 w-4" />
-              </MagneticButton>
-              <Link
-                href="/login"
-                className="font-sans text-sm text-primary-foreground/70 underline-offset-4 transition-colors hover:text-primary-foreground hover:underline"
-              >
-                Sudah punya akun? Masuk
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       <SiteFooter />
     </SmoothScroll>
   );
 }
 
-function WhyFeature({
-  icon: Icon,
-  heartBadge = false,
-  title,
-  delay = 0,
-}: {
-  icon: LucideIcon;
-  heartBadge?: boolean;
-  title: string;
-  delay?: number;
-}) {
-  return (
-    <Reveal delay={delay}>
-      <div className="group max-w-[280px]">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-background text-primary shadow-[0_10px_28px_-14px_hsl(var(--primary)/0.45)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/40 group-hover:bg-primary group-hover:text-primary-foreground-strong">
-          <span className="relative">
-            <Icon className="h-7 w-7" strokeWidth={1.5} />
-            {heartBadge && (
-              <Heart className="absolute -bottom-2 -right-2.5 h-3.5 w-3.5 fill-primary stroke-background transition-colors duration-300 group-hover:fill-primary-foreground-strong group-hover:stroke-primary" />
-            )}
-          </span>
-        </div>
-        <h3 className="mt-4 font-sans text-sm font-bold uppercase leading-snug tracking-[0.06em] text-primary">
-          {title}
-        </h3>
-      </div>
-    </Reveal>
-  );
-}
+function FoodPlate({ image }: { image: string }) {
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const gradId = `plate-surface-${uid}`;
+  const clipId = `plate-cut-${uid}`;
 
-function GroceryBag() {
   return (
-    <motion.div
-      className="relative w-full"
-      animate={{ y: [0, -10, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      aria-hidden
+    <svg
+      viewBox="0 0 200 200"
+      role="img"
+      aria-label="Piring makanan"
+      className="h-full w-full drop-shadow-[0_16px_22px_-14px_rgba(47,66,53,0.55)]"
     >
-      <svg
-        viewBox="0 0 360 430"
-        className="h-auto w-full drop-shadow-[0_24px_40px_-20px_hsl(var(--primary)/0.35)]"
-      >
-        {/* sayuran di belakang tas */}
-        {/* daun bawang */}
-        <g stroke="#2f5d43" strokeWidth="3.5" strokeLinecap="round" fill="none">
-          <path d="M112 205 C110 155 106 115 100 88" />
-          <path d="M128 205 C127 155 124 115 120 82" />
-          <path d="M144 205 C144 157 142 117 140 90" />
-        </g>
-        {/* brokoli */}
-        <rect x="157" y="150" width="11" height="55" rx="5" fill="#3e7d57" />
-        <g fill="#2c5e42">
-          <circle cx="152" cy="146" r="13" />
-          <circle cx="173" cy="142" r="14" />
-          <circle cx="162" cy="130" r="14" />
-          <circle cx="182" cy="148" r="12" />
-        </g>
-        <g fill="#4c8f66">
-          <circle cx="160" cy="137" r="5" />
-          <circle cx="174" cy="149" r="5" />
-        </g>
-        {/* wortel */}
-        <path d="M205 205 L188 100 L222 100 Z" fill="#e2793b" />
-        <g stroke="#3e7d57" strokeWidth="3" strokeLinecap="round">
-          <path d="M191 100 L183 80" />
-          <path d="M205 100 L205 76" />
-          <path d="M219 100 L227 80" />
-        </g>
-        {/* paprika merah */}
-        <path
-          d="M250 205 C246 168 254 140 275 129 C296 140 304 168 300 205 Z"
-          fill="#cf5340"
-        />
-        <path
-          d="M273 131 L273 116"
-          stroke="#2f5d43"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-        {/* bawang merah */}
-        <circle cx="316" cy="158" r="33" fill="#b06b8f" />
-        <path
-          d="M316 129 A 26 26 0 0 0 313 186"
-          stroke="#8a4f6d"
-          strokeWidth="2"
-          fill="none"
-        />
-        <path
-          d="M316 192 L316 205"
-          stroke="#8a4f6d"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
+      <defs>
+        <radialGradient id={gradId} cx="50%" cy="42%">
+          <stop offset="0%" stopColor="#F7F6EE" />
+          <stop offset="72%" stopColor="#E9E7D9" />
+          <stop offset="100%" stopColor="#D5D2C1" />
+        </radialGradient>
 
-        {/* bayangan */}
-        <ellipse
-          cx="190"
-          cy="404"
-          rx="95"
-          ry="8"
-          fill="hsl(135 21% 26%)"
-          opacity="0.12"
-        />
+        <clipPath id={clipId}>
+          <circle cx="100" cy="100" r="84" />
+        </clipPath>
+      </defs>
 
-        {/* badan tas */}
-        <path
-          d="M70 195
-             L90 181 L110 195 L130 181 L150 195 L170 181 L190 195 L210 181 L230 195 L250 181 L270 195 L290 181 L310 195
-             L310 352
-             Q310 400 262 400
-             L118 400
-             Q70 400 70 352
-             Z"
-          className="fill-primary"
-        />
+      {/* Outer plate */}
+      <circle cx="100" cy="100" r="92" fill={`url(#${gradId})`} />
 
-        {/* kerutan tas */}
-        <g
-          className="stroke-primary-foreground"
-          strokeOpacity="0.12"
-          strokeWidth="1.5"
-          fill="none"
-        >
-          <path d="M95 210 C92 280 96 340 100 382" />
-          <path d="M132 205 C127 272 134 334 142 384" />
-          <path d="M185 200 C185 262 182 324 187 386" />
-          <path d="M245 205 C243 280 248 340 254 384" />
-          <path d="M290 212 C292 268 288 330 292 378" />
-        </g>
-        {/* lipatan samping */}
-        <g
-          className="stroke-primary-foreground"
-          strokeOpacity="0.1"
-          strokeWidth="1.5"
-          fill="none"
-        >
-          <path d="M108 202 C104 260 110 320 112 392" />
-          <path d="M252 202 C256 260 250 320 248 392" />
-        </g>
+      {/* Outer rim */}
+      <circle
+        cx="100"
+        cy="100"
+        r="92"
+        fill="none"
+        stroke="#C8C5B5"
+        strokeWidth="2.5"
+      />
 
-        {/* emblem */}
-        <circle
-          cx="190"
-          cy="282"
-          r="54"
-          fill="hsl(40 30% 96%)"
-          fillOpacity="0.06"
-          stroke="hsl(40 30% 96%)"
-          strokeOpacity="0.85"
-          strokeWidth="2.5"
-        />
-        {/* daun */}
-        <g
-          stroke="hsl(40 30% 96%)"
-          strokeOpacity="0.9"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        >
-          <path d="M190 240 C210 250 216 268 190 290 C164 268 170 250 190 240 Z" />
-          <path d="M190 244 C190 262 190 272 190 286" />
-        </g>
-        {/* teks melengkung */}
-        <defs>
-          <path id="rebites-arc" d="M150 306 A50 50 0 0 0 230 306" />
-        </defs>
-        <text
-          fontSize="14"
-          fontWeight="600"
-          letterSpacing="3"
-          fill="hsl(40 30% 96%)"
-          style={{ fontFamily: "var(--font-sans)" }}
-        >
-          <textPath href="#rebites-arc" startOffset="50%" textAnchor="middle">
-            REBITES
-          </textPath>
-        </text>
-      </svg>
-    </motion.div>
+      {/* Inner rim */}
+      <circle
+        cx="100"
+        cy="100"
+        r="88"
+        fill="none"
+        stroke="#D8D5C6"
+        strokeWidth="1.5"
+      />
+
+      {/* Inner plate */}
+      <circle cx="100" cy="100" r="86" fill="#F5F3E9" />
+
+      {/* Food image */}
+      <image
+        href={image}
+        x="0"
+        y="0"
+        width="200"
+        height="200"
+        preserveAspectRatio="xMidYMid slice"
+        clipPath={`url(#${clipId})`}
+      />
+
+      {/* Foto border */}
+      <circle
+        cx="100"
+        cy="100"
+        r="84"
+        fill="none"
+        stroke="#F5F3E9"
+        strokeWidth="4"
+      />
+
+      {/* Plate highlight */}
+      <ellipse cx="80" cy="66" rx="46" ry="22" fill="#FFFFFF" opacity="0.16" />
+    </svg>
   );
 }
 
-function StatCard({
-  to,
-  suffix,
-  prefix,
+function WasteRing({
+  progress,
+  children,
+}: {
+  progress: number;
+  children: React.ReactNode;
+}) {
+  const radius = 80;
+  const circumference = 2 * Math.PI * radius;
+
+  return (
+    <div className="relative h-44 w-44 shrink-0">
+      <svg viewBox="0 0 200 200" className="h-full w-full -rotate-90">
+        <circle
+          cx="100"
+          cy="100"
+          r={radius}
+          fill="none"
+          stroke="hsl(var(--primary-foreground) / 0.12)"
+          strokeWidth="10"
+        />
+
+        <motion.circle
+          cx="100"
+          cy="100"
+          r={radius}
+          fill="none"
+          stroke="hsl(var(--primary-foreground) / 0.85)"
+          strokeWidth="10"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          whileInView={{ strokeDashoffset: circumference * (1 - progress) }}
+          viewport={{ once: true, margin: "-20% 0px" }}
+          transition={{ duration: 2.4, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </svg>
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function StatTile({
+  icon,
+  counter,
   label,
   sub,
 }: {
-  to: number;
-  suffix?: string;
-  prefix?: string;
+  icon: React.ReactNode;
+  counter: React.ReactNode;
   label: string;
   sub: string;
 }) {
   return (
-    <div className="bg-primary p-8 lg:p-10">
-      <p className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-light leading-none tracking-tight text-primary-foreground">
-        <Counter to={to} prefix={prefix} suffix={suffix} duration={2.4} />
+    <div className="group flex h-full flex-col rounded-[var(--radius)] border border-primary-foreground/15 bg-primary-foreground/[0.04] p-6 transition-colors duration-300 hover:bg-primary-foreground/10">
+      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 text-primary-foreground/70 transition-transform duration-500 group-hover:scale-110">
+        {icon}
+      </span>
+
+      <p className="mt-6 font-display text-[clamp(1.9rem,3vw,2.6rem)] font-light leading-none tracking-tight">
+        {counter}
       </p>
-      <p className="mt-4 font-sans text-sm leading-relaxed text-primary-foreground/70">
+
+      <p className="mt-3 font-sans text-sm leading-relaxed text-primary-foreground/70">
         {label}
       </p>
-      <p className="mt-2 font-sans text-xs text-primary-foreground/40">{sub}</p>
+
+      <p className="mt-3 border-t border-dashed border-primary-foreground/15 pt-2 font-sans text-xs text-primary-foreground/40">
+        {sub}
+      </p>
     </div>
   );
 }
