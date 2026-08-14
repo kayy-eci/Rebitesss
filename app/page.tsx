@@ -29,7 +29,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/app/components/ui/carousel";
-import { Avatar, AvatarFallback } from "@/app/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/app/components/ui/avatar";
 
 const PARTNERS = [
   "Warung Mang Teten",
@@ -54,71 +54,72 @@ type Food = {
 const FOODS: Food[] = [
   {
     name: "Geprek Sambal Bawang",
-    desc: "Ayamnya digoreng kering, sambal bawangnya pedes bikin keringetan. Kalau nggak kuat level asli, boleh minta dibikin sopan.",
-    price: 20000,
+    desc: "Ayam geprek dengan sambal bawang yang pedas gurih. Ayamnya masih renyah dan paling enak dimakan bareng nasi hangat.",
+    price: 18000,
     original: 24000,
     image: "/makanan1.jpeg",
   },
   {
     name: "Nasi Goreng Kampung",
-    desc: "Nasgor ala rumahan: telur dadar, kerupuk, dan acar. Enak dimakan nasi anget pas jam istirahat.",
-    price: 25000,
+    desc: "Nasi goreng rumahan dengan telur, sayuran, dan bumbu gurih yang bikin nagih. Cocok buat makan siang atau makan malam.",
+    price: 20000,
+    original: 25000,
     image: "/makanan2.jpeg",
   },
   {
     name: "Soto Mie Bogor",
-    desc: "Kuah kaldu hangat, lengkap sama mie, risol, dan potongan daging sapi. Paling pas dimakan pas hujan.",
-    price: 30000,
-    original: 34000,
+    desc: "Soto khas Bogor dengan kuah gurih, mie, risol, daging sapi, dan pelengkap segar. Hangat dan pas disantap kapan saja.",
+    price: 23000,
+    original: 30000,
     image: "/makanan3.jpeg",
   },
   {
-    name: "Sate Ayam Bumbu Kacang",
-    desc: "Sepuluh tusuk sate bakaran arang, bumbu kacang kental dari kacang sangrai sendiri. Lontongnya minta dua juga nggak nolak.",
-    price: 32000,
-    tag: "Favorit",
+    name: "Sate Ayam Pak Tigiset",
+    desc: "Sate ayam bakar dengan bumbu kacang yang gurih dan meresap, cocok ditemani lontong atau nasi.",
+    price: 25000,
+    original: 32000,
     image: "/makanan4.jpeg",
   },
   {
-    name: "Rendang Sapi Rumahan",
-    desc: "Dimasak pelan sampai bumbunya nyerap bener, dagingnya empuk tapi nggak lembek. Diduetin sama nasi anget, habis satu piring.",
-    price: 38000,
-    tag: "Terlaris",
+    name: "Rendang Padang Karindang",
+    desc: "Potongan daging sapi empuk dengan bumbu rendang yang gurih, kaya rempah, dan meresap sampai ke dalam.",
+    price: 30000,
+    original: 38000,
     image: "/makanan5.jpeg",
   },
   {
-    name: "Kari Ayam Kuning",
-    desc: "Kuah kari kental dari santan segar, ayamnya empuk meresap kunyit dan rempah. Paling enak disantap sama ketupat atau nasi anget.",
-    price: 27000,
-    original: 30000,
+    name: "Pancong Boss Lumer",
+    desc: "Kue pancong yang lumer di luar dan lembut di dalam, dengan topping coklat keju yang manis. Enak dijadikan teman ngemil.",
+    price: 20000,
+    original: 27000,
     image: "/makanan6.jpeg",
   },
   {
-    name: "Gado-Gado Ibu",
-    desc: "Sayuran rebus segar disiram bumbu kacang gurih, telur, tahu, tempe, dan kerupuk. Dijamin bikin nambah terus.",
-    price: 19000,
-    tag: "Sehat",
+    name: "Martabak Gombret",
+    desc: "Martabak manis yang lembut dengan topping cokelat, keju, dan susu kental manis. Manisnya pas, cocok buat teman ngemil.",
+    price: 17000,
+    original: 24000,
     image: "/makanan7.jpg",
   },
   {
-    name: "Nasi Uduk Komplit",
-    desc: "Nasi uduk wangi santan dan daun pandan, lengkap sama orek tempe, telur balado, bihun, dan sambal kacang.",
-    price: 21000,
+    name: "Bakso Spesial Mas Jono",
+    desc: "Bakso kenyal dengan kuah kaldu gurih, lengkap dengan mie, tahu, dan sayuran.",
+    price: 18000,
     original: 24000,
     image: "/makanan8.webp",
   },
   {
-    name: "Ikan Bakar Sambal Matah",
-    desc: "Ikan bakar bumbu kecap manis, dipadu sambal matah segar yang bikin nagih. Dimakan sama nasi putih hangat, mantap.",
-    price: 33000,
-    tag: "Favorit",
+    name: "Ketoprak Telor Sedap",
+    desc: "Ketoprak dengan tahu, bihun, tauge, telur, dan saus kacang yang gurih. Ditambah kerupuk biar makin josss.",
+    price: 22000,
+    original: 33000,
     image: "/makanan9.webp",
   },
   {
-    name: "Rawon Daging",
-    desc: "Semangkuk rawon kuah hitam khas keluak yang gurih, dagingnya empuk dengan tauge dan sambal terasi. Pas buat makan siang.",
-    price: 35000,
-    original: 39000,
+    name: "Mie Ayam Balap 12",
+    desc: "Mie kenyal dengan topping ayam berbumbu gurih, dan sayuran. Dijamin kenyang sampai besok",
+    price: 25000,
+    original: 35000,
     image: "/makanan10.webp",
   },
 ];
@@ -126,15 +127,15 @@ const FOODS: Food[] = [
 const PLANS = [
   {
     name: "Trial",
-    tagline: "Mulai jualan di ReBites tanpa biaya",
+    tagline: "Mulai jualan di ReBites tanpa biaya langganan",
     monthly: 0,
     yearly: 0,
     features: [
       "Gratis tanpa biaya langganan",
       "Maksimal 5 produk",
-      "Kelola stok & harga",
-      "Riwayat penjualan 30 hari",
-      "Dasbor UMKM",
+      "Kelola stok dan harga",
+      "Riwayat penjualan hingga 30 hari",
+      "Dasbor penjualan UMKM",
     ],
     capacity: 5,
     popular: false,
@@ -142,35 +143,35 @@ const PLANS = [
   },
   {
     name: "Standar",
-    tagline: "Bikin jualan makin laris dan dikenal",
+    tagline: "Kembangkan usaha dan jangkau lebih banyak pembeli",
     monthly: 49000,
     yearly: 490000,
     features: [
       "Maksimal 25 produk",
       "Riwayat penjualan tanpa batas",
       "Prioritas tampil di marketplace",
-      "Laporan penjualan lanjutan",
+      "Laporan penjualan lebih lengkap",
       "Lencana UMKM Terverifikasi",
     ],
     capacity: 25,
     popular: true,
-    cta: "Naik Kelas",
+    cta: "Pilih Paket",
   },
   {
     name: "Premium",
-    tagline: "Maksimalkan penjualan dengan fitur terlengkap",
+    tagline: "Kelola penjualan dengan fitur yang lebih lengkap",
     monthly: 99000,
     yearly: 990000,
     features: [
       "Produk tanpa batas",
-      "Semua fitur Standar",
-      "Promosi posisi unggulan",
+      "Semua fitur Paket Standar",
+      "Promosi di posisi unggulan",
       "Analitik tren permintaan",
       "Dukungan prioritas",
     ],
     capacity: Infinity,
     popular: false,
-    cta: "Maksimalkan Jualan",
+    cta: "Pilih Paket",
   },
 ];
 
@@ -180,6 +181,7 @@ type Testimonial = {
   quote: string;
   rating: number;
   initials: string;
+  photo: string;
 };
 
 const TESTIMONIALS: Testimonial[] = [
@@ -187,49 +189,61 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Rina Astuti",
     role: "Pemilik Dapur Ibu Sri",
     quote:
-      "Awalnya cuma iseng daftar paket Trial, eh malah kebantu banget. Stok yang biasanya sisa di akhir hari sekarang ludes, laporan penjualannya juga gampang dibaca.",
+      "Awalnya coba-coba daftar Trial karena penasaran. Ternyata kepake banget. Makanan yang biasanya masih sisa sekarang lebih cepat habis, dan laporan penjualannya juga gampang dipahami.",
     rating: 5,
     initials: "RA",
+    photo:
+      "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop",
   },
   {
-    name: "Budi Santoso",
+    name: "Arga Zanuar",
     role: "Pembeli setia",
     quote:
-      "Tiap jam istirahat pasti cek ReBites dulu. Makan siang jadi lebih hemat, tapi rasa dan kebersihannya nggak kalah dari yang dijual normal.",
+      "Sekarang kalau jam makan siang biasanya cek ReBites dulu. Harganya lebih hemat, tapi makanannya tetap enak dan kondisinya juga oke. Lumayan banget buat sehari-hari.",
     rating: 5,
     initials: "BS",
+    photo:
+      "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop",
   },
   {
     name: "Dewi Lestari",
     role: "Kue Mbok Darmi",
     quote:
-      "Setelah naik ke paket Standar, kue saya makin sering ketampil di marketplace. Nama Mbok Darmi sekarang dikenal sampai luar kelurahan!",
+      "Sejak pakai paket Standar, produk saya jadi lebih sering dilihat orang. Ada beberapa pembeli baru yang awalnya nemu dari ReBites, jadi lumayan banget buat kenalin usaha juga.",
     rating: 5,
     initials: "DL",
+    photo:
+      "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop",
   },
   {
-    name: "Ahmad Fauzi",
+    name: "Abdurrahman Kaysan",
     role: "Pelanggan rutin",
     quote:
-      "Pas hujan, pesan Soto Mie Bogor tinggal diantar. Harganya ringan, porsinya banyak, rasanya juara. Sudah langganan tiga bulan ini.",
+      "Paling sering pesen kalau lagi males keluar rumah. Soto Mie Bogornya enak, harganya juga nggak bikin mikir dua kali. Udah beberapa kali beli dan sejauh ini selalu puas.",
     rating: 5,
     initials: "AF",
+    photo:
+      "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop",
   },
   {
-    name: "Sri Wahyuni",
+    name: "Mang Teten",
     role: "Warung Mang Teten",
     quote:
-      "Sebelumnya banyak makanan terbuang sia-sia. Sekarang hampir nggak ada yang bersisa, jadi warung lebih untung dan nggak bikin sampah makanan.",
+      "Dulu kalau ada makanan yang nggak habis biasanya bingung mau diapain. Sekarang bisa ditawarkan lewat ReBites. Lumayan, makanan nggak kebuang dan masih bisa jadi tambahan pemasukan.",
     rating: 5,
     initials: "SW",
+    photo:
+      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop",
   },
   {
-    name: "Rizky Pratama",
+    name: "Falen Darmawan",
     role: "Mahasiswa",
     quote:
-      "Anak kos kayak saya jadi bisa makan enak tiap hari tanpa bongkar dompet. Banyak promo yang bikin nagih, pokoknya ReBites mantap!",
+      "Sebagai anak kos, ReBites cukup ngebantu sih. Bisa dapet makanan yang masih bagus dengan harga lebih murah. Biasanya sebelum beli makan saya cek sini dulu.",
     rating: 5,
     initials: "RP",
+    photo:
+      "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop",
   },
 ];
 
@@ -294,26 +308,17 @@ export default function Home() {
             WebkitTextStroke: "1px hsl(var(--primary-foreground) / 0.14)",
           }}
         >
-          48
+          46
         </span>
 
         <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
             {/* Kiri: judul + ticker live */}
             <div>
-              <Reveal delay={0.05}>
-                <p className="flex items-center gap-3 font-sans text-[11px] font-medium uppercase tracking-[0.28em] text-primary-foreground/60">
-                  Fakta food loss &amp; food waste
-                  <span className="h-px w-8 bg-primary-foreground/30" />
-                </p>
-              </Reveal>
-
               <Reveal delay={0.1}>
                 <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
-                  <RevealWords text="Setiap hari, jutaan porsi" />{" "}
-                  <span className="italic">
-                    <RevealWords text="terbuang" />
-                  </span>{" "}
+                  <RevealWords text="Setiap hari, begitu banyak pangan" />{" "}
+                  <RevealWords text="terbuang" />{" "}
                   <RevealWords text="begitu saja." />
                 </h2>
               </Reveal>
@@ -334,7 +339,7 @@ export default function Home() {
 
                   <p className="mt-3 flex items-baseline gap-1.5 font-display text-[clamp(2.1rem,4vw,3.2rem)] font-light leading-none tracking-tight text-primary-foreground">
                     <Counter
-                      to={46_350_000}
+                      to={48_000_000}
                       className="tabular-nums"
                       duration={10}
                     />
@@ -344,8 +349,8 @@ export default function Home() {
                   </p>
 
                   <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1 border-t border-dashed border-primary-foreground/20 pt-4 font-sans text-xs text-primary-foreground/70">
-                    <span>≈ 91 ton / menit</span>
-                    <span>≈ 1,5 ton / detik</span>
+                    <span>≈ 63.000 ton / hari</span>
+                    <span>≈ 2.630 ton / jam</span>
                   </div>
                 </div>
               </Reveal>
@@ -390,8 +395,8 @@ export default function Home() {
                   <StatTile
                     icon={<Scale className="h-5 w-5" />}
                     counter={<Counter to={184} suffix=" kg" duration={2.4} />}
-                    label="per kapita per tahun"
-                    sub="115–184 kg/kapita/tahun"
+                    label="rata-rata pangan terbuang"
+                    sub="115–184 kg per kapita/tahun  "
                   />
                 </Reveal>
 
@@ -410,13 +415,12 @@ export default function Home() {
                     sub="Rp213–551 triliun"
                   />
                 </Reveal>
-
                 <Reveal delay={0.25}>
                   <StatTile
                     icon={<Users className="h-5 w-5" />}
                     counter={<Counter to={125} suffix=" jt" duration={2.4} />}
-                    label="setara kebutuhan pangan penduduk"
-                    sub="61–125 juta penduduk"
+                    label="orang berpotensi makan"
+                    sub="61–125 juta orang"
                   />
                 </Reveal>
               </div>
@@ -427,7 +431,6 @@ export default function Home() {
 
       {/* ── CARA KERJA ─────────────────────────────────────── */}
       <HowItWorks />
-
 
       {/* ── REKOMENDASI MAKANAN ────────────────────────────── */}
       <section
@@ -443,14 +446,13 @@ export default function Home() {
           <div className="mx-auto max-w-3xl text-center">
             <Reveal delay={0.1}>
               <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
-                Rekomendasi{" "}
-                <span className="italic font-extralight">Makanan</span>
+                Rekomendasi <span className=" font-extralight">Makanan</span>
               </h2>
             </Reveal>
 
             <Reveal delay={0.15}>
-              <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-primary-foreground/70">
-                Yang lagi laris dari dapur tetangga
+              <p className="mx-auto mt-5 max-w-md font-sans text-lg leading-relaxed text-primary-foreground/70">
+                Paling banyak dinikmati akhir-akhir ini
               </p>
             </Reveal>
           </div>
@@ -505,10 +507,6 @@ export default function Home() {
                       Pesan Sekarang
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>
-
-                    <p className="font-sans text-xs tabular-nums text-primary-foreground/50">
-                      {foodIndex + 1} / {FOODS.length}
-                    </p>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -563,25 +561,17 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-3xl text-center">
-            <Reveal delay={0.05}>
-              <p className="flex items-center justify-center gap-3 font-sans text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
-                Paket langganan
-                <span className="h-px w-8 bg-primary/30" />
-              </p>
-            </Reveal>
-
             <Reveal delay={0.1}>
-              <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
-                Pilih paket yang{" "}
-                <span className="italic font-extralight">tumbuh</span> bersama
-                usaha Anda.
+              <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
+                Pilih paket yang <span>sesuai</span> dengan kebutuhan usaha
+                Anda.
               </h2>
             </Reveal>
 
             <Reveal delay={0.15}>
               <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
-                Semua paket bisa dicoba gratis 1 bulan penuh. Upgrade atau
-                berhenti kapan saja.
+                Coba semua fitur secara gratis selama 1 bulan. Lanjutkan
+                langganan atau berhenti kapan saja, tanpa ribet.
               </p>
             </Reveal>
 
@@ -640,7 +630,7 @@ export default function Home() {
                 plan.monthly === 0 ? "" : yearlyMode ? "/tahun" : "/bulan";
               const subLine =
                 plan.monthly === 0
-                  ? "tanpa biaya, selamanya"
+                  ? "Khusus penjual baru"
                   : yearlyMode
                     ? `Hemat 2 bulan · setara Rp${Math.round(
                         plan.yearly / 12,
@@ -654,20 +644,12 @@ export default function Home() {
               return (
                 <Reveal key={plan.name} delay={i * 0.1} className="h-full">
                   <div
-                      className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
+                    className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
                   >
                     <div className="relative flex items-center justify-between">
                       <span className="font-display text-sm italic tracking-[0.2em] text-caramel/50">
                         0{i + 1}
                       </span>
-
-                      {!plan.popular && (
-                        <span className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
-                          {plan.name === "Starter"
-                            ? "Untuk pemula"
-                            : "Skala penuh"}
-                        </span>
-                      )}
                     </div>
 
                     <h3 className="mt-4 font-display text-2xl font-light tracking-tight text-primary">
@@ -806,27 +788,18 @@ export default function Home() {
           {/* Header */}
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
-              <Reveal delay={0.05}>
-                <p className="flex items-center justify-center gap-3 font-sans text-[11px] font-medium uppercase tracking-[0.28em] text-primary-foreground/60 lg:justify-start">
-                  Testimoni
-                  <span className="h-px w-8 bg-primary-foreground/30" />
-                </p>
-              </Reveal>
-
               <Reveal delay={0.1}>
                 <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
-                  <RevealWords text="Apa kata mereka yang sudah" />{" "}
-                  <span className="italic">
-                    <RevealWords text="berhemat" />
-                  </span>{" "}
-                  <RevealWords text="di ReBites." />
+                  <RevealWords text="Apa kata mereka setelah" />{" "}
+                  <span>menggunakan</span> ReBites.
                 </h2>
               </Reveal>
 
               <Reveal delay={0.15}>
                 <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-primary-foreground/70 lg:mx-0">
-                  Cerita nyata dari UMKM dan pembeli yang sudah merasakan
-                  manfaat menyelamatkan makanan bersama ReBites.
+                  Pengalaman dari UMKM dan pembeli yang sudah menemukan cara
+                  baru untuk menjual, membeli, dan menikmati makanan dengan
+                  lebih hemat.
                 </p>
               </Reveal>
             </div>
@@ -857,66 +830,71 @@ export default function Home() {
                 setApi={setTestimonialApi}
               >
                 <CarouselContent className="-ml-4 lg:-ml-5">
-                {TESTIMONIALS.map((t, i) => (
-                  <CarouselItem
-                    key={t.name}
-                    className="basis-full pl-4 sm:basis-1/2 sm:pl-4 lg:basis-1/3 lg:pl-5"
-                  >
-                    <div className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-white p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel/40 hover:shadow-[0_30px_60px_-28px_rgba(34,81,56,0.35)] lg:p-9">
-                      {/* Watermark tanda kutip */}
-                      <span
-                        aria-hidden
-                        className="pointer-events-none absolute -top-3 right-4 select-none font-display text-[6rem] font-extralight leading-none text-caramel/[0.08] transition-colors duration-300 group-hover:text-caramel/15"
-                      >
-                        &ldquo;
-                      </span>
-
-                      {/* Rating */}
-                      <div className="flex items-center gap-1">
-                        {Array.from({ length: t.rating }).map((_, s) => (
-                          <Star
-                            key={s}
-                            className="h-4 w-4 fill-amber text-amber"
-                          />
-                        ))}
-                      </div>
-
-                      {/* Kutipan */}
-                      <Quote className="mt-5 h-5 w-5 text-caramel/40" />
-                      <blockquote className="mt-3 flex-1 font-sans text-sm leading-relaxed text-foreground/80">
-                        &ldquo;{t.quote}&rdquo;
-                      </blockquote>
-
-                      {/* Penulis */}
-                      <div className="relative mt-7 flex items-center gap-3 pt-6">
+                  {TESTIMONIALS.map((t, i) => (
+                    <CarouselItem
+                      key={t.name}
+                      className="basis-full pl-4 sm:basis-1/2 sm:pl-4 lg:basis-1/3 lg:pl-5"
+                    >
+                      <div className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-white p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel/40 hover:shadow-[0_30px_60px_-28px_rgba(34,81,56,0.35)] lg:p-9">
+                        {/* Watermark tanda kutip */}
                         <span
                           aria-hidden
-                          className="absolute inset-x-0 top-0 h-px"
-                          style={{
-                            background:
-                              "repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 10px)",
-                            opacity: 0.35,
-                          }}
-                        />
-                        <Avatar className="h-11 w-11 border border-caramel/30">
-                          <AvatarFallback className="bg-caramel font-display text-sm font-medium text-white">
-                            {t.initials}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-display text-base font-medium text-primary">
-                            {t.name}
-                          </p>
-                          <p className="mt-0.5 font-sans text-xs text-muted-foreground">
-                            {t.role}
-                          </p>
+                          className="pointer-events-none absolute -top-3 right-4 select-none font-display text-[6rem] font-extralight leading-none text-caramel/[0.08] transition-colors duration-300 group-hover:text-caramel/15"
+                        >
+                          &ldquo;
+                        </span>
+
+                        {/* Rating */}
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: t.rating }).map((_, s) => (
+                            <Star
+                              key={s}
+                              className="h-4 w-4 fill-amber text-amber"
+                            />
+                          ))}
+                        </div>
+
+                        {/* Kutipan */}
+                        <Quote className="mt-5 h-5 w-5 text-caramel/40" />
+                        <blockquote className="mt-3 flex-1 font-sans text-sm leading-relaxed text-foreground/80">
+                          &ldquo;{t.quote}&rdquo;
+                        </blockquote>
+
+                        {/* Penulis */}
+                        <div className="relative mt-7 flex items-center gap-3 pt-6">
+                          <span
+                            aria-hidden
+                            className="absolute inset-x-0 top-0 h-px"
+                            style={{
+                              background:
+                                "repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 10px)",
+                              opacity: 0.35,
+                            }}
+                          />
+                          <Avatar className="h-11 w-11 border border-caramel/30">
+                            <AvatarImage
+                              src={t.photo}
+                              alt={t.name}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="bg-caramel font-display text-sm font-medium text-white">
+                              {t.initials}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-display text-base font-medium text-primary">
+                              {t.name}
+                            </p>
+                            <p className="mt-0.5 font-sans text-xs text-muted-foreground">
+                              {t.role}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
             </div>
           </Reveal>
 

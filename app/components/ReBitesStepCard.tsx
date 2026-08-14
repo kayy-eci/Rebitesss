@@ -42,7 +42,7 @@ export default function ReBitesStepCard({
         aria-hidden
         animate={{ opacity: isActive ? 0 : 1, y: isActive ? -12 : 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 26 }}
-        className="absolute left-5 top-4 z-20 select-none font-sans text-5xl font-semibold leading-none text-[#CBD5E1]"
+        className="absolute left-5 top-4 z-20 select-none font-display text-5xl font-semibold leading-none text-[#CBD5E1]"
       >
         {step.number}
       </motion.span>
@@ -74,7 +74,7 @@ export default function ReBitesStepCard({
           <step.icon className="h-5 w-5" strokeWidth={2} />
         </span>
 
-        <h3 className="mt-4 font-sans text-xl font-semibold leading-snug text-[#111827]">
+        <h3 className="mt-4 font-display text-xl font-medium leading-snug text-[#111827]">
           {step.title}
         </h3>
 

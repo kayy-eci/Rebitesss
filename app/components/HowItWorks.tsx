@@ -8,11 +8,10 @@ import ReBitesStepCard, { type Step } from "@/app/components/ReBitesStepCard";
 const steps: Step[] = [
   {
     number: "01",
-    title: "UMKM Mendaftar & Mengunggah Produk",
+    title: "UMKM Mendaftar & Mengunggah",
     description:
       "Pelaku UMKM mengunggah makanan surplus yang masih layak konsumsi beserta informasi harga, stok, dan waktu penjualan.",
-    image:
-      "https://images.pexels.com/photos/5874513/pexels-photo-5874513.jpeg",
+    image: "https://images.pexels.com/photos/5874513/pexels-photo-5874513.jpeg",
     icon: Compass,
   },
   {
@@ -20,8 +19,7 @@ const steps: Step[] = [
     title: "Pembeli Mencari & Memesan",
     description:
       "Pembeli mencari makanan surplus sesuai kebutuhan, kemudian memilih dan memesan makanan yang diinginkan.",
-    image:
-      "https://images.pexels.com/photos/7213361/pexels-photo-7213361.jpeg",
+    image: "https://images.pexels.com/photos/7213361/pexels-photo-7213361.jpeg",
     icon: ShieldCheck,
   },
   {
@@ -53,26 +51,22 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section id="cara-kerja" data-nav="cream" className="bg-cream py-24 lg:py-32">
+    <section
+      id="cara-kerja"
+      data-nav="cream"
+      className="bg-cream py-24 lg:py-32"
+    >
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-        <Reveal delay={0}>
-          <div className="flex justify-center">
-            <span className="inline-flex items-center rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
-              Cara Kerja
-            </span>
-          </div>
-        </Reveal>
-
         <Reveal delay={0.05}>
-          <h2 className="mt-6 text-center font-display text-[clamp(2rem,4vw,3.375rem)] font-semibold leading-[1.1] tracking-[-0.01em] text-primary">
+          <h2 className="mt-6 text-center font-display text-[clamp(2rem,4vw,3.375rem)] font-medium leading-[1.1] tracking-[-0.01em] text-primary">
             Cara Kerja ReBites
           </h2>
         </Reveal>
 
         <Reveal delay={0.1}>
           <p className="mx-auto mt-4 max-w-[700px] text-center font-sans text-base font-normal leading-relaxed text-primary/70 lg:text-lg">
-            ReBites menghubungkan makanan berlebih dengan orang dan lingkungan
-            yang membutuhkan melalui proses yang sederhana, aman, dan berdampak.
+            ReBites membantu makanan berlebih menemukan tempat yang tepat, agar
+            tidak berakhir menjadi sampah.
           </p>
         </Reveal>
 

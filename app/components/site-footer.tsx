@@ -117,7 +117,7 @@ export function SiteFooter() {
           </p>
           <div className="flex items-center gap-2 font-sans text-xs text-primary-foreground/50">
             <Leaf className="h-3.5 w-3.5" />
-            Setiap makanan yang terselamatkan punya cerita.
+            Selamatkan Makanan, selamatkan bumi.
           </div>
         </div>
       </div>

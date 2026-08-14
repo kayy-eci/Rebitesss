@@ -11,11 +11,11 @@ const HERO_IMAGE =
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
-  { href: "/#cta", label: "Informasi" },
+  { href: "/#info", label: "Informasi" },
   { href: "/#cara-kerja", label: "Cara Kerja" },
-  { href: "/#masalah", label: "Rekomendasi" },
-  { href: "/#dampak", label: "Testimoni" },
+  { href: "/#rekomendasi", label: "Rekomendasi" },
   { href: "/#langganan", label: "Langganan" },
+  { href: "/#testimoni", label: "Testimoni" },
 ];
 
 const FOCUS_RING =
@@ -69,6 +69,19 @@ export function HeroSection() {
           .map(Number) ?? [0, 0, 0];
       const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
       setOverDark(luminance < 0.5);
+
+      // Scrollspy: tandai item navigasi sesuai section yang sedang dilihat
+      let label = NAV_LINKS[0].label;
+      for (const link of NAV_LINKS) {
+        const hash = link.href.split("#")[1];
+        const el = hash ? document.getElementById(hash) : null;
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= probeY && rect.bottom > probeY) {
+          label = link.label;
+        }
+      }
+      setActiveNav(label);
     };
 
     update();
@@ -82,6 +95,26 @@ export function HeroSection() {
   }, [mounted]);
 
   const navIsDark = mounted && overDark;
+
+  const scrollToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    label: string,
+    href: string,
+  ) => {
+    e.preventDefault();
+    setActiveNav(label);
+    setOpen(false);
+    const hash = href.split("#")[1];
+    const target = hash ? document.getElementById(hash) : null;
+    if (!target) return;
+
+    const lenis = window.__lenis;
+    if (lenis) {
+      lenis.scrollTo(target, { offset: -88, duration: 1.1 });
+    } else {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <div className="bg-cream" data-nav="cream">
@@ -112,11 +145,16 @@ export function HeroSection() {
 
               <span
                 className={cn(
-                  "font-display text-2xl font-bold tracking-tight transition-colors duration-500",
+                  "font-display text-2xl font-medium tracking-tight transition-colors duration-500",
                   navIsDark ? "text-white" : "text-forest-dark",
                 )}
               >
-                ReBites
+                <span className="font-display text-2xl font-medium text-primary-foreground-strong">
+                  Re
+                </span>
+                <span className="font-display text-2xl font-light italic text-primary-foreground-strong">
+                  Bites
+                </span>
               </span>
             </Link>
 
@@ -126,7 +164,7 @@ export function HeroSection() {
                 <li key={link.label} className="relative">
                   <Link
                     href={link.href}
-                    onClick={() => setActiveNav(link.label)}
+                    onClick={(e) => scrollToSection(e, link.label, link.href)}
                     aria-current={activeNav === link.label ? "page" : undefined}
                     className={cn(
                       "relative py-1 font-inter text-sm transition-colors duration-300",
@@ -217,11 +255,15 @@ export function HeroSection() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        onClick={() => {
-                          setActiveNav(link.label);
-                          setOpen(false);
-                        }}
-                        className="flex items-center justify-between rounded-2xl px-4 py-3 font-inter text-sm text-forest-dark transition-colors duration-300 hover:bg-cream"
+                        onClick={(e) =>
+                          scrollToSection(e, link.label, link.href)
+                        }
+                        className={cn(
+                          "flex items-center justify-between rounded-2xl px-4 py-3 font-inter text-sm transition-colors duration-300",
+                          activeNav === link.label
+                            ? "bg-caramel/10 font-semibold text-forest-dark"
+                            : "text-forest-dark hover:bg-cream",
+                        )}
                       >
                         {link.label}
                       </Link>
@@ -307,7 +349,7 @@ export function HeroSection() {
                 HERO TEXT
             =================================================== */}
             <div className="relative z-10 max-w-[560px]">
-              <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-bold leading-[1.02] tracking-[-0.03em]">
+              <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
                 <span className="text-forest-dark">Selamatkan Makanan,</span>
 
                 <span className="block text-forest">Selamatkan Bumi.</span>
