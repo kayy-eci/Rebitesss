@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { UserProfile } from './components/user-profile';
+import { UserProfile } from '@/app/components/user-profile';
 
 export const metadata: Metadata = {
   title: 'Profil - ReBites',
