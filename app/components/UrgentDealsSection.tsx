@@ -3,13 +3,13 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Clock, Flame, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { formatRupiah, urgentItems } from '../lib/data';
-import { useCountdown, formatCountdown } from '../lib/useCountdown';
-import { useCart } from '../lib/cart-store';
-import { Badge } from './ui/Badge';
-import { SmartImage } from './ui/SmartImage';
-import { SoftBlob } from './Ornaments';
-import type { UrgentItem } from '../lib/types';
+import { formatRupiah, urgentItems } from '@/lib/data';
+import { useCountdown, formatCountdown } from '@/lib/useCountdown';
+import { useCart } from '@/lib/cart-store';
+import { Badge } from '@/app/components/Badge';
+import { SmartImage } from '@/app/components/SmartImage';
+import { SoftBlob } from '@/app/components/Ornaments';
+import type { UrgentItem } from '@/lib/types';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';

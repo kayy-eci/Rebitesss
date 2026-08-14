@@ -2,9 +2,9 @@
 
 import { MapPin, Star, Store } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Badge } from './ui/Badge';
-import { SmartImage } from './ui/SmartImage';
-import type { Vendor } from '../lib/types';
+import { Badge } from '@/app/components/Badge';
+import { SmartImage } from '@/app/components/SmartImage';
+import type { Vendor } from '@/lib/types';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';

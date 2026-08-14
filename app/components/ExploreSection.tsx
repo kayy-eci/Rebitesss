@@ -1,10 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { foodItems } from '../lib/data';
-import type { FilterKey } from '../lib/types';
-import { SearchFilterBar } from './SearchFilterBar';
-import { FoodGrid } from './FoodGrid';
+import { foodItems } from '@/lib/data';
+import type { FilterKey } from '@/lib/types';
+import { SearchFilterBar } from '@/app/components/SearchFilterBar';
+import { FoodGrid } from '@/app/components/FoodGrid';
 
 function applyFilter(key: FilterKey) {
   return (a: (typeof foodItems)[number], b: (typeof foodItems)[number]) => {

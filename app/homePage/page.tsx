@@ -1,14 +1,14 @@
-import { CartProvider } from './lib/cart-store';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { ExploreSection } from './components/ExploreSection';
-import { UrgentDealsSection } from './components/UrgentDealsSection';
-import { VendorSection } from './components/VendorSection';
-import { BenefitsSection } from './components/BenefitsSection';
-import { HowItWorksSection } from './components/HowItWorksSection';
-import { ImpactStatsSection } from './components/ImpactStatsSection';
-import { VendorCTASection } from './components/VendorCTASection';
-import { Footer } from './components/Footer';
+import { CartProvider } from '@/lib/cart-store';
+import { Navbar } from '@/app/components/Navbar';
+import { Hero } from '@/app/components/Hero';
+import { ExploreSection } from '@/app/components/ExploreSection';
+import { UrgentDealsSection } from '@/app/components/UrgentDealsSection';
+import { VendorSection } from '@/app/components/VendorSection';
+import { BenefitsSection } from '@/app/components/BenefitsSection';
+import { HowItWorksSection } from '@/app/components/HowItWorksSection';
+import { ImpactStatsSection } from '@/app/components/ImpactStatsSection';
+import { VendorCTASection } from '@/app/components/VendorCTASection';
+import { Footer } from '@/app/components/Footer';
 
 export default function HomePage() {
   return (

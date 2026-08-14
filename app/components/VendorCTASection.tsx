@@ -2,10 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight, BadgeCheck } from 'lucide-react';
-import { Button } from './ui/Button';
-import { SmartImage } from './ui/SmartImage';
-import { DotPattern, FloatingLeaf, SoftBlob } from './Ornaments';
-import { scrollToId } from '../lib/scroll';
+import { Button } from '@/app/components/Button';
+import { SmartImage } from '@/app/components/SmartImage';
+import { DotPattern, FloatingLeaf, SoftBlob } from '@/app/components/Ornaments';
+import { scrollToId } from '@/lib/scroll';
 
 const CTA_IMAGE =
   'https://images.pexels.com/photos/8964280/pexels-photo-8964280.jpeg?auto=compress&cs=tinysrgb&w=1000';

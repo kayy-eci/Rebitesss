@@ -15,9 +15,9 @@ import {
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { LOCATIONS } from '../lib/data';
-import { scrollToId } from '../lib/scroll';
-import { useCart } from '../lib/cart-store';
+import { LOCATIONS } from '@/lib/data';
+import { scrollToId } from '@/lib/scroll';
+import { useCart } from '@/lib/cart-store';
 
 const NAV_LINKS = [
   { id: 'home', label: 'Home' },

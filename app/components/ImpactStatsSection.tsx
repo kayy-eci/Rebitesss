@@ -2,9 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { Leaf } from 'lucide-react';
-import { impactStats } from '../lib/data';
+import { impactStats } from '@/lib/data';
 import { Counter } from '@/app/components/counter';
-import { DotPattern, FloatingLeaf, SoftBlob } from './Ornaments';
+import { DotPattern, FloatingLeaf, SoftBlob } from '@/app/components/Ornaments';
 
 export function ImpactStatsSection() {
   return (

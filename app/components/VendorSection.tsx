@@ -3,9 +3,9 @@
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { vendors } from '../lib/data';
-import { VendorCard } from './VendorCard';
-import { SoftBlob } from './Ornaments';
+import { vendors } from '@/lib/data';
+import { VendorCard } from '@/app/components/VendorCard';
+import { SoftBlob } from '@/app/components/Ornaments';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';

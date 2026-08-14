@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { ChevronDown, MapPin, Search } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { LOCATIONS } from '../lib/data';
-import { Pill } from './ui/Pill';
-import type { FilterKey } from '../lib/types';
+import { LOCATIONS } from '@/lib/data';
+import { Pill } from '@/app/components/Pill';
+import type { FilterKey } from '@/lib/types';
 
 export const FILTER_OPTIONS: { key: FilterKey; label: string }[] = [
   { key: 'terdekat', label: 'Terdekat' },

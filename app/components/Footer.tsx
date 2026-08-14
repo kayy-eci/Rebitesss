@@ -9,7 +9,7 @@ import {
   Twitter,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SoftBlob } from './Ornaments';
+import { SoftBlob } from '@/app/components/Ornaments';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-forest-800';

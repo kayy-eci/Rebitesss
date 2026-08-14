@@ -2,17 +2,17 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { ArrowRight, Recycle, Sparkles, Store } from 'lucide-react';
-import { Button } from './ui/Button';
-import { Badge } from './ui/Badge';
-import { SmartImage } from './ui/SmartImage';
+import { Button } from '@/app/components/Button';
+import { Badge } from '@/app/components/Badge';
+import { SmartImage } from '@/app/components/SmartImage';
 import {
   ArcLines,
   DotPattern,
   FloatingLeaf,
   LeafSprig,
   SoftBlob,
-} from './Ornaments';
-import { scrollToId } from '../lib/scroll';
+} from '@/app/components/Ornaments';
+import { scrollToId } from '@/lib/scroll';
 
 const HERO_IMAGE =
   'https://images.pexels.com/photos/16134564/pexels-photo-16134564.jpeg?auto=compress&cs=tinysrgb&w=1200';

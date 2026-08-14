@@ -3,9 +3,9 @@
 import { ArrowRight, SearchX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { FoodCard } from './FoodCard';
-import { DotPattern, SoftBlob } from './Ornaments';
-import type { FoodItem } from '../lib/types';
+import { FoodCard } from '@/app/components/FoodCard';
+import { DotPattern, SoftBlob } from '@/app/components/Ornaments';
+import type { FoodItem } from '@/lib/types';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
