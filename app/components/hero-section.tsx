@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Leaf, Lock, Menu, X } from "lucide-react";
+import { ArrowRight, Lock, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const HERO_IMAGE =
@@ -11,15 +11,15 @@ const HERO_IMAGE =
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
-  { href: "/#cta", label: "Reservasi" },
-  { href: "/#cara-kerja", label: "Layanan" },
-  { href: "/#masalah", label: "Tentang" },
-  { href: "/#dampak", label: "Blog" },
-  { href: "/#langganan", label: "FAQ" },
+  { href: "/#cta", label: "Informasi" },
+  { href: "/#cara-kerja", label: "Cara Kerja" },
+  { href: "/#masalah", label: "Rekomendasi" },
+  { href: "/#dampak", label: "Testimoni" },
+  { href: "/#langganan", label: "Langganan" },
 ];
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-cream";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-cream";
 
 export function HeroSection() {
   const [open, setOpen] = useState<boolean>(false);
@@ -40,37 +40,51 @@ export function HeroSection() {
   useEffect(() => {
     if (!mounted) return;
 
-    const darkSections = ["masalah", "cta"]
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-nav]"),
+    );
 
-    if (darkSections.length === 0) {
+    if (sections.length === 0) {
       setOverDark(false);
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries: IntersectionObserverEntry[]) => {
-        setOverDark(entries.some((entry) => entry.isIntersecting));
-      },
-      {
-        rootMargin: "0px 0px -70% 0px",
-      },
-    );
+    const probeY = 44;
 
-    darkSections.forEach((section) => {
-      observer.observe(section);
-    });
+    const update = () => {
+      const current = sections.find((section) => {
+        const rect = section.getBoundingClientRect();
+        return rect.top <= probeY && rect.bottom > probeY;
+      });
+
+      if (!current) {
+        setOverDark(false);
+        return;
+      }
+
+      const [r, g, b] =
+        getComputedStyle(current)
+          .backgroundColor.match(/\d+/g)
+          ?.slice(0, 3)
+          .map(Number) ?? [0, 0, 0];
+      const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+      setOverDark(luminance < 0.5);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
 
     return () => {
-      observer.disconnect();
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
   }, [mounted]);
 
   const navIsDark = mounted && overDark;
 
   return (
-    <div className="bg-cream">
+    <div className="bg-cream" data-nav="cream">
       {/* =========================================================
           NAVBAR
       ========================================================= */}
@@ -78,10 +92,10 @@ export function HeroSection() {
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
             className={cn(
-              "flex h-16 items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
+              "flex h-16 items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
               navIsDark
-                ? "border-white/15 bg-forest-dark/75 text-white"
-                : "border-hairline/70 bg-cream/80 text-forest-dark",
+                ? "border-white/15 bg-transparent text-white"
+                : "border-hairline/70 bg-transparent text-forest-dark",
             )}
           >
             {/* Logo */}
@@ -90,16 +104,11 @@ export function HeroSection() {
               aria-label="ReBites"
               className="flex shrink-0 items-center gap-2.5"
             >
-              <span
-                className={cn(
-                  "flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500",
-                  navIsDark
-                    ? "bg-white text-forest-dark"
-                    : "bg-forest text-white",
-                )}
-              >
-                <Leaf className="h-4 w-4" />
-              </span>
+              <img
+                src="/logo.png"
+                alt="ReBites"
+                className="h-9 w-9 rounded-full object-cover"
+              />
 
               <span
                 className={cn(
@@ -127,7 +136,7 @@ export function HeroSection() {
                           : "font-semibold text-forest-dark"
                         : navIsDark
                           ? "text-white/80 hover:text-white"
-                          : "text-forest-dark/80 hover:text-forest",
+                          : "text-forest-dark/80 hover:text-caramel",
                     )}
                   >
                     {link.label}
@@ -136,7 +145,7 @@ export function HeroSection() {
                       <span
                         className={cn(
                           "absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full transition-colors duration-500",
-                          navIsDark ? "bg-white" : "bg-forest",
+                          navIsDark ? "bg-white" : "bg-caramel",
                         )}
                       />
                     )}
@@ -150,10 +159,10 @@ export function HeroSection() {
               <Link
                 href="/login"
                 className={cn(
-                  "hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(47,66,53,0.65)] transition-colors duration-300 sm:flex",
+                  "hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(34,81,56,0.65)] transition-colors duration-300 sm:flex",
                   navIsDark
-                    ? "bg-white text-forest-dark hover:bg-white/90"
-                    : "bg-forest text-white hover:bg-forest-dark",
+                    ? "bg-white text-forest-dark hover:bg-caramel hover:text-white"
+                    : "bg-forest text-white hover:bg-caramel",
                   FOCUS_RING,
                 )}
               >
@@ -201,7 +210,7 @@ export function HeroSection() {
                   duration: 0.25,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-2 overflow-hidden rounded-3xl border border-hairline/70 bg-white p-3 shadow-[0_28px_56px_-28px_rgba(47,66,53,0.5)] lg:hidden"
+                className="mt-2 overflow-hidden rounded-3xl border border-hairline/70 bg-white p-3 shadow-[0_28px_56px_-28px_rgba(34,81,56,0.5)] lg:hidden"
               >
                 <ul className="flex flex-col">
                   {NAV_LINKS.map((link) => (
@@ -224,7 +233,7 @@ export function HeroSection() {
                   <Link
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-full bg-forest py-3 font-inter text-sm font-semibold text-white transition-colors duration-300 hover:bg-forest-dark"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-full bg-forest py-3 font-inter text-sm font-semibold text-white transition-colors duration-300 hover:bg-caramel"
                   >
                     <Lock className="h-3.5 w-3.5" />
                     {t("Masuk", "Log In")}
@@ -254,11 +263,11 @@ export function HeroSection() {
         >
           <defs>
             <linearGradient id="hero-organic-line" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#3B5240" stopOpacity="0.18" />
+              <stop offset="0%" stopColor="#225138" stopOpacity="0.18" />
 
-              <stop offset="55%" stopColor="#3B5240" stopOpacity="0.10" />
+              <stop offset="55%" stopColor="#225138" stopOpacity="0.10" />
 
-              <stop offset="100%" stopColor="#3B5240" stopOpacity="0" />
+              <stop offset="100%" stopColor="#225138" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -308,7 +317,7 @@ export function HeroSection() {
                 <Link
                   href="/#cara-kerja"
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-7 py-3.5 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(47,66,53,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-forest/40 hover:text-forest",
+                    "inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-7 py-3.5 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(34,81,56,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-caramel/50 hover:text-caramel",
                     FOCUS_RING,
                   )}
                 >
@@ -318,7 +327,7 @@ export function HeroSection() {
                 <Link
                   href="/#cta"
                   className={cn(
-                    "group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-forest to-forest-dark px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(47,66,53,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_-16px_rgba(47,66,53,0.85)]",
+                    "group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-forest to-forest-dark px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(34,81,56,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:from-caramel hover:to-caramel-dark hover:shadow-[0_18px_38px_-16px_rgba(140,90,60,0.85)]",
                     FOCUS_RING,
                   )}
                 >
@@ -346,7 +355,7 @@ export function HeroSection() {
                   w-[108%]
                   -translate-x-1/2
                   -translate-y-1/2
-                  drop-shadow-[0_24px_35px_-22px_rgba(47,66,53,0.55)]
+                  drop-shadow-[0_24px_35px_-22px_rgba(34,81,56,0.55)]
                 "
               >
                 <defs>
@@ -407,7 +416,7 @@ export function HeroSection() {
                   relative
                   z-10
                   w-full
-                  drop-shadow-[0_34px_54px_-28px_rgba(47,66,53,0.55)]
+                  drop-shadow-[0_34px_54px_-28px_rgba(34,81,56,0.55)]
                 "
               >
                 <defs>
@@ -469,7 +478,7 @@ function HeroOrganicArt() {
     >
       <g
         fill="none"
-        stroke="#3B5240"
+        stroke="#225138"
         strokeOpacity="0.55"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -762,7 +771,7 @@ function HeroOrganicArt() {
           cx="255"
           cy="310"
           r="4"
-          fill="#3B5240"
+          fill="#225138"
           stroke="none"
           opacity="0.46"
         />
@@ -771,7 +780,7 @@ function HeroOrganicArt() {
           cx="355"
           cy="350"
           r="2.5"
-          fill="#3B5240"
+          fill="#225138"
           stroke="none"
           opacity="0.36"
         />
@@ -780,7 +789,7 @@ function HeroOrganicArt() {
           cx="665"
           cy="250"
           r="4"
-          fill="#3B5240"
+          fill="#225138"
           stroke="none"
           opacity="0.42"
         />
@@ -789,7 +798,7 @@ function HeroOrganicArt() {
           cx="830"
           cy="300"
           r="2.5"
-          fill="#3B5240"
+          fill="#225138"
           stroke="none"
           opacity="0.34"
         />
@@ -798,7 +807,7 @@ function HeroOrganicArt() {
           cx="1120"
           cy="340"
           r="4"
-          fill="#3B5240"
+          fill="#225138"
           stroke="none"
           opacity="0.40"
         />

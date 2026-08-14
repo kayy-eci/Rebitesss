@@ -26,13 +26,15 @@ const config: Config = {
         inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        forest: '#3B5240',
-        'forest-dark': '#2F4235',
+        forest: '#225138',
+        'forest-dark': '#225138',
         cream: '#F7F5EF',
         stone: '#6B6A63',
         hairline: '#DEDACF',
         sage: '#AEB89B',
         amber: '#D6A54A',
+        caramel: '#8C5A3C',
+        'caramel-dark': '#6F4529',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

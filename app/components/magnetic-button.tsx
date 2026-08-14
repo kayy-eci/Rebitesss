@@ -16,7 +16,7 @@ export function MagneticButton({
   children: React.ReactNode;
   href?: string;
   onClick?: () => void;
-  variant?: 'default' | 'outline' | 'cream';
+  variant?: 'default' | 'outline' | 'cream' | 'white';
   className?: string;
   strength?: number;
 }) {
@@ -37,11 +37,13 @@ export function MagneticButton({
   const base = cn(
     'group relative inline-flex items-center justify-center gap-2 rounded-[var(--radius)] px-7 py-3.5 font-sans text-sm font-medium tracking-tight transition-colors duration-300',
     variant === 'default' &&
-      'bg-primary text-primary-foreground-strong hover:bg-primary/90',
+      'bg-primary text-primary-foreground-strong hover:bg-caramel',
     variant === 'outline' &&
-      'border border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground-strong',
+      'border border-primary/40 text-primary hover:border-caramel hover:bg-caramel hover:text-white',
     variant === 'cream' &&
-      'bg-secondary text-primary hover:bg-secondary/70 border border-primary/10',
+      'bg-secondary text-primary hover:bg-caramel hover:text-white border border-primary/10',
+    variant === 'white' &&
+      'border border-caramel/40 bg-white text-primary hover:border-caramel hover:bg-caramel hover:text-white',
     className
   );
 
@@ -105,7 +107,7 @@ export function ArrowLink({
     >
       <span className="relative">
         {children}
-        <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-primary transition-transform duration-300 ease-out group-hover:scale-x-100" />
+        <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-caramel transition-transform duration-300 ease-out group-hover:scale-x-100" />
       </span>
       <svg
         className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"

@@ -6,16 +6,26 @@ import { Reveal } from './reveal';
 
 export function SiteFooter() {
   return (
-    <footer className="grain-overlay relative overflow-hidden bg-primary text-primary-foreground">
+    <footer
+      data-nav="green"
+      className="grain-overlay relative overflow-hidden bg-primary text-primary-foreground"
+    >
       <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
         <Reveal className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <Link href="/" className="flex items-baseline gap-0.5">
-              <span className="font-display text-3xl font-medium text-primary-foreground-strong">
-                Re
-              </span>
-              <span className="font-display text-3xl font-light italic text-primary-foreground-strong">
-                Bites
+            <Link href="/" className="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="ReBites"
+                className="h-12 w-12 rounded-full object-cover shadow-[0_10px_24px_-12px_rgba(0,0,0,0.5)] ring-1 ring-primary-foreground/20"
+              />
+              <span className="flex items-baseline gap-0.5">
+                <span className="font-display text-3xl font-medium text-primary-foreground-strong">
+                  Re
+                </span>
+                <span className="font-display text-3xl font-light italic text-primary-foreground-strong">
+                  Bites
+                </span>
               </span>
             </Link>
             <p className="mt-5 max-w-xs font-sans text-sm leading-relaxed text-primary-foreground/70">
@@ -27,14 +37,14 @@ export function SiteFooter() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 text-primary-foreground/80 transition-colors hover:border-primary-foreground/60 hover:text-primary-foreground"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 text-primary-foreground/80 transition-colors hover:border-caramel hover:bg-caramel hover:text-white"
                 aria-label="Instagram"
               >
                 <Instagram className="h-4 w-4" />
               </a>
               <a
                 href="mailto:halo@rebites.id"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 text-primary-foreground/80 transition-colors hover:border-primary-foreground/60 hover:text-primary-foreground"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 text-primary-foreground/80 transition-colors hover:border-caramel hover:bg-caramel hover:text-white"
                 aria-label="Email"
               >
                 <Mail className="h-4 w-4" />

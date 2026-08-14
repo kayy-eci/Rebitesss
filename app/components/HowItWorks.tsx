@@ -53,24 +53,24 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section id="cara-kerja" className="bg-white py-20 lg:py-28">
+    <section id="cara-kerja" data-nav="cream" className="bg-cream py-24 lg:py-32">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
         <Reveal delay={0}>
           <div className="flex justify-center">
-            <span className="inline-flex items-center rounded-full border border-[#005A46]/20 bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#005A46]">
+            <span className="inline-flex items-center rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
               Cara Kerja
             </span>
           </div>
         </Reveal>
 
         <Reveal delay={0.05}>
-          <h2 className="mt-6 text-center font-display text-[clamp(2rem,4vw,3.375rem)] font-semibold leading-[1.1] tracking-[-0.01em] text-[#112D4E]">
+          <h2 className="mt-6 text-center font-display text-[clamp(2rem,4vw,3.375rem)] font-semibold leading-[1.1] tracking-[-0.01em] text-primary">
             Cara Kerja ReBites
           </h2>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="mx-auto mt-4 max-w-[700px] text-center font-sans text-base font-normal leading-relaxed text-[#475569] lg:text-lg">
+          <p className="mx-auto mt-4 max-w-[700px] text-center font-sans text-base font-normal leading-relaxed text-primary/70 lg:text-lg">
             ReBites menghubungkan makanan berlebih dengan orang dan lingkungan
             yang membutuhkan melalui proses yang sederhana, aman, dan berdampak.
           </p>
