@@ -1,19 +1,16 @@
-'use client';
+"use client";
 
-import { Clock, MapPin, Plus, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatRupiah } from '@/lib/data';
-import { useCart } from '@/lib/cart-store';
-import { Badge } from '@/app/components/Badge';
-import { SmartImage } from '@/app/components/SmartImage';
-import type { FoodItem } from '@/lib/types';
+import { Clock, MapPin, Plus, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { formatRupiah } from "@/lib/data";
+import { Badge } from "@/app/components/Badge";
+import { SmartImage } from "@/app/components/SmartImage";
+import type { FoodItem } from "@/lib/types";
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function FoodCard({ item }: { item: FoodItem }) {
-  const { addItem } = useCart();
-
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15">
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
@@ -70,15 +67,14 @@ export function FoodCard({ item }: { item: FoodItem }) {
 
         <button
           type="button"
-          onClick={() => addItem(item.id)}
-          aria-label={`Tambah ${item.name} ke keranjang`}
+          aria-label={`Lihat detail ${item.name}`}
           className={cn(
-            'mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]',
-            FOCUS_RING
+            "mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]",
+            FOCUS_RING,
           )}
         >
           <Plus className="h-4 w-4" />
-          Keranjang
+          Lihat Detail
         </button>
       </div>
     </article>

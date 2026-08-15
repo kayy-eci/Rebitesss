@@ -1,29 +1,27 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { ArrowRight, Clock, Flame, MapPin, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatRupiah, urgentItems } from '@/lib/data';
-import { useCountdown, formatCountdown } from '@/lib/useCountdown';
-import { useCart } from '@/lib/cart-store';
-import { Badge } from '@/app/components/Badge';
-import { SmartImage } from '@/app/components/SmartImage';
-import { SoftBlob } from '@/app/components/Ornaments';
-import type { UrgentItem } from '@/lib/types';
+import { motion } from "framer-motion";
+import { ArrowRight, Clock, Flame, MapPin, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { formatRupiah, urgentItems } from "@/lib/data";
+import { useCountdown, formatCountdown } from "@/lib/useCountdown";
+import { Badge } from "@/app/components/Badge";
+import { SmartImage } from "@/app/components/SmartImage";
+import { SoftBlob } from "@/app/components/Ornaments";
+import type { UrgentItem } from "@/lib/types";
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 function UrgentCard({ item }: { item: UrgentItem }) {
-  const { addItem } = useCart();
   const remaining = useCountdown(item.expiresAt);
   const isExpired = remaining === 0;
   const isLow = remaining !== null && remaining > 0 && remaining < 300;
   const timeText =
     remaining === null
-      ? '--:--:--'
+      ? "--:--:--"
       : isExpired
-        ? 'Habis'
+        ? "Habis"
         : formatCountdown(remaining);
 
   return (
@@ -34,8 +32,8 @@ function UrgentCard({ item }: { item: UrgentItem }) {
           alt={`Foto ${item.name} dari ${item.vendorName}`}
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
           className={cn(
-            'transition-transform duration-500 group-hover:scale-105',
-            isExpired && 'grayscale'
+            "transition-transform duration-500 group-hover:scale-105",
+            isExpired && "grayscale",
           )}
         />
         <div className="absolute left-3 top-3">
@@ -49,20 +47,20 @@ function UrgentCard({ item }: { item: UrgentItem }) {
           <div className="flex items-center gap-2 rounded-full bg-forest-900/85 px-4 py-2 backdrop-blur-sm">
             <Flame
               className={cn(
-                'h-4 w-4 shrink-0',
-                isExpired ? 'text-charcoal-500' : 'text-gold-500'
+                "h-4 w-4 shrink-0",
+                isExpired ? "text-charcoal-500" : "text-gold-500",
               )}
             />
             <span className="text-xs font-semibold text-cream-50">
-              Berakhir dalam{' '}
+              Berakhir dalam{" "}
               <span
                 className={cn(
-                  'tabular-nums',
+                  "tabular-nums",
                   isExpired
-                    ? 'text-charcoal-500'
+                    ? "text-charcoal-500"
                     : isLow
-                      ? 'text-red-800'
-                      : 'text-gold-500'
+                      ? "text-red-800"
+                      : "text-gold-500",
                 )}
               >
                 {timeText}
@@ -107,28 +105,25 @@ function UrgentCard({ item }: { item: UrgentItem }) {
         <motion.button
           type="button"
           disabled={isExpired}
-          onClick={() => addItem(item.id)}
           aria-label={
-            isExpired
-              ? `${item.name} sudah habis`
-              : `Selamatkan ${item.name} sekarang`
+            isExpired ? `${item.name} sudah habis` : `Lihat detail ${item.name}`
           }
           animate={!isExpired ? { scale: [1, 1.03, 1] } : undefined}
           transition={
             !isExpired
-              ? { duration: 1.8, repeat: Infinity, ease: 'easeInOut' }
+              ? { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
               : undefined
           }
           className={cn(
-            'mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-md transition-colors duration-200 active:scale-[0.98]',
+            "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-md transition-colors duration-200 active:scale-[0.98]",
             isExpired
-              ? 'cursor-not-allowed bg-sage-100 text-charcoal-500'
-              : 'bg-green-700 text-white shadow-green-700/20 hover:bg-green-600',
-            FOCUS_RING
+              ? "cursor-not-allowed bg-sage-100 text-charcoal-500"
+              : "bg-green-700 text-white shadow-green-700/20 hover:bg-green-600",
+            FOCUS_RING,
           )}
         >
           <Flame className="h-4 w-4 text-gold-500" />
-          {isExpired ? 'Habis' : 'Selamatkan Sekarang'}
+          {isExpired ? "Habis" : "Selamatkan Sekarang"}
         </motion.button>
       </div>
     </article>
@@ -156,12 +151,12 @@ export function UrgentDealsSection() {
             onClick={(e) => {
               e.preventDefault();
               document
-                .getElementById('explore')
-                ?.scrollIntoView({ behavior: 'smooth' });
+                .getElementById("explore")
+                ?.scrollIntoView({ behavior: "smooth" });
             }}
             className={cn(
-              'group inline-flex w-fit items-center gap-1.5 font-inter text-sm font-semibold text-green-700 transition-colors hover:text-green-600',
-              FOCUS_RING
+              "group inline-flex w-fit items-center gap-1.5 font-inter text-sm font-semibold text-green-700 transition-colors hover:text-green-600",
+              FOCUS_RING,
             )}
           >
             Lihat Semua

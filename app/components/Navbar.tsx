@@ -1,37 +1,25 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Bell,
-  ChevronDown,
-  Leaf,
-  MapPin,
-  Menu,
-  Search,
-  ShoppingCart,
-  User,
-  X,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { LOCATIONS } from '@/lib/data';
-import { scrollToId } from '@/lib/scroll';
-import { useCart } from '@/lib/cart-store';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import { Bell, ChevronDown, Leaf, MapPin, Menu, User, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { LOCATIONS } from "@/lib/data";
+import { scrollToId } from "@/lib/scroll";
 
 const NAV_LINKS = [
-  { id: 'home', label: 'Home' },
-  { id: 'explore', label: 'Explore Food' },
-  { id: 'umkm', label: 'UMKM' },
-  { id: 'how-it-works', label: 'How It Works' },
+  { id: "home", label: "Home" },
+  { id: "explore", label: "Explore Food" },
+  { id: "umkm", label: "UMKM" },
+  { id: "how-it-works", label: "How It Works" },
 ];
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function Navbar() {
-  const { itemCount } = useCart();
-  const [active, setActive] = useState('home');
+  const [active, setActive] = useState("home");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState(LOCATIONS[0]);
@@ -49,7 +37,7 @@ export function Navbar() {
           if (entry.isIntersecting) setActive(entry.target.id);
         }
       },
-      { rootMargin: '-35% 0px -55% 0px' }
+      { rootMargin: "-35% 0px -55% 0px" },
     );
 
     sections.forEach((el) => observer.observe(el));
@@ -57,7 +45,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const darkIds = ['dampak', 'footer'];
+    const darkIds = ["dampak", "footer"];
     const darkEls = darkIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -65,7 +53,7 @@ export function Navbar() {
 
     const observer = new IntersectionObserver(
       (entries) => setOverDark(entries.some((e) => e.isIntersecting)),
-      { rootMargin: '0px 0px -65% 0px' }
+      { rootMargin: "0px 0px -65% 0px" },
     );
 
     darkEls.forEach((el) => observer.observe(el));
@@ -82,36 +70,24 @@ export function Navbar() {
     label,
     children,
     onClick,
-    badge,
   }: {
     label: string;
     children: React.ReactNode;
     onClick?: () => void;
-    badge?: number;
   }) => (
     <button
       type="button"
       aria-label={label}
       onClick={onClick}
       className={cn(
-        'relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200',
+        "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200",
         overDark
-          ? 'text-white/80 hover:bg-white/10 hover:text-white'
-          : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
-        FOCUS_RING
+          ? "text-white/80 hover:bg-white/10 hover:text-white"
+          : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+        FOCUS_RING,
       )}
     >
       {children}
-      {badge !== undefined && badge > 0 && (
-        <span
-          className={cn(
-            'absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-colors duration-500',
-            overDark ? 'bg-gold-500 text-charcoal-900' : 'bg-green-700 text-white'
-          )}
-        >
-          {badge}
-        </span>
-      )}
     </button>
   );
 
@@ -121,10 +97,10 @@ export function Navbar() {
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
             className={cn(
-              'flex h-16 items-center justify-between rounded-full border px-4 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-5 lg:px-7',
+              "flex h-16 items-center justify-between rounded-full border px-4 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-5 lg:px-7",
               overDark
-                ? 'border-white/15 bg-forest-dark/75 text-white'
-                : 'border-hairline/70 bg-cream/80 text-forest-dark'
+                ? "border-white/15 bg-forest-dark/75 text-white"
+                : "border-hairline/70 bg-cream/80 text-forest-dark",
             )}
           >
             {/* Logo */}
@@ -132,23 +108,28 @@ export function Navbar() {
               href="#home"
               onClick={(e) => {
                 e.preventDefault();
-                handleNav('home');
+                handleNav("home");
               }}
               aria-label="ReBites beranda"
-              className={cn('flex shrink-0 items-center gap-2 rounded-full', FOCUS_RING)}
+              className={cn(
+                "flex shrink-0 items-center gap-2 rounded-full",
+                FOCUS_RING,
+              )}
             >
               <span
                 className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500',
-                  overDark ? 'bg-white text-forest-dark' : 'bg-green-700 text-white'
+                  "flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500",
+                  overDark
+                    ? "bg-white text-forest-dark"
+                    : "bg-green-700 text-white",
                 )}
               >
                 <Leaf className="h-4 w-4" />
               </span>
               <span
                 className={cn(
-                  'font-sans text-xl font-bold tracking-tight transition-colors duration-500',
-                  overDark ? 'text-white' : 'text-green-700'
+                  "font-sans text-xl font-bold tracking-tight transition-colors duration-500",
+                  overDark ? "text-white" : "text-green-700",
                 )}
               >
                 ReBites
@@ -165,17 +146,17 @@ export function Navbar() {
                       e.preventDefault();
                       handleNav(link.id);
                     }}
-                    aria-current={active === link.id ? 'page' : undefined}
+                    aria-current={active === link.id ? "page" : undefined}
                     className={cn(
-                      'rounded-full px-3 py-2 font-inter text-sm transition-colors duration-200 xl:px-4',
+                      "rounded-full px-3 py-2 font-inter text-sm transition-colors duration-200 xl:px-4",
                       active === link.id
                         ? overDark
-                          ? 'bg-white/15 font-semibold text-white'
-                          : 'bg-cream-100 font-semibold text-green-700'
+                          ? "bg-white/15 font-semibold text-white"
+                          : "bg-cream-100 font-semibold text-green-700"
                         : overDark
-                          ? 'text-white/75 hover:text-white'
-                          : 'text-charcoal-500 hover:text-green-700',
-                      FOCUS_RING
+                          ? "text-white/75 hover:text-white"
+                          : "text-charcoal-500 hover:text-green-700",
+                      FOCUS_RING,
                     )}
                   >
                     {link.label}
@@ -194,24 +175,24 @@ export function Navbar() {
                   aria-expanded={locationOpen}
                   onClick={() => setLocationOpen((v) => !v)}
                   className={cn(
-                    'flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200',
+                    "flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200",
                     overDark
-                      ? 'text-white/80 hover:bg-white/10 hover:text-white'
-                      : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
-                    FOCUS_RING
+                      ? "text-white/80 hover:bg-white/10 hover:text-white"
+                      : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+                    FOCUS_RING,
                   )}
                 >
                   <MapPin
                     className={cn(
-                      'h-4 w-4 transition-colors duration-500',
-                      overDark ? 'text-gold-500' : 'text-green-700'
+                      "h-4 w-4 transition-colors duration-500",
+                      overDark ? "text-gold-500" : "text-green-700",
                     )}
                   />
                   <span className="max-w-[100px] truncate">{location}</span>
                   <ChevronDown
                     className={cn(
-                      'h-4 w-4 transition-transform duration-200',
-                      locationOpen && 'rotate-180'
+                      "h-4 w-4 transition-transform duration-200",
+                      locationOpen && "rotate-180",
                     )}
                   />
                 </button>
@@ -242,10 +223,10 @@ export function Navbar() {
                                 setLocationOpen(false);
                               }}
                               className={cn(
-                                'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150',
+                                "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                                 loc === location
-                                  ? 'bg-cream-100 font-semibold text-green-700'
-                                  : 'text-charcoal-500 hover:bg-cream-50 hover:text-green-700'
+                                  ? "bg-cream-100 font-semibold text-green-700"
+                                  : "text-charcoal-500 hover:bg-cream-50 hover:text-green-700",
                               )}
                             >
                               <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -261,12 +242,6 @@ export function Navbar() {
 
               {/* Icon actions */}
               <div className="hidden items-center gap-0.5 sm:flex">
-                <IconButton label="Cari makanan">
-                  <Search className="h-5 w-5" />
-                </IconButton>
-                <IconButton label="Keranjang belanja" badge={itemCount}>
-                  <ShoppingCart className="h-5 w-5" />
-                </IconButton>
                 <IconButton label="Notifikasi">
                   <Bell className="h-5 w-5" />
                 </IconButton>
@@ -279,11 +254,11 @@ export function Navbar() {
               <Link
                 href="/login"
                 className={cn(
-                  'hidden rounded-full px-5 py-2.5 font-inter text-sm font-semibold transition-colors duration-300 md:block',
+                  "hidden rounded-full px-5 py-2.5 font-inter text-sm font-semibold transition-colors duration-300 md:block",
                   overDark
-                    ? 'bg-white text-forest-dark hover:bg-white/90'
-                    : 'bg-green-700 text-white hover:bg-green-600',
-                  FOCUS_RING
+                    ? "bg-white text-forest-dark hover:bg-white/90"
+                    : "bg-green-700 text-white hover:bg-green-600",
+                  FOCUS_RING,
                 )}
               >
                 Masuk / Daftar
@@ -296,12 +271,16 @@ export function Navbar() {
                 aria-expanded={drawerOpen}
                 onClick={() => setDrawerOpen((v) => !v)}
                 className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden',
-                  overDark ? 'text-white' : 'text-forest-dark',
-                  FOCUS_RING
+                  "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
+                  overDark ? "text-white" : "text-forest-dark",
+                  FOCUS_RING,
                 )}
               >
-                {drawerOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {drawerOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </button>
             </div>
           </nav>
@@ -320,9 +299,9 @@ export function Navbar() {
               className="fixed inset-0 z-[55] bg-forest-900/40 backdrop-blur-sm lg:hidden"
             />
             <motion.aside
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              exit={{ x: "100%" }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="fixed right-0 top-0 z-[60] flex h-full w-72 flex-col bg-cream-50 p-5 shadow-2xl lg:hidden"
             >
@@ -355,10 +334,10 @@ export function Navbar() {
                         handleNav(link.id);
                       }}
                       className={cn(
-                        'block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150',
+                        "block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150",
                         active === link.id
-                          ? 'bg-cream-100 font-semibold text-green-700'
-                          : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700'
+                          ? "bg-cream-100 font-semibold text-green-700"
+                          : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
                       )}
                     >
                       {link.label}
@@ -377,7 +356,7 @@ export function Navbar() {
                     setLocation(
                       LOCATIONS[
                         (LOCATIONS.indexOf(location) + 1) % LOCATIONS.length
-                      ]
+                      ],
                     );
                   }}
                   className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700"
@@ -397,27 +376,6 @@ export function Navbar() {
                   <User className="h-4 w-4" />
                   Masuk / Daftar
                 </Link>
-                <div className="flex items-center justify-around border-t border-sage-100 pt-3 text-charcoal-500">
-                  {[
-                    { label: 'Cari makanan', icon: Search, badge: 0 },
-                    { label: 'Keranjang belanja', icon: ShoppingCart, badge: itemCount },
-                    { label: 'Notifikasi', icon: Bell, badge: 0 },
-                  ].map(({ label, icon: Icon, badge }) => (
-                    <button
-                      key={label}
-                      type="button"
-                      aria-label={label}
-                      className="relative flex h-10 w-10 items-center justify-center rounded-full text-charcoal-500 transition-colors duration-200 hover:bg-cream-100 hover:text-green-700"
-                    >
-                      <Icon className="h-5 w-5" />
-                      {badge > 0 && (
-                        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-green-700 px-1 text-[10px] font-bold text-white">
-                          {badge}
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                </div>
               </div>
             </motion.aside>
           </>

@@ -1,158 +1,124 @@
+'use client';
+
 import Link from 'next/link';
-import {
-  Instagram,
-  Leaf,
-  Mail,
-  MapPin,
-  Music2,
-  Phone,
-  Twitter,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { SoftBlob } from '@/app/components/Ornaments';
+import { Leaf, Instagram, Mail, MapPin } from 'lucide-react';
+import { Reveal } from './reveal';
 
-const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-forest-800';
-
-const LINK_CLASS =
-  'font-inter text-sm text-cream-50/75 transition-colors duration-200 hover:text-cream-50';
-
-export function Footer() {
+export function SiteFooter() {
   return (
     <footer
-      id="footer"
-      className="relative overflow-hidden bg-forest-800 text-cream-50"
+      data-nav="green"
+      className="grain-overlay relative overflow-hidden bg-primary text-primary-foreground"
     >
-      <SoftBlob className="-left-24 -bottom-24 h-96 w-96 bg-white/5" />
-      <SoftBlob className="-right-20 -top-24 h-80 w-80 bg-green-700/30" />
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
-          {/* Brand */}
+      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+        <Reveal className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <Link href="#home" className="flex items-center gap-2" aria-label="ReBites">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-cream-50 text-green-700">
-                <Leaf className="h-4 w-4" />
-              </span>
-              <span className="font-sans text-xl font-bold tracking-tight text-cream-50">
-                ReBites
+            <Link href="/" className="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="ReBites"
+                className="h-12 w-12 rounded-full object-cover shadow-[0_10px_24px_-12px_rgba(0,0,0,0.5)] ring-1 ring-primary-foreground/20"
+              />
+              <span className="flex items-baseline gap-0.5">
+                <span className="font-display text-3xl font-medium text-primary-foreground-strong">
+                  Re
+                </span>
+                <span className="font-display text-3xl font-light italic text-primary-foreground-strong">
+                  Bites
+                </span>
               </span>
             </Link>
-            <p className="mt-4 max-w-xs font-inter text-sm leading-relaxed text-cream-50/70">
-              Marketplace yang mempertemukan pembeli dengan UMKM untuk
-              menyelamatkan makanan surplus yang masih layak konsumsi.
+            <p className="mt-5 max-w-xs font-sans text-sm leading-relaxed text-primary-foreground/70">
+              Marketplace yang menyelamatkan makanan surplus dari dapur UMKM
+              kuliner Indonesia sebelum menjadi food waste.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              {[
-                { icon: Instagram, label: 'Instagram' },
-                { icon: Twitter, label: 'Twitter / X' },
-                { icon: Music2, label: 'TikTok' },
-              ].map(({ icon: Icon, label }) => (
-                <a
-                  key={label}
-                  href="#home"
-                  aria-label={label}
-                  className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-full border border-cream-50/20 text-cream-50/80 transition-colors duration-200 hover:border-cream-50/60 hover:text-cream-50',
-                    FOCUS_RING
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 text-primary-foreground/80 transition-colors hover:border-caramel hover:bg-caramel hover:text-white"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a
+                href="mailto:halo@rebites.id"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/20 text-primary-foreground/80 transition-colors hover:border-caramel hover:bg-caramel hover:text-white"
+                aria-label="Email"
+              >
+                <Mail className="h-4 w-4" />
+              </a>
             </div>
           </div>
 
-          {/* Untuk Pembeli */}
           <div>
-            <h4 className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-cream-50/50">
-              Untuk Pembeli
+            <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
+              Platform
             </h4>
             <ul className="mt-5 space-y-3">
               <li>
-                <a href="#explore" className={LINK_CLASS}>
-                  Explore Food
-                </a>
-              </li>
-              <li>
-                <a href="#how-it-works" className={LINK_CLASS}>
+                <Link
+                  href="/#cara-kerja"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                >
                   Cara Kerja
-                </a>
-              </li>
-              <li>
-                <a href="#umkm" className={LINK_CLASS}>
-                  Pilihan UMKM
-                </a>
-              </li>
-              <li>
-                <a href="#home" className={LINK_CLASS}>
-                  FAQ
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Untuk UMKM */}
-          <div>
-            <h4 className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-cream-50/50">
-              Untuk UMKM
-            </h4>
-            <ul className="mt-5 space-y-3">
-              <li>
-                <a href="#umkm-cta" className={LINK_CLASS}>
-                  Mulai Jual
-                </a>
-              </li>
-              <li>
-                <Link href="/register" className={LINK_CLASS}>
-                  Daftar UMKM
                 </Link>
               </li>
               <li>
-                <a href="#home" className={LINK_CLASS}>
-                  Syarat &amp; Ketentuan
-                </a>
+                <Link
+                  href="/#umkm"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                >
+                  Untuk UMKM
+                </Link>
               </li>
               <li>
-                <a href="#home" className={LINK_CLASS}>
-                  Bantuan UMKM
-                </a>
+                <Link
+                  href="/#pembeli"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                >
+                  Untuk Pembeli
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#langganan"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                >
+                  Paket Langganan
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Kontak */}
           <div>
-            <h4 className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-cream-50/50">
+            <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
               Kontak
             </h4>
-            <ul className="mt-5 space-y-3 font-inter text-sm text-cream-50/75">
-              <li className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 shrink-0 text-gold-500" />
+            <ul className="mt-5 space-y-3 font-sans text-sm text-primary-foreground/80">
+              <li className="flex items-start gap-2">
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary-foreground/60" />
                 halo@rebites.id
               </li>
-              <li className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 shrink-0 text-gold-500" />
-                +62 812-3456-7890
-              </li>
-              <li className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold-500" />
-                Jl. KH. Sholeh Iskandar, Kedung Badak,
-                <br />
-                Kota Bogor, Jawa Barat
+              <li className="flex items-start gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-foreground/60" />
+                SMK Taruna Bhakti, Jl. Pekapuran, RT.02/RW.06, Curug, Kec. Cimanggis, Kota Depok, Jawa Barat 16953
               </li>
             </ul>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center">
-          <p className="font-inter text-xs text-cream-50/50">
-            © {new Date().getFullYear()} ReBites. Dibuat oleh Tim Sixquit —
+        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-primary-foreground/15 pt-8 sm:flex-row sm:items-center">
+          <p className="font-sans text-xs text-primary-foreground/50">
+            © {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
+            <span className="text-primary-foreground/80">Tim Sixquit</span> -
             SMK Taruna Bhakti.
           </p>
-          <p className="flex items-center gap-2 font-inter text-xs text-cream-50/50">
-            <Leaf className="h-3.5 w-3.5 text-gold-500" />
-            Setiap makanan yang terselamatkan punya cerita.
-          </p>
+          <div className="flex items-center gap-2 font-sans text-xs text-primary-foreground/50">
+            <Leaf className="h-3.5 w-3.5" />
+            Selamatkan Makanan, selamatkan bumi.
+          </div>
         </div>
       </div>
     </footer>
