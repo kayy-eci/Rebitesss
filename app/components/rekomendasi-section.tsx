@@ -27,7 +27,7 @@ type FoodItem = {
 const FOODS: FoodItem[] = [
   {
     id: "roti-sourdough",
-    foto: "/foods/rotisourdough.jpg",
+    foto: "/makanan2.jpeg",
     nama: "Paket Roti Sourdough Sisa Panggang",
     detail:
       "Campuran roti hari ini, tetap renyah & segar, cocok untuk sarapan besok pagi.",
@@ -36,7 +36,7 @@ const FOODS: FoodItem[] = [
   },
   {
     id: "salad-kebun",
-    foto: "/foods/saladkebun.jpg",
+    foto: "/makanan5.jpeg",
     nama: "Salad Segar Kebun",
     detail:
       "Sayur lokal dari panen berlebih, vinaigrette lemon di sisi terpisah.",
@@ -45,7 +45,7 @@ const FOODS: FoodItem[] = [
   },
   {
     id: "sup-krim-labu",
-    foto: "/foods/supkrimlabu.jpg",
+    foto: "/makanan6.jpeg",
     nama: "Sup Krim Labu Hangat",
     detail:
       "Labu lokal tanpa pengawet, cukup dihangatkan 3 menit sebelum disantap.",
@@ -54,7 +54,7 @@ const FOODS: FoodItem[] = [
   },
   {
     id: "pasta-carbonara",
-    foto: "/foods/pastacarbonara.jpg",
+    foto: "/makanan7.jpg",
     nama: "Pasta Carbonara Surplus",
     detail:
       "Krim dan guanciale, sisa produksi dapur yang masih segar hari ini.",
@@ -63,7 +63,7 @@ const FOODS: FoodItem[] = [
   },
   {
     id: "box-donat",
-    foto: "/foods/boxdonat.jpg",
+    foto: "/makanan4.jpeg",
     nama: "Box Donat Mini Rasa Campur",
     detail:
       "Enam donat mini rasa campur dalam satu box, siap dimakan hingga besok.",
@@ -72,7 +72,7 @@ const FOODS: FoodItem[] = [
   },
   {
     id: "sandwich-croissant",
-    foto: "/foods/sandwichcroissant.jpg",
+    foto: "/makanan8.webp",
     nama: "Sandwich Croissant Pagi",
     detail:
       "Croissant mentega berisi isian pilihan, dibungkus rapi untuk dibawa pergi.",
@@ -81,7 +81,7 @@ const FOODS: FoodItem[] = [
   },
   {
     id: "ikan-sayur",
-    foto: "/foods/ikansayur.jpg",
+    foto: "/makanan10.webp",
     nama: "Ikan & Sayur Surplus Hari Ini",
     detail:
       "Panggang saus jamur, dari kelebihan pasokan segar yang masih layak.",
@@ -90,7 +90,7 @@ const FOODS: FoodItem[] = [
   },
   {
     id: "kopi-susu",
-    foto: "/foods/kopisusu.jpg",
+    foto: "/makanan9.webp",
     nama: "Kopi Susu Sisa Barista",
     detail:
       "Racikan barista pagi tadi, disimpan dingin, tetap nikmat hingga sore.",

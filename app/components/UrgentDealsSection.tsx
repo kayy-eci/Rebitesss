@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Eye, Flame, MapPin, Star } from "lucide-react";
+import { Flame, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRupiah, urgentItems } from "@/lib/data";
 import { useCountdown, formatCountdown } from "@/lib/useCountdown";
@@ -79,7 +79,7 @@ function slotEndHour(key: UrgentSlot) {
 
 function useSlotRotation() {
   const [tick, setTick] = useState(0);
-  const [viewSlot, setViewSlot] = useState<UrgentSlot | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<UrgentSlot | null>(null);
 
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 20_000);
@@ -88,9 +88,9 @@ function useSlotRotation() {
 
   void tick;
   const realSlot = getSlotFromHour(getWibParts().hour);
-  const activeSlot = viewSlot ?? realSlot;
+  const activeSlot = selectedSlot ?? realSlot;
 
-  return { realSlot, viewSlot, setViewSlot, activeSlot };
+  return { realSlot, selectedSlot, setSelectedSlot, activeSlot };
 }
 
 /* ── Small pieces ──────────────────────────────────────── */
@@ -98,27 +98,6 @@ function useSlotRotation() {
 function parseStockCount(label: string) {
   const match = label.match(/\d+/);
   return match ? parseInt(match[0], 10) : null;
-}
-
-function Blink() {
-  return (
-    <motion.span
-      aria-hidden
-      className="font-sans text-base font-bold text-amber-200"
-      animate={{ opacity: [1, 0.2, 1] }}
-      transition={{ duration: 1, repeat: Infinity }}
-    >
-      :
-    </motion.span>
-  );
-}
-
-function TimeBox({ value }: { value: string }) {
-  return (
-    <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-white/10 font-sans text-base font-bold tabular-nums text-white">
-      {value}
-    </span>
-  );
 }
 
 function SectionCountdown({
@@ -129,24 +108,42 @@ function SectionCountdown({
   label: string;
 }) {
   const remaining = useCountdown(deadlineIso);
-  const text =
-    remaining === null ? "00:00:00" : formatCountdown(remaining);
+  const text = remaining === null ? "00:00:00" : formatCountdown(remaining);
   const [h, m, s] = text.split(":");
 
   return (
-    <div className="inline-flex items-center gap-3 rounded-2xl border border-white/15 bg-black/25 px-5 py-3 backdrop-blur-sm">
-      <Flame className="h-6 w-6 shrink-0 text-[#FF8A5C]" />
-      <div>
-        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-amber-200">
+    <div className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(94,31,18,0.45)]">
+      <div className="flex items-center gap-2.5">
+        <Flame className="h-5 w-5 shrink-0 text-[#E05A33]" />
+        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-[#9E2B1D]">
           {label}
         </p>
-        <div className="mt-1.5 flex items-center gap-1.5">
-          <TimeBox value={h} />
-          <Blink />
-          <TimeBox value={m} />
-          <Blink />
-          <TimeBox value={s} />
-        </div>
+      </div>
+
+      <div className="mt-1 flex items-baseline gap-1">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#5E1F12] sm:text-3xl">
+          {h}
+        </span>
+        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E05A33] sm:text-3xl">
+          :
+        </span>
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#5E1F12] sm:text-3xl">
+          {m}
+        </span>
+        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E05A33] sm:text-3xl">
+          :
+        </span>
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#5E1F12] sm:text-3xl">
+          {s}
+        </span>
+      </div>
+
+      <div className="mt-1 flex gap-1 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-[#9E2B1D]/60">
+        <span className="min-w-[2ch] text-center">Jam</span>
+        <span aria-hidden className="w-[1ch]" />
+        <span className="min-w-[2ch] text-center">Menit</span>
+        <span aria-hidden className="w-[1ch]" />
+        <span className="min-w-[2ch] text-center">Detik</span>
       </div>
     </div>
   );
@@ -161,19 +158,10 @@ function UrgentCard({
 }) {
   const remaining = useCountdown(deadlineIso);
   const isExpired = remaining === 0;
-  const isLow = remaining !== null && remaining > 0 && remaining < 300;
-  const timeText =
-    remaining === null
-      ? "--:--:--"
-      : isExpired
-        ? "Habis"
-        : formatCountdown(remaining);
 
   const stockCount = parseStockCount(item.stockLabel);
   const stockPct =
-    stockCount === null
-      ? null
-      : Math.max(10, Math.min(95, stockCount * 10));
+    stockCount === null ? null : Math.max(10, Math.min(95, stockCount * 10));
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-[#7E2F1D]/15 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#B3402A]/30">
@@ -229,46 +217,6 @@ function UrgentCard({
             />
           </div>
         </motion.div>
-
-        {/* Countdown pill */}
-        <div className="absolute inset-x-3 bottom-3 z-20">
-          <div className="flex items-center gap-2 rounded-full bg-black/70 px-4 py-2 backdrop-blur-sm">
-            <Flame
-              className={cn(
-                "h-4 w-4 shrink-0",
-                isExpired
-                  ? "text-charcoal-500"
-                  : isLow
-                    ? "text-red-500"
-                    : "text-amber-300",
-              )}
-            />
-            <span className="text-xs font-semibold text-cream-50">
-              Berakhir dalam{" "}
-              <motion.span
-                key={timeText}
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: 1 }}
-                className={cn(
-                  "tabular-nums font-bold",
-                  isExpired
-                    ? "text-charcoal-400"
-                    : isLow
-                      ? "text-red-400"
-                      : "text-amber-200",
-                )}
-              />
-              {isLow && !isExpired && (
-                <motion.span
-                  aria-hidden
-                  className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-red-500 align-middle"
-                  animate={{ opacity: [1, 0.15, 1] }}
-                  transition={{ duration: 0.9, repeat: Infinity }}
-                />
-              )}
-            </span>
-          </div>
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
@@ -361,7 +309,7 @@ function UrgentCard({
               isExpired ? "text-charcoal-500" : "text-amber-200",
             )}
           />
-          {isExpired ? "Habis" : "Selamatkan Sekarang"}
+          {isExpired ? "Habis" : "Beli"}
         </motion.button>
       </div>
     </article>
@@ -369,7 +317,7 @@ function UrgentCard({
 }
 
 export function UrgentDealsSection() {
-  const { realSlot, viewSlot, setViewSlot, activeSlot } = useSlotRotation();
+  const { realSlot, setSelectedSlot, activeSlot } = useSlotRotation();
 
   const slotEndIso = activeSlot
     ? new Date(wibEpochOfToday(slotEndHour(activeSlot))).toISOString()
@@ -381,7 +329,7 @@ export function UrgentDealsSection() {
     : [];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#7E2F1D] via-[#A84E2E] to-[#C97B3F]">
+    <section className="relative overflow-hidden bg-gradient-to-tr from-[#DC2626] via-[#F26B5E] to-[#FFF6F4]">
       {/* Marquee */}
       <div className="relative border-b border-white/15 bg-[#5E1F12]/40 py-3">
         <Marquee pauseOnHover>
@@ -404,18 +352,39 @@ export function UrgentDealsSection() {
 
       {/* Decorative layer */}
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        {/* Diagonal stripes */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            background:
-              "repeating-linear-gradient(-45deg, #fff 0 2px, transparent 2px 18px)",
-          }}
-        />
-        {/* Gold glows */}
-        <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-amber-200/20" />
-        <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-[#FFD9A0]/15" />
+        {/* White & rose glows */}
+        <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/25" />
+        <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-[#FFF6F4]/40" />
+        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-red-500/20" />
+
+        {/* Floating sparkles */}
+        {[
+          { top: "10%", left: "8%" },
+          { top: "22%", right: "12%" },
+          { top: "46%", left: "3%" },
+          { top: "70%", right: "6%" },
+          { bottom: "8%", right: "20%" },
+        ].map((pos, i) => (
+          <motion.span
+            key={i}
+            aria-hidden
+            className="pointer-events-none absolute text-white/60"
+            style={pos}
+            animate={{
+              y: [0, -12, 0],
+              rotate: [0, 45, 0],
+              opacity: [0.35, 1, 0.35],
+            }}
+            transition={{
+              duration: 4.5 + i * 0.6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5,
+            }}
+          >
+            ✦
+          </motion.span>
+        ))}
 
         {/* Floating confetti dots */}
         {[
@@ -427,7 +396,7 @@ export function UrgentDealsSection() {
           <motion.span
             key={i}
             aria-hidden
-            className="pointer-events-none absolute h-2 w-2 rounded-full bg-amber-200/70"
+            className="pointer-events-none absolute h-2 w-2 rounded-full bg-white/70"
             style={pos}
             animate={{
               y: [0, -18, 0],
@@ -439,6 +408,30 @@ export function UrgentDealsSection() {
               repeat: Infinity,
               ease: "easeInOut",
               delay: i * 0.7,
+            }}
+          />
+        ))}
+
+        {[
+          { top: "20%", left: "30%" },
+          { top: "55%", right: "16%" },
+          { bottom: "12%", left: "24%" },
+        ].map((pos, i) => (
+          <motion.span
+            key={`red-dot-${i}`}
+            aria-hidden
+            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-red-400/60"
+            style={pos}
+            animate={{
+              y: [0, -14, 0],
+              rotate: [0, -100, 0],
+              opacity: [0.3, 0.9, 0.3],
+            }}
+            transition={{
+              duration: 4.8 + i * 0.6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.6,
             }}
           />
         ))}
@@ -456,22 +449,23 @@ export function UrgentDealsSection() {
             </div>
 
             <h2 className="mt-3 flex items-center gap-3 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Segera{" "}
-              <span>
-                Diselamatkan
-              </span>
+              Segera <span>Beli</span>
               <motion.span
                 className="inline-block text-amber-300"
                 animate={{ rotate: [0, -12, 12, 0] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 <Flame className="h-9 w-9 sm:h-11 sm:w-11" />
               </motion.span>
             </h2>
 
             <p className="mt-3 max-w-md font-inter text-sm text-white/80">
-              Produk surplus berganti setiap 3 jam: pagi, siang, sore, dan
-              malam. Kalau tidak kamu ambil, orang lain yang menyelamatkannya.
+              Makanan surplus pilihan dengan harga lebih hemat. Jangan sampai
+              kelewatan sebelum stoknya habis!
             </p>
           </div>
 
@@ -487,22 +481,6 @@ export function UrgentDealsSection() {
                 label="Flash sale dimulai dalam"
               />
             )}
-            <a
-              href="#explore"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("explore")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className={cn(
-                "group inline-flex w-fit items-center gap-1.5 font-inter text-sm font-semibold text-amber-200 transition-colors hover:text-white",
-                FOCUS_RING,
-              )}
-            >
-              Lihat Semua
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
           </div>
         </div>
 
@@ -516,7 +494,11 @@ export function UrgentDealsSection() {
                 key={slot.key}
                 type="button"
                 aria-pressed={isActive}
-                onClick={() => setViewSlot(slot.key)}
+                onClick={() =>
+                  setSelectedSlot((prev) =>
+                    prev === slot.key ? null : slot.key,
+                  )
+                }
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 font-sans transition-all duration-300",
                   isActive
@@ -550,20 +532,6 @@ export function UrgentDealsSection() {
               </button>
             );
           })}
-
-          {viewSlot && realSlot && viewSlot !== realSlot && (
-            <button
-              type="button"
-              onClick={() => setViewSlot(null)}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-full border border-amber-200/40 bg-amber-200/15 px-4 py-2.5 font-sans text-xs font-semibold text-amber-100 backdrop-blur-sm transition-colors duration-300 hover:bg-amber-200/25",
-                FOCUS_RING,
-              )}
-            >
-              <Eye className="h-3.5 w-3.5" />
-              Pratinjau slot · kembali ke slot aktif
-            </button>
-          )}
         </div>
 
         {/* Content */}
@@ -606,7 +574,11 @@ export function UrgentDealsSection() {
               <motion.span
                 className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/10"
                 animate={{ scale: [1, 1.08, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 <Flame className="h-7 w-7 text-amber-300" />
               </motion.span>

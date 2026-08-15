@@ -1,15 +1,23 @@
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from "lucide-react";
 
-export type FoodCategory = 'bakery' | 'restoran' | 'minuman' | 'umkm';
+export type FoodCategory =
+  | "bakery"
+  | "restoran"
+  | "minuman"
+  | "umkm"
+  | "Makanan Berat"
+  | "Roti & Kue"
+  | "Buah & Sayur"
+  | "Jajanan";
 
 export type FilterKey =
-  | 'terdekat'
-  | 'diskon-terbesar'
-  | 'segera-habis'
-  | 'umkm'
-  | 'bakery'
-  | 'restoran'
-  | 'minuman';
+  | "terdekat"
+  | "diskon-terbesar"
+  | "segera-habis"
+  | "umkm"
+  | "bakery"
+  | "restoran"
+  | "minuman";
 
 export interface FoodItem {
   id: string;
@@ -32,12 +40,13 @@ export interface Vendor {
   id: string;
   name: string;
   image: string;
-  logo: string;
   isRescuePartner: boolean;
   rating: number;
   distanceKm: number;
   category: string;
   itemCount: number;
+  address: string;
+  openHours: string;
 }
 
 export interface ImpactStat {
@@ -48,7 +57,7 @@ export interface ImpactStat {
   label: string;
 }
 
-export type UrgentSlot = '09-12' | '12-15' | '15-18' | '18-21';
+export type UrgentSlot = "09-12" | "12-15" | "15-18" | "18-21";
 
 export interface UrgentItem extends FoodItem {
   expiresAt: string;

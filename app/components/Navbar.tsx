@@ -251,19 +251,6 @@ export function Navbar() {
               </div>
 
               {/* CTA */}
-              <Link
-                href="/login"
-                className={cn(
-                  "hidden rounded-full px-5 py-2.5 font-inter text-sm font-semibold transition-colors duration-300 md:block",
-                  overDark
-                    ? "bg-white text-forest-dark hover:bg-white/90"
-                    : "bg-green-700 text-white hover:bg-green-600",
-                  FOCUS_RING,
-                )}
-              >
-                Masuk / Daftar
-              </Link>
-
               {/* Hamburger */}
               <button
                 type="button"
@@ -365,17 +352,6 @@ export function Navbar() {
                   {location}
                   <ChevronDown className="h-4 w-4" />
                 </button>
-              </div>
-
-              <div className="mt-auto flex flex-col gap-3">
-                <Link
-                  href="/login"
-                  onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-full bg-green-700 py-3 font-inter text-sm font-semibold text-white transition-colors hover:bg-green-600"
-                >
-                  <User className="h-4 w-4" />
-                  Masuk / Daftar
-                </Link>
               </div>
             </motion.aside>
           </>

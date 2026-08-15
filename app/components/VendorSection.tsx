@@ -54,7 +54,7 @@ export function VendorSection() {
             hidden: {},
             visible: { transition: { staggerChildren: 0.06 } },
           }}
-          className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-10 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {vendors.map((vendor) => (
             <motion.div
@@ -67,6 +67,7 @@ export function VendorSection() {
                   transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
                 },
               }}
+              className="min-w-0 snap-start"
             >
               <VendorCard vendor={vendor} />
             </motion.div>

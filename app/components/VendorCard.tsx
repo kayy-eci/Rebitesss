@@ -1,6 +1,6 @@
 'use client';
 
-import { MapPin, Star, Store } from 'lucide-react';
+import { ArrowRight, Clock, MapPin, Star, Store } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/app/components/Badge';
 import { SmartImage } from '@/app/components/SmartImage';
@@ -11,7 +11,7 @@ const FOCUS_RING =
 
 export function VendorCard({ vendor }: { vendor: Vendor }) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15">
+    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-forest-900/20">
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
           src={vendor.image}
@@ -20,43 +20,54 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
           className="transition-transform duration-500 group-hover:scale-105"
         />
 
+        {/* Legibility overlay */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-t from-forest-900/55 via-transparent to-transparent"
+        />
+
+        {/* Status chip */}
+        <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-green-700 shadow-md">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
+          </span>
+          Buka Sekarang
+        </div>
+
         {vendor.isRescuePartner && (
-          <div className="absolute left-3 top-3">
+          <div className="absolute right-3 top-3">
             <Badge variant="green">
               <Store className="h-3 w-3" />
-              UMKM Penyelamat Makanan
+              Rescue Partner
             </Badge>
           </div>
         )}
-
-        <div className="absolute -bottom-5 left-4">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-green-700 to-green-600 font-sans text-base font-bold text-white shadow-lg">
-            {vendor.logo}
-          </span>
-        </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 p-4 pt-6">
-        <h3 className="font-sans text-lg font-bold text-charcoal-900">
+      <div className="flex flex-1 flex-col gap-2.5 p-4">
+        <h3 className="font-sans text-lg font-bold leading-snug text-charcoal-900">
           {vendor.name}
         </h3>
 
-        <div className="flex items-center gap-3 text-xs text-charcoal-500">
-          <span className="flex items-center gap-1 font-medium">
-            <Star className="h-3.5 w-3.5 fill-gold-500 text-gold-500" />
-            {vendor.rating.toFixed(1)}
-          </span>
-          <span className="flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5 text-sage-500" />
-            {vendor.distanceKm} km
-          </span>
-        </div>
-
         <p className="text-sm text-charcoal-500">{vendor.category}</p>
 
-        <span className="mt-1 w-fit rounded-full bg-cream-100 px-3 py-1 text-xs font-medium text-charcoal-500">
-          {vendor.itemCount} makanan tersedia
-        </span>
+        <div className="mt-1 flex flex-col gap-2 text-xs text-charcoal-500">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="flex items-center gap-1 rounded-full bg-gold-100 px-2.5 py-1 font-medium text-gold-600">
+              <Star className="h-3 w-3 fill-gold-500 text-gold-500" />
+              {vendor.rating.toFixed(1)}
+            </span>
+            <span className="flex items-center gap-1 font-medium">
+              <Clock className="h-3.5 w-3.5 text-sage-500" />
+              Buka {vendor.openHours}
+            </span>
+          </div>
+          <span className="flex items-start gap-1">
+            <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-sage-500" />
+            {vendor.address}
+          </span>
+        </div>
 
         <a
           href="#explore"
@@ -67,11 +78,12 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
               ?.scrollIntoView({ behavior: 'smooth' });
           }}
           className={cn(
-            'mt-auto flex w-full items-center justify-center rounded-full border-2 border-green-700 py-2.5 text-sm font-semibold text-green-700 transition-colors duration-200 hover:bg-green-700 hover:text-white active:scale-[0.98]',
+            'group/cta mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]',
             FOCUS_RING
           )}
         >
           Lihat Toko
+          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
         </a>
       </div>
     </article>

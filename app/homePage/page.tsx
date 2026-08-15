@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Navbar } from "@/app/components/Navbar";
 import { Hero } from "@/app/components/Hero";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
+import { CategorySection } from "@/app/components/CategorySection";
 import { VendorSection } from "@/app/components/VendorSection";
 import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
@@ -73,6 +74,8 @@ export default function HomePage() {
       <main className="bg-cream-50">
         <Hero />
         <UrgentDealsSection />
+
+        <CategorySection />
 
         <VendorSection />
 
