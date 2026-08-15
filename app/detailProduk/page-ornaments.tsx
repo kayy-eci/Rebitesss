@@ -1,0 +1,93 @@
+'use client';
+
+import { useRef } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { Leaf } from 'lucide-react';
+import {
+  ArcLines,
+  DotPattern,
+  FloatingLeaf,
+  LeafSprig,
+} from '@/app/components/ornaments';
+
+export function PageOrnaments() {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -30]);
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      {/* Blob organik kiri atas */}
+      <motion.div
+        style={{ y: reduce ? 0 : y1 }}
+        className="absolute -left-32 -top-28 h-[24rem] w-[24rem] rounded-[55%_45%_60%_40%_/50%_55%_45%_50%] bg-green-700/[0.07] blur-3xl"
+      />
+      {/* Blob organik kanan tengah */}
+      <motion.div
+        style={{ y: reduce ? 0 : y2 }}
+        className="absolute -right-32 top-40 h-[26rem] w-[26rem] rounded-[45%_55%_50%_50%_/55%_45%_55%_45%] bg-sage-500/10 blur-3xl"
+      />
+      {/* Blob organik bawah kiri */}
+      <motion.div
+        style={{ y: reduce ? 0 : y3 }}
+        className="absolute -left-40 top-[42rem] h-[28rem] w-[28rem] rounded-[40%_60%_55%_45%_/45%_55%_40%_60%] bg-green-50 blur-3xl"
+      />
+
+      {/* Garis vena daun */}
+      <motion.div
+        style={{ y: reduce ? 0 : y2 }}
+        className="absolute -right-12 top-24 hidden h-[360px] w-[680px] text-sage-500/20 lg:block"
+      >
+        <ArcLines className="h-full w-full" />
+      </motion.div>
+
+      {/* Pola titik halus */}
+      <motion.div
+        style={{ y: reduce ? 0 : y1 }}
+        className="absolute left-6 top-80 hidden h-24 w-24 text-green-700/10 lg:block"
+      >
+        <DotPattern className="h-full w-full" />
+      </motion.div>
+
+      {/* Ranting daun dekoratif */}
+      <LeafSprig className="-left-6 top-72 hidden h-44 w-44 -rotate-12 text-sage-500/25 lg:block" />
+
+      {/* Daun melayang di dekat galeri */}
+      {reduce ? (
+        <Leaf
+          className="absolute right-8 top-72 hidden h-5 w-5 text-sage-500/40 lg:block"
+          strokeWidth={1.5}
+        />
+      ) : (
+        <FloatingLeaf
+          className="right-8 top-72 hidden h-5 w-5 text-sage-500/40 lg:block"
+          delay={1.2}
+        />
+      )}
+
+      {/* Daun melayang di dekat CTA */}
+      {reduce ? (
+        <Leaf
+          className="absolute left-8 top-[58rem] hidden h-5 w-5 text-sage-500/40 lg:block"
+          strokeWidth={1.5}
+        />
+      ) : (
+        <FloatingLeaf
+          className="left-8 top-[58rem] hidden h-5 w-5 text-sage-500/40 lg:block"
+          delay={0.4}
+        />
+      )}
+    </div>
+  );
+}
