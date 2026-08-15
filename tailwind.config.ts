@@ -50,6 +50,7 @@ const config: Config = {
           600: '#A9861C',
           100: '#F3E9C9',
         },
+        caramel: '#C08A4E',
         charcoal: {
           900: '#1E2A22',
           500: '#5C6B60',
