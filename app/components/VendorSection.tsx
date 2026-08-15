@@ -21,7 +21,7 @@ export function VendorSection() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
-              Pilihan UMKM Minggu Ini
+              Rekomendasi buat kamu sayang
             </h2>
             <p className="mt-2 max-w-md font-inter text-sm text-charcoal-500">
               Toko lokal yang rutin menyelamatkan makanan surplusnya setiap

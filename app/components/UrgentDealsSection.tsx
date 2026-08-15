@@ -1,20 +1,165 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, Flame, MapPin, Star } from "lucide-react";
+import { ArrowRight, Eye, Flame, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRupiah, urgentItems } from "@/lib/data";
 import { useCountdown, formatCountdown } from "@/lib/useCountdown";
-import { Badge } from "@/app/components/Badge";
 import { SmartImage } from "@/app/components/SmartImage";
 import { SoftBlob } from "@/app/components/Ornaments";
-import type { UrgentItem } from "@/lib/types";
+import { Marquee } from "@/app/components/marquee";
+import type { UrgentItem, UrgentSlot } from "@/lib/types";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E05A33] focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
-function UrgentCard({ item }: { item: UrgentItem }) {
-  const remaining = useCountdown(item.expiresAt);
+const WIB_OFFSET_MS = 7 * 3600 * 1000;
+
+const SLOTS: {
+  key: UrgentSlot;
+  start: number;
+  end: number;
+  range: string;
+  name: string;
+}[] = [
+  { key: "09-12", start: 9, end: 12, range: "09.00–12.00", name: "Pagi" },
+  { key: "12-15", start: 12, end: 15, range: "12.00–15.00", name: "Siang" },
+  { key: "15-18", start: 15, end: 18, range: "15.00–18.00", name: "Sore" },
+  { key: "18-21", start: 18, end: 21, range: "18.00–21.00", name: "Malam" },
+];
+
+/* ── Real-time WIB helpers ─────────────────────────────── */
+
+function getWibParts() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(new Date());
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+  return {
+    year: Number(get("year")),
+    month: Number(get("month")),
+    day: Number(get("day")),
+    hour: Number(get("hour")) % 24,
+    minute: Number(get("minute")),
+    second: Number(get("second")),
+  };
+}
+
+function wibEpochOfToday(h: number, min = 0, sec = 0) {
+  const p = getWibParts();
+  return Date.UTC(p.year, p.month - 1, p.day, h, min, sec) - WIB_OFFSET_MS;
+}
+
+function nextStartEpoch() {
+  const p = getWibParts();
+  const secondsToday = p.hour * 3600 + p.minute * 60 + p.second;
+  const dayOffset = secondsToday < 9 * 3600 ? 0 : 1;
+  return wibEpochOfToday(9) + dayOffset * 24 * 3600 * 1000;
+}
+
+function getSlotFromHour(h: number): UrgentSlot | null {
+  if (h >= 9 && h < 12) return "09-12";
+  if (h >= 12 && h < 15) return "12-15";
+  if (h >= 15 && h < 18) return "15-18";
+  if (h >= 18 && h < 21) return "18-21";
+  return null;
+}
+
+function slotEndHour(key: UrgentSlot) {
+  return SLOTS.find((s) => s.key === key)!.end;
+}
+
+function useSlotRotation() {
+  const [tick, setTick] = useState(0);
+  const [viewSlot, setViewSlot] = useState<UrgentSlot | null>(null);
+
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 20_000);
+    return () => clearInterval(id);
+  }, []);
+
+  void tick;
+  const realSlot = getSlotFromHour(getWibParts().hour);
+  const activeSlot = viewSlot ?? realSlot;
+
+  return { realSlot, viewSlot, setViewSlot, activeSlot };
+}
+
+/* ── Small pieces ──────────────────────────────────────── */
+
+function parseStockCount(label: string) {
+  const match = label.match(/\d+/);
+  return match ? parseInt(match[0], 10) : null;
+}
+
+function Blink() {
+  return (
+    <motion.span
+      aria-hidden
+      className="font-sans text-base font-bold text-amber-200"
+      animate={{ opacity: [1, 0.2, 1] }}
+      transition={{ duration: 1, repeat: Infinity }}
+    >
+      :
+    </motion.span>
+  );
+}
+
+function TimeBox({ value }: { value: string }) {
+  return (
+    <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-white/10 font-sans text-base font-bold tabular-nums text-white">
+      {value}
+    </span>
+  );
+}
+
+function SectionCountdown({
+  deadlineIso,
+  label,
+}: {
+  deadlineIso: string;
+  label: string;
+}) {
+  const remaining = useCountdown(deadlineIso);
+  const text =
+    remaining === null ? "00:00:00" : formatCountdown(remaining);
+  const [h, m, s] = text.split(":");
+
+  return (
+    <div className="inline-flex items-center gap-3 rounded-2xl border border-white/15 bg-black/25 px-5 py-3 backdrop-blur-sm">
+      <Flame className="h-6 w-6 shrink-0 text-[#FF8A5C]" />
+      <div>
+        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-amber-200">
+          {label}
+        </p>
+        <div className="mt-1.5 flex items-center gap-1.5">
+          <TimeBox value={h} />
+          <Blink />
+          <TimeBox value={m} />
+          <Blink />
+          <TimeBox value={s} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function UrgentCard({
+  item,
+  deadlineIso,
+}: {
+  item: UrgentItem;
+  deadlineIso: string;
+}) {
+  const remaining = useCountdown(deadlineIso);
   const isExpired = remaining === 0;
   const isLow = remaining !== null && remaining > 0 && remaining < 300;
   const timeText =
@@ -24,9 +169,15 @@ function UrgentCard({ item }: { item: UrgentItem }) {
         ? "Habis"
         : formatCountdown(remaining);
 
+  const stockCount = parseStockCount(item.stockLabel);
+  const stockPct =
+    stockCount === null
+      ? null
+      : Math.max(10, Math.min(95, stockCount * 10));
+
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15">
-      <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
+    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-[#7E2F1D]/15 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#B3402A]/30">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#EAD6C4]">
         <SmartImage
           src={item.image}
           alt={`Foto ${item.name} dari ${item.vendorName}`}
@@ -36,35 +187,85 @@ function UrgentCard({ item }: { item: UrgentItem }) {
             isExpired && "grayscale",
           )}
         />
-        <div className="absolute left-3 top-3">
-          <Badge variant="green">SURPLUS</Badge>
-        </div>
-        <div className="absolute right-3 top-3">
-          <Badge variant="gold">{item.discountPercent}% OFF</Badge>
+
+        {/* Shine sweep */}
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 z-10 w-1/3 -skew-x-12 bg-white/30 blur-md"
+          initial={{ left: "-40%" }}
+          animate={{ left: "130%" }}
+          transition={{
+            duration: 2.8,
+            repeat: Infinity,
+            repeatDelay: 2,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        />
+
+        {/* SURPLUS chip */}
+        <div className="absolute left-3 top-3 z-20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#9E2B1D] shadow-md">
+            <Flame className="h-3 w-3 text-[#E05A33]" />
+            Surplus
+          </span>
         </div>
 
-        <div className="absolute inset-x-3 bottom-3">
-          <div className="flex items-center gap-2 rounded-full bg-forest-900/85 px-4 py-2 backdrop-blur-sm">
+        {/* Discount ribbon */}
+        <motion.div
+          className="absolute right-3 top-3 z-20"
+          animate={{ y: [0, -3, 0] }}
+          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="relative rounded-lg bg-gradient-to-br from-[#C94A32] to-[#9E2B1D] px-3 py-2 text-center text-white shadow-[0_10px_22px_-10px_rgba(158,43,29,0.85)]">
+            <span className="block font-sans text-base font-black leading-none tabular-nums">
+              {item.discountPercent}%
+            </span>
+            <span className="block font-sans text-[9px] font-bold uppercase leading-tight tracking-[0.18em]">
+              Off
+            </span>
+            <span
+              aria-hidden
+              className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-[#9E2B1D]"
+            />
+          </div>
+        </motion.div>
+
+        {/* Countdown pill */}
+        <div className="absolute inset-x-3 bottom-3 z-20">
+          <div className="flex items-center gap-2 rounded-full bg-black/70 px-4 py-2 backdrop-blur-sm">
             <Flame
               className={cn(
                 "h-4 w-4 shrink-0",
-                isExpired ? "text-charcoal-500" : "text-gold-500",
+                isExpired
+                  ? "text-charcoal-500"
+                  : isLow
+                    ? "text-red-500"
+                    : "text-amber-300",
               )}
             />
             <span className="text-xs font-semibold text-cream-50">
               Berakhir dalam{" "}
-              <span
+              <motion.span
+                key={timeText}
+                initial={{ opacity: 0.3 }}
+                animate={{ opacity: 1 }}
                 className={cn(
-                  "tabular-nums",
+                  "tabular-nums font-bold",
                   isExpired
-                    ? "text-charcoal-500"
+                    ? "text-charcoal-400"
                     : isLow
-                      ? "text-red-800"
-                      : "text-gold-500",
+                      ? "text-red-400"
+                      : "text-amber-200",
                 )}
-              >
-                {timeText}
-              </span>
+              />
+              {isLow && !isExpired && (
+                <motion.span
+                  aria-hidden
+                  className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-red-500 align-middle"
+                  animate={{ opacity: [1, 0.15, 1] }}
+                  transition={{ duration: 0.9, repeat: Infinity }}
+                />
+              )}
             </span>
           </div>
         </div>
@@ -89,15 +290,37 @@ function UrgentCard({ item }: { item: UrgentItem }) {
           </span>
         </div>
 
-        <span className="w-fit rounded-full bg-cream-100 px-3 py-1 text-xs font-medium text-charcoal-500">
-          {item.stockLabel}
-        </span>
+        {stockPct === null ? (
+          <span className="w-fit rounded-full bg-cream-100 px-3 py-1 text-xs font-medium text-charcoal-500">
+            {item.stockLabel}
+          </span>
+        ) : (
+          <div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-[#9E2B1D]">
+                Sisa {stockCount}
+              </span>
+              <span className="text-charcoal-500">
+                {isExpired ? "Habis" : "Buru!"}
+              </span>
+            </div>
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-red-100">
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-[#B3402A] to-[#E05A33]"
+                initial={{ width: 0 }}
+                whileInView={{ width: `${stockPct}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </div>
+          </div>
+        )}
 
         <div className="mt-auto flex items-baseline gap-2 pt-1">
           <span className="text-sm text-charcoal-500 line-through">
             {formatRupiah(item.originalPrice)}
           </span>
-          <span className="text-lg font-bold text-green-700">
+          <span className="text-xl font-bold text-[#B3402A]">
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>
@@ -108,21 +331,36 @@ function UrgentCard({ item }: { item: UrgentItem }) {
           aria-label={
             isExpired ? `${item.name} sudah habis` : `Lihat detail ${item.name}`
           }
-          animate={!isExpired ? { scale: [1, 1.03, 1] } : undefined}
+          animate={
+            !isExpired
+              ? {
+                  boxShadow: [
+                    "0 0 0 0 rgba(179,64,42,0.45)",
+                    "0 0 0 12px rgba(179,64,42,0)",
+                    "0 0 0 0 rgba(179,64,42,0)",
+                  ],
+                }
+              : undefined
+          }
           transition={
             !isExpired
-              ? { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
+              ? { duration: 2, repeat: Infinity, ease: "easeInOut" }
               : undefined
           }
           className={cn(
-            "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-md transition-colors duration-200 active:scale-[0.98]",
+            "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
             isExpired
               ? "cursor-not-allowed bg-sage-100 text-charcoal-500"
-              : "bg-green-700 text-white shadow-green-700/20 hover:bg-green-600",
+              : "bg-gradient-to-r from-[#B3402A] to-[#E05A33] text-white shadow-[#B3402A]/30 hover:from-[#9E2B1D] hover:to-[#D14E26]",
             FOCUS_RING,
           )}
         >
-          <Flame className="h-4 w-4 text-gold-500" />
+          <Flame
+            className={cn(
+              "h-4 w-4",
+              isExpired ? "text-charcoal-500" : "text-amber-200",
+            )}
+          />
           {isExpired ? "Habis" : "Selamatkan Sekarang"}
         </motion.button>
       </div>
@@ -131,65 +369,266 @@ function UrgentCard({ item }: { item: UrgentItem }) {
 }
 
 export function UrgentDealsSection() {
+  const { realSlot, viewSlot, setViewSlot, activeSlot } = useSlotRotation();
+
+  const slotEndIso = activeSlot
+    ? new Date(wibEpochOfToday(slotEndHour(activeSlot))).toISOString()
+    : null;
+  const nextStartIso = new Date(nextStartEpoch()).toISOString();
+
+  const visibleItems = activeSlot
+    ? urgentItems.filter((i) => i.slot === activeSlot)
+    : [];
+
   return (
-    <section className="relative overflow-hidden bg-cream-50 pb-16 pt-2 lg:pb-20">
-      <SoftBlob className="-left-24 top-1/3 h-72 w-72 bg-gold-100/50" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#7E2F1D] via-[#A84E2E] to-[#C97B3F]">
+      {/* Marquee */}
+      <div className="relative border-b border-white/15 bg-[#5E1F12]/40 py-3">
+        <Marquee pauseOnHover>
+          {[
+            "SURPLUS",
+            "DISKON HINGGA 50%",
+            "SELAMATKAN SEBELUM HABIS",
+            "MAKANAN BERSIH & LAYAK KONSUMSI",
+          ].map((t, i) => (
+            <span
+              key={i}
+              className="mx-6 flex items-center gap-3 font-display text-lg font-medium text-white tracking-tight lg:text-xl"
+            >
+              {t}
+              <span className="text-amber-300/70">✦</span>
+            </span>
+          ))}
+        </Marquee>
+      </div>
+
+      {/* Decorative layer */}
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        {/* Diagonal stripes */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            background:
+              "repeating-linear-gradient(-45deg, #fff 0 2px, transparent 2px 18px)",
+          }}
+        />
+        {/* Gold glows */}
+        <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-amber-200/20" />
+        <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-[#FFD9A0]/15" />
+
+        {/* Floating confetti dots */}
+        {[
+          { top: "14%", left: "5%" },
+          { top: "32%", right: "8%" },
+          { bottom: "16%", left: "11%" },
+          { top: "58%", right: "4%" },
+        ].map((pos, i) => (
+          <motion.span
+            key={i}
+            aria-hidden
+            className="pointer-events-none absolute h-2 w-2 rounded-full bg-amber-200/70"
+            style={pos}
+            animate={{
+              y: [0, -18, 0],
+              rotate: [0, 120, 0],
+              opacity: [0.4, 1, 0.4],
+            }}
+            transition={{
+              duration: 4 + i,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.7,
+            }}
+          />
+        ))}
+
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="flex items-center gap-2.5 font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
-              Segera Diselamatkan
-              <Clock className="h-7 w-7 text-green-700 sm:h-8 sm:w-8" />
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-300 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+              </span>
+              <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-amber-200">
+                Flash Sale
+              </span>
+            </div>
+
+            <h2 className="mt-3 flex items-center gap-3 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
+              Segera{" "}
+              <span>
+                Diselamatkan
+              </span>
+              <motion.span
+                className="inline-block text-amber-300"
+                animate={{ rotate: [0, -12, 12, 0] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Flame className="h-9 w-9 sm:h-11 sm:w-11" />
+              </motion.span>
             </h2>
-            <p className="mt-2 max-w-md font-inter text-sm text-charcoal-500">
-              Penawaran dengan waktu terbatas. Kalau tidak kamu ambil, orang
-              lain yang menyelamatkannya.
+
+            <p className="mt-3 max-w-md font-inter text-sm text-white/80">
+              Produk surplus berganti setiap 3 jam: pagi, siang, sore, dan
+              malam. Kalau tidak kamu ambil, orang lain yang menyelamatkannya.
             </p>
           </div>
-          <a
-            href="#explore"
-            onClick={(e) => {
-              e.preventDefault();
-              document
-                .getElementById("explore")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className={cn(
-              "group inline-flex w-fit items-center gap-1.5 font-inter text-sm font-semibold text-green-700 transition-colors hover:text-green-600",
-              FOCUS_RING,
+
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            {slotEndIso ? (
+              <SectionCountdown
+                deadlineIso={slotEndIso}
+                label="Berakhir dalam"
+              />
+            ) : (
+              <SectionCountdown
+                deadlineIso={nextStartIso}
+                label="Flash sale dimulai dalam"
+              />
             )}
-          >
-            Lihat Semua
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+            <a
+              href="#explore"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("explore")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className={cn(
+                "group inline-flex w-fit items-center gap-1.5 font-inter text-sm font-semibold text-amber-200 transition-colors hover:text-white",
+                FOCUS_RING,
+              )}
+            >
+              Lihat Semua
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+          </div>
         </div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.07 } },
-          }}
-          className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-        >
-          {urgentItems.map((item) => (
-            <motion.div
-              key={item.id}
-              variants={{
-                hidden: { opacity: 0, y: 24 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                },
-              }}
+        {/* Slot pills */}
+        <div className="relative mt-9 flex flex-wrap items-center gap-2">
+          {SLOTS.map((slot) => {
+            const isReal = realSlot === slot.key;
+            const isActive = activeSlot === slot.key;
+            return (
+              <button
+                key={slot.key}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => setViewSlot(slot.key)}
+                className={cn(
+                  "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 font-sans transition-all duration-300",
+                  isActive
+                    ? "border-transparent bg-white text-[#9E2B1D] shadow-lg shadow-[#7E2F1D]/35"
+                    : "border-white/25 bg-white/10 text-white/85 backdrop-blur-sm hover:border-white/50 hover:bg-white/20 hover:text-white",
+                  FOCUS_RING,
+                )}
+              >
+                <span className="flex flex-col items-start leading-tight">
+                  <span className="text-sm font-bold tabular-nums">
+                    {slot.range}
+                  </span>
+                  <span
+                    className={cn(
+                      "text-[10px] font-semibold uppercase tracking-[0.18em]",
+                      isActive ? "text-[#B3402A]/70" : "text-white/55",
+                    )}
+                  >
+                    {slot.name}
+                  </span>
+                </span>
+                {isReal && (
+                  <span
+                    className="relative flex h-2 w-2 shrink-0"
+                    title="Slot aktif sekarang"
+                  >
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+                  </span>
+                )}
+              </button>
+            );
+          })}
+
+          {viewSlot && realSlot && viewSlot !== realSlot && (
+            <button
+              type="button"
+              onClick={() => setViewSlot(null)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border border-amber-200/40 bg-amber-200/15 px-4 py-2.5 font-sans text-xs font-semibold text-amber-100 backdrop-blur-sm transition-colors duration-300 hover:bg-amber-200/25",
+                FOCUS_RING,
+              )}
             >
-              <UrgentCard item={item} />
+              <Eye className="h-3.5 w-3.5" />
+              Pratinjau slot · kembali ke slot aktif
+            </button>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="relative mt-10">
+          {visibleItems.length > 0 ? (
+            <motion.div
+              key={activeSlot}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.07 } },
+              }}
+              className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            >
+              {visibleItems.map((item) => (
+                <motion.div
+                  key={item.id}
+                  variants={{
+                    hidden: { opacity: 0, y: 24 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                    },
+                  }}
+                >
+                  <UrgentCard item={item} deadlineIso={slotEndIso!} />
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-3xl border border-white/20 bg-black/20 p-10 text-center backdrop-blur-sm sm:p-14"
+            >
+              <motion.span
+                className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/10"
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Flame className="h-7 w-7 text-amber-300" />
+              </motion.span>
+              <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.3em] text-amber-200">
+                Flash Sale WIB
+              </p>
+              <h3 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
+                Flash sale dimulai pukul 09.00 WIB
+              </h3>
+              <p className="mx-auto mt-3 max-w-md font-inter text-sm text-white/75">
+                Produk surplus berganti setiap 3 jam — pagi, siang, sore, dan
+                malam. Siap-siap menyelamatkannya sebelum habis!
+              </p>
+              <div className="mt-7 flex justify-center">
+                <SectionCountdown
+                  deadlineIso={nextStartIso}
+                  label="Dimulai dalam"
+                />
+              </div>
+            </motion.div>
+          )}
+        </div>
       </div>
     </section>
   );

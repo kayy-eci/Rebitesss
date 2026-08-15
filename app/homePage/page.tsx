@@ -2,17 +2,15 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-
 import { Navbar } from "@/app/components/Navbar";
 import { Hero } from "@/app/components/Hero";
-import { ExploreSection } from "@/app/components/ExploreSection";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { VendorSection } from "@/app/components/VendorSection";
 import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
 import { MagneticButton } from "@/app/components/magnetic-button";
 
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, } from "lucide-react";
 
 const PLANS = [
   {
@@ -74,9 +72,6 @@ export default function HomePage() {
 
       <main className="bg-cream-50">
         <Hero />
-
-        <ExploreSection />
-
         <UrgentDealsSection />
 
         <VendorSection />

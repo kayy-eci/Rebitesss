@@ -3,13 +3,11 @@
 import { useMemo, useState } from 'react';
 import { foodItems } from '@/lib/data';
 import type { FilterKey } from '@/lib/types';
-import { SearchFilterBar } from '@/app/components/SearchFilterBar';
-import { FoodGrid } from '@/app/components/FoodGrid';
 
 function applyFilter(key: FilterKey) {
   return (a: (typeof foodItems)[number], b: (typeof foodItems)[number]) => {
     switch (key) {
-      case 'terdekat':
+      case 'terdekat': 
         return a.distanceKm - b.distanceKm;
       case 'diskon-terbesar':
         return b.discountPercent - a.discountPercent;
@@ -55,17 +53,4 @@ export function ExploreSection() {
     setQuery('');
     setActiveFilter('terdekat');
   };
-
-  return (
-    <section id="explore" className="scroll-mt-24 bg-cream-50 pt-2">
-      <SearchFilterBar
-        query={query}
-        onQueryChange={setQuery}
-        onSearchSubmit={() => {}}
-        activeFilter={activeFilter}
-        onFilterChange={setActiveFilter}
-      />
-      <FoodGrid items={filteredItems} onShowAll={resetAll} />
-    </section>
-  );
 }

@@ -10,9 +10,9 @@ import { scrollToId } from "@/lib/scroll";
 
 const NAV_LINKS = [
   { id: "home", label: "Home" },
-  { id: "explore", label: "Explore Food" },
-  { id: "umkm", label: "UMKM" },
-  { id: "how-it-works", label: "How It Works" },
+  { id: "explore", label: "Flash Sale" },
+  { id: "umkm", label: "Rekomendasi" },
+  { id: "how-it-works", label: "Best Seller" },
 ];
 
 const FOCUS_RING =

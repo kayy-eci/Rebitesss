@@ -48,6 +48,9 @@ export interface ImpactStat {
   label: string;
 }
 
+export type UrgentSlot = '09-12' | '12-15' | '15-18' | '18-21';
+
 export interface UrgentItem extends FoodItem {
   expiresAt: string;
+  slot: UrgentSlot;
 }

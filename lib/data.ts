@@ -193,6 +193,7 @@ export const urgentItems: UrgentItem[] = [
     discountedPrice: 19000,
     discountPercent: 50,
     expiresAt: inHours(0.75),
+    slot: '15-18',
   },
   {
     id: 'urgent-sourdough',
@@ -209,6 +210,7 @@ export const urgentItems: UrgentItem[] = [
     discountedPrice: 15000,
     discountPercent: 50,
     expiresAt: inHours(1.25),
+    slot: '09-12',
   },
   {
     id: 'urgent-kopi-susu',
@@ -225,6 +227,7 @@ export const urgentItems: UrgentItem[] = [
     discountedPrice: 9000,
     discountPercent: 50,
     expiresAt: inHours(2),
+    slot: '12-15',
   },
   {
     id: 'urgent-carbonara',
@@ -241,6 +244,7 @@ export const urgentItems: UrgentItem[] = [
     discountedPrice: 27000,
     discountPercent: 40,
     expiresAt: inHours(3),
+    slot: '18-21',
   },
   {
     id: 'urgent-donat',
@@ -257,6 +261,7 @@ export const urgentItems: UrgentItem[] = [
     discountedPrice: 12500,
     discountPercent: 50,
     expiresAt: inHours(4),
+    slot: '09-12',
   },
   {
     id: 'urgent-salad',
@@ -273,6 +278,7 @@ export const urgentItems: UrgentItem[] = [
     discountedPrice: 14400,
     discountPercent: 40,
     expiresAt: inHours(5),
+    slot: '12-15',
   },
 ];
 
