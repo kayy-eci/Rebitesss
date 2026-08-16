@@ -1,6 +1,7 @@
 'use client';
 
-import { Store } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowUpRight, Store } from 'lucide-react';
 import { Card } from './Card';
 import { QuickActionsRow } from './QuickActionsRow';
 import { useCountUp } from './useCountUp';
@@ -57,6 +58,15 @@ export function StoreCard() {
           </div>
         </div>
       </div>
+
+      <Link
+        href="/toko/dapur-ibu-tini"
+        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-sage-100 bg-white px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
+      >
+        <Store className="h-3.5 w-3.5 text-green-700" />
+        Lihat Profil Toko
+        <ArrowUpRight className="h-3.5 w-3.5 text-sage-500" />
+      </Link>
 
       <QuickActionsRow />
     </Card>

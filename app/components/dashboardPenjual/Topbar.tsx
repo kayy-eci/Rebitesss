@@ -51,7 +51,11 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
         <div className="hidden h-9 w-px bg-sage-100 md:block" />
 
-        <div className="hidden items-center gap-2.5 md:flex">
+        <Link
+          href="/toko/dapur-ibu-tini"
+          aria-label="Lihat profil toko Dapur Ibu Tini"
+          className="hidden items-center gap-2.5 md:flex"
+        >
           <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-sage-100">
             <SmartImage src={VENDOR.avatar} alt="Foto profil Bu Tini" />
           </div>
@@ -59,7 +63,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
             <p className="text-sm font-semibold text-charcoal-900">{VENDOR.storeName}</p>
             <p className="text-[11px] text-sage-500">{VENDOR.tier}</p>
           </div>
-        </div>
+        </Link>
 
         <Link
           href="/dashboardPenjual/tambahMenu"
