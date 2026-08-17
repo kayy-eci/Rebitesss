@@ -20,9 +20,6 @@ export function FoodCard({ item }: { item: FoodItem }) {
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
           className="transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute left-3 top-3">
-          <Badge variant="green">SURPLUS</Badge>
-        </div>
         <div className="absolute right-3 top-3">
           <Badge variant="gold">{item.discountPercent}% OFF</Badge>
         </div>
@@ -73,7 +70,6 @@ export function FoodCard({ item }: { item: FoodItem }) {
             FOCUS_RING,
           )}
         >
-          <Plus className="h-4 w-4" />
           Lihat Detail
         </button>
       </div>

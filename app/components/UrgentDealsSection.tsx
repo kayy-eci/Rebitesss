@@ -12,7 +12,7 @@ import { Marquee } from "@/app/components/marquee";
 import type { UrgentItem, UrgentSlot } from "@/lib/types";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E05A33] focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
 const WIB_OFFSET_MS = 7 * 3600 * 1000;
 
@@ -112,33 +112,33 @@ function SectionCountdown({
   const [h, m, s] = text.split(":");
 
   return (
-    <div className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(94,31,18,0.45)]">
+    <div className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]">
       <div className="flex items-center gap-2.5">
-        <Flame className="h-5 w-5 shrink-0 text-[#E05A33]" />
-        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-[#9E2B1D]">
+        <Flame className="h-5 w-5 shrink-0 text-gold-500" />
+        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-gold-500">
           {label}
         </p>
       </div>
 
       <div className="mt-1 flex items-baseline gap-1">
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#5E1F12] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#B91C1C] sm:text-3xl">
           {h}
         </span>
-        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E05A33] sm:text-3xl">
+        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#B91C1C] sm:text-3xl">
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#5E1F12] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#B91C1C] sm:text-3xl">
           {m}
         </span>
-        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E05A33] sm:text-3xl">
+        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#B91C1C] sm:text-3xl">
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#5E1F12] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#B91C1C] sm:text-3xl">
           {s}
         </span>
       </div>
 
-      <div className="mt-1 flex gap-1 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-[#9E2B1D]/60">
+      <div className="mt-1 flex gap-1 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-gold-500/70">
         <span className="min-w-[2ch] text-center">Jam</span>
         <span aria-hidden className="w-[1ch]" />
         <span className="min-w-[2ch] text-center">Menit</span>
@@ -152,9 +152,11 @@ function SectionCountdown({
 function UrgentCard({
   item,
   deadlineIso,
+  isNotLive,
 }: {
   item: UrgentItem;
   deadlineIso: string;
+  isNotLive: boolean;
 }) {
   const remaining = useCountdown(deadlineIso);
   const isExpired = remaining === 0;
@@ -164,15 +166,15 @@ function UrgentCard({
     stockCount === null ? null : Math.max(10, Math.min(95, stockCount * 10));
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-[#7E2F1D]/15 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#B3402A]/30">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#EAD6C4]">
+    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-green-700/30">
+      <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
           src={item.image}
           alt={`Foto ${item.name} dari ${item.vendorName}`}
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
           className={cn(
             "transition-transform duration-500 group-hover:scale-105",
-            isExpired && "grayscale",
+            (isExpired || isNotLive) && "grayscale",
           )}
         />
 
@@ -192,8 +194,8 @@ function UrgentCard({
 
         {/* SURPLUS chip */}
         <div className="absolute left-3 top-3 z-20">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#9E2B1D] shadow-md">
-            <Flame className="h-3 w-3 text-[#E05A33]" />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-green-700 shadow-md">
+            <Flame className="h-3 w-3 text-gold-500" />
             Surplus
           </span>
         </div>
@@ -204,7 +206,7 @@ function UrgentCard({
           animate={{ y: [0, -3, 0] }}
           transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
         >
-          <div className="relative rounded-lg bg-gradient-to-br from-[#C94A32] to-[#9E2B1D] px-3 py-2 text-center text-white shadow-[0_10px_22px_-10px_rgba(158,43,29,0.85)]">
+          <div className="relative rounded-lg bg-[#E53935] px-3 py-2 text-center text-white shadow-[0_10px_22px_-10px_rgba(229,57,53,0.85)]">
             <span className="block font-sans text-base font-black leading-none tabular-nums">
               {item.discountPercent}%
             </span>
@@ -213,7 +215,7 @@ function UrgentCard({
             </span>
             <span
               aria-hidden
-              className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-[#9E2B1D]"
+              className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-[#E53935]"
             />
           </div>
         </motion.div>
@@ -245,16 +247,16 @@ function UrgentCard({
         ) : (
           <div>
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-[#9E2B1D]">
+              <span className="font-bold text-[#DC2626]">
                 Sisa {stockCount}
               </span>
-              <span className="text-charcoal-500">
+              <span className={cn(isExpired ? "text-charcoal-500" : "text-[#DC2626]")}>
                 {isExpired ? "Habis" : "Buru!"}
               </span>
             </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-red-100">
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream-100">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-[#B3402A] to-[#E05A33]"
+                className="h-full rounded-full bg-[#E53935]"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${stockPct}%` }}
                 viewport={{ once: true }}
@@ -268,7 +270,7 @@ function UrgentCard({
           <span className="text-sm text-charcoal-500 line-through">
             {formatRupiah(item.originalPrice)}
           </span>
-          <span className="text-xl font-bold text-[#B3402A]">
+          <span className="text-xl font-bold text-green-700">
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>
@@ -283,9 +285,9 @@ function UrgentCard({
             !isExpired
               ? {
                   boxShadow: [
-                    "0 0 0 0 rgba(179,64,42,0.45)",
-                    "0 0 0 12px rgba(179,64,42,0)",
-                    "0 0 0 0 rgba(179,64,42,0)",
+                    "0 0 0 0 rgba(27,77,50,0.45)",
+                    "0 0 0 12px rgba(27,77,50,0)",
+                    "0 0 0 0 rgba(27,77,50,0)",
                   ],
                 }
               : undefined
@@ -299,14 +301,14 @@ function UrgentCard({
             "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
             isExpired
               ? "cursor-not-allowed bg-sage-100 text-charcoal-500"
-              : "bg-gradient-to-r from-[#B3402A] to-[#E05A33] text-white shadow-[#B3402A]/30 hover:from-[#9E2B1D] hover:to-[#D14E26]",
+              : "bg-gradient-to-r from-green-700 to-green-600 text-white shadow-green-700/30 hover:from-forest-800 hover:to-green-700",
             FOCUS_RING,
           )}
         >
           <Flame
             className={cn(
               "h-4 w-4",
-              isExpired ? "text-charcoal-500" : "text-amber-200",
+              isExpired ? "text-charcoal-500" : "text-gold-500",
             )}
           />
           {isExpired ? "Habis" : "Beli"}
@@ -329,9 +331,9 @@ export function UrgentDealsSection() {
     : [];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-tr from-[#DC2626] via-[#F26B5E] to-[#FFF6F4]">
+    <section className="relative overflow-hidden bg-gradient-to-tr from-[#163C28] via-[#2D6A4F] to-[#F7F5EF]">
       {/* Marquee */}
-      <div className="relative border-b border-white/15 bg-[#5E1F12]/40 py-3">
+      <div className="relative border-b border-white/15 bg-forest-900/40 py-3">
         <Marquee pauseOnHover>
           {[
             "SURPLUS",
@@ -344,7 +346,7 @@ export function UrgentDealsSection() {
               className="mx-6 flex items-center gap-3 font-display text-lg font-medium text-white tracking-tight lg:text-xl"
             >
               {t}
-              <span className="text-amber-300/70">✦</span>
+              <span className="text-gold-500/80">✦</span>
             </span>
           ))}
         </Marquee>
@@ -352,10 +354,10 @@ export function UrgentDealsSection() {
 
       {/* Decorative layer */}
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        {/* White & rose glows */}
+        {/* White & cream glows */}
         <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/25" />
-        <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-[#FFF6F4]/40" />
-        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-red-500/20" />
+        <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-cream-50/50" />
+        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-gold-500/20" />
 
         {/* Floating sparkles */}
         {[
@@ -418,9 +420,9 @@ export function UrgentDealsSection() {
           { bottom: "12%", left: "24%" },
         ].map((pos, i) => (
           <motion.span
-            key={`red-dot-${i}`}
+            key={`caramel-dot-${i}`}
             aria-hidden
-            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-red-400/60"
+            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-gold-500/50"
             style={pos}
             animate={{
               y: [0, -14, 0],
@@ -440,10 +442,10 @@ export function UrgentDealsSection() {
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-300 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-500 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold-500" />
               </span>
-              <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-amber-200">
+              <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-white">
                 Flash Sale
               </span>
             </div>
@@ -451,7 +453,7 @@ export function UrgentDealsSection() {
             <h2 className="mt-3 flex items-center gap-3 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Segera <span>Beli</span>
               <motion.span
-                className="inline-block text-amber-300"
+                className="inline-block text-gold-500"
                 animate={{ rotate: [0, -12, 12, 0] }}
                 transition={{
                   duration: 2.2,
@@ -502,8 +504,8 @@ export function UrgentDealsSection() {
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 font-sans transition-all duration-300",
                   isActive
-                    ? "border-transparent bg-white text-[#9E2B1D] shadow-lg shadow-[#7E2F1D]/35"
-                    : "border-white/25 bg-white/10 text-white/85 backdrop-blur-sm hover:border-white/50 hover:bg-white/20 hover:text-white",
+                    ? "border-transparent bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg shadow-forest-900/40 hover:from-forest-800 hover:to-green-700"
+                    : "border-white/60 bg-white text-green-700 shadow-lg shadow-forest-900/25 hover:bg-cream-100 hover:text-forest-dark",
                   FOCUS_RING,
                 )}
               >
@@ -514,7 +516,7 @@ export function UrgentDealsSection() {
                   <span
                     className={cn(
                       "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                      isActive ? "text-[#B3402A]/70" : "text-white/55",
+                      isActive ? "text-white/70" : "text-green-700/60",
                     )}
                   >
                     {slot.name}
@@ -525,8 +527,8 @@ export function UrgentDealsSection() {
                     className="relative flex h-2 w-2 shrink-0"
                     title="Slot aktif sekarang"
                   >
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-500 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-gold-500" />
                   </span>
                 )}
               </button>
@@ -560,7 +562,7 @@ export function UrgentDealsSection() {
                     },
                   }}
                 >
-                  <UrgentCard item={item} deadlineIso={slotEndIso!} />
+                  <UrgentCard item={item} deadlineIso={slotEndIso!} isNotLive={realSlot !== activeSlot} />
                 </motion.div>
               ))}
             </motion.div>
@@ -580,17 +582,16 @@ export function UrgentDealsSection() {
                   ease: "easeInOut",
                 }}
               >
-                <Flame className="h-7 w-7 text-amber-300" />
+                <Flame className="h-7 w-7 text-gold-500" />
               </motion.span>
-              <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.3em] text-amber-200">
-                Flash Sale WIB
+              <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.3em] text-white">
+                Flash Sale
               </p>
               <h3 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
                 Flash sale dimulai pukul 09.00 WIB
               </h3>
               <p className="mx-auto mt-3 max-w-md font-inter text-sm text-white/75">
-                Produk surplus berganti setiap 3 jam — pagi, siang, sore, dan
-                malam. Siap-siap menyelamatkannya sebelum habis!
+                Jangan sampai kelewatan!
               </p>
               <div className="mt-7 flex justify-center">
                 <SectionCountdown

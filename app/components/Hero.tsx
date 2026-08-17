@@ -71,10 +71,6 @@ export function Hero() {
           <div className="absolute inset-0 bg-gradient-to-t from-forest-900/95 via-forest-900/65 to-forest-900/25" />
 
           <div className="relative flex h-full flex-col justify-end p-6 sm:p-10 lg:p-12">
-            <Badge variant="glass" className="mb-5 w-fit text-cream-50">
-              <Recycle className="h-3.5 w-3.5 text-gold-500" />
-              Food Rescue
-            </Badge>
 
             <h1 className="max-w-xl font-sans text-4xl font-bold leading-[1.05] tracking-tight text-cream-50 sm:text-5xl lg:text-[3.4rem]">
               Selamatkan Makanan,
@@ -87,9 +83,8 @@ export function Hero() {
               .
             </h1>
 
-            <p className="mt-5 max-w-md font-inter text-sm leading-relaxed text-cream-50/85 sm:text-base">
-              Temukan makanan surplus layak konsumsi dari UMKM di sekitarmu
-              dengan harga yang lebih ramah — tanpa mengorbankan rasa.
+            <p className="mt-5 max-w-md font-inter text-sm leading-relaxed text-cream-50/85 sm:text-base text-white">
+              Temukan makanan surplus berkualitas dari UMKM di sekitarmu dengan harga lebih bersahabat.
             </p>
 
             <div className="mt-7">
@@ -119,10 +114,6 @@ export function Hero() {
             className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-700 to-green-600 p-6 shadow-lg shadow-green-700/25 transition-transform duration-300 hover:scale-[1.02] sm:p-8"
           >
             <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-            <Badge variant="gold" className="w-fit">
-              <Sparkles className="h-3.5 w-3.5" />
-              Hingga 60% OFF
-            </Badge>
             <h2 className="mt-4 font-sans text-2xl font-bold leading-snug text-cream-50 sm:text-[1.7rem]">
               Diskon Besar,
               <br />
@@ -158,10 +149,6 @@ export function Hero() {
             <div className="absolute inset-0 bg-forest-900/80 transition-colors duration-300 group-hover:bg-forest-900/70" />
 
             <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
-              <Badge variant="glass" className="w-fit">
-                <Store className="h-3.5 w-3.5 text-gold-500" />
-                Untuk UMKM
-              </Badge>
               <h2 className="mt-3 font-sans text-xl font-bold text-cream-50 sm:text-2xl">
                 Punya Makanan Surplus?
               </h2>

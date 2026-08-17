@@ -1,15 +1,35 @@
 'use client';
 
-import { ArrowRight, Clock, MapPin, Star, Store } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, Clock, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/app/components/Badge';
 import { SmartImage } from '@/app/components/SmartImage';
 import type { Vendor } from '@/lib/types';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
+function isOpenNow(openHours: string): boolean {
+  const match = openHours.match(/(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/);
+  if (!match) return true;
+
+  const open = Number(match[1]) * 60 + Number(match[2]);
+  const close = Number(match[3]) * 60 + Number(match[4]);
+  const now = new Date();
+  const minutes = now.getHours() * 60 + now.getMinutes();
+
+  return open <= close
+    ? minutes >= open && minutes < close
+    : minutes >= open || minutes < close;
+}
+
 export function VendorCard({ vendor }: { vendor: Vendor }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    setIsOpen(isOpenNow(vendor.openHours));
+  }, [vendor.openHours]);
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-forest-900/20">
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
@@ -27,22 +47,20 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
         />
 
         {/* Status chip */}
-        <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-green-700 shadow-md">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
-          </span>
-          Buka Sekarang
+        <div
+          className={cn(
+            'absolute left-3 top-3 flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] shadow-md',
+            isOpen ? 'bg-white/95 text-green-700' : 'bg-white/90 text-charcoal-500'
+          )}
+        >
+          {isOpen && (
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
+            </span>
+          )}
+          {isOpen ? 'Buka Sekarang' : 'Tutup Sekarang'}
         </div>
-
-        {vendor.isRescuePartner && (
-          <div className="absolute right-3 top-3">
-            <Badge variant="green">
-              <Store className="h-3 w-3" />
-              Rescue Partner
-            </Badge>
-          </div>
-        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">
@@ -60,7 +78,9 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
             </span>
             <span className="flex items-center gap-1 font-medium">
               <Clock className="h-3.5 w-3.5 text-sage-500" />
-              Buka {vendor.openHours}
+              {isOpen
+                ? `Buka ${vendor.openHours}`
+                : `Tutup · ${vendor.openHours}`}
             </span>
           </div>
           <span className="flex items-start gap-1">

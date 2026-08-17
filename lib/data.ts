@@ -402,7 +402,8 @@ export const vendors: Vendor[] = [
   {
     id: 'warung-nusantara',
     name: 'Warung Nusantara',
-    image: '/makanan1.jpeg',
+    image:
+      'https://images.pexels.com/photos/37193132/pexels-photo-37193132.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: true,
     rating: 4.8,
     distanceKm: 0.8,
@@ -414,7 +415,8 @@ export const vendors: Vendor[] = [
   {
     id: 'nasi-goreng-mas-jono',
     name: 'Nasi Goreng Mas Jono',
-    image: '/makanan2.jpeg',
+    image:
+      'https://images.pexels.com/photos/19066564/pexels-photo-19066564.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: true,
     rating: 4.9,
     distanceKm: 0.4,
@@ -426,7 +428,8 @@ export const vendors: Vendor[] = [
   {
     id: 'dapur-ibu-tini',
     name: 'Dapur Ibu Tini',
-    image: '/makanan6.jpeg',
+    image:
+      'https://images.pexels.com/photos/30294334/pexels-photo-30294334.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: false,
     rating: 4.7,
     distanceKm: 1.1,
@@ -438,7 +441,8 @@ export const vendors: Vendor[] = [
   {
     id: 'sate-ayam-pak-tigiset',
     name: 'Sate Ayam Pak Tigiset',
-    image: '/makanan4.jpeg',
+    image:
+      'https://images.pexels.com/photos/31118377/pexels-photo-31118377.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: false,
     rating: 4.6,
     distanceKm: 1.2,
@@ -450,7 +454,8 @@ export const vendors: Vendor[] = [
   {
     id: 'padang-karindang',
     name: 'Padang Karindang',
-    image: '/makanan5.jpeg',
+    image:
+      'https://images.pexels.com/photos/35258440/pexels-photo-35258440.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: true,
     rating: 4.5,
     distanceKm: 2.0,
@@ -462,7 +467,8 @@ export const vendors: Vendor[] = [
   {
     id: 'martabak-go-99',
     name: 'Martabak Go 99',
-    image: '/makanan7.jpg',
+    image:
+      'https://images.pexels.com/photos/37129828/pexels-photo-37129828.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: true,
     rating: 4.7,
     distanceKm: 2.3,
@@ -474,7 +480,8 @@ export const vendors: Vendor[] = [
   {
     id: 'bakso-si-gendut',
     name: 'Bakso si Gendut',
-    image: '/makanan8.webp',
+    image:
+      'https://images.pexels.com/photos/35398717/pexels-photo-35398717.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: false,
     rating: 4.9,
     distanceKm: 0.6,
@@ -486,7 +493,8 @@ export const vendors: Vendor[] = [
   {
     id: 'ketoprak-sedap-siang',
     name: 'Ketoprak Sedap Siang',
-    image: '/makanan9.webp',
+    image:
+      'https://images.pexels.com/photos/29831531/pexels-photo-29831531.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: true,
     rating: 4.6,
     distanceKm: 0.9,
