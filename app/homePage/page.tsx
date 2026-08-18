@@ -86,7 +86,6 @@ export default function HomePage() {
           data-nav="cream"
           className="grain-overlay relative overflow-hidden bg-cream py-24 lg:py-32"
         >
-          {/* Soft radial glow */}
           <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-3xl" />
 
           <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">

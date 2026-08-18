@@ -29,7 +29,11 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/app/components/ui/carousel";
-import { Avatar, AvatarImage, AvatarFallback } from "@/app/components/ui/avatar";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/app/components/ui/avatar";
 
 const PARTNERS = [
   "Warung Mang Teten",
@@ -423,20 +427,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CARA KERJA ─────────────────────────────────────── */}
       <HowItWorks />
 
-      {/* ── REKOMENDASI MAKANAN ────────────────────────────── */}
       <section
         id="rekomendasi"
         data-nav="green"
         className="grain-overlay relative overflow-hidden bg-primary py-24 lg:py-32"
       >
-        {/* Soft radial glow */}
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary-foreground/[0.06] blur-3xl" />
 
         <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          {/* Header */}
           <div className="mx-auto max-w-3xl text-center">
             <Reveal delay={0.1}>
               <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
@@ -452,7 +452,6 @@ export default function Home() {
           </div>
 
           <div className="mt-12 grid items-center gap-14 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 xl:gap-20">
-            {/* Info makanan terpilih */}
             <div className="mx-auto w-full max-w-[520px] text-center lg:max-w-none lg:text-left">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -506,7 +505,6 @@ export default function Home() {
               </AnimatePresence>
             </div>
 
-            {/* Roda piring berputar */}
             <div className="relative mx-auto w-full max-w-[560px]">
               <div className="relative h-[520px] w-full sm:h-[600px]">
                 <OptionWheel
@@ -544,19 +542,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── LANGGANAN / PAKET ──────────────────────────────── */}
       <section
         id="langganan"
         data-nav="cream"
         className="grain-overlay relative overflow-hidden bg-cream py-24 lg:py-32"
       >
-        {/* Soft radial glow */}
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-3xl" />
 
         <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-3xl text-center">
             <Reveal delay={0.1}>
-              <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
+              <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
                 Pilih paket yang <span>sesuai</span> dengan kebutuhan usaha
                 Anda.
               </h2>
@@ -564,8 +560,9 @@ export default function Home() {
 
             <Reveal delay={0.15}>
               <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
-                Coba semua fitur secara gratis selama 1 bulan. Lanjutkan
-                langganan atau berhenti kapan saja, tanpa ribet.
+                Nikmati 1 paket gratis selama 1 bulan untuk mencoba fitur
+                ReBites. Setelah masa percobaan berakhir, lanjutkan langganan
+                atau berhenti kapan saja.
               </p>
             </Reveal>
 
@@ -587,13 +584,13 @@ export default function Home() {
                         className={`relative z-10 flex items-center gap-2 rounded-full px-5 py-2 font-sans text-xs font-medium tracking-tight transition-colors duration-300 ${
                           active
                             ? "text-primary-foreground"
-                            : "text-muted-foreground hover:text-caramel"
+                            : "text-muted-foreground hover:text-[#8C5A3C]"
                         }`}
                       >
                         {active && (
                           <motion.span
                             layoutId="billing-pill"
-                            className="absolute inset-0 rounded-full bg-caramel"
+                            className="absolute inset-0 rounded-full bg-[#8C5A3C]"
                             transition={{
                               type: "spring",
                               stiffness: 320,
@@ -641,12 +638,12 @@ export default function Home() {
                     className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
                   >
                     <div className="relative flex items-center justify-between">
-                      <span className="font-display text-sm italic tracking-[0.2em] text-caramel/50">
+                      <span className="font-sans text-sm italic tracking-[0.2em] text-[#8C5A3C]">
                         0{i + 1}
                       </span>
                     </div>
 
-                    <h3 className="mt-4 font-display text-2xl font-light tracking-tight text-primary">
+                    <h3 className="mt-4 font-sans text-2xl font-semibold tracking-tight text-primary">
                       {plan.name}
                     </h3>
 
@@ -666,7 +663,7 @@ export default function Home() {
                               duration: 0.3,
                               ease: [0.22, 1, 0.36, 1],
                             }}
-                            className="block font-display text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
+                            className="block font-sans text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
                           >
                             {priceLabel}
                           </motion.span>
@@ -754,8 +751,7 @@ export default function Home() {
                     <div className="relative mt-8">
                       <MagneticButton
                         href="/register"
-                        variant={plan.popular ? "white" : "outline"}
-                        className="w-full"
+                        className="w-full border border-primary/40 bg-white text-primary hover:border-[#8C5A3C] hover:bg-[#8C5A3C] hover:text-white"
                       >
                         {plan.cta}
                         <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -769,17 +765,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── TESTIMONI ───────────────────────────────────────── */}
       <section
         id="testimoni"
         data-nav="green"
         className="grain-overlay relative overflow-hidden bg-primary py-24 lg:py-32"
       >
-        {/* Soft radial glow */}
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary-foreground/[0.06] blur-3xl" />
 
         <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          {/* Header */}
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
               <Reveal delay={0.1}>
@@ -799,7 +792,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Slider kartu */}
           <Reveal delay={0.1}>
             <div className="relative mt-12 lg:mt-16">
               <button
@@ -830,7 +822,6 @@ export default function Home() {
                       className="basis-full pl-4 sm:basis-1/2 sm:pl-4 lg:basis-1/3 lg:pl-5"
                     >
                       <div className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-white p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel/40 hover:shadow-[0_30px_60px_-28px_rgba(34,81,56,0.35)] lg:p-9">
-                        {/* Watermark tanda kutip */}
                         <span
                           aria-hidden
                           className="pointer-events-none absolute -top-3 right-4 select-none font-display text-[6rem] font-extralight leading-none text-caramel/[0.08] transition-colors duration-300 group-hover:text-caramel/15"
@@ -838,7 +829,6 @@ export default function Home() {
                           &ldquo;
                         </span>
 
-                        {/* Rating */}
                         <div className="flex items-center gap-1">
                           {Array.from({ length: t.rating }).map((_, s) => (
                             <Star
@@ -848,13 +838,11 @@ export default function Home() {
                           ))}
                         </div>
 
-                        {/* Kutipan */}
                         <Quote className="mt-5 h-5 w-5 text-caramel/40" />
                         <blockquote className="mt-3 flex-1 font-sans text-sm leading-relaxed text-foreground/80">
                           &ldquo;{t.quote}&rdquo;
                         </blockquote>
 
-                        {/* Penulis */}
                         <div className="relative mt-7 flex items-center gap-3 pt-6">
                           <span
                             aria-hidden
@@ -892,7 +880,6 @@ export default function Home() {
             </div>
           </Reveal>
 
-          {/* Dots */}
           <Reveal delay={0.15}>
             <div className="mt-9 flex justify-center gap-2">
               {TESTIMONIALS.map((t, i) => (
@@ -913,7 +900,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── MARQUEE: MITRA UMKM (PEMISAH TESTIMONI ↔ FOOTER) ─── */}
       <section
         data-nav="green"
         className="border-y border-white/15 bg-caramel py-5"
@@ -960,10 +946,8 @@ function FoodPlate({ image }: { image: string }) {
         </clipPath>
       </defs>
 
-      {/* Outer plate */}
       <circle cx="100" cy="100" r="92" fill={`url(#${gradId})`} />
 
-      {/* Outer rim */}
       <circle
         cx="100"
         cy="100"
@@ -973,7 +957,6 @@ function FoodPlate({ image }: { image: string }) {
         strokeWidth="2.5"
       />
 
-      {/* Inner rim */}
       <circle
         cx="100"
         cy="100"
@@ -983,10 +966,8 @@ function FoodPlate({ image }: { image: string }) {
         strokeWidth="1.5"
       />
 
-      {/* Inner plate */}
       <circle cx="100" cy="100" r="86" fill="#F5F3E9" />
 
-      {/* Food image */}
       <image
         href={image}
         x="0"
@@ -997,7 +978,6 @@ function FoodPlate({ image }: { image: string }) {
         clipPath={`url(#${clipId})`}
       />
 
-      {/* Foto border */}
       <circle
         cx="100"
         cy="100"
@@ -1007,7 +987,6 @@ function FoodPlate({ image }: { image: string }) {
         strokeWidth="4"
       />
 
-      {/* Plate highlight */}
       <ellipse cx="80" cy="66" rx="46" ry="22" fill="#FFFFFF" opacity="0.16" />
     </svg>
   );
