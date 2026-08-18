@@ -49,7 +49,6 @@ export function SearchFilterBar({
           }}
           className="flex flex-col gap-2.5 sm:flex-row sm:items-center"
         >
-          {/* Search input */}
           <div className="flex flex-1 items-center gap-3 rounded-full bg-cream-50 px-4 py-2.5">
             <Search className="h-5 w-5 shrink-0 text-sage-500" />
             <input
@@ -62,7 +61,6 @@ export function SearchFilterBar({
             />
           </div>
 
-          {/* Location */}
           <div className="relative hidden sm:block">
             <button
               type="button"
@@ -127,7 +125,6 @@ export function SearchFilterBar({
             </AnimatePresence>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             className={cn(
@@ -142,7 +139,6 @@ export function SearchFilterBar({
         </form>
       </div>
 
-      {/* Quick filter pills */}
       <div className="mt-4 flex gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {FILTER_OPTIONS.map((option) => (
           <Pill

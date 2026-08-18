@@ -1,41 +1,3 @@
-/*
-# ReBites marketplace schema
-
-## Overview
-Creates the full database for the ReBites food-surplus marketplace:
-- profiles (role per user: admin/umkm/buyer)
-- plans (subscription tiers for UMKM)
-- subscriptions (a UMKM's active/trial plan)
-- umkm_profiles (business info + geolocation)
-- products (surplus food listings)
-- orders (buyer purchases, Midtrans payment)
-
-## Tables
-1. profiles — extends auth.users with role, full name, phone, verification flag.
-2. plans — subscription packages an admin can manage (name, prices, max products, features, popular flag).
-3. subscriptions — links a UMKM to a plan, tracks trial period and billing period.
-4. umkm_profiles — business details for users with role 'umkm', includes lat/lng for map, rating.
-5. products — surplus food items a UMKM lists (name, prices, stock, status, sell window, delivery/pickup flags, image).
-6. orders — a buyer's order for a product (quantity, total, delivery option/address, note, payment + order status, Midtrans order id).
-
-## Security / RLS
-- RLS enabled on every table.
-- profiles: user reads/updates own row; admins read all. INSERT handled by trigger (not client), but a policy exists for safety.
-- plans: public read (anon + authenticated); only admins write.
-- subscriptions: a UMKM reads/inserts/updates own subscription; admins read all.
-- umkm_profiles: public read (marketplace listing needs it); owner updates own; admins read + update (verification).
-- products: public read (browse marketplace); owner UMKM inserts/updates/deletes own; admins update (moderation).
-- orders: buyer reads own orders; UMKM reads orders for their products; admin reads all. buyer inserts own; buyer/umkm/admin update within scope.
-
-## Notes
-- profiles.role uses a check constraint limited to admin/umkm/buyer.
-- umkm_profiles.is_verified defaults false; admin flips it true after review.
-- products.surplus_price is the discounted price; original_price is the reference original.
-- A trigger auto-creates a profiles row on auth.users insert using new-user metadata.
-- Order indexes on buyer_id, umkm_id, product_id for dashboard queries.
-*/
-
--- profiles
 CREATE TABLE IF NOT EXISTS public.profiles (
   id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email text NOT NULL,
@@ -67,7 +29,6 @@ TO authenticated
 USING (auth.uid() = id)
 WITH CHECK (auth.uid() = id);
 
--- plans
 CREATE TABLE IF NOT EXISTS public.plans (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
@@ -104,7 +65,6 @@ ON public.plans FOR DELETE
 TO authenticated
 USING (EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin'));
 
--- umkm_profiles
 CREATE TABLE IF NOT EXISTS public.umkm_profiles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -146,7 +106,6 @@ ON public.umkm_profiles FOR DELETE
 TO authenticated
 USING (auth.uid() = user_id);
 
--- subscriptions
 CREATE TABLE IF NOT EXISTS public.subscriptions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   umkm_id uuid NOT NULL REFERENCES public.umkm_profiles(id) ON DELETE CASCADE,
@@ -189,7 +148,6 @@ WITH CHECK (
   OR EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin')
 );
 
--- products
 CREATE TABLE IF NOT EXISTS public.products (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   umkm_id uuid NOT NULL REFERENCES public.umkm_profiles(id) ON DELETE CASCADE,
@@ -243,7 +201,6 @@ USING (
   EXISTS (SELECT 1 FROM public.umkm_profiles u WHERE u.id = products.umkm_id AND u.user_id = auth.uid())
 );
 
--- orders
 CREATE TABLE IF NOT EXISTS public.orders (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   buyer_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -295,7 +252,6 @@ WITH CHECK (
   OR EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin')
 );
 
--- Trigger: auto-create profile on signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -321,7 +277,6 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
--- Seed default plans
 INSERT INTO public.plans (name, price_monthly, price_yearly, max_products, features, is_popular)
 VALUES
   ('Starter', 0, 0, 5, ARRAY['Maksimal 5 produk','Kelola stok & harga','Riwayat penjualan 30 hari','Dasbor UMKM'], false),

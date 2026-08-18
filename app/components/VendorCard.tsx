@@ -40,13 +40,11 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
           className="transition-transform duration-500 group-hover:scale-105"
         />
 
-        {/* Legibility overlay */}
         <div
           aria-hidden
           className="absolute inset-0 bg-gradient-to-t from-forest-900/55 via-transparent to-transparent"
         />
 
-        {/* Status chip */}
         <div
           className={cn(
             'absolute left-3 top-3 flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] shadow-md',

@@ -288,19 +288,15 @@ export default function Home() {
   return (
     <SmoothScroll>
       <Preloader onDone={() => setLoaded(true)} />
-
-      {/* ── HERO / BERANDA ─────────────────────────────────── */}
       <div id="top">
         <HeroSection />
       </div>
 
-      {/* ── INFO: FOOD WASTE ───────────────────────────────── */}
       <section
         id="info"
         data-nav="green"
         className="grain-overlay relative overflow-hidden bg-primary py-28 lg:py-40"
       >
-        {/* Watermark outline angka */}
         <span
           aria-hidden
           className="pointer-events-none absolute -top-8 right-0 select-none font-display text-[clamp(10rem,24vw,22rem)] font-extralight leading-none text-transparent"
@@ -313,7 +309,6 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
-            {/* Kiri: judul + ticker live */}
             <div>
               <Reveal delay={0.1}>
                 <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
@@ -356,7 +351,6 @@ export default function Home() {
               </Reveal>
             </div>
 
-            {/* Kanan: statistik */}
             <div className="grid gap-4">
               <Reveal delay={0.1}>
                 <div className="flex flex-col items-center gap-8 rounded-[var(--radius)] border border-primary-foreground/15 bg-primary-foreground/[0.08] p-8 sm:flex-row sm:items-center lg:p-10">

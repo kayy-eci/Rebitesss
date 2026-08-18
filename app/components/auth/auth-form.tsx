@@ -153,7 +153,6 @@ export default function AuthForm({
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="show">
-      {/* tombol kembali ke beranda */}
       <motion.div variants={itemVariants} className="mb-4">
         <Link
           href="/"
@@ -164,7 +163,6 @@ export default function AuthForm({
         </Link>
       </motion.div>
 
-      {/* logo — hanya tampil di mobile */}
       <motion.div
         variants={itemVariants}
         className="mb-8 flex items-center justify-center gap-2.5 lg:hidden"

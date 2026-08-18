@@ -127,7 +127,7 @@ export function ProfileNavbar() {
                 : 'border-hairline/70 bg-cream/80 text-forest-dark'
             )}
           >
-            {/* Logo */}
+
             <Link
               href="/"
               className={cn('flex shrink-0 items-center gap-2 rounded-full', FOCUS_RING)}
@@ -150,7 +150,7 @@ export function ProfileNavbar() {
               </span>
             </Link>
 
-            {/* Nav links */}
+
             <ul className="hidden items-center gap-1 lg:flex">
               {NAV_LINKS.map((link) => (
                 <li key={link.id}>
@@ -179,9 +179,9 @@ export function ProfileNavbar() {
               ))}
             </ul>
 
-            {/* Actions */}
+
             <div className="flex items-center gap-1 sm:gap-0.5">
-              {/* Location selector */}
+
               <div className="relative hidden lg:block">
                 <button
                   type="button"
@@ -254,7 +254,7 @@ export function ProfileNavbar() {
                 </AnimatePresence>
               </div>
 
-              {/* Icon actions */}
+
               <div className="hidden items-center gap-0.5 sm:flex">
                 <IconButton label="Cari makanan">
                   <Search className="h-5 w-5" />
@@ -270,7 +270,7 @@ export function ProfileNavbar() {
                 </IconButton>
               </div>
 
-              {/* CTA */}
+
               <Link
                 href="/login"
                 className={cn(
@@ -284,7 +284,7 @@ export function ProfileNavbar() {
                 Masuk / Daftar
               </Link>
 
-              {/* Hamburger */}
+
               <button
                 type="button"
                 aria-label="Buka menu navigasi"
@@ -303,7 +303,7 @@ export function ProfileNavbar() {
         </div>
       </header>
 
-      {/* Mobile drawer */}
+
       <AnimatePresence>
         {drawerOpen && (
           <>

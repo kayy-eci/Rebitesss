@@ -56,7 +56,7 @@ export function HowItWorksSection() {
         </div>
 
         <div className="relative mt-14">
-          {/* Garis penghubung */}
+
           <motion.div
             aria-hidden
             initial={{ scaleX: 0 }}

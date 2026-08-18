@@ -118,9 +118,7 @@ export function HeroSection() {
 
   return (
     <div className="bg-cream" data-nav="cream">
-      {/* =========================================================
-          NAVBAR
-      ========================================================= */}
+
       <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
@@ -287,16 +285,12 @@ export function HeroSection() {
         </div>
       </header>
 
-      {/* =========================================================
-          HERO
-      ========================================================= */}
+
       <section
         id="top"
         className="relative overflow-hidden bg-cream px-5 pb-24 pt-24 sm:px-8 lg:px-12 lg:pb-32 lg:pt-28"
       >
-        {/* =======================================================
-            BACKGROUND ORGANIC LINES
-        ======================================================= */}
+
         <svg
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full"
@@ -338,16 +332,12 @@ export function HeroSection() {
           />
         </svg>
 
-        {/* =======================================================
-            FULL WIDTH LINE ART
-        ======================================================= */}
+
         <div className="relative mx-auto max-w-[1200px]">
           <HeroOrganicArt />
 
           <div className="relative grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
-            {/* ===================================================
-                HERO TEXT
-            =================================================== */}
+
             <div className="relative z-10 max-w-[560px]">
               <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
                 <span className="text-forest-dark">Selamatkan Makanan,</span>
@@ -379,13 +369,9 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* ===================================================
-                HERO IMAGE + PLATE
-            =================================================== */}
+
             <div className="relative z-10 mx-auto w-full max-w-[500px]">
-              {/* =========================
-                  PLATE BACKGROUND
-              ========================= */}
+
               <svg
                 aria-hidden="true"
                 viewBox="0 0 560 560"
@@ -447,9 +433,7 @@ export function HeroSection() {
                 />
               </svg>
 
-              {/* =========================
-                  FOOD IMAGE
-              ========================= */}
+
               <svg
                 viewBox="0 0 500 500"
                 role="img"
@@ -525,9 +509,7 @@ function HeroOrganicArt() {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {/* =====================================================
-            FULL WIDTH MAIN LINES
-        ===================================================== */}
+
 
         <path
           d="
@@ -565,9 +547,7 @@ function HeroOrganicArt() {
           opacity="0.34"
         />
 
-        {/* =====================================================
-            LEFT LEAVES
-        ===================================================== */}
+
 
         <path
           d="
@@ -607,9 +587,7 @@ function HeroOrganicArt() {
           opacity="0.42"
         />
 
-        {/* =====================================================
-            SMALL LEAF
-        ===================================================== */}
+
 
         <path
           d="
@@ -630,9 +608,7 @@ function HeroOrganicArt() {
           opacity="0.38"
         />
 
-        {/* =====================================================
-            PLATE / FOOD
-        ===================================================== */}
+
 
         <ellipse
           cx="590"
@@ -692,9 +668,7 @@ function HeroOrganicArt() {
           opacity="0.32"
         />
 
-        {/* =====================================================
-            APPLE / FOOD RIGHT
-        ===================================================== */}
+
 
         <path
           d="
@@ -717,9 +691,7 @@ function HeroOrganicArt() {
           opacity="0.38"
         />
 
-        {/* =====================================================
-            RIGHT LEAF
-        ===================================================== */}
+
 
         <path
           d="
@@ -740,9 +712,7 @@ function HeroOrganicArt() {
           opacity="0.34"
         />
 
-        {/* =====================================================
-            RECYCLE SYMBOL
-        ===================================================== */}
+
 
         <path
           d="
@@ -783,9 +753,7 @@ function HeroOrganicArt() {
 
         <path d="M 1021 321 L 1024 308" strokeWidth="1.4" opacity="0.42" />
 
-        {/* =====================================================
-            FORK / CUTLERY
-        ===================================================== */}
+
 
         <path d="M 1180 150 L 1180 320" strokeWidth="1.8" opacity="0.34" />
 
@@ -805,9 +773,7 @@ function HeroOrganicArt() {
           opacity="0.30"
         />
 
-        {/* =====================================================
-            DECORATIVE DOTS
-        ===================================================== */}
+
 
         <circle
           cx="255"
@@ -854,9 +820,7 @@ function HeroOrganicArt() {
           opacity="0.40"
         />
 
-        {/* =====================================================
-            SPARKLES
-        ===================================================== */}
+
 
         <path d="M 430 150 V 170" strokeWidth="1.5" opacity="0.38" />
 

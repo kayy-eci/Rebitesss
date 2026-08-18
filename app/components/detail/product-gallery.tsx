@@ -71,12 +71,10 @@ export function ProductGallery({
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
     >
       <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-sage-100 shadow-[0_28px_60px_-30px_rgba(47,66,53,0.45)]">
-        {/* Badge diskon */}
         <div className="absolute left-4 top-4 z-20 rounded-full bg-forest-900 px-3 py-1.5 text-xs font-semibold text-cream-50 shadow-lg">
           Hemat {product.discountPercent}%
         </div>
 
-        {/* Tombol panah — desktop */}
         <button
           type="button"
           aria-label="Foto sebelumnya"
@@ -100,7 +98,6 @@ export function ProductGallery({
           <ChevronRight className="h-5 w-5" />
         </button>
 
-        {/* Drag (swipe mobile) + crossfade */}
         <motion.div
           drag={reduce ? false : 'x'}
           dragConstraints={{ left: 0, right: 0 }}
@@ -136,7 +133,6 @@ export function ProductGallery({
           </AnimatePresence>
         </motion.div>
 
-        {/* Chip stok — pulse saat menipis */}
         <motion.div
           animate={
             lowStock && !reduce ? { scale: [1, 1.04, 1] } : undefined
@@ -152,7 +148,6 @@ export function ProductGallery({
           {product.stockLabel}
         </motion.div>
 
-        {/* Dot indicator */}
         <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5">
           {product.images.map((_, i) => (
             <button
@@ -176,7 +171,6 @@ export function ProductGallery({
         </span>
       </div>
 
-      {/* Thumbnail strip */}
       <div className="mt-4 grid grid-cols-5 gap-3">
         {product.images.map((image, i) => (
           <button

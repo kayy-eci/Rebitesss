@@ -59,6 +59,47 @@ export interface ImpactStat {
 
 export type UrgentSlot = "09-12" | "12-15" | "15-18" | "18-21";
 
+export interface OrderDraft {
+  productId: string;
+  productSlug: string;
+  vendorName: string;
+  vendorSlug: string;
+  productName: string;
+  image: string;
+  originalPrice: number;
+  discountedPrice: number;
+  stockRemaining: number;
+  pickupTime: { from: string; to: string };
+  pickupLocation: string;
+  reservedUntil: string;
+  co2ePerUnitKg: number;
+}
+
+export interface PaymentMethod {
+  id: string;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  fee: number;
+  feeLabel: string;
+}
+
+export interface PromoCode {
+  code: string;
+  discountAmount: number;
+  isValid: boolean;
+}
+
+export interface CheckoutSummary {
+  subtotal: number;
+  serviceFee: number;
+  methodFee: number;
+  promoDiscount: number;
+  total: number;
+  totalSavings: number;
+  co2eSaved: number;
+}
+
 export interface UrgentItem extends FoodItem {
   expiresAt: string;
   slot: UrgentSlot;

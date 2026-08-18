@@ -68,7 +68,6 @@ const OptionWheel = ({
   draggable = true,
   className = '',
   renderItem,
-  // 1. Mengubah default plateSize jadi lebih besar (misal 440)
   plateSize = 440, 
   autoRotate = false,
   autoRotateInterval = 2600
@@ -96,11 +95,8 @@ const OptionWheel = ({
   cfgRef.current = {
     count: items.length,
     items,
-    // 2. LOGIKA BARU: Jika isi foto, hitung jarak antar frame (rowH) berdasarkan besar plateSize.
-    // Jika sekadar teks, gunakan rumus default. Ini mencegah foto saling dempet.
     rowH: isPlateMode ? (plateSize * spacing * 0.7) : Math.max(fontSize * spacing * remPx, 1),
     curve,
-    // 3. LOGIKA BARU: Kurangi kemiringan (tilt) saat mode foto agar lengkungan tidak membuat foto bersinggungan.
     tilt: isPlateMode ? (tilt * 0.6) : tilt,
     blur,
     fade,

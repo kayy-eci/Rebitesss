@@ -4,10 +4,20 @@ import {
   Store,
   Utensils,
 } from 'lucide-react';
-import type { FoodItem, ImpactStat, UrgentItem, Vendor } from './types';
+import type {
+  FoodItem,
+  ImpactStat,
+  OrderDraft,
+  PromoCode,
+  UrgentItem,
+  Vendor,
+} from './types';
 
 const inHours = (hours: number) =>
   new Date(Date.now() + hours * 3600 * 1000).toISOString();
+
+const inMinutes = (minutes: number) =>
+  new Date(Date.now() + minutes * 60 * 1000).toISOString();
 
 export const LOCATIONS = [
   'SMP Taruna Bhakti',
@@ -535,3 +545,25 @@ export const impactStats: ImpactStat[] = [
 
 export const formatRupiah = (value: number) =>
   `Rp${value.toLocaleString('id-ID')}`;
+
+export const orderDraft: OrderDraft = {
+  productId: 'nasi-ayam-surplus',
+  productSlug: 'paket-nasi-ayam-surplus',
+  vendorName: 'Dapur Bu Tini',
+  vendorSlug: 'dapur-ibu-tini',
+  productName: 'Paket Nasi Ayam Surplus',
+  image:
+    'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800',
+  originalPrice: 30000,
+  discountedPrice: 18000,
+  stockRemaining: 7,
+  pickupTime: { from: '18:30', to: '20:00' },
+  pickupLocation: 'Jl. Kenanga No. 12, Bogor Utara',
+  reservedUntil: inMinutes(35),
+  co2ePerUnitKg: 0.45,
+};
+
+export const promoCodes: PromoCode[] = [
+  { code: 'HEMAT10', discountAmount: 3000, isValid: true },
+  { code: 'SEGAR15', discountAmount: 5000, isValid: true },
+];

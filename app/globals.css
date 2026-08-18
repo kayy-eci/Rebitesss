@@ -1,10 +1,6 @@
-/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind base;
-/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind components;
-/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind utilities;
-/* stylelint-disable-next-line at-rule-no-unknown */
 
 @font-face {
   font-family: '__Inter_VariableFallback';
@@ -14,19 +10,18 @@
 
 @layer base {
   :root {
-    /* ReBites design tokens */
-    --background: 0 0% 100%;          /* #FFFFFF */
-    --foreground: 50 5% 11%;          /* #1C1C1A charcoal */
+    --background: 0 0% 100%;
+    --foreground: 50 5% 11%;
     --card: 0 0% 100%;
     --card-foreground: 50 5% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 50 5% 11%;
 
-    --primary: 148 41% 23%;           /* #225138 deep green */
-    --primary-foreground: 40 30% 96%; /* #F1EEE5 warm cream */
+    --primary: 148 41% 23%;
+    --primary-foreground: 40 30% 96%;
     --primary-foreground-strong: 0 0% 100%;
 
-    --secondary: 40 30% 96%;          /* #F1EEE5 warm cream */
+    --secondary: 40 30% 96%;
     --secondary-foreground: 148 41% 23%;
 
     --muted: 40 24% 92%;
@@ -48,11 +43,11 @@
     --input: 40 14% 86%;
     --ring: 148 41% 23%;
 
-    --chart-1: 148 41% 23%;  /* deep green */
-    --chart-2: 148 41% 35%;  /* mid green */
-    --chart-3: 40 30% 60%;   /* warm muted */
-    --chart-4: 148 30% 50%;  /* soft green */
-    --chart-5: 50 5% 30%;    /* charcoal */
+    --chart-1: 148 41% 23%;
+    --chart-2: 148 41% 35%;
+    --chart-3: 40 30% 60%;
+    --chart-4: 148 30% 50%;
+    --chart-5: 50 5% 30%;
 
     --radius: 0.25rem;
 
@@ -61,7 +56,6 @@
   }
 
   * {
-    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply border-border;
   }
 
@@ -76,7 +70,6 @@
   }
 
   body {
-    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
     font-feature-settings: 'ss01', 'ss02';
@@ -223,7 +216,6 @@
   }
 }
 
-/* Lenis smooth scroll */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -235,7 +227,6 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -251,7 +242,6 @@ html.lenis body {
   background: hsl(var(--primary));
 }
 
-/* Leaflet overrides */
 .leaflet-container {
   font-family: var(--font-sans);
   background: hsl(var(--secondary));

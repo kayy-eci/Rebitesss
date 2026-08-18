@@ -33,8 +33,6 @@ import {
   SoftBlob,
 } from './ornaments';
 
-/* ─────────────────────────  Data mock  ───────────────────────── */
-
 const BANNER_IMAGE =
   'https://images.pexels.com/photos/406152/pexels-photo-406152.jpeg?auto=compress&cs=tinysrgb&w=1600';
 
@@ -145,8 +143,6 @@ const VIEWPORT = { once: true, amount: 0.15 } as const;
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
-/* ─────────────────────────  Sub-komponen  ───────────────────────── */
-
 function StatusBadge({ status }: { status: OrderStatus }) {
   const { icon: Icon, className } = STATUS_STYLE[status];
   return (
@@ -195,14 +191,11 @@ function InfoRow({
   );
 }
 
-/* ─────────────────────────  Sidebar kiri  ───────────────────────── */
-
 function ProfileSidebar() {
   const [editing, setEditing] = useState(false);
 
   return (
     <aside className="space-y-5 lg:sticky lg:top-28 lg:h-fit">
-      {/* Card profil utama */}
       <section className="relative overflow-hidden rounded-3xl border border-hairline/70 bg-white p-6 text-center shadow-[0_24px_48px_-32px_rgba(42,55,49,0.35)]">
         <FloatingLeaf
           className="right-5 top-5 hidden h-4 w-4 text-sage-500/50 lg:block"
@@ -250,7 +243,6 @@ function ProfileSidebar() {
         )}
       </section>
 
-      {/* Card data akun */}
       <section className="relative overflow-hidden rounded-3xl border border-hairline/70 bg-white p-6 shadow-[0_24px_48px_-32px_rgba(42,55,49,0.35)]">
         <SoftBlob className="-right-10 -top-12 h-32 w-32 bg-sage-100/70" />
         <h3 className="relative font-display text-base font-semibold text-forest-deep">
@@ -281,8 +273,6 @@ function ProfileSidebar() {
   );
 }
 
-/* ─────────────────────────  Kolom utama  ───────────────────────── */
-
 function EcoImpactBanner() {
   return (
     <motion.section
@@ -302,7 +292,6 @@ function EcoImpactBanner() {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/95 via-forest-deep/75 to-forest-deep/25" />
 
-      {/* ornamen lembut */}
       <Sparkles className="pointer-events-none absolute right-10 top-8 h-5 w-5 text-gold-500/60" />
       <FloatingLeaf className="bottom-10 right-16 hidden h-5 w-5 text-gold-500/50 lg:block" delay={1.4} />
       <Leaf className="pointer-events-none absolute -bottom-8 -right-6 h-40 w-40 text-white/10" strokeWidth={1.2} />
@@ -335,7 +324,6 @@ function ImpactStats() {
       viewport={VIEWPORT}
       className="grain-overlay relative scroll-mt-28 overflow-hidden rounded-3xl bg-forest-deep p-6 shadow-[0_32px_64px_-40px_rgba(42,55,49,0.7)] sm:p-8"
     >
-      {/* ornamen latar gelap */}
       <SoftBlob className="-left-20 -top-20 h-64 w-64 bg-white/5" />
       <SoftBlob className="-bottom-24 -right-20 h-72 w-72 bg-green-700/25" />
       <DotPattern className="right-8 top-8 hidden h-20 w-20 text-white/10 lg:block" />
@@ -402,7 +390,6 @@ function AddressAndSubscription() {
         viewport={VIEWPORT}
         className="relative scroll-mt-28 grid gap-4 md:grid-cols-2"
       >
-        {/* Alamat utama */}
         <motion.div
           variants={fadeUp}
           className="rounded-2xl border border-hairline/70 bg-white p-6 shadow-[0_20px_40px_-32px_rgba(42,55,49,0.35)]"
@@ -430,7 +417,6 @@ function AddressAndSubscription() {
           </Link>
         </motion.div>
 
-        {/* Langganan ReBites Plus */}
         <motion.div
           variants={fadeUp}
           className="grain-overlay relative overflow-hidden rounded-2xl bg-forest-deep p-6 text-cream-50 shadow-[0_20px_40px_-32px_rgba(42,55,49,0.7)]"
@@ -499,7 +485,6 @@ function OrderHistory() {
           </Link>
         </div>
 
-        {/* Tabel — layar md ke atas */}
         <div className="hidden overflow-x-auto px-6 pb-6 md:block">
           <table className="mt-3 w-full text-left">
             <thead>
@@ -543,7 +528,6 @@ function OrderHistory() {
           </table>
         </div>
 
-        {/* Kartu — layar di bawah md */}
         <ul className="divide-y divide-hairline/60 px-6 pb-6 md:hidden">
           {ORDERS.map((order) => (
             <li
@@ -573,14 +557,11 @@ function OrderHistory() {
   );
 }
 
-/* ─────────────────────────  Halaman  ───────────────────────── */
-
 export function UserProfile() {
   return (
     <div className="relative min-h-screen bg-cream-50">
       <ProfileNavbar />
 
-      {/* Lapisan ornamen latar (dipotong sendiri agar tidak mengganggu sticky) */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <SoftBlob className="-left-32 -top-24 h-96 w-96 bg-sage-100/70" />
         <SoftBlob className="-right-32 top-40 h-[26rem] w-[26rem] bg-gold-100/50" />

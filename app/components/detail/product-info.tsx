@@ -27,7 +27,6 @@ export function ProductInfo({
 
   return (
     <div className="space-y-8">
-      {/* Judul, meta, harga, deskripsi — fade-up saat load */}
       <motion.div
         variants={staggerContainer(0.1)}
         initial="hidden"

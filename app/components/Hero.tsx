@@ -40,7 +40,7 @@ export function Hero() {
       id="home"
       className="relative overflow-hidden scroll-mt-24 bg-cream-50 px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pb-24 lg:pt-28"
     >
-      {/* Ornamen latar */}
+
       <SoftBlob className="-left-28 -top-28 h-80 w-80 bg-sage-100/70" />
       <SoftBlob className="-right-24 top-36 h-96 w-96 bg-green-700/10" />
       <ArcLines className="right-0 top-6 hidden h-[420px] w-[720px] text-sage-500/25 md:block" />
@@ -58,7 +58,7 @@ export function Hero() {
         animate="visible"
         className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.55fr_1fr]"
       >
-        {/* ── Card utama ─────────────────────────────── */}
+  
         <motion.div
           variants={item}
           className="relative min-h-[420px] overflow-hidden rounded-3xl shadow-2xl shadow-forest-900/30 lg:min-h-[560px]"
@@ -106,9 +106,9 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* ── Kolom kanan: 2 card ────────────────────── */}
+
         <div className="grid gap-6">
-          {/* Promo card */}
+
           <motion.div
             variants={item}
             className="group relative overflow-hidden rounded-3xl shadow-lg shadow-green-700/25 transition-transform duration-300 hover:scale-[1.02]"
@@ -144,7 +144,7 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* UMKM card */}
+
           <motion.div
             variants={item}
             className="group relative overflow-hidden rounded-3xl shadow-lg shadow-forest-900/20 transition-transform duration-300 hover:scale-[1.02]"

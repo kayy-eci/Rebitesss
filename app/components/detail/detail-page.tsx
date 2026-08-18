@@ -63,7 +63,6 @@ function DetailPageContent() {
       <main className="relative mx-auto max-w-[1200px] px-5 pb-10 pt-24 sm:px-8 lg:pt-28">
         <ProductBreadcrumb product={PRODUCT} onShare={handleShare} />
 
-        {/* Grid 2 kolom: galeri sticky kiri, konten scroll kanan */}
         <div className="mt-8 grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="lg:sticky lg:top-28">
             <ProductGallery product={PRODUCT} scrollTargetRef={rightColRef} />
@@ -79,7 +78,6 @@ function DetailPageContent() {
           </div>
         </div>
 
-        {/* Ulasan & produk terkait — full width, DI LUAR grid sticky */}
         <ReviewSection reviews={REVIEWS} product={PRODUCT} />
         <RelatedProducts products={RELATED_PRODUCTS} />
       </main>

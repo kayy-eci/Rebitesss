@@ -100,7 +100,6 @@ export function RevealItem({
   );
 }
 
-/** Split a string into words and reveal each one staggered. */
 export function RevealWords({
   text,
   className,

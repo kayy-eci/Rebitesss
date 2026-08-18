@@ -224,7 +224,7 @@ export function RekomendasiSection() {
   return (
     <section id="pembeli" className="bg-cream pt-24 lg:pt-32">
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8 lg:px-12">
-        {/* ── Heading ─────────────────────────────────── */}
+
         <div className="text-center">
           <p className="font-sans text-xs font-semibold uppercase tracking-[0.4em] text-forest-dark">
             Rekomendasi
@@ -234,9 +234,9 @@ export function RekomendasiSection() {
           </h2>
         </div>
 
-        {/* ── Tiga kolom: info kiri, foto, info kanan ──── */}
+
         <div className="mt-16 grid items-center gap-12 lg:mt-20 lg:grid-cols-[1fr_400px_1fr] lg:gap-10 xl:gap-16">
-          {/* Kolom kiri — nama & detail */}
+
           <div className="order-2 flex flex-col items-center lg:order-none lg:items-start">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
@@ -266,7 +266,7 @@ export function RekomendasiSection() {
             </AnimatePresence>
           </div>
 
-          {/* Tengah — frame foto + panah + beli */}
+
           <div className="order-1 lg:order-none">
             <div className="relative mx-auto w-full max-w-[400px] sm:max-w-[440px]">
               <div
@@ -318,7 +318,7 @@ export function RekomendasiSection() {
             </div>
           </div>
 
-          {/* Kolom kanan — stok & waktu habis */}
+
           <div className="order-3 flex flex-col items-center lg:order-none lg:items-end">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
@@ -353,7 +353,7 @@ export function RekomendasiSection() {
         </div>
       </div>
 
-      {/* ── Ticker kategori (full-bleed) ─────────────── */}
+
       <div className="group relative mt-20 flex overflow-hidden bg-forest lg:mt-24">
         <div
           tabIndex={0}

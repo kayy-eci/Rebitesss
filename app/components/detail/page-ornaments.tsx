@@ -28,23 +28,19 @@ export function PageOrnaments() {
       aria-hidden
       className="pointer-events-none absolute inset-0 overflow-hidden"
     >
-      {/* Blob organik kiri atas */}
       <motion.div
         style={{ y: reduce ? 0 : y1 }}
         className="absolute -left-32 -top-28 h-[24rem] w-[24rem] rounded-[55%_45%_60%_40%_/50%_55%_45%_50%] bg-green-700/[0.07] blur-3xl"
       />
-      {/* Blob organik kanan tengah */}
       <motion.div
         style={{ y: reduce ? 0 : y2 }}
         className="absolute -right-32 top-40 h-[26rem] w-[26rem] rounded-[45%_55%_50%_50%_/55%_45%_55%_45%] bg-sage-500/10 blur-3xl"
       />
-      {/* Blob organik bawah kiri */}
       <motion.div
         style={{ y: reduce ? 0 : y3 }}
         className="absolute -left-40 top-[42rem] h-[28rem] w-[28rem] rounded-[40%_60%_55%_45%_/45%_55%_40%_60%] bg-green-50 blur-3xl"
       />
 
-      {/* Garis vena daun */}
       <motion.div
         style={{ y: reduce ? 0 : y2 }}
         className="absolute -right-12 top-24 hidden h-[360px] w-[680px] text-sage-500/20 lg:block"
@@ -52,7 +48,6 @@ export function PageOrnaments() {
         <ArcLines className="h-full w-full" />
       </motion.div>
 
-      {/* Pola titik halus */}
       <motion.div
         style={{ y: reduce ? 0 : y1 }}
         className="absolute left-6 top-80 hidden h-24 w-24 text-green-700/10 lg:block"
@@ -60,10 +55,8 @@ export function PageOrnaments() {
         <DotPattern className="h-full w-full" />
       </motion.div>
 
-      {/* Ranting daun dekoratif */}
       <LeafSprig className="-left-6 top-72 hidden h-44 w-44 -rotate-12 text-sage-500/25 lg:block" />
 
-      {/* Daun melayang di dekat galeri */}
       {reduce ? (
         <Leaf
           className="absolute right-8 top-72 hidden h-5 w-5 text-sage-500/40 lg:block"
@@ -76,7 +69,6 @@ export function PageOrnaments() {
         />
       )}
 
-      {/* Daun melayang di dekat CTA */}
       {reduce ? (
         <Leaf
           className="absolute left-8 top-[58rem] hidden h-5 w-5 text-sage-500/40 lg:block"

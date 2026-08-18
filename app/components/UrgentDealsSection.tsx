@@ -29,8 +29,6 @@ const SLOTS: {
   { key: "18-21", start: 18, end: 21, range: "18.00–21.00", name: "Malam" },
 ];
 
-/* ── Real-time WIB helpers ─────────────────────────────── */
-
 function getWibParts() {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Jakarta",
@@ -92,8 +90,6 @@ function useSlotRotation() {
 
   return { realSlot, selectedSlot, setSelectedSlot, activeSlot };
 }
-
-/* ── Small pieces ──────────────────────────────────────── */
 
 function parseStockCount(label: string) {
   const match = label.match(/\d+/);
@@ -183,7 +179,6 @@ function UrgentCard({
           )}
         />
 
-        {/* Shine sweep */}
         <motion.span
           aria-hidden
           className="pointer-events-none absolute inset-y-0 z-10 w-1/3 -skew-x-12 bg-white/30 blur-md"
@@ -197,7 +192,6 @@ function UrgentCard({
           }}
         />
 
-        {/* Discount ribbon */}
         <motion.div
           className="absolute right-3 top-3 z-20"
           animate={{ y: [0, -3, 0] }}
@@ -306,7 +300,6 @@ export function UrgentDealsSection() {
 
   return (
     <section id="flash-sale" className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] to-[#F7F5EF]">
-      {/* Marquee */}
       <div className="relative border-b border-white/15 bg-forest-900/40 py-3">
         <Marquee pauseOnHover>
           {[
@@ -325,14 +318,11 @@ export function UrgentDealsSection() {
         </Marquee>
       </div>
 
-      {/* Decorative layer */}
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        {/* White & cream glows */}
         <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/25" />
         <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-cream-50/50" />
         <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-gold-500/20" />
 
-        {/* Floating sparkles */}
         {[
           { top: "10%", left: "8%" },
           { top: "22%", right: "12%" },
@@ -361,7 +351,6 @@ export function UrgentDealsSection() {
           </motion.span>
         ))}
 
-        {/* Floating confetti dots */}
         {[
           { top: "14%", left: "5%" },
           { top: "32%", right: "8%" },
@@ -448,7 +437,6 @@ export function UrgentDealsSection() {
           </div>
         </div>
 
-        {/* Slot pills */}
         <div className="relative mt-9 flex flex-wrap items-center gap-2">
           {SLOTS.map((slot) => {
             const isReal = realSlot === slot.key;
@@ -498,7 +486,6 @@ export function UrgentDealsSection() {
           })}
         </div>
 
-        {/* Content */}
         <div className="relative mt-10">
           {visibleItems.length > 0 ? (
             <motion.div

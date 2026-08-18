@@ -61,7 +61,6 @@ function Twinkle({
   );
 }
 
-/* Stempel melingkar berputar — ikon tema dari hero */
 function RotatingStamp({ className }: { className?: string }) {
   return (
     <motion.div
@@ -122,28 +121,22 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
       aria-hidden
       className="grain-overlay relative hidden min-h-screen overflow-hidden bg-[#1B3F2C] lg:block"
     >
-      {/* foto makanan sebagai background */}
       <div className="absolute inset-0">
         <img
           src={IMG_MAIN}
           alt=""
           className="h-full w-full object-cover"
         />
-        {/* overlay hijau agar teks & ornamen tetap terbaca */}
         <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(34,81,56,0.88)_0%,rgba(34,81,56,0.55)_48%,rgba(18,45,32,0.94)_100%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#122D20]/70 via-transparent to-[#1B3F2C]/45" />
       </div>
 
-      {/* glow hangat */}
       <div className="pointer-events-none absolute -left-1/4 top-1/4 h-[34rem] w-[34rem] rounded-full bg-[#C89B5A]/25 blur-[130px]" />
-      {/* glow hijau dalam */}
       <div className="pointer-events-none absolute -bottom-1/3 -right-1/4 h-[38rem] w-[38rem] rounded-full bg-[#122D20]/85 blur-[110px]" />
 
-      {/* ring dekoratif */}
       <div className="pointer-events-none absolute -right-24 top-14 h-[240px] w-[240px] rounded-full border border-white/10" />
       <div className="pointer-events-none absolute -right-16 top-24 h-[180px] w-[180px] rounded-full border border-white/10" />
 
-      {/* ornamen daun & kilau, sudut kanan atas */}
       <Twinkle className="pointer-events-none absolute right-36 top-10 h-6 w-6 text-[#D6A54A]/70" />
       <Twinkle
         className="pointer-events-none absolute right-64 top-20 h-3.5 w-3.5 text-white/40"
@@ -157,7 +150,6 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
         <Leaf className="h-16 w-16" strokeWidth={1.25} />
       </motion.div>
 
-      {/* logo */}
       <div className="absolute left-8 top-8 z-10 flex items-center gap-2.5 text-[#F7F5EF] xl:left-12 xl:top-10">
         <motion.span
           initial={{ opacity: 0, scale: 0.7 }}
@@ -177,12 +169,9 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
         </motion.span>
       </div>
 
-      {/* ornamen melayang di ruang kosong */}
       <div className="pointer-events-none absolute inset-0">
-        {/* stempel melingkar berputar */}
         <RotatingStamp className="absolute right-14 top-24 h-20 w-20 drop-shadow-[0_16px_28px_rgba(18,45,32,0.5)] xl:right-24 xl:top-28 xl:h-24 xl:w-24" />
 
-        {/* foto hidangan kedua */}
         <Float
           className="absolute right-[30%] top-[30%] xl:right-[32%]"
           duration={8}
@@ -198,7 +187,6 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           />
         </Float>
 
-        {/* foto hidangan ketiga */}
         <Float
           className="absolute right-[16%] top-[48%] xl:right-[20%]"
           duration={9}
@@ -214,7 +202,6 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           />
         </Float>
 
-        {/* chip harga */}
         <Float
           className="absolute right-[40%] top-[42%] xl:right-[42%]"
           duration={6}
@@ -228,7 +215,6 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           </div>
         </Float>
 
-        {/* kartu statistik */}
         <Float
           className="absolute right-[22%] top-[58%] xl:right-[26%]"
           duration={9}
@@ -252,7 +238,6 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           </div>
         </Float>
 
-        {/* kilau tersebar */}
         <Twinkle
           className="absolute right-[40%] top-[20%] h-5 w-5 text-[#D6A54A]/80"
           delay={2.2}
@@ -267,7 +252,6 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
         />
       </div>
 
-      {/* konten bawah */}
       <div className="absolute inset-x-0 bottom-0 z-10 p-10 xl:p-14">
         <motion.h1
           initial={{ opacity: 0, y: 28 }}
