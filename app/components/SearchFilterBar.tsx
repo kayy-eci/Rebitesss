@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ChevronDown, MapPin, Search } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { LOCATIONS } from '@/lib/data';
-import { Pill } from '@/app/components/Pill';
-import type { FilterKey } from '@/lib/types';
+import { useState } from "react";
+import { ChevronDown, MapPin, Search } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { LOCATIONS } from "@/lib/data";
+import { Pill } from "@/app/components/Pill";
+import type { FilterKey } from "@/lib/types";
 
 export const FILTER_OPTIONS: { key: FilterKey; label: string }[] = [
-  { key: 'terdekat', label: 'Terdekat' },
-  { key: 'diskon-terbesar', label: 'Diskon Terbesar' },
-  { key: 'segera-habis', label: 'Segera Habis' },
-  { key: 'umkm', label: 'UMKM' },
-  { key: 'bakery', label: 'Bakery' },
-  { key: 'restoran', label: 'Restoran' },
-  { key: 'minuman', label: 'Minuman' },
+  { key: "terdekat", label: "Terdekat" },
+  { key: "diskon-terbesar", label: "Diskon Terbesar" },
+  { key: "segera-habis", label: "Segera Habis" },
+  { key: "umkm", label: "UMKM" },
+  { key: "bakery", label: "Bakery" },
+  { key: "restoran", label: "Restoran" },
+  { key: "minuman", label: "Minuman" },
 ];
 
 interface SearchFilterBarProps {
@@ -27,7 +27,7 @@ interface SearchFilterBarProps {
 }
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C5A3C] focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function SearchFilterBar({
   query,
@@ -56,9 +56,9 @@ export function SearchFilterBar({
               type="search"
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
-              placeholder="Mau menyelamatkan makanan apa hari ini?"
+              placeholder="Cari makanan surplus di sekitarmu..."
               aria-label="Cari makanan surplus"
-              className="w-full bg-transparent font-inter text-sm text-charcoal-900 placeholder:text-charcoal-500/70 focus:outline-none"
+              className="w-full bg-transparent font-sans text-sm text-charcoal-900 placeholder:text-charcoal-500/70 focus:outline-none"
             />
           </div>
 
@@ -70,16 +70,16 @@ export function SearchFilterBar({
               aria-expanded={locationOpen}
               onClick={() => setLocationOpen((v) => !v)}
               className={cn(
-                'flex h-11 items-center gap-2 rounded-full border border-sage-100 bg-white px-4 text-sm font-medium text-charcoal-500 transition-colors duration-200 hover:border-green-600/40 hover:text-green-700',
-                FOCUS_RING
+                "flex h-11 items-center gap-2 rounded-full border border-sage-100 bg-white px-4 text-sm font-medium text-charcoal-500 transition-colors duration-200 hover:border-[#8C5A3C]/40 hover:text-[#8C5A3C]",
+                FOCUS_RING,
               )}
             >
-              <MapPin className="h-4 w-4 text-green-700" />
+              <MapPin className="h-4 w-4 text-[#8C5A3C]" />
               <span className="max-w-[130px] truncate">{location}</span>
               <ChevronDown
                 className={cn(
-                  'h-4 w-4 transition-transform duration-200',
-                  locationOpen && 'rotate-180'
+                  "h-4 w-4 transition-transform duration-200",
+                  locationOpen && "rotate-180",
                 )}
               />
             </button>
@@ -110,10 +110,10 @@ export function SearchFilterBar({
                             setLocationOpen(false);
                           }}
                           className={cn(
-                            'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150',
+                            "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                             loc === location
-                              ? 'bg-cream-100 font-semibold text-green-700'
-                              : 'text-charcoal-500 hover:bg-cream-50 hover:text-green-700'
+                              ? "bg-cream-100 font-semibold text-[#8C5A3C]"
+                              : "text-charcoal-500 hover:bg-cream-50 hover:text-[#8C5A3C]",
                           )}
                         >
                           <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -131,8 +131,9 @@ export function SearchFilterBar({
           <button
             type="submit"
             className={cn(
-              'flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-green-700 px-7 font-inter text-sm font-semibold text-white shadow-md shadow-green-700/25 transition-colors duration-200 hover:bg-green-600 active:scale-[0.98]',
-              FOCUS_RING
+              "flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-7 font-sans text-sm font-semibold text-white shadow-md transition-colors duration-200 active:scale-[0.98]",
+              "bg-[#8C5A3C] hover:bg-[#A06B45]",
+              FOCUS_RING,
             )}
           >
             <Search className="h-4 w-4" />

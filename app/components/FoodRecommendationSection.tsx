@@ -2,12 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { foodItems } from "@/lib/data";
 import { FoodCard } from "@/app/components/FoodCard";
@@ -101,12 +96,10 @@ export function FoodRecommendationSection() {
             <h2 className="mt-3 font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
               Menu unggulan hari ini
             </h2>
-            <p className="mt-2 max-w-md font-inter text-sm text-charcoal-500">
+            <p className="mt-2 max-w-md font-sans text-sm text-charcoal-500">
               Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat.
-              Pilih sesuai kebutuhanmu.
             </p>
           </div>
-
         </div>
 
         <div
@@ -125,8 +118,8 @@ export function FoodRecommendationSection() {
                 className={cn(
                   "rounded-full border px-4 py-2 font-sans text-sm font-semibold transition-all duration-200",
                   isActive
-                    ? "border-transparent bg-green-700 text-white shadow-md shadow-green-700/25 hover:bg-green-600"
-                    : "border-sage-100 bg-white text-charcoal-500 hover:border-green-700/30 hover:text-green-700",
+                    ? "border-transparent bg-[#8C5A3C] text-white shadow-md shadow-[#8C5A3C]/25 hover:bg-[#7A4E35]"
+                    : "border-sage-100 bg-white text-charcoal-500 hover:border-[#8C5A3C]/30 hover:text-[#8C5A3C]",
                   FOCUS_RING,
                 )}
               >
@@ -144,7 +137,7 @@ export function FoodRecommendationSection() {
               scrollToVendors();
             }}
             className={cn(
-              "group inline-flex w-fit items-center gap-1.5 font-inter text-sm font-semibold text-green-700 transition-colors hover:text-green-600",
+              "group inline-flex w-fit items-center gap-1.5 font-sans text-sm font-semibold text-green-700 transition-colors hover:text-[#8C5A3C]",
               FOCUS_RING,
             )}
           >
@@ -160,7 +153,7 @@ export function FoodRecommendationSection() {
             disabled={!canLeft}
             aria-label="Geser rekomendasi makanan ke kiri"
             className={cn(
-              "absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-forest-900/5 transition-all duration-200 hover:bg-green-700 hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11",
+              "absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-forest-900/5 transition-all duration-200 hover:bg-[#8C5A3C] hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11",
               !canLeft &&
                 "cursor-default opacity-35 hover:bg-white hover:text-charcoal-900",
               FOCUS_RING,
@@ -205,7 +198,7 @@ export function FoodRecommendationSection() {
             disabled={!canRight}
             aria-label="Geser rekomendasi makanan ke kanan"
             className={cn(
-              "absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-forest-900/5 transition-all duration-200 hover:bg-green-700 hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11",
+              "absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-forest-900/5 transition-all duration-200 hover:bg-[#8C5A3C] hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11",
               !canRight &&
                 "cursor-default opacity-35 hover:bg-white hover:text-charcoal-900",
               FOCUS_RING,

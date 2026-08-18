@@ -53,12 +53,6 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
             isOpen ? 'bg-white/95 text-green-700' : 'bg-white/90 text-charcoal-500'
           )}
         >
-          {isOpen && (
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
-            </span>
-          )}
           {isOpen ? 'Buka Sekarang' : 'Tutup Sekarang'}
         </div>
       </div>
@@ -98,7 +92,7 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
               ?.scrollIntoView({ behavior: 'smooth' });
           }}
           className={cn(
-            'group/cta mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]',
+            'group/cta mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#8C5A3C] active:scale-[0.98]',
             FOCUS_RING
           )}
         >

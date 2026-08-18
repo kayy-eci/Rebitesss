@@ -55,12 +55,12 @@ function Field({
         </label>
         {hint}
       </div>
-      <div className="group flex items-center gap-3 border-b border-[#DEDACF] pb-2 transition-colors duration-200 focus-within:border-[#3B5240]">
-        <Icon className="h-4 w-4 shrink-0 text-[#6B6A63]/60 transition-colors duration-200 group-focus-within:text-[#3B5240]" />
+      <div className="group flex items-center gap-3 border-b border-[#DEDACF] pb-2 transition-colors duration-200 focus-within:border-[#225138]">
+        <Icon className="h-4 w-4 shrink-0 text-[#6B6A63]/60 transition-colors duration-200 group-focus-within:text-[#225138]" />
         <input
           id={id}
           {...inputProps}
-          className="w-full bg-transparent py-1 font-sans text-[15px] text-[#2F4235] outline-none placeholder:text-[#6B6A63]/40"
+          className="w-full bg-transparent py-1 font-sans text-[15px] text-[#1B3F2C] outline-none placeholder:text-[#6B6A63]/40"
         />
       </div>
     </div>
@@ -157,7 +157,7 @@ export default function AuthForm({
       <motion.div variants={itemVariants} className="mb-4">
         <Link
           href="/"
-          className="group inline-flex items-center gap-2 rounded-full py-1.5 pr-3 font-sans text-sm font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#3B5240]"
+          className="group inline-flex items-center gap-2 rounded-full py-1.5 pr-3 font-sans text-sm font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#225138]"
         >
           <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
           Kembali
@@ -169,17 +169,17 @@ export default function AuthForm({
         variants={itemVariants}
         className="mb-8 flex items-center justify-center gap-2.5 lg:hidden"
       >
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#3B5240] text-[#F7F5EF]">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#225138] text-[#F7F5EF]">
           <Leaf className="h-[18px] w-[18px]" strokeWidth={1.75} />
         </span>
-        <span className="font-display text-xl font-medium tracking-tight text-[#3B5240]">
+        <span className="font-display text-xl font-medium tracking-tight text-[#225138]">
           ReBites
         </span>
       </motion.div>
 
       <motion.h1
         variants={itemVariants}
-        className="font-display text-[2rem] font-semibold leading-[1.1] tracking-[-0.02em] text-[#3B5240]"
+        className="font-display text-[2rem] font-semibold leading-[1.1] tracking-[-0.02em] text-[#225138]"
       >
         {title}
       </motion.h1>
@@ -236,7 +236,7 @@ export default function AuthForm({
             !isSignup ? (
               <Link
                 href="/forgot-password"
-                className="font-sans text-xs text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#3B5240]"
+                className="font-sans text-xs text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
               >
                 Forgot Password?
               </Link>
@@ -253,7 +253,7 @@ export default function AuthForm({
         <button
           type="submit"
           disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-[#3B5240] px-5 py-3.5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F7F5EF] transition-colors duration-200 hover:bg-[#2F4235] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B5240] disabled:cursor-not-allowed disabled:opacity-70"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-[#225138] px-5 py-3.5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F7F5EF] transition-colors duration-200 hover:bg-[#1B3F2C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? (isSignup ? "Mendaftar" : "Masuk") : submitLabel}
           <ArrowRight className="h-4 w-4" />
@@ -267,7 +267,7 @@ export default function AuthForm({
         {bottomHint.text}{" "}
         <Link
           href={bottomHint.href}
-          className="font-semibold text-[#3B5240] underline underline-offset-4 transition-colors hover:text-[#2F4235]"
+          className="font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
         >
           {bottomHint.linkText}
         </Link>

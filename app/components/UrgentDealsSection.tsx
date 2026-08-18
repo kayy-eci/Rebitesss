@@ -114,31 +114,36 @@ function SectionCountdown({
   return (
     <div className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]">
       <div className="flex items-center gap-2.5">
-        <Flame className="h-5 w-5 shrink-0 text-gold-500" />
-        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-gold-500">
+        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-black">
           {label}
         </p>
       </div>
 
       <div className="mt-1 flex items-baseline gap-1">
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#B91C1C] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
           {h}
         </span>
-        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#B91C1C] sm:text-3xl">
+        <span
+          aria-hidden
+          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E53935] sm:text-3xl"
+        >
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#B91C1C] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
           {m}
         </span>
-        <span aria-hidden className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#B91C1C] sm:text-3xl">
+        <span
+          aria-hidden
+          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E53935] sm:text-3xl"
+        >
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#B91C1C] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
           {s}
         </span>
       </div>
 
-      <div className="mt-1 flex gap-1 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-gold-500/70">
+      <div className="mt-1 flex gap-1 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-black">
         <span className="min-w-[2ch] text-center">Jam</span>
         <span aria-hidden className="w-[1ch]" />
         <span className="min-w-[2ch] text-center">Menit</span>
@@ -192,14 +197,6 @@ function UrgentCard({
           }}
         />
 
-        {/* SURPLUS chip */}
-        <div className="absolute left-3 top-3 z-20">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-green-700 shadow-md">
-            <Flame className="h-3 w-3 text-gold-500" />
-            Surplus
-          </span>
-        </div>
-
         {/* Discount ribbon */}
         <motion.div
           className="absolute right-3 top-3 z-20"
@@ -240,31 +237,30 @@ function UrgentCard({
           </span>
         </div>
 
-        {stockPct === null ? (
-          <span className="w-fit rounded-full bg-cream-100 px-3 py-1 text-xs font-medium text-charcoal-500">
-            {item.stockLabel}
-          </span>
-        ) : (
-          <div>
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-[#DC2626]">
-                Sisa {stockCount}
-              </span>
-              <span className={cn(isExpired ? "text-charcoal-500" : "text-[#DC2626]")}>
-                {isExpired ? "Habis" : "Buru!"}
-              </span>
+        {!isExpired &&
+          (stockPct === null ? (
+            <span className="w-fit rounded-full bg-cream-100 px-3 py-1 text-xs font-medium text-charcoal-500">
+              {item.stockLabel}
+            </span>
+          ) : (
+            <div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-[#DC2626]">
+                  Sisa {stockCount}
+                </span>
+                <span className="text-[#DC2626]">Buru!</span>
+              </div>
+              <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream-100">
+                <motion.div
+                  className="h-full rounded-full bg-[#E53935]"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${stockPct}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                />
+              </div>
             </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream-100">
-              <motion.div
-                className="h-full rounded-full bg-[#E53935]"
-                initial={{ width: 0 }}
-                whileInView={{ width: `${stockPct}%` }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-              />
-            </div>
-          </div>
-        )}
+          ))}
 
         <div className="mt-auto flex items-baseline gap-2 pt-1">
           <span className="text-sm text-charcoal-500 line-through">
@@ -275,44 +271,22 @@ function UrgentCard({
           </span>
         </div>
 
-        <motion.button
+        <button
           type="button"
           disabled={isExpired}
           aria-label={
             isExpired ? `${item.name} sudah habis` : `Lihat detail ${item.name}`
           }
-          animate={
-            !isExpired
-              ? {
-                  boxShadow: [
-                    "0 0 0 0 rgba(27,77,50,0.45)",
-                    "0 0 0 12px rgba(27,77,50,0)",
-                    "0 0 0 0 rgba(27,77,50,0)",
-                  ],
-                }
-              : undefined
-          }
-          transition={
-            !isExpired
-              ? { duration: 2, repeat: Infinity, ease: "easeInOut" }
-              : undefined
-          }
           className={cn(
             "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
             isExpired
               ? "cursor-not-allowed bg-sage-100 text-charcoal-500"
-              : "bg-gradient-to-r from-green-700 to-green-600 text-white shadow-green-700/30 hover:from-forest-800 hover:to-green-700",
+              : "bg-[#225138] text-white hover:bg-[#8C5A3C]",
             FOCUS_RING,
           )}
         >
-          <Flame
-            className={cn(
-              "h-4 w-4",
-              isExpired ? "text-charcoal-500" : "text-gold-500",
-            )}
-          />
           {isExpired ? "Habis" : "Beli"}
-        </motion.button>
+        </button>
       </div>
     </article>
   );
@@ -331,7 +305,7 @@ export function UrgentDealsSection() {
     : [];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-tr from-[#163C28] via-[#2D6A4F] to-[#F7F5EF]">
+    <section id="flash-sale" className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] to-[#F7F5EF]">
       {/* Marquee */}
       <div className="relative border-b border-white/15 bg-forest-900/40 py-3">
         <Marquee pauseOnHover>
@@ -343,10 +317,9 @@ export function UrgentDealsSection() {
           ].map((t, i) => (
             <span
               key={i}
-              className="mx-6 flex items-center gap-3 font-display text-lg font-medium text-white tracking-tight lg:text-xl"
+              className="mx-6 flex items-center gap-3 font-sans text-lg font-medium text-white tracking-tight lg:text-xl"
             >
               {t}
-              <span className="text-gold-500/80">✦</span>
             </span>
           ))}
         </Marquee>
@@ -442,30 +415,19 @@ export function UrgentDealsSection() {
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-500 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold-500" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935]" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#E53935]" />
               </span>
               <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-white">
                 Flash Sale
               </span>
             </div>
 
-            <h2 className="mt-3 flex items-center gap-3 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            <h2 className="mt-3 flex items-center gap-3 font-sans text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Segera <span>Beli</span>
-              <motion.span
-                className="inline-block text-gold-500"
-                animate={{ rotate: [0, -12, 12, 0] }}
-                transition={{
-                  duration: 2.2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Flame className="h-9 w-9 sm:h-11 sm:w-11" />
-              </motion.span>
             </h2>
 
-            <p className="mt-3 max-w-md font-inter text-sm text-white/80">
+            <p className="mt-3 max-w-md font-sans text-sm text-white/80">
               Makanan surplus pilihan dengan harga lebih hemat. Jangan sampai
               kelewatan sebelum stoknya habis!
             </p>
@@ -504,8 +466,8 @@ export function UrgentDealsSection() {
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 font-sans transition-all duration-300",
                   isActive
-                    ? "border-transparent bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg shadow-forest-900/40 hover:from-forest-800 hover:to-green-700"
-                    : "border-white/60 bg-white text-green-700 shadow-lg shadow-forest-900/25 hover:bg-cream-100 hover:text-forest-dark",
+                    ? "border-transparent bg-gradient-to-r from-[#8C5A3C] to-[#A06B45] text-white shadow-lg shadow-forest-900/40 hover:from-[#6B4530] hover:to-[#8C5A3C]"
+                    : "border-white/60 bg-white text-[#8C5A3C] shadow-lg shadow-forest-900/25 hover:bg-cream-100 hover:text-[#6B4530]",
                   FOCUS_RING,
                 )}
               >
@@ -516,7 +478,7 @@ export function UrgentDealsSection() {
                   <span
                     className={cn(
                       "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                      isActive ? "text-white/70" : "text-green-700/60",
+                      isActive ? "text-white/70" : "text-[#8C5A3C]/60",
                     )}
                   >
                     {slot.name}
@@ -527,8 +489,8 @@ export function UrgentDealsSection() {
                     className="relative flex h-2 w-2 shrink-0"
                     title="Slot aktif sekarang"
                   >
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-500 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-gold-500" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935] opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E53935]" />
                   </span>
                 )}
               </button>
@@ -562,7 +524,11 @@ export function UrgentDealsSection() {
                     },
                   }}
                 >
-                  <UrgentCard item={item} deadlineIso={slotEndIso!} isNotLive={realSlot !== activeSlot} />
+                  <UrgentCard
+                    item={item}
+                    deadlineIso={slotEndIso!}
+                    isNotLive={realSlot !== activeSlot}
+                  />
                 </motion.div>
               ))}
             </motion.div>
@@ -573,24 +539,13 @@ export function UrgentDealsSection() {
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-3xl border border-white/20 bg-black/20 p-10 text-center backdrop-blur-sm sm:p-14"
             >
-              <motion.span
-                className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/10"
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Flame className="h-7 w-7 text-gold-500" />
-              </motion.span>
               <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.3em] text-white">
                 Flash Sale
               </p>
-              <h3 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
+              <h3 className="mt-3 font-sans text-3xl font-bold text-white sm:text-4xl">
                 Flash sale dimulai pukul 09.00 WIB
               </h3>
-              <p className="mx-auto mt-3 max-w-md font-inter text-sm text-white/75">
+              <p className="mx-auto mt-3 max-w-md font-sans text-sm text-white/75">
                 Jangan sampai kelewatan!
               </p>
               <div className="mt-7 flex justify-center">

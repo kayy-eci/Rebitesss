@@ -226,7 +226,7 @@ export function RekomendasiSection() {
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8 lg:px-12">
         {/* ── Heading ─────────────────────────────────── */}
         <div className="text-center">
-          <p className="font-inter text-xs font-semibold uppercase tracking-[0.4em] text-forest-dark">
+          <p className="font-sans text-xs font-semibold uppercase tracking-[0.4em] text-forest-dark">
             Rekomendasi
           </p>
           <h2 className="mt-5 font-display text-[clamp(2.2rem,5.5vw,4.5rem)] font-bold leading-[0.98] tracking-[-0.02em] text-forest">
@@ -258,7 +258,7 @@ export function RekomendasiSection() {
 
                 <div className="max-w-[320px]">
                   <Info className="h-6 w-6 text-forest" strokeWidth={1.5} aria-hidden />
-                  <p className="mt-4 font-inter text-sm leading-relaxed text-stone">
+                  <p className="mt-4 font-sans text-sm leading-relaxed text-stone">
                     {item.detail}
                   </p>
                 </div>
@@ -275,7 +275,7 @@ export function RekomendasiSection() {
                 aria-roledescription="carousel"
                 aria-label="Carousel rekomendasi makanan"
                 onKeyDown={handleKeyDown}
-                className={`relative aspect-square w-full overflow-hidden rounded-full bg-sage shadow-[0_36px_70px_-30px_rgba(47,66,53,0.55)] ${FOCUS_RING}`}
+                className={`relative aspect-square w-full overflow-hidden rounded-full bg-sage shadow-[0_36px_70px_-30px_rgba(34,81,56,0.55)] ${FOCUS_RING}`}
               >
                 <AnimatePresence initial={false} mode="sync">
                   <motion.div
@@ -294,7 +294,7 @@ export function RekomendasiSection() {
                   type="button"
                   onClick={() => navigate(-1)}
                   aria-label="Rekomendasi sebelumnya"
-                  className={`absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-hairline bg-white text-forest-dark shadow-[0_14px_30px_-16px_rgba(47,66,53,0.65)] transition-all duration-300 hover:bg-forest-dark hover:text-white sm:left-5 sm:h-12 sm:w-12 ${FOCUS_RING}`}
+                  className={`absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-hairline bg-white text-forest-dark shadow-[0_14px_30px_-16px_rgba(34,81,56,0.65)] transition-all duration-300 hover:bg-forest-dark hover:text-white sm:left-5 sm:h-12 sm:w-12 ${FOCUS_RING}`}
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </button>
@@ -302,7 +302,7 @@ export function RekomendasiSection() {
                   type="button"
                   onClick={() => navigate(1)}
                   aria-label="Rekomendasi berikutnya"
-                  className={`absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-forest-dark text-white shadow-[0_14px_30px_-16px_rgba(47,66,53,0.7)] transition-all duration-300 hover:bg-forest sm:right-5 sm:h-12 sm:w-12 ${FOCUS_RING}`}
+                  className={`absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-forest-dark text-white shadow-[0_14px_30px_-16px_rgba(34,81,56,0.7)] transition-all duration-300 hover:bg-forest sm:right-5 sm:h-12 sm:w-12 ${FOCUS_RING}`}
                 >
                   <ArrowRight className="h-5 w-5" />
                 </button>
@@ -310,7 +310,7 @@ export function RekomendasiSection() {
 
               <Link
                 href={`/register?produk=${item.id}`}
-                className={`group absolute bottom-0 left-1/2 z-20 inline-flex -translate-x-1/2 translate-y-1/2 items-center gap-2 rounded-full bg-forest px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_18px_38px_-16px_rgba(47,66,53,0.75)] transition-all duration-300 hover:bg-forest-dark ${FOCUS_RING}`}
+                className={`group absolute bottom-0 left-1/2 z-20 inline-flex -translate-x-1/2 translate-y-1/2 items-center gap-2 rounded-full bg-forest px-7 py-3.5 font-sans text-sm font-semibold text-white shadow-[0_18px_38px_-16px_rgba(34,81,56,0.75)] transition-all duration-300 hover:bg-forest-dark ${FOCUS_RING}`}
               >
                 <ShoppingCart className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
                 Beli Sekarang
@@ -340,7 +340,7 @@ export function RekomendasiSection() {
 
                 <div className="max-w-[320px]">
                   <Clock className="h-6 w-6 text-forest" strokeWidth={1.5} aria-hidden />
-                  <p className="mt-4 font-inter text-sm text-stone">
+                  <p className="mt-4 font-sans text-sm text-stone">
                     Habis dalam{" "}
                     <span className="font-semibold text-forest-dark tabular-nums">
                       {formatHMS(remaining)}
@@ -364,7 +364,7 @@ export function RekomendasiSection() {
             <span
               key={i}
               aria-hidden={i >= TICKER.length}
-              className="flex items-center font-inter text-sm font-bold uppercase tracking-[0.22em] text-white"
+              className="flex items-center font-sans text-sm font-bold uppercase tracking-[0.22em] text-white"
             >
               <span className="px-6">{kategori}</span>
               <span className="text-white/40">•</span>

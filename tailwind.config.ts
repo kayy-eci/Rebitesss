@@ -27,12 +27,12 @@ const config: Config = {
       },
       colors: {
         forest: {
-          DEFAULT: '#3B5240',
-          900: '#0F2E1F',
-          800: '#163C28',
-          700: '#1B4D32',
+          DEFAULT: '#225138',
+          900: '#122D20',
+          800: '#163D28',
+          700: '#225138',
         },
-        'forest-dark': '#2F4235',
+        'forest-dark': '#1B3F2C',
         cream: {
           DEFAULT: '#F7F5EF',
           50: '#FBF8F1',
@@ -56,8 +56,8 @@ const config: Config = {
           500: '#5C6B60',
         },
         green: {
-          700: '#1B4D32',
-          600: '#2D6A4F',
+          700: '#225138',
+          600: '#2D7050',
         },
         amber: '#D6A54A',
         background: 'hsl(var(--background))',

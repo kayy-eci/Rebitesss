@@ -43,7 +43,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
+            <h4 className="font-display text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
               Platform
             </h4>
             <ul className="mt-5 space-y-3">
@@ -83,7 +83,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
+            <h4 className="font-display text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
               Akun
             </h4>
             <ul className="mt-5 space-y-3">
@@ -115,7 +115,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
+            <h4 className="font-display text-[11px] uppercase tracking-[0.25em] text-primary-foreground/50">
               Kontak
             </h4>
             <ul className="mt-5 space-y-3 font-sans text-sm text-primary-foreground/80">

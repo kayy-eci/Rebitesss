@@ -1,9 +1,9 @@
 "use client";
 
 import { Clock, MapPin, Plus, Star } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { formatRupiah } from "@/lib/data";
-import { Badge } from "@/app/components/Badge";
 import { SmartImage } from "@/app/components/SmartImage";
 import type { FoodItem } from "@/lib/types";
 
@@ -20,9 +20,24 @@ export function FoodCard({ item }: { item: FoodItem }) {
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
           className="transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute right-3 top-3">
-          <Badge variant="gold">{item.discountPercent}% OFF</Badge>
-        </div>
+        <motion.div
+          className="absolute right-3 top-3 z-20"
+          animate={{ y: [0, -3, 0] }}
+          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="relative rounded-lg bg-[#E53935] px-3 py-2 text-center text-white shadow-[0_10px_22px_-10px_rgba(34,81,56,0.85)]">
+            <span className="block font-sans text-base font-black leading-none tabular-nums">
+              {item.discountPercent}%
+            </span>
+            <span className="block font-sans text-[9px] font-bold uppercase leading-tight tracking-[0.18em]">
+              Off
+            </span>
+            <span
+              aria-hidden
+              className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-[#E53935]"
+            />
+          </div>
+        </motion.div>
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
@@ -66,7 +81,7 @@ export function FoodCard({ item }: { item: FoodItem }) {
           type="button"
           aria-label={`Lihat detail ${item.name}`}
           className={cn(
-            "mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]",
+            "mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#8C5A3C] active:scale-[0.98]",
             FOCUS_RING,
           )}
         >

@@ -7,6 +7,7 @@ import { Reveal } from './reveal';
 export function SiteFooter() {
   return (
     <footer
+      id="footer"
       data-nav="green"
       className="grain-overlay relative overflow-hidden bg-primary text-primary-foreground"
     >

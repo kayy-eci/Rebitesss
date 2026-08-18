@@ -23,14 +23,10 @@ export function ExploreSection() {
   return (
     <section
       id="explore"
-      className="relative scroll-mt-24 overflow-hidden bg-cream-50 py-14 lg:py-16"
+      className="relative scroll-mt-24 bg-cream-50 py-14 lg:py-16"
     >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <p className="flex items-center justify-center gap-2 font-sans text-xs font-bold uppercase tracking-[0.3em] text-green-700">
-            <Sparkles className="h-4 w-4" />
-            Jelajahi
-          </p>
           <h2 className="mt-3 font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
             Cari Makanan Surplus
           </h2>

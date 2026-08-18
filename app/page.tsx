@@ -216,7 +216,7 @@ export default function Home() {
           <div className="mt-14 grid gap-4 md:grid-cols-6 md:grid-rows-[auto_auto]">
             {/* step 1 - large */}
             <Reveal className="md:col-span-3" delay={0.05}>
-              <div className="group h-full rounded-[var(--radius)] border border-border bg-secondary p-8 transition-colors duration-300 hover:border-primary/30">
+              <div className="group h-full rounded-[var(--radius)] border border-border bg-secondary p-8 transition-colors duration-300 hover:border-[#8C5A3C]/30">
                 <div className="flex items-center justify-between">
                   <span className="font-display text-5xl font-light text-primary/30">
                     01
@@ -235,7 +235,7 @@ export default function Home() {
 
             {/* step 2 */}
             <Reveal className="md:col-span-3" delay={0.1}>
-              <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-8 transition-colors duration-300 hover:border-primary/30">
+              <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-8 transition-colors duration-300 hover:border-[#8C5A3C]/30">
                 <div className="flex items-center justify-between">
                   <span className="font-display text-5xl font-light text-primary/30">
                     02
@@ -254,7 +254,7 @@ export default function Home() {
 
             {/* step 3 */}
             <Reveal className="md:col-span-2" delay={0.15}>
-              <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-8 transition-colors duration-300 hover:border-primary/30">
+              <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-8 transition-colors duration-300 hover:border-[#8C5A3C]/30">
                 <span className="font-display text-5xl font-light text-primary/30">
                   03
                 </span>
@@ -381,7 +381,7 @@ export default function Home() {
                 },
               ].map((f, i) => (
                 <Reveal key={i} delay={i * 0.08}>
-                  <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_40px_-20px_hsl(var(--primary)/0.3)]">
+                  <div className="group h-full rounded-[var(--radius)] border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#8C5A3C]/30 hover:shadow-[0_20px_40px_-20px_rgba(140,90,60,0.3)]">
                     <f.icon className="h-6 w-6 text-primary/50 transition-transform duration-500 group-hover:scale-110 group-hover:text-primary" />
                     <h3 className="mt-5 font-display text-lg font-medium text-primary">
                       {f.title}
@@ -615,7 +615,7 @@ export default function Home() {
                   className={`relative flex h-full flex-col rounded-[var(--radius)] border p-8 transition-all duration-300 hover:-translate-y-1 ${
                     plan.popular
                       ? "border-primary bg-primary text-primary-foreground shadow-[0_30px_60px_-25px_hsl(var(--primary)/0.5)]"
-                      : "border-border bg-secondary hover:border-primary/30"
+                      : "border-border bg-secondary hover:border-[#8C5A3C]/30"
                   }`}
                 >
                   {plan.popular && (
@@ -789,15 +789,15 @@ function WhyFeature({
   return (
     <Reveal delay={delay}>
       <div className="group max-w-[280px]">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-background text-primary shadow-[0_10px_28px_-14px_hsl(var(--primary)/0.45)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/40 group-hover:bg-primary group-hover:text-primary-foreground-strong">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-background text-primary shadow-[0_10px_28px_-14px_hsl(var(--primary)/0.45)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-[#8C5A3C]/40 group-hover:bg-[#8C5A3C] group-hover:text-primary-foreground-strong">
           <span className="relative">
             <Icon className="h-7 w-7" strokeWidth={1.5} />
             {heartBadge && (
-              <Heart className="absolute -bottom-2 -right-2.5 h-3.5 w-3.5 fill-primary stroke-background transition-colors duration-300 group-hover:fill-primary-foreground-strong group-hover:stroke-primary" />
+              <Heart className="absolute -bottom-2 -right-2.5 h-3.5 w-3.5 fill-primary stroke-background transition-colors duration-300 group-hover:fill-primary-foreground-strong group-hover:stroke-[#8C5A3C]" />
             )}
           </span>
         </div>
-        <h3 className="mt-4 font-sans text-sm font-bold uppercase leading-snug tracking-[0.06em] text-primary">
+        <h3 className="mt-4 font-display text-sm font-bold uppercase leading-snug tracking-[0.06em] text-primary">
           {title}
         </h3>
       </div>
@@ -819,26 +819,26 @@ function GroceryBag() {
       >
         {/* sayuran di belakang tas */}
         {/* daun bawang */}
-        <g stroke="#2f5d43" strokeWidth="3.5" strokeLinecap="round" fill="none">
+        <g stroke="#225138" strokeWidth="3.5" strokeLinecap="round" fill="none">
           <path d="M112 205 C110 155 106 115 100 88" />
           <path d="M128 205 C127 155 124 115 120 82" />
           <path d="M144 205 C144 157 142 117 140 90" />
         </g>
         {/* brokoli */}
-        <rect x="157" y="150" width="11" height="55" rx="5" fill="#3e7d57" />
-        <g fill="#2c5e42">
+        <rect x="157" y="150" width="11" height="55" rx="5" fill="#2D7050" />
+        <g fill="#1B3F2C">
           <circle cx="152" cy="146" r="13" />
           <circle cx="173" cy="142" r="14" />
           <circle cx="162" cy="130" r="14" />
           <circle cx="182" cy="148" r="12" />
         </g>
-        <g fill="#4c8f66">
+        <g fill="#3A8A60">
           <circle cx="160" cy="137" r="5" />
           <circle cx="174" cy="149" r="5" />
         </g>
         {/* wortel */}
         <path d="M205 205 L188 100 L222 100 Z" fill="#e2793b" />
-        <g stroke="#3e7d57" strokeWidth="3" strokeLinecap="round">
+        <g stroke="#2D7050" strokeWidth="3" strokeLinecap="round">
           <path d="M191 100 L183 80" />
           <path d="M205 100 L205 76" />
           <path d="M219 100 L227 80" />
@@ -850,7 +850,7 @@ function GroceryBag() {
         />
         <path
           d="M273 131 L273 116"
-          stroke="#2f5d43"
+          stroke="#225138"
           strokeWidth="3"
           strokeLinecap="round"
         />
@@ -875,7 +875,7 @@ function GroceryBag() {
           cy="404"
           rx="95"
           ry="8"
-          fill="hsl(135 21% 26%)"
+          fill="hsl(148 41% 23%)"
           opacity="0.12"
         />
 

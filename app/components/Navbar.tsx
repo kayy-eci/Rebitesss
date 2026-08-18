@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bell, ChevronDown, Leaf, MapPin, Menu, User, X } from "lucide-react";
+import { Bell, Menu, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { LOCATIONS } from "@/lib/data";
 import { scrollToId } from "@/lib/scroll";
 
 const NAV_LINKS = [
@@ -22,9 +21,7 @@ const FOCUS_RING =
 
 export function Navbar() {
   const [active, setActive] = useState("home");
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [locationOpen, setLocationOpen] = useState(false);
-  const [location, setLocation] = useState(LOCATIONS[0]);
+  const [open, setOpen] = useState(false);
   const [overDark, setOverDark] = useState(false);
 
   useEffect(() => {
@@ -47,7 +44,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const darkIds = ["dampak", "footer"];
+    const darkIds = ["flash-sale", "footer"];
     const darkEls = darkIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -63,7 +60,7 @@ export function Navbar() {
   }, []);
 
   const handleNav = (id: string) => {
-    setDrawerOpen(false);
+    setOpen(false);
     setActive(id);
     scrollToId(id);
   };
@@ -71,16 +68,13 @@ export function Navbar() {
   const IconButton = ({
     label,
     children,
-    onClick,
   }: {
     label: string;
     children: React.ReactNode;
-    onClick?: () => void;
   }) => (
     <button
       type="button"
       aria-label={label}
-      onClick={onClick}
       className={cn(
         "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200",
         overDark
@@ -94,226 +88,119 @@ export function Navbar() {
   );
 
   return (
-    <>
-      <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
-        <div className="mx-auto w-full max-w-[1200px]">
-          <nav
-            className={cn(
-              "flex h-16 items-center justify-between rounded-full border px-4 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-5 lg:px-7",
-              overDark
-                ? "border-white/15 bg-forest-dark/75 text-white"
-                : "border-hairline/70 bg-cream/80 text-forest-dark",
-            )}
+    <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
+      <div className="mx-auto w-full max-w-[1200px]">
+        <nav
+          className={cn(
+            "flex h-16 items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
+            overDark
+              ? "border-white/15 bg-transparent text-white"
+              : "border-hairline/70 bg-transparent text-forest-dark",
+          )}
+        >
+          {/* Logo */}
+          <Link
+            href="/"
+            aria-label="ReBites"
+            className="flex shrink-0 items-center gap-2.5"
           >
-            {/* Logo */}
-            <a
-              href="#home"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNav("home");
-              }}
-              aria-label="ReBites beranda"
-              className={cn(
-                "flex shrink-0 items-center gap-2 rounded-full",
-                FOCUS_RING,
-              )}
-            >
-              <span
-                className={cn(
-                  "flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500",
-                  overDark
-                    ? "bg-white text-forest-dark"
-                    : "bg-green-700 text-white",
-                )}
-              >
-                <Leaf className="h-4 w-4" />
+            <img
+              src="/logo.png"
+              alt="ReBites"
+              className="h-9 w-9 rounded-full object-cover"
+            />
+            <span className="font-display text-2xl font-medium tracking-tight">
+              <span className="font-display text-2xl font-medium text-primary-foreground-strong">
+                Re
               </span>
-              <span
-                className={cn(
-                  "font-sans text-xl font-bold tracking-tight transition-colors duration-500",
-                  overDark ? "text-white" : "text-green-700",
-                )}
-              >
-                ReBites
+              <span className="font-display text-2xl font-light italic text-primary-foreground-strong">
+                Bites
               </span>
-            </a>
+            </span>
+          </Link>
 
-            {/* Nav links */}
-            <ul className="hidden items-center gap-1 lg:flex">
-              {NAV_LINKS.map((link) => (
-                <li key={link.id}>
-                  <a
-                    href={`#${link.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNav(link.id);
-                    }}
-                    aria-current={active === link.id ? "page" : undefined}
-                    className={cn(
-                      "rounded-full px-3 py-2 font-inter text-sm transition-colors duration-200 xl:px-4",
-                      active === link.id
-                        ? overDark
-                          ? "bg-white/15 font-semibold text-white"
-                          : "bg-cream-100 font-semibold text-green-700"
-                        : overDark
-                          ? "text-white/75 hover:text-white"
-                          : "text-charcoal-500 hover:text-green-700",
-                      FOCUS_RING,
-                    )}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            {/* Actions */}
-            <div className="flex items-center gap-1 sm:gap-0.5">
-              {/* Location selector */}
-              <div className="relative hidden lg:block">
-                <button
-                  type="button"
-                  aria-label="Pilih lokasi"
-                  aria-expanded={locationOpen}
-                  onClick={() => setLocationOpen((v) => !v)}
+          {/* Desktop Navigation */}
+          <ul className="hidden items-center gap-7 lg:flex">
+            {NAV_LINKS.map((link) => (
+              <li key={link.id} className="relative">
+                <a
+                  href={`#${link.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNav(link.id);
+                  }}
+                  aria-current={active === link.id ? "page" : undefined}
                   className={cn(
-                    "flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200",
-                    overDark
-                      ? "text-white/80 hover:bg-white/10 hover:text-white"
-                      : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+                    "relative py-1 font-sans text-sm transition-colors duration-300",
+                    active === link.id
+                      ? overDark
+                        ? "font-semibold text-white"
+                        : "font-semibold text-forest-dark"
+                      : overDark
+                        ? "text-white/80 hover:text-white"
+                        : "text-forest-dark/80 hover:text-caramel",
                     FOCUS_RING,
                   )}
                 >
-                  <MapPin
-                    className={cn(
-                      "h-4 w-4 transition-colors duration-500",
-                      overDark ? "text-gold-500" : "text-green-700",
-                    )}
-                  />
-                  <span className="max-w-[100px] truncate">{location}</span>
-                  <ChevronDown
-                    className={cn(
-                      "h-4 w-4 transition-transform duration-200",
-                      locationOpen && "rotate-180",
-                    )}
-                  />
-                </button>
+                  {link.label}
 
-                <AnimatePresence>
-                  {locationOpen && (
-                    <>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-40"
-                        onClick={() => setLocationOpen(false)}
-                      />
-                      <motion.ul
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-sage-100 bg-white p-1.5 text-forest-dark shadow-xl"
-                      >
-                        {LOCATIONS.map((loc) => (
-                          <li key={loc}>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setLocation(loc);
-                                setLocationOpen(false);
-                              }}
-                              className={cn(
-                                "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
-                                loc === location
-                                  ? "bg-cream-100 font-semibold text-green-700"
-                                  : "text-charcoal-500 hover:bg-cream-50 hover:text-green-700",
-                              )}
-                            >
-                              <MapPin className="h-3.5 w-3.5 shrink-0" />
-                              {loc}
-                            </button>
-                          </li>
-                        ))}
-                      </motion.ul>
-                    </>
+                  {active === link.id && (
+                    <span
+                      className={cn(
+                        "absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full transition-colors duration-500",
+                        overDark ? "bg-white" : "bg-caramel",
+                      )}
+                    />
                   )}
-                </AnimatePresence>
-              </div>
+                </a>
+              </li>
+            ))}
+          </ul>
 
-              {/* Icon actions */}
-              <div className="hidden items-center gap-0.5 sm:flex">
-                <IconButton label="Notifikasi">
-                  <Bell className="h-5 w-5" />
-                </IconButton>
-                <IconButton label="Profil saya">
-                  <User className="h-5 w-5" />
-                </IconButton>
-              </div>
-
-              {/* CTA */}
-              {/* Hamburger */}
-              <button
-                type="button"
-                aria-label="Buka menu navigasi"
-                aria-expanded={drawerOpen}
-                onClick={() => setDrawerOpen((v) => !v)}
-                className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
-                  overDark ? "text-white" : "text-forest-dark",
-                  FOCUS_RING,
-                )}
-              >
-                {drawerOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </button>
+          {/* Actions */}
+          <div className="flex items-center gap-1 sm:gap-0.5">
+            {/* Icon actions */}
+            <div className="hidden items-center gap-0.5 sm:flex">
+              <IconButton label="Notifikasi">
+                <Bell className="h-5 w-5" />
+              </IconButton>
+              <IconButton label="Profil saya">
+                <User className="h-5 w-5" />
+              </IconButton>
             </div>
-          </nav>
-        </div>
-      </header>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {drawerOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setDrawerOpen(false)}
-              className="fixed inset-0 z-[55] bg-forest-900/40 backdrop-blur-sm lg:hidden"
-            />
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed right-0 top-0 z-[60] flex h-full w-72 flex-col bg-cream-50 p-5 shadow-2xl lg:hidden"
+            {/* Hamburger */}
+            <button
+              type="button"
+              onClick={() => setOpen((value) => !value)}
+              aria-label={open ? "Tutup menu" : "Buka menu"}
+              aria-expanded={open}
+              className={cn(
+                "flex h-10 w-10 items-center justify-center lg:hidden",
+                overDark ? "text-white" : "text-forest",
+                FOCUS_RING,
+              )}
             >
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-700 text-white">
-                    <Leaf className="h-4 w-4" />
-                  </span>
-                  <span className="font-sans text-xl font-bold text-green-700">
-                    ReBites
-                  </span>
-                </span>
-                <button
-                  type="button"
-                  aria-label="Tutup menu"
-                  onClick={() => setDrawerOpen(false)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-charcoal-900 hover:bg-cream-100"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
+              {open ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </nav>
 
-              <ul className="mt-8 flex flex-col gap-1">
+        {/* Mobile Navigation */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-2 overflow-hidden rounded-3xl border border-hairline/70 bg-white p-3 shadow-[0_28px_56px_-28px_rgba(34,81,56,0.5)] lg:hidden"
+            >
+              <ul className="flex flex-col">
                 {NAV_LINKS.map((link) => (
                   <li key={link.id}>
                     <a
@@ -323,10 +210,10 @@ export function Navbar() {
                         handleNav(link.id);
                       }}
                       className={cn(
-                        "block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150",
+                        "flex items-center justify-between rounded-2xl px-4 py-3 font-sans text-sm transition-colors duration-300",
                         active === link.id
-                          ? "bg-cream-100 font-semibold text-green-700"
-                          : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+                          ? "bg-caramel/10 font-semibold text-forest-dark"
+                          : "text-forest-dark hover:bg-cream",
                       )}
                     >
                       {link.label}
@@ -334,31 +221,10 @@ export function Navbar() {
                   </li>
                 ))}
               </ul>
-
-              <div className="mt-6 border-t border-sage-100 pt-5">
-                <p className="font-inter text-xs font-semibold uppercase tracking-wider text-charcoal-500">
-                  Lokasi
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLocation(
-                      LOCATIONS[
-                        (LOCATIONS.indexOf(location) + 1) % LOCATIONS.length
-                      ],
-                    );
-                  }}
-                  className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700"
-                >
-                  <MapPin className="h-4 w-4" />
-                  {location}
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-    </>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </header>
   );
 }

@@ -75,7 +75,7 @@ export function CategorySection() {
             <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
               Jelajahi Kategori
             </h2>
-            <p className="mt-2 max-w-md font-inter text-sm text-charcoal-500">
+            <p className="mt-2 max-w-md font-sans text-sm text-charcoal-500">
               Temukan berbagai makanan sesuai seleramu yang masih layak dinikmati
             </p>
           </div>

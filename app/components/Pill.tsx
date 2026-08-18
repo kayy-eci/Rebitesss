@@ -14,10 +14,10 @@ export function Pill({ active, children, onClick, className }: PillProps) {
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50',
+        'shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C5A3C] focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50',
         active
-          ? 'bg-green-700 text-white shadow-md shadow-green-700/20'
-          : 'border border-sage-100 bg-white text-charcoal-500 hover:border-green-600/40 hover:text-green-700',
+          ? 'bg-[#8C5A3C] text-white shadow-md shadow-[#8C5A3C]/20'
+          : 'border border-sage-100 bg-white text-charcoal-500 hover:border-[#8C5A3C]/40 hover:text-[#8C5A3C]',
         className
       )}
     >

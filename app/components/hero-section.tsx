@@ -108,7 +108,7 @@ export function HeroSection() {
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
             className={cn(
-              'flex h-16 items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8',
+              'flex h-16 items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8',
               overDark
                 ? 'border-white/15 bg-forest-dark/75 text-white'
                 : 'border-hairline/70 bg-cream/80 text-forest-dark'
@@ -141,7 +141,7 @@ export function HeroSection() {
                     onClick={() => setActiveNav(l.label)}
                     aria-current={activeNav === l.label ? 'page' : undefined}
                     className={cn(
-                      'relative py-1 font-inter text-sm transition-colors duration-300',
+                      'relative py-1 font-sans text-sm transition-colors duration-300',
                       activeNav === l.label
                         ? overDark
                           ? 'font-semibold text-white'
@@ -169,7 +169,7 @@ export function HeroSection() {
               <Link
                 href="/login"
                 className={cn(
-                  'hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(47,66,53,0.65)] transition-colors duration-300 sm:flex',
+                  'hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-sans text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(34,81,56,0.65)] transition-colors duration-300 sm:flex',
                   overDark
                     ? 'bg-white text-forest-dark hover:bg-white/90'
                     : 'bg-forest text-white hover:bg-forest-dark',
@@ -202,7 +202,7 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-2 overflow-hidden rounded-3xl border border-hairline/70 bg-white p-3 shadow-[0_28px_56px_-28px_rgba(47,66,53,0.5)] lg:hidden"
+                className="mt-2 overflow-hidden rounded-3xl border border-hairline/70 bg-white p-3 shadow-[0_28px_56px_-28px_rgba(34,81,56,0.5)] lg:hidden"
               >
                 <ul className="flex flex-col">
                   {NAV_LINKS.map((l) => (
@@ -213,7 +213,7 @@ export function HeroSection() {
                           setActiveNav(l.label);
                           setOpen(false);
                         }}
-                        className="flex items-center justify-between rounded-2xl px-4 py-3 font-inter text-sm text-forest-dark transition-colors duration-300 hover:bg-cream"
+                        className="flex items-center justify-between rounded-2xl px-4 py-3 font-sans text-sm text-forest-dark transition-colors duration-300 hover:bg-cream"
                       >
                         {l.label}
                       </Link>
@@ -224,7 +224,7 @@ export function HeroSection() {
                   <Link
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-full bg-forest py-3 font-inter text-sm font-semibold text-white transition-colors duration-300 hover:bg-forest-dark"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-full bg-forest py-3 font-sans text-sm font-semibold text-white transition-colors duration-300 hover:bg-forest-dark"
                   >
                     <Lock className="h-3.5 w-3.5" />
                     {t('Masuk', 'Log In')}
@@ -250,8 +250,8 @@ export function HeroSection() {
         >
           <defs>
             <linearGradient id="rb-curve" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#3B5240" stopOpacity="0.5" />
-              <stop offset="70%" stopColor="#3B5240" stopOpacity="0.12" />
+              <stop offset="0%" stopColor="#225138" stopOpacity="0.5" />
+              <stop offset="70%" stopColor="#225138" stopOpacity="0.12" />
               <stop offset="100%" stopColor="#F7F5EF" stopOpacity="0" />
             </linearGradient>
           </defs>
@@ -282,7 +282,7 @@ export function HeroSection() {
               )}
             >
               <Leaf className="h-3.5 w-3.5 text-forest" />
-              <span className="font-inter text-xs font-semibold text-forest">
+              <span className="font-sans text-xs font-semibold text-forest">
                 {t('Rasa Baik, Tanpa Ribet.', 'Great Taste, No Fuss.')}
               </span>
             </span>
@@ -299,7 +299,7 @@ export function HeroSection() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-[460px] font-inter text-[0.95rem] leading-[1.85] text-stone">
+            <p className="mt-6 max-w-[460px] font-sans text-[0.95rem] leading-[1.85] text-stone">
               Bahan segar, diracik penuh perhatian. Menu yang terinspirasi
               dari musim dan kelebihan pasokan terbaik. Baik untuk camilan
               cepat atau makan malam panjang, meja kami selalu terbuka untukmu.
@@ -309,7 +309,7 @@ export function HeroSection() {
               <Link
                 href="/#menu"
                 className={cn(
-                  'group inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-7 py-3.5 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(47,66,53,0.55)] transition-all duration-300 hover:border-forest/40 hover:text-forest',
+                  'group inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-7 py-3.5 font-sans text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(34,81,56,0.55)] transition-all duration-300 hover:border-[#8C5A3C]/40 hover:text-[#8C5A3C]',
                   FOCUS_RING
                 )}
               >
@@ -320,7 +320,7 @@ export function HeroSection() {
               <Link
                 href="/#cta"
                 className={cn(
-                  'group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-forest to-forest-dark px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(47,66,53,0.65)] transition-all duration-300 hover:shadow-[0_18px_38px_-16px_rgba(47,66,53,0.85)]',
+                  'group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-forest to-forest-dark px-7 py-3.5 font-sans text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(34,81,56,0.65)] transition-all duration-300 hover:shadow-[0_18px_38px_-16px_rgba(34,81,56,0.85)]',
                   FOCUS_RING
                 )}
               >
@@ -350,7 +350,7 @@ export function HeroSection() {
               viewBox="0 0 500 500"
               role="img"
               aria-label="Hidangan segar hasil selamatkan ReBites, tampak atas di atas piring gelap"
-              className="relative z-10 w-full drop-shadow-[0_34px_54px_-28px_rgba(47,66,53,0.55)]"
+              className="relative z-10 w-full drop-shadow-[0_34px_54px_-28px_rgba(34,81,56,0.55)]"
             >
               <defs>
                 <clipPath id="dishCutout">
@@ -380,7 +380,7 @@ export function HeroSection() {
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         aria-label="Kembali ke atas"
         className={cn(
-          'fixed bottom-6 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-forest shadow-[0_16px_32px_-16px_rgba(47,66,53,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-forest hover:text-white',
+          'fixed bottom-6 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-forest shadow-[0_16px_32px_-16px_rgba(34,81,56,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#8C5A3C] hover:text-white',
           FOCUS_RING
         )}
       >
@@ -414,11 +414,11 @@ function CircularStamp() {
           strokeDasharray="5 4"
         />
         <text
-          className="font-inter font-semibold uppercase"
+          className="font-sans font-semibold uppercase"
           fontSize="8.2"
           letterSpacing="2.4"
-          fill="#3B5240"
-          style={{ fontFamily: 'var(--font-inter), Inter, sans-serif' }}
+          fill="#225138"
+          style={{ fontFamily: 'var(--font-sans), Inter, sans-serif' }}
         >
           <textPath href="#stampCircle" startOffset="0%">
             RESCUED • FRESH • DAILY •
@@ -537,7 +537,7 @@ function MenuCarousel() {
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-forest/40 px-4 py-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-forest" />
-              <span className="font-inter text-xs font-semibold uppercase tracking-[0.14em] text-forest">
+              <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-forest">
                 Menu Hari Ini
               </span>
             </span>
@@ -564,19 +564,19 @@ function MenuCarousel() {
         </div>
 
         <div className="mt-8 flex justify-center">
-          <div className="flex items-center gap-4 rounded-full bg-white px-6 py-3 shadow-[0_18px_40px_-26px_rgba(47,66,53,0.5)]">
+          <div className="flex items-center gap-4 rounded-full bg-white px-6 py-3 shadow-[0_18px_40px_-26px_rgba(34,81,56,0.5)]">
             <button
               type="button"
               onClick={() => navigate(-1)}
               aria-label="Menu sebelumnya"
               className={cn(
-                'flex h-11 w-11 items-center justify-center rounded-full bg-white text-forest-dark shadow-[0_10px_22px_-12px_rgba(47,66,53,0.6)] transition-all duration-300 hover:bg-cream hover:text-forest',
+                'flex h-11 w-11 items-center justify-center rounded-full bg-white text-forest-dark shadow-[0_10px_22px_-12px_rgba(34,81,56,0.6)] transition-all duration-300 hover:bg-cream hover:text-forest',
                 FOCUS_RING
               )}
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
-            <span className="min-w-[3ch] text-center font-inter text-sm font-semibold text-stone">
+            <span className="min-w-[3ch] text-center font-sans text-sm font-semibold text-stone">
               {activeIndex + 1}
               <span className="mx-0.5 text-stone/60">/</span>
               {MENU_ITEMS.length}
@@ -586,7 +586,7 @@ function MenuCarousel() {
               onClick={() => navigate(1)}
               aria-label="Menu berikutnya"
               className={cn(
-                'flex h-11 w-11 items-center justify-center rounded-full bg-forest-dark text-white shadow-[0_10px_22px_-12px_rgba(47,66,53,0.8)] transition-all duration-300 hover:bg-forest',
+                'flex h-11 w-11 items-center justify-center rounded-full bg-forest-dark text-white shadow-[0_10px_22px_-12px_rgba(34,81,56,0.8)] transition-all duration-300 hover:bg-forest',
                 FOCUS_RING
               )}
             >
@@ -627,14 +627,14 @@ function MenuCard({
         width={300}
         height={300}
         loading="lazy"
-        className="absolute left-1/2 top-0 z-10 h-24 w-24 -translate-x-1/2 rounded-full border-8 object-cover shadow-[0_16px_30px_-18px_rgba(47,66,53,0.6)] transition-colors duration-300"
-        style={{ borderColor: active ? '#3B5240' : '#FFFFFF' }}
+        className="absolute left-1/2 top-0 z-10 h-24 w-24 -translate-x-1/2 rounded-full border-8 object-cover shadow-[0_16px_30px_-18px_rgba(34,81,56,0.6)] transition-colors duration-300"
+        style={{ borderColor: active ? '#225138' : '#FFFFFF' }}
       />
       <div
         className={cn(
           'rounded-2xl p-6 pt-16 transition-colors duration-300',
           active
-            ? 'bg-forest text-white shadow-[0_28px_56px_-28px_rgba(59,82,64,0.7)]'
+            ? 'bg-forest text-white shadow-[0_28px_56px_-28px_rgba(34,81,56,0.7)]'
             : 'bg-white'
         )}
       >
@@ -648,7 +648,7 @@ function MenuCard({
         </h3>
         <p
           className={cn(
-            'mt-1.5 font-inter text-sm',
+            'mt-1.5 font-sans text-sm',
             active ? 'text-white/75' : 'text-stone'
           )}
         >

@@ -120,7 +120,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
   return (
     <section
       aria-hidden
-      className="grain-overlay relative hidden min-h-screen overflow-hidden bg-[#2F4235] lg:block"
+      className="grain-overlay relative hidden min-h-screen overflow-hidden bg-[#1B3F2C] lg:block"
     >
       {/* foto makanan sebagai background */}
       <div className="absolute inset-0">
@@ -130,14 +130,14 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           className="h-full w-full object-cover"
         />
         {/* overlay hijau agar teks & ornamen tetap terbaca */}
-        <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(35,50,39,0.88)_0%,rgba(47,66,53,0.55)_48%,rgba(20,31,24,0.94)_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141F18]/70 via-transparent to-[#22301f]/45" />
+        <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(34,81,56,0.88)_0%,rgba(34,81,56,0.55)_48%,rgba(18,45,32,0.94)_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#122D20]/70 via-transparent to-[#1B3F2C]/45" />
       </div>
 
       {/* glow hangat */}
       <div className="pointer-events-none absolute -left-1/4 top-1/4 h-[34rem] w-[34rem] rounded-full bg-[#C89B5A]/25 blur-[130px]" />
       {/* glow hijau dalam */}
-      <div className="pointer-events-none absolute -bottom-1/3 -right-1/4 h-[38rem] w-[38rem] rounded-full bg-[#141F18]/85 blur-[110px]" />
+      <div className="pointer-events-none absolute -bottom-1/3 -right-1/4 h-[38rem] w-[38rem] rounded-full bg-[#122D20]/85 blur-[110px]" />
 
       {/* ring dekoratif */}
       <div className="pointer-events-none absolute -right-24 top-14 h-[240px] w-[240px] rounded-full border border-white/10" />
@@ -180,7 +180,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
       {/* ornamen melayang di ruang kosong */}
       <div className="pointer-events-none absolute inset-0">
         {/* stempel melingkar berputar */}
-        <RotatingStamp className="absolute right-14 top-24 h-20 w-20 drop-shadow-[0_16px_28px_rgba(10,16,12,0.5)] xl:right-24 xl:top-28 xl:h-24 xl:w-24" />
+        <RotatingStamp className="absolute right-14 top-24 h-20 w-20 drop-shadow-[0_16px_28px_rgba(18,45,32,0.5)] xl:right-24 xl:top-28 xl:h-24 xl:w-24" />
 
         {/* foto hidangan kedua */}
         <Float
@@ -194,7 +194,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
             alt=""
             width={200}
             height={200}
-            className="h-24 w-24 rounded-full border-4 border-white/25 object-cover shadow-[0_24px_48px_-24px_rgba(10,16,12,0.8)] xl:h-28 xl:w-28"
+            className="h-24 w-24 rounded-full border-4 border-white/25 object-cover shadow-[0_24px_48px_-24px_rgba(18,45,32,0.8)] xl:h-28 xl:w-28"
           />
         </Float>
 
@@ -210,7 +210,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
             alt=""
             width={160}
             height={160}
-            className="h-20 w-20 rounded-full border-4 border-white/25 object-cover shadow-[0_24px_48px_-24px_rgba(10,16,12,0.8)] xl:h-24 xl:w-24"
+            className="h-20 w-20 rounded-full border-4 border-white/25 object-cover shadow-[0_24px_48px_-24px_rgba(18,45,32,0.8)] xl:h-24 xl:w-24"
           />
         </Float>
 
@@ -220,7 +220,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           duration={6}
           delay={1.2}
         >
-          <div className="flex items-center gap-2 rounded-full bg-[#D6A54A]/90 px-4 py-2 text-[#2F4235] shadow-[0_12px_24px_-12px_rgba(10,16,12,0.7)]">
+          <div className="flex items-center gap-2 rounded-full bg-[#D6A54A]/90 px-4 py-2 text-[#1B3F2C] shadow-[0_12px_24px_-12px_rgba(18,45,32,0.7)]">
             <Leaf className="h-3.5 w-3.5" strokeWidth={2.2} />
             <span className="font-inter text-sm font-bold uppercase tracking-wide">
               Hemat 50%
@@ -235,9 +235,9 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           delay={1.5}
           distance={11}
         >
-          <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 shadow-[0_24px_48px_-24px_rgba(10,16,12,0.7)] backdrop-blur-md">
+          <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 shadow-[0_24px_48px_-24px_rgba(18,45,32,0.7)] backdrop-blur-md">
             <div className="flex items-center gap-2.5">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B5240]">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#225138]">
                 <Check className="h-4 w-4 text-[#F7F5EF]" />
               </span>
               <div>
@@ -273,7 +273,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35, ease: EASE }}
-          className="max-w-md font-display text-[clamp(2.4rem,3.2vw,2.75rem)] font-semibold leading-[1.04] tracking-[-0.02em] text-[#F7F5EF] [text-shadow:0_2px_24px_rgba(15,26,20,0.65)]"
+          className="max-w-md font-display text-[clamp(2.4rem,3.2vw,2.75rem)] font-semibold leading-[1.04] tracking-[-0.02em] text-[#F7F5EF] [text-shadow:0_2px_24px_rgba(18,45,32,0.65)]"
         >
           {title}
         </motion.h1>

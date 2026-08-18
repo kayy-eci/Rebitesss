@@ -13,7 +13,7 @@ import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
 import { MagneticButton } from "@/app/components/magnetic-button";
 
-import { ArrowRight, } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const PLANS = [
   {
@@ -92,7 +92,7 @@ export default function HomePage() {
           <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
             <div className="mx-auto max-w-3xl text-center">
               <Reveal delay={0.1}>
-                <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
+                <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
                   Pilih paket yang <span>sesuai</span> dengan kebutuhan usaha
                   Anda.
                 </h2>
@@ -100,8 +100,9 @@ export default function HomePage() {
 
               <Reveal delay={0.15}>
                 <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
-                  Coba semua fitur secara gratis selama 1 bulan. Lanjutkan
-                  langganan atau berhenti kapan saja, tanpa ribet.
+                  Nikmati 1 paket gratis selama 1 bulan untuk mencoba fitur
+                  ReBites. Setelah masa percobaan berakhir, lanjutkan langganan
+                  atau berhenti kapan saja.
                 </p>
               </Reveal>
 
@@ -177,12 +178,12 @@ export default function HomePage() {
                       className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
                     >
                       <div className="relative flex items-center justify-between">
-                        <span className="font-display text-sm italic tracking-[0.2em] text-[#8C5A3C]">
+                        <span className="font-sans text-sm italic tracking-[0.2em] text-[#8C5A3C]">
                           0{i + 1}
                         </span>
                       </div>
 
-                      <h3 className="mt-4 font-display text-2xl font-light tracking-tight text-primary">
+                      <h3 className="mt-4 font-sans text-2xl font-semibold tracking-tight text-primary">
                         {plan.name}
                       </h3>
 
@@ -202,7 +203,7 @@ export default function HomePage() {
                                 duration: 0.3,
                                 ease: [0.22, 1, 0.36, 1],
                               }}
-                              className="block font-display text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
+                              className="block font-sans text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
                             >
                               {priceLabel}
                             </motion.span>
