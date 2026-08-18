@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Lock, Menu, X } from "lucide-react";
+import { ArrowRight, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const HERO_IMAGE =
@@ -198,7 +198,7 @@ export function HeroSection() {
                   FOCUS_RING,
                 )}
               >
-                <Lock className="h-3.5 w-3.5" />
+                <User className="h-3.5 w-3.5" />
                 {t("Masuk", "Log In")}
               </Link>
 
@@ -270,7 +270,7 @@ export function HeroSection() {
                     onClick={() => setOpen(false)}
                     className="flex flex-1 items-center justify-center gap-2 rounded-full bg-forest py-3 font-inter text-sm font-semibold text-white transition-colors duration-300 hover:bg-caramel"
                   >
-                    <Lock className="h-3.5 w-3.5" />
+                    <User className="h-3.5 w-3.5" />
                     {t("Masuk", "Log In")}
                   </Link>
                 </div>
