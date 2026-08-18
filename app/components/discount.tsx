@@ -2,7 +2,7 @@
 
 export default function DiscountCoupoun() {
     return (
-        <div className="absolute bottom-[18px] right-[32px] z-30 w-[min(430px,46%)] rounded-[18px] border border-white/15 bg-white/10 p-3.5 text-[#f5f0e7] shadow-[0_20px_30px_rgba(7,33,28,0.18)] backdrop-blur-sm">
+        <div className="absolute bottom-[18px] right-[32px] z-30 w-[min(430px,46%)] rounded-[18px] border border-white/15 bg-white/10 p-3.5 text-[#f5f0e7] shadow-[0_20px_30px_rgba(34,81,56,0.18)] backdrop-blur-sm">
                       <div className="flex items-center justify-between gap-3 border-b border-white/15 pb-2.5 text-[0.75rem] tracking-[0.02em] text-[#f5f0e7]/80">
                         <span>Discount coupon</span>
                         <div className="flex items-center gap-3.5 text-[0.7rem]">

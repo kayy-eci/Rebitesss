@@ -26,12 +26,39 @@ const config: Config = {
         inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        forest: '#225138',
-        'forest-dark': '#225138',
-        cream: '#F7F5EF',
+        forest: {
+          DEFAULT: '#225138',
+          900: '#122D20',
+          800: '#163D28',
+          700: '#225138',
+        },
+        'forest-dark': '#1B3F2C',
+        cream: {
+          DEFAULT: '#F7F5EF',
+          50: '#FBF8F1',
+          100: '#F3ECDD',
+        },
         stone: '#6B6A63',
         hairline: '#DEDACF',
-        sage: '#AEB89B',
+        sage: {
+          DEFAULT: '#AEB89B',
+          500: '#6B9080',
+          100: '#E4EBE4',
+        },
+        gold: {
+          500: '#C9A227',
+          600: '#A9861C',
+          100: '#F3E9C9',
+        },
+        caramel: '#C08A4E',
+        charcoal: {
+          900: '#1E2A22',
+          500: '#5C6B60',
+        },
+        green: {
+          700: '#225138',
+          600: '#2D7050',
+        },
         amber: '#D6A54A',
         caramel: '#8C5A3C',
         'caramel-dark': '#6F4529',
