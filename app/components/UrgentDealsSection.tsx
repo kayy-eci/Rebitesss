@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Flame, MapPin, Star } from "lucide-react";
+import {  MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRupiah, urgentItems } from "@/lib/data";
 import { useCountdown, formatCountdown } from "@/lib/useCountdown";
@@ -108,7 +108,7 @@ function SectionCountdown({
   const [h, m, s] = text.split(":");
 
   return (
-    <div className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]">
+    <div id="flash-sale" className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]">
       <div className="flex items-center gap-2.5">
         <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-black">
           {label}

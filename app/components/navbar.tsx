@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 const LOCATIONS = ['Depok', 'Jakarta Selatan', 'Bekasi', 'Bogor', 'Tangerang'];
 
 const NAV_LINKS = [
-  { id: 'beranda', label: 'Beranda' },
+  { id: 'home', label: 'Beranda' },
   { id: 'flashSale', label: 'Flash Sale' },
   { id: 'makanan', label: 'Makanan' },
   { id: 'umkm', label: 'UMKM' },

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { ArrowRight, Recycle, Sparkles, Store } from "lucide-react";
+import { ArrowRight, Recycle, } from "lucide-react";
 import { Button } from "@/app/components/Button";
 import { SmartImage } from "@/app/components/SmartImage";
 import {
