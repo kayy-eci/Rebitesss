@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import type { RelatedProduct } from './data';
-import { formatIDR } from './data';
+import type { RelatedProduct } from '@/app/detailProduct/data';
+import { formatIDR } from '@/app/detailProduct/data';
 import { StaggerGroup, StaggerItem } from './anim';
 
 export function RelatedProducts({ products }: { products: RelatedProduct[] }) {

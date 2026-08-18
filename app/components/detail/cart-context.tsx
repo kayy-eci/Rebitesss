@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import type { ProductDetail } from './data';
+import type { ProductDetail } from '@/app/detailProduct/data';
 
 export interface CartItem {
   id: string;

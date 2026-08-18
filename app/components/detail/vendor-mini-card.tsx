@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowRight, Leaf } from 'lucide-react';
-import type { VendorInfo } from './data';
+import type { VendorInfo } from '@/app/detailProduct/data';
 import { Avatar } from './avatar';
 import { Stars } from './stars';
 

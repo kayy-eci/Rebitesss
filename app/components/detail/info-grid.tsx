@@ -1,7 +1,7 @@
 'use client';
 
 import { Clock, Leaf, ShieldCheck, Store } from 'lucide-react';
-import type { ProductDetail } from './data';
+import type { ProductDetail } from '@/app/detailProduct/data';
 import { StaggerGroup, StaggerItem } from './anim';
 
 export function InfoGrid({ product }: { product: ProductDetail }) {

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import DetailPage from '@/app/detailProduk/detail-page';
-import { PRODUCT } from '@/app/detailProduk/data';
+import DetailPage from '@/app/components/detail/detail-page';
+import { PRODUCT } from './data';
 
 export const metadata: Metadata = {
   title: `${PRODUCT.title} - ReBites`,

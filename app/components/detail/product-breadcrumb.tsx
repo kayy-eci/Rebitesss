@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft, Share2 } from 'lucide-react';
-import type { ProductDetail } from './data';
+import type { ProductDetail } from '@/app/detailProduct/data';
 
 export function ProductBreadcrumb({
   product,

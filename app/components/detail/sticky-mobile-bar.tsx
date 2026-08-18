@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ShoppingBag } from 'lucide-react';
-import type { ProductDetail } from './data';
-import { formatIDR } from './data';
+import type { ProductDetail } from '@/app/detailProduct/data';
+import { formatIDR } from '@/app/detailProduct/data';
 import { EASE } from './anim';
 
 export function StickyMobileBar({

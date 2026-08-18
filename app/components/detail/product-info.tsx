@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { Lock, MapPin } from 'lucide-react';
-import type { ProductDetail } from './data';
-import { formatIDR } from './data';
+import type { ProductDetail } from '@/app/detailProduct/data';
+import { formatIDR } from '@/app/detailProduct/data';
 import { SectionReveal, fadeUpSmall, staggerContainer } from './anim';
 import { Stars } from './stars';
 import { VendorMiniCard } from './vendor-mini-card';

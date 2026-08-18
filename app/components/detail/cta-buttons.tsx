@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check, Heart, ShoppingBag } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { ProductDetail } from './data';
+import type { ProductDetail } from '@/app/detailProduct/data';
 
 export function CTAButtons({
   product,

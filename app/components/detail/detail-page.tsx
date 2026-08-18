@@ -12,7 +12,7 @@ import { ProductInfo } from './product-info';
 import { ReviewSection } from './review-section';
 import { RelatedProducts } from './related-products';
 import { StickyMobileBar } from './sticky-mobile-bar';
-import { PRODUCT, RELATED_PRODUCTS, REVIEWS } from './data';
+import { PRODUCT, RELATED_PRODUCTS, REVIEWS } from '@/app/detailProduct/data';
 import { EASE } from './anim';
 
 export default function DetailPage() {

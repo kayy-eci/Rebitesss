@@ -14,7 +14,7 @@ import {
 } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { ProductDetail } from './data';
+import type { ProductDetail } from '@/app/detailProduct/data';
 import { EASE } from './anim';
 
 export function ProductGallery({
