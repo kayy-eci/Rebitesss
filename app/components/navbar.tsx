@@ -4,13 +4,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Bell,
   ChevronDown,
   Leaf,
   MapPin,
   Menu,
   Search,
-  ShoppingCart,
   User,
   X,
 } from 'lucide-react';
@@ -19,10 +17,11 @@ import { cn } from '@/lib/utils';
 const LOCATIONS = ['Depok', 'Jakarta Selatan', 'Bekasi', 'Bogor', 'Tangerang'];
 
 const NAV_LINKS = [
-  { id: 'profil', label: 'Profil' },
-  { id: 'dampak', label: 'Dampak' },
+  { id: 'beranda', label: 'Beranda' },
+  { id: 'flashSale', label: 'Flash Sale' },
+  { id: 'makanan', label: 'Makanan' },
+  { id: 'umkm', label: 'UMKM' },
   { id: 'langganan', label: 'Langganan' },
-  { id: 'riwayat', label: 'Riwayat' },
 ];
 
 const FOCUS_RING =
@@ -256,34 +255,10 @@ export function ProfileNavbar() {
 
 
               <div className="hidden items-center gap-0.5 sm:flex">
-                <IconButton label="Cari makanan">
-                  <Search className="h-5 w-5" />
-                </IconButton>
-                <IconButton label="Keranjang belanja">
-                  <ShoppingCart className="h-5 w-5" />
-                </IconButton>
-                <IconButton label="Notifikasi">
-                  <Bell className="h-5 w-5" />
-                </IconButton>
                 <IconButton label="Profil saya">
                   <User className="h-5 w-5" />
                 </IconButton>
               </div>
-
-
-              <Link
-                href="/login"
-                className={cn(
-                  'hidden rounded-full px-5 py-2.5 font-inter text-sm font-semibold transition-colors duration-300 md:block',
-                  overDark
-                    ? 'bg-white text-forest-dark hover:bg-white/90'
-                    : 'bg-green-700 text-white hover:bg-green-600',
-                  FOCUS_RING
-                )}
-              >
-                Masuk / Daftar
-              </Link>
-
 
               <button
                 type="button"
@@ -381,33 +356,6 @@ export function ProfileNavbar() {
                   {location}
                   <ChevronDown className="h-4 w-4" />
                 </button>
-              </div>
-
-              <div className="mt-auto flex flex-col gap-3">
-                <Link
-                  href="/login"
-                  onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-full bg-green-700 py-3 font-inter text-sm font-semibold text-white transition-colors hover:bg-green-600"
-                >
-                  <User className="h-4 w-4" />
-                  Masuk / Daftar
-                </Link>
-                <div className="flex items-center justify-around border-t border-sage-100 pt-3 text-charcoal-500">
-                  {[
-                    { label: 'Cari makanan', icon: Search },
-                    { label: 'Keranjang belanja', icon: ShoppingCart },
-                    { label: 'Notifikasi', icon: Bell },
-                  ].map(({ label, icon: Icon }) => (
-                    <button
-                      key={label}
-                      type="button"
-                      aria-label={label}
-                      className="relative flex h-10 w-10 items-center justify-center rounded-full text-charcoal-500 transition-colors duration-200 hover:bg-cream-100 hover:text-green-700"
-                    >
-                      <Icon className="h-5 w-5" />
-                    </button>
-                  ))}
-                </div>
               </div>
             </motion.aside>
           </>
