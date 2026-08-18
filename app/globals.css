@@ -1,6 +1,10 @@
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind base;
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind components;
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind utilities;
+/* stylelint-disable-next-line at-rule-no-unknown */
 
 @font-face {
   font-family: '__Inter_VariableFallback';
@@ -57,6 +61,7 @@
   }
 
   * {
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply border-border;
   }
 
@@ -71,6 +76,7 @@
   }
 
   body {
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
     font-feature-settings: 'ss01', 'ss02';

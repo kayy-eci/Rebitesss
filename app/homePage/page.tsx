@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Navbar } from "@/app/components/Navbar";
+import { Navbar } from "@/app/components/navbar";
 import { Hero } from "@/app/components/Hero";
 import { ExploreSection } from "@/app/components/ExploreSection";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";

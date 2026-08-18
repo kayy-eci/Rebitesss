@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { vendors } from '@/lib/data';
 import { VendorCard } from '@/app/components/VendorCard';
-import { SoftBlob } from '@/app/components/Ornaments';
+import { SoftBlob } from '@/app/components/ornaments';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';

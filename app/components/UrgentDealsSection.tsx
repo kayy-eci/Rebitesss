@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { formatRupiah, urgentItems } from "@/lib/data";
 import { useCountdown, formatCountdown } from "@/lib/useCountdown";
 import { SmartImage } from "@/app/components/SmartImage";
-import { SoftBlob } from "@/app/components/Ornaments";
+import { SoftBlob } from "@/app/components/ornaments";
 import { Marquee } from "@/app/components/marquee";
 import type { UrgentItem, UrgentSlot } from "@/lib/types";
 

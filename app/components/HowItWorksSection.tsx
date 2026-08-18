@@ -7,7 +7,7 @@ import {
   Search,
   type LucideIcon,
 } from 'lucide-react';
-import { DotPattern, LeafSprig, SoftBlob } from '@/app/components/Ornaments';
+import { DotPattern, LeafSprig, SoftBlob } from '@/app/components/ornaments';
 
 interface Step {
   icon: LucideIcon;

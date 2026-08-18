@@ -10,7 +10,7 @@ import {
   FloatingLeaf,
   LeafSprig,
   SoftBlob,
-} from "@/app/components/Ornaments";
+} from "@/app/components/ornaments";
 import { scrollToId } from "@/lib/scroll";
 
 const HERO_IMAGE =

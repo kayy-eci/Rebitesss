@@ -8,7 +8,7 @@ import {
   Store,
   type LucideIcon,
 } from 'lucide-react';
-import { FloatingLeaf, SoftBlob } from '@/app/components/Ornaments';
+import { FloatingLeaf, SoftBlob } from '@/app/components/ornaments';
 
 interface Benefit {
   icon: LucideIcon;
