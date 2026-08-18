@@ -8,7 +8,6 @@ import {
   Leaf,
   MapPin,
   Menu,
-  Search,
   User,
   X,
 } from 'lucide-react';

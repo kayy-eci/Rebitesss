@@ -70,7 +70,6 @@ export function HeroSection() {
       const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
       setOverDark(luminance < 0.5);
 
-      // Scrollspy: tandai item navigasi sesuai section yang sedang dilihat
       let label = NAV_LINKS[0].label;
       for (const link of NAV_LINKS) {
         const hash = link.href.split("#")[1];
@@ -129,7 +128,6 @@ export function HeroSection() {
                 : "border-hairline/70 bg-transparent text-forest-dark",
             )}
           >
-            {/* Logo */}
             <Link
               href="/"
               aria-label="ReBites"
@@ -156,7 +154,6 @@ export function HeroSection() {
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
             <ul className="hidden items-center gap-7 lg:flex">
               {NAV_LINKS.map((link) => (
                 <li key={link.label} className="relative">
@@ -190,7 +187,6 @@ export function HeroSection() {
               ))}
             </ul>
 
-            {/* Login + Mobile Menu */}
             <div className="flex items-center gap-4">
               <Link
                 href="/login"
@@ -226,7 +222,6 @@ export function HeroSection() {
             </div>
           </nav>
 
-          {/* Mobile Navigation */}
           <AnimatePresence initial={false}>
             {open && (
               <motion.div
@@ -396,10 +391,8 @@ export function HeroSection() {
                   </radialGradient>
                 </defs>
 
-                {/* Outer plate */}
                 <circle cx="280" cy="280" r="250" fill="url(#plate-surface)" />
 
-                {/* Outer rim */}
                 <circle
                   cx="280"
                   cy="280"
@@ -409,7 +402,6 @@ export function HeroSection() {
                   strokeWidth="5"
                 />
 
-                {/* Inner rim */}
                 <circle
                   cx="280"
                   cy="280"
@@ -419,10 +411,8 @@ export function HeroSection() {
                   strokeWidth="3"
                 />
 
-                {/* Inner plate */}
                 <circle cx="280" cy="280" r="185" fill="#F5F3E9" />
 
-                {/* Plate highlight */}
                 <ellipse
                   cx="225"
                   cy="190"
@@ -461,7 +451,6 @@ export function HeroSection() {
                   clipPath="url(#dishCutout)"
                 />
 
-                {/* Border foto */}
                 <circle
                   cx="250"
                   cy="250"
@@ -478,10 +467,6 @@ export function HeroSection() {
     </div>
   );
 }
-
-/* ============================================================
-   FULL-WIDTH ORGANIC HERO ART
-============================================================ */
 
 function HeroOrganicArt() {
   return (
@@ -648,7 +633,6 @@ function HeroOrganicArt() {
           opacity="0.40"
         />
 
-        {/* Leaf inside plate */}
         <path
           d="
             M 580 317
