@@ -51,7 +51,7 @@ const config: Config = {
         'charcoal-500': '#5C6B60',
         'charcoal-900': '#1E2A22',
         amber: '#D6A54A',
-        caramel: '#8C5A3C',
+        caramel: '#C8A882',
         'caramel-dark': '#6F4529',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

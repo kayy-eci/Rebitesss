@@ -81,7 +81,7 @@ export function FoodCard({ item }: { item: FoodItem }) {
           type="button"
           aria-label={`Lihat detail ${item.name}`}
           className={cn(
-            "mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#8C5A3C] active:scale-[0.98]",
+            "mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#C8A882] active:scale-[0.98]",
             FOCUS_RING,
           )}
         >

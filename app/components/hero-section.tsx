@@ -6,12 +6,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const HERO_IMAGE =
-  "/hero-makanan.jpeg";
+const HERO_IMAGE = "/hero-makanan.jpeg";
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
-  { href: "/#info", label: "Informasi" },
+  { href: "/#about", label: "About Us" },
   { href: "/#cara-kerja", label: "Cara Kerja" },
   { href: "/#rekomendasi", label: "Rekomendasi" },
   { href: "/#langganan", label: "Langganan" },
@@ -62,11 +61,10 @@ export function HeroSection() {
         return;
       }
 
-      const [r, g, b] =
-        getComputedStyle(current)
-          .backgroundColor.match(/\d+/g)
-          ?.slice(0, 3)
-          .map(Number) ?? [0, 0, 0];
+      const [r, g, b] = getComputedStyle(current)
+        .backgroundColor.match(/\d+/g)
+        ?.slice(0, 3)
+        .map(Number) ?? [0, 0, 0];
       const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
       setOverDark(luminance < 0.5);
 
@@ -117,7 +115,6 @@ export function HeroSection() {
 
   return (
     <div className="bg-cream" data-nav="cream">
-
       <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
@@ -175,12 +172,7 @@ export function HeroSection() {
                     {link.label}
 
                     {activeNav === link.label && (
-                      <span
-                        className={cn(
-                          "absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full transition-colors duration-500",
-                          navIsDark ? "bg-white" : "bg-caramel",
-                        )}
-                      />
+                      <span className="absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-caramel" />
                     )}
                   </Link>
                 </li>
@@ -193,8 +185,8 @@ export function HeroSection() {
                 className={cn(
                   "hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(34,81,56,0.65)] transition-colors duration-300 sm:flex",
                   navIsDark
-                    ? "bg-white text-forest-dark hover:bg-caramel hover:text-white"
-                    : "bg-forest text-white hover:bg-caramel",
+                    ? "bg-white text-forest-dark hover:bg-[#C8A882] hover:text-white"
+                    : "bg-forest text-white hover:bg-[#C8A882] hover:text-white",
                   FOCUS_RING,
                 )}
               >
@@ -280,12 +272,10 @@ export function HeroSection() {
         </div>
       </header>
 
-
       <section
         id="top"
         className="relative overflow-hidden bg-cream px-5 pb-24 pt-24 sm:px-8 lg:px-12 lg:pb-32 lg:pt-28"
       >
-
         <svg
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full"
@@ -327,12 +317,10 @@ export function HeroSection() {
           />
         </svg>
 
-
         <div className="relative mx-auto max-w-[1200px]">
           <HeroOrganicArt />
 
           <div className="relative grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
-
             <div className="relative z-10 max-w-[560px]">
               <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
                 <span className="text-forest-dark">Selamatkan Makanan,</span>
@@ -364,9 +352,7 @@ export function HeroSection() {
               </div>
             </div>
 
-
             <div className="relative z-10 mx-auto w-full max-w-[500px]">
-
               <svg
                 aria-hidden="true"
                 viewBox="0 0 560 560"
@@ -422,7 +408,6 @@ export function HeroSection() {
                   opacity="0.16"
                 />
               </svg>
-
 
               <svg
                 viewBox="0 0 500 500"
@@ -494,8 +479,6 @@ function HeroOrganicArt() {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-
-
         <path
           d="
             M -220 330
@@ -531,8 +514,6 @@ function HeroOrganicArt() {
           strokeWidth="1"
           opacity="0.34"
         />
-
-
 
         <path
           d="
@@ -572,8 +553,6 @@ function HeroOrganicArt() {
           opacity="0.42"
         />
 
-
-
         <path
           d="
             M 325 210
@@ -592,8 +571,6 @@ function HeroOrganicArt() {
           strokeWidth="1"
           opacity="0.38"
         />
-
-
 
         <ellipse
           cx="590"
@@ -652,8 +629,6 @@ function HeroOrganicArt() {
           opacity="0.32"
         />
 
-
-
         <path
           d="
             M 760 352
@@ -675,8 +650,6 @@ function HeroOrganicArt() {
           opacity="0.38"
         />
 
-
-
         <path
           d="
             M 880 220
@@ -695,8 +668,6 @@ function HeroOrganicArt() {
           strokeWidth="1"
           opacity="0.34"
         />
-
-
 
         <path
           d="
@@ -737,8 +708,6 @@ function HeroOrganicArt() {
 
         <path d="M 1021 321 L 1024 308" strokeWidth="1.4" opacity="0.42" />
 
-
-
         <path d="M 1180 150 L 1180 320" strokeWidth="1.8" opacity="0.34" />
 
         <path d="M 1170 150 L 1170 214" strokeWidth="1.2" opacity="0.30" />
@@ -756,8 +725,6 @@ function HeroOrganicArt() {
           strokeWidth="1.2"
           opacity="0.30"
         />
-
-
 
         <circle
           cx="255"
@@ -803,8 +770,6 @@ function HeroOrganicArt() {
           stroke="none"
           opacity="0.40"
         />
-
-
 
         <path d="M 430 150 V 170" strokeWidth="1.5" opacity="0.38" />
 

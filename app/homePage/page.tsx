@@ -123,13 +123,13 @@ export default function HomePage() {
                           className={`relative z-10 flex items-center gap-2 rounded-full px-5 py-2 font-sans text-xs font-medium tracking-tight transition-colors duration-300 ${
                             active
                               ? "text-primary-foreground"
-                              : "text-muted-foreground hover:text-[#8C5A3C]"
+                              : "text-muted-foreground hover:text-[#C8A882]"
                           }`}
                         >
                           {active && (
                             <motion.span
                               layoutId="billing-pill"
-                              className="absolute inset-0 rounded-full bg-[#8C5A3C]"
+                              className="absolute inset-0 rounded-full bg-[#C8A882]"
                               transition={{
                                 type: "spring",
                                 stiffness: 320,
@@ -177,7 +177,7 @@ export default function HomePage() {
                       className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
                     >
                       <div className="relative flex items-center justify-between">
-                        <span className="font-sans text-sm italic tracking-[0.2em] text-[#8C5A3C]">
+                        <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
                           0{i + 1}
                         </span>
                       </div>
@@ -290,7 +290,7 @@ export default function HomePage() {
                       <div className="relative mt-8">
                         <MagneticButton
                           href="/register"
-                          className="w-full border border-primary/40 bg-white text-primary hover:border-[#8C5A3C] hover:bg-[#8C5A3C] hover:text-white"
+                          className="w-full border border-primary/40 bg-white text-primary hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
                         >
                           {plan.cta}
                           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

@@ -275,7 +275,7 @@ function UrgentCard({
             "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
             isExpired
               ? "cursor-not-allowed bg-sage-100 text-charcoal-500"
-              : "bg-[#225138] text-white hover:bg-[#8C5A3C]",
+              : "bg-[#225138] text-white hover:bg-[#C8A882]",
             FOCUS_RING,
           )}
         >
@@ -454,8 +454,8 @@ export function UrgentDealsSection() {
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 font-sans transition-all duration-300",
                   isActive
-                    ? "border-transparent bg-gradient-to-r from-[#8C5A3C] to-[#A06B45] text-white shadow-lg shadow-forest-900/40 hover:from-[#6B4530] hover:to-[#8C5A3C]"
-                    : "border-white/60 bg-white text-[#8C5A3C] shadow-lg shadow-forest-900/25 hover:bg-cream-100 hover:text-[#6B4530]",
+                    ? "border-transparent bg-gradient-to-r from-[#C8A882] to-[#A06B45] text-white shadow-lg shadow-forest-900/40 hover:from-[#6B4530] hover:to-[#C8A882]"
+                    : "border-white/60 bg-white text-[#C8A882] shadow-lg shadow-forest-900/25 hover:bg-cream-100 hover:text-[#6B4530]",
                   FOCUS_RING,
                 )}
               >
@@ -466,7 +466,7 @@ export function UrgentDealsSection() {
                   <span
                     className={cn(
                       "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                      isActive ? "text-white/70" : "text-[#8C5A3C]/60",
+                      isActive ? "text-white/70" : "text-[#C8A882]/60",
                     )}
                   >
                     {slot.name}

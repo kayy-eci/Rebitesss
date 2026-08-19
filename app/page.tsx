@@ -299,130 +299,137 @@ export default function Home() {
       <section
         id="info"
         data-nav="green"
-        className="grain-overlay relative overflow-hidden bg-primary py-28 lg:py-40"
+        className="grain-overlay relative overflow-hidden bg-primary py-20 lg:py-28"
       >
-        <span
+        <div
           aria-hidden
-          className="pointer-events-none absolute -top-8 right-0 select-none font-display text-[clamp(10rem,24vw,22rem)] font-extralight leading-none text-transparent"
-          style={{
-            WebkitTextStroke: "1px hsl(var(--primary-foreground) / 0.14)",
-          }}
-        >
-          46
-        </span>
+          className="pointer-events-none absolute -right-32 -top-32 h-[32rem] w-[32rem] rounded-full bg-[#C8A882]/10 blur-3xl"
+        />
 
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-20 top-32 h-32 w-32 rounded-full border border-[#C8A882]/20"
+        />
+
+        <div className="relative mx-auto max-w-[1400px]">
+          {/* ── Part 2 — About Us (Main Story) ── */}
+          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
+            {/* ── Left: About Us narrative ── */}
             <div>
-              <Reveal delay={0.1}>
-                <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
-                  <RevealWords text="Setiap hari, begitu banyak pangan" />{" "}
-                  <RevealWords text="terbuang" />{" "}
-                  <RevealWords text="begitu saja." />
+              <Reveal delay={0.15}>
+                <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
+                  <RevealWords text="Bukan sekadar" />{" "}
+                  <RevealWords text="menyelamatkan" />{" "}
+                  <RevealWords text="makanan." />
                 </h2>
               </Reveal>
 
               <Reveal delay={0.2}>
-                <p className="mt-6 max-w-sm font-sans text-sm leading-relaxed text-primary-foreground/70">
-                  Data Bappenas mencatat skala food loss &amp; food waste di
-                  Indonesia mencapai angka yang sulit diabaikan. Hal ini
-                  berdampak pada ekonomi, ketahanan pangan, dan lingkungan.
+                <p className="mt-6 max-w-lg font-sans text-sm leading-[1.85] text-primary-foreground">
+                  <span className="font-semibold text-[#C8A882]">ReBites</span>{" "}
+                  hadir sebagai marketplace makanan surplus yang mempertemukan
+                  pelaku UMKM dengan masyarakat. Makanan yang sebelumnya
+                  berpotensi terbuang dapat kembali memiliki nilai, sementara
+                  pelaku usaha memperoleh peluang tambahan pendapatan dan
+                  pembeli mendapatkan makanan berkualitas dengan harga yang
+                  lebih terjangkau.
                 </p>
               </Reveal>
-
-              <Reveal delay={0.25}>
-                <div className="mt-8 rounded-[var(--radius)] border border-primary-foreground/15 bg-primary-foreground/[0.08] p-6">
-                  <p className="font-sans text-[11px] font-medium uppercase tracking-[0.22em] text-primary-foreground/60">
-                    Food loss &amp; waste Indonesia per tahun
-                  </p>
-
-                  <p className="mt-3 flex items-baseline gap-1.5 font-display text-[clamp(2.1rem,4vw,3.2rem)] font-light leading-none tracking-tight text-primary-foreground">
-                    <Counter
-                      to={48_000_000}
-                      className="tabular-nums"
-                      duration={10}
-                    />
-                    <span className="font-sans text-sm text-primary-foreground/70">
-                      ton
-                    </span>
-                  </p>
-
-                  <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1 border-t border-dashed border-primary-foreground/20 pt-4 font-sans text-xs text-primary-foreground/70">
-                    <span>≈ 63.000 ton / hari</span>
-                    <span>≈ 2.630 ton / jam</span>
-                  </div>
-                </div>
-              </Reveal>
             </div>
 
-            <div className="grid gap-4">
-              <Reveal delay={0.1}>
-                <div className="flex flex-col items-center gap-8 rounded-[var(--radius)] border border-primary-foreground/15 bg-primary-foreground/[0.08] p-8 sm:flex-row sm:items-center lg:p-10">
-                  <WasteRing progress={0.82}>
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <p className="font-display text-[clamp(2.6rem,4vw,3.6rem)] font-light leading-none tracking-tight text-center text-primary-foreground">
-                        <Counter
-                          to={7.3}
-                          decimals={1}
-                          suffix="%"
-                          duration={5}
-                        />
-                      </p>
-                    </div>
-                  </WasteRing>
-
-                  <div className="text-center sm:text-left">
-                    <h3 className="font-display text-2xl font-medium text-primary-foreground">
-                      Emisi gas rumah kaca
-                    </h3>
-
-                    <p className="mt-3 font-sans text-sm leading-relaxed text-primary-foreground/70">
-                      Sisa pangan yang terbuang ikut menyumbang emisi gas rumah
-                      kaca yang mempercepat perubahan iklim.
-                    </p>
-
-                    <p className="mt-4 font-sans text-xs text-primary-foreground/60">
-                      Setara 1.702 juta ton CO₂e per tahun
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-
-              <div className="grid gap-4 sm:grid-cols-3">
-                <Reveal delay={0.15}>
-                  <StatTile
-                    icon={<Scale className="h-5 w-5" />}
-                    counter={<Counter to={184} suffix=" kg" duration={2.4} />}
-                    label="rata-rata pangan terbuang"
-                    sub="115–184 kg per kapita/tahun  "
-                  />
-                </Reveal>
-
-                <Reveal delay={0.2}>
-                  <StatTile
-                    icon={<Wallet className="h-5 w-5" />}
-                    counter={
+            {/* ── Right: Statistics as evidence ── */}
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  icon: Scale,
+                  value: 184,
+                  suffix: " kg",
+                  label: "rata-rata pangan terbuang",
+                  subtext: "115–184 kg per kapita/tahun",
+                },
+                {
+                  icon: Wallet,
+                  value: 551,
+                  prefix: "Rp ",
+                  suffix: " T",
+                  label: "kerugian ekonomi per tahun",
+                  subtext: "Rp213–551 triliun",
+                },
+                {
+                  icon: Users,
+                  value: 125,
+                  suffix: " jt",
+                  label: "orang berpotensi makan",
+                  subtext: "61–125 juta orang",
+                },
+              ].map((stat, i) => (
+                <Reveal key={stat.label} delay={0.15 + i * 0.08}>
+                  <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-white bg-primary-foreground/[0.05] p-5 transition-colors duration-300 hover:bg-primary-foreground/[0.10] sm:p-6">
+                    {" "}
+                    <stat.icon className="mb-3 h-5 w-5 text-[#C8A882]" />
+                    <p className="flex items-baseline gap-1 font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-none tracking-tight text-primary-foreground">
                       <Counter
-                        prefix="Rp "
-                        to={551}
-                        suffix=" T"
-                        duration={2.4}
+                        to={stat.value}
+                        prefix={stat.prefix ?? ""}
+                        suffix={stat.suffix}
+                        className="tabular-nums"
+                        duration={8}
                       />
-                    }
-                    label="kerugian ekonomi per tahun"
-                    sub="Rp213–551 triliun"
-                  />
+                    </p>
+                    <p className="mt-2 font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-primary-foreground">
+                      {stat.label}
+                    </p>
+                    <p className="mt-1 font-sans text-xs text-primary-foreground">
+                      {stat.subtext}
+                    </p>
+                  </div>
                 </Reveal>
-                <Reveal delay={0.25}>
-                  <StatTile
-                    icon={<Users className="h-5 w-5" />}
-                    counter={<Counter to={125} suffix=" jt" duration={2.4} />}
-                    label="orang berpotensi makan"
-                    sub="61–125 juta orang"
-                  />
-                </Reveal>
-              </div>
+              ))}
             </div>
+          </div>
+
+          {/* ── Part 3 — Three Key Values ── */}
+          <Reveal delay={0.1}>
+            <h3 className="mt-14 font-display text-[clamp(1.5rem,2.8vw,2.2rem)] font-light leading-[1.1] tracking-[-0.02em] text-primary-foreground lg:mt-20">
+              Untuk <span className="text-[#C8A882]">UMKM</span>. Untuk{" "}
+              <span className="text-[#C8A882]">masyarakat</span>. Untuk{" "}
+              <span className="text-[#C8A882]">lingkungan</span>.
+            </h3>
+          </Reveal>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-3 lg:mt-10">
+            {[
+              {
+                num: "01",
+                title: "UMKM",
+                desc: "Memberi peluang tambahan pendapatan dari makanan surplus yang masih layak konsumsi.",
+              },
+              {
+                num: "02",
+                title: "Masyarakat",
+                desc: "Memudahkan menemukan makanan berkualitas dengan harga yang lebih terjangkau.",
+              },
+              {
+                num: "03",
+                title: "Lingkungan",
+                desc: "Membantu mengurangi potensi food waste dengan memperpanjang pemanfaatan makanan.",
+              },
+            ].map((item, i) => (
+              <Reveal key={item.num} delay={0.1 + i * 0.08}>
+                <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-white bg-primary-foreground/[0.06] p-7 transition-colors duration-300 hover:bg-primary-foreground/[0.12] sm:p-8">
+                  {" "}
+                  <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
+                    {item.num}
+                  </span>
+                  <h3 className="mt-5 font-sans text-xl font-semibold tracking-tight text-primary-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 max-w-xs font-sans text-sm leading-[1.8] text-primary-foreground">
+                    {item.desc}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -584,13 +591,13 @@ export default function Home() {
                         className={`relative z-10 flex items-center gap-2 rounded-full px-5 py-2 font-sans text-xs font-medium tracking-tight transition-colors duration-300 ${
                           active
                             ? "text-primary-foreground"
-                            : "text-muted-foreground hover:text-[#8C5A3C]"
+                            : "text-muted-foreground hover:text-[#C8A882]"
                         }`}
                       >
                         {active && (
                           <motion.span
                             layoutId="billing-pill"
-                            className="absolute inset-0 rounded-full bg-[#8C5A3C]"
+                            className="absolute inset-0 rounded-full bg-[#C8A882]"
                             transition={{
                               type: "spring",
                               stiffness: 320,
@@ -638,7 +645,7 @@ export default function Home() {
                     className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
                   >
                     <div className="relative flex items-center justify-between">
-                      <span className="font-sans text-sm italic tracking-[0.2em] text-[#8C5A3C]">
+                      <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
                         0{i + 1}
                       </span>
                     </div>
@@ -751,7 +758,7 @@ export default function Home() {
                     <div className="relative mt-8">
                       <MagneticButton
                         href="/register"
-                        className="w-full border border-primary/40 bg-white text-primary hover:border-[#8C5A3C] hover:bg-[#8C5A3C] hover:text-white"
+                        className="w-full border border-primary/40 bg-white text-primary hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
                       >
                         {plan.cta}
                         <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
