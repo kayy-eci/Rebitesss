@@ -5,7 +5,6 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 
 export type Step = {
-  number: string;
   title: string;
   description: string;
   image: string;
@@ -38,36 +37,15 @@ export default function ReBitesStepCard({
       onMouseLeave={isTouch ? undefined : onHoverEnd}
       onClick={isTouch ? onSelect : undefined}
     >
-      <motion.span
-        aria-hidden
-        animate={{ opacity: isActive ? 0 : 1, y: isActive ? -12 : 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 26 }}
-        className="absolute left-5 top-4 z-20 select-none font-display text-5xl font-semibold leading-none text-[#CBD5E1]"
-      >
-        {step.number}
-      </motion.span>
-
-      <motion.div
-        aria-hidden
-        animate={{ height: isActive ? 140 : 0, opacity: isActive ? 1 : 0 }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 32,
-          mass: 0.9,
-        }}
-        className="relative w-full shrink-0 overflow-hidden"
-      >
-        <div className="relative h-[140px] w-full">
-          <Image
-            src={step.image}
-            alt={step.title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover"
-          />
-        </div>
-      </motion.div>
+      <div className="relative h-[140px] w-full shrink-0 overflow-hidden">
+        <Image
+          src={step.image}
+          alt={step.title}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover"
+        />
+      </div>
 
       <div className="mt-auto flex flex-col px-6 pb-6 pt-4">
         <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-black/5 bg-white text-caramel">

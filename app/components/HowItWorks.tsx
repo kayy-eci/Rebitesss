@@ -7,37 +7,31 @@ import ReBitesStepCard, { type Step } from "@/app/components/ReBitesStepCard";
 
 const steps: Step[] = [
   {
-    number: "01",
     title: "UMKM Mendaftar & Mengunggah",
     description:
       "Pelaku UMKM mengunggah makanan surplus yang masih layak konsumsi beserta informasi harga, stok, dan waktu penjualan.",
-    image: "https://images.pexels.com/photos/5874513/pexels-photo-5874513.jpeg",
+    image: "/penjual-login.jpg",
     icon: Compass,
   },
   {
-    number: "02",
     title: "Pembeli Mencari & Memesan",
     description:
       "Pembeli mencari makanan surplus sesuai kebutuhan, kemudian memilih dan memesan makanan yang diinginkan.",
-    image: "https://images.pexels.com/photos/7213361/pexels-photo-7213361.jpeg",
+    image: "/pembeli-mencaro.jpg",
     icon: ShieldCheck,
   },
   {
-    number: "03",
     title: "Pilih Metode Penerimaan",
     description:
       "Pembeli memilih metode penerimaan makanan, yaitu diantar atau diambil langsung.",
-    image:
-      "https://images.pexels.com/photos/12725452/pexels-photo-12725452.jpeg",
+    image: "/penerimaan.jpg",
     icon: HeartHandshake,
   },
   {
-    number: "04",
     title: "Makanan Terselamatkan!",
     description:
       "Setiap pesanan membantu menyelamatkan makanan surplus agar tidak berakhir sebagai food waste.",
-    image:
-      "https://images.pexels.com/photos/37052500/pexels-photo-37052500.jpeg",
+    image: "/terselamatkan.jpg",
     icon: Recycle,
   },
 ];
@@ -74,7 +68,7 @@ export default function HowItWorks() {
           <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-12">
             {steps.map((step, index) => (
               <ReBitesStepCard
-                key={step.number}
+                key={index}
                 step={step}
                 isActive={hoveredStep === index}
                 isTouch={isTouch}

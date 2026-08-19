@@ -130,52 +130,49 @@ const FOODS: Food[] = [
 
 const PLANS = [
   {
-    name: "Trial",
-    tagline: "Mulai jualan di ReBites tanpa biaya langganan",
-    monthly: 0,
-    yearly: 0,
+    name: "Saver",
+    tagline: "Hemat lebih banyak dan dapatkan prioritas saat berbelanja",
+    monthly: 14999,
+    yearly: 149999,
+    originalYearly: null,
     features: [
-      "Gratis tanpa biaya langganan",
-      "Maksimal 5 produk",
-      "Kelola stok dan harga",
-      "Riwayat penjualan hingga 30 hari",
-      "Dasbor penjualan UMKM",
+      "Prioritas pesanan dibanding pengguna non-member",
+      "5x Diskon biaya pengantaran",
+      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
     ],
-    capacity: 5,
     popular: false,
-    cta: "Mulai Gratis",
+    cta: "Mulai Berlangganan",
   },
   {
-    name: "Standar",
-    tagline: "Kembangkan usaha dan jangkau lebih banyak pembeli",
-    monthly: 49000,
-    yearly: 490000,
+    name: "Plus",
+    tagline: "Pilihan tepat untuk pembeli yang lebih sering bertransaksi",
+    monthly: 29999,
+    yearly: 269999,
+    originalYearly: 299999,
     features: [
-      "Maksimal 25 produk",
-      "Riwayat penjualan tanpa batas",
-      "Prioritas tampil di marketplace",
-      "Laporan penjualan lebih lengkap",
-      "Lencana UMKM Terverifikasi",
+      "Prioritas pesanan lebih tinggi",
+      "10x Diskon biaya pengantaran",
+      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
+      "Gratis biaya pengantaran hingga 3 transaksi setiap bulan",
     ],
-    capacity: 25,
     popular: true,
-    cta: "Pilih Paket",
+    cta: "Pilih ReBites Plus",
   },
   {
-    name: "Premium",
-    tagline: "Kelola penjualan dengan fitur yang lebih lengkap",
-    monthly: 99000,
-    yearly: 990000,
+    name: "Max",
+    tagline: "Maksimalkan keuntungan di setiap pembelian",
+    monthly: 49999,
+    yearly: 469999,
+    originalYearly: 499999,
     features: [
-      "Produk tanpa batas",
-      "Semua fitur Paket Standar",
-      "Promosi di posisi unggulan",
-      "Analitik tren permintaan",
-      "Dukungan prioritas",
+      "Prioritas pesanan lebih tinggi",
+      "20x Diskon biaya pengantaran",
+      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
+      "Gratis biaya pengantaran hingga 10 transaksi setiap bulan",
+      "Gratis biaya layanan hingga 3 transaksi setiap bulan",
     ],
-    capacity: Infinity,
     popular: false,
-    cta: "Pilih Paket",
+    cta: "Pilih ReBites Max",
   },
 ];
 
@@ -312,9 +309,7 @@ export default function Home() {
         />
 
         <div className="relative mx-auto max-w-[1400px]">
-          {/* ── Part 2 — About Us (Main Story) ── */}
           <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
-            {/* ── Left: About Us narrative ── */}
             <div>
               <Reveal delay={0.15}>
                 <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
@@ -337,7 +332,6 @@ export default function Home() {
               </Reveal>
             </div>
 
-            {/* ── Right: Statistics as evidence ── */}
             <div className="grid gap-4 sm:grid-cols-3">
               {[
                 {
@@ -365,8 +359,8 @@ export default function Home() {
               ].map((stat, i) => (
                 <Reveal key={stat.label} delay={0.15 + i * 0.08}>
                   <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-white bg-primary-foreground/[0.05] p-5 transition-colors duration-300 hover:bg-primary-foreground/[0.10] sm:p-6">
-                    {" "}
                     <stat.icon className="mb-3 h-5 w-5 text-[#C8A882]" />
+
                     <p className="flex items-baseline gap-1 font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-none tracking-tight text-primary-foreground">
                       <Counter
                         to={stat.value}
@@ -376,9 +370,11 @@ export default function Home() {
                         duration={8}
                       />
                     </p>
+
                     <p className="mt-2 font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-primary-foreground">
                       {stat.label}
                     </p>
+
                     <p className="mt-1 font-sans text-xs text-primary-foreground">
                       {stat.subtext}
                     </p>
@@ -388,7 +384,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── Part 3 — Three Key Values ── */}
           <Reveal delay={0.1}>
             <h3 className="mt-14 font-display text-[clamp(1.5rem,2.8vw,2.2rem)] font-light leading-[1.1] tracking-[-0.02em] text-primary-foreground lg:mt-20">
               Untuk <span className="text-[#C8A882]">UMKM</span>. Untuk{" "}
@@ -417,13 +412,14 @@ export default function Home() {
             ].map((item, i) => (
               <Reveal key={item.num} delay={0.1 + i * 0.08}>
                 <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-white bg-primary-foreground/[0.06] p-7 transition-colors duration-300 hover:bg-primary-foreground/[0.12] sm:p-8">
-                  {" "}
                   <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
                     {item.num}
                   </span>
+
                   <h3 className="mt-5 font-sans text-xl font-semibold tracking-tight text-primary-foreground">
                     {item.title}
                   </h3>
+
                   <p className="mt-3 max-w-xs font-sans text-sm leading-[1.8] text-primary-foreground">
                     {item.desc}
                   </p>
@@ -447,7 +443,7 @@ export default function Home() {
           <div className="mx-auto max-w-3xl text-center">
             <Reveal delay={0.1}>
               <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
-                Rekomendasi <span className=" font-extralight">Makanan</span>
+                Rekomendasi <span className="font-extralight">Makanan</span>
               </h2>
             </Reveal>
 
@@ -474,7 +470,9 @@ export default function Home() {
                       className="mb-5 border-primary-foreground/30 text-primary-foreground"
                     >
                       {food.original
-                        ? `Hemat ${Math.round((1 - food.price / food.original) * 100)}%`
+                        ? `Hemat ${Math.round(
+                            (1 - food.price / food.original) * 100,
+                          )}%`
                         : food.tag}
                     </Badge>
                   )}
@@ -539,6 +537,7 @@ export default function Home() {
                   aria-hidden
                   className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-primary to-transparent sm:h-24"
                 />
+
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-primary to-transparent sm:h-24"
@@ -560,16 +559,17 @@ export default function Home() {
           <div className="mx-auto max-w-3xl text-center">
             <Reveal delay={0.1}>
               <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
-                Pilih paket yang <span>sesuai</span> dengan kebutuhan usaha
-                Anda.
+                Dapatkan lebih banyak <span>keuntungan</span> sebagai member
+                ReBites.
               </h2>
             </Reveal>
 
             <Reveal delay={0.15}>
-              <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
-                Nikmati 1 paket gratis selama 1 bulan untuk mencoba fitur
-                ReBites. Setelah masa percobaan berakhir, lanjutkan langganan
-                atau berhenti kapan saja.
+              <p className="mx-auto mt-5 max-w-xl font-sans text-sm leading-relaxed text-muted-foreground">
+                Pilih paket membership yang sesuai dengan kebiasaan belanja
+                Anda. Nikmati prioritas pesanan, potongan biaya pengantaran,
+                kompensasi saat terjadi kendala, dan berbagai keuntungan layanan
+                eksklusif selama menjadi member ReBites.
               </p>
             </Reveal>
 
@@ -581,6 +581,7 @@ export default function Home() {
                     { key: "yearly", label: "Tahunan" },
                   ].map((mode) => {
                     const active = billing === mode.key;
+
                     return (
                       <button
                         key={mode.key}
@@ -605,6 +606,7 @@ export default function Home() {
                             }}
                           />
                         )}
+
                         <span className="relative z-10">{mode.label}</span>
                       </button>
                     );
@@ -617,33 +619,30 @@ export default function Home() {
           <div className="mt-14 grid gap-5 lg:mt-16 lg:grid-cols-3">
             {PLANS.map((plan, i) => {
               const yearlyMode = billing === "yearly";
+
+              const priceValue = yearlyMode ? plan.yearly : plan.monthly;
+
               const priceLabel =
-                plan.monthly === 0
+                priceValue === 0
                   ? "Gratis"
-                  : `Rp${(yearlyMode
-                      ? plan.yearly
-                      : plan.monthly
-                    ).toLocaleString("id-ID")}`;
+                  : `Rp${priceValue.toLocaleString("id-ID")}`;
+
               const priceSuffix =
-                plan.monthly === 0 ? "" : yearlyMode ? "/tahun" : "/bulan";
-              const subLine =
-                plan.monthly === 0
-                  ? "Khusus penjual baru"
-                  : yearlyMode
-                    ? `Hemat 2 bulan · setara Rp${Math.round(
-                        plan.yearly / 12,
-                      ).toLocaleString("id-ID")} / bulan`
-                    : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
-              const capacityPct =
-                plan.capacity === Infinity
-                  ? 100
-                  : Math.max(12, (plan.capacity / 25) * 100);
+                priceValue === 0 ? "" : yearlyMode ? "/tahun" : "/bulan";
+
+              const subLine = yearlyMode
+                ? "Bayar sekali untuk masa membership 1 tahun"
+                : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
 
               return (
                 <Reveal key={plan.name} delay={i * 0.1} className="h-full">
-                  <div
-                    className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
-                  >
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C8A882] hover:shadow-[0_15px_40px_-20px_rgba(200,168,130,0.35)] lg:p-9">
+                    {plan.popular && (
+                      <div className="absolute right-5 top-5 rounded-full bg-[#C8A882] px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                        Paling Populer
+                      </div>
+                    )}
+
                     <div className="relative flex items-center justify-between">
                       <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
                         0{i + 1}
@@ -651,66 +650,60 @@ export default function Home() {
                     </div>
 
                     <h3 className="mt-4 font-sans text-2xl font-semibold tracking-tight text-primary">
-                      {plan.name}
+                      ReBites {plan.name}
                     </h3>
 
-                    <p className="mt-1 font-sans text-xs italic text-muted-foreground">
+                    <p className="mt-1 min-h-[2rem] max-w-[250px] font-sans text-xs italic text-muted-foreground">
                       {plan.tagline}
                     </p>
 
-                    <div className="mt-6 flex items-baseline gap-1.5 text-primary">
-                      <div className="relative h-[3rem] overflow-hidden">
-                        <AnimatePresence mode="wait" initial={false}>
-                          <motion.span
-                            key={priceLabel}
-                            initial={{ opacity: 0, y: 16 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -16 }}
-                            transition={{
-                              duration: 0.3,
-                              ease: [0.22, 1, 0.36, 1],
-                            }}
-                            className="block font-sans text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
-                          >
-                            {priceLabel}
-                          </motion.span>
-                        </AnimatePresence>
+                    <div className="mt-6 flex min-h-[3.5rem] items-end gap-2 text-primary">
+                      <div className="relative flex h-[3.5rem] shrink-0 flex-col items-start">
+                        {yearlyMode && plan.originalYearly && (
+                          <span className="absolute left-0 top-0 whitespace-nowrap font-sans text-xs font-medium leading-none text-muted-foreground line-through tabular-nums">
+                            Rp
+                            {plan.originalYearly.toLocaleString("id-ID")}
+                          </span>
+                        )}
+
+                        <div className="mt-auto overflow-hidden">
+                          <AnimatePresence mode="wait" initial={false}>
+                            <motion.span
+                              key={priceLabel}
+                              initial={{
+                                opacity: 0,
+                                y: 16,
+                              }}
+                              animate={{
+                                opacity: 1,
+                                y: 0,
+                              }}
+                              exit={{
+                                opacity: 0,
+                                y: -16,
+                              }}
+                              transition={{
+                                duration: 0.3,
+                                ease: [0.22, 1, 0.36, 1],
+                              }}
+                              className="block whitespace-nowrap font-sans text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
+                            >
+                              {priceLabel}
+                            </motion.span>
+                          </AnimatePresence>
+                        </div>
                       </div>
 
                       {priceSuffix && (
-                        <span className="font-sans text-sm text-muted-foreground">
+                        <span className="mb-1 shrink-0 whitespace-nowrap font-sans text-sm text-muted-foreground">
                           {priceSuffix}
                         </span>
                       )}
                     </div>
 
-                    <p className="mt-1 font-sans text-xs text-muted-foreground">
+                    <p className="mt-1 min-h-[2rem] font-sans text-xs text-muted-foreground">
                       {subLine}
                     </p>
-
-                    <div className="mt-6">
-                      <div className="flex items-center justify-between font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                        <span>Kapasitas produk</span>
-                        <span>
-                          {plan.capacity === Infinity
-                            ? "Tak terbatas"
-                            : `${plan.capacity} produk`}
-                        </span>
-                      </div>
-                      <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-caramel/10">
-                        <motion.div
-                          className="h-full rounded-full bg-caramel"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${capacityPct}%` }}
-                          viewport={{ once: true }}
-                          transition={{
-                            duration: 1.1,
-                            delay: 0.3 + i * 0.15,
-                            ease: [0.22, 1, 0.36, 1],
-                          }}
-                        />
-                      </div>
-                    </div>
 
                     <div className="relative mt-7 pt-7 text-foreground/75">
                       <span
@@ -722,6 +715,7 @@ export default function Home() {
                           opacity: 0.35,
                         }}
                       />
+
                       <span
                         aria-hidden
                         className="absolute left-1/2 top-0 h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-caramel/50"
@@ -749,18 +743,20 @@ export default function Home() {
                                 />
                               </svg>
                             </span>
-                            {f}
+
+                            <span>{f}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    <div className="relative mt-8">
+                    <div className="relative mt-auto pt-8">
                       <MagneticButton
                         href="/register"
-                        className="w-full border border-primary/40 bg-white text-primary hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
+                        className="group w-full border border-primary/40 bg-white text-primary transition-all duration-300 hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
                       >
                         {plan.cta}
+
                         <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </MagneticButton>
                     </div>
@@ -809,6 +805,7 @@ export default function Home() {
               >
                 <ArrowRight className="h-4 w-4 rotate-180" />
               </button>
+
               <button
                 type="button"
                 onClick={() => testimonialApi?.scrollNext()}
@@ -846,6 +843,7 @@ export default function Home() {
                         </div>
 
                         <Quote className="mt-5 h-5 w-5 text-caramel/40" />
+
                         <blockquote className="mt-3 flex-1 font-sans text-sm leading-relaxed text-foreground/80">
                           &ldquo;{t.quote}&rdquo;
                         </blockquote>
@@ -860,20 +858,24 @@ export default function Home() {
                               opacity: 0.35,
                             }}
                           />
+
                           <Avatar className="h-11 w-11 border border-caramel/30">
                             <AvatarImage
                               src={t.photo}
                               alt={t.name}
                               className="object-cover"
                             />
+
                             <AvatarFallback className="bg-caramel font-display text-sm font-medium text-white">
                               {t.initials}
                             </AvatarFallback>
                           </Avatar>
+
                           <div>
                             <p className="font-display text-base font-medium text-primary">
                               {t.name}
                             </p>
+
                             <p className="mt-0.5 font-sans text-xs text-muted-foreground">
                               {t.role}
                             </p>
@@ -1031,9 +1033,14 @@ function WasteRing({
           strokeLinecap="round"
           strokeDasharray={circumference}
           initial={{ strokeDashoffset: circumference }}
-          whileInView={{ strokeDashoffset: circumference * (1 - progress) }}
+          whileInView={{
+            strokeDashoffset: circumference * (1 - progress),
+          }}
           viewport={{ once: true, margin: "-20% 0px" }}
-          transition={{ duration: 2.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 2.4,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         />
       </svg>
 
