@@ -274,7 +274,7 @@ export function HeroSection() {
 
       <section
         id="top"
-        className="relative overflow-hidden bg-cream px-5 pb-24 pt-24 sm:px-8 lg:px-12 lg:pb-32 lg:pt-28"
+        className="relative flex min-h-[100svh] items-center overflow-hidden bg-cream px-5 pb-24 pt-24 sm:px-8 lg:px-12 lg:pb-32 lg:pt-28"
       >
         <svg
           aria-hidden="true"
