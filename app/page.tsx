@@ -294,7 +294,7 @@ export default function Home() {
       </div>
 
       <section
-        id="info"
+        id="about"
         data-nav="green"
         className="grain-overlay relative overflow-hidden bg-primary py-20 lg:py-28"
       >
