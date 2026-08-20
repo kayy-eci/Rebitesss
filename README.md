@@ -1,4 +1,7 @@
-# ReBites 🍱
+<p align="center">
+  <img width="1763" height="592" alt="Gemini_Generated_Image_jy9xk4jy9xk4jy9x" src="https://github.com/user-attachments/assets/712750b1-62c6-4b98-aad0-7604ac753069" />
+</p>
+
 
 > **Give Surplus Food a Second Bite.**
 
