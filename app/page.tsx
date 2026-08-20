@@ -22,7 +22,10 @@ import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
 import { Badge } from "@/app/components/ui/badge";
 import { HeroSection } from "@/app/components/hero-section";
+import { ExploreSection } from "@/app/components/ExploreSection";
 import OptionWheel from "@/app/components/ui/korosel";
+import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { getProductById } from "@/app/detailProduct/data";
 import {
   Carousel,
   CarouselContent,
@@ -55,8 +58,9 @@ type Food = {
   image: string;
 };
 
-const FOODS: Food[] = [
+const FOODS: (Food & { id: string })[] = [
   {
+    id: "geprek-sambal-bawang",
     name: "Geprek Sambal Bawang",
     desc: "Ayam geprek dengan sambal bawang yang pedas gurih. Ayamnya masih renyah dan paling enak dimakan bareng nasi hangat.",
     price: 18000,
@@ -64,6 +68,7 @@ const FOODS: Food[] = [
     image: "/makanan1.jpeg",
   },
   {
+    id: "nasi-goreng-gila",
     name: "Nasi Goreng Kampung",
     desc: "Nasi goreng rumahan dengan telur, sayuran, dan bumbu gurih yang bikin nagih. Cocok buat makan siang atau makan malam.",
     price: 20000,
@@ -71,6 +76,7 @@ const FOODS: Food[] = [
     image: "/makanan2.jpeg",
   },
   {
+    id: "soto-mie-bogor",
     name: "Soto Mie Bogor",
     desc: "Soto khas Bogor dengan kuah gurih, mie, risol, daging sapi, dan pelengkap segar. Hangat dan pas disantap kapan saja.",
     price: 23000,
@@ -78,6 +84,7 @@ const FOODS: Food[] = [
     image: "/makanan3.jpeg",
   },
   {
+    id: "sate-ayam-10-pcs",
     name: "Sate Ayam Pak Tigiset",
     desc: "Sate ayam bakar dengan bumbu kacang yang gurih dan meresap, cocok ditemani lontong atau nasi.",
     price: 25000,
@@ -85,6 +92,7 @@ const FOODS: Food[] = [
     image: "/makanan4.jpeg",
   },
   {
+    id: "salad-segar-kebun",
     name: "Rendang Padang Karindang",
     desc: "Potongan daging sapi empuk dengan bumbu rendang yang gurih, kaya rempah, dan meresap sampai ke dalam.",
     price: 30000,
@@ -92,6 +100,7 @@ const FOODS: Food[] = [
     image: "/makanan5.jpeg",
   },
   {
+    id: "pancong-lumer-coklat-keju",
     name: "Pancong Boss Lumer",
     desc: "Kue pancong yang lumer di luar dan lembut di dalam, dengan topping coklat keju yang manis. Enak dijadikan teman ngemil.",
     price: 20000,
@@ -99,6 +108,7 @@ const FOODS: Food[] = [
     image: "/makanan6.jpeg",
   },
   {
+    id: "martabak-coklat-kacang",
     name: "Martabak Gombret",
     desc: "Martabak manis yang lembut dengan topping cokelat, keju, dan susu kental manis. Manisnya pas, cocok buat teman ngemil.",
     price: 17000,
@@ -106,6 +116,7 @@ const FOODS: Food[] = [
     image: "/makanan7.jpg",
   },
   {
+    id: "bakso-komplit",
     name: "Bakso Spesial Mas Jono",
     desc: "Bakso kenyal dengan kuah kaldu gurih, lengkap dengan mie, tahu, dan sayuran.",
     price: 18000,
@@ -113,6 +124,7 @@ const FOODS: Food[] = [
     image: "/makanan8.webp",
   },
   {
+    id: "ketoprak-telor",
     name: "Ketoprak Telor Sedap",
     desc: "Ketoprak dengan tahu, bihun, tauge, telur, dan saus kacang yang gurih. Ditambah kerupuk biar makin josss.",
     price: 22000,
@@ -120,6 +132,7 @@ const FOODS: Food[] = [
     image: "/makanan9.webp",
   },
   {
+    id: "mie-ayam",
     name: "Mie Ayam Balap 12",
     desc: "Mie kenyal dengan topping ayam berbumbu gurih, dan sayuran. Dijamin kenyang sampai besok",
     price: 25000,
@@ -252,6 +265,8 @@ export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [foodIndex, setFoodIndex] = useState(0);
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const selectedProduct = selectedProductId ? getProductById(selectedProductId) : undefined;
   const [testimonialApi, setTestimonialApi] = useState<CarouselApi>();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const food = FOODS[foodIndex];
@@ -292,6 +307,8 @@ export default function Home() {
       <div id="top">
         <HeroSection />
       </div>
+
+      <ExploreSection />
 
       <section
         id="about"
@@ -498,13 +515,14 @@ export default function Home() {
                   </div>
 
                   <div className="mt-8 flex flex-wrap items-center justify-center gap-5 lg:justify-start">
-                    <Link
-                      href="/#cta"
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProductId(FOODS[foodIndex].id)}
                       className="group inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-6 py-3 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(34,81,56,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-caramel/50 hover:text-caramel"
                     >
                       Pesan Sekarang
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Link>
+                    </button>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -927,6 +945,15 @@ export default function Home() {
       </section>
 
       <SiteFooter />
+
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductDetailModal
+            product={selectedProduct}
+            onClose={() => setSelectedProductId(null)}
+          />
+        )}
+      </AnimatePresence>
     </SmoothScroll>
   );
 }

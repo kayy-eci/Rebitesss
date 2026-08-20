@@ -108,7 +108,7 @@ function SectionCountdown({
   const [h, m, s] = text.split(":");
 
   return (
-    <div id="flash-sale" className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]">
+    <div id="flashSale" className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]">
       <div className="flex items-center gap-2.5">
         <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-black">
           {label}
@@ -154,10 +154,12 @@ function UrgentCard({
   item,
   deadlineIso,
   isNotLive,
+  onViewDetail,
 }: {
   item: UrgentItem;
   deadlineIso: string;
   isNotLive: boolean;
+  onViewDetail?: (id: string) => void;
 }) {
   const remaining = useCountdown(deadlineIso);
   const isExpired = remaining === 0;
@@ -268,6 +270,7 @@ function UrgentCard({
         <button
           type="button"
           disabled={isExpired}
+          onClick={() => !isExpired && onViewDetail?.(item.id)}
           aria-label={
             isExpired ? `${item.name} sudah habis` : `Lihat detail ${item.name}`
           }
@@ -286,7 +289,7 @@ function UrgentCard({
   );
 }
 
-export function UrgentDealsSection() {
+export function UrgentDealsSection({ onViewDetail }: { onViewDetail?: (id: string) => void }) {
   const { realSlot, setSelectedSlot, activeSlot } = useSlotRotation();
 
   const slotEndIso = activeSlot
@@ -515,6 +518,7 @@ export function UrgentDealsSection() {
                     item={item}
                     deadlineIso={slotEndIso!}
                     isNotLive={realSlot !== activeSlot}
+                    onViewDetail={onViewDetail}
                   />
                 </motion.div>
               ))}

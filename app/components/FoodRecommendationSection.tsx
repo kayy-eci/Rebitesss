@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { foodItems } from "@/lib/data";
 import { FoodCard } from "@/app/components/FoodCard";
@@ -22,7 +22,7 @@ const FILTERS: { key: FoodFilter; label: string }[] = [
 
 const MAX_ITEMS = 8;
 
-export function FoodRecommendationSection() {
+export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id: string) => void }) {
   const [activeFilter, setActiveFilter] = useState<FoodFilter>("semua");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -84,7 +84,7 @@ export function FoodRecommendationSection() {
 
   return (
     <section
-      id="rekomendasi-makanan"
+      id="rekomendasiMakanan"
       className="relative overflow-hidden scroll-mt-24 bg-cream-50 py-16 lg:py-20"
     >
       <SoftBlob className="-left-24 top-1/3 h-80 w-80 bg-sage-100/60" />
@@ -187,7 +187,7 @@ export function FoodRecommendationSection() {
                 }}
                 className="min-w-0 snap-start"
               >
-                <FoodCard item={item} />
+                <FoodCard item={item} onViewDetail={onViewDetail} />
               </motion.div>
             ))}
           </motion.div>

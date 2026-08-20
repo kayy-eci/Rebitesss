@@ -323,9 +323,13 @@ export function HeroSection() {
           <div className="relative grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
             <div className="relative z-10 max-w-[560px]">
               <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
-                <span className="text-forest-dark">Selamatkan Makanan,</span>
+                <span className="text-forest-dark">
+                  <span className="text-caramel">Selamatkan</span> Makanan,
+                </span>
 
-                <span className="block text-forest">Selamatkan Bumi.</span>
+                <span className="block text-forest">
+                  <span className="text-caramel">Selamatkan</span> Bumi.
+                </span>
               </h1>
 
               <div className="mt-9 flex flex-wrap items-center gap-4">

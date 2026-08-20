@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, MapPin, Plus, Star } from "lucide-react";
+import { Clock, MapPin, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { formatRupiah } from "@/lib/data";
@@ -10,7 +10,7 @@ import type { FoodItem } from "@/lib/types";
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
-export function FoodCard({ item }: { item: FoodItem }) {
+export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?: (id: string) => void }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15">
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
@@ -80,6 +80,7 @@ export function FoodCard({ item }: { item: FoodItem }) {
         <button
           type="button"
           aria-label={`Lihat detail ${item.name}`}
+          onClick={() => onViewDetail?.(item.id)}
           className={cn(
             "mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#C8A882] active:scale-[0.98]",
             FOCUS_RING,

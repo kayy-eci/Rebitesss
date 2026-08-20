@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Navbar } from "@/app/components/navbar";
 import { Hero } from "@/app/components/Hero";
@@ -12,62 +12,72 @@ import { VendorSection } from "@/app/components/VendorSection";
 import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
 import { MagneticButton } from "@/app/components/magnetic-button";
+import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { getProductById } from "@/app/detailProduct/data";
 
 import { ArrowRight } from "lucide-react";
 
 const PLANS = [
   {
-    name: "Trial",
-    tagline: "Mulai jualan di ReBites tanpa biaya langganan",
-    monthly: 0,
-    yearly: 0,
+    name: "Saver",
+    tagline: "Hemat lebih banyak dan dapatkan prioritas saat berbelanja",
+    monthly: 14999,
+    yearly: 149999,
+    originalYearly: null,
     features: [
-      "Gratis tanpa biaya langganan",
-      "Maksimal 5 produk",
-      "Kelola stok dan harga",
-      "Riwayat penjualan hingga 30 hari",
-      "Dasbor penjualan UMKM",
+      "Prioritas pesanan dibanding pengguna non-member",
+      "5x Diskon biaya pengantaran",
+      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
     ],
-    capacity: 5,
     popular: false,
-    cta: "Mulai Gratis",
+    cta: "Mulai Berlangganan",
   },
   {
-    name: "Standar",
-    tagline: "Kembangkan usaha dan jangkau lebih banyak pembeli",
-    monthly: 49000,
-    yearly: 490000,
+    name: "Plus",
+    tagline: "Pilihan tepat untuk pembeli yang lebih sering bertransaksi",
+    monthly: 29999,
+    yearly: 269999,
+    originalYearly: 299999,
     features: [
-      "Maksimal 25 produk",
-      "Riwayat penjualan tanpa batas",
-      "Prioritas tampil di marketplace",
-      "Laporan penjualan lebih lengkap",
-      "Lencana UMKM Terverifikasi",
+      "Prioritas pesanan lebih tinggi",
+      "10x Diskon biaya pengantaran",
+      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
+      "Gratis biaya pengantaran hingga 3 transaksi setiap bulan",
     ],
-    capacity: 25,
     popular: true,
-    cta: "Pilih Paket",
+    cta: "Pilih ReBites Plus",
   },
   {
-    name: "Premium",
-    tagline: "Kelola penjualan dengan fitur yang lebih lengkap",
-    monthly: 99000,
-    yearly: 990000,
+    name: "Max",
+    tagline: "Maksimalkan keuntungan di setiap pembelian",
+    monthly: 49999,
+    yearly: 469999,
+    originalYearly: 499999,
     features: [
-      "Produk tanpa batas",
-      "Semua fitur Paket Standar",
-      "Promosi di posisi unggulan",
-      "Analitik tren permintaan",
-      "Dukungan prioritas",
+      "Prioritas pesanan lebih tinggi",
+      "20x Diskon biaya pengantaran",
+      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
+      "Gratis biaya pengantaran hingga 10 transaksi setiap bulan",
+      "Gratis biaya layanan hingga 3 transaksi setiap bulan",
     ],
-    capacity: Infinity,
     popular: false,
-    cta: "Pilih Paket",
+    cta: "Pilih ReBites Max",
   },
 ];
 
 export default function HomePage() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+
+  const handleViewDetail = useCallback((id: string) => {
+    setSelectedProductId(id);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedProductId(null);
+  }, []);
+
+  const selectedProduct = selectedProductId ? getProductById(selectedProductId) : undefined;
 
   return (
     <div>
@@ -76,9 +86,9 @@ export default function HomePage() {
       <main className="bg-cream-50">
         <Hero />
         <ExploreSection />
-        <UrgentDealsSection />
+        <UrgentDealsSection onViewDetail={handleViewDetail} />
         <CategorySection />
-        <FoodRecommendationSection />
+        <FoodRecommendationSection onViewDetail={handleViewDetail} />
         <VendorSection />
 
         <section
@@ -92,16 +102,17 @@ export default function HomePage() {
             <div className="mx-auto max-w-3xl text-center">
               <Reveal delay={0.1}>
                 <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
-                  Pilih paket yang <span>sesuai</span> dengan kebutuhan usaha
-                  Anda.
+                  Dapatkan lebih banyak <span>keuntungan</span> sebagai member
+                  ReBites.
                 </h2>
               </Reveal>
 
               <Reveal delay={0.15}>
-                <p className="mx-auto mt-5 max-w-md font-sans text-sm leading-relaxed text-muted-foreground">
-                  Nikmati 1 paket gratis selama 1 bulan untuk mencoba fitur
-                  ReBites. Setelah masa percobaan berakhir, lanjutkan langganan
-                  atau berhenti kapan saja.
+                <p className="mx-auto mt-5 max-w-xl font-sans text-sm leading-relaxed text-muted-foreground">
+                  Pilih paket membership yang sesuai dengan kebiasaan belanja
+                  Anda. Nikmati prioritas pesanan, potongan biaya pengantaran,
+                  kompensasi saat terjadi kendala, dan berbagai keuntungan
+                  layanan eksklusif selama menjadi member ReBites.
                 </p>
               </Reveal>
 
@@ -113,6 +124,7 @@ export default function HomePage() {
                       { key: "yearly", label: "Tahunan" },
                     ].map((mode) => {
                       const active = billing === mode.key;
+
                       return (
                         <button
                           key={mode.key}
@@ -137,6 +149,7 @@ export default function HomePage() {
                               }}
                             />
                           )}
+
                           <span className="relative z-10">{mode.label}</span>
                         </button>
                       );
@@ -149,33 +162,30 @@ export default function HomePage() {
             <div className="mt-14 grid gap-5 lg:mt-16 lg:grid-cols-3">
               {PLANS.map((plan, i) => {
                 const yearlyMode = billing === "yearly";
+
+                const priceValue = yearlyMode ? plan.yearly : plan.monthly;
+
                 const priceLabel =
-                  plan.monthly === 0
+                  priceValue === 0
                     ? "Gratis"
-                    : `Rp${(yearlyMode
-                        ? plan.yearly
-                        : plan.monthly
-                      ).toLocaleString("id-ID")}`;
+                    : `Rp${priceValue.toLocaleString("id-ID")}`;
+
                 const priceSuffix =
-                  plan.monthly === 0 ? "" : yearlyMode ? "/tahun" : "/bulan";
-                const subLine =
-                  plan.monthly === 0
-                    ? "Khusus penjual baru"
-                    : yearlyMode
-                      ? `Hemat 2 bulan · setara Rp${Math.round(
-                          plan.yearly / 12,
-                        ).toLocaleString("id-ID")} / bulan`
-                      : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
-                const capacityPct =
-                  plan.capacity === Infinity
-                    ? 100
-                    : Math.max(12, (plan.capacity / 25) * 100);
+                  priceValue === 0 ? "" : yearlyMode ? "/tahun" : "/bulan";
+
+                const subLine = yearlyMode
+                  ? "Bayar sekali untuk masa membership 1 tahun"
+                  : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
 
                 return (
                   <Reveal key={plan.name} delay={i * 0.1} className="h-full">
-                    <div
-                      className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] bg-background p-8 transition-all duration-300 lg:p-9 border border-border shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] hover:-translate-y-1 hover:border-caramel/40`}
-                    >
+                    <div className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C8A882] hover:shadow-[0_15px_40px_-20px_rgba(200,168,130,0.35)] lg:p-9">
+                      {plan.popular && (
+                        <div className="absolute right-5 top-5 rounded-full bg-[#C8A882] px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                          Paling Populer
+                        </div>
+                      )}
+
                       <div className="relative flex items-center justify-between">
                         <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
                           0{i + 1}
@@ -183,66 +193,60 @@ export default function HomePage() {
                       </div>
 
                       <h3 className="mt-4 font-sans text-2xl font-semibold tracking-tight text-primary">
-                        {plan.name}
+                        ReBites {plan.name}
                       </h3>
 
-                      <p className="mt-1 font-sans text-xs italic text-muted-foreground">
+                      <p className="mt-1 min-h-[2rem] max-w-[250px] font-sans text-xs italic text-muted-foreground">
                         {plan.tagline}
                       </p>
 
-                      <div className="mt-6 flex items-baseline gap-1.5 text-primary">
-                        <div className="relative h-[3rem] overflow-hidden">
-                          <AnimatePresence mode="wait" initial={false}>
-                            <motion.span
-                              key={priceLabel}
-                              initial={{ opacity: 0, y: 16 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -16 }}
-                              transition={{
-                                duration: 0.3,
-                                ease: [0.22, 1, 0.36, 1],
-                              }}
-                              className="block font-sans text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
-                            >
-                              {priceLabel}
-                            </motion.span>
-                          </AnimatePresence>
+                      <div className="mt-6 flex min-h-[3.5rem] items-end gap-2 text-primary">
+                        <div className="relative flex h-[3.5rem] shrink-0 flex-col items-start">
+                          {yearlyMode && plan.originalYearly && (
+                            <span className="absolute left-0 top-0 whitespace-nowrap font-sans text-xs font-medium leading-none text-muted-foreground line-through tabular-nums">
+                              Rp
+                              {plan.originalYearly.toLocaleString("id-ID")}
+                            </span>
+                          )}
+
+                          <div className="mt-auto overflow-hidden">
+                            <AnimatePresence mode="wait" initial={false}>
+                              <motion.span
+                                key={priceLabel}
+                                initial={{
+                                  opacity: 0,
+                                  y: 16,
+                                }}
+                                animate={{
+                                  opacity: 1,
+                                  y: 0,
+                                }}
+                                exit={{
+                                  opacity: 0,
+                                  y: -16,
+                                }}
+                                transition={{
+                                  duration: 0.3,
+                                  ease: [0.22, 1, 0.36, 1],
+                                }}
+                                className="block whitespace-nowrap font-sans text-[clamp(2.4rem,3vw,3rem)] font-light leading-[3rem] tracking-tight tabular-nums"
+                              >
+                                {priceLabel}
+                              </motion.span>
+                            </AnimatePresence>
+                          </div>
                         </div>
 
                         {priceSuffix && (
-                          <span className="font-sans text-sm text-muted-foreground">
+                          <span className="mb-1 shrink-0 whitespace-nowrap font-sans text-sm text-muted-foreground">
                             {priceSuffix}
                           </span>
                         )}
                       </div>
 
-                      <p className="mt-1 font-sans text-xs text-muted-foreground">
+                      <p className="mt-1 min-h-[2rem] font-sans text-xs text-muted-foreground">
                         {subLine}
                       </p>
-
-                      <div className="mt-6">
-                        <div className="flex items-center justify-between font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                          <span>Kapasitas produk</span>
-                          <span>
-                            {plan.capacity === Infinity
-                              ? "Tak terbatas"
-                              : `${plan.capacity} produk`}
-                          </span>
-                        </div>
-                        <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-caramel/10">
-                          <motion.div
-                            className="h-full rounded-full bg-caramel"
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${capacityPct}%` }}
-                            viewport={{ once: true }}
-                            transition={{
-                              duration: 1.1,
-                              delay: 0.3 + i * 0.15,
-                              ease: [0.22, 1, 0.36, 1],
-                            }}
-                          />
-                        </div>
-                      </div>
 
                       <div className="relative mt-7 pt-7 text-foreground/75">
                         <span
@@ -254,6 +258,7 @@ export default function HomePage() {
                             opacity: 0.35,
                           }}
                         />
+
                         <span
                           aria-hidden
                           className="absolute left-1/2 top-0 h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-caramel/50"
@@ -281,18 +286,20 @@ export default function HomePage() {
                                   />
                                 </svg>
                               </span>
-                              {f}
+
+                              <span>{f}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="relative mt-8">
+                      <div className="relative mt-auto pt-8">
                         <MagneticButton
                           href="/register"
-                          className="w-full border border-primary/40 bg-white text-primary hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
+                          className="group w-full border border-primary/40 bg-white text-primary transition-all duration-300 hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
                         >
                           {plan.cta}
+
                           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </MagneticButton>
                       </div>
@@ -306,6 +313,15 @@ export default function HomePage() {
       </main>
 
       <SiteFooter />
+
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductDetailModal
+            product={selectedProduct}
+            onClose={handleCloseModal}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
