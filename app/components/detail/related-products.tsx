@@ -21,7 +21,7 @@ export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
           </p>
         </div>
         <Link
-          href="/#rekomendasi"
+          href="/homePage"
           className="hidden items-center gap-1.5 font-inter text-sm font-semibold text-green-700 transition-colors hover:text-green-600 sm:inline-flex"
         >
           Lihat Semua

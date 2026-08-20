@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useId } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import {
   ArrowRight,
   Store,
@@ -20,12 +19,9 @@ import { Counter } from "@/app/components/counter";
 import { Marquee } from "@/app/components/marquee";
 import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
-import { Badge } from "@/app/components/ui/badge";
+import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { HeroSection } from "@/app/components/hero-section";
 import { ExploreSection } from "@/app/components/ExploreSection";
-import OptionWheel from "@/app/components/ui/korosel";
-import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detailProduct/data";
 import {
   Carousel,
   CarouselContent,
@@ -49,143 +45,49 @@ const PARTNERS = [
   "Kopi Pagi",
 ];
 
-type Food = {
-  name: string;
-  desc: string;
-  price: number;
-  original?: number;
-  tag?: string;
-  image: string;
-};
-
-const FOODS: (Food & { id: string })[] = [
-  {
-    id: "geprek-sambal-bawang",
-    name: "Geprek Sambal Bawang",
-    desc: "Ayam geprek dengan sambal bawang yang pedas gurih. Ayamnya masih renyah dan paling enak dimakan bareng nasi hangat.",
-    price: 18000,
-    original: 24000,
-    image: "/makanan1.jpeg",
-  },
-  {
-    id: "nasi-goreng-gila",
-    name: "Nasi Goreng Kampung",
-    desc: "Nasi goreng rumahan dengan telur, sayuran, dan bumbu gurih yang bikin nagih. Cocok buat makan siang atau makan malam.",
-    price: 20000,
-    original: 25000,
-    image: "/makanan2.jpeg",
-  },
-  {
-    id: "soto-mie-bogor",
-    name: "Soto Mie Bogor",
-    desc: "Soto khas Bogor dengan kuah gurih, mie, risol, daging sapi, dan pelengkap segar. Hangat dan pas disantap kapan saja.",
-    price: 23000,
-    original: 30000,
-    image: "/makanan3.jpeg",
-  },
-  {
-    id: "sate-ayam-10-pcs",
-    name: "Sate Ayam Pak Tigiset",
-    desc: "Sate ayam bakar dengan bumbu kacang yang gurih dan meresap, cocok ditemani lontong atau nasi.",
-    price: 25000,
-    original: 32000,
-    image: "/makanan4.jpeg",
-  },
-  {
-    id: "salad-segar-kebun",
-    name: "Rendang Padang Karindang",
-    desc: "Potongan daging sapi empuk dengan bumbu rendang yang gurih, kaya rempah, dan meresap sampai ke dalam.",
-    price: 30000,
-    original: 38000,
-    image: "/makanan5.jpeg",
-  },
-  {
-    id: "pancong-lumer-coklat-keju",
-    name: "Pancong Boss Lumer",
-    desc: "Kue pancong yang lumer di luar dan lembut di dalam, dengan topping coklat keju yang manis. Enak dijadikan teman ngemil.",
-    price: 20000,
-    original: 27000,
-    image: "/makanan6.jpeg",
-  },
-  {
-    id: "martabak-coklat-kacang",
-    name: "Martabak Gombret",
-    desc: "Martabak manis yang lembut dengan topping cokelat, keju, dan susu kental manis. Manisnya pas, cocok buat teman ngemil.",
-    price: 17000,
-    original: 24000,
-    image: "/makanan7.jpg",
-  },
-  {
-    id: "bakso-komplit",
-    name: "Bakso Spesial Mas Jono",
-    desc: "Bakso kenyal dengan kuah kaldu gurih, lengkap dengan mie, tahu, dan sayuran.",
-    price: 18000,
-    original: 24000,
-    image: "/makanan8.webp",
-  },
-  {
-    id: "ketoprak-telor",
-    name: "Ketoprak Telor Sedap",
-    desc: "Ketoprak dengan tahu, bihun, tauge, telur, dan saus kacang yang gurih. Ditambah kerupuk biar makin josss.",
-    price: 22000,
-    original: 33000,
-    image: "/makanan9.webp",
-  },
-  {
-    id: "mie-ayam",
-    name: "Mie Ayam Balap 12",
-    desc: "Mie kenyal dengan topping ayam berbumbu gurih, dan sayuran. Dijamin kenyang sampai besok",
-    price: 25000,
-    original: 35000,
-    image: "/makanan10.webp",
-  },
-];
-
 const PLANS = [
   {
-    name: "Saver",
-    tagline: "Hemat lebih banyak dan dapatkan prioritas saat berbelanja",
-    monthly: 14999,
-    yearly: 149999,
-    originalYearly: null,
+    name: "Basic",
+    tagline: "Gunakan ReBites secara gratis selamanya.",
+    monthly: 0,
+    yearly: 0,
     features: [
-      "Prioritas pesanan dibanding pengguna non-member",
-      "5x Diskon biaya pengantaran",
-      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
+      "Maksimal 5 produk",
+      "Riwayat penjualan 30 hari",
+      "Dashboard penjualan",
     ],
+    cta: "Gunakan Gratis",
     popular: false,
-    cta: "Mulai Berlangganan",
   },
   {
-    name: "Plus",
-    tagline: "Pilihan tepat untuk pembeli yang lebih sering bertransaksi",
-    monthly: 29999,
-    yearly: 269999,
-    originalYearly: 299999,
+    name: "Standar",
+    tagline: "Untuk UMKM yang mulai aktif berjualan di ReBites.",
+    monthly: 49000,
+    yearly: 490000,
     features: [
-      "Prioritas pesanan lebih tinggi",
-      "10x Diskon biaya pengantaran",
-      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
-      "Gratis biaya pengantaran hingga 3 transaksi setiap bulan",
+      "Maksimal 25 produk",
+      "Riwayat penjualan tanpa batas",
+      "Prioritas di marketplace",
+      "Laporan penjualan detail",
+      "Badge UMKM Terverifikasi",
     ],
+    cta: "Pilih Standar",
     popular: true,
-    cta: "Pilih ReBites Plus",
   },
   {
-    name: "Max",
-    tagline: "Maksimalkan keuntungan di setiap pembelian",
-    monthly: 49999,
-    yearly: 469999,
-    originalYearly: 499999,
+    name: "Premium",
+    tagline: "Untuk usaha yang ingin berkembang lebih jauh.",
+    monthly: 99000,
+    yearly: 990000,
     features: [
-      "Prioritas pesanan lebih tinggi",
-      "20x Diskon biaya pengantaran",
-      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
-      "Gratis biaya pengantaran hingga 10 transaksi setiap bulan",
-      "Gratis biaya layanan hingga 3 transaksi setiap bulan",
+      "Produk tanpa batas",
+      "Semua fitur Standar",
+      "Promosi unggulan",
+      "Analitik permintaan",
+      "Dukungan prioritas",
     ],
+    cta: "Pilih Premium",
     popular: false,
-    cta: "Pilih ReBites Max",
   },
 ];
 
@@ -263,13 +165,9 @@ const TESTIMONIALS: Testimonial[] = [
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  const [foodIndex, setFoodIndex] = useState(0);
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-  const selectedProduct = selectedProductId ? getProductById(selectedProductId) : undefined;
   const [testimonialApi, setTestimonialApi] = useState<CarouselApi>();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const food = FOODS[foodIndex];
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -308,7 +206,11 @@ export default function Home() {
         <HeroSection />
       </div>
 
-      <ExploreSection />
+      <ExploreSection from="landing" />
+
+      <UrgentDealsSection />
+
+      <HowItWorks />
 
       <section
         id="about"
@@ -447,125 +349,6 @@ export default function Home() {
         </div>
       </section>
 
-      <HowItWorks />
-
-      <section
-        id="rekomendasi"
-        data-nav="green"
-        className="grain-overlay relative overflow-hidden bg-primary py-24 lg:py-32"
-      >
-        <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary-foreground/[0.06] blur-3xl" />
-
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-3xl text-center">
-            <Reveal delay={0.1}>
-              <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
-                Rekomendasi <span className="font-extralight">Makanan</span>
-              </h2>
-            </Reveal>
-
-            <Reveal delay={0.15}>
-              <p className="mx-auto mt-5 max-w-md font-sans text-lg leading-relaxed text-primary-foreground/70">
-                Paling banyak dinikmati akhir-akhir ini
-              </p>
-            </Reveal>
-          </div>
-
-          <div className="mt-12 grid items-center gap-14 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 xl:gap-20">
-            <div className="mx-auto w-full max-w-[520px] text-center lg:max-w-none lg:text-left">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={foodIndex}
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -18 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {(food.original || food.tag) && (
-                    <Badge
-                      variant="outline"
-                      className="mb-5 border-primary-foreground/30 text-primary-foreground"
-                    >
-                      {food.original
-                        ? `Hemat ${Math.round(
-                            (1 - food.price / food.original) * 100,
-                          )}%`
-                        : food.tag}
-                    </Badge>
-                  )}
-
-                  <h3 className="font-display text-[clamp(2.2rem,3.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.02em] text-primary-foreground">
-                    {food.name}
-                  </h3>
-
-                  <p className="mx-auto mt-5 max-w-[46ch] font-sans text-sm leading-relaxed text-primary-foreground/70 lg:mx-0">
-                    {food.desc}
-                  </p>
-
-                  <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 lg:justify-start">
-                    <span className="font-display text-4xl font-light tracking-tight text-primary-foreground lg:text-5xl">
-                      Rp{food.price.toLocaleString("id-ID")}
-                    </span>
-
-                    {food.original && (
-                      <span className="font-sans text-sm text-primary-foreground/50 line-through">
-                        Rp{food.original.toLocaleString("id-ID")}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="mt-8 flex flex-wrap items-center justify-center gap-5 lg:justify-start">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedProductId(FOODS[foodIndex].id)}
-                      className="group inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-6 py-3 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(34,81,56,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-caramel/50 hover:text-caramel"
-                    >
-                      Pesan Sekarang
-                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <div className="relative mx-auto w-full max-w-[560px]">
-              <div className="relative h-[520px] w-full sm:h-[600px]">
-                <OptionWheel
-                  items={FOODS.map((f) => f.name)}
-                  defaultSelected={0}
-                  side="right"
-                  fontSize={8}
-                  spacing={1.4}
-                  curve={20}
-                  tilt={6}
-                  blur={3}
-                  fade={0.32}
-                  minOpacity={0.02}
-                  smoothing={160}
-                  loop
-                  draggable
-                  autoRotate
-                  autoRotateInterval={3000}
-                  plateSize={330}
-                  onChange={(index) => setFoodIndex(index)}
-                  renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
-                />
-
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-primary to-transparent sm:h-24"
-                />
-
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-primary to-transparent sm:h-24"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section
         id="langganan"
         data-nav="cream"
@@ -577,17 +360,16 @@ export default function Home() {
           <div className="mx-auto max-w-3xl text-center">
             <Reveal delay={0.1}>
               <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
-                Dapatkan lebih banyak <span>keuntungan</span> sebagai member
-                ReBites.
+                Kembangkan usaha bersama{" "}
+                <span className="text-caramel">ReBites.</span>
               </h2>
             </Reveal>
 
             <Reveal delay={0.15}>
               <p className="mx-auto mt-5 max-w-xl font-sans text-sm leading-relaxed text-muted-foreground">
-                Pilih paket membership yang sesuai dengan kebiasaan belanja
-                Anda. Nikmati prioritas pesanan, potongan biaya pengantaran,
-                kompensasi saat terjadi kendala, dan berbagai keuntungan layanan
-                eksklusif selama menjadi member ReBites.
+                Pilih paket penjual yang sesuai dengan kebutuhan usaha Anda.
+                Kelola produk, pantau penjualan, dan dapatkan lebih banyak
+                kesempatan untuk menjangkau pelanggan melalui ReBites.
               </p>
             </Reveal>
 
@@ -610,13 +392,13 @@ export default function Home() {
                         className={`relative z-10 flex items-center gap-2 rounded-full px-5 py-2 font-sans text-xs font-medium tracking-tight transition-colors duration-300 ${
                           active
                             ? "text-primary-foreground"
-                            : "text-muted-foreground hover:text-[#C8A882]"
+                            : "text-muted-foreground hover:text-caramel"
                         }`}
                       >
                         {active && (
                           <motion.span
                             layoutId="billing-pill"
-                            className="absolute inset-0 rounded-full bg-[#C8A882]"
+                            className="absolute inset-0 rounded-full bg-caramel"
                             transition={{
                               type: "spring",
                               stiffness: 320,
@@ -648,42 +430,46 @@ export default function Home() {
               const priceSuffix =
                 priceValue === 0 ? "" : yearlyMode ? "/tahun" : "/bulan";
 
-              const subLine = yearlyMode
-                ? "Bayar sekali untuk masa membership 1 tahun"
-                : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
+              const subLine =
+                plan.monthly === 0
+                  ? "Gratis selama 1 bulan"
+                  : yearlyMode
+                    ? `Setara Rp${Math.round(plan.yearly / 12).toLocaleString(
+                        "id-ID",
+                      )} / bulan`
+                    : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
 
               return (
                 <Reveal key={plan.name} delay={i * 0.1} className="h-full">
-                  <div className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C8A882] hover:shadow-[0_15px_40px_-20px_rgba(200,168,130,0.35)] lg:p-9">
+                  <div
+                    className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 lg:p-9 ${
+                      plan.popular
+                        ? "border-caramel shadow-[0_15px_40px_-20px_rgba(200,168,130,0.35)]"
+                        : "border-border hover:border-caramel"
+                    }`}
+                  >
                     {plan.popular && (
-                      <div className="absolute right-5 top-5 rounded-full bg-[#C8A882] px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                      <div className="absolute right-5 top-5 rounded-full bg-white px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
                         Paling Populer
                       </div>
                     )}
 
                     <div className="relative flex items-center justify-between">
-                      <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
+                      <span className="font-sans text-sm italic tracking-[0.2em] text-caramel">
                         0{i + 1}
                       </span>
                     </div>
 
-                    <h3 className="mt-4 font-sans text-2xl font-semibold tracking-tight text-primary">
+                    <h3 className="mt-4 font-sans text-2xl font-bold tracking-tight text-primary">
                       ReBites {plan.name}
                     </h3>
 
-                    <p className="mt-1 min-h-[2rem] max-w-[250px] font-sans text-xs italic text-muted-foreground">
+                    <p className="mt-2 min-h-[2.5rem] max-w-[250px] font-sans text-xs leading-relaxed italic text-muted-foreground">
                       {plan.tagline}
                     </p>
 
                     <div className="mt-6 flex min-h-[3.5rem] items-end gap-2 text-primary">
                       <div className="relative flex h-[3.5rem] shrink-0 flex-col items-start">
-                        {yearlyMode && plan.originalYearly && (
-                          <span className="absolute left-0 top-0 whitespace-nowrap font-sans text-xs font-medium leading-none text-muted-foreground line-through tabular-nums">
-                            Rp
-                            {plan.originalYearly.toLocaleString("id-ID")}
-                          </span>
-                        )}
-
                         <div className="mt-auto overflow-hidden">
                           <AnimatePresence mode="wait" initial={false}>
                             <motion.span
@@ -740,7 +526,7 @@ export default function Home() {
                       />
 
                       <ul className="space-y-3">
-                        {plan.features.map((f, j) => (
+                        {plan.features.map((feature, j) => (
                           <li
                             key={j}
                             className="flex items-start gap-3 font-sans text-sm"
@@ -762,7 +548,7 @@ export default function Home() {
                               </svg>
                             </span>
 
-                            <span>{f}</span>
+                            <span>{feature}</span>
                           </li>
                         ))}
                       </ul>
@@ -771,7 +557,11 @@ export default function Home() {
                     <div className="relative mt-auto pt-8">
                       <MagneticButton
                         href="/register"
-                        className="group w-full border border-primary/40 bg-white text-primary transition-all duration-300 hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
+                        className={`group w-full border transition-all duration-300 ${
+                          plan.popular
+                            ? "border-caramel bg-caramel text-white hover:bg-[#A06B45]"
+                            : "border-primary/40 bg-white text-primary hover:border-caramel hover:bg-caramel hover:text-white"
+                        }`}
                       >
                         {plan.cta}
 
@@ -783,6 +573,14 @@ export default function Home() {
               );
             })}
           </div>
+
+          <Reveal delay={0.2}>
+            <p className="mx-auto mt-8 max-w-2xl text-center font-sans text-xs leading-relaxed text-muted-foreground">
+              Semua paket ditujukan untuk penjual dan UMKM yang ingin
+              memanfaatkan ReBites sebagai kanal tambahan untuk menjual makanan
+              surplus yang masih layak konsumsi.
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -945,167 +743,6 @@ export default function Home() {
       </section>
 
       <SiteFooter />
-
-      <AnimatePresence>
-        {selectedProduct && (
-          <ProductDetailModal
-            product={selectedProduct}
-            onClose={() => setSelectedProductId(null)}
-          />
-        )}
-      </AnimatePresence>
     </SmoothScroll>
-  );
-}
-
-function FoodPlate({ image }: { image: string }) {
-  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const gradId = `plate-surface-${uid}`;
-  const clipId = `plate-cut-${uid}`;
-
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      role="img"
-      aria-label="Piring makanan"
-      className="h-full w-full drop-shadow-[0_16px_22px_-14px_rgba(34,81,56,0.55)]"
-    >
-      <defs>
-        <radialGradient id={gradId} cx="50%" cy="42%">
-          <stop offset="0%" stopColor="#F7F6EE" />
-          <stop offset="72%" stopColor="#E9E7D9" />
-          <stop offset="100%" stopColor="#D5D2C1" />
-        </radialGradient>
-
-        <clipPath id={clipId}>
-          <circle cx="100" cy="100" r="84" />
-        </clipPath>
-      </defs>
-
-      <circle cx="100" cy="100" r="92" fill={`url(#${gradId})`} />
-
-      <circle
-        cx="100"
-        cy="100"
-        r="92"
-        fill="none"
-        stroke="#C8C5B5"
-        strokeWidth="2.5"
-      />
-
-      <circle
-        cx="100"
-        cy="100"
-        r="88"
-        fill="none"
-        stroke="#D8D5C6"
-        strokeWidth="1.5"
-      />
-
-      <circle cx="100" cy="100" r="86" fill="#F5F3E9" />
-
-      <image
-        href={image}
-        x="0"
-        y="0"
-        width="200"
-        height="200"
-        preserveAspectRatio="xMidYMid slice"
-        clipPath={`url(#${clipId})`}
-      />
-
-      <circle
-        cx="100"
-        cy="100"
-        r="84"
-        fill="none"
-        stroke="#F5F3E9"
-        strokeWidth="4"
-      />
-
-      <ellipse cx="80" cy="66" rx="46" ry="22" fill="#FFFFFF" opacity="0.16" />
-    </svg>
-  );
-}
-
-function WasteRing({
-  progress,
-  children,
-}: {
-  progress: number;
-  children: React.ReactNode;
-}) {
-  const radius = 80;
-  const circumference = 2 * Math.PI * radius;
-
-  return (
-    <div className="relative h-44 w-44 shrink-0">
-      <svg viewBox="0 0 200 200" className="h-full w-full -rotate-90">
-        <circle
-          cx="100"
-          cy="100"
-          r={radius}
-          fill="none"
-          stroke="hsl(var(--primary-foreground) / 0.15)"
-          strokeWidth="10"
-        />
-
-        <motion.circle
-          cx="100"
-          cy="100"
-          r={radius}
-          fill="none"
-          stroke="hsl(var(--primary-foreground) / 0.85)"
-          strokeWidth="10"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          initial={{ strokeDashoffset: circumference }}
-          whileInView={{
-            strokeDashoffset: circumference * (1 - progress),
-          }}
-          viewport={{ once: true, margin: "-20% 0px" }}
-          transition={{
-            duration: 2.4,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        />
-      </svg>
-
-      <div className="absolute inset-0 flex items-center justify-center">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function StatTile({
-  icon,
-  counter,
-  label,
-  sub,
-}: {
-  icon: React.ReactNode;
-  counter: React.ReactNode;
-  label: string;
-  sub: string;
-}) {
-  return (
-    <div className="group flex h-full flex-col rounded-[var(--radius)] border border-primary-foreground/15 bg-primary-foreground/[0.08] p-6 transition-colors duration-300 hover:bg-primary-foreground/15">
-      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/25 text-primary-foreground transition-transform duration-500 group-hover:scale-110">
-        {icon}
-      </span>
-
-      <p className="mt-6 font-display text-[clamp(1.9rem,3vw,2.6rem)] font-light leading-none tracking-tight text-primary-foreground">
-        {counter}
-      </p>
-
-      <p className="mt-3 font-sans text-sm leading-relaxed text-primary-foreground/70">
-        {label}
-      </p>
-
-      <p className="mt-3 border-t border-dashed border-primary-foreground/20 pt-2 font-sans text-xs text-primary-foreground/60">
-        {sub}
-      </p>
-    </div>
   );
 }

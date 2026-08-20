@@ -1,18 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useId } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import OptionWheel from "@/app/components/ui/korosel";
 
-const HERO_IMAGE = "/hero-makanan.jpeg";
+const FOODS = [
+  { name: "Geprek Sambal Bawang", image: "/makanan1.jpeg" },
+  { name: "Nasi Goreng Kampung", image: "/makanan2.jpeg" },
+  { name: "Soto Mie Bogor", image: "/makanan3.jpeg" },
+  { name: "Sate Ayam Pak Tigiset", image: "/makanan4.jpeg" },
+  { name: "Rendang Padang Karindang", image: "/makanan5.jpeg" },
+  { name: "Pancong Boss Lumer", image: "/makanan6.jpeg" },
+  { name: "Martabak Gombret", image: "/makanan7.jpg" },
+  { name: "Bakso Spesial Mas Jono", image: "/makanan8.webp" },
+  { name: "Ketoprak Telor Sedap", image: "/makanan9.webp" },
+  { name: "Mie Ayam Balap 12", image: "/makanan10.webp" },
+];
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
   { href: "/#about", label: "About Us" },
   { href: "/#cara-kerja", label: "Cara Kerja" },
-  { href: "/#rekomendasi", label: "Rekomendasi" },
   { href: "/#langganan", label: "Langganan" },
   { href: "/#testimoni", label: "Testimoni" },
 ];
@@ -25,6 +36,7 @@ export function HeroSection() {
   const [activeNav, setActiveNav] = useState<string>("Beranda");
   const [overDark, setOverDark] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
+  const [foodIndex, setFoodIndex] = useState(0);
 
   const lang = "id" as "id" | "en";
 
@@ -114,7 +126,7 @@ export function HeroSection() {
   };
 
   return (
-    <div className="bg-cream" data-nav="cream">
+    <div className="overflow-x-hidden bg-cream" data-nav="cream">
       <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
@@ -274,7 +286,7 @@ export function HeroSection() {
 
       <section
         id="top"
-        className="relative flex min-h-[100svh] items-center overflow-hidden bg-cream px-5 pb-24 pt-24 sm:px-8 lg:px-12 lg:pb-32 lg:pt-28"
+        className="relative flex min-h-[100svh] flex-col items-center bg-cream px-5 pb-32 pt-24 sm:px-8 lg:px-12 lg:pb-40 lg:pt-28"
       >
         <svg
           aria-hidden="true"
@@ -320,8 +332,7 @@ export function HeroSection() {
         <div className="relative mx-auto max-w-[1200px]">
           <HeroOrganicArt />
 
-          <div className="relative grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
-            <div className="relative z-10 max-w-[560px]">
+          <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+5rem)]">
               <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
                 <span className="text-forest-dark">
                   <span className="text-caramel">Selamatkan</span> Makanan,
@@ -354,102 +365,85 @@ export function HeroSection() {
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </div>
+          </div>
+
+          {/* Mobile carousel – stays in flow below text */}
+          <div className="relative z-10 mx-auto mt-12 w-full max-w-[360px] lg:hidden">
+            <div className="relative h-[480px] w-full sm:h-[540px]">
+              <OptionWheel
+                items={FOODS.map((f) => f.name)}
+                defaultSelected={0}
+                side="right"
+                fontSize={8}
+                spacing={1.4}
+                curve={20}
+                tilt={6}
+                blur={3}
+                fade={0.32}
+                minOpacity={0.02}
+                smoothing={160}
+                loop
+                draggable
+                autoRotate
+                autoRotateInterval={3000}
+                plateSize={315}
+                onChange={(index) => setFoodIndex(index)}
+                renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
+              />
+
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-cream to-transparent sm:h-24"
+              />
+
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-20 bg-gradient-to-t from-cream to-transparent sm:h-24"
+              />
             </div>
+          </div>
+        </div>
 
-            <div className="relative z-10 mx-auto w-full max-w-[500px]">
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 560 560"
-                className="
-                  pointer-events-none
-                  absolute
-                  left-1/2
-                  top-1/2
-                  w-[108%]
-                  -translate-x-1/2
-                  -translate-y-1/2
-                  drop-shadow-[0_24px_35px_-22px_rgba(34,81,56,0.55)]
-                "
-              >
-                <defs>
-                  <radialGradient id="plate-surface" cx="50%" cy="45%">
-                    <stop offset="0%" stopColor="#F7F6EE" />
+        {/*
+          Desktop carousel – absolutely positioned within the section (full-width)
+          so its right offset is relative to the viewport, not the 1200px container.
+          overflow-hidden lives here only, keeping the hero section itself unclipped.
+        */}
+        <div className="pointer-events-none absolute right-[clamp(8px,2vw,50px)] top-1/2 z-10 hidden -translate-y-1/2 lg:block">
+          <div
+            className="pointer-events-auto relative overflow-hidden rounded-[28px]"
+            style={{ width: 'clamp(460px, 36vw, 540px)', height: 'clamp(460px, 36vw, 540px)' }}
+          >
+              <OptionWheel
+                items={FOODS.map((f) => f.name)}
+                defaultSelected={0}
+                side="right"
+                fontSize={8}
+                spacing={1.4}
+                curve={20}
+                tilt={6}
+                blur={3}
+                fade={0.32}
+                minOpacity={0.02}
+                smoothing={160}
+                loop
+                draggable
+                autoRotate
+                autoRotateInterval={3000}
+                plateSize={400}
+                onChange={(index) => setFoodIndex(index)}
+                renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
+              />
 
-                    <stop offset="72%" stopColor="#E9E7D9" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-cream to-transparent sm:h-24 lg:h-28"
+            />
 
-                    <stop offset="100%" stopColor="#D5D2C1" />
-                  </radialGradient>
-                </defs>
-
-                <circle cx="280" cy="280" r="250" fill="url(#plate-surface)" />
-
-                <circle
-                  cx="280"
-                  cy="280"
-                  r="250"
-                  fill="none"
-                  stroke="#C8C5B5"
-                  strokeWidth="5"
-                />
-
-                <circle
-                  cx="280"
-                  cy="280"
-                  r="215"
-                  fill="none"
-                  stroke="#D8D5C6"
-                  strokeWidth="3"
-                />
-
-                <circle cx="280" cy="280" r="185" fill="#F5F3E9" />
-
-                <ellipse
-                  cx="225"
-                  cy="190"
-                  rx="120"
-                  ry="65"
-                  fill="#FFFFFF"
-                  opacity="0.16"
-                />
-              </svg>
-
-              <svg
-                viewBox="0 0 500 500"
-                role="img"
-                aria-label="Hidangan segar ReBites"
-                className="
-                  relative
-                  z-10
-                  w-full
-                  drop-shadow-[0_34px_54px_-28px_rgba(34,81,56,0.55)]
-                "
-              >
-                <defs>
-                  <clipPath id="dishCutout">
-                    <circle cx="250" cy="250" r="178" />
-                  </clipPath>
-                </defs>
-
-                <image
-                  href={HERO_IMAGE}
-                  x="0"
-                  y="0"
-                  width="500"
-                  height="500"
-                  preserveAspectRatio="xMidYMid slice"
-                  clipPath="url(#dishCutout)"
-                />
-
-                <circle
-                  cx="250"
-                  cy="250"
-                  r="178"
-                  fill="none"
-                  stroke="#F5F3E9"
-                  strokeWidth="8"
-                />
-              </svg>
-            </div>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-20 bg-gradient-to-t from-cream to-transparent sm:h-24 lg:h-28"
+            />
           </div>
         </div>
       </section>
@@ -783,6 +777,76 @@ function HeroOrganicArt() {
 
         <path d="M 921 374 H 939" strokeWidth="1.3" opacity="0.34" />
       </g>
+    </svg>
+  );
+}
+
+function FoodPlate({ image }: { image: string }) {
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const gradId = `plate-surface-${uid}`;
+  const clipId = `plate-cut-${uid}`;
+
+  return (
+    <svg
+      viewBox="0 0 200 200"
+      role="img"
+      aria-label="Piring makanan"
+      className="h-full w-full drop-shadow-[0_16px_22px_-14px_rgba(34,81,56,0.55)]"
+    >
+      <defs>
+        <radialGradient id={gradId} cx="50%" cy="42%">
+          <stop offset="0%" stopColor="#F7F6EE" />
+          <stop offset="72%" stopColor="#E9E7D9" />
+          <stop offset="100%" stopColor="#D5D2C1" />
+        </radialGradient>
+
+        <clipPath id={clipId}>
+          <circle cx="100" cy="100" r="84" />
+        </clipPath>
+      </defs>
+
+      <circle cx="100" cy="100" r="92" fill={`url(#${gradId})`} />
+
+      <circle
+        cx="100"
+        cy="100"
+        r="92"
+        fill="none"
+        stroke="#C8C5B5"
+        strokeWidth="2.5"
+      />
+
+      <circle
+        cx="100"
+        cy="100"
+        r="88"
+        fill="none"
+        stroke="#D8D5C6"
+        strokeWidth="1.5"
+      />
+
+      <circle cx="100" cy="100" r="86" fill="#F5F3E9" />
+
+      <image
+        href={image}
+        x="0"
+        y="0"
+        width="200"
+        height="200"
+        preserveAspectRatio="xMidYMid slice"
+        clipPath={`url(#${clipId})`}
+      />
+
+      <circle
+        cx="100"
+        cy="100"
+        r="84"
+        fill="none"
+        stroke="#F5F3E9"
+        strokeWidth="4"
+      />
+
+      <ellipse cx="80" cy="66" rx="46" ry="22" fill="#FFFFFF" opacity="0.16" />
     </svg>
   );
 }

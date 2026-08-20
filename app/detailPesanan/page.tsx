@@ -29,7 +29,7 @@ export default function DetailPesananPage() {
           {/* Header mini */}
           <div className="flex items-center gap-3">
             <Link
-              href="/"
+              href="/homePage"
               aria-label="Kembali"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-sage-100 bg-white text-green-700 transition-colors hover:bg-green-700 hover:text-white"
             >

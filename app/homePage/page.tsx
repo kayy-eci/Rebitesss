@@ -85,7 +85,7 @@ export default function HomePage() {
 
       <main className="bg-cream-50">
         <Hero />
-        <ExploreSection />
+        <ExploreSection from="home" />
         <UrgentDealsSection onViewDetail={handleViewDetail} />
         <CategorySection />
         <FoodRecommendationSection onViewDetail={handleViewDetail} />

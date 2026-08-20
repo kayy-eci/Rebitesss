@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles } from "lucide-react";
 import type { FilterKey } from "@/lib/types";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 
-export function ExploreSection() {
+export function ExploreSection({ from = "landing" }: { from?: "landing" | "home" }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterKey>("terdekat");
@@ -16,8 +15,9 @@ export function ExploreSection() {
     const q = query.trim();
     if (q) params.set("q", q);
     if (activeFilter !== "terdekat") params.set("filter", activeFilter);
+    params.set("from", from);
     const qs = params.toString();
-    router.push(qs ? `/cari?${qs}` : "/cari");
+    router.push(`/cari?${qs}`);
   };
 
   return (

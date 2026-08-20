@@ -316,7 +316,7 @@ const OptionWheel = ({
       role="listbox"
       tabIndex={0}
       aria-label="Pilihan menu makanan"
-      className={`relative h-full w-full select-none overflow-hidden outline-none [touch-action:none] ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}${className ? ` ${className}` : ''}`}
+      className={`relative h-full w-full select-none overflow-hidden outline-none [touch-action:none]${isPlateMode ? ' py-16 sm:py-20' : ''} ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}${className ? ` ${className}` : ''}`}
       style={
         {
           '--ow-text-color': textColor,

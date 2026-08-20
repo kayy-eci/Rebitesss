@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Compass, HeartHandshake, Recycle, ShieldCheck } from "lucide-react";
 import { Reveal } from "@/app/components/reveal";
 import ReBitesStepCard, { type Step } from "@/app/components/ReBitesStepCard";
 
@@ -11,28 +10,24 @@ const steps: Step[] = [
     description:
       "Pelaku UMKM mengunggah makanan surplus yang masih layak konsumsi beserta informasi harga, stok, dan waktu penjualan.",
     image: "/penjual-login.jpg",
-    icon: Compass,
   },
   {
     title: "Pembeli Mencari & Memesan",
     description:
       "Pembeli mencari makanan surplus sesuai kebutuhan, kemudian memilih dan memesan makanan yang diinginkan.",
     image: "/pembeli-mencaro.jpg",
-    icon: ShieldCheck,
   },
   {
     title: "Pilih Metode Penerimaan",
     description:
       "Pembeli memilih metode penerimaan makanan, yaitu diantar atau diambil langsung.",
     image: "/penerimaan.jpg",
-    icon: HeartHandshake,
   },
   {
     title: "Makanan Terselamatkan!",
     description:
       "Setiap pesanan membantu menyelamatkan makanan surplus agar tidak berakhir sebagai food waste.",
     image: "/terselamatkan.jpg",
-    icon: Recycle,
   },
 ];
 

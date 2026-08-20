@@ -2,13 +2,11 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import type { LucideIcon } from "lucide-react";
 
 export type Step = {
   title: string;
   description: string;
   image: string;
-  icon: LucideIcon;
 };
 
 type ReBitesStepCardProps = {
@@ -30,7 +28,7 @@ export default function ReBitesStepCard({
 }: ReBitesStepCardProps) {
   return (
     <div
-      className={`relative flex h-[400px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-black/5 shadow-sm transition-[box-shadow,background-color] duration-500 ${
+      className={`relative flex min-h-[260px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-black/5 shadow-sm transition-[box-shadow,background-color] duration-500 ${
         isActive ? "bg-white shadow-md" : "bg-[#F8FAFC]"
       }`}
       onMouseEnter={isTouch ? undefined : onHoverStart}
@@ -47,12 +45,8 @@ export default function ReBitesStepCard({
         />
       </div>
 
-      <div className="mt-auto flex flex-col px-6 pb-6 pt-4">
-        <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-black/5 bg-white text-caramel">
-          <step.icon className="h-5 w-5" strokeWidth={2} />
-        </span>
-
-        <h3 className="mt-4 font-display text-xl font-medium leading-snug text-[#111827]">
+      <div className="flex flex-col px-6 pb-6 pt-4">
+        <h3 className="font-display text-xl font-medium leading-snug text-[#111827]">
           {step.title}
         </h3>
 

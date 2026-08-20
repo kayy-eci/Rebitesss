@@ -55,6 +55,8 @@ function CariContent() {
     parseFilter(searchParams.get("filter")),
   );
 
+  const fromPage = searchParams.get("from") === "home" ? "/homePage" : "/";
+
   const hasQuery = query.trim().length > 0;
 
   const filteredItems = useMemo(() => {
@@ -200,7 +202,7 @@ function CariContent() {
                   yang tersedia.
                 </p>
                 <Link
-                  href="/homePage"
+                  href={fromPage}
                   className="mt-6 inline-flex items-center gap-2 rounded-full bg-green-700 px-6 py-2.5 font-sans text-sm font-semibold text-white shadow-md shadow-green-700/25 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]"
                 >
                   <ArrowLeft className="h-4 w-4" />
