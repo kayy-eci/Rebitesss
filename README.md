@@ -31,9 +31,8 @@ ReBites provides a dedicated marketplace where UMKM can list and sell surplus fo
 
 Consumers can discover available surplus food, place orders, choose their preferred fulfillment method, and complete payments through the platform.
 
-The system is designed around three main users:
+The system is designed around two main users:
 
-* **Admin**
 * **UMKM**
 * **Buyer**
 
@@ -66,16 +65,6 @@ The system is designed around three main users:
 * Manage incoming orders
 * Update order status
 * View sales history
-
-### 🛡️ Admin
-
-* Monitoring dashboard
-* Verify UMKM accounts
-* Manage users
-* Manage subscription packages
-* Monitor transactions
-* View system activity
-* View and download system reports
 
 ---
 
@@ -196,10 +185,6 @@ Track Order
 ---
 
 ## 👥 User Roles
-
-### Admin
-
-Responsible for monitoring and managing the overall platform, including users, UMKM verification, subscriptions, and transactions.
 
 ### UMKM
 
