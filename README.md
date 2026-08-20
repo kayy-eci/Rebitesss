@@ -1,4 +1,7 @@
-# ReBites 🍱
+<p align="center">
+  <img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/e32b79bc-606a-40c5-ab7c-a4bc5c27831d" />
+</p>
+
 
 > **Give Surplus Food a Second Bite.**
 
