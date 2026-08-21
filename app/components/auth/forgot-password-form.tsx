@@ -115,7 +115,7 @@ export default function ForgotPasswordForm() {
             tautan tersebut untuk membuat kata sandi baru.
           </p>
           <Link
-            href="/login"
+            href="/auth/login"
             className="mt-7 inline-flex items-center gap-2 font-sans text-sm font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
           >
             Kembali ke halaman login
@@ -192,7 +192,7 @@ export default function ForgotPasswordForm() {
           >
             Ingat kata sandi?{" "}
             <Link
-              href="/login"
+              href="/auth/login"
               className="font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
             >
               Masuk

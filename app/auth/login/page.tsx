@@ -24,7 +24,7 @@ export default function LoginPage() {
       bottomHint={{
         text: "Belum punya akun?",
         linkText: "Daftar di sini",
-        href: "/register",
+        href: "/auth/register",
       }}
       brand={{
         title: (

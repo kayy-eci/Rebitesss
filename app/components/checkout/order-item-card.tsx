@@ -19,7 +19,7 @@ export function OrderItemCard() {
 
         <div className="min-w-0 flex-1">
           <Link
-            href={`/vendor/${draft.vendorSlug}`}
+            href="/detail/product"
             className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500 transition-colors hover:text-green-700"
           >
             {draft.vendorName}
@@ -27,7 +27,7 @@ export function OrderItemCard() {
           </Link>
 
           <Link
-            href={`/product/${draft.productSlug}`}
+            href="/detail/product"
             className="mt-1 block font-display text-lg font-medium leading-snug text-charcoal-900 transition-colors hover:text-green-700 sm:text-xl"
           >
             {draft.productName}

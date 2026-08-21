@@ -40,7 +40,7 @@ export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
             className="min-w-[220px] snap-start sm:min-w-[240px] lg:min-w-0"
           >
             <Link
-              href="/detailProduct"
+              href="/detail/product"
               className="group block h-full overflow-hidden rounded-2xl border border-sage-100 bg-white transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_28px_50px_-30px_rgba(47,66,53,0.45)]"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-cream-100">

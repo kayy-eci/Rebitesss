@@ -299,7 +299,7 @@ export default function HomePage() {
 
                       <div className="relative mt-auto pt-8">
                         <MagneticButton
-                          href="/register"
+                          href="/auth/register"
                           className="group w-full border border-primary/40 bg-white text-primary transition-all duration-300 hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
                         >
                           {plan.cta}

@@ -184,7 +184,7 @@ export default function Home() {
   };
 
   const handleRequireLogin = () => {
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   const selectedProduct = selectedProductId
@@ -576,7 +576,7 @@ export default function Home() {
 
                     <div className="relative mt-auto pt-8">
                       <MagneticButton
-                        href="/register"
+                        href="/auth/register"
                         className={`group w-full border transition-all duration-300 ${
                           plan.popular
                             ? "border-caramel bg-caramel text-white hover:bg-[#A06B45]"

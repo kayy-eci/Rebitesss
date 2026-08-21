@@ -13,7 +13,7 @@ export default function DashboardPenjualPage() {
       const { supabase } = await import("@/lib/supabase");
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        window.location.href = "/login";
+        window.location.href = "/auth/login";
         return;
       }
       setUser({
@@ -39,7 +39,7 @@ export default function DashboardPenjualPage() {
   async function handleLogout() {
     const { supabase } = await import("@/lib/supabase");
     await supabase.auth.signOut();
-    window.location.href = "/login";
+    window.location.href = "/auth/login";
   }
 
   if (!user) {
