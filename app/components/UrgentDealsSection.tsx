@@ -26,8 +26,10 @@ const SPARKLES = [
 
 export function UrgentDealsSection({
   onViewDetail,
+  from = "landing",
 }: {
   onViewDetail?: (id: string) => void;
+  from?: "landing" | "home";
 }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,7 +43,7 @@ export function UrgentDealsSection({
     const q = searchQuery.trim();
     if (q) params.set("q", q);
     if (searchFilter !== "terdekat") params.set("filter", searchFilter);
-    params.set("from", "landing");
+    params.set("from", from);
     router.push(`/cari?${params.toString()}`);
   };
 
@@ -135,6 +137,7 @@ export function UrgentDealsSection({
             onSearchSubmit={handleSearchSubmit}
             activeFilter={searchFilter}
             onFilterChange={setSearchFilter}
+            showLocation={false}
           />
         </div>
 

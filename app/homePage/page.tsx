@@ -4,10 +4,9 @@ import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Navbar } from "@/app/components/navbar";
 import { Hero } from "@/app/components/Hero";
-import { ExploreSection } from "@/app/components/ExploreSection";
+import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { FlashSaleSection } from "@/app/components/FlashSaleSection";
 import { CategorySection } from "@/app/components/CategorySection";
-import { FoodRecommendationSection } from "@/app/components/FoodRecommendationSection";
 import { VendorSection } from "@/app/components/VendorSection";
 import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
@@ -88,10 +87,9 @@ export default function HomePage() {
 
       <main className="bg-cream-50">
         <Hero />
-        <ExploreSection from="home" />
-        <FlashSaleSection onViewDetail={handleViewDetail} />
+        <UrgentDealsSection from="home" onViewDetail={handleViewDetail} />
         <CategorySection />
-        <FoodRecommendationSection onViewDetail={handleViewDetail} />
+        <FlashSaleSection onViewDetail={handleViewDetail} />
         <VendorSection />
 
         <section

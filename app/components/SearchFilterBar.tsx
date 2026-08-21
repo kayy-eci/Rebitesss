@@ -14,6 +14,7 @@ interface SearchFilterBarProps {
   onSearchSubmit: () => void;
   activeFilter: FilterKey;
   onFilterChange: (key: FilterKey) => void;
+  showLocation?: boolean;
 }
 
 const FOCUS_RING =
@@ -25,6 +26,7 @@ export function SearchFilterBar({
   onSearchSubmit,
   activeFilter,
   onFilterChange,
+  showLocation = true,
 }: SearchFilterBarProps) {
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState(LOCATIONS[0]);
@@ -51,7 +53,8 @@ export function SearchFilterBar({
             />
           </div>
 
-          <div className="relative hidden sm:block">
+          {showLocation && (
+            <div className="relative hidden sm:block">
             <button
               type="button"
               aria-label="Pilih lokasi"
@@ -114,6 +117,7 @@ export function SearchFilterBar({
               )}
             </AnimatePresence>
           </div>
+          )}
 
           <button
             type="submit"
