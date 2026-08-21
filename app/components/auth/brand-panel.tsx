@@ -95,7 +95,7 @@ function RotatingStamp({ className }: { className?: string }) {
             fontSize="8.2"
             letterSpacing="2.4"
             fill="rgba(255,255,255,0.9)"
-            style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}
+            style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
           >
             <textPath href="#authStamp" startOffset="0%">
               RESCUED • FRESH • DAILY •

@@ -23,7 +23,7 @@ const config: Config = {
       fontFamily: {
         display: ['var(--font-display)'],
         sans: ['var(--font-sans)'],
-        inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        inter: ['var(--font-sans)', 'system-ui', 'sans-serif'],
       },
       colors: {
         forest: '#3B5240',
