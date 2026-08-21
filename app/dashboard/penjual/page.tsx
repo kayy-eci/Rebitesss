@@ -1,117 +1,104 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Store, LogOut, Package } from "lucide-react";
+import { useState } from 'react';
+import { motion, MotionConfig } from 'framer-motion';
+import { Reveal } from '@/app/components/reveal';
+import { VENDOR } from '@/app/components/dashboardPenjual/data';
+import { DashboardDecor } from '@/app/components/dashboardPenjual/decor';
+import { Sidebar } from '@/app/components/dashboardPenjual/Sidebar';
+import { Topbar } from '@/app/components/dashboardPenjual/Topbar';
+import { SalesActivityChartCard } from '@/app/components/dashboardPenjual/SalesActivityChartCard';
+import { VendorStatCardStack } from '@/app/components/dashboardPenjual/VendorStatCardStack';
+import { StoreCard } from '@/app/components/dashboardPenjual/StoreCard';
+import { BestSellingMenuRow } from '@/app/components/dashboardPenjual/BestSellingMenuRow';
+import { IncomingOrderListCard } from '@/app/components/dashboardPenjual/IncomingOrderListCard';
+import { MonthlySalesTargetCard } from '@/app/components/dashboardPenjual/MonthlySalesTargetCard';
+import { TipsCard } from '@/app/components/dashboardPenjual/TipsCard';
+import { TopCategoryCard } from '@/app/components/dashboardPenjual/TopCategoryCard';
+import { PartnerScoreGaugeCard } from '@/app/components/dashboardPenjual/PartnerScoreGaugeCard';
+import { AchievementBadgesCard } from '@/app/components/dashboardPenjual/AchievementBadgesCard';
 
-export default function DashboardPenjualPage() {
-  const [user, setUser] = useState<{ email: string; fullName: string } | null>(null);
-  const [umkm, setUmkm] = useState<{ business_name: string; category: string; city: string } | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const { supabase } = await import("@/lib/supabase");
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        window.location.href = "/auth/login";
-        return;
-      }
-      setUser({
-        email: session.user.email,
-        fullName: session.user.user_metadata?.full_name || session.user.email,
-      });
-
-      const { data } = await supabase
-        .from("umkm_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .single();
-      if (data) {
-        setUmkm({
-          business_name: data.business_name,
-          category: data.category,
-          city: data.city,
-        });
-      }
-    })();
-  }, []);
-
-  async function handleLogout() {
-    const { supabase } = await import("@/lib/supabase");
-    await supabase.auth.signOut();
-    window.location.href = "/auth/login";
-  }
-
-  if (!user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F7F5EF]">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#225138] border-t-transparent" />
-      </div>
-    );
-  }
+export default function VendorDashboardPage() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F7F5EF]">
-      <header className="border-b border-[#DEDACF] bg-white/60 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <Store className="h-5 w-5 text-[#225138]" />
-            <span className="font-display text-lg font-semibold text-[#225138]">
-              ReBites
-            </span>
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 rounded-md px-3 py-2 font-sans text-sm text-[#6B6A63] transition-colors hover:bg-[#DEDACF]/30 hover:text-[#225138]"
-          >
-            <LogOut className="h-4 w-4" />
-            Keluar
-          </button>
-        </div>
-      </header>
+    <MotionConfig reducedMotion="user">
+      <div className="relative min-h-screen bg-cream-50 font-sans text-charcoal-900">
+        <DashboardDecor />
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
-        <h1 className="font-display text-2xl font-semibold text-[#225138]">
-          Dashboard Penjual
-        </h1>
-        <p className="mt-2 font-sans text-sm text-[#6B6A63]">
-          Selamat datang, {user.fullName}
-        </p>
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        {umkm && (
-          <div className="mt-8 rounded-lg border border-[#DEDACF] bg-white p-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#225138]/10">
-                <Store className="h-5 w-5 text-[#225138]" />
-              </div>
-              <div>
-                <h2 className="font-sans text-lg font-semibold text-[#1B3F2C]">
-                  {umkm.business_name}
-                </h2>
-                <p className="font-sans text-sm text-[#6B6A63]">
-                  {umkm.category} &middot; {umkm.city}
-                </p>
-              </div>
-            </div>
+        <div className="relative z-10 lg:pl-[280px]">
+          <Topbar onMenuClick={() => setSidebarOpen(true)} />
 
-            <div className="mt-6 flex items-center gap-3 rounded-md bg-[#F7F5EF] p-4">
-              <Package className="h-5 w-5 text-[#6B6A63]/60" />
-              <p className="font-sans text-sm text-[#6B6A63]">
-                Belum ada produk. Mulai tambahkan produk pertama Anda.
+          <main className="mx-auto max-w-[1400px] px-4 pb-20 pt-6 sm:px-6 lg:px-10">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
+                Dashboard Penjual
               </p>
-            </div>
-          </div>
-        )}
+              <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
+                Halo, <span className="font-extralight italic">{VENDOR.firstName}</span>
+              </h1>
+              <p className="mt-1 text-sm text-sage-500">
+                Pantau penjualan, pesanan masuk, dan limbah tokomu dari tiap porsi yang
+                terselamatkan.
+              </p>
+            </motion.div>
 
-        {!umkm && (
-          <div className="mt-8 rounded-lg border border-[#DEDACF] bg-white p-6 text-center">
-            <Store className="mx-auto h-10 w-10 text-[#6B6A63]/40" />
-            <p className="mt-3 font-sans text-sm text-[#6B6A63]">
-              Sedang memuat data usaha...
-            </p>
-          </div>
-        )}
-      </main>
-    </div>
+            <div className="mt-7 grid grid-cols-1 gap-5 lg:grid-cols-12 lg:gap-6">
+              {/* Wilayah kanan — tampil lebih dulu di mobile agar kartu toko & pesanan dekat atas */}
+              <div className="order-1 space-y-5 lg:order-2 lg:col-span-4 lg:space-y-6">
+                <Reveal delay={0.05}>
+                  <StoreCard />
+                </Reveal>
+                <Reveal delay={0.1}>
+                  <BestSellingMenuRow />
+                </Reveal>
+                <Reveal delay={0.15}>
+                  <IncomingOrderListCard />
+                </Reveal>
+              </div>
+
+              {/* Wilayah kiri */}
+              <div className="order-2 space-y-5 lg:order-1 lg:col-span-8 lg:space-y-6">
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6">
+                  <Reveal delay={0.05} className="md:col-span-2">
+                    <SalesActivityChartCard />
+                  </Reveal>
+                  <Reveal delay={0.1} className="md:col-span-1">
+                    <VendorStatCardStack />
+                  </Reveal>
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
+                  <Reveal delay={0.1}>
+                    <MonthlySalesTargetCard />
+                  </Reveal>
+                  <Reveal delay={0.15}>
+                    <TipsCard />
+                  </Reveal>
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6">
+                  <Reveal delay={0.15}>
+                    <TopCategoryCard />
+                  </Reveal>
+                  <Reveal delay={0.2}>
+                    <PartnerScoreGaugeCard />
+                  </Reveal>
+                  <Reveal delay={0.25}>
+                    <AchievementBadgesCard />
+                  </Reveal>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </MotionConfig>
   );
 }
