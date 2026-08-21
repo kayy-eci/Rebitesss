@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Share2 } from 'lucide-react';
-import type { ProductDetail } from '@/app/detailProduct/data';
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { ArrowLeft, Share2 } from "lucide-react";
+import type { ProductDetail } from "@/app/detail/product/data";
 
 export function ProductBreadcrumb({
   product,
@@ -13,7 +13,7 @@ export function ProductBreadcrumb({
   onShare: () => void;
 }) {
   const searchParams = useSearchParams();
-  const fromPage = searchParams.get('from') === 'home' ? '/homePage' : '/';
+  const fromPage = searchParams.get("from") === "home" ? "/homePage" : "/";
 
   return (
     <div className="flex items-center justify-between gap-4">
@@ -40,7 +40,7 @@ export function ProductBreadcrumb({
             ·
           </span>
           <Link
-            href="/detailProduct"
+            href="/detail/product"
             className="truncate text-[11px] font-semibold uppercase tracking-[0.2em] text-sage-500 transition-colors hover:text-green-700"
           >
             {product.vendor.name}

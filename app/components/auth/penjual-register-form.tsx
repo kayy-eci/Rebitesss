@@ -193,7 +193,7 @@ export default function PenjualRegisterForm() {
         if (cancelled) return;
 
         if (!session) {
-          router.replace("/login");
+          router.replace("/auth/login");
           return;
         }
 
@@ -208,7 +208,7 @@ export default function PenjualRegisterForm() {
         step1Form.setValue("email", email);
         setSessionReady(true);
       } catch {
-        if (!cancelled) router.replace("/login");
+        if (!cancelled) router.replace("/auth/login");
       }
     })();
     return () => {
@@ -256,7 +256,7 @@ export default function PenjualRegisterForm() {
         data: { session },
       } = await supabase.auth.getSession();
       if (!session) {
-        router.replace("/login");
+        router.replace("/auth/login");
         return;
       }
 
@@ -304,7 +304,7 @@ export default function PenjualRegisterForm() {
 
       if (insertError) throw insertError;
 
-      router.push("/dashboardPenjual");
+      router.push("/dashboard/penjual");
     } catch (err) {
       const message = err instanceof Error ? err.message : "";
       setError(message || "Terjadi kesalahan. Silakan coba lagi.");
@@ -752,7 +752,7 @@ export default function PenjualRegisterForm() {
       >
         Sudah punya akun penjual?{" "}
         <Link
-          href="/login"
+          href="/auth/login"
           className="font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
         >
           Masuk

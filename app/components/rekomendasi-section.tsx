@@ -309,7 +309,7 @@ export function RekomendasiSection() {
               </div>
 
               <Link
-                href={`/register?produk=${item.id}`}
+                href={`/auth/register?produk=${item.id}`}
                 className={`group absolute bottom-0 left-1/2 z-20 inline-flex -translate-x-1/2 translate-y-1/2 items-center gap-2 rounded-full bg-forest px-7 py-3.5 font-sans text-sm font-semibold text-white shadow-[0_18px_38px_-16px_rgba(34,81,56,0.75)] transition-all duration-300 hover:bg-forest-dark ${FOCUS_RING}`}
               >
                 <ShoppingCart className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />

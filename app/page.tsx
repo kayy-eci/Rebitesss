@@ -22,7 +22,7 @@ import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detailProduct/data";
+import { getProductById } from "@/app/detail/product/data";
 import { HeroSection } from "@/app/components/hero-section";
 import {
   Carousel,
@@ -185,7 +185,7 @@ export default function Home() {
   };
 
   const handleRequireLogin = () => {
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   const selectedProduct = selectedProductId
@@ -571,8 +571,12 @@ export default function Home() {
 
                     <div className="relative mt-auto pt-8">
                       <MagneticButton
-                        href="/register"
-                        className="group w-full border border-primary/40 bg-white text-primary transition-colors duration-300 hover:border-caramel hover:bg-caramel hover:text-white"
+                        href="/auth/register"
+                        className={`group w-full border transition-all duration-300 ${
+                          plan.popular
+                            ? "border-caramel bg-caramel text-white hover:bg-[#A06B45]"
+                            : "border-primary/40 bg-white text-primary hover:border-caramel hover:bg-caramel hover:text-white"
+                        }`}
                       >
                         {plan.cta}
 

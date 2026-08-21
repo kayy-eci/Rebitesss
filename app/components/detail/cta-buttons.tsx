@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Check, Heart, ShoppingBag } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { ProductDetail } from '@/app/detailProduct/data';
+import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { Check, Heart, ShoppingBag } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { ProductDetail } from "@/app/detail/product/data";
 
 export function CTAButtons({
   product,
@@ -22,7 +22,7 @@ export function CTAButtons({
   const handleSave = () => {
     const next = !saved;
     setSaved(next);
-    notify(next ? 'Disimpan ke favorit' : 'Dihapus dari favorit');
+    notify(next ? "Disimpan ke favorit" : "Dihapus dari favorit");
   };
 
   const handleOrder = () => {
@@ -56,28 +56,28 @@ export function CTAButtons({
       <motion.button
         type="button"
         aria-pressed={saved}
-        aria-label={saved ? 'Hapus dari favorit' : 'Simpan ke favorit'}
+        aria-label={saved ? "Hapus dari favorit" : "Simpan ke favorit"}
         onClick={handleSave}
         whileTap={reduce ? undefined : { scale: 0.94 }}
         className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50',
+          "inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50",
           saved
-            ? 'border-green-700 bg-sage-100 text-green-700'
-            : 'border-sage-500/60 text-green-700 hover:bg-cream-100'
+            ? "border-green-700 bg-sage-100 text-green-700"
+            : "border-sage-500/60 text-green-700 hover:bg-cream-100",
         )}
       >
         <motion.span
           className="inline-flex"
-          key={saved ? 'on' : 'off'}
+          key={saved ? "on" : "off"}
           initial={saved ? { scale: 0.5, rotate: -18 } : false}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: 'spring', stiffness: 600, damping: 14 }}
+          transition={{ type: "spring", stiffness: 600, damping: 14 }}
         >
           <Heart
-            className={cn('h-4 w-4', saved && 'fill-green-700 text-green-700')}
+            className={cn("h-4 w-4", saved && "fill-green-700 text-green-700")}
           />
         </motion.span>
-        {saved ? 'Tersimpan' : 'Simpan'}
+        {saved ? "Tersimpan" : "Simpan"}
       </motion.button>
     </div>
   );

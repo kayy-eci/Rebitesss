@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ProfileNavbar } from '@/app/components/navbar';
-import { SiteFooter } from '@/app/components/site-footer';
-import { CartProvider, useCart } from './cart-context';
-import { PageOrnaments } from './page-ornaments';
-import { ProductBreadcrumb } from './product-breadcrumb';
-import { ProductGallery } from './product-gallery';
-import { ProductInfo } from './product-info';
-import { ReviewSection } from './review-section';
-import { RelatedProducts } from './related-products';
-import { StickyMobileBar } from './sticky-mobile-bar';
-import { PRODUCT, RELATED_PRODUCTS, REVIEWS } from '@/app/detailProduct/data';
-import { EASE } from './anim';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ProfileNavbar } from "@/app/components/navbar";
+import { SiteFooter } from "@/app/components/site-footer";
+import { CartProvider, useCart } from "./cart-context";
+import { PageOrnaments } from "./page-ornaments";
+import { ProductBreadcrumb } from "./product-breadcrumb";
+import { ProductGallery } from "./product-gallery";
+import { ProductInfo } from "./product-info";
+import { ReviewSection } from "./review-section";
+import { RelatedProducts } from "./related-products";
+import { StickyMobileBar } from "./sticky-mobile-bar";
+import { PRODUCT, RELATED_PRODUCTS, REVIEWS } from "@/app/detail/product/data";
+import { EASE } from "./anim";
 
 export default function DetailPage() {
   return (
@@ -27,7 +27,7 @@ function DetailPageContent() {
   const rightColRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState<{ id: number; message: string } | null>(
-    null
+    null,
   );
   const { addToCart } = useCart();
 
@@ -43,15 +43,15 @@ function DetailPageContent() {
 
   const handleOrder = useCallback(() => {
     addToCart(PRODUCT);
-    notify('Ditambahkan ke keranjang');
+    notify("Ditambahkan ke keranjang");
   }, [addToCart, notify]);
 
   const handleShare = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      notify('Link produk disalin ke clipboard');
+      notify("Link produk disalin ke clipboard");
     } catch {
-      notify('Gagal menyalin link');
+      notify("Gagal menyalin link");
     }
   }, [notify]);
 
@@ -82,7 +82,11 @@ function DetailPageContent() {
         <RelatedProducts products={RELATED_PRODUCTS} />
       </main>
 
-      <StickyMobileBar product={PRODUCT} ctaRef={ctaRef} onOrder={handleOrder} />
+      <StickyMobileBar
+        product={PRODUCT}
+        ctaRef={ctaRef}
+        onOrder={handleOrder}
+      />
 
       <AnimatePresence>
         {toast && (

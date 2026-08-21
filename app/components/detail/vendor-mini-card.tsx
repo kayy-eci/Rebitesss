@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { ArrowRight, Leaf } from 'lucide-react';
-import type { VendorInfo } from '@/app/detailProduct/data';
-import { Avatar } from './avatar';
-import { Stars } from './stars';
+import Link from "next/link";
+import { ArrowRight, Leaf } from "lucide-react";
+import type { VendorInfo } from "@/app/detail/product/data";
+import { Avatar } from "./avatar";
+import { Stars } from "./stars";
 
 export function VendorMiniCard({ vendor }: { vendor: VendorInfo }) {
   return (
@@ -33,7 +33,7 @@ export function VendorMiniCard({ vendor }: { vendor: VendorInfo }) {
       </div>
 
       <Link
-        href="/detailProduct"
+        href="/detail/product"
         className="group inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-sage-500/50 px-4 py-2 text-sm font-semibold text-green-700 transition-colors duration-200 hover:bg-green-700 hover:text-white sm:self-auto"
       >
         Lihat Toko

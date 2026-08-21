@@ -24,7 +24,7 @@ export default function RegisterPage() {
       bottomHint={{
         text: "Sudah punya akun?",
         linkText: "Masuk",
-        href: "/login",
+        href: "/auth/login",
       }}
       brand={{
         title: (

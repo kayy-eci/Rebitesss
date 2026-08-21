@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { Clock, Leaf, ShieldCheck, Store } from 'lucide-react';
-import type { ProductDetail } from '@/app/detailProduct/data';
-import { StaggerGroup, StaggerItem } from './anim';
+import { Clock, Leaf, ShieldCheck, Store } from "lucide-react";
+import type { ProductDetail } from "@/app/detail/product/data";
+import { StaggerGroup, StaggerItem } from "./anim";
 
 export function InfoGrid({ product }: { product: ProductDetail }) {
   const items = [
     {
       icon: Clock,
-      label: 'Waktu Ambil',
+      label: "Waktu Ambil",
       value: `${product.pickupTime.from}–${product.pickupTime.to} WIB`,
     },
-    { icon: Store, label: 'Titik Ambil', value: product.pickupLocation },
-    { icon: ShieldCheck, label: 'Kelayakan', value: product.consumeWindow },
+    { icon: Store, label: "Titik Ambil", value: product.pickupLocation },
+    { icon: ShieldCheck, label: "Kelayakan", value: product.consumeWindow },
     {
       icon: Leaf,
-      label: 'Dampak',
+      label: "Dampak",
       value: `±${product.co2eSavedKg} kg CO₂e dicegah`,
     },
   ];

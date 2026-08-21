@@ -184,7 +184,7 @@ export function HeroSection() {
 
             <div className="flex items-center gap-4">
               <Link
-                href="/login"
+                href="/auth/login"
                 className={cn(
                   "hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(34,81,56,0.65)] transition-colors duration-300 sm:flex",
                   navIsDark
@@ -261,7 +261,7 @@ export function HeroSection() {
 
                 <div className="mt-2 flex border-t border-hairline/70 pt-3">
                   <Link
-                    href="/login"
+                    href="/auth/login"
                     onClick={() => setOpen(false)}
                     className="flex flex-1 items-center justify-center gap-2 rounded-full bg-forest py-3 font-inter text-sm font-semibold text-white transition-colors duration-300 hover:bg-caramel"
                   >

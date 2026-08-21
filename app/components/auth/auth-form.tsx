@@ -233,7 +233,7 @@ export default function AuthForm({
           hint={
             !isSignup ? (
               <Link
-                href="/forgot-password"
+                href="/auth/forgotPassword"
                 className="font-sans text-xs text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
               >
                 Forgot Password?

@@ -13,7 +13,7 @@ import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
 import { MagneticButton } from "@/app/components/magnetic-button";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detailProduct/data";
+import { getProductById } from "@/app/detail/product/data";
 
 import { ArrowRight } from "lucide-react";
 
@@ -67,7 +67,9 @@ const PLANS = [
 
 export default function HomePage() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null,
+  );
 
   const handleViewDetail = useCallback((id: string) => {
     setSelectedProductId(id);
@@ -77,7 +79,9 @@ export default function HomePage() {
     setSelectedProductId(null);
   }, []);
 
-  const selectedProduct = selectedProductId ? getProductById(selectedProductId) : undefined;
+  const selectedProduct = selectedProductId
+    ? getProductById(selectedProductId)
+    : undefined;
 
   return (
     <div>
@@ -295,8 +299,8 @@ export default function HomePage() {
 
                       <div className="relative mt-auto pt-8">
                         <MagneticButton
-                          href="/register"
-                          className="group w-full border border-primary/40 bg-white text-primary transition-colors duration-300 hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
+                          href="/auth/register"
+                          className="group w-full border border-primary/40 bg-white text-primary transition-all duration-300 hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
                         >
                           {plan.cta}
 
