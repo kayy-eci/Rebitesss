@@ -1,27 +1,21 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Fraunces, Inter, Space_Grotesk } from 'next/font/google';
+import { Be_Vietnam_Pro, Plus_Jakarta_Sans } from 'next/font/google';
 
-const fraunces = Fraunces({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700', '900'],
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
   style: ['normal', 'italic'],
 });
 
-const spaceGrotesk = Space_Grotesk({
+const beVietnamPro = Be_Vietnam_Pro({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
@@ -45,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${fraunces.variable} ${spaceGrotesk.variable} ${inter.variable}`}
+      className={`${plusJakartaSans.variable} ${beVietnamPro.variable}`}
     >
       <body className="font-sans antialiased">{children}</body>
     </html>
