@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { CalendarDays } from 'lucide-react';
-import type { ProductDetail, Review } from '@/app/detailProduct/data';
-import { Avatar } from './avatar';
-import { Stars } from './stars';
-import { StaggerGroup, StaggerItem } from './anim';
+import { CalendarDays } from "lucide-react";
+import type { ProductDetail, Review } from "@/app/detail/product/data";
+import { Avatar } from "./avatar";
+import { Stars } from "./stars";
+import { StaggerGroup, StaggerItem } from "./anim";
 
 export function ReviewSection({
   reviews,

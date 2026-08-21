@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { Lock, MapPin } from 'lucide-react';
-import type { ProductDetail } from '@/app/detailProduct/data';
-import { formatIDR } from '@/app/detailProduct/data';
-import { SectionReveal, fadeUpSmall, staggerContainer } from './anim';
-import { Stars } from './stars';
-import { VendorMiniCard } from './vendor-mini-card';
-import { InfoGrid } from './info-grid';
-import { TrustBadges } from './trust-badges';
-import { PackageContents } from './package-contents';
-import { CTAButtons } from './cta-buttons';
+import { motion } from "framer-motion";
+import { Lock, MapPin } from "lucide-react";
+import type { ProductDetail } from "@/app/detail/product/data";
+import { formatIDR } from "@/app/detail/product/data";
+import { SectionReveal, fadeUpSmall, staggerContainer } from "./anim";
+import { Stars } from "./stars";
+import { VendorMiniCard } from "./vendor-mini-card";
+import { InfoGrid } from "./info-grid";
+import { TrustBadges } from "./trust-badges";
+import { PackageContents } from "./package-contents";
+import { CTAButtons } from "./cta-buttons";
 
 export function ProductInfo({
   product,
@@ -58,7 +58,7 @@ export function ProductInfo({
           </span>
           <span className="inline-flex items-center gap-1 text-charcoal-500">
             <MapPin className="h-4 w-4 text-green-700" />
-            {product.distanceKm.toLocaleString('id-ID')} km dari kamu
+            {product.distanceKm.toLocaleString("id-ID")} km dari kamu
           </span>
         </motion.div>
 

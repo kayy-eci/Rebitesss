@@ -22,7 +22,7 @@ import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detailProduct/data";
+import { getProductById } from "@/app/detail/product/data";
 import { HeroSection } from "@/app/components/hero-section";
 import {
   Carousel,
@@ -171,7 +171,9 @@ export default function Home() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const [testimonialApi, setTestimonialApi] = useState<CarouselApi>();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null,
+  );
 
   const handleViewDetail = (id: string) => {
     setSelectedProductId(id);

@@ -1,16 +1,25 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Minus, Plus, Star, X, Clock, MapPin, Truck, Shield } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatIDR, type ProductDetail } from '@/app/detailProduct/data';
+import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Minus,
+  Plus,
+  Star,
+  X,
+  Clock,
+  MapPin,
+  Truck,
+  Shield,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { formatIDR, type ProductDetail } from "@/app/detail/product/data";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function ProductDetailModal({
   product,
@@ -31,16 +40,16 @@ export function ProductDetailModal({
   /* ── focus trap & escape ── */
   useEffect(() => {
     prevFocusRef.current = document.activeElement as HTMLElement;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
         return;
       }
-      if (e.key !== 'Tab' || !dialogRef.current) return;
+      if (e.key !== "Tab" || !dialogRef.current) return;
       const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
       if (focusable.length === 0) return;
       const first = focusable[0];
@@ -54,15 +63,17 @@ export function ProductDetailModal({
       }
     };
 
-    document.addEventListener('keydown', handleKey);
+    document.addEventListener("keydown", handleKey);
     // focus first element
     requestAnimationFrame(() => {
-      dialogRef.current?.querySelector<HTMLElement>('button, [tabindex]')?.focus();
+      dialogRef.current
+        ?.querySelector<HTMLElement>("button, [tabindex]")
+        ?.focus();
     });
 
     return () => {
-      document.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = '';
+      document.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
       prevFocusRef.current?.focus();
     };
   }, [onClose]);
@@ -71,7 +82,7 @@ export function ProductDetailModal({
     (e: React.MouseEvent) => {
       if (e.target === overlayRef.current) onClose();
     },
-    [onClose]
+    [onClose],
   );
 
   const handleAddToCart = useCallback(() => {
@@ -115,8 +126,8 @@ export function ProductDetailModal({
             aria-label="Tutup detail produk"
             onClick={onClose}
             className={cn(
-              'absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-charcoal-900 shadow-md backdrop-blur-sm transition-all duration-200 hover:bg-white hover:shadow-lg hover:scale-105',
-              FOCUS_RING
+              "absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-charcoal-900 shadow-md backdrop-blur-sm transition-all duration-200 hover:bg-white hover:shadow-lg hover:scale-105",
+              FOCUS_RING,
             )}
           >
             <X className="h-5 w-5" />
@@ -161,11 +172,11 @@ export function ProductDetailModal({
                   aria-label={`Lihat foto ${i + 1}`}
                   onClick={() => setImageIdx(i)}
                   className={cn(
-                    'relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl border-2 transition-all duration-200 sm:h-[80px] sm:w-[80px]',
+                    "relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl border-2 transition-all duration-200 sm:h-[80px] sm:w-[80px]",
                     i === imageIdx
-                      ? 'border-green-700 shadow-md shadow-green-700/15'
-                      : 'border-transparent opacity-60 hover:opacity-100',
-                    FOCUS_RING
+                      ? "border-green-700 shadow-md shadow-green-700/15"
+                      : "border-transparent opacity-60 hover:opacity-100",
+                    FOCUS_RING,
                   )}
                 >
                   <Image
@@ -188,13 +199,15 @@ export function ProductDetailModal({
               <span className="mx-2 text-sage">/</span>
               <span className="text-charcoal-500">KATALOG</span>
               <span className="mx-2 text-sage">/</span>
-              <span className="text-charcoal-900">{product.title.toUpperCase()}</span>
+              <span className="text-charcoal-900">
+                {product.title.toUpperCase()}
+              </span>
             </div>
 
             {/* Badge */}
             {product.discountPercent >= 40 && (
               <div className="mb-3 w-fit rounded-full bg-sage-100 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-green-700">
-                {product.discountPercent >= 50 ? 'BEST SELLER' : 'HEMAT'}
+                {product.discountPercent >= 50 ? "BEST SELLER" : "HEMAT"}
               </div>
             )}
 
@@ -210,7 +223,7 @@ export function ProductDetailModal({
 
             {/* Vendor */}
             <p className="mt-1.5 text-sm text-charcoal-500">
-              oleh{' '}
+              oleh{" "}
               <span className="font-medium text-charcoal-900">
                 {product.vendor.name}
               </span>
@@ -223,10 +236,10 @@ export function ProductDetailModal({
                   <Star
                     key={i}
                     className={cn(
-                      'h-4 w-4',
+                      "h-4 w-4",
                       i < Math.round(product.rating)
-                        ? 'fill-gold-500 text-gold-500'
-                        : 'text-sage-100'
+                        ? "fill-gold-500 text-gold-500"
+                        : "text-sage-100",
                     )}
                   />
                 ))}
@@ -234,13 +247,19 @@ export function ProductDetailModal({
                   {product.rating.toFixed(1)}
                 </span>
               </span>
-              <span aria-hidden className="text-sage">·</span>
+              <span aria-hidden className="text-sage">
+                ·
+              </span>
               <span>{product.reviewCount} ulasan</span>
-              <span aria-hidden className="text-sage">·</span>
+              <span aria-hidden className="text-sage">
+                ·
+              </span>
               <span
                 className={cn(
-                  'font-medium',
-                  product.stockRemaining <= 3 ? 'text-[#E53935]' : 'text-green-600'
+                  "font-medium",
+                  product.stockRemaining <= 3
+                    ? "text-[#E53935]"
+                    : "text-green-600",
                 )}
               >
                 {product.stockLabel}
@@ -294,8 +313,8 @@ export function ProductDetailModal({
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   disabled={qty <= 1}
                   className={cn(
-                    'flex h-full w-12 items-center justify-center text-lg font-medium text-charcoal-500 transition-colors hover:bg-cream-100 disabled:opacity-30',
-                    FOCUS_RING
+                    "flex h-full w-12 items-center justify-center text-lg font-medium text-charcoal-500 transition-colors hover:bg-cream-100 disabled:opacity-30",
+                    FOCUS_RING,
                   )}
                 >
                   <Minus className="h-4 w-4" />
@@ -306,11 +325,13 @@ export function ProductDetailModal({
                 <button
                   type="button"
                   aria-label="Tambah jumlah"
-                  onClick={() => setQty((q) => Math.min(product.stockRemaining, q + 1))}
+                  onClick={() =>
+                    setQty((q) => Math.min(product.stockRemaining, q + 1))
+                  }
                   disabled={qty >= product.stockRemaining}
                   className={cn(
-                    'flex h-full w-12 items-center justify-center text-lg font-medium text-charcoal-500 transition-colors hover:bg-cream-100 disabled:opacity-30',
-                    FOCUS_RING
+                    "flex h-full w-12 items-center justify-center text-lg font-medium text-charcoal-500 transition-colors hover:bg-cream-100 disabled:opacity-30",
+                    FOCUS_RING,
                   )}
                 >
                   <Plus className="h-4 w-4" />
@@ -323,14 +344,18 @@ export function ProductDetailModal({
                 onClick={handleAddToCart}
                 disabled={added}
                 className={cn(
-                  'flex h-[52px] flex-1 items-center justify-center gap-2 rounded-full bg-forest-dark px-6 text-sm font-semibold text-white shadow-lg shadow-forest-900/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest hover:shadow-xl active:scale-[0.98]',
-                  added && 'bg-green-600',
-                  FOCUS_RING
+                  "flex h-[52px] flex-1 items-center justify-center gap-2 rounded-full bg-forest-dark px-6 text-sm font-semibold text-white shadow-lg shadow-forest-900/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest hover:shadow-xl active:scale-[0.98]",
+                  added && "bg-green-600",
+                  FOCUS_RING,
                 )}
               >
                 {added ? (
                   <>
-                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
                       <path
                         fillRule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -340,7 +365,7 @@ export function ProductDetailModal({
                     Ditambahkan!
                   </>
                 ) : (
-                  'Tambah ke Keranjang'
+                  "Tambah ke Keranjang"
                 )}
               </button>
             </div>

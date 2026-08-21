@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
-import Image from 'next/image';
+import { useCallback, useState } from "react";
+import Image from "next/image";
 import {
   AnimatePresence,
   animate,
@@ -11,11 +11,11 @@ import {
   useScroll,
   useTransform,
   type PanInfo,
-} from 'framer-motion';
-import { ChevronLeft, ChevronRight, Package } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { ProductDetail } from '@/app/detailProduct/data';
-import { EASE } from './anim';
+} from "framer-motion";
+import { ChevronLeft, ChevronRight, Package } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { ProductDetail } from "@/app/detail/product/data";
+import { EASE } from "./anim";
 
 export function ProductGallery({
   product,
@@ -31,30 +31,30 @@ export function ProductGallery({
 
   const { scrollYProgress } = useScroll({
     target: scrollTargetRef,
-    offset: ['start end', 'end start'],
+    offset: ["start end", "end start"],
   });
   const kenburns = useTransform(scrollYProgress, [0, 1], [0.97, 1.03]);
 
   const next = useCallback(() => setIndex((i) => (i + 1) % count), [count]);
   const prev = useCallback(
     () => setIndex((i) => (i - 1 + count) % count),
-    [count]
+    [count],
   );
 
   const handleDragEnd = useCallback(
     (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
       if (info.offset.x < -50) next();
       else if (info.offset.x > 50) prev();
-      animate(dragX, 0, { type: 'spring', stiffness: 400, damping: 40 });
+      animate(dragX, 0, { type: "spring", stiffness: 400, damping: 40 });
     },
-    [next, prev, dragX]
+    [next, prev, dragX],
   );
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'ArrowLeft') {
+    if (event.key === "ArrowLeft") {
       event.preventDefault();
       prev();
-    } else if (event.key === 'ArrowRight') {
+    } else if (event.key === "ArrowRight") {
       event.preventDefault();
       next();
     }
@@ -80,8 +80,8 @@ export function ProductGallery({
           aria-label="Foto sebelumnya"
           onClick={prev}
           className={cn(
-            'absolute left-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-cream-50/90 text-green-700 shadow-md transition-all duration-200 hover:scale-105 hover:bg-white sm:flex',
-            'opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600'
+            "absolute left-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-cream-50/90 text-green-700 shadow-md transition-all duration-200 hover:scale-105 hover:bg-white sm:flex",
+            "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600",
           )}
         >
           <ChevronLeft className="h-5 w-5" />
@@ -91,15 +91,15 @@ export function ProductGallery({
           aria-label="Foto berikutnya"
           onClick={next}
           className={cn(
-            'absolute right-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-cream-50/90 text-green-700 shadow-md transition-all duration-200 hover:scale-105 hover:bg-white sm:flex',
-            'opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600'
+            "absolute right-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-cream-50/90 text-green-700 shadow-md transition-all duration-200 hover:scale-105 hover:bg-white sm:flex",
+            "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600",
           )}
         >
           <ChevronRight className="h-5 w-5" />
         </button>
 
         <motion.div
-          drag={reduce ? false : 'x'}
+          drag={reduce ? false : "x"}
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.12}
           dragMomentum={false}
@@ -134,12 +134,10 @@ export function ProductGallery({
         </motion.div>
 
         <motion.div
-          animate={
-            lowStock && !reduce ? { scale: [1, 1.04, 1] } : undefined
-          }
+          animate={lowStock && !reduce ? { scale: [1, 1.04, 1] } : undefined}
           transition={
             lowStock && !reduce
-              ? { duration: 2, repeat: Infinity, ease: 'easeInOut' }
+              ? { duration: 2, repeat: Infinity, ease: "easeInOut" }
               : undefined
           }
           className="absolute bottom-4 left-4 z-20 flex items-center gap-1.5 rounded-full bg-forest-900/70 px-3 py-1.5 text-xs font-medium text-cream-50 backdrop-blur-sm"
@@ -157,10 +155,10 @@ export function ProductGallery({
               aria-current={i === index}
               onClick={() => setIndex(i)}
               className={cn(
-                'h-2 rounded-full transition-all duration-300',
+                "h-2 rounded-full transition-all duration-300",
                 i === index
-                  ? 'w-6 bg-green-700'
-                  : 'w-2 bg-cream-50/70 hover:bg-cream-50'
+                  ? "w-6 bg-green-700"
+                  : "w-2 bg-cream-50/70 hover:bg-cream-50",
               )}
             />
           ))}
@@ -179,13 +177,19 @@ export function ProductGallery({
             aria-label={`Tampilkan foto ${i + 1}`}
             onClick={() => setIndex(i)}
             className={cn(
-              'relative aspect-square overflow-hidden rounded-xl border-2 bg-cream-100 transition-all duration-200',
+              "relative aspect-square overflow-hidden rounded-xl border-2 bg-cream-100 transition-all duration-200",
               i === index
-                ? 'border-green-700 ring-2 ring-green-700/20'
-                : 'border-transparent opacity-70 hover:opacity-100'
+                ? "border-green-700 ring-2 ring-green-700/20"
+                : "border-transparent opacity-70 hover:opacity-100",
             )}
           >
-            <Image src={image} alt="" fill sizes="80px" className="object-cover" />
+            <Image
+              src={image}
+              alt=""
+              fill
+              sizes="80px"
+              className="object-cover"
+            />
           </button>
         ))}
       </div>

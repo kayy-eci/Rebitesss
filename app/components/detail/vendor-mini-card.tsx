@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { ArrowRight, Leaf } from 'lucide-react';
-import type { VendorInfo } from '@/app/detailProduct/data';
-import { Avatar } from './avatar';
-import { Stars } from './stars';
+import Link from "next/link";
+import { ArrowRight, Leaf } from "lucide-react";
+import type { VendorInfo } from "@/app/detail/product/data";
+import { Avatar } from "./avatar";
+import { Stars } from "./stars";
 
 export function VendorMiniCard({ vendor }: { vendor: VendorInfo }) {
   return (

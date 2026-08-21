@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ShoppingBag } from 'lucide-react';
-import type { ProductDetail } from '@/app/detailProduct/data';
-import { formatIDR } from '@/app/detailProduct/data';
-import { EASE } from './anim';
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ShoppingBag } from "lucide-react";
+import type { ProductDetail } from "@/app/detail/product/data";
+import { formatIDR } from "@/app/detail/product/data";
+import { EASE } from "./anim";
 
 export function StickyMobileBar({
   product,
@@ -26,18 +26,18 @@ export function StickyMobileBar({
       const rect = el.getBoundingClientRect();
       setVisible(rect.bottom < 0);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, [ctaRef]);
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ y: reduce ? 0 : '100%' }}
+          initial={{ y: reduce ? 0 : "100%" }}
           animate={{ y: 0 }}
-          exit={{ y: reduce ? 0 : '100%' }}
+          exit={{ y: reduce ? 0 : "100%" }}
           transition={{ duration: 0.35, ease: EASE }}
           className="fixed inset-x-0 bottom-0 z-40 border-t border-sage-100 bg-cream-50/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl lg:hidden"
         >

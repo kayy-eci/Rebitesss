@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   createContext,
@@ -6,8 +6,8 @@ import {
   useContext,
   useMemo,
   useState,
-} from 'react';
-import type { ProductDetail } from '@/app/detailProduct/data';
+} from "react";
+import type { ProductDetail } from "@/app/detail/product/data";
 
 export interface CartItem {
   id: string;
@@ -35,7 +35,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+          item.id === product.id ? { ...item, qty: item.qty + 1 } : item,
         );
       }
       return [
@@ -63,7 +63,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       addToCart,
       removeFromCart,
     }),
-    [items, addToCart, removeFromCart]
+    [items, addToCart, removeFromCart],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
@@ -71,6 +71,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
 export function useCart() {
   const ctx = useContext(CartContext);
-  if (!ctx) throw new Error('useCart harus dipakai di dalam CartProvider');
+  if (!ctx) throw new Error("useCart harus dipakai di dalam CartProvider");
   return ctx;
 }

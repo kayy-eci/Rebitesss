@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
-import type { RelatedProduct } from '@/app/detailProduct/data';
-import { formatIDR } from '@/app/detailProduct/data';
-import { StaggerGroup, StaggerItem } from './anim';
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import type { RelatedProduct } from "@/app/detail/product/data";
+import { formatIDR } from "@/app/detail/product/data";
+import { StaggerGroup, StaggerItem } from "./anim";
 
 export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
   return (
