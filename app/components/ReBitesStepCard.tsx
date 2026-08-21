@@ -28,8 +28,10 @@ export default function ReBitesStepCard({
 }: ReBitesStepCardProps) {
   return (
     <div
-      className={`relative flex min-h-[260px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-black/5 shadow-sm transition-[box-shadow,background-color] duration-500 ${
-        isActive ? "bg-white shadow-md" : "bg-[#F8FAFC]"
+      className={`relative flex min-h-[260px] cursor-pointer flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-[box-shadow,border-color,transform] duration-500 hover:-translate-y-1 ${
+        isActive
+          ? "border-caramel/40 shadow-[0_18px_40px_-24px_rgba(34,81,56,0.35)]"
+          : "border-black/5"
       }`}
       onMouseEnter={isTouch ? undefined : onHoverStart}
       onMouseLeave={isTouch ? undefined : onHoverEnd}

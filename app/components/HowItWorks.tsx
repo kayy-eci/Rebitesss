@@ -60,20 +60,27 @@ export default function HowItWorks() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-12">
-            {steps.map((step, index) => (
-              <ReBitesStepCard
-                key={index}
-                step={step}
-                isActive={hoveredStep === index}
-                isTouch={isTouch}
-                onHoverStart={() => setHoveredStep(index)}
-                onHoverEnd={() => setHoveredStep(null)}
-                onSelect={() =>
-                  setHoveredStep(hoveredStep === index ? null : index)
-                }
-              />
-            ))}
+          <div className="relative mt-14 lg:mt-16">
+            <span
+              aria-hidden
+              className="absolute inset-x-12 top-[70px] hidden h-px bg-primary/15 lg:block"
+            />
+
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+              {steps.map((step, index) => (
+                <ReBitesStepCard
+                  key={index}
+                  step={step}
+                  isActive={hoveredStep === index}
+                  isTouch={isTouch}
+                  onHoverStart={() => setHoveredStep(index)}
+                  onHoverEnd={() => setHoveredStep(null)}
+                  onSelect={() =>
+                    setHoveredStep(hoveredStep === index ? null : index)
+                  }
+                />
+              ))}
+            </div>
           </div>
         </Reveal>
       </div>
