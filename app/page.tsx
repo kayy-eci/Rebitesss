@@ -50,15 +50,16 @@ const PARTNERS = [
 const PLANS = [
   {
     name: "Basic",
-    tagline: "Gunakan ReBites secara gratis selamanya.",
+    tagline: "Mulai jualan di ReBites tanpa biaya, selamanya.",
     monthly: 0,
     yearly: 0,
     features: [
+      "Gratis tanpa biaya langganan",
       "Maksimal 5 produk",
       "Riwayat penjualan 30 hari",
       "Dashboard penjualan",
     ],
-    cta: "Gunakan Gratis",
+    cta: "Mulai Jual",
     popular: false,
   },
   {
@@ -171,7 +172,9 @@ export default function Home() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const [testimonialApi, setTestimonialApi] = useState<CarouselApi>();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null,
+  );
 
   const handleViewDetail = (id: string) => {
     setSelectedProductId(id);
@@ -228,28 +231,26 @@ export default function Home() {
 
       <UrgentDealsSection onViewDetail={handleViewDetail} />
 
-      <HowItWorks />
-
       <section
         id="about"
-        data-nav="green"
-        className="grain-overlay relative overflow-hidden bg-primary py-20 lg:py-28"
+        data-nav="cream"
+        className="grain-overlay relative overflow-hidden bg-cream py-20 lg:py-28"
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-32 -top-32 h-[32rem] w-[32rem] rounded-full bg-[#C8A882]/10 blur-3xl"
+          className="pointer-events-none absolute -right-32 -top-32 h-[32rem] w-[32rem] rounded-full bg-primary/[0.06] blur-3xl"
         />
 
         <div
           aria-hidden
-          className="pointer-events-none absolute right-20 top-32 h-32 w-32 rounded-full border border-[#C8A882]/20"
+          className="pointer-events-none absolute right-20 top-32 h-32 w-32 rounded-full border border-caramel/40"
         />
 
         <div className="relative mx-auto max-w-[1400px]">
           <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
             <div>
               <Reveal delay={0.15}>
-                <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
+                <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
                   <RevealWords text="Bukan sekadar" />{" "}
                   <RevealWords text="menyelamatkan" />{" "}
                   <RevealWords text="makanan." />
@@ -257,7 +258,7 @@ export default function Home() {
               </Reveal>
 
               <Reveal delay={0.2}>
-                <p className="mt-6 max-w-lg font-sans text-sm leading-[1.85] text-primary-foreground">
+                <p className="mt-6 max-w-lg font-sans text-sm leading-[1.85] text-muted-foreground">
                   <span className="font-semibold text-[#C8A882]">ReBites</span>{" "}
                   hadir sebagai marketplace makanan surplus yang mempertemukan
                   pelaku UMKM dengan masyarakat. Makanan yang sebelumnya
@@ -295,10 +296,10 @@ export default function Home() {
                 },
               ].map((stat, i) => (
                 <Reveal key={stat.label} delay={0.15 + i * 0.08}>
-                  <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-white bg-primary-foreground/[0.05] p-5 transition-colors duration-300 hover:bg-primary-foreground/[0.10] sm:p-6">
+                  <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-border bg-white p-5 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel sm:p-6">
                     <stat.icon className="mb-3 h-5 w-5 text-[#C8A882]" />
 
-                    <p className="flex items-baseline gap-1 font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-none tracking-tight text-primary-foreground">
+                    <p className="flex items-baseline gap-1 font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-none tracking-tight text-primary">
                       <Counter
                         to={stat.value}
                         prefix={stat.prefix ?? ""}
@@ -308,11 +309,11 @@ export default function Home() {
                       />
                     </p>
 
-                    <p className="mt-2 font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-primary-foreground">
+                    <p className="mt-2 font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
                       {stat.label}
                     </p>
 
-                    <p className="mt-1 font-sans text-xs text-primary-foreground">
+                    <p className="mt-1 font-sans text-xs text-muted-foreground">
                       {stat.subtext}
                     </p>
                   </div>
@@ -322,7 +323,7 @@ export default function Home() {
           </div>
 
           <Reveal delay={0.1}>
-            <h3 className="mt-14 font-display text-[clamp(1.5rem,2.8vw,2.2rem)] font-light leading-[1.1] tracking-[-0.02em] text-primary-foreground lg:mt-20">
+            <h3 className="mt-14 font-display text-[clamp(1.5rem,2.8vw,2.2rem)] font-light leading-[1.1] tracking-[-0.02em] text-primary lg:mt-20">
               Untuk <span className="text-[#C8A882]">UMKM</span>. Untuk{" "}
               <span className="text-[#C8A882]">masyarakat</span>. Untuk{" "}
               <span className="text-[#C8A882]">lingkungan</span>.
@@ -348,16 +349,16 @@ export default function Home() {
               },
             ].map((item, i) => (
               <Reveal key={item.num} delay={0.1 + i * 0.08}>
-                <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-white bg-primary-foreground/[0.06] p-7 transition-colors duration-300 hover:bg-primary-foreground/[0.12] sm:p-8">
+                <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-border bg-white p-7 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel sm:p-8">
                   <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
                     {item.num}
                   </span>
 
-                  <h3 className="mt-5 font-sans text-xl font-semibold tracking-tight text-primary-foreground">
+                  <h3 className="mt-5 font-sans text-xl font-semibold tracking-tight text-primary">
                     {item.title}
                   </h3>
 
-                  <p className="mt-3 max-w-xs font-sans text-sm leading-[1.8] text-primary-foreground">
+                  <p className="mt-3 max-w-xs font-sans text-sm leading-[1.8] text-muted-foreground">
                     {item.desc}
                   </p>
                 </div>
@@ -366,6 +367,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <HowItWorks />
 
       <section
         id="langganan"
@@ -434,7 +437,7 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="mt-14 grid gap-5 lg:mt-16 lg:grid-cols-3">
+          <div className="mx-auto mt-14 grid max-w-[1080px] gap-5 lg:mt-16 lg:grid-cols-3">
             {PLANS.map((plan, i) => {
               const yearlyMode = billing === "yearly";
 
@@ -450,7 +453,7 @@ export default function Home() {
 
               const subLine =
                 plan.monthly === 0
-                  ? "Gratis selama 1 bulan"
+                  ? "Tidak Perlu Langganan"
                   : yearlyMode
                     ? `Setara Rp${Math.round(plan.yearly / 12).toLocaleString(
                         "id-ID",
@@ -459,15 +462,9 @@ export default function Home() {
 
               return (
                 <Reveal key={plan.name} delay={i * 0.1} className="h-full">
-                  <div
-                    className={`relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 lg:p-9 ${
-                      plan.popular
-                        ? "border-caramel shadow-[0_15px_40px_-20px_rgba(200,168,130,0.35)]"
-                        : "border-border hover:border-caramel"
-                    }`}
-                  >
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel lg:p-9">
                     {plan.popular && (
-                      <div className="absolute right-5 top-5 rounded-full bg-white px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                      <div className="absolute right-5 top-5 rounded-full bg-caramel px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
                         Paling Populer
                       </div>
                     )}
@@ -575,11 +572,7 @@ export default function Home() {
                     <div className="relative mt-auto pt-8">
                       <MagneticButton
                         href="/register"
-                        className={`group w-full border transition-all duration-300 ${
-                          plan.popular
-                            ? "border-caramel bg-caramel text-white hover:bg-[#A06B45]"
-                            : "border-primary/40 bg-white text-primary hover:border-caramel hover:bg-caramel hover:text-white"
-                        }`}
+                        className="group w-full border border-primary/40 bg-white text-primary transition-colors duration-300 hover:border-caramel hover:bg-caramel hover:text-white"
                       >
                         {plan.cta}
 
@@ -591,14 +584,6 @@ export default function Home() {
               );
             })}
           </div>
-
-          <Reveal delay={0.2}>
-            <p className="mx-auto mt-8 max-w-2xl text-center font-sans text-xs leading-relaxed text-muted-foreground">
-              Semua paket ditujukan untuk penjual dan UMKM yang ingin
-              memanfaatkan ReBites sebagai kanal tambahan untuk menjual makanan
-              surplus yang masih layak konsumsi.
-            </p>
-          </Reveal>
         </div>
       </section>
 

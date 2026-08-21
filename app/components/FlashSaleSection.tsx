@@ -302,7 +302,11 @@ export function FlashSaleSection({ onViewDetail }: { onViewDetail?: (id: string)
     : [];
 
   return (
-    <section id="flash-sale" className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] to-[#F7F5EF]">
+    <section
+      id="flash-sale"
+      data-nav="green"
+      className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] to-[#F7F5EF]"
+    >
       <div className="relative border-b border-white/15 bg-forest-900/40 py-3">
         <Marquee pauseOnHover>
           {[

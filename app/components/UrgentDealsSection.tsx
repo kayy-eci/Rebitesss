@@ -80,6 +80,7 @@ export function UrgentDealsSection({
   return (
     <section
       id="rekomendasi"
+      data-nav="green"
       className="grain-overlay relative flex min-h-screen scroll-mt-24 flex-col justify-center overflow-hidden bg-primary py-16 lg:py-20"
     >
       <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/10" />

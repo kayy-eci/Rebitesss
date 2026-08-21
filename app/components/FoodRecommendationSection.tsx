@@ -85,6 +85,7 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
   return (
     <section
       id="rekomendasiMakanan"
+      data-nav="cream"
       className="relative overflow-hidden scroll-mt-24 bg-cream-50 py-16 lg:py-20"
     >
       <SoftBlob className="-left-24 top-1/3 h-80 w-80 bg-sage-100/60" />

@@ -1,6 +1,3 @@
-"use client";
-
-import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
 export type Step = {
@@ -11,33 +8,12 @@ export type Step = {
 
 type ReBitesStepCardProps = {
   step: Step;
-  isActive: boolean;
-  isTouch: boolean;
-  onHoverStart: () => void;
-  onHoverEnd: () => void;
-  onSelect: () => void;
 };
 
-export default function ReBitesStepCard({
-  step,
-  isActive,
-  isTouch,
-  onHoverStart,
-  onHoverEnd,
-  onSelect,
-}: ReBitesStepCardProps) {
+export default function ReBitesStepCard({ step }: ReBitesStepCardProps) {
   return (
-    <div
-      className={`relative flex min-h-[260px] cursor-pointer flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-[box-shadow,border-color,transform] duration-500 hover:-translate-y-1 ${
-        isActive
-          ? "border-caramel/40 shadow-[0_18px_40px_-24px_rgba(34,81,56,0.35)]"
-          : "border-black/5"
-      }`}
-      onMouseEnter={isTouch ? undefined : onHoverStart}
-      onMouseLeave={isTouch ? undefined : onHoverEnd}
-      onClick={isTouch ? onSelect : undefined}
-    >
-      <div className="relative h-[140px] w-full shrink-0 overflow-hidden">
+    <div className="cursor-pointer overflow-hidden rounded-xl border border-[#EEEEEE] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-2 hover:border-[#DDE5DD] hover:shadow-[0_20px_45px_-15px_rgba(34,81,56,0.35)]">
+      <div className="relative h-[190px] w-full shrink-0 overflow-hidden">
         <Image
           src={step.image}
           alt={step.title}
@@ -47,33 +23,13 @@ export default function ReBitesStepCard({
         />
       </div>
 
-      <div className="flex flex-col px-6 pb-6 pt-4">
-        <h3 className="font-display text-xl font-medium leading-snug text-[#111827]">
+      <div className="flex flex-col items-center px-5 pb-5 pt-5 text-center">
+        <h3 className="font-display text-lg font-bold leading-snug text-[#244D2A]">
           {step.title}
         </h3>
-
-        <AnimatePresence initial={false}>
-          {isActive && (
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{
-                opacity: 0,
-                y: 12,
-                transition: { duration: 0.18, ease: "easeIn" },
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 280,
-                damping: 26,
-                delay: 0.08,
-              }}
-              className="mt-3 font-sans text-sm leading-relaxed text-[#475569]"
-            >
-              {step.description}
-            </motion.p>
-          )}
-        </AnimatePresence>
+        <p className="mt-2.5 font-sans text-sm leading-[1.6] text-[#59636E]">
+          {step.description}
+        </p>
       </div>
     </div>
   );

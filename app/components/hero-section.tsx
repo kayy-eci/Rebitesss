@@ -69,17 +69,7 @@ export function HeroSection() {
         return rect.top <= probeY && rect.bottom > probeY;
       });
 
-      if (!current) {
-        setOverDark(false);
-        return;
-      }
-
-      const [r, g, b] = getComputedStyle(current)
-        .backgroundColor.match(/\d+/g)
-        ?.slice(0, 3)
-        .map(Number) ?? [0, 0, 0];
-      const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-      setOverDark(luminance < 0.5);
+      setOverDark(current?.dataset.nav === "green");
 
       let label = NAV_LINKS[0].label;
       for (const link of NAV_LINKS) {
@@ -134,7 +124,7 @@ export function HeroSection() {
             className={cn(
               "flex h-16 items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
               navIsDark
-                ? "border-white/15 bg-transparent text-white"
+                ? "border-white/15 bg-forest-dark/70 text-white"
                 : "border-hairline/70 bg-transparent text-forest-dark",
             )}
           >
@@ -155,10 +145,10 @@ export function HeroSection() {
                   navIsDark ? "text-white" : "text-forest-dark",
                 )}
               >
-                <span className="font-display text-2xl font-medium text-primary-foreground-strong">
+                <span className="font-display text-2xl font-medium">
                   Re
                 </span>
-                <span className="font-display text-2xl font-light italic text-primary-foreground-strong">
+                <span className="font-display text-2xl font-light italic">
                   Bites
                 </span>
               </span>

@@ -58,16 +58,28 @@ export function ProfileNavbar() {
   }, []);
 
   useEffect(() => {
-    const darkEl = document.getElementById('dampak');
-    if (!darkEl) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => setOverDark(entries.some((e) => e.isIntersecting)),
-      { rootMargin: '0px 0px -65% 0px' }
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-nav]')
     );
+    if (sections.length === 0) return;
 
-    observer.observe(darkEl);
-    return () => observer.disconnect();
+    const probeY = 44;
+
+    const update = () => {
+      const current = sections.find((s) => {
+        const r = s.getBoundingClientRect();
+        return r.top <= probeY && r.bottom > probeY;
+      });
+      setOverDark(current?.dataset.nav === 'green');
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
   }, []);
 
   const handleNav = (id: string) => {

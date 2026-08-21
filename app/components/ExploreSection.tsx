@@ -23,6 +23,7 @@ export function ExploreSection({ from = "landing" }: { from?: "landing" | "home"
   return (
     <section
       id="explore"
+      data-nav="cream"
       className="relative scroll-mt-24 bg-cream-50 pt-14 pb-5 lg:pt-16 lg:pb-8"
     >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

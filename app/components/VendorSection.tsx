@@ -45,6 +45,7 @@ export function VendorSection() {
   return (
     <section
       id="umkm"
+      data-nav="cream"
       className="relative overflow-hidden scroll-mt-24 bg-cream-50 pb-16 pt-2 lg:pb-20"
     >
       <SoftBlob className="-right-24 top-1/4 h-80 w-80 bg-sage-100/60" />

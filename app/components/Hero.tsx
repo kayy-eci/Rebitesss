@@ -38,6 +38,7 @@ export function Hero() {
   return (
     <section
       id="home"
+      data-nav="cream"
       className="relative overflow-hidden scroll-mt-24 bg-cream-50 px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pb-24 lg:pt-28"
     >
 

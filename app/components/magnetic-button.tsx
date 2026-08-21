@@ -1,9 +1,16 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+
+const SPRING = { stiffness: 320, damping: 24, mass: 0.8 };
 
 export function MagneticButton({
   children,
@@ -21,18 +28,26 @@ export function MagneticButton({
   strength?: number;
 }) {
   const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, SPRING);
+  const springY = useSpring(y, SPRING);
+  const contentX = useTransform(springX, (v) => v * 0.3);
+  const contentY = useTransform(springY, (v) => v * 0.3);
 
   const handleMove = (e: React.MouseEvent) => {
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) * strength;
-    const y = (e.clientY - rect.top - rect.height / 2) * strength;
-    setPos({ x, y });
+    x.set((e.clientX - rect.left - rect.width / 2) * strength);
+    y.set((e.clientY - rect.top - rect.height / 2) * strength);
   };
 
-  const reset = () => setPos({ x: 0, y: 0 });
+  const reset = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   const base = cn(
     'group relative inline-flex items-center justify-center gap-2 rounded-[var(--radius)] px-7 py-3.5 font-sans text-sm font-medium tracking-tight transition-colors duration-300',
@@ -50,7 +65,7 @@ export function MagneticButton({
   const content = (
     <motion.span
       className="relative z-10 flex items-center gap-2"
-      style={{ x: pos.x * 0.3, y: pos.y * 0.3 }}
+      style={{ x: contentX, y: contentY }}
     >
       {children}
     </motion.span>
@@ -64,8 +79,7 @@ export function MagneticButton({
         className={base}
         onMouseMove={handleMove}
         onMouseLeave={reset}
-        animate={{ x: pos.x, y: pos.y }}
-        transition={{ type: 'spring', stiffness: 200, damping: 18 }}
+        style={{ x: springX, y: springY }}
       >
         {content}
       </motion.a>
@@ -80,8 +94,7 @@ export function MagneticButton({
       className={base}
       onMouseMove={handleMove}
       onMouseLeave={reset}
-      animate={{ x: pos.x, y: pos.y }}
-      transition={{ type: 'spring', stiffness: 200, damping: 18 }}
+      style={{ x: springX, y: springY }}
     >
       {content}
     </motion.button>
