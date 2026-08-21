@@ -47,6 +47,7 @@ export interface Vendor {
   itemCount: number;
   address: string;
   openHours: string;
+  description: string;
 }
 
 export interface ImpactStat {

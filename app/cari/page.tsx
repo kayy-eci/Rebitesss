@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { Suspense, useCallback, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Search, SearchX, Sparkles } from "lucide-react";
@@ -11,6 +11,8 @@ import { Navbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { FoodCard } from "@/app/components/FoodCard";
+import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { getProductById } from "@/app/detail/product/data";
 
 const VALID_FILTERS: FilterKey[] = [
   "terdekat",
@@ -54,6 +56,21 @@ function CariContent() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>(
     parseFilter(searchParams.get("filter")),
   );
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null,
+  );
+
+  const handleViewDetail = useCallback((id: string) => {
+    setSelectedProductId(id);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedProductId(null);
+  }, []);
+
+  const selectedProduct = selectedProductId
+    ? getProductById(selectedProductId)
+    : undefined;
 
   const fromPage = searchParams.get("from") === "home" ? "/homePage" : "/";
 
@@ -167,7 +184,7 @@ function CariContent() {
                         }}
                         className="min-w-0"
                       >
-                        <FoodCard item={item} />
+                        <FoodCard item={item} onViewDetail={handleViewDetail} />
                       </motion.div>
                     ))}
                   </motion.div>
@@ -215,6 +232,15 @@ function CariContent() {
       </main>
 
       <SiteFooter />
+
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductDetailModal
+            product={selectedProduct}
+            onClose={handleCloseModal}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

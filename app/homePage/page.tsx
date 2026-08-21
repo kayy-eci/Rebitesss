@@ -19,49 +19,48 @@ import { ArrowRight } from "lucide-react";
 
 const PLANS = [
   {
-    name: "Saver",
-    tagline: "Hemat lebih banyak dan dapatkan prioritas saat berbelanja",
-    monthly: 14999,
-    yearly: 149999,
-    originalYearly: null,
+    name: "Basic",
+    tagline: "Mulai jualan di ReBites tanpa biaya, selamanya.",
+    monthly: 0,
+    yearly: 0,
     features: [
-      "Prioritas pesanan dibanding pengguna non-member",
-      "5x Diskon biaya pengantaran",
-      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
+      "Gratis tanpa biaya langganan",
+      "Maksimal 5 produk",
+      "Riwayat penjualan 30 hari",
+      "Dashboard penjualan",
     ],
+    cta: "Mulai Jual",
     popular: false,
-    cta: "Mulai Berlangganan",
   },
   {
-    name: "Plus",
-    tagline: "Pilihan tepat untuk pembeli yang lebih sering bertransaksi",
-    monthly: 29999,
-    yearly: 269999,
-    originalYearly: 299999,
+    name: "Standar",
+    tagline: "Untuk UMKM yang mulai aktif berjualan di ReBites.",
+    monthly: 49000,
+    yearly: 490000,
     features: [
-      "Prioritas pesanan lebih tinggi",
-      "10x Diskon biaya pengantaran",
-      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
-      "Gratis biaya pengantaran hingga 3 transaksi setiap bulan",
+      "Maksimal 25 produk",
+      "Riwayat penjualan tanpa batas",
+      "Prioritas di marketplace",
+      "Laporan penjualan detail",
+      "Badge UMKM Terverifikasi",
     ],
+    cta: "Pilih Standar",
     popular: true,
-    cta: "Pilih ReBites Plus",
   },
   {
-    name: "Max",
-    tagline: "Maksimalkan keuntungan di setiap pembelian",
-    monthly: 49999,
-    yearly: 469999,
-    originalYearly: 499999,
+    name: "Premium",
+    tagline: "Untuk usaha yang ingin berkembang lebih jauh.",
+    monthly: 99000,
+    yearly: 990000,
     features: [
-      "Prioritas pesanan lebih tinggi",
-      "20x Diskon biaya pengantaran",
-      "Dapatkan kompensasi khusus saat pesanan mengalami kendala",
-      "Gratis biaya pengantaran hingga 10 transaksi setiap bulan",
-      "Gratis biaya layanan hingga 3 transaksi setiap bulan",
+      "Produk tanpa batas",
+      "Semua fitur Standar",
+      "Promosi unggulan",
+      "Analitik permintaan",
+      "Dukungan prioritas",
     ],
+    cta: "Pilih Premium",
     popular: false,
-    cta: "Pilih ReBites Max",
   },
 ];
 
@@ -106,17 +105,16 @@ export default function HomePage() {
             <div className="mx-auto max-w-3xl text-center">
               <Reveal delay={0.1}>
                 <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
-                  Dapatkan lebih banyak <span>keuntungan</span> sebagai member
-                  ReBites.
+                  Kembangkan usaha bersama{" "}
+                  <span className="text-caramel">ReBites.</span>
                 </h2>
               </Reveal>
 
               <Reveal delay={0.15}>
                 <p className="mx-auto mt-5 max-w-xl font-sans text-sm leading-relaxed text-muted-foreground">
-                  Pilih paket membership yang sesuai dengan kebiasaan belanja
-                  Anda. Nikmati prioritas pesanan, potongan biaya pengantaran,
-                  kompensasi saat terjadi kendala, dan berbagai keuntungan
-                  layanan eksklusif selama menjadi member ReBites.
+                  Pilih paket penjual yang sesuai dengan kebutuhan usaha Anda.
+                  Kelola produk, pantau penjualan, dan dapatkan lebih banyak
+                  kesempatan untuk menjangkau pelanggan melalui ReBites.
                 </p>
               </Reveal>
 
@@ -139,13 +137,13 @@ export default function HomePage() {
                           className={`relative z-10 flex items-center gap-2 rounded-full px-5 py-2 font-sans text-xs font-medium tracking-tight transition-colors duration-300 ${
                             active
                               ? "text-primary-foreground"
-                              : "text-muted-foreground hover:text-[#C8A882]"
+                              : "text-muted-foreground hover:text-caramel"
                           }`}
                         >
                           {active && (
                             <motion.span
                               layoutId="billing-pill"
-                              className="absolute inset-0 rounded-full bg-[#C8A882]"
+                              className="absolute inset-0 rounded-full bg-caramel"
                               transition={{
                                 type: "spring",
                                 stiffness: 320,
@@ -163,7 +161,7 @@ export default function HomePage() {
               </Reveal>
             </div>
 
-            <div className="mt-14 grid gap-5 lg:mt-16 lg:grid-cols-3">
+            <div className="mx-auto mt-14 grid max-w-[1080px] gap-5 lg:mt-16 lg:grid-cols-3">
               {PLANS.map((plan, i) => {
                 const yearlyMode = billing === "yearly";
 
@@ -177,42 +175,40 @@ export default function HomePage() {
                 const priceSuffix =
                   priceValue === 0 ? "" : yearlyMode ? "/tahun" : "/bulan";
 
-                const subLine = yearlyMode
-                  ? "Bayar sekali untuk masa membership 1 tahun"
-                  : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
+                const subLine =
+                  plan.monthly === 0
+                    ? "Tidak Perlu Langganan"
+                    : yearlyMode
+                      ? `Setara Rp${Math.round(plan.yearly / 12).toLocaleString(
+                          "id-ID",
+                        )} / bulan`
+                      : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
 
                 return (
                   <Reveal key={plan.name} delay={i * 0.1} className="h-full">
-                    <div className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C8A882] hover:shadow-[0_15px_40px_-20px_rgba(200,168,130,0.35)] lg:p-9">
+                    <div className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel lg:p-9">
                       {plan.popular && (
-                        <div className="absolute right-5 top-5 rounded-full bg-[#C8A882] px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                        <div className="absolute right-5 top-5 rounded-full bg-caramel px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
                           Paling Populer
                         </div>
                       )}
 
                       <div className="relative flex items-center justify-between">
-                        <span className="font-sans text-sm italic tracking-[0.2em] text-[#C8A882]">
+                        <span className="font-sans text-sm italic tracking-[0.2em] text-caramel">
                           0{i + 1}
                         </span>
                       </div>
 
-                      <h3 className="mt-4 font-sans text-2xl font-semibold tracking-tight text-primary">
+                      <h3 className="mt-4 font-sans text-2xl font-bold tracking-tight text-primary">
                         ReBites {plan.name}
                       </h3>
 
-                      <p className="mt-1 min-h-[2rem] max-w-[250px] font-sans text-xs italic text-muted-foreground">
+                      <p className="mt-2 min-h-[2.5rem] max-w-[250px] font-sans text-xs leading-relaxed italic text-muted-foreground">
                         {plan.tagline}
                       </p>
 
                       <div className="mt-6 flex min-h-[3.5rem] items-end gap-2 text-primary">
                         <div className="relative flex h-[3.5rem] shrink-0 flex-col items-start">
-                          {yearlyMode && plan.originalYearly && (
-                            <span className="absolute left-0 top-0 whitespace-nowrap font-sans text-xs font-medium leading-none text-muted-foreground line-through tabular-nums">
-                              Rp
-                              {plan.originalYearly.toLocaleString("id-ID")}
-                            </span>
-                          )}
-
                           <div className="mt-auto overflow-hidden">
                             <AnimatePresence mode="wait" initial={false}>
                               <motion.span
@@ -269,7 +265,7 @@ export default function HomePage() {
                         />
 
                         <ul className="space-y-3">
-                          {plan.features.map((f, j) => (
+                          {plan.features.map((feature, j) => (
                             <li
                               key={j}
                               className="flex items-start gap-3 font-sans text-sm"
@@ -291,7 +287,7 @@ export default function HomePage() {
                                 </svg>
                               </span>
 
-                              <span>{f}</span>
+                              <span>{feature}</span>
                             </li>
                           ))}
                         </ul>
@@ -300,7 +296,8 @@ export default function HomePage() {
                       <div className="relative mt-auto pt-8">
                         <MagneticButton
                           href="/auth/register"
-                          className="group w-full border border-primary/40 bg-white text-primary transition-all duration-300 hover:border-[#C8A882] hover:bg-[#C8A882] hover:text-white"
+                          variant="outline"
+                          className="group w-full bg-white"
                         >
                           {plan.cta}
 

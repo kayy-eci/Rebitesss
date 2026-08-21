@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Leaf } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Leaf } from "lucide-react";
 import {
   ArcLines,
   DotPattern,
   FloatingLeaf,
   LeafSprig,
   SoftBlob,
-} from '@/app/components/Ornaments';
+} from "@/app/components/ornaments";
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(query.matches);
     const onChange = (event: MediaQueryListEvent) => setReduced(event.matches);
-    query.addEventListener('change', onChange);
-    return () => query.removeEventListener('change', onChange);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
   }, []);
 
   return reduced;

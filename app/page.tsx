@@ -572,11 +572,8 @@ export default function Home() {
                     <div className="relative mt-auto pt-8">
                       <MagneticButton
                         href="/auth/register"
-                        className={`group w-full border transition-all duration-300 ${
-                          plan.popular
-                            ? "border-caramel bg-caramel text-white hover:bg-[#A06B45]"
-                            : "border-primary/40 bg-white text-primary hover:border-caramel hover:bg-caramel hover:text-white"
-                        }`}
+                        variant="outline"
+                        className="group w-full bg-white"
                       >
                         {plan.cta}
 

@@ -28,6 +28,7 @@ export function MagneticButton({
   strength?: number;
 }) {
   const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -36,15 +37,21 @@ export function MagneticButton({
   const contentX = useTransform(springX, (v) => v * 0.3);
   const contentY = useTransform(springY, (v) => v * 0.3);
 
-  const handleMove = (e: React.MouseEvent) => {
+  const handleEnter = () => {
     const el = ref.current;
     if (!el) return;
-    const rect = el.getBoundingClientRect();
+    rectRef.current = el.getBoundingClientRect();
+  };
+
+  const handleMove = (e: React.MouseEvent) => {
+    const rect = rectRef.current;
+    if (!rect) return;
     x.set((e.clientX - rect.left - rect.width / 2) * strength);
     y.set((e.clientY - rect.top - rect.height / 2) * strength);
   };
 
   const reset = () => {
+    rectRef.current = null;
     x.set(0);
     y.set(0);
   };
@@ -77,9 +84,10 @@ export function MagneticButton({
         href={href}
         ref={ref as React.RefObject<HTMLAnchorElement>}
         className={base}
+        onMouseEnter={handleEnter}
         onMouseMove={handleMove}
         onMouseLeave={reset}
-        style={{ x: springX, y: springY }}
+        style={{ x: springX, y: springY, willChange: 'transform' }}
       >
         {content}
       </motion.a>
@@ -92,9 +100,10 @@ export function MagneticButton({
       onClick={onClick}
       ref={ref as React.RefObject<HTMLButtonElement>}
       className={base}
+      onMouseEnter={handleEnter}
       onMouseMove={handleMove}
       onMouseLeave={reset}
-      style={{ x: springX, y: springY }}
+      style={{ x: springX, y: springY, willChange: 'transform' }}
     >
       {content}
     </motion.button>

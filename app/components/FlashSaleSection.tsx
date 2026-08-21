@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {  MapPin, Star } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRupiah, urgentItems } from "@/lib/data";
 import { useCountdown, formatCountdown } from "@/lib/useCountdown";
@@ -108,7 +108,10 @@ function SectionCountdown({
   const [h, m, s] = text.split(":");
 
   return (
-    <div id="flashSale" className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]">
+    <div
+      id="flashSale"
+      className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]"
+    >
       <div className="flex items-center gap-2.5">
         <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-black">
           {label}
@@ -169,7 +172,19 @@ function UrgentCard({
     stockCount === null ? null : Math.max(10, Math.min(95, stockCount * 10));
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-green-700/30">
+    <article
+      role="button"
+      tabIndex={0}
+      aria-label={`Lihat detail ${item.name}`}
+      onClick={() => !isExpired && onViewDetail?.(item.id)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          if (!isExpired) onViewDetail?.(item.id);
+        }
+      }}
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 outline-none transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-green-700/30 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+    >
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
           src={item.image}
@@ -270,7 +285,10 @@ function UrgentCard({
         <button
           type="button"
           disabled={isExpired}
-          onClick={() => !isExpired && onViewDetail?.(item.id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            if (!isExpired) onViewDetail?.(item.id);
+          }}
           aria-label={
             isExpired ? `${item.name} sudah habis` : `Lihat detail ${item.name}`
           }
@@ -289,7 +307,11 @@ function UrgentCard({
   );
 }
 
-export function FlashSaleSection({ onViewDetail }: { onViewDetail?: (id: string) => void }) {
+export function FlashSaleSection({
+  onViewDetail,
+}: {
+  onViewDetail?: (id: string) => void;
+}) {
   const { realSlot, setSelectedSlot, activeSlot } = useSlotRotation();
 
   const slotEndIso = activeSlot

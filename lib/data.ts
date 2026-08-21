@@ -416,6 +416,8 @@ export const vendors: Vendor[] = [
     itemCount: 4,
     address: "Jl. Pajajaran No. 18, Bogor",
     openHours: "09.00–21.00",
+    description:
+      "Warung rumahan dengan masakan nusantara otentik. Dari nasi goreng sampai rendang, semua dimasak fresh setiap hari.",
   },
   {
     id: "dapur-ibu-tini",
@@ -429,6 +431,8 @@ export const vendors: Vendor[] = [
     itemCount: 4,
     address: "Jl. Raya Tajur No. 12, Bogor",
     openHours: "10.00–20.00",
+    description:
+      "Dapur rumahan spesialis kudapan pasar buatan sendiri, dari martabak dan pancong hangat sampai ketoprak dan salad buah segar.",
   },
   {
     id: "warkop-pak-iman",
@@ -442,6 +446,8 @@ export const vendors: Vendor[] = [
     itemCount: 3,
     address: "Jl. Baranangsiang No. 9, Bogor",
     openHours: "06.30–22.00",
+    description:
+      "Warkop favorit anak Bogor untuk sarapan dan nongkrong. Bakso hangat, roti bakar, dan kopi susu gula aren jadi andalan.",
   },
 ];
 

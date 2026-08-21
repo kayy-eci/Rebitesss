@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { foodItems } from "@/lib/data";
 import { FoodCard } from "@/app/components/FoodCard";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
-import { SoftBlob } from "@/app/components/Ornaments";
+import { SoftBlob } from "@/app/components/ornaments";
 import type { FilterKey } from "@/lib/types";
 
 const FOCUS_RING =

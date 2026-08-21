@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { ArrowRight, Clock, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/SmartImage';
@@ -81,14 +82,8 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
           </span>
         </div>
 
-        <a
-          href="#explore"
-          onClick={(e) => {
-            e.preventDefault();
-            document
-              .getElementById('explore')
-              ?.scrollIntoView({ behavior: 'smooth' });
-          }}
+        <Link
+          href={`/detail/toko?id=${vendor.id}`}
           className={cn(
             'group/cta mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#C8A882] active:scale-[0.98]',
             FOCUS_RING
@@ -96,7 +91,7 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
         >
           Lihat Toko
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
-        </a>
+        </Link>
       </div>
     </article>
   );

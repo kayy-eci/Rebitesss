@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Lock, Sparkles } from 'lucide-react';
-import { formatRupiah } from '@/lib/data';
-import { cn } from '@/lib/utils';
-import { DotPattern } from '@/app/components/Ornaments';
-import { AnimatedNumber } from './animated-number';
-import { PromoCodeInput } from './promo-code-input';
-import { useCheckout } from './checkout-context';
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Lock, Sparkles } from "lucide-react";
+import { formatRupiah } from "@/lib/data";
+import { cn } from "@/lib/utils";
+import { DotPattern } from "@/app/components/ornaments";
+import { AnimatedNumber } from "./animated-number";
+import { PromoCodeInput } from "./promo-code-input";
+import { useCheckout } from "./checkout-context";
 
 const STICKY_TOP = 112;
 
@@ -23,12 +23,12 @@ export function PaymentSummaryCard() {
       if (!rect) return;
       setStuck(rect.top <= STICKY_TOP + 1);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     onScroll();
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
 
@@ -36,8 +36,10 @@ export function PaymentSummaryCard() {
     <div
       ref={cardRef}
       className={cn(
-        'relative overflow-hidden rounded-3xl bg-cream-100 p-5 transition-shadow duration-300 sm:p-6',
-        stuck ? 'shadow-xl shadow-green-900/10' : 'shadow-md shadow-green-900/5'
+        "relative overflow-hidden rounded-3xl bg-cream-100 p-5 transition-shadow duration-300 sm:p-6",
+        stuck
+          ? "shadow-xl shadow-green-900/10"
+          : "shadow-md shadow-green-900/5",
       )}
     >
       <DotPattern className="pointer-events-none absolute inset-0 h-full w-full text-green-700/[0.05]" />
@@ -49,9 +51,7 @@ export function PaymentSummaryCard() {
 
         <dl className="mt-5 space-y-3 text-sm">
           <div className="flex items-center justify-between gap-4">
-            <dt className="text-charcoal-500">
-              Subtotal ({quantity} porsi)
-            </dt>
+            <dt className="text-charcoal-500">Subtotal ({quantity} porsi)</dt>
             <dd className="font-medium tabular-nums text-charcoal-900">
               <AnimatedNumber value={summary.subtotal} format={formatRupiah} />
             </dd>
@@ -60,7 +60,10 @@ export function PaymentSummaryCard() {
           <div className="flex items-center justify-between gap-4">
             <dt className="text-charcoal-500">Biaya layanan</dt>
             <dd className="font-medium tabular-nums text-charcoal-900">
-              <AnimatedNumber value={summary.serviceFee} format={formatRupiah} />
+              <AnimatedNumber
+                value={summary.serviceFee}
+                format={formatRupiah}
+              />
             </dd>
           </div>
 
@@ -68,7 +71,10 @@ export function PaymentSummaryCard() {
             <dt className="text-charcoal-500">Biaya metode</dt>
             <dd className="font-medium tabular-nums text-charcoal-900">
               {canPay ? (
-                <AnimatedNumber value={summary.methodFee} format={formatRupiah} />
+                <AnimatedNumber
+                  value={summary.methodFee}
+                  format={formatRupiah}
+                />
               ) : (
                 <span className="text-sage-500">—</span>
               )}
@@ -100,8 +106,8 @@ export function PaymentSummaryCard() {
           <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-green-700">
             <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
-              Kamu hemat {formatRupiah(summary.totalSavings)} dan mencegah
-              ≈{summary.co2eSaved.toFixed(1)} kg CO2e
+              Kamu hemat {formatRupiah(summary.totalSavings)} dan mencegah ≈
+              {summary.co2eSaved.toFixed(1)} kg CO2e
             </span>
           </p>
         </div>
@@ -111,17 +117,17 @@ export function PaymentSummaryCard() {
           disabled={!canPay}
           whileHover={canPay ? { scale: 1.02 } : undefined}
           whileTap={canPay ? { scale: 0.98 } : undefined}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
-            'mt-6 w-full rounded-full py-3.5 text-sm font-semibold transition-colors duration-200',
+            "mt-6 w-full rounded-full py-3.5 text-sm font-semibold transition-colors duration-200",
             canPay
-              ? 'bg-green-700 text-white shadow-lg shadow-green-700/25 hover:bg-green-600'
-              : 'cursor-not-allowed bg-sage-100 text-sage-500'
+              ? "bg-green-700 text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+              : "cursor-not-allowed bg-sage-100 text-sage-500",
           )}
         >
           {canPay
             ? `Bayar Sekarang · ${formatRupiah(summary.total)}`
-            : 'Pilih metode pembayaran'}
+            : "Pilih metode pembayaran"}
         </motion.button>
 
         {!canPay && (
