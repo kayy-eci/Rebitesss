@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Navbar } from "@/app/components/navbar";
 import { Hero } from "@/app/components/Hero";
 import { ExploreSection } from "@/app/components/ExploreSection";
-import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
+import { FlashSaleSection } from "@/app/components/FlashSaleSection";
 import { CategorySection } from "@/app/components/CategorySection";
 import { FoodRecommendationSection } from "@/app/components/FoodRecommendationSection";
 import { VendorSection } from "@/app/components/VendorSection";
@@ -86,7 +86,7 @@ export default function HomePage() {
       <main className="bg-cream-50">
         <Hero />
         <ExploreSection from="home" />
-        <UrgentDealsSection onViewDetail={handleViewDetail} />
+        <FlashSaleSection onViewDetail={handleViewDetail} />
         <CategorySection />
         <FoodRecommendationSection onViewDetail={handleViewDetail} />
         <VendorSection />

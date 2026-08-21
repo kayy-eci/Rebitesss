@@ -70,7 +70,7 @@ const OptionWheel = ({
   renderItem,
   plateSize = 440, 
   autoRotate = false,
-  autoRotateInterval = 2600
+  autoRotateInterval = 1000
 }: OptionWheelProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);

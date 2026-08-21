@@ -15,9 +15,11 @@ const FOCUS_RING =
 export function ProductDetailModal({
   product,
   onClose,
+  onRequireLogin,
 }: {
   product: ProductDetail;
   onClose: () => void;
+  onRequireLogin?: () => void;
 }) {
   const [imageIdx, setImageIdx] = useState(0);
   const [qty, setQty] = useState(1);
@@ -73,9 +75,14 @@ export function ProductDetailModal({
   );
 
   const handleAddToCart = useCallback(() => {
+    if (onRequireLogin) {
+      onClose();
+      onRequireLogin();
+      return;
+    }
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
-  }, []);
+  }, [onClose, onRequireLogin]);
 
   const savings = product.originalPrice - product.discountedPrice;
   const savingsPercent = Math.round((savings / product.originalPrice) * 100);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Store,
@@ -20,8 +21,9 @@ import { Marquee } from "@/app/components/marquee";
 import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
+import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { getProductById } from "@/app/detailProduct/data";
 import { HeroSection } from "@/app/components/hero-section";
-import { ExploreSection } from "@/app/components/ExploreSection";
 import {
   Carousel,
   CarouselContent,
@@ -164,10 +166,28 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [loaded, setLoaded] = useState(false);
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const [testimonialApi, setTestimonialApi] = useState<CarouselApi>();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+
+  const handleViewDetail = (id: string) => {
+    setSelectedProductId(id);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProductId(null);
+  };
+
+  const handleRequireLogin = () => {
+    router.push("/login");
+  };
+
+  const selectedProduct = selectedProductId
+    ? getProductById(selectedProductId)
+    : undefined;
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -206,9 +226,7 @@ export default function Home() {
         <HeroSection />
       </div>
 
-      <ExploreSection from="landing" />
-
-      <UrgentDealsSection />
+      <UrgentDealsSection onViewDetail={handleViewDetail} />
 
       <HowItWorks />
 
@@ -741,6 +759,16 @@ export default function Home() {
           ))}
         </Marquee>
       </section>
+
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductDetailModal
+            product={selectedProduct}
+            onClose={handleCloseModal}
+            onRequireLogin={handleRequireLogin}
+          />
+        )}
+      </AnimatePresence>
 
       <SiteFooter />
     </SmoothScroll>

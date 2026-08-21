@@ -6,7 +6,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { foodItems } from "@/lib/data";
 import { FoodCard } from "@/app/components/FoodCard";
-import { SoftBlob } from "@/app/components/ornaments";
+import { SoftBlob } from "@/app/components/Ornaments";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";

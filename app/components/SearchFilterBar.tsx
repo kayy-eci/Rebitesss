@@ -8,16 +8,6 @@ import { LOCATIONS } from "@/lib/data";
 import { Pill } from "@/app/components/Pill";
 import type { FilterKey } from "@/lib/types";
 
-export const FILTER_OPTIONS: { key: FilterKey; label: string }[] = [
-  { key: "terdekat", label: "Terdekat" },
-  { key: "diskon-terbesar", label: "Diskon Terbesar" },
-  { key: "segera-habis", label: "Segera Habis" },
-  { key: "umkm", label: "UMKM" },
-  { key: "bakery", label: "Bakery" },
-  { key: "restoran", label: "Restoran" },
-  { key: "minuman", label: "Minuman" },
-];
-
 interface SearchFilterBarProps {
   query: string;
   onQueryChange: (value: string) => void;
@@ -137,18 +127,6 @@ export function SearchFilterBar({
             Cari
           </button>
         </form>
-      </div>
-
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {FILTER_OPTIONS.map((option) => (
-          <Pill
-            key={option.key}
-            active={activeFilter === option.key}
-            onClick={() => onFilterChange(option.key)}
-          >
-            {option.label}
-          </Pill>
-        ))}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ const FOODS = [
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
+  { href: "/#rekomendasi", label: "Rekomendasi" },
   { href: "/#about", label: "About Us" },
   { href: "/#cara-kerja", label: "Cara Kerja" },
   { href: "/#langganan", label: "Langganan" },
@@ -332,39 +333,39 @@ export function HeroSection() {
         <div className="relative mx-auto max-w-[1200px]">
           <HeroOrganicArt />
 
-          <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+5rem)]">
-              <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
-                <span className="text-forest-dark">
-                  <span className="text-caramel">Selamatkan</span> Makanan,
-                </span>
+          <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+7rem)]">
+            <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
+              <span className="text-forest-dark">
+                <span className="text-caramel">Selamatkan</span> Makanan,
+              </span>
 
-                <span className="block text-forest">
-                  <span className="text-caramel">Selamatkan</span> Bumi.
-                </span>
-              </h1>
+              <span className="block text-forest">
+                <span className="text-caramel">Selamatkan</span> Bumi.
+              </span>
+            </h1>
 
-              <div className="mt-9 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/#cara-kerja"
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-7 py-3.5 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(34,81,56,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-caramel/50 hover:text-caramel",
-                    FOCUS_RING,
-                  )}
-                >
-                  Lihat Cara Kerja
-                </Link>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <Link
+                href="/#cara-kerja"
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-7 py-3.5 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(34,81,56,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-caramel/50 hover:text-caramel",
+                  FOCUS_RING,
+                )}
+              >
+                Lihat Cara Kerja
+              </Link>
 
-                <Link
-                  href="/#cta"
-                  className={cn(
-                    "group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-forest to-forest-dark px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(34,81,56,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:from-caramel hover:to-caramel-dark hover:shadow-[0_18px_38px_-16px_rgba(140,90,60,0.85)]",
-                    FOCUS_RING,
-                  )}
-                >
-                  Mulai Selamatkan Makanan
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </div>
+              <Link
+                href="/#cta"
+                className={cn(
+                  "group inline-flex items-center gap-2 rounded-full bg-gradient-to-r bg-forest px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(34,81,56,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel",
+                  FOCUS_RING,
+                )}
+              >
+                Mulai Selamatkan Makanan
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
 
           {/* Mobile carousel – stays in flow below text */}
@@ -385,7 +386,7 @@ export function HeroSection() {
                 loop
                 draggable
                 autoRotate
-                autoRotateInterval={3000}
+                autoRotateInterval={1500}
                 plateSize={315}
                 onChange={(index) => setFoodIndex(index)}
                 renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
@@ -412,28 +413,31 @@ export function HeroSection() {
         <div className="pointer-events-none absolute right-[clamp(8px,2vw,50px)] top-1/2 z-10 hidden -translate-y-1/2 lg:block">
           <div
             className="pointer-events-auto relative overflow-hidden rounded-[28px]"
-            style={{ width: 'clamp(460px, 36vw, 540px)', height: 'clamp(460px, 36vw, 540px)' }}
+            style={{
+              width: "clamp(460px, 36vw, 540px)",
+              height: "clamp(460px, 36vw, 540px)",
+            }}
           >
-              <OptionWheel
-                items={FOODS.map((f) => f.name)}
-                defaultSelected={0}
-                side="right"
-                fontSize={8}
-                spacing={1.4}
-                curve={20}
-                tilt={6}
-                blur={3}
-                fade={0.32}
-                minOpacity={0.02}
-                smoothing={160}
-                loop
-                draggable
-                autoRotate
-                autoRotateInterval={3000}
-                plateSize={400}
-                onChange={(index) => setFoodIndex(index)}
-                renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
-              />
+            <OptionWheel
+              items={FOODS.map((f) => f.name)}
+              defaultSelected={0}
+              side="right"
+              fontSize={8}
+              spacing={1.4}
+              curve={20}
+              tilt={6}
+              blur={3}
+              fade={0.32}
+              minOpacity={0.02}
+              smoothing={160}
+              loop
+              draggable
+              autoRotate
+              autoRotateInterval={1500}
+              plateSize={400}
+              onChange={(index) => setFoodIndex(index)}
+              renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
+            />
 
             <div
               aria-hidden
