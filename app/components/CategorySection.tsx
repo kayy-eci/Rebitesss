@@ -1,68 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CATEGORIES } from "@/lib/categories";
 import { SmartImage } from "@/app/components/SmartImage";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
-const CATEGORIES: { id: string; name: string; image: string }[] = [
-  {
-    id: "makanan-berat",
-    name: "Makanan Berat",
-    image:
-      "https://images.pexels.com/photos/37081081/pexels-photo-37081081.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: "jajanan",
-    name: "Jajanan",
-    image:
-      "https://images.pexels.com/photos/37222830/pexels-photo-37222830.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: "japanese",
-    name: "Japanese",
-    image:
-      "https://images.pexels.com/photos/36292346/pexels-photo-36292346.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: "roti-kue",
-    name: "Roti & Kue",
-    image:
-      "https://images.pexels.com/photos/5436437/pexels-photo-5436437.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: "makanan-cepat-saji",
-    name: "Makanan Cepat Saji",
-    image:
-      "https://images.pexels.com/photos/23091813/pexels-photo-23091813.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: "dessert",
-    name: "Dessert",
-    image:
-      "https://images.pexels.com/photos/32916204/pexels-photo-32916204.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: "buah-sayur",
-    name: "Buah & Sayur",
-    image:
-      "https://images.pexels.com/photos/3987405/pexels-photo-3987405.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: "minuman",
-    name: "Minuman",
-    image:
-      "https://images.pexels.com/photos/8215110/pexels-photo-8215110.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-];
-
 export function CategorySection() {
-  const scrollToFoods = () => {
-    document.getElementById("umkm")?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <section
@@ -104,9 +52,8 @@ export function CategorySection() {
                 },
               }}
             >
-              <button
-                type="button"
-                onClick={scrollToFoods}
+              <Link
+                href={`/makanan/${category.id}`}
                 aria-label={`Lihat makanan kategori ${category.name}`}
                 className={cn(
                   "group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15",
@@ -134,7 +81,7 @@ export function CategorySection() {
                     <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
-              </button>
+              </Link>
             </motion.div>
           ))}
         </motion.div>

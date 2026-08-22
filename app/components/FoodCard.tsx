@@ -90,21 +90,6 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>
-
-        <button
-          type="button"
-          aria-label={`Lihat detail ${item.name}`}
-          onClick={(event) => {
-            event.stopPropagation();
-            handleOpen();
-          }}
-          className={cn(
-            "mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#C8A882] active:scale-[0.98]",
-            FOCUS_RING,
-          )}
-        >
-          Lihat Detail
-        </button>
       </div>
     </article>
   );

@@ -8,7 +8,12 @@ export type FoodCategory =
   | "Makanan Berat"
   | "Roti & Kue"
   | "Buah & Sayur"
-  | "Jajanan";
+  | "Jajanan"
+  | "Japanese"
+  | "Makanan Cepat Saji"
+  | "Dessert"
+  | "Minuman"
+  | "Makanan & Minuman";
 
 export type FilterKey =
   | "terdekat"

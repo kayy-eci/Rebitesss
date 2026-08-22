@@ -12,12 +12,13 @@ interface SearchFilterBarProps {
   query: string;
   onQueryChange: (value: string) => void;
   onSearchSubmit: () => void;
-  activeFilter: FilterKey;
-  onFilterChange: (key: FilterKey) => void;
+  activeFilter?: FilterKey;
+  onFilterChange?: (key: FilterKey) => void;
   showLocation?: boolean;
   showInlineResults?: boolean;
   onSelectResult?: (id: string) => void;
-  variant?: "default" | "glass";
+  placeholder?: string;
+  variant?: "default" | "glass" | "light";
 }
 
 const FOCUS_RING =
@@ -70,14 +71,16 @@ export function SearchFilterBar({
   query,
   onQueryChange,
   onSearchSubmit,
-  activeFilter,
+  activeFilter = "terdekat",
   onFilterChange,
   showLocation = true,
   showInlineResults = false,
   onSelectResult,
+  placeholder = "Cari makanan surplus di sekitarmu...",
   variant = "default",
 }: SearchFilterBarProps) {
   const isGlass = variant === "glass";
+  const isLight = variant === "light";
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -162,7 +165,9 @@ export function SearchFilterBar({
         className={cn(
           isGlass
             ? "rounded-[28px] border border-white/25 bg-white/15 p-2 shadow-lg shadow-black/10 backdrop-blur-md sm:rounded-full"
-            : "rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-forest-900/5 sm:p-3",
+            : isLight
+              ? "rounded-[28px] border border-sage-100 bg-white p-2 shadow-md shadow-forest-900/5 sm:rounded-full"
+              : "rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-forest-900/5 sm:p-3",
         )}
       >
         <form
@@ -177,7 +182,7 @@ export function SearchFilterBar({
             <div
               className={cn(
                 "flex w-full items-center gap-3 rounded-full px-4 py-2.5",
-                !isGlass && "bg-cream-50",
+                !isGlass && !isLight && "bg-cream-50",
               )}
             >
               <Search
@@ -194,8 +199,8 @@ export function SearchFilterBar({
                 onFocus={() => {
                   if (trimmedQuery) setIsDropdownOpen(true);
                 }}
-                placeholder="Cari makanan surplus di sekitarmu..."
-                aria-label="Cari makanan surplus"
+                placeholder={placeholder}
+                aria-label={placeholder}
                 aria-expanded={dropdownVisible}
                 role="combobox"
                 aria-controls="search-inline-results"
@@ -204,11 +209,12 @@ export function SearchFilterBar({
                   isGlass
                     ? "text-white placeholder:text-white/60"
                     : "text-charcoal-900 placeholder:text-charcoal-500/70",
-                  showInlineResults && "[&::-webkit-search-cancel-button]:hidden",
+                  (showInlineResults || isLight) &&
+                  "[&::-webkit-search-cancel-button]:hidden",
                 )}
               />
 
-              {showInlineResults && trimmedQuery && (
+              {trimmedQuery && (
                 <button
                   type="button"
                   aria-label="Hapus pencarian"
@@ -379,7 +385,7 @@ export function SearchFilterBar({
           </div>
           )}
 
-          {!isGlass && (
+          {!isGlass && !isLight && (
             <button
               type="submit"
               className={cn(

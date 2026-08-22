@@ -578,7 +578,7 @@ function StoreDetailContent() {
         <div className="absolute inset-x-0 top-0 px-5 pt-5 sm:px-8 sm:pt-6">
           <div className="mx-auto max-w-[1200px]">
             <Link
-              href="/homePage"
+              href="/home"
               className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-xs font-medium text-cream-50 backdrop-blur-sm transition-colors duration-200 hover:bg-black/45"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
