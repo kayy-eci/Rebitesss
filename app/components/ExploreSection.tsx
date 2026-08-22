@@ -3,7 +3,6 @@
 import { useState } from "react";
 import type { FilterKey } from "@/lib/types";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
-
 export function ExploreSection({
   onViewDetail,
 }: {

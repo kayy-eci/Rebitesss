@@ -129,6 +129,7 @@ export function UrgentDealsSection({
             showLocation={false}
             showInlineResults
             onSelectResult={onViewDetail}
+            variant="glass"
           />
         </div>
 

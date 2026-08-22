@@ -17,10 +17,14 @@ interface SearchFilterBarProps {
   showLocation?: boolean;
   showInlineResults?: boolean;
   onSelectResult?: (id: string) => void;
+  variant?: "default" | "glass";
 }
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C8A882] focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+
+const GLASS_FOCUS_RING =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 function applySort(key: FilterKey) {
   return (a: FoodItem, b: FoodItem) => {
@@ -71,7 +75,9 @@ export function SearchFilterBar({
   showLocation = true,
   showInlineResults = false,
   onSelectResult,
+  variant = "default",
 }: SearchFilterBarProps) {
+  const isGlass = variant === "glass";
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -118,6 +124,17 @@ export function SearchFilterBar({
     return () => document.removeEventListener("keydown", handleKey);
   }, [dropdownVisible]);
 
+  useEffect(() => {
+    if (!dropdownVisible) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [dropdownVisible]);
+
   const handleQueryChange = (value: string) => {
     onQueryChange(value);
     setIsDropdownOpen(value.trim().length > 0);
@@ -135,8 +152,19 @@ export function SearchFilterBar({
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div className="rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-forest-900/5 sm:p-3">
+    <div
+      className={cn(
+        "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
+        isGlass && "relative z-30",
+      )}
+    >
+      <div
+        className={cn(
+          isGlass
+            ? "rounded-[28px] border border-white/25 bg-white/15 p-2 shadow-lg shadow-black/10 backdrop-blur-md sm:rounded-full"
+            : "rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-forest-900/5 sm:p-3",
+        )}
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -146,8 +174,18 @@ export function SearchFilterBar({
           className="flex flex-col gap-2.5 sm:flex-row sm:items-center"
         >
           <div className="relative flex-1">
-            <div className="flex w-full items-center gap-3 rounded-full bg-cream-50 px-4 py-2.5">
-              <Search className="h-5 w-5 shrink-0 text-sage-500" />
+            <div
+              className={cn(
+                "flex w-full items-center gap-3 rounded-full px-4 py-2.5",
+                !isGlass && "bg-cream-50",
+              )}
+            >
+              <Search
+                className={cn(
+                  "h-5 w-5 shrink-0",
+                  isGlass ? "text-white/80" : "text-sage-500",
+                )}
+              />
               <input
                 ref={inputRef}
                 type="search"
@@ -162,7 +200,10 @@ export function SearchFilterBar({
                 role="combobox"
                 aria-controls="search-inline-results"
                 className={cn(
-                  "w-full bg-transparent font-sans text-sm text-charcoal-900 placeholder:text-charcoal-500/70 focus:outline-none",
+                  "w-full bg-transparent font-sans text-sm focus:outline-none",
+                  isGlass
+                    ? "text-white placeholder:text-white/60"
+                    : "text-charcoal-900 placeholder:text-charcoal-500/70",
                   showInlineResults && "[&::-webkit-search-cancel-button]:hidden",
                 )}
               />
@@ -172,7 +213,12 @@ export function SearchFilterBar({
                   type="button"
                   aria-label="Hapus pencarian"
                   onClick={handleClear}
-                  className="-ml-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-charcoal-500 transition-colors duration-150 hover:bg-cream-100 hover:text-charcoal-900"
+                  className={cn(
+                    "-ml-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors duration-150",
+                    isGlass
+                      ? "text-white/70 hover:bg-white/15 hover:text-white"
+                      : "text-charcoal-500 hover:bg-cream-100 hover:text-charcoal-900",
+                  )}
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -196,7 +242,7 @@ export function SearchFilterBar({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.18 }}
-                    className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[340px] overflow-y-auto rounded-2xl border border-sage-100 bg-white p-1.5 shadow-xl"
+                    className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[min(340px,60vh)] overflow-y-auto overscroll-contain rounded-2xl border border-sage-100 bg-white p-1.5 shadow-xl [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-sage-500/40 [&::-webkit-scrollbar-track]:bg-transparent"
                   >
                     {results.length > 0 ? (
                       results.map((item) => (
@@ -272,8 +318,11 @@ export function SearchFilterBar({
               aria-expanded={locationOpen}
               onClick={() => setLocationOpen((v) => !v)}
               className={cn(
-                "flex h-11 items-center gap-2 rounded-full border border-sage-100 bg-white px-4 text-sm font-medium text-charcoal-500 transition-colors duration-200 hover:border-[#C8A882]/40 hover:text-[#C8A882]",
-                FOCUS_RING,
+                "flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-200",
+                isGlass
+                  ? "border-white/30 bg-white/10 text-white hover:border-white/60 hover:text-white"
+                  : "border-sage-100 bg-white text-charcoal-500 hover:border-[#C8A882]/40 hover:text-[#C8A882]",
+                isGlass ? GLASS_FOCUS_RING : FOCUS_RING,
               )}
             >
               <MapPin className="h-4 w-4 text-[#C8A882]" />
@@ -330,17 +379,19 @@ export function SearchFilterBar({
           </div>
           )}
 
-          <button
-            type="submit"
-            className={cn(
-              "flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-7 font-sans text-sm font-semibold text-white shadow-md transition-colors duration-200 active:scale-[0.98]",
-              "bg-[#C8A882] hover:bg-[#A06B45]",
-              FOCUS_RING,
-            )}
-          >
-            <Search className="h-4 w-4" />
-            Cari
-          </button>
+          {!isGlass && (
+            <button
+              type="submit"
+              className={cn(
+                "flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-7 font-sans text-sm font-semibold text-white shadow-md transition-colors duration-200 active:scale-[0.98]",
+                "bg-[#C8A882] hover:bg-[#A06B45]",
+                FOCUS_RING,
+              )}
+            >
+              <Search className="h-4 w-4" />
+              Cari
+            </button>
+          )}
         </form>
       </div>
     </div>
