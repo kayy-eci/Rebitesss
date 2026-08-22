@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { foodItems } from "@/lib/data";
@@ -31,21 +30,11 @@ export function UrgentDealsSection({
   onViewDetail?: (id: string) => void;
   from?: "landing" | "home";
 }) {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFilter, setSearchFilter] = useState<FilterKey>("terdekat");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
-
-  const handleSearchSubmit = () => {
-    const params = new URLSearchParams();
-    const q = searchQuery.trim();
-    if (q) params.set("q", q);
-    if (searchFilter !== "terdekat") params.set("filter", searchFilter);
-    params.set("from", from);
-    router.push(`/cari?${params.toString()}`);
-  };
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
@@ -134,10 +123,12 @@ export function UrgentDealsSection({
           <SearchFilterBar
             query={searchQuery}
             onQueryChange={setSearchQuery}
-            onSearchSubmit={handleSearchSubmit}
+            onSearchSubmit={() => undefined}
             activeFilter={searchFilter}
             onFilterChange={setSearchFilter}
             showLocation={false}
+            showInlineResults
+            onSelectResult={onViewDetail}
           />
         </div>
 

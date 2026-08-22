@@ -1,24 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import type { FilterKey } from "@/lib/types";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 
-export function ExploreSection({ from = "landing" }: { from?: "landing" | "home" }) {
-  const router = useRouter();
+export function ExploreSection({
+  onViewDetail,
+}: {
+  onViewDetail?: (id: string) => void;
+  from?: "landing" | "home";
+}) {
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterKey>("terdekat");
-
-  const handleSearchSubmit = () => {
-    const params = new URLSearchParams();
-    const q = query.trim();
-    if (q) params.set("q", q);
-    if (activeFilter !== "terdekat") params.set("filter", activeFilter);
-    params.set("from", from);
-    const qs = params.toString();
-    router.push(`/cari?${qs}`);
-  };
 
   return (
     <section
@@ -40,9 +33,11 @@ export function ExploreSection({ from = "landing" }: { from?: "landing" | "home"
           <SearchFilterBar
             query={query}
             onQueryChange={setQuery}
-            onSearchSubmit={handleSearchSubmit}
+            onSearchSubmit={() => undefined}
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
+            showInlineResults
+            onSelectResult={onViewDetail}
           />
         </div>
       </div>
