@@ -109,7 +109,7 @@ function SectionCountdown({
       className="rounded-2xl bg-white px-5 py-3.5 shadow-[0_18px_40px_-18px_rgba(185,28,28,0.3)]"
     >
       <div className="flex items-center gap-2.5">
-        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-black">
+        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
           {label}
         </p>
       </div>
@@ -138,7 +138,7 @@ function SectionCountdown({
         </span>
       </div>
 
-      <div className="mt-1 flex gap-1 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-black">
+      <div className="mt-1 flex gap-1 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-primary">
         <span className="min-w-[2ch] text-center">Jam</span>
         <span aria-hidden className="w-[1ch]" />
         <span className="min-w-[2ch] text-center">Menit</span>
@@ -320,7 +320,7 @@ export function FlashSaleSection({
   const { realSlot, setSelectedSlot, activeSlot } = useSlotRotation();
 
   const activeSlotDef = activeSlot
-    ? SLOTS.find((s) => s.key === activeSlot) ?? null
+    ? (SLOTS.find((s) => s.key === activeSlot) ?? null)
     : null;
   const slotStartIso = activeSlotDef
     ? new Date(wibEpochOfToday(activeSlotDef.start)).toISOString()
@@ -477,7 +477,7 @@ export function FlashSaleSection({
           </div>
         </div>
 
-        <div className="relative mt-9 flex flex-wrap items-center gap-2">
+        <div className="relative mt-9 flex flex-wrap items-center justify-center gap-3 md:flex-nowrap md:gap-8">
           {SLOTS.map((slot) => {
             const isReal = realSlot === slot.key;
             const isActive = activeSlot === slot.key;
@@ -492,10 +492,10 @@ export function FlashSaleSection({
                   )
                 }
                 className={cn(
-                  "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 font-sans transition-all duration-300",
+                  "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 md:px-6 md:py-3.5 font-sans transition-all duration-300",
                   isActive
-                    ? "border-transparent bg-gradient-to-r from-[#C8A882] to-[#A06B45] text-white shadow-lg shadow-forest-900/40 hover:from-[#6B4530] hover:to-[#C8A882]"
-                    : "border-white/60 bg-white text-[#C8A882] shadow-lg shadow-forest-900/25 hover:bg-cream-100 hover:text-[#6B4530]",
+                    ? "border-transparent bg-caramel text-white shadow-lg shadow-forest-900/40 hover:bg-white hover:text-caramel"
+                    : "border-white/60 bg-white text-primary shadow-lg shadow-forest-900/25 hover:bg-caramel hover:text-white",
                   FOCUS_RING,
                 )}
               >
@@ -506,7 +506,9 @@ export function FlashSaleSection({
                   <span
                     className={cn(
                       "text-[10px] font-semibold uppercase tracking-[0.18em]",
-                      isActive ? "text-white/70" : "text-[#C8A882]/60",
+                      isActive
+                        ? "text-white/70 group-hover:text-caramel"
+                        : "text-[#C8A882]/60 group-hover:text-white",
                     )}
                   >
                     {slot.name}
@@ -565,7 +567,7 @@ export function FlashSaleSection({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl border border-white/20 bg-black/20 p-10 text-center backdrop-blur-sm sm:p-14"
+              className="rounded-3xl border border-white/20 bg-white/20 p-10 text-center backdrop-blur-sm sm:p-14"
             >
               <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.3em] text-white">
                 Flash Sale

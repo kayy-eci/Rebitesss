@@ -17,13 +17,13 @@ const steps: Step[] = [
     image: "/pembeli-mencaro.jpg",
   },
   {
-    title: "Pilih Metode Penerimaan",
+    title: "Pilih Metode Penerimaan Pesanan",
     description:
       "Pilih untuk mengambil sendiri pesanan di toko atau gunakan layanan pengiriman yang tersedia.",
     image: "/penerimaan.jpg",
   },
   {
-    title: "Makanan Terselamatkan!",
+    title: "Makanan Berhasil Diselamatkan!",
     description:
       "Nikmati makanan lezat Anda dengan harga hemat, sekaligus berkontribusi menyelamatkan lingkungan.",
     image: "/terselamatkan.jpg",
