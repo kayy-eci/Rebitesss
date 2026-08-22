@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Minus,
@@ -24,12 +25,11 @@ const FOCUS_RING =
 export function ProductDetailModal({
   product,
   onClose,
-  onRequireLogin,
 }: {
   product: ProductDetail;
   onClose: () => void;
-  onRequireLogin?: () => void;
 }) {
+  const router = useRouter();
   const [imageIdx, setImageIdx] = useState(0);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
@@ -86,14 +86,9 @@ export function ProductDetailModal({
   );
 
   const handleAddToCart = useCallback(() => {
-    if (onRequireLogin) {
-      onClose();
-      onRequireLogin();
-      return;
-    }
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  }, [onClose, onRequireLogin]);
+    onClose();
+    router.push("/detail/pesanan");
+  }, [onClose, router]);
 
   const savings = product.originalPrice - product.discountedPrice;
   const savingsPercent = Math.round((savings / product.originalPrice) * 100);
@@ -193,7 +188,6 @@ export function ProductDetailModal({
 
           {/* ═══════ RIGHT: Info ═══════ */}
           <div className="flex flex-1 flex-col overflow-y-auto px-7 py-7 sm:px-9 lg:px-10 lg:py-8">
-
             {/* Category */}
             <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-stone">
               {product.category}

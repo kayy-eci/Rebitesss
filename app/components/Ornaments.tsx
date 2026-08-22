@@ -9,10 +9,7 @@ export function SoftBlob({ className }: { className?: string }) {
   return (
     <div
       aria-hidden
-      className={cn(
-        'pointer-events-none absolute rounded-full blur-3xl',
-        className
-      )}
+      className={cn('pointer-events-none absolute rounded-full blur-3xl', className)}
     />
   );
 }
@@ -40,17 +37,9 @@ export function DotPattern({ className }: { className?: string }) {
   const rawId = useId();
   const id = rawId.replace(/:/g, '');
   return (
-    <svg
-      aria-hidden
-      className={cn('pointer-events-none absolute', className)}
-    >
+    <svg aria-hidden className={cn('pointer-events-none absolute', className)}>
       <defs>
-        <pattern
-          id={id}
-          width="22"
-          height="22"
-          patternUnits="userSpaceOnUse"
-        >
+        <pattern id={id} width="22" height="22" patternUnits="userSpaceOnUse">
           <circle cx="2" cy="2" r="1.4" fill="currentColor" />
         </pattern>
       </defs>

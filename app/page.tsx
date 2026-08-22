@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Store,
@@ -167,7 +166,6 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 export default function Home() {
-  const router = useRouter();
   const [loaded, setLoaded] = useState(false);
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const [testimonialApi, setTestimonialApi] = useState<CarouselApi>();
@@ -182,10 +180,6 @@ export default function Home() {
 
   const handleCloseModal = () => {
     setSelectedProductId(null);
-  };
-
-  const handleRequireLogin = () => {
-    router.push("/auth/login");
   };
 
   const selectedProduct = selectedProductId
@@ -751,7 +745,6 @@ export default function Home() {
           <ProductDetailModal
             product={selectedProduct}
             onClose={handleCloseModal}
-            onRequireLogin={handleRequireLogin}
           />
         )}
       </AnimatePresence>

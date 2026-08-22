@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ChevronDown,
@@ -12,6 +13,8 @@ import {
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/lib/supabase';
+import { AccountSidebar, type SidebarUser } from './account-sidebar';
 
 const LOCATIONS = ['Depok', 'Jakarta Selatan', 'Bekasi', 'Bogor', 'Tangerang'];
 
@@ -31,12 +34,47 @@ function scrollToId(id: string) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+interface AuthSessionUser {
+  email?: string;
+  user_metadata?: { full_name?: string };
+}
+
 export function ProfileNavbar() {
+  const router = useRouter();
   const [active, setActive] = useState('profil');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [overDark, setOverDark] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [sessionUser, setSessionUser] = useState<SidebarUser | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    supabase.auth
+      .getSession()
+      .then(({ data }: { data: { session: { user: AuthSessionUser | null } | null } }) => {
+        if (cancelled) return;
+        const user = data.session?.user;
+        if (!user) return;
+        setSessionUser({
+          fullName: user.user_metadata?.full_name ?? '',
+          email: user.email ?? '',
+        });
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setSessionUser(null);
+    setProfileOpen(false);
+    router.push('/auth/login');
+  };
 
   useEffect(() => {
     const ids = NAV_LINKS.map((l) => l.id);
@@ -266,7 +304,10 @@ export function ProfileNavbar() {
 
 
               <div className="hidden items-center gap-0.5 sm:flex">
-                <IconButton label="Profil saya">
+                <IconButton
+                  label="Profil saya"
+                  onClick={() => setProfileOpen(true)}
+                >
                   <User className="h-5 w-5" />
                 </IconButton>
               </div>
@@ -372,6 +413,13 @@ export function ProfileNavbar() {
           </>
         )}
       </AnimatePresence>
+
+      <AccountSidebar
+        open={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        user={sessionUser}
+        onLogout={handleLogout}
+      />
     </>
   );
 }
