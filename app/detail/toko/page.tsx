@@ -6,12 +6,14 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
+  ArrowRight,
   BadgeCheck,
   ChevronDown,
   ChevronRight,
   Clock,
   Leaf,
   MapPin,
+  Quote,
   Search,
   SearchX,
   ShoppingCart,
@@ -28,6 +30,17 @@ import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
 import { getProductById } from "@/app/detail/product/data";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/app/components/ui/avatar";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/app/components/ui/carousel";
 
 /* ─── Data Helpers ─── */
 function getVendorFoods(vendorName: string): FoodItem[] {
@@ -65,6 +78,295 @@ function isOpenNow(openHours: string): boolean {
   return open <= close
     ? minutes >= open && minutes < close
     : minutes >= open || minutes < close;
+}
+
+/* ─── Review Pelanggan tentang Pelayanan Toko ─── */
+interface ServiceReview {
+  name: string;
+  avatar: string;
+  rating: number;
+  comment: string;
+  timeAgo: string;
+}
+
+const pexelsAvatar = (id: number) =>
+  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=160&h=160&fit=crop`;
+
+const SERVICE_REVIEWS: Record<string, ServiceReview[]> = {
+  "warung-nusantara": [
+    {
+      name: "Andi Pratama",
+      avatar: pexelsAvatar(220453),
+      rating: 5,
+      comment:
+        "Pelayanannya ramah dan proses pengambilan makanan cepat, tidak perlu antre lama.",
+      timeAgo: "2 hari lalu",
+    },
+    {
+      name: "Siti Rahma",
+      avatar: pexelsAvatar(774909),
+      rating: 4,
+      comment:
+        "Staff cukup ramah dan pesanannya sudah disiapkan dengan baik sesuai jadwal.",
+      timeAgo: "5 hari lalu",
+    },
+    {
+      name: "Budi Santoso",
+      avatar: pexelsAvatar(1222271),
+      rating: 5,
+      comment:
+        "Packing rapi, makanan masih hangat waktu diambil. Komunikasinya juga enak.",
+      timeAgo: "1 minggu lalu",
+    },
+    {
+      name: "Dewi Lestari",
+      avatar: pexelsAvatar(415829),
+      rating: 4,
+      comment:
+        "Admin responsif membalas chat, cuma waktu tunggu agak lama saat jam sibuk.",
+      timeAgo: "1 minggu lalu",
+    },
+    {
+      name: "Rizky Maulana",
+      avatar: pexelsAvatar(614810),
+      rating: 3,
+      comment:
+        "Rasa konsisten dan staff membantu, tapi tanda antrean pengambilan kurang jelas.",
+      timeAgo: "2 minggu lalu",
+    },
+  ],
+  "dapur-ibu-tini": [
+    {
+      name: "Maya Anggraini",
+      avatar: pexelsAvatar(1130626),
+      rating: 5,
+      comment:
+        "Bu Tini sangat ramah, pesanan selalu sudah siap tepat jadwal pengambilan.",
+      timeAgo: "1 hari lalu",
+    },
+    {
+      name: "Fajar Nugroho",
+      avatar: pexelsAvatar(2379004),
+      rating: 4,
+      comment:
+        "Proses pengambilan cepat, kemasan dibungkus rapi dan aman dibawa jauh.",
+      timeAgo: "3 hari lalu",
+    },
+    {
+      name: "Intan Permata",
+      avatar: pexelsAvatar(1239291),
+      rating: 5,
+      comment:
+        "Staff responsif banget membalas chat, pengalaman ambil pesanan lancar.",
+      timeAgo: "4 hari lalu",
+    },
+    {
+      name: "Hendra Wijaya",
+      avatar: pexelsAvatar(1043471),
+      rating: 3,
+      comment:
+        "Masakannya enak, hanya saja saya sempat menunggu agak lama saat jam makan siang.",
+      timeAgo: "1 minggu lalu",
+    },
+    {
+      name: "Ratna Sari",
+      avatar: pexelsAvatar(733872),
+      rating: 4,
+      comment:
+        "Pelayanan hangat dan sabar menjawab pertanyaan soal menu surplus hari itu.",
+      timeAgo: "2 minggu lalu",
+    },
+  ],
+  "warkop-pak-iman": [
+    {
+      name: "Dimas Prasetyo",
+      avatar: pexelsAvatar(91227),
+      rating: 5,
+      comment:
+        "Pak Iman ramah, pesanan kopi dan snack selalu siap sebelum jadwal ambil.",
+      timeAgo: "1 hari lalu",
+    },
+    {
+      name: "Nadia Putri",
+      avatar: pexelsAvatar(762020),
+      rating: 4,
+      comment:
+        "Staff gerak cepat meski lagi ramai, packing minuman aman tidak tumpah.",
+      timeAgo: "4 hari lalu",
+    },
+    {
+      name: "Yusuf Hidayat",
+      avatar: pexelsAvatar(1681010),
+      rating: 5,
+      comment:
+        "Komunikasinya baik sekali, salah pesan langsung diganti tanpa ribet.",
+      timeAgo: "6 hari lalu",
+    },
+    {
+      name: "Lina Marlina",
+      avatar: pexelsAvatar(1858175),
+      rating: 3,
+      comment:
+        "Menu standarnya enak, tapi antreannya lumayan panjang kalau pagi hari.",
+      timeAgo: "1 minggu lalu",
+    },
+    {
+      name: "Agus Setiawan",
+      avatar: pexelsAvatar(1516680),
+      rating: 4,
+      comment:
+        "Titik pengambilan jelas dan staff membantu carikan pesanan dengan cepat.",
+      timeAgo: "2 minggu lalu",
+    },
+  ],
+};
+
+function initialsOf(name: string) {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase();
+}
+
+function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
+  const reviews = SERVICE_REVIEWS[vendor.id] ?? [];
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+
+    const onSelect = () => setActiveIndex(carouselApi.selectedScrollSnap());
+
+    onSelect();
+    carouselApi.on("select", onSelect);
+    carouselApi.on("reInit", onSelect);
+
+    return () => {
+      carouselApi.off("select", onSelect);
+      carouselApi.off("reInit", onSelect);
+    };
+  }, [carouselApi]);
+
+  return (
+    <>
+      <div className="mt-8">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
+          Review Pelanggan
+        </p>
+        <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-forest-900 sm:text-3xl">
+          Kata Pelanggan tentang Pelayanan {vendor.name}
+        </h2>
+      </div>
+
+      <div className="relative mt-6">
+        <button
+          type="button"
+          onClick={() => carouselApi?.scrollPrev()}
+          aria-label="Review sebelumnya"
+          className="absolute -left-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white text-primary shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1/2 hover:border-caramel hover:bg-caramel hover:text-white sm:flex"
+        >
+          <ArrowRight className="h-4 w-4 rotate-180" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => carouselApi?.scrollNext()}
+          aria-label="Review berikutnya"
+          className="absolute -right-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white text-primary shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1/2 hover:border-caramel hover:bg-caramel hover:text-white sm:flex"
+        >
+          <ArrowRight className="h-4 w-4" />
+        </button>
+
+        <Carousel opts={{ align: "start", loop: true }} setApi={setCarouselApi}>
+          <CarouselContent className="-ml-4 lg:-ml-5">
+            {reviews.map((review) => (
+              <CarouselItem
+                key={review.name}
+                className="basis-full pl-4 sm:basis-1/2 sm:pl-4 lg:basis-1/3 lg:pl-5"
+              >
+                <div className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-white p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel/40 hover:shadow-[0_30px_60px_-28px_rgba(34,81,56,0.35)] lg:p-9">
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -top-3 right-4 select-none font-display text-[6rem] font-extralight leading-none text-caramel/[0.08] transition-colors duration-300 group-hover:text-caramel/15"
+                  >
+                    &ldquo;
+                  </span>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: review.rating }).map((_, s) => (
+                      <Star
+                        key={s}
+                        className="h-4 w-4 fill-amber text-amber"
+                      />
+                    ))}
+                  </div>
+
+                  <Quote className="mt-5 h-5 w-5 text-caramel/40" />
+
+                  <blockquote className="mt-3 flex-1 font-sans text-sm leading-relaxed text-foreground/80">
+                    &ldquo;{review.comment}&rdquo;
+                  </blockquote>
+
+                  <div className="relative mt-7 flex items-center gap-3 pt-6">
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-0 top-0 h-px"
+                      style={{
+                        background:
+                          "repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 10px)",
+                        opacity: 0.35,
+                      }}
+                    />
+
+                    <Avatar className="h-11 w-11 border border-caramel/30">
+                      <AvatarImage
+                        src={review.avatar}
+                        alt={review.name}
+                        className="object-cover"
+                      />
+
+                      <AvatarFallback className="bg-caramel font-display text-sm font-medium text-white">
+                        {initialsOf(review.name)}
+                      </AvatarFallback>
+                    </Avatar>
+
+                    <div>
+                      <p className="font-display text-base font-medium text-primary">
+                        {review.name}
+                      </p>
+
+                      <p className="mt-0.5 font-sans text-xs text-muted-foreground">
+                        {review.timeAgo}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+
+      <div className="mt-7 flex justify-center gap-2">
+        {reviews.map((review, i) => (
+          <button
+            key={review.name}
+            type="button"
+            aria-label={`Ke review ${i + 1}`}
+            onClick={() => carouselApi?.scrollTo(i)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeIndex === i
+                ? "w-8 bg-green-700"
+                : "w-1.5 bg-charcoal-900/15 hover:bg-charcoal-900/30"
+            }`}
+          />
+        ))}
+      </div>
+    </>
+  );
 }
 
 /* ─── Not Found State ─── */
@@ -502,151 +804,9 @@ function StoreDetailContent() {
           )}
         </section>
 
-        {/* ─── Tentang Toko ─── */}
+        {/* ─── Review Pelanggan tentang Pelayanan Toko ─── */}
         <section id="tentang-toko" className="mt-16 pb-4">
-          <div className="mt-8">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-              Tentang Toko
-            </p>
-            <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-forest-900 sm:text-3xl">
-              Kenali {vendor.name}
-            </h2>
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Info Card */}
-            <div className="rounded-2xl border border-sage-100 bg-white p-5 shadow-sm sm:col-span-2 lg:col-span-1">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 rounded-xl bg-cream-50 px-4 py-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage-100 text-green-700">
-                    <Star className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-sage-500">
-                      Rating
-                    </p>
-                    <p className="text-xs font-semibold text-charcoal-900">
-                      {vendor.rating.toFixed(1)} / 5.0
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 rounded-xl bg-cream-50 px-4 py-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage-100 text-green-700">
-                    <MapPin className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-sage-500">
-                      Alamat
-                    </p>
-                    <p className="truncate text-xs font-semibold text-charcoal-900">
-                      {vendor.address}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 rounded-xl bg-cream-50 px-4 py-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage-100 text-green-700">
-                    <Clock className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-sage-500">
-                      Jam Buka
-                    </p>
-                    <p className="text-xs font-semibold text-charcoal-900">
-                      {vendor.openHours}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 rounded-xl bg-cream-50 px-4 py-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage-100 text-green-700">
-                    <Utensils className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-sage-500">
-                      Jumlah Produk
-                    </p>
-                    <p className="text-xs font-semibold text-charcoal-900">
-                      {foods.length} menu surplus tersedia
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {vendor.isRescuePartner && (
-                <div className="mt-4 flex items-center gap-2 rounded-xl bg-green-700/5 px-4 py-3">
-                  <BadgeCheck className="h-4 w-4 shrink-0 text-green-700" />
-                  <p className="text-xs font-semibold text-green-700">
-                    Rescue Partner — Berkomitmen mengurangi food waste
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Impact Card */}
-            <div className="relative overflow-hidden rounded-2xl bg-primary p-6 text-cream-50 shadow-md shadow-forest-900/20 sm:p-8">
-              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-cream-50/5 blur-3xl" />
-              <div className="relative">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-cream-50/15">
-                  <Leaf className="h-5 w-5 text-cream-50" />
-                </span>
-                <h3 className="mt-4 font-display text-xl font-medium tracking-tight text-cream-50">
-                  Dampak Toko Ini
-                </h3>
-                <p className="mt-1 text-xs leading-relaxed text-cream-50/70">
-                  Setiap porsi yang kamu pesan membantu toko ini mengurangi sisa
-                  makanan.
-                </p>
-
-                <ul className="mt-5 space-y-3">
-                  {[
-                    { label: "Kategori", value: vendor.category },
-                    { label: "Jarak", value: `${vendor.distanceKm} km` },
-                    {
-                      label: "Status",
-                      value: vendor.isRescuePartner
-                        ? "Rescue Partner"
-                        : "UMKM Partner",
-                    },
-                    { label: "Komitmen", value: "Zero Food Waste" },
-                  ].map((row) => (
-                    <li
-                      key={row.label}
-                      className="flex items-center justify-between gap-2 border-b border-cream-50/10 pb-2.5 text-xs last:border-0 last:pb-0"
-                    >
-                      <span className="text-cream-50/70">{row.label}</span>
-                      <span className="font-semibold text-cream-50">
-                        {row.value}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Location Card */}
-            <div className="rounded-2xl border border-sage-100 bg-white p-5 shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-                Lokasi
-              </p>
-              <h3 className="mt-2 font-display text-lg font-medium tracking-tight text-forest-900">
-                {vendor.address}
-              </h3>
-              <div className="relative mt-4 aspect-[4/3] overflow-hidden rounded-xl bg-sage-100">
-                <SmartImage
-                  src={vendor.image}
-                  alt={`Lokasi ${vendor.name}`}
-                  sizes="(min-width: 1024px) 33vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="mt-3 flex items-center gap-2 text-sm text-charcoal-500">
-                <MapPin className="h-4 w-4 shrink-0 text-green-700" />
-                <span>{vendor.distanceKm} km dari lokasi Anda</span>
-              </div>
-            </div>
-          </div>
+          <StoreServiceReviews vendor={vendor} />
         </section>
       </div>
 
