@@ -304,7 +304,7 @@ function StoreDetailContent() {
                   "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold",
                   openNow
                     ? "bg-green-600 text-white"
-                    : "bg-white/85 text-charcoal-500",
+                    : "bg-white/85 text-white",
                 )}
               >
                 <span

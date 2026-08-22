@@ -193,23 +193,6 @@ export function ProductDetailModal({
 
           {/* ═══════ RIGHT: Info ═══════ */}
           <div className="flex flex-1 flex-col overflow-y-auto px-7 py-7 sm:px-9 lg:px-10 lg:py-8">
-            {/* Breadcrumb */}
-            <div className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone">
-              <span className="text-charcoal-500">BERANDA</span>
-              <span className="mx-2 text-sage">/</span>
-              <span className="text-charcoal-500">KATALOG</span>
-              <span className="mx-2 text-sage">/</span>
-              <span className="text-charcoal-900">
-                {product.title.toUpperCase()}
-              </span>
-            </div>
-
-            {/* Badge */}
-            {product.discountPercent >= 40 && (
-              <div className="mb-3 w-fit rounded-full bg-sage-100 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-green-700">
-                {product.discountPercent >= 50 ? "BEST SELLER" : "HEMAT"}
-              </div>
-            )}
 
             {/* Category */}
             <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-stone">
@@ -365,7 +348,7 @@ export function ProductDetailModal({
                     Ditambahkan!
                   </>
                 ) : (
-                  "Tambah ke Keranjang"
+                  "Beli"
                 )}
               </button>
             </div>

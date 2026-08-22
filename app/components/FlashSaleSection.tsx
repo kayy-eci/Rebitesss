@@ -71,10 +71,6 @@ function getSlotFromHour(h: number): UrgentSlot | null {
   return null;
 }
 
-function slotEndHour(key: UrgentSlot) {
-  return SLOTS.find((s) => s.key === key)!.end;
-}
-
 function useSlotRotation() {
   const [tick, setTick] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState<UrgentSlot | null>(null);
@@ -155,17 +151,20 @@ function SectionCountdown({
 
 function UrgentCard({
   item,
-  deadlineIso,
-  isNotLive,
+  startsAtIso,
+  endsAtIso,
   onViewDetail,
 }: {
   item: UrgentItem;
-  deadlineIso: string;
-  isNotLive: boolean;
+  startsAtIso: string;
+  endsAtIso: string;
   onViewDetail?: (id: string) => void;
 }) {
-  const remaining = useCountdown(deadlineIso);
-  const isExpired = remaining === 0;
+  const remainingToStart = useCountdown(startsAtIso);
+  const remainingToEnd = useCountdown(endsAtIso);
+  const isEnded = remainingToEnd === 0;
+  const isUpcoming = !isEnded && (remainingToStart ?? 0) > 0;
+  const isActive = !isEnded && !isUpcoming;
 
   const stockCount = parseStockCount(item.stockLabel);
   const stockPct =
@@ -176,11 +175,11 @@ function UrgentCard({
       role="button"
       tabIndex={0}
       aria-label={`Lihat detail ${item.name}`}
-      onClick={() => !isExpired && onViewDetail?.(item.id)}
+      onClick={() => !isEnded && onViewDetail?.(item.id)}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          if (!isExpired) onViewDetail?.(item.id);
+          if (!isEnded) onViewDetail?.(item.id);
         }
       }}
       className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 outline-none transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-green-700/30 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
@@ -190,10 +189,7 @@ function UrgentCard({
           src={item.image}
           alt={`Foto ${item.name} dari ${item.vendorName}`}
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
-          className={cn(
-            "transition-transform duration-500 group-hover:scale-105",
-            (isExpired || isNotLive) && "grayscale",
-          )}
+          className="transition-transform duration-500 group-hover:scale-105"
         />
 
         <motion.span
@@ -248,7 +244,7 @@ function UrgentCard({
           </span>
         </div>
 
-        {!isExpired &&
+        {isActive &&
           (stockPct === null ? (
             <span className="w-fit rounded-full bg-cream-100 px-3 py-1 text-xs font-medium text-charcoal-500">
               {item.stockLabel}
@@ -282,26 +278,35 @@ function UrgentCard({
           </span>
         </div>
 
-        <button
-          type="button"
-          disabled={isExpired}
-          onClick={(event) => {
-            event.stopPropagation();
-            if (!isExpired) onViewDetail?.(item.id);
-          }}
-          aria-label={
-            isExpired ? `${item.name} sudah habis` : `Lihat detail ${item.name}`
-          }
-          className={cn(
-            "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
-            isExpired
-              ? "cursor-not-allowed bg-sage-100 text-charcoal-500"
-              : "bg-[#225138] text-white hover:bg-[#C8A882]",
-            FOCUS_RING,
-          )}
-        >
-          {isExpired ? "Habis" : "Beli"}
-        </button>
+        {isActive ? (
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onViewDetail?.(item.id);
+            }}
+            aria-label={`Lihat detail ${item.name}`}
+            className={cn(
+              "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
+              "bg-[#225138] text-white hover:bg-[#C8A882]",
+              FOCUS_RING,
+            )}
+          >
+            Beli
+          </button>
+        ) : (
+          <div
+            role="status"
+            aria-label={
+              isEnded
+                ? `${item.name} sudah habis`
+                : `${item.name} belum tersedia`
+            }
+            className="mt-1 flex w-full items-center justify-center rounded-full bg-sage-100 px-3 py-2.5 text-center text-sm font-semibold text-charcoal-500"
+          >
+            {isEnded ? "Produk sudah habis" : "Produk belum tersedia"}
+          </div>
+        )}
       </div>
     </article>
   );
@@ -314,8 +319,14 @@ export function FlashSaleSection({
 }) {
   const { realSlot, setSelectedSlot, activeSlot } = useSlotRotation();
 
-  const slotEndIso = activeSlot
-    ? new Date(wibEpochOfToday(slotEndHour(activeSlot))).toISOString()
+  const activeSlotDef = activeSlot
+    ? SLOTS.find((s) => s.key === activeSlot) ?? null
+    : null;
+  const slotStartIso = activeSlotDef
+    ? new Date(wibEpochOfToday(activeSlotDef.start)).toISOString()
+    : null;
+  const slotEndIso = activeSlotDef
+    ? new Date(wibEpochOfToday(activeSlotDef.end)).toISOString()
     : null;
   const nextStartIso = new Date(nextStartEpoch()).toISOString();
 
@@ -542,8 +553,8 @@ export function FlashSaleSection({
                 >
                   <UrgentCard
                     item={item}
-                    deadlineIso={slotEndIso!}
-                    isNotLive={realSlot !== activeSlot}
+                    startsAtIso={slotStartIso!}
+                    endsAtIso={slotEndIso!}
                     onViewDetail={onViewDetail}
                   />
                 </motion.div>
