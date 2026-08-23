@@ -50,7 +50,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   },
   {
     slug: 'premium',
-    name: 'Premium',
+    name: 'Max',
     tagline: 'Untuk usaha yang ingin berkembang lebih jauh.',
     monthly: 99_000,
     yearly: 990_000,

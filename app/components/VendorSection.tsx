@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils';
 import { vendors } from '@/lib/data';
 import { VendorCard } from '@/app/components/VendorCard';
 import { SoftBlob } from '@/app/components/ornaments';
+import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
+import { useSellerPlan } from '@/lib/seller-plan';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
@@ -15,6 +17,16 @@ export function VendorSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
+  const { plan } = useSellerPlan();
+
+  /* Benefit paket Standar/Max: toko prioritas tampil paling depan. */
+  const sortedVendors = plan.priorityListing
+    ? [...vendors].sort(
+        (a, b) =>
+          Number(b.id === SELLER_VENDOR_SLUG) -
+          Number(a.id === SELLER_VENDOR_SLUG)
+      )
+    : vendors;
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
@@ -106,7 +118,7 @@ export function VendorSection() {
             }}
             className="mt-10 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {vendors.map((vendor) => (
+            {sortedVendors.map((vendor) => (
               <motion.div
                 key={vendor.id}
                 variants={{
@@ -119,7 +131,14 @@ export function VendorSection() {
                 }}
                 className="min-w-0 snap-start"
               >
-                <VendorCard vendor={vendor} />
+                <VendorCard
+                  vendor={vendor}
+                  badgeLabel={
+                    plan.priorityListing && vendor.id === SELLER_VENDOR_SLUG
+                      ? 'Prioritas'
+                      : undefined
+                  }
+                />
               </motion.div>
             ))}
           </motion.div>

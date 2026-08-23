@@ -1,23 +1,60 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight, Store } from 'lucide-react';
+import { ArrowUpRight, BadgeCheck, Store } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { QuickActionsRow } from './QuickActionsRow';
 import { useCountUp } from './useCountUp';
 import { vendorInfo } from './data';
 import { DotPattern, LeafSprig } from './decor';
 import { formatRupiah } from '@/lib/data';
+import { useSellerPlan } from '@/lib/seller-plan';
+import { getSellerWallet, WALLET_UPDATED_EVENT } from '@/lib/wallet-storage';
+import {
+  getSellerStoreSettings,
+  setStoreOpen,
+  STORE_SETTINGS_UPDATED_EVENT,
+} from '@/lib/store-settings-storage';
+import { useEffect, useState } from 'react';
 
+/**
+ * Kartu profil toko: saldo live dari wallet-storage, status Buka/Tutup
+ * yang tersimpan (store-settings-storage), lencana UMKM Terverifikasi
+ * bila paket mengizinkan, plus label paket aktif.
+ */
 export function StoreCard() {
-  const { ref, value } = useCountUp(vendorInfo.withdrawableBalance);
+  const { plan } = useSellerPlan();
+  const { ref, value } = useCountUp(getSellerWallet().balance);
+
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    const refresh = () => setIsOpen(getSellerStoreSettings().isOpen);
+    refresh();
+    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+    window.addEventListener(WALLET_UPDATED_EVENT, refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+      window.removeEventListener(WALLET_UPDATED_EVENT, refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
+  const handleToggleOpen = () => {
+    const next = !isOpen;
+    setStoreOpen(next);
+    setIsOpen(next);
+  };
 
   return (
     <Card>
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-charcoal-900">Profil Toko</h2>
-        <span className="rounded-full bg-sage-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-charcoal-900">
-          {vendorInfo.partnerTier}
+        <span className="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-charcoal-900">
+          <span className="h-3 w-3 rounded-full bg-gold-400" />
+          Paket {plan.label}
         </span>
       </div>
 
@@ -30,8 +67,14 @@ export function StoreCard() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cream-50/70">
               ReBites Partner
             </p>
-            <p className="mt-2 inline-flex rounded-full bg-cream-50/15 px-2.5 py-1 text-[11px] font-semibold text-cream-50">
+            <p className="mt-2 inline-flex flex-wrap items-center gap-1.5 rounded-full bg-cream-50/15 px-2.5 py-1 text-[11px] font-semibold text-cream-50">
               {vendorInfo.storeName}
+              {plan.verifiedBadge && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-cream-50 text-forest-900">
+                  <BadgeCheck className="h-3 w-3" />
+                  Terverifikasi
+                </span>
+              )}
             </p>
           </div>
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cream-50/15">
@@ -39,7 +82,34 @@ export function StoreCard() {
           </div>
         </div>
 
-        <div className="relative mt-7 flex flex-wrap items-end justify-between gap-3">
+        <button
+          type="button"
+          onClick={handleToggleOpen}
+          aria-pressed={isOpen}
+          className={cn(
+            'relative mt-5 inline-flex items-center gap-2.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors',
+            isOpen
+              ? 'border-cream-50/30 bg-cream-50/15 text-cream-50 hover:bg-cream-50/25'
+              : 'border-gold-300/60 bg-gold-100/90 text-charcoal-900 hover:bg-gold-100'
+          )}
+        >
+          <span
+            className={cn(
+              'relative inline-flex h-4 w-7 items-center rounded-full transition-colors',
+              isOpen ? 'bg-green-500' : 'bg-sage-500'
+            )}
+          >
+            <span
+              className={cn(
+                'absolute h-3 w-3 rounded-full bg-white transition-all',
+                isOpen ? 'left-3.5' : 'left-0.5'
+              )}
+            />
+          </span>
+          {isOpen ? 'Toko Buka' : 'Toko Tutup'}
+        </button>
+
+        <div className="relative mt-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="font-display text-lg font-medium leading-tight text-cream-50">
               {vendorInfo.ownerName}

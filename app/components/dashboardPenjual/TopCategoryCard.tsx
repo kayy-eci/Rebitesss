@@ -1,17 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { Lock } from 'lucide-react';
 import { Card } from './Card';
 import { FilterDropdown } from './FilterDropdown';
 import { useCountUp } from './useCountUp';
 import { monthOptions, topCategoriesByMonth } from './data';
 import { formatRupiah } from '@/lib/data';
+import { useSellerPlan } from '@/lib/seller-plan';
 
 const SEGMENT_COLORS = ['#0F2E1F', '#1B4D32', '#2D6A4F', '#6B9080', '#E4EBE4', '#EAE0C8'];
 
+/**
+ * Breakdown kategori per bulan. Paket dengan `historyDays` terbatas
+ * (Basic = 30 hari) tidak bisa membuka bulan-bulan sebelum bulan ini —
+ * datanya benar-benar disembunyikan, bukan sekadar diberi tanda.
+ */
+function useLockedMonths(): string[] {
+  const { plan } = useSellerPlan();
+
+  return useMemo(() => {
+    if (plan.historyDays === null) return [];
+
+    const cutoff = new Date();
+    cutoff.setMonth(cutoff.getMonth() - 1);
+    cutoff.setDate(0);
+    const limitMs = Date.now() - plan.historyDays * 24 * 60 * 60 * 1000;
+
+    return monthOptions
+      .filter((option) => {
+        /* Bulan berjalan selalu bisa dibuka; bulan sebelumnya hanya bila
+           masih dalam jendela riwayat paket. */
+        const [year, month] = option.value.split('-').map(Number);
+        const monthStart = new Date(year, month - 1, 1).getTime();
+        const isCurrentMonth =
+          new Date().getFullYear() === year && new Date().getMonth() === month - 1;
+        return !isCurrentMonth && monthStart < limitMs;
+      })
+      .map((option) => option.value);
+  }, [plan.historyDays]);
+}
+
 export function TopCategoryCard() {
-  const [month, setMonth] = useState('2026-08');
-  const data = topCategoriesByMonth[month];
+  const lockedMonths = useLockedMonths();
+  const firstOpenMonth =
+    monthOptions.find((option) => !lockedMonths.includes(option.value))?.value ??
+    monthOptions[0].value;
+
+  const [month, setMonth] = useState(firstOpenMonth);
+  const activeMonth = lockedMonths.includes(month) ? firstOpenMonth : month;
+  const data = topCategoriesByMonth[activeMonth];
+  const isLocked = lockedMonths.includes(month);
+  const { plan } = useSellerPlan();
   const { ref, value } = useCountUp(data.total);
 
   return (
@@ -33,37 +74,62 @@ export function TopCategoryCard() {
         />
       </div>
 
-      <div
-        className="mt-5 flex h-3 w-full overflow-hidden rounded-full bg-cream-100"
-        role="img"
-        aria-label="Persentase penjualan per kategori"
-      >
-        {data.categories.map((category, index) => (
+      {isLocked ? (
+        <div className="mt-5 flex flex-col items-start gap-3 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 p-5">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-100 text-charcoal-500">
+            <Lock className="h-4 w-4" />
+          </span>
+          <div>
+            <p className="text-sm font-bold text-charcoal-900">
+              Riwayat di luar 30 hari terkunci
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-sage-500">
+              Paket {plan.label} menyimpan riwayat penjualan {plan.historyDays} hari.
+              Upgrade ke ReBites Standar untuk riwayat tanpa batas.
+            </p>
+          </div>
+          <Link
+            href="/langganan/pembayaran?plan=standar&billing=monthly"
+            className="rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+          >
+            Upgrade ke ReBites Standar
+          </Link>
+        </div>
+      ) : (
+        <>
           <div
-            key={category.category}
-            className="h-full"
-            style={{
-              width: `${category.percent}%`,
-              backgroundColor: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
-            }}
-          />
-        ))}
-      </div>
-
-      <ul className="mt-4 space-y-2">
-        {data.categories.map((category, index) => (
-          <li key={category.category} className="flex items-center justify-between gap-2 text-xs">
-            <span className="flex items-center gap-2 font-medium text-charcoal-900">
-              <span
-                className="h-2.5 w-2.5 rounded-full"
-                style={{ backgroundColor: SEGMENT_COLORS[index % SEGMENT_COLORS.length] }}
+            className="mt-5 flex h-3 w-full overflow-hidden rounded-full bg-cream-100"
+            role="img"
+            aria-label="Persentase penjualan per kategori"
+          >
+            {data.categories.map((category, index) => (
+              <div
+                key={category.category}
+                className="h-full"
+                style={{
+                  width: `${category.percent}%`,
+                  backgroundColor: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
+                }}
               />
-              {category.category}
-            </span>
-            <span className="font-semibold text-charcoal-900">{category.percent}%</span>
-          </li>
-        ))}
-      </ul>
+            ))}
+          </div>
+
+          <ul className="mt-4 space-y-2">
+            {data.categories.map((category, index) => (
+              <li key={category.category} className="flex items-center justify-between gap-2 text-xs">
+                <span className="flex items-center gap-2 font-medium text-charcoal-900">
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: SEGMENT_COLORS[index % SEGMENT_COLORS.length] }}
+                  />
+                  {category.category}
+                </span>
+                <span className="font-semibold text-charcoal-900">{category.percent}%</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </Card>
   );
 }

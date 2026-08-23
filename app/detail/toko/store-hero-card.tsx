@@ -18,6 +18,7 @@ import { Badge } from "@/app/components/Badge";
 import { SmartImage } from "@/app/components/SmartImage";
 import { DotPattern, LeafSprig } from "@/app/components/dashboardPenjual/decor";
 import { getVendorProfile } from "./vendor-profiles";
+import { useSellerPlan } from "@/lib/seller-plan";
 
 interface StoreHeroCardProps {
   vendor: Vendor;
@@ -27,6 +28,7 @@ interface StoreHeroCardProps {
 export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [following, setFollowing] = useState(false);
   const profile = getVendorProfile(vendor.id);
+  const { plan } = useSellerPlan();
 
   return (
     <section>
@@ -62,6 +64,12 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                       <span className="inline-flex items-center gap-1 rounded-full bg-green-700 px-2.5 py-1 text-[10px] font-bold text-white">
                         <BadgeCheck className="h-3 w-3" />
                         Rescue Partner
+                      </span>
+                    )}
+                    {plan.verifiedBadge && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-bold text-charcoal-900">
+                        <BadgeCheck className="h-3 w-3" />
+                        UMKM Terverifikasi
                       </span>
                     )}
                     <span

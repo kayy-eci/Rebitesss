@@ -66,7 +66,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         </Link>
 
         <Link
-          href="/dashboardPenjual/tambahMenu"
+          href="/dashboard/penjual/tambahMenu"
           aria-label="Tambahkan menu baru"
           className="inline-flex shrink-0 items-center gap-2 rounded-full bg-green-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
         >

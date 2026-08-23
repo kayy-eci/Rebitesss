@@ -1,11 +1,10 @@
 import Link from 'next/link';
-import { Plus, Clock, Wallet, MoreHorizontal } from 'lucide-react';
+import { Plus, ShoppingBag, Wallet } from 'lucide-react';
 
 const actions = [
-  { label: 'Tambah Menu', icon: Plus, href: '/dashboardPenjual/tambahMenu' },
-  { label: 'Jadwal Buka', icon: Clock },
-  { label: 'Pencairan Dana', icon: Wallet },
-  { label: 'Lainnya', icon: MoreHorizontal },
+  { label: 'Tambah Menu', icon: Plus, href: '/dashboard/penjual/tambahMenu' },
+  { label: 'Pesanan Masuk', icon: ShoppingBag, href: '/dashboard/penjual/pesanan' },
+  { label: 'Pencairan Dana', icon: Wallet, href: '/dashboard/penjual/penarikan' },
 ] as const;
 
 type Action = (typeof actions)[number];
@@ -26,28 +25,17 @@ function ActionContent({ action }: { action: Action }) {
 
 export function QuickActionsRow() {
   return (
-    <div className="mt-5 grid grid-cols-4 gap-3">
-      {actions.map((action) =>
-        'href' in action ? (
-          <Link
-            key={action.label}
-            href={action.href}
-            aria-label={action.label}
-            className="group flex flex-col items-center gap-1.5"
-          >
-            <ActionContent action={action} />
-          </Link>
-        ) : (
-          <button
-            key={action.label}
-            type="button"
-            aria-label={action.label}
-            className="group flex flex-col items-center gap-1.5"
-          >
-            <ActionContent action={action} />
-          </button>
-        )
-      )}
+    <div className="mt-5 grid grid-cols-3 gap-3">
+      {actions.map((action) => (
+        <Link
+          key={action.label}
+          href={action.href}
+          aria-label={action.label}
+          className="group flex flex-col items-center gap-1.5"
+        >
+          <ActionContent action={action} />
+        </Link>
+      ))}
     </div>
   );
 }

@@ -1,15 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  ChevronDown,
   LayoutGrid,
   Leaf,
-  LifeBuoy,
   ShoppingBag,
-  Sprout,
   TrendingUp,
   Utensils,
   Wallet,
@@ -29,28 +26,82 @@ interface NavItem {
   id: string;
   label: string;
   icon: LucideIcon;
-  active?: boolean;
-  sub?: string[];
+  href: string;
+  /** Hanya aktif pada exact match — dipakai Dashboard agar tidak
+      ikut aktif di subroute /pesanan, /menu, dst. */
+  exact?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid, active: true },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutGrid,
+    href: '/dashboard/penjual',
+    exact: true,
+  },
   {
     id: 'pesanan',
     label: 'Pesanan Masuk',
     icon: ShoppingBag,
-    sub: ['Sedang Berlangsung', 'Riwayat'],
+    href: '/dashboard/penjual/pesanan',
   },
-  { id: 'menu', label: 'Menu Saya', icon: Utensils },
-  { id: 'dampak', label: 'Dampak & Waste', icon: Sprout },
-  { id: 'performa', label: 'Performa Toko', icon: TrendingUp },
-  { id: 'dana', label: 'Penarikan Dana', icon: Wallet },
-  { id: 'bantuan', label: 'Bantuan', icon: LifeBuoy },
+  {
+    id: 'menu',
+    label: 'Menu Saya',
+    icon: Utensils,
+    href: '/dashboard/penjual/menu',
+  },
+  {
+    id: 'performa',
+    label: 'Performa Toko',
+    icon: TrendingUp,
+    href: '/dashboard/penjual/performa',
+  },
+  {
+    id: 'dana',
+    label: 'Penarikan Dana',
+    icon: Wallet,
+    href: '/dashboard/penjual/penarikan',
+  },
 ];
 
-function SidebarContent({ onClose }: { onClose: () => void }) {
-  const [expanded, setExpanded] = useState<string | null>(null);
+function useActiveHref(href: string, exact?: boolean) {
+  const pathname = usePathname();
+  if (!pathname) return false;
+  return exact ? pathname === href : pathname.startsWith(href);
+}
 
+function NavItemLink({ item, onClose }: { item: NavItem; onClose?: () => void }) {
+  const isActive = useActiveHref(item.href, item.exact);
+  const Icon = item.icon;
+
+  return (
+    <Link
+      href={item.href}
+      onClick={onClose}
+      aria-current={isActive ? 'page' : undefined}
+      className={cn(
+        'group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors',
+        isActive
+          ? 'bg-sage-100 text-charcoal-900'
+          : 'text-charcoal-500 hover:bg-sage-100/60 hover:text-charcoal-900'
+      )}
+    >
+      <Icon
+        className={cn(
+          'h-[18px] w-[18px] shrink-0',
+          isActive
+            ? 'text-green-700'
+            : 'text-sage-500 group-hover:text-green-700'
+        )}
+      />
+      <span className="flex-1">{item.label}</span>
+    </Link>
+  );
+}
+
+function SidebarContent({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -83,74 +134,9 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
       </div>
 
       <nav className="relative flex-1 space-y-1 px-4" aria-label="Navigasi dashboard penjual">
-        {NAV_ITEMS.map((item) => {
-          const Icon = item.icon;
-          const hasSub = !!item.sub;
-          const isExpanded = expanded === item.id;
-
-          return (
-            <div key={item.id}>
-              <Link
-                href="#"
-                onClick={(event) => {
-                  if (hasSub) {
-                    event.preventDefault();
-                    setExpanded(isExpanded ? null : item.id);
-                  }
-                }}
-                aria-expanded={hasSub ? isExpanded : undefined}
-                className={cn(
-                  'group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors',
-                  item.active
-                    ? 'bg-sage-100 text-charcoal-900'
-                    : 'text-charcoal-500 hover:bg-sage-100/60 hover:text-charcoal-900'
-                )}
-              >
-                <Icon
-                  className={cn(
-                    'h-[18px] w-[18px] shrink-0',
-                    item.active
-                      ? 'text-green-700'
-                      : 'text-sage-500 group-hover:text-green-700'
-                  )}
-                />
-                <span className="flex-1">{item.label}</span>
-                {hasSub && (
-                  <ChevronDown
-                    className={cn(
-                      'h-4 w-4 text-sage-500 transition-transform',
-                      isExpanded && 'rotate-180'
-                    )}
-                  />
-                )}
-              </Link>
-
-              <AnimatePresence initial={false}>
-                {hasSub && isExpanded && (
-                  <motion.ul
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    {item.sub?.map((sub) => (
-                      <li key={sub}>
-                        <Link
-                          href="#"
-                          className="ml-11 flex items-center gap-2 py-2 text-[13px] font-medium text-charcoal-500 transition-colors hover:text-green-700"
-                        >
-                          <span className="h-1 w-1 rounded-full bg-sage-500" />
-                          {sub}
-                        </Link>
-                      </li>
-                    ))}
-                  </motion.ul>
-                )}
-              </AnimatePresence>
-            </div>
-          );
-        })}
+        {NAV_ITEMS.map((item) => (
+          <NavItemLink key={item.id} item={item} onClose={onClose} />
+        ))}
       </nav>
 
       <div className="relative px-4 pb-6 pt-4">

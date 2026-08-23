@@ -73,8 +73,18 @@ function SalesTooltip({
   );
 }
 
-export function SalesActivityChartCard() {
-  const [period, setPeriod] = useState<Period>('7-hari');
+/**
+ * Statistik penjualan — fokus utama dashboard. Seluruh angka
+ * (pendapatan, porsi terjual, tersisa, grafik) mengikuti periode yang
+ * dipilih lewat dropdown 7/14/30 hari.
+ */
+export function SalesStatsCard({
+  period,
+  onPeriodChange,
+}: {
+  period: Period;
+  onPeriodChange: (next: Period) => void;
+}) {
   const [kind, setKind] = useState<ChartKind>('bar');
 
   const data = useMemo(() => {
@@ -83,7 +93,6 @@ export function SalesActivityChartCard() {
     return salesActivityPeriod.slice(-days);
   }, [period]);
 
-  /* Seluruh angka kartu diturunkan dari periode terpilih. */
   const totalTerjual = useMemo(
     () => data.reduce((sum, point) => sum + point.terjual, 0),
     [data]
@@ -92,36 +101,29 @@ export function SalesActivityChartCard() {
     () => data.reduce((sum, point) => sum + point.tersisa, 0),
     [data]
   );
-  const periodLabel =
-    PERIOD_OPTIONS.find((option) => option.value === period)?.label ?? '';
-  const { ref, value } = useCountUp(totalTerjual);
+  const revenue = totalTerjual * AVG_PRICE_PER_PORSI;
+
+  const porsiCount = useCountUp(totalTerjual);
+  const revenueCount = useCountUp(revenue);
 
   return (
-    <Card className="h-full">
+    <Card>
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
         <div>
-          <div className="flex items-baseline gap-2">
-            <span
-              ref={ref}
-              className="font-display text-[42px] font-medium leading-none tracking-tight text-forest-900"
-            >
-              {value}
-            </span>
-            <span className="text-sm font-medium text-charcoal-900">
-              porsi terjual · {periodLabel}
-            </span>
-          </div>
-          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-sage-500">
-            Statistik penjualan
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
+            Statistik Penjualan
           </p>
+          <h2 className="mt-1 font-display text-xl font-medium tracking-tight text-forest-900">
+            Performa penjualan tokomu
+          </h2>
         </div>
 
         <div className="flex items-center gap-2">
           <FilterDropdown
             value={period}
-            onChange={(next) => setPeriod(next as Period)}
+            onChange={(next) => onPeriodChange(next as Period)}
             options={PERIOD_OPTIONS}
-            ariaLabel="Pilih rentang waktu penjualan"
+            ariaLabel="Pilih rentang waktu statistik"
           />
           <div role="group" aria-label="Tipe grafik" className="flex rounded-full bg-cream-100 p-1">
             <button
@@ -154,6 +156,27 @@ export function SalesActivityChartCard() {
         </div>
       </div>
 
+      {/* Metrik utama periode terpilih */}
+      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl bg-cream-50 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
+            Pendapatan
+          </p>
+          <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-forest-900">
+            <span ref={revenueCount.ref}>{formatRupiah(revenueCount.value)}</span>
+          </p>
+        </div>
+        <div className="rounded-2xl bg-cream-50 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
+            Porsi Terjual
+          </p>
+          <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-forest-900">
+            <span ref={porsiCount.ref}>{porsiCount.value}</span>{' '}
+            <span className="text-sm font-medium text-charcoal-500">porsi</span>
+          </p>
+        </div>
+      </div>
+
       <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-4 text-xs font-medium text-charcoal-900">
           <span className="flex items-center gap-1.5">
@@ -179,6 +202,8 @@ export function SalesActivityChartCard() {
                 axisLine={false}
                 tick={{ fontSize: 11, fill: '#6B9080' }}
                 dy={6}
+                interval="preserveStartEnd"
+                minTickGap={24}
               />
               <YAxis
                 allowDecimals={false}
@@ -213,6 +238,8 @@ export function SalesActivityChartCard() {
                 axisLine={false}
                 tick={{ fontSize: 11, fill: '#6B9080' }}
                 dy={6}
+                interval="preserveStartEnd"
+                minTickGap={24}
               />
               <YAxis
                 allowDecimals={false}
@@ -227,7 +254,7 @@ export function SalesActivityChartCard() {
                 name="Terjual"
                 stroke="#1B4D32"
                 strokeWidth={2.5}
-                dot={{ r: 3, fill: '#1B4D32', strokeWidth: 0 }}
+                dot={false}
                 activeDot={{ r: 5 }}
                 animationDuration={700}
               />
@@ -237,7 +264,7 @@ export function SalesActivityChartCard() {
                 name="Tersisa"
                 stroke="#6B9080"
                 strokeWidth={2.5}
-                dot={{ r: 3, fill: '#6B9080', strokeWidth: 0 }}
+                dot={false}
                 activeDot={{ r: 5 }}
                 animationDuration={700}
               />
@@ -245,10 +272,6 @@ export function SalesActivityChartCard() {
           )}
         </ResponsiveContainer>
       </div>
-
-      <p className="sr-only">
-        Statistik penjualan {periodLabel}: {totalTerjual} porsi terjual, {totalTersisa} porsi tersisa.
-      </p>
     </Card>
   );
 }

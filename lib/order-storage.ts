@@ -64,6 +64,11 @@ export function getUserOrders(userId: string | null | undefined): StoredOrder[] 
   return readOrders().filter((order) => order.userId === userId);
 }
 
+/** Semua order perangkat ini — basis daftar Pesanan Masuk penjual. */
+export function getAllOrders(): StoredOrder[] {
+  return readOrders();
+}
+
 /** Patch sebagian field order (mis. status → completed). Emit event bila berubah. */
 export function patchOrder(
   orderId: string,

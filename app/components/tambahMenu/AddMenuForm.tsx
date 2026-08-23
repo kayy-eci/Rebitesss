@@ -3,10 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, Info, Minus, Plus, Save } from 'lucide-react';
+import { CheckCircle2, Info, Lock, Minus, Plus, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/app/components/dashboardPenjual/Card';
 import { Reveal } from '@/app/components/reveal';
+import {
+  getSellerProductCount,
+  saveSellerProduct,
+} from '@/lib/product-storage';
+import { useSellerPlan } from '@/lib/seller-plan';
 import { PhotoPicker } from './PhotoPicker';
 import { MenuPreviewCard } from './MenuPreviewCard';
 import { DEFAULT_MENU_FORM, MENU_CATEGORIES } from './types';
@@ -42,6 +47,11 @@ export function AddMenuForm() {
   const [touched, setTouched] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savedName, setSavedName] = useState('');
+  const [limitReached, setLimitReached] = useState(false);
+  const { plan } = useSellerPlan();
+
+  const isQuotaFull =
+    plan.maxProducts !== null && getSellerProductCount() >= plan.maxProducts;
 
   const set = <K extends keyof MenuFormState>(key: K, value: MenuFormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -49,6 +59,32 @@ export function AddMenuForm() {
   const handleSave = () => {
     setTouched(true);
     if (!form.name.trim()) return;
+
+    /* Batasan paket ditegakkan saat penyimpanan — bukan sekadar UI. */
+    if (plan.maxProducts !== null && getSellerProductCount() >= plan.maxProducts) {
+      setLimitReached(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    saveSellerProduct({
+      name: form.name.trim(),
+      category: form.category,
+      description: form.description.trim(),
+      image: form.photo || '/foods/ikansayur.jpg',
+      originalPrice: form.normalPrice,
+      surplusPrice: form.surplusPrice,
+      discountPercent:
+        form.normalPrice > 0
+          ? Math.max(0, Math.round((1 - form.surplusPrice / form.normalPrice) * 100))
+          : 0,
+      stock: form.stock,
+      startTime: form.startTime,
+      endTime: form.endTime,
+      isSurplusToday: form.isSurplusToday,
+      featured: false,
+    });
+
     setSavedName(form.name.trim());
     setSaved(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -58,7 +94,53 @@ export function AddMenuForm() {
     setForm(DEFAULT_MENU_FORM);
     setTouched(false);
     setSaved(false);
+    setLimitReached(false);
   };
+
+  if (limitReached) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="mx-auto mt-10 max-w-md"
+      >
+        <Card className="text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold-100 text-gold-600">
+            <Lock className="h-8 w-8" />
+          </div>
+          <h2 className="mt-5 font-display text-2xl font-medium tracking-tight text-forest-900">
+            Kuota Produk Penuh
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-sage-500">
+            Paket {plan.label} membatasi{' '}
+            <span className="font-bold text-charcoal-900">
+              {getSellerProductCount()}/{plan.maxProducts} produk
+            </span>
+            . Hapus salah satu menu di Menu Saya, atau upgrade ke{' '}
+            {plan.tier === 'basic' ? 'ReBites Standar (25 produk)' : 'ReBites Max (tanpa batas)'}{' '}
+            untuk menambah menu lagi.
+          </p>
+          <div className="mt-6 grid gap-3">
+            {plan.upgradeSlug && (
+              <Link
+                href={`/langganan/pembayaran?plan=${plan.upgradeSlug}&billing=monthly`}
+                className="inline-flex w-full items-center justify-center rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+              >
+                Lihat Paket Upgrade
+              </Link>
+            )}
+            <Link
+              href="/dashboard/penjual/menu"
+              className="inline-flex w-full items-center justify-center rounded-full border border-sage-100 bg-white px-4 py-3 text-sm font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
+            >
+              Kelola Menu Saya
+            </Link>
+          </div>
+        </Card>
+      </motion.div>
+    );
+  }
 
   if (saved) {
     return (
@@ -85,7 +167,7 @@ export function AddMenuForm() {
           </p>
           <div className="mt-6 grid gap-3">
             <Link
-              href="/dashboardPenjual"
+              href="/dashboard/penjual"
               className="inline-flex w-full items-center justify-center rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
             >
               Lihat Dashboard
@@ -333,18 +415,25 @@ export function AddMenuForm() {
 
             <div className="flex flex-col-reverse gap-3 border-t border-sage-100 pt-6 sm:flex-row sm:items-center">
               <Link
-                href="/dashboardPenjual"
+                href="/dashboard/penjual"
                 className="inline-flex items-center justify-center rounded-full border border-sage-100 bg-white px-5 py-3 text-sm font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
               >
                 Batalkan
               </Link>
-              <button
-                type="submit"
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-green-700 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
-              >
-                <Save className="h-4 w-4" />
-                Simpan Menu
-              </button>
+              <div className="flex flex-1 flex-col gap-2">
+                <button
+                  type="submit"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-green-700 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+                >
+                  <Save className="h-4 w-4" />
+                  Simpan Menu
+                </button>
+                <p className="text-center text-[11px] text-sage-500">
+                  {plan.maxProducts !== null
+                    ? `Kuota terpakai ${getSellerProductCount()}/${plan.maxProducts} produk · paket ${plan.label}`
+                    : `Kuota produk tanpa batas · paket ${plan.label}`}
+                </p>
+              </div>
             </div>
 
             <p className="flex items-center gap-1.5 text-[11px] text-sage-500">

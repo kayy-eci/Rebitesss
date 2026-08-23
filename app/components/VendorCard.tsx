@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Clock, MapPin, Star } from 'lucide-react';
+import { ArrowRight, Clock, Crown, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/SmartImage';
 import type { Vendor } from '@/lib/types';
@@ -24,7 +24,13 @@ function isOpenNow(openHours: string): boolean {
     : minutes >= open || minutes < close;
 }
 
-export function VendorCard({ vendor }: { vendor: Vendor }) {
+export function VendorCard({
+  vendor,
+  badgeLabel,
+}: {
+  vendor: Vendor;
+  badgeLabel?: string;
+}) {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
@@ -54,6 +60,13 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
         >
           {isOpen ? 'Buka Sekarang' : 'Tutup Sekarang'}
         </div>
+
+        {badgeLabel && (
+          <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900 shadow-md">
+            <Crown className="h-3 w-3" />
+            {badgeLabel}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">
