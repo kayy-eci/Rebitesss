@@ -570,6 +570,7 @@ export const orderDraft: OrderDraft = {
   originalPrice: 30000,
   discountedPrice: 18000,
   stockRemaining: 7,
+  distanceKm: 1.1,
   pickupTime: { from: "18:30", to: "20:00" },
   pickupLocation: "Jl. Kenanga No. 12, Bogor Utara",
   reservedUntil: inMinutes(35),
@@ -577,6 +578,5 @@ export const orderDraft: OrderDraft = {
 };
 
 export const promoCodes: PromoCode[] = [
-  { code: "HEMAT10", discountAmount: 3000, isValid: true },
-  { code: "SEGAR15", discountAmount: 5000, isValid: true },
+  { code: "REBITES26", percentOff: 5, isValid: true },
 ];

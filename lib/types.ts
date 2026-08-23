@@ -65,6 +65,53 @@ export interface ImpactStat {
 
 export type UrgentSlot = "09-12" | "12-15" | "15-18" | "18-21";
 
+export type FulfillmentMode = "pickup" | "delivery";
+
+export type AddressLabel = "Rumah" | "Kos" | "Sekolah" | "Lainnya";
+
+export interface DeliveryAddress {
+  id: string;
+  label: AddressLabel;
+  receiverName: string;
+  phone: string;
+  province: string;
+  city: string;
+  district: string;
+  fullAddress: string;
+  note?: string;
+}
+
+export interface StoredOrder {
+  orderId: string;
+  productId: string;
+  productName: string;
+  vendorName: string;
+  vendorSlug: string;
+  image: string;
+  quantity: number;
+  fulfillment: FulfillmentMode;
+  addressSnapshot: Omit<DeliveryAddress, "id"> | null;
+  paymentMethodId: string;
+  subtotal: number;
+  discount: number;
+  serviceFee: number;
+  deliveryFee: number;
+  total: number;
+  coinEarned: number;
+  createdAt: string;
+}
+
+export interface CoinHistoryEntry {
+  orderId: string;
+  amount: number;
+  createdAt: string;
+}
+
+export interface ReBitesCoinState {
+  balance: number;
+  totalEarned: number;
+}
+
 export interface OrderDraft {
   productId: string;
   productSlug: string;
@@ -75,6 +122,7 @@ export interface OrderDraft {
   originalPrice: number;
   discountedPrice: number;
   stockRemaining: number;
+  distanceKm?: number;
   pickupTime: { from: string; to: string };
   pickupLocation: string;
   reservedUntil: string;
@@ -86,24 +134,23 @@ export interface PaymentMethod {
   name: string;
   description: string;
   icon: LucideIcon;
-  fee: number;
-  feeLabel: string;
 }
 
 export interface PromoCode {
   code: string;
-  discountAmount: number;
+  percentOff: number;
   isValid: boolean;
 }
 
 export interface CheckoutSummary {
   subtotal: number;
+  discount: number;
   serviceFee: number;
-  methodFee: number;
-  promoDiscount: number;
+  deliveryFee: number;
   total: number;
   totalSavings: number;
   co2eSaved: number;
+  coinEarned: number;
 }
 
 export interface UrgentItem extends FoodItem {

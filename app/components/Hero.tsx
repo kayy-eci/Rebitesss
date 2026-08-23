@@ -102,7 +102,7 @@ export function Hero() {
 
             <p className="mt-5 flex items-center gap-2 font-inter text-xs text-cream-50/75 sm:text-sm">
               <Recycle className="h-4 w-4 text-gold-500" />
-              12.540+ porsi makanan berhasil diselamatkan oleh komunitas
+              1000+ porsi makanan berhasil diselamatkan
             </p>
           </div>
         </motion.div>

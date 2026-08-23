@@ -3,8 +3,9 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LogOut, Receipt, Settings, Store, User, X } from 'lucide-react';
+import { LogOut, Coins, Receipt, Settings, Store, User, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useRebitesCoins } from '@/hooks/use-rebites-coins';
 
 export interface SidebarUser {
   fullName: string;
@@ -62,6 +63,7 @@ export function AccountSidebar({
 
   const displayName = user?.fullName?.trim() || 'Wildan Tair';
   const initials = user?.fullName ? getInitials(user.fullName) : '';
+  const { balance, totalEarned } = useRebitesCoins();
 
   return (
     <AnimatePresence>
@@ -127,6 +129,23 @@ export function AccountSidebar({
               </div>
             </div>
             <div className="mx-8 h-px bg-hairline" />
+
+            {/* Saldo ReBites Coin */}
+            <div className="px-8 pt-6">
+              <div className="flex items-center gap-3.5 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow-sm">
+                  <Coins className="h-5 w-5" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-inter text-base font-bold tabular-nums text-gold-600">
+                    {balance.toLocaleString('id-ID')} Coin
+                  </p>
+                  <p className="font-inter text-xs text-stone">
+                    Total didapat: {totalEarned.toLocaleString('id-ID')} Coin
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {/* CTA Mulai Jualan */}
             <div className="px-8 pt-6">

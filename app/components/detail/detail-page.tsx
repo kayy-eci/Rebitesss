@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ProfileNavbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/site-footer";
@@ -24,6 +25,7 @@ export default function DetailPage() {
 }
 
 function DetailPageContent() {
+  const router = useRouter();
   const rightColRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState<{ id: number; message: string } | null>(
@@ -44,7 +46,8 @@ function DetailPageContent() {
   const handleOrder = useCallback(() => {
     addToCart(PRODUCT);
     notify("Ditambahkan ke keranjang");
-  }, [addToCart, notify]);
+    router.push(`/detail/pesanan?product=${encodeURIComponent(PRODUCT.id)}`);
+  }, [addToCart, notify, router]);
 
   const handleShare = useCallback(async () => {
     try {

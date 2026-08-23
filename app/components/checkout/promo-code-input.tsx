@@ -13,11 +13,16 @@ export function PromoCodeInput() {
   return (
     <div className="border-t border-sage-100 pt-4">
       {promo ? (
-        <div className="flex items-center justify-between rounded-xl bg-green-700/[0.06] px-3.5 py-2.5">
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-center justify-between rounded-xl bg-green-700/[0.06] px-3.5 py-2.5"
+        >
           <div className="flex items-center gap-2">
             <BadgePercent className="h-4 w-4 text-green-700" />
             <span className="text-sm font-semibold text-green-700">
-              {promo.code} berlaku
+              {promo.code} berlaku · diskon {promo.percentOff}%
             </span>
           </div>
           <button
@@ -28,16 +33,17 @@ export function PromoCodeInput() {
           >
             <X className="h-4 w-4" />
           </button>
-        </div>
+        </motion.div>
       ) : (
         <>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-700 transition-colors hover:text-green-600"
           >
             <BadgePercent className="h-4 w-4" />
-            {open ? 'Tutup kode promo' : 'Punya kode promo?'}
+            {open ? 'Tutup kode promo' : 'Punya Kode Promo?'}
           </button>
 
           <AnimatePresence initial={false}>
@@ -64,20 +70,29 @@ export function PromoCodeInput() {
                     placeholder="Masukkan kode promo"
                     aria-label="Kode promo"
                     aria-invalid={promoError !== null}
-                    className="w-full rounded-xl border border-sage-100 bg-white px-3.5 py-2.5 text-sm text-charcoal-900 placeholder:text-sage-500 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-700/20"
+                    className="w-full rounded-xl border border-sage-100 bg-white px-3.5 py-2.5 text-sm uppercase text-charcoal-900 placeholder:normal-case placeholder:text-sage-500 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-700/20"
                   />
                   <button
                     type="button"
                     onClick={applyPromo}
                     className="shrink-0 rounded-xl bg-green-700 px-4 text-sm font-semibold text-white transition-colors hover:bg-green-600"
                   >
-                    Pakai
+                    Gunakan
                   </button>
                 </div>
-                {promoError && (
-                  <p className="mt-2 flex items-center gap-1.5 text-xs text-sage-500">
-                    <Check className="h-3.5 w-3.5 -rotate-45" />
+                {promoError ? (
+                  <p
+                    role="alert"
+                    className="mt-2 flex items-center gap-1.5 text-xs font-medium text-[#DC2626]"
+                  >
+                    <X className="h-3.5 w-3.5" strokeWidth={2.5} />
                     {promoError}
+                  </p>
+                ) : (
+                  <p className="mt-2 flex items-center gap-1.5 text-xs text-sage-500">
+                    <Check className="h-3.5 w-3.5 text-green-600" />
+                    Coba kode <span className="font-semibold">REBITES26</span>{' '}
+                    untuk diskon 5%
                   </p>
                 )}
               </motion.div>

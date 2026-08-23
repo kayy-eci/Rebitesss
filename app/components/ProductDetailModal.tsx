@@ -87,8 +87,10 @@ export function ProductDetailModal({
 
   const handleAddToCart = useCallback(() => {
     onClose();
-    router.push("/detail/pesanan");
-  }, [onClose, router]);
+    router.push(
+      `/detail/pesanan?product=${encodeURIComponent(product.id)}&qty=${qty}`,
+    );
+  }, [onClose, qty, product.id, router]);
 
   const savings = product.originalPrice - product.discountedPrice;
   const savingsPercent = Math.round((savings / product.originalPrice) * 100);

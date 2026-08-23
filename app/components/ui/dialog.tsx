@@ -21,7 +21,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'fixed inset-0 z-50 bg-black/70 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       className
     )}
     {...props}
@@ -29,24 +29,39 @@ const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
+/**
+ * Panel dialog responsif:
+ * - Mobile (< sm): bottom-sheet menempel bawah layar, slide-up,
+ *   tinggi maksimum memakai satuan dvh agar akurat saat keyboard/browser bar muncul.
+ * - Desktop (>= sm): modal tercenter dengan zoom halus.
+ *
+ * Struktur konten yang disarankan (flex-col dari .dialog-panel):
+ *   <header tetap terlihat />           ← di luar area scroll
+ *   <div className="min-h-0 flex-1 overflow-y-auto">isi panjang</div>
+ *   <footer tetap terlihat />           ← opsional, untuk tombol aksi
+ */
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    /** Tampilkan handle bar khas bottom-sheet (hanya tampil di mobile). */
+    handle?: boolean;
+  }
+>(({ className, children, handle = false, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
+        'dialog-panel rounded-t-3xl border-t border-x-0 border-b-0 border-sage-100 bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-12px_40px_rgba(30,42,34,0.16)] sm:rounded-3xl sm:border sm:p-6 sm:shadow-[0_24px_60px_rgba(30,42,34,0.2)]',
         className
       )}
       {...props}
     >
+      {handle && <div aria-hidden className="dialog-panel-handle" />}
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+      <DialogPrimitive.Close className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white text-charcoal-500 shadow-sm ring-1 ring-hairline transition-colors duration-200 hover:bg-cream-100 hover:text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-green-700/40">
         <X className="h-4 w-4" />
-        <span className="sr-only">Close</span>
+        <span className="sr-only">Tutup</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>

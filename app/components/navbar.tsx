@@ -15,6 +15,7 @@ import {
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 import { AccountSidebar, type SidebarUser } from './account-sidebar';
+import { CoinBadge } from './checkout/coin-badge';
 
 const LOCATIONS = ['Depok', 'Jakarta Selatan', 'Bekasi', 'Bogor', 'Tangerang'];
 
@@ -303,7 +304,8 @@ export function ProfileNavbar() {
               </div>
 
 
-              <div className="hidden items-center gap-0.5 sm:flex">
+              <div className="hidden items-center gap-2 sm:flex">
+                <CoinBadge className="hidden md:inline-flex" />
                 <IconButton
                   label="Profil saya"
                   onClick={() => setProfileOpen(true)}

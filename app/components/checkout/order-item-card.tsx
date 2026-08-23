@@ -19,19 +19,16 @@ export function OrderItemCard() {
 
         <div className="min-w-0 flex-1">
           <Link
-            href="/detail/product"
+            href={`/detail/toko?id=${encodeURIComponent(draft.vendorSlug)}`}
             className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500 transition-colors hover:text-green-700"
           >
             {draft.vendorName}
             <ChevronRight className="h-3 w-3" />
           </Link>
 
-          <Link
-            href="/detail/product"
-            className="mt-1 block font-display text-lg font-medium leading-snug text-charcoal-900 transition-colors hover:text-green-700 sm:text-xl"
-          >
+          <h2 className="mt-1 block font-display text-lg font-medium leading-snug text-charcoal-900 sm:text-xl">
             {draft.productName}
-          </Link>
+          </h2>
 
           <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
             <span className="font-display text-lg font-semibold text-green-700">

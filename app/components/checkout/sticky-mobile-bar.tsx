@@ -8,7 +8,7 @@ import { AnimatedNumber } from './animated-number';
 import { useCheckout } from './checkout-context';
 
 export function StickyMobileBar() {
-  const { summary, canPay } = useCheckout();
+  const { summary, canPay, submitOrder, submitting } = useCheckout();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -49,6 +49,7 @@ export function StickyMobileBar() {
             <button
               type="button"
               disabled={!canPay}
+              onClick={submitOrder}
               className={cn(
                 'rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200',
                 canPay
@@ -56,7 +57,7 @@ export function StickyMobileBar() {
                   : 'cursor-not-allowed bg-sage-100 text-sage-500'
               )}
             >
-              {canPay ? 'Bayar Sekarang' : 'Pilih metode bayar'}
+              {submitting ? 'Memproses…' : 'Pesan Sekarang'}
             </button>
           </div>
         </motion.div>

@@ -1,39 +1,48 @@
 'use client';
 
-import { CreditCard, Landmark, QrCode, Smartphone } from 'lucide-react';
+import { Banknote, QrCode, Wallet } from 'lucide-react';
 import type { PaymentMethod } from '@/lib/types';
 
+/**
+ * Semua metode memakai biaya layanan global 2% dari subtotal
+ * (lihat SERVICE_FEE_RATE di lib/useOrderCalculation.ts).
+ * Tidak ada biaya tetap per metode.
+ */
 export const paymentMethods: PaymentMethod[] = [
   {
     id: 'qris',
     name: 'QRIS',
     description: 'Scan sekali langsung bayar',
     icon: QrCode,
-    fee: 0,
-    feeLabel: 'Tanpa biaya',
   },
   {
-    id: 'ewallet',
-    name: 'GoPay / ShopeePay',
+    id: 'gopay',
+    name: 'GoPay',
     description: 'Bayar cepat dari e-wallet',
-    icon: Smartphone,
-    fee: 1000,
-    feeLabel: '+Rp1.000',
+    icon: Wallet,
   },
   {
-    id: 'virtual-account',
-    name: 'Virtual Account',
-    description: 'Transfer ke nomor VA mandiri',
-    icon: Landmark,
-    fee: 4000,
-    feeLabel: '+Rp4.000',
+    id: 'ovo',
+    name: 'OVO',
+    description: 'Bayar dari saldo OVO kamu',
+    icon: Wallet,
   },
   {
-    id: 'kartu',
-    name: 'Kartu Kredit / Debit',
-    description: 'Visa, Mastercard, atau JCB',
-    icon: CreditCard,
-    fee: 2500,
-    feeLabel: '+Rp2.500',
+    id: 'dana',
+    name: 'DANA',
+    description: 'Dompet digital DANA',
+    icon: Wallet,
+  },
+  {
+    id: 'shopeepay',
+    name: 'ShopeePay',
+    description: 'Bayar dari saldo ShopeePay',
+    icon: Wallet,
+  },
+  {
+    id: 'transfer-bank',
+    name: 'Transfer Bank',
+    description: 'Virtual account semua bank',
+    icon: Banknote,
   },
 ];

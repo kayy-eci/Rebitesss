@@ -52,15 +52,6 @@ export function PaymentMethodCard({
 
       <span
         className={cn(
-          'shrink-0 text-xs font-medium',
-          method.fee === 0 ? 'text-sage-500' : 'text-charcoal-500'
-        )}
-      >
-        {method.feeLabel}
-      </span>
-
-      <span
-        className={cn(
           'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200',
           selected ? 'border-green-700' : 'border-sage-500/70'
         )}
