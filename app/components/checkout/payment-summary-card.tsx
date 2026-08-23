@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Coins, Lock, Sparkles } from "lucide-react";
 import { formatRupiah } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { DotPattern } from "@/app/components/ornaments";
 import { AnimatedNumber } from "./animated-number";
 import { PromoCodeInput } from "./promo-code-input";
+import { UseCoinsCard } from "./use-coins-card";
 import { useCheckout } from "./checkout-context";
 
 const STICKY_TOP = 112;
@@ -112,6 +113,27 @@ export function PaymentSummaryCard() {
               </dd>
             </div>
           )}
+
+          {/* Potongan ReBites Coin — hanya muncul saat toggle ON */}
+          <AnimatePresence initial={false}>
+            {summary.coinUsed > 0 && (
+              <motion.div
+                key="coin-discount-row"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="overflow-hidden"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <dt className="text-green-700">ReBites Coin</dt>
+                  <dd className="font-semibold tabular-nums text-green-700">
+                    −<AnimatedNumber value={summary.coinDiscount} format={formatRupiah} />
+                  </dd>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </dl>
 
         {/* Reward ReBites Coin */}
@@ -132,6 +154,8 @@ export function PaymentSummaryCard() {
         </div>
 
         <PromoCodeInput />
+
+        <UseCoinsCard />
 
         <div className="mt-5 border-t border-sage-500/25 pt-4">
           <div className="flex items-center justify-between gap-4">

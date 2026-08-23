@@ -132,7 +132,9 @@ export default function AuthForm({
         if (signInError) throw signInError;
       }
 
-      window.location.href = redirectTo;
+      /* Param ?redirect= menang atas target statis halaman. */
+      const params = new URLSearchParams(window.location.search);
+      window.location.href = params.get("redirect") || redirectTo;
     } catch (err) {
       const message = err instanceof Error ? err.message : "";
       if (message.includes("Supabase env")) {

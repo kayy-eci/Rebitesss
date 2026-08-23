@@ -130,7 +130,7 @@ export function OrderSuccessView() {
         {/* Ringkasan pesanan */}
         <div className="px-6 pb-7 pt-5">
           <div className="flex items-start gap-4 rounded-2xl border border-sage-100 bg-cream-50 p-4">
-            <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-sage-100">
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-sage-100">
               <SmartImage src={order.image} alt={order.productName} sizes="64px" />
             </div>
             <div className="min-w-0 flex-1">
@@ -169,6 +169,13 @@ export function OrderSuccessView() {
               <Row
                 label="Biaya pengantaran"
                 value={formatRupiah(order.deliveryFee)}
+              />
+            )}
+            {(order.coinUsed ?? 0) > 0 && (
+              <Row
+                label="ReBites Coin"
+                value={`−${formatRupiah(order.coinUsed ?? 0)}`}
+                accent
               />
             )}
             <div className="flex items-center justify-between border-t border-sage-100 pt-2.5">

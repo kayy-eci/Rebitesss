@@ -1,33 +1,33 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { OrderHistoryShell } from '@/app/components/order-history/order-history-shell';
-import { OrderPageHeader } from '@/app/components/order-history/page-header';
-import { OrderSummaryCards } from '@/app/components/order-history/summary-cards';
-import { OrderTable } from '@/app/components/order-history/order-table';
-import { OrderImpactPanel } from '@/app/components/order-history/eco-impact';
-import { RescueAgain } from '@/app/components/order-history/rescue-again';
+import { OrderHistoryView } from '@/app/components/order-history/order-history-view';
 
 export const metadata: Metadata = {
-  title: 'Order History | Rebites',
+  title: 'Pesanan Saya | ReBites',
   description:
-    'Track your rescued meals, pickups, deliveries, and sustainable impact with the Rebites order history.',
+    'Lacak pesanan yang sedang berlangsung dan lihat riwayat belanja makanan di ReBites.',
 };
 
+/**
+ * Halaman Pesanan Saya — full-width application page TANPA sidebar.
+ * Layout mandiri: container terpusat max-w-6xl, tanpa offset bekas
+ * sidebar (margin-left, padding-left, atau fixed width).
+ */
 export default function OrderHistoryPage() {
   return (
-    <OrderHistoryShell>
-      <div className="mx-auto max-w-[1400px] space-y-5">
-        <OrderPageHeader />
-        <OrderSummaryCards />
-
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-          <div className="min-w-0 xl:col-span-2">
-            <OrderTable />
-          </div>
-          <OrderImpactPanel />
-        </div>
-
-        <RescueAgain />
+    <main className="min-h-screen bg-cream">
+      <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+        <Suspense
+          fallback={
+            <div className="space-y-5">
+              <div className="h-14 w-56 animate-pulse rounded-xl bg-white ring-1 ring-hairline" />
+              <div className="h-52 animate-pulse rounded-2xl bg-white ring-1 ring-hairline" />
+            </div>
+          }
+        >
+          <OrderHistoryView />
+        </Suspense>
       </div>
-    </OrderHistoryShell>
+    </main>
   );
 }

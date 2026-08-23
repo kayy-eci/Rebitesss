@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import DetailPage from '@/app/components/detail/detail-page';
 import { PRODUCT } from './data';
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function DetailProductPage() {
-  return <DetailPage />;
+  return (
+    <Suspense>
+      <DetailPage />
+    </Suspense>
+  );
 }

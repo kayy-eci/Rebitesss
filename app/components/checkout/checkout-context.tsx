@@ -18,13 +18,18 @@ import type {
   StoredOrder,
 } from '@/lib/types';
 import { useOrderCalculation } from '@/lib/useOrderCalculation';
+import {
+  estimateOrderMinutes,
+  getVendorPreparationMinutes,
+} from '@/lib/delivery-estimate';
 import { createOrderId, saveOrder } from '@/lib/order-storage';
-import { grantCoinsForOrder } from '@/hooks/use-rebites-coins';
+import { settleOrderCoins, useRebitesCoins } from '@/hooks/use-rebites-coins';
+import { getCurrentUserId } from '@/lib/current-user';
 import {
   useAddresses,
   type AddressFormValues,
 } from '@/hooks/use-addresses';
-import { promoCodes } from '@/lib/data';
+import { promoCodes, vendors } from '@/lib/data';
 import { paymentMethods } from './payment-methods';
 
 interface CheckoutContextValue {
@@ -55,6 +60,11 @@ interface CheckoutContextValue {
   promoError: string | null;
   applyPromo: () => void;
   clearPromo: () => void;
+
+  /** Saldo ReBites Coin dari sumber data tunggal (realtime). */
+  coinBalance: number;
+  useCoins: boolean;
+  toggleUseCoins: (on: boolean) => void;
 
   summary: ReturnType<typeof useOrderCalculation>;
   canPay: boolean;
@@ -88,7 +98,11 @@ export function CheckoutProvider({
   const [promoInput, setPromoInput] = useState('');
   const [promo, setPromo] = useState<PromoCode | null>(null);
   const [promoError, setPromoError] = useState<string | null>(null);
+  const [useCoins, setUseCoins] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  /* Sumber saldo Coin tunggal — sama dengan sidebar. */
+  const { balance: coinBalance } = useRebitesCoins();
 
   const submittedRef = useRef(false);
   const {
@@ -150,30 +164,61 @@ export function CheckoutProvider({
     quantity,
     fulfillment,
     promo,
+    useCoins,
+    coinBalance,
   });
 
+  /* Coin opsional — toggle tidak boleh aktif tanpa saldo. */
+  const toggleUseCoins = useCallback(
+    (on: boolean) => setUseCoins(on && coinBalance > 0),
+    [coinBalance],
+  );
+
   const missingRequirement = useMemo<string | null>(() => {
-    if (!selectedMethod) return 'Pilih metode pembayaran terlebih dahulu.';
+    if (!selectedMethod && summary.total > 0)
+      return 'Pilih metode pembayaran terlebih dahulu.';
     if (fulfillment === 'delivery' && !selectedAddress)
       return 'Pilih alamat pengiriman terlebih dahulu.';
     return null;
-  }, [selectedMethod, fulfillment, selectedAddress]);
+  }, [selectedMethod, fulfillment, selectedAddress, summary.total]);
 
   const canPay = missingRequirement === null && !submitting;
 
   /* ── Submit order ──
-     Coin diberikan HANYA di sini (sekali per orderId), bukan saat
-     halaman sukses dibuka — aman dari refresh/double click. */
+     Demo: tidak ada login yang diwajibkan — order langsung diproses dan
+     teratribusi ke identitas demo (getCurrentUserId).
+     Potongan & reward Coin DIPROSES HANYA di sini (sekali per orderId
+     via settleOrderCoins), bukan saat toggle diaktifkan maupun saat
+     halaman sukses dibuka — aman dari refresh/double click.
+     Semua field snapshot (harga, nama, alamat, coin, estimasi) adalah
+     kondisi SAAT transaksi — tidak ikut berubah bila produk berubah. */
   const submitOrder = useCallback(() => {
-    if (!selectedMethod || submitting || submittedRef.current) return;
+    if (submitting || submittedRef.current) return;
+    if (!selectedMethod && summary.total > 0) return;
     if (fulfillment === 'delivery' && !selectedAddress) return;
 
     submittedRef.current = true;
     setSubmitting(true);
 
     const orderId = createOrderId();
+    const createdAt = new Date().toISOString();
+
+    /* Estimasi deterministik: pickup = persiapan toko;
+       delivery = persiapan + waktu tempuh sesuai jarak toko → alamat. */
+    const estimate = estimateOrderMinutes({
+      fulfillment,
+      distanceKm: draft.distanceKm,
+      vendorSlug: draft.vendorSlug,
+    });
+    const estimatedCompletionAt = new Date(
+      Date.now() + estimate.estimatedMinutes * 60_000
+    ).toISOString();
+
+    const vendorInfo = vendors.find((v) => v.id === draft.vendorSlug);
+
     const order: StoredOrder = {
       orderId,
+      userId: getCurrentUserId(),
       productId: draft.productId,
       productName: draft.productName,
       vendorName: draft.vendorName,
@@ -194,22 +239,43 @@ export function CheckoutProvider({
               note: selectedAddress.note,
             }
           : null,
-      paymentMethodId: selectedMethod.id,
+      paymentMethodId: selectedMethod?.id ?? 'tanpa-pembayaran',
       subtotal: summary.subtotal,
       discount: summary.discount,
       serviceFee: summary.serviceFee,
       deliveryFee: summary.deliveryFee,
+      totalBeforeCoin: summary.totalBeforeCoin,
+      coinUsed: summary.coinUsed,
       total: summary.total,
       coinEarned: summary.coinEarned,
-      createdAt: new Date().toISOString(),
+      createdAt,
+
+      /* Snapshot Order Center */
+      unitPrice: draft.discountedPrice,
+      promoCode: promo?.code ?? null,
+      status: 'ongoing',
+      estimatedMinutes: estimate.estimatedMinutes,
+      estimatedCompletionAt,
+      completedAt: undefined,
+      distanceKm: fulfillment === 'delivery' ? draft.distanceKm : undefined,
+      vendorAddress: vendorInfo?.address ?? draft.pickupLocation,
+      vendorOpenHours: vendorInfo?.openHours,
+      preparationMinutes:
+        estimate.preparationMinutes ||
+        getVendorPreparationMinutes(draft.vendorSlug),
+      co2eSavedKg: draft.co2ePerUnitKg * quantity,
     };
 
     saveOrder(order);
-    grantCoinsForOrder(order.orderId, summary.coinEarned);
+    settleOrderCoins(order.orderId, {
+      spent: summary.coinUsed,
+      earned: summary.coinEarned,
+    });
     router.push(`/detail/pesanan/sukses?orderId=${encodeURIComponent(orderId)}`);
   }, [
     draft,
     fulfillment,
+    promo,
     quantity,
     router,
     selectedAddress,
@@ -243,6 +309,9 @@ export function CheckoutProvider({
       promoError,
       applyPromo,
       clearPromo,
+      coinBalance,
+      useCoins,
+      toggleUseCoins,
       summary,
       canPay,
       missingRequirement,
@@ -268,6 +337,9 @@ export function CheckoutProvider({
       promoError,
       applyPromo,
       clearPromo,
+      coinBalance,
+      useCoins,
+      toggleUseCoins,
       summary,
       canPay,
       missingRequirement,
