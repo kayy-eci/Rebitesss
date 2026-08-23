@@ -10,6 +10,7 @@ import { vendorInfo } from './data';
 import { DotPattern, LeafSprig } from './decor';
 import { formatRupiah } from '@/lib/data';
 import { useSellerPlan } from '@/lib/seller-plan';
+import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
 import { getSellerWallet, WALLET_UPDATED_EVENT } from '@/lib/wallet-storage';
 import {
   getSellerStoreSettings,
@@ -130,7 +131,7 @@ export function StoreCard() {
       </div>
 
       <Link
-        href="/toko/dapur-ibu-tini"
+        href={`/detail/toko?id=${SELLER_VENDOR_SLUG}`}
         className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-sage-100 bg-white px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
       >
         <Store className="h-3.5 w-3.5 text-green-700" />

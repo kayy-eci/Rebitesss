@@ -41,8 +41,16 @@ import { StoreAboutImpact } from "./store-about-impact";
 import { SERVICE_REVIEWS, type ServiceReview } from "./service-reviews";
 import {
   SELLER_VENDOR_SLUG,
+  getSellerProducts,
+  isProductAvailable,
+  PRODUCTS_UPDATED_EVENT,
   getFeaturedProductIds,
 } from "@/lib/product-storage";
+import type { SellerProduct } from "@/lib/product-storage";
+import {
+  getSellerStoreSettings,
+  STORE_SETTINGS_UPDATED_EVENT,
+} from "@/lib/store-settings-storage";
 
 /* ─── Data Helpers ─── */
 function getVendorFoods(vendorName: string): FoodItem[] {
@@ -59,6 +67,40 @@ function getVendorFoods(vendorName: string): FoodItem[] {
     seen.add(key);
     return true;
   });
+}
+
+/**
+ * Ubah SellerProduct (dari storage penjual) menjadi FoodItem
+ * agar bisa ditampilkan di halaman toko user.
+ */
+function sellerProductToFoodItem(
+  sp: SellerProduct,
+  vendor: Vendor
+): FoodItem {
+  return {
+    id: sp.id,
+    name: sp.name,
+    vendorName: vendor.name,
+    image: sp.image,
+    category: sp.category as FoodItem["category"],
+    rating: 4.7,
+    distanceKm: vendor.distanceKm,
+    availableFrom: sp.startTime,
+    availableTo: sp.endTime,
+    stockLabel: sp.stock > 0 ? `${sp.stock} porsi tersisa` : "Habis",
+    originalPrice: sp.originalPrice,
+    discountedPrice: sp.surplusPrice,
+    discountPercent: sp.discountPercent,
+  };
+}
+
+/**
+ * Ambil data produk penjual dari storage yang sama dengan dashboard.
+ * Hanya dipanggil untuk vendor yang sedang login (Dapur Ibu Tini).
+ */
+function getSellerVendorFoods(vendor: Vendor): FoodItem[] {
+  const sellerProducts = getSellerProducts();
+  return sellerProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
 }
 
 function parseStock(label: string): number | null {
@@ -265,13 +307,20 @@ function StoreNotFound() {
 function FoodCard({
   item,
   onSelect,
+  forceUnavailable,
 }: {
   item: FoodItem;
   onSelect: () => void;
+  /**
+   * Bila diisi, menimpa ketersediaan berdasarkan data penjual.
+   * true = tidak tersedia, false = tersedia, undefined = gunakan default.
+   */
+  forceUnavailable?: boolean;
 }) {
   const stock = parseStock(item.stockLabel);
   const lowStock = stock !== null && stock <= 3;
   const savings = item.originalPrice - item.discountedPrice;
+  const isUnavailable = forceUnavailable === true || item.stockLabel === "Habis";
 
   return (
     <article
@@ -285,18 +334,33 @@ function FoodCard({
           onSelect();
         }
       }}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 outline-none transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15 focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
+      className={cn(
+        "group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md outline-none transition-all duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2",
+        isUnavailable
+          ? "opacity-60 shadow-none hover:translate-y-0 hover:shadow-md"
+          : "shadow-forest-900/5 hover:shadow-xl hover:shadow-forest-900/15"
+      )}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
           src={item.image}
           alt={`Foto ${item.name}`}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="transition-transform duration-500 group-hover:scale-105"
+          className={cn(
+            "transition-transform duration-500 group-hover:scale-105",
+            isUnavailable && "grayscale-[40%]"
+          )}
         />
         <div className="absolute right-3 top-3">
           <Badge variant="gold">{item.discountPercent}% OFF</Badge>
         </div>
+        {isUnavailable && (
+          <div className="absolute inset-0 flex items-center justify-center bg-charcoal-900/40">
+            <span className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-charcoal-900 shadow-lg">
+              {stock === 0 ? "Stok Habis" : "Tidak Tersedia"}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
@@ -333,14 +397,20 @@ function FoodCard({
           </p>
         </div>
 
-        <Link
-          href={`/auth/register?produk=${item.id}`}
-          onClick={(event) => event.stopPropagation()}
-          className="mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]"
-        >
-          <ShoppingCart className="h-4 w-4" />
-          Beli Sekarang
-        </Link>
+        {isUnavailable ? (
+          <div className="mt-1 flex w-full items-center justify-center gap-2 rounded-full border border-sage-200 bg-sage-50 py-2.5 text-sm font-semibold text-charcoal-500">
+            {stock === 0 ? "Stok Habis" : "Di Luar Jam Jual"}
+          </div>
+        ) : (
+          <Link
+            href={`/auth/register?produk=${item.id}`}
+            onClick={(event) => event.stopPropagation()}
+            className="mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            Beli Sekarang
+          </Link>
+        )}
       </div>
     </article>
   );
@@ -354,9 +424,33 @@ function StoreDetailContent() {
     (item) => item.id === storeId,
   );
 
+  /* Sinkron data penjual — tampilan terbaru dari dashboard langsung terbaca. */
+  const [sellerProducts, setSellerProducts] = useState<SellerProduct[]>([]);
+  const isSellerVendor = vendor?.id === SELLER_VENDOR_SLUG;
+
+  useEffect(() => {
+    if (!isSellerVendor) return;
+    const refresh = () => setSellerProducts(getSellerProducts());
+    refresh();
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, refresh);
+    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+    window.addEventListener("storage", refresh);
+    return () => {
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, refresh);
+      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+      window.removeEventListener("storage", refresh);
+    };
+  }, [isSellerVendor]);
+
   const foods = useMemo(
-    () => (vendor ? getVendorFoods(vendor.name) : []),
-    [vendor],
+    () => {
+      if (!vendor) return [];
+      if (isSellerVendor && sellerProducts.length > 0) {
+        return sellerProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
+      }
+      return getVendorFoods(vendor.name);
+    },
+    [vendor, isSellerVendor, sellerProducts]
   );
 
   const categories = useMemo(
@@ -409,6 +503,16 @@ function StoreDetailContent() {
         : new Set<string>(),
     [vendor]
   );
+
+  /* Cek ketersediaan real-time berdasarkan data penjual */
+  const sellerAvailability = useMemo(() => {
+    if (!isSellerVendor) return new Map<string, boolean>();
+    const map = new Map<string, boolean>();
+    for (const sp of sellerProducts) {
+      map.set(sp.id, isProductAvailable(sp));
+    }
+    return map;
+  }, [isSellerVendor, sellerProducts]);
 
   const visibleFoods = useMemo(() => {
     let items = foods;
@@ -556,6 +660,7 @@ function StoreDetailContent() {
                   <FoodCard
                     item={item}
                     onSelect={() => handleViewDetail(item.id)}
+                    forceUnavailable={isSellerVendor && sellerAvailability.has(item.id) ? !sellerAvailability.get(item.id) : undefined}
                   />
                 </motion.div>
               ))}

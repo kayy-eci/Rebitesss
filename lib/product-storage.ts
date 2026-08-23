@@ -32,6 +32,8 @@ export interface SellerProduct {
   stock: number;
   startTime: string;
   endTime: string;
+  /** Apakah menu dijual sepanjang hari tanpa batas jam. */
+  allDay?: boolean;
   isSurplusToday: boolean;
   /** Promosi unggulan — benefit khusus ReBites Max. */
   featured?: boolean;
@@ -153,4 +155,48 @@ export function getFeaturedProductIds(): string[] {
   return getSellerProducts()
     .filter((product) => product.featured)
     .map((product) => product.id);
+}
+
+/**
+ * Cek apakah produk tersedia berdasarkan stok dan waktu penjualan saat ini.
+ * Dipakai oleh halaman detail toko (user) agar sinkron dengan dashboard penjual.
+ */
+export function isProductAvailable(product: SellerProduct): boolean {
+  if (product.stock <= 0) return false;
+  if (product.allDay) return true;
+  return isWithinSaleWindow(product.startTime, product.endTime);
+}
+
+/**
+ * Cek apakah waktu sekarang berada di dalam jam penjualan.
+ */
+export function isWithinSaleWindow(
+  startTime: string,
+  endTime: string
+): boolean {
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const start = parseTimeToMinutes(startTime);
+  const end = parseTimeToMinutes(endTime);
+  if (start <= end) {
+    return currentMinutes >= start && currentMinutes < end;
+  }
+  // melewati tengah malam (mis. 22:00–06:00)
+  return currentMinutes >= start || currentMinutes < end;
+}
+
+function parseTimeToMinutes(time: string): number {
+  const match = time.match(/(\d{1,2}):(\d{2})/);
+  if (!match) return 0;
+  return Number(match[1]) * 60 + Number(match[2]);
+}
+
+/**
+ * Cari produk penjual berdasarkan id — dipakai halaman detail toko untuk
+ * mengambil data stok & jam jual terkini.
+ */
+export function getSellerProductById(
+  id: string
+): SellerProduct | undefined {
+  return getSellerProducts().find((p) => p.id === id);
 }

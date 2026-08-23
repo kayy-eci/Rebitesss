@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -19,6 +19,11 @@ import { SmartImage } from "@/app/components/SmartImage";
 import { DotPattern, LeafSprig } from "@/app/components/dashboardPenjual/decor";
 import { getVendorProfile } from "./vendor-profiles";
 import { useSellerPlan } from "@/lib/seller-plan";
+import { SELLER_VENDOR_SLUG } from "@/lib/product-storage";
+import {
+  getSellerStoreSettings,
+  STORE_SETTINGS_UPDATED_EVENT,
+} from "@/lib/store-settings-storage";
 
 interface StoreHeroCardProps {
   vendor: Vendor;
@@ -29,6 +34,31 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [following, setFollowing] = useState(false);
   const profile = getVendorProfile(vendor.id);
   const { plan } = useSellerPlan();
+
+  /* Gunakan data toko dari storage bila ini adalah toko penjual yang aktif */
+  const isSellerVendor = vendor.id === SELLER_VENDOR_SLUG;
+  const [storeName, setStoreName] = useState(vendor.name);
+  const [storeDesc, setStoreDesc] = useState(vendor.description);
+  const [storeAddress, setStoreAddress] = useState(vendor.address);
+  const [storeImage, setStoreImage] = useState(vendor.image);
+
+  useEffect(() => {
+    if (!isSellerVendor) return;
+    const refresh = () => {
+      const s = getSellerStoreSettings();
+      setStoreName(s.storeName || vendor.name);
+      setStoreDesc(s.description || vendor.description);
+      setStoreAddress(s.address || vendor.address);
+      if (s.image) setStoreImage(s.image);
+    };
+    refresh();
+    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+    window.addEventListener("storage", refresh);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+      window.removeEventListener("storage", refresh);
+    };
+  }, [isSellerVendor, vendor]);
 
   return (
     <section>
@@ -49,15 +79,15 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <div className="relative -mt-16 h-28 w-28 shrink-0 overflow-hidden rounded-full bg-sage-100 ring-4 ring-white shadow-lg sm:-mt-20 sm:h-32 sm:w-32">
                   <SmartImage
-                    src={vendor.image}
-                    alt={`Foto ${vendor.name}`}
+                    src={storeImage}
+                    alt={`Foto ${storeName}`}
                   />
                 </div>
 
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <h1 className="font-display text-2xl font-medium leading-tight tracking-tight text-forest-900 sm:text-3xl">
-                      {vendor.name}
+                      {storeName}
                     </h1>
                     <Badge variant="cream">{profile.tier}</Badge>
                     {vendor.isRescuePartner && (
@@ -104,7 +134,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                     </span>
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5 text-sage-500" />
-                      {vendor.address}
+                      {storeAddress}
                     </span>
                   </div>
 
@@ -143,7 +173,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
             </div>
 
             <p className="mt-6 border-t border-sage-100 pt-5 text-sm leading-relaxed text-charcoal-500">
-              {vendor.description}
+              {storeDesc}
             </p>
           </div>
         </motion.div>
