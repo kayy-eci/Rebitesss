@@ -7,18 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
-  BadgeCheck,
   ChevronDown,
-  ChevronRight,
-  Clock,
-  Leaf,
   MapPin,
   Quote,
   Search,
   SearchX,
   ShoppingCart,
   Star,
-  Store,
   Utensils,
   X,
 } from "lucide-react";
@@ -41,6 +36,8 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/app/components/ui/carousel";
+import { StoreHeroCard } from "./store-hero-card";
+import { StoreAboutImpact } from "./store-about-impact";
 
 /* ─── Data Helpers ─── */
 function getVendorFoods(vendorName: string): FoodItem[] {
@@ -563,95 +560,20 @@ function StoreDetailContent() {
 
   return (
     <main className="min-h-screen bg-cream-50 font-sans text-charcoal-900">
-      {/* ─── Compact Hero ─── */}
-      <section className="relative h-56 overflow-hidden sm:h-60 lg:h-72">
-        <SmartImage
-          src={vendor.image}
-          alt={`Foto ${vendor.name}`}
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/5" />
+      {/* ─── Hero ─── */}
+      <StoreHeroCard vendor={vendor} openNow={openNow} />
 
-        {/* Breadcrumb */}
-        <div className="absolute inset-x-0 top-0 px-5 pt-5 sm:px-8 sm:pt-6">
-          <div className="mx-auto max-w-[1200px]">
-            <Link
-              href="/home"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-xs font-medium text-cream-50 backdrop-blur-sm transition-colors duration-200 hover:bg-black/45"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Kembali ke Beranda
-            </Link>
-          </div>
-        </div>
+      {/* ─── Menu Surplus ─── */}
+      <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
+        <section id="menu-surplus" className="pt-9">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
+            Menu Surplus Hari Ini
+          </p>
+          <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-forest-900 sm:text-3xl">
+            Menu Surplus dari {vendor.name}
+          </h2>
 
-        {/* Hero Content */}
-        <div className="absolute inset-x-0 bottom-0 px-5 pb-5 sm:px-8 sm:pb-6">
-          <div className="mx-auto max-w-[1200px]">
-            {vendor.isRescuePartner && (
-              <span className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-green-700 px-3 py-1 text-[10px] font-bold text-white shadow-lg">
-                <BadgeCheck className="h-3 w-3" />
-                Rescue Partner
-              </span>
-            )}
-
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="font-display text-2xl font-bold leading-tight text-cream-50 sm:text-3xl lg:text-4xl">
-                {vendor.name}
-              </h1>
-              <span
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold",
-                  openNow
-                    ? "bg-green-600 text-white"
-                    : "bg-white/85 text-white",
-                )}
-              >
-                <span
-                  className={cn(
-                    "h-1.5 w-1.5 rounded-full",
-                    openNow ? "bg-white" : "bg-red-500",
-                  )}
-                />
-                {openNow ? "Buka Sekarang" : "Tutup"}
-              </span>
-            </div>
-
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-cream-50/90">
-              <span className="flex items-center gap-1 font-semibold">
-                <Star className="h-4 w-4 fill-gold-500 text-gold-500" />
-                {vendor.rating.toFixed(1)}
-              </span>
-              <span className="text-cream-50/40">·</span>
-              <span>{vendor.distanceKm} km</span>
-              <span className="text-cream-50/40">·</span>
-              <span>{vendor.category}</span>
-            </div>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-xs font-medium text-cream-50 backdrop-blur-sm">
-                <Clock className="h-3.5 w-3.5" />
-                {openNow ? "Buka" : "Tutup"} · {vendor.openHours}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-xs font-medium text-cream-50 backdrop-blur-sm">
-                <Store className="h-3.5 w-3.5" />
-                {foods.length} menu surplus
-              </span>
-            </div>
-
-            <p className="mt-3 max-w-2xl text-xs leading-relaxed text-white sm:text-sm">
-              {vendor.description}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Menu Toolbar ─── */}
-      <section className="border-b border-sage-100 bg-white">
-        <div className="mx-auto max-w-[1200px] px-5 py-4 sm:px-8">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+          <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center">
             {/* Search */}
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-charcoal-500" />
@@ -734,29 +656,8 @@ function StoreDetailContent() {
               </AnimatePresence>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ─── Food Products ─── */}
-      <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
-        {/* Eco Banner */}
-        <div className="mt-7 flex items-start gap-3 rounded-2xl border border-sage-100 bg-white p-4 sm:items-center sm:p-5">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-700/10 text-green-700">
-            <Leaf className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-forest-900">
-              Setiap pesanan di toko ini membantu mengurangi limbah makanan.
-            </p>
-            <p className="mt-0.5 text-xs leading-relaxed text-charcoal-500">
-              Nikmati makanan enak dengan harga lebih hemat sekaligus ikut
-              menjaga bumi.
-            </p>
-          </div>
-        </div>
-
-        <section id="menu-surplus" className="pt-7">
-          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
               {visibleFoods.map((item) => (
                 <motion.div
@@ -803,9 +704,14 @@ function StoreDetailContent() {
             </div>
           )}
         </section>
+      </div>
 
-        {/* ─── Review Pelanggan tentang Pelayanan Toko ─── */}
-        <section id="tentang-toko" className="mt-16 pb-4">
+      {/* ─── Tentang & Dampak Toko ─── */}
+      <StoreAboutImpact vendor={vendor} />
+
+      {/* ─── Review Pelanggan tentang Pelayanan Toko ─── */}
+      <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
+        <section id="tentang-toko" className="mt-14 pb-4">
           <StoreServiceReviews vendor={vendor} />
         </section>
       </div>

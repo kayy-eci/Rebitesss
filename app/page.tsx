@@ -34,6 +34,7 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@/app/components/ui/avatar";
+import { SUBSCRIPTION_PLANS } from "@/lib/subscription-plans";
 
 const PARTNERS = [
   "Warung Mang Teten",
@@ -44,53 +45,6 @@ const PARTNERS = [
   "Satay Pak Tigiset",
   "Toko Sehat Jaya",
   "Kopi Pagi",
-];
-
-const PLANS = [
-  {
-    name: "Basic",
-    tagline: "Mulai jualan di ReBites tanpa biaya, selamanya.",
-    monthly: 0,
-    yearly: 0,
-    features: [
-      "Gratis tanpa biaya langganan",
-      "Maksimal 5 produk",
-      "Riwayat penjualan 30 hari",
-      "Dashboard penjualan",
-    ],
-    cta: "Mulai Jual",
-    popular: false,
-  },
-  {
-    name: "Standar",
-    tagline: "Untuk UMKM yang mulai aktif berjualan di ReBites.",
-    monthly: 49000,
-    yearly: 490000,
-    features: [
-      "Maksimal 25 produk",
-      "Riwayat penjualan tanpa batas",
-      "Prioritas di marketplace",
-      "Laporan penjualan detail",
-      "Badge UMKM Terverifikasi",
-    ],
-    cta: "Pilih Standar",
-    popular: true,
-  },
-  {
-    name: "Premium",
-    tagline: "Untuk usaha yang ingin berkembang lebih jauh.",
-    monthly: 99000,
-    yearly: 990000,
-    features: [
-      "Produk tanpa batas",
-      "Semua fitur Standar",
-      "Promosi unggulan",
-      "Analitik permintaan",
-      "Dukungan prioritas",
-    ],
-    cta: "Pilih Premium",
-    popular: false,
-  },
 ];
 
 type Testimonial = {
@@ -432,7 +386,7 @@ export default function Home() {
           </div>
 
           <div className="mx-auto mt-14 grid max-w-[1080px] gap-5 lg:mt-16 lg:grid-cols-3">
-            {PLANS.map((plan, i) => {
+            {SUBSCRIPTION_PLANS.map((plan, i) => {
               const yearlyMode = billing === "yearly";
 
               const priceValue = yearlyMode ? plan.yearly : plan.monthly;
@@ -565,7 +519,7 @@ export default function Home() {
 
                     <div className="relative mt-auto pt-8">
                       <MagneticButton
-                        href="/auth/register"
+                        href={`/langganan/pembayaran?plan=${plan.slug}&billing=${billing}`}
                         variant="outline"
                         className="group w-full bg-white"
                       >
