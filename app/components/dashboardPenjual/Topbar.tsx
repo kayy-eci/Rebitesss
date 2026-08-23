@@ -8,6 +8,8 @@ import {
   getSellerStoreSettings,
   STORE_SETTINGS_UPDATED_EVENT,
 } from '@/lib/store-settings-storage';
+import { getCurrentUserId } from '@/lib/current-user';
+import { useNotifications } from '@/hooks/use-notifications';
 import { SmartImage } from '@/app/components/SmartImage';
 import { VENDOR } from './data';
 
@@ -16,6 +18,10 @@ interface TopbarProps {
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
+  const { unreadCount: unreadNotifCount } = useNotifications(
+    getCurrentUserId(),
+    'seller'
+  );
   const [settings, setSettings] = useState(() => ({
     storeName: VENDOR.storeName,
     image: VENDOR.avatar,
@@ -66,14 +72,18 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
         {/* Store profile — right side */}
         <div className="ml-auto flex items-center gap-2">
-          <button
-            type="button"
+          <Link
+            href="/dashboard/penjual/notifikasi"
             aria-label="Notifikasi"
             className="relative flex h-9 w-9 items-center justify-center rounded-lg text-charcoal-500 transition-colors hover:bg-sage-100 hover:text-charcoal-900"
           >
             <Bell className="h-[18px] w-[18px]" />
-            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
-          </button>
+            {unreadNotifCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white ring-2 ring-white">
+                {unreadNotifCount}
+              </span>
+            )}
+          </Link>
 
           <div className="hidden h-5 w-px bg-sage-100 md:block" />
 

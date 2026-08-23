@@ -16,8 +16,10 @@ import {
   ORDERS_UPDATED_EVENT,
   completeExpiredOrders,
   getAllOrders,
+  getOrderById,
   patchOrder,
 } from '@/lib/order-storage';
+import { notifyOrderCompleted } from '@/lib/order-notifications';
 import {
   SELLER_VENDOR_NAME,
   SELLER_VENDOR_SLUG,
@@ -199,12 +201,22 @@ export default function PesananMasukPage() {
   const [tab, setTab] = useState<OrderTab>('berlangsung');
 
   /* Aksi nyata: menandai pesanan selesai mem-patch storage yang sama
-     dengan milik pembeli (Riwayat Pesanan ikut berubah). */
+     dengan milik pembeli (Riwayat Pesanan ikut berubah).
+     Notifikasi dikirim ke pembeli terkait. */
   const handleComplete = useCallback((orderId: string) => {
+    const order = getOrderById(orderId);
     patchOrder(orderId, {
       status: 'completed',
       completedAt: new Date().toISOString(),
     });
+    // Notifikasi ke pembeli bahwa pesanan selesai
+    if (order) {
+      notifyOrderCompleted({
+        ...order,
+        status: 'completed',
+        completedAt: new Date().toISOString(),
+      });
+    }
   }, []);
 
   const tabs = [

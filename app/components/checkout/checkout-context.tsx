@@ -23,13 +23,15 @@ import {
   getVendorPreparationMinutes,
 } from '@/lib/delivery-estimate';
 import { createOrderId, saveOrder } from '@/lib/order-storage';
+import { createNotification } from '@/lib/notification-storage';
+import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
 import { settleOrderCoins, useRebitesCoins } from '@/hooks/use-rebites-coins';
 import { getCurrentUserId } from '@/lib/current-user';
 import {
   useAddresses,
   type AddressFormValues,
 } from '@/hooks/use-addresses';
-import { promoCodes, vendors } from '@/lib/data';
+import { promoCodes, vendors, formatRupiah } from '@/lib/data';
 import { paymentMethods } from './payment-methods';
 
 interface CheckoutContextValue {
@@ -271,6 +273,47 @@ export function CheckoutProvider({
       spent: summary.coinUsed,
       earned: summary.coinEarned,
     });
+
+    /* ── Buat notifikasi setelah order tersimpan ── */
+    const buyerUserId = getCurrentUserId();
+    const paymentMethodName =
+      paymentMethods.find((m) => m.id === selectedMethod?.id)?.name ?? '—';
+
+    // Notifikasi pembeli: pembayaran berhasil
+    createNotification({
+      userId: buyerUserId,
+      role: 'buyer',
+      type: 'payment_success',
+      title: 'Pembayaran Berhasil',
+      message: `Pembayaran ${formatRupiah(order.total)} untuk pesanan ${order.productName} telah berhasil diproses melalui ${paymentMethodName}.`,
+      referenceId: orderId,
+      href: `/riwayatPesanan`,
+    });
+
+    // Notifikasi pembeli: pesanan dibuat
+    createNotification({
+      userId: buyerUserId,
+      role: 'buyer',
+      type: 'order_created',
+      title: 'Pesanan Berhasil Dibuat',
+      message: `Pesanan #${orderId} dari ${order.vendorName} sedang diproses. Estimasi ${order.estimatedMinutes ?? 20} menit.`,
+      referenceId: orderId,
+      href: `/riwayatPesanan`,
+    });
+
+    // Notifikasi penjual: pesanan masuk (hanya untuk toko yang relevan)
+    const buyerName =
+      order.addressSnapshot?.receiverName ?? 'Pembeli';
+    createNotification({
+      userId: SELLER_VENDOR_SLUG,
+      role: 'seller',
+      type: 'incoming_order',
+      title: 'Pesanan Masuk!',
+      message: `${buyerName} memesan ${order.productName}${order.quantity > 1 ? ` ×${order.quantity}` : ''} seharga ${formatRupiah(order.total)}. Segera siapkan pesanan.`,
+      referenceId: orderId,
+      href: `/dashboard/penjual/pesanan`,
+    });
+
     router.push(`/detail/pesanan/sukses?orderId=${encodeURIComponent(orderId)}`);
   }, [
     draft,

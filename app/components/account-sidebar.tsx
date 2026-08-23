@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LogOut, Coins, Receipt, Settings, Store, User, X } from 'lucide-react';
+import { Bell, LogOut, Coins, Receipt, Settings, Store, User, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRebitesCoins } from '@/hooks/use-rebites-coins';
 
@@ -25,6 +25,7 @@ const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
 const ACCOUNT_MENU = [
+  { href: '/notifikasi/pembeli', label: 'Notifikasi', icon: Bell },
   { href: '/profile', label: 'Profil & Akun Saya', icon: Settings },
   { href: '/riwayatPesanan', label: 'Pesanan Saya', icon: Receipt },
 ];

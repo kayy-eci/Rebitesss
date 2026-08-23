@@ -1,6 +1,7 @@
 'use client';
 
 import type { StoredOrder } from './types';
+import { notifyOrderCompleted } from './order-notifications';
 
 /**
  * Penyimpanan order berbasis localStorage — SATU sumber data untuk
@@ -120,6 +121,12 @@ export function completeExpiredOrders(): boolean {
       writeOrders(next);
     } catch {
       return false;
+    }
+    // Buat notifikasi untuk pesanan yang baru saja selesai
+    for (const order of next) {
+      if (order.status === 'completed' && order.userId) {
+        notifyOrderCompleted(order);
+      }
     }
   }
   return changed;

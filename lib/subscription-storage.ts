@@ -17,6 +17,8 @@ import {
   getSubscriptionPlan,
   type BillingCycle,
 } from './subscription-plans';
+import { createNotification } from './notification-storage';
+import { SELLER_VENDOR_SLUG } from './product-storage';
 
 export type StoredSubscriptionStatus = 'active' | 'expired' | 'cancelled';
 
@@ -94,6 +96,25 @@ export function saveSubscription(
   };
 
   writeRaw(subscription);
+
+  // Notifikasi ke penjual tentang langganan
+  const billingLabel = input.billing === 'yearly' ? 'Tahunan' : 'Bulanan';
+  const periodEnd = computePeriodEnd(input.billing, now).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
+  createNotification({
+    userId: SELLER_VENDOR_SLUG,
+    role: 'seller',
+    type: 'subscription_active',
+    title: 'Langganan Aktif!',
+    message: `Paket ReBites ${plan.name} (${billingLabel}) berhasil diaktifkan. Berlaku hingga ${periodEnd}.`,
+    referenceId: subscription.id,
+    href: '/dashboard/penjual',
+  });
+
   return subscription;
 }
 

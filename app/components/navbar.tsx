@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  Bell,
   ChevronDown,
   Leaf,
   MapPin,
@@ -14,6 +15,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
+import { getCurrentUserId } from '@/lib/current-user';
+import { useNotifications } from '@/hooks/use-notifications';
 import { AccountSidebar, type SidebarUser } from './account-sidebar';
 
 const LOCATIONS = ['Depok', 'Jakarta Selatan', 'Bekasi', 'Bogor', 'Tangerang'];
@@ -48,6 +51,10 @@ export function ProfileNavbar() {
   const [overDark, setOverDark] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [sessionUser, setSessionUser] = useState<SidebarUser | null>(null);
+  const { unreadCount: unreadNotifCount } = useNotifications(
+    getCurrentUserId(),
+    'buyer'
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -305,6 +312,15 @@ export function ProfileNavbar() {
 
               <div className="hidden items-center gap-2 sm:flex">
                 <IconButton
+                  label="Notifikasi"
+                  onClick={() => {
+                    window.location.href = '/notifikasi/pembeli';
+                  }}
+                  badge={unreadNotifCount}
+                >
+                  <Bell className="h-5 w-5" />
+                </IconButton>
+                <IconButton
                   label="Profil saya"
                   onClick={() => setProfileOpen(true)}
                 >
@@ -389,7 +405,25 @@ export function ProfileNavbar() {
                 ))}
               </ul>
 
-              <div className="mt-6 border-t border-sage-100 pt-5">
+              <div className="mt-4 border-t border-sage-100 pt-4">
+                <a
+                  href="/notifikasi/pembeli"
+                  onClick={() => setDrawerOpen(false)}
+                  className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-500 hover:bg-cream-100 hover:text-green-700"
+                >
+                  <span className="flex items-center gap-2">
+                    <Bell className="h-4 w-4" />
+                    Notifikasi
+                  </span>
+                  {unreadNotifCount > 0 && (
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-green-700 px-1 text-[10px] font-bold text-white">
+                      {unreadNotifCount}
+                    </span>
+                  )}
+                </a>
+              </div>
+
+              <div className="mt-4 border-t border-sage-100 pt-4">
                 <p className="font-inter text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                   Lokasi
                 </p>

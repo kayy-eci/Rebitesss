@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  Bell,
   LayoutGrid,
   Leaf,
   ShoppingBag,
@@ -39,6 +40,12 @@ const NAV_ITEMS: NavItem[] = [
     icon: LayoutGrid,
     href: '/dashboard/penjual',
     exact: true,
+  },
+  {
+    id: 'notifikasi',
+    label: 'Notifikasi',
+    icon: Bell,
+    href: '/dashboard/penjual/notifikasi',
   },
   {
     id: 'pesanan',
