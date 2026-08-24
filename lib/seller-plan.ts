@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import {
-  getActiveSubscription,
   SUBSCRIPTION_UPDATED_EVENT,
+  getActiveSubscription,
   type StoredSubscription,
 } from './subscription-storage';
 
@@ -12,11 +12,8 @@ export type SellerTier = 'basic' | 'standar' | 'max';
 export interface SellerEntitlements {
   tier: SellerTier;
   label: string;
-
   maxProducts: number | null;
-
   historyDays: number | null;
-
   maxFlashSaleProducts: number | null;
   detailedReport: boolean;
   verifiedBadge: boolean;
@@ -24,7 +21,6 @@ export interface SellerEntitlements {
   featuredPromo: boolean;
   demandAnalytics: boolean;
   prioritySupport: boolean;
-
   upgradeSlug: 'standar' | 'premium' | null;
 }
 
@@ -82,9 +78,9 @@ export function getSellerEntitlements(
   return ENTITLEMENTS.basic;
 }
 
-export function readSellerPlan(): SellerEntitlements {
-  if (typeof window === 'undefined') return ENTITLEMENTS.basic;
-  return getSellerEntitlements(getActiveSubscription());
+export async function readSellerPlan(): Promise<SellerEntitlements> {
+  const subscription = await getActiveSubscription();
+  return getSellerEntitlements(subscription);
 }
 
 export function useSellerPlan() {
@@ -92,18 +88,22 @@ export function useSellerPlan() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+
     const refresh = () => {
-      setPlan(readSellerPlan());
-      setHydrated(true);
+      readSellerPlan().then((result) => {
+        if (!mounted) return;
+        setPlan(result);
+        setHydrated(true);
+      });
     };
 
     refresh();
     window.addEventListener(SUBSCRIPTION_UPDATED_EVENT, refresh);
-    window.addEventListener('storage', refresh);
 
     return () => {
+      mounted = false;
       window.removeEventListener(SUBSCRIPTION_UPDATED_EVENT, refresh);
-      window.removeEventListener('storage', refresh);
     };
   }, []);
 

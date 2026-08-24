@@ -3,7 +3,6 @@
 import { readSellerPlan, type SellerEntitlements } from './seller-plan';
 import {
   SELLER_VENDOR_NAME,
-  SELLER_VENDOR_SLUG,
   getSellerProducts,
   isProductAvailable,
   patchSellerProduct,
@@ -77,16 +76,16 @@ export function getDisplayPricing(
   return { price: product.surplusPrice, isFlash: false };
 }
 
-export function setFlashSale(
+export async function setFlashSale(
   productId: string,
   config: FlashSaleConfig,
   planOverride?: SellerEntitlements
-): FlashSaleResult {
-  const products = getSellerProducts();
+): Promise<FlashSaleResult> {
+  const products = await getSellerProducts();
   const product = products.find((item) => item.id === productId);
   if (!product) return { ok: false, error: 'Produk tidak ditemukan.' };
 
-  const plan = planOverride ?? readSellerPlan();
+  const plan = planOverride ?? (await readSellerPlan());
   const usedByOthers = countFlashSaleProducts(
     products.filter((item) => item.id !== productId && item.flashSale != null)
   );
@@ -113,7 +112,7 @@ export function setFlashSale(
     return { ok: false, error: 'Waktu selesai harus setelah waktu mulai.' };
   }
 
-  patchSellerProduct(productId, {
+  await patchSellerProduct(productId, {
     flashSale: {
       price: config.price,
       startIso: config.startIso,
@@ -123,17 +122,16 @@ export function setFlashSale(
   return { ok: true };
 }
 
-export function removeFlashSale(productId: string): FlashSaleResult {
-  const products = getSellerProducts();
+export async function removeFlashSale(productId: string): Promise<FlashSaleResult> {
+  const products = await getSellerProducts();
   if (!products.some((item) => item.id === productId)) {
     return { ok: false, error: 'Produk tidak ditemukan.' };
   }
-  patchSellerProduct(productId, { flashSale: null });
+  await patchSellerProduct(productId, { flashSale: null });
   return { ok: true };
 }
 
 export interface FlashSaleCardItem extends UrgentItem {
-
   startsAt?: string;
   endsAt?: string;
   isSellerFlash?: boolean;
@@ -156,10 +154,11 @@ function slotFromStartIso(iso: string): UrgentSlot {
   return '09-12';
 }
 
-export function getActiveFlashSaleProducts(
+export async function getActiveFlashSaleProducts(
   now: number = Date.now()
-): FlashSaleCardItem[] {
-  return getSellerProducts()
+): Promise<FlashSaleCardItem[]> {
+  const products = await getSellerProducts();
+  return products
     .filter((product) => product.flashSale != null)
     .filter(
       (product) =>
@@ -200,5 +199,3 @@ export function getActiveFlashSaleProducts(
       } satisfies FlashSaleCardItem;
     });
 }
-
-export const FLASH_SELLER_STORE_HREF = `/detail/toko?id=${SELLER_VENDOR_SLUG}`;

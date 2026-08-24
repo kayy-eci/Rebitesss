@@ -94,24 +94,22 @@ export async function fetchUrgentItems(): Promise<UrgentItem[]> {
 }
 
 export async function fetchVendors(): Promise<Vendor[]> {
-  const [{ data: umkms }, { data: products }] = await Promise.all([
+  const [umkmResult, productResult] = await Promise.all([
     supabase.from('umkm_profiles').select('*').order('rating', { ascending: false }),
     supabase.from('products').select('umkm_id'),
   ]);
-  if (error_umkms(umkms)) return [];
+  if (umkmResult.error) {
+    console.error('[catalog] gagal memuat vendor:', umkmResult.error.message);
+    return [];
+  }
 
   const counts = new Map<string, number>();
-  for (const p of products ?? []) {
+  for (const p of productResult.data ?? []) {
     counts.set(p.umkm_id, (counts.get(p.umkm_id) ?? 0) + 1);
   }
-  return (umkms ?? []).map((row: UmkmRow) =>
+  return (umkmResult.data ?? []).map((row: UmkmRow) =>
     umkmToVendor(row, counts.get(row.id) ?? 0)
   );
-}
-
-function error_umkms(result: unknown): boolean {
-  // helper kecil untuk menandai hasil null dari query pertama
-  return !Array.isArray(result);
 }
 
 export async function fetchCatalog(): Promise<CatalogData> {

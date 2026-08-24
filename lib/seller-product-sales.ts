@@ -1,15 +1,11 @@
 'use client';
 
 import { getAllOrders } from './order-storage';
-import {
-  SELLER_VENDOR_SLUG,
-  getSellerProducts,
-} from './product-storage';
+import { getSellerProducts } from './product-storage';
+import { SELLER_VENDOR_SLUG } from './product-storage';
 
 export interface BestSellingMenu {
-
   sellerId: string;
-
   menuId: string;
   name: string;
   image: string;
@@ -25,10 +21,11 @@ function demoSoldQuantity(menuId: string): number {
   return 5 + (hash % 26);
 }
 
-export function getSellerBestSellingMenus(): BestSellingMenu[] {
-  const products = getSellerProducts();
+export async function getSellerBestSellingMenus(): Promise<BestSellingMenu[]> {
+  const products = await getSellerProducts();
 
-  const orders = getAllOrders().filter(
+  const allOrders = await getAllOrders();
+  const orders = allOrders.filter(
     (order) => order.vendorSlug === SELLER_VENDOR_SLUG
   );
 
