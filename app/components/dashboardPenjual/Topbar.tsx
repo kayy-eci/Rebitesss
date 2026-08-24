@@ -17,13 +17,15 @@ export function Topbar({ onMenuClick }: TopbarProps) {
   const [storeName, setStoreName] = useState(VENDOR.storeName);
 
   useEffect(() => {
-    const refresh = () => setStoreName(getSellerStoreSettings().storeName);
+    const refresh = () => {
+      getSellerStoreSettings().then((settings) => {
+        if (settings?.storeName) setStoreName(settings.storeName);
+      });
+    };
     refresh();
     window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-    window.addEventListener('storage', refresh);
     return () => {
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-      window.removeEventListener('storage', refresh);
     };
   }, []);
 

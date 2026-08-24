@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { PackageSearch, SearchX } from 'lucide-react';
 import type { StoredOrder } from '@/lib/types';
 import { getReviewFor } from '@/lib/review-storage';
-import { getCurrentUserId } from '@/lib/current-user';
+import { useCurrentUser } from '@/lib/current-user';
 import { useOrders } from '@/hooks/use-orders';
 import {
   OrderToolbar,
@@ -19,6 +19,7 @@ import { Toaster } from '@/app/components/ui/toaster';
 
 export function OrderHistoryView() {
   const { orders, activeOrders, completedOrders, loading } = useOrders();
+  const { userId } = useCurrentUser();
 
   const [tab, setTab] = useState<OrderTab>('active');
   const [query, setQuery] = useState('');
@@ -26,6 +27,26 @@ export function OrderHistoryView() {
   const [detailOrder, setDetailOrder] = useState<StoredOrder | null>(null);
 
   const [reviewsTick, setReviewsTick] = useState(0);
+  const [reviewedMap, setReviewedMap] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    let mounted = true;
+    if (!userId) {
+      setReviewedMap(new Set());
+      return;
+    }
+    (async () => {
+      const map = new Set<string>();
+      for (const order of completedOrders) {
+        const review = await getReviewFor(order.orderId, userId);
+        if (review) map.add(order.orderId);
+      }
+      if (mounted) setReviewedMap(map);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [completedOrders, reviewsTick, userId]);
 
   const baseList =
     tab === 'active' ? activeOrders : completedOrders;
@@ -43,16 +64,6 @@ export function OrderHistoryView() {
       return true;
     });
   }, [baseList, fulfillment, query]);
-
-  const reviewedMap = useMemo(() => {
-    void reviewsTick;
-    const map = new Set<string>();
-    for (const order of completedOrders) {
-      if (getReviewFor(order.orderId, getCurrentUserId())) map.add(order.orderId);
-    }
-    return map;
-
-  }, [completedOrders, reviewsTick]);
 
   if (loading) {
     return (
@@ -113,7 +124,7 @@ export function OrderHistoryView() {
 
       <OrderDetailModal
         order={detailOrder}
-        userId={getCurrentUserId()}
+        userId={userId}
         onClose={() => setDetailOrder(null)}
         onReviewed={() => setReviewsTick((t) => t + 1)}
       />

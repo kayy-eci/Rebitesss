@@ -1,17 +1,24 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Clock, MapPin, Navigation, Store } from 'lucide-react';
-import { vendors } from '@/lib/data';
 import {
   PICKUP_READY_ESTIMATE,
 } from '@/lib/useOrderCalculation';
+import { fetchVendors } from '@/lib/catalog';
+import type { Vendor } from '@/lib/types';
 import { useCheckout } from './checkout-context';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function PickupInfoCard() {
   const { draft, fulfillment } = useCheckout();
+  const [vendors, setVendors] = useState<Vendor[]>([]);
+
+  useEffect(() => {
+    fetchVendors().then(setVendors);
+  }, []);
 
   const vendor = vendors.find((item) => item.id === draft.vendorSlug);
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useEffect, useState } from 'react';
 import { supabase } from './supabase';
 
 export const STORE_SETTINGS_UPDATED_EVENT = 'rebites-seller-store-updated';
@@ -83,4 +84,26 @@ export function updateStoreSettings(
   if (patch.address !== undefined) payload.address = patch.address;
   if (Object.keys(payload).length === 0) return Promise.resolve(true);
   return patchOwnUmkm(payload);
+}
+
+export function useSellerStoreSettings() {
+  const [settings, setSettings] = useState<SellerStoreSettings | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    const result = await getSellerStoreSettings();
+    setSettings(result);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+    };
+  }, [refresh]);
+
+  return { settings, loading, refresh };
 }

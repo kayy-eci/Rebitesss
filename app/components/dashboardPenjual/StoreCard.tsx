@@ -22,20 +22,23 @@ export function StoreCard() {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    const refresh = () => setIsOpen(getSellerStoreSettings().isOpen);
+    const refresh = () => {
+      getSellerStoreSettings().then((settings) => {
+        if (settings) setIsOpen(settings.isOpen);
+      });
+    };
     refresh();
     window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-    window.addEventListener('storage', refresh);
     return () => {
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-      window.removeEventListener('storage', refresh);
     };
   }, []);
 
   const handleToggleOpen = () => {
     const next = !isOpen;
-    setStoreOpen(next);
-    setIsOpen(next);
+    setStoreOpen(next).then((ok) => {
+      if (ok) setIsOpen(next);
+    });
   };
 
   return (

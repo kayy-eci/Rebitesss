@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Check,
   Coins,
@@ -51,10 +51,22 @@ export function OrderDetailModal({
 }) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+  const [existingReview, setExistingReview] = useState<
+    { rating: number; comment: string; createdAt: string } | undefined
+  >(undefined);
 
-  const existingReview = useMemo(() => {
-    if (!order || !userId) return undefined;
-    return getReviewFor(order.orderId, userId);
+  useEffect(() => {
+    let mounted = true;
+    if (!order || !userId) {
+      setExistingReview(undefined);
+      return;
+    }
+    getReviewFor(order.orderId, userId).then((review) => {
+      if (mounted) setExistingReview(review);
+    });
+    return () => {
+      mounted = false;
+    };
   }, [order, userId]);
 
   const handleCopy = async () => {
@@ -459,18 +471,18 @@ function ReviewBlock({
   const submit = () => {
     if (saving || !userId || rating < 1) return;
     setSaving(true);
-    try {
-      saveReview({
-        orderId,
-        userId,
-        rating,
-        comment: comment.trim(),
-        createdAt: new Date().toISOString(),
-      });
-      onSaved();
-    } finally {
-      setSaving(false);
-    }
+    saveReview({
+      orderId,
+      userId,
+      rating,
+      comment: comment.trim(),
+      createdAt: new Date().toISOString(),
+    })
+      .then(() => onSaved())
+      .catch(() => {
+        toast({ title: 'Gagal menyimpan penilaian', description: 'Coba lagi sebentar.' });
+      })
+      .finally(() => setSaving(false));
   };
 
   return (

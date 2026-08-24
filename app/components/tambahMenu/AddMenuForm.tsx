@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, Info, Lock, Minus, Plus, Save } from 'lucide-react';
@@ -8,8 +8,10 @@ import { cn } from '@/lib/utils';
 import { Card } from '@/app/components/dashboardPenjual/Card';
 import { Reveal } from '@/app/components/reveal';
 import {
+  PRODUCTS_UPDATED_EVENT,
   getSellerProductCount,
   saveSellerProduct,
+  uploadProductImage,
 } from '@/lib/product-storage';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { PhotoPicker } from './PhotoPicker';
@@ -48,46 +50,78 @@ export function AddMenuForm() {
   const [saved, setSaved] = useState(false);
   const [savedName, setSavedName] = useState('');
   const [limitReached, setLimitReached] = useState(false);
+  const [savingProduct, setSavingProduct] = useState(false);
+  const [productCount, setProductCount] = useState(0);
   const { plan } = useSellerPlan();
 
+  const refreshCount = useCallback(() => {
+    getSellerProductCount().then(setProductCount);
+  }, []);
+
+  useEffect(() => {
+    refreshCount();
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, refreshCount);
+    return () => {
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, refreshCount);
+    };
+  }, [refreshCount]);
+
   const isQuotaFull =
-    plan.maxProducts !== null && getSellerProductCount() >= plan.maxProducts;
+    plan.maxProducts !== null && productCount >= plan.maxProducts;
 
   const set = <K extends keyof MenuFormState>(key: K, value: MenuFormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
   const handleSave = () => {
     setTouched(true);
-    if (!form.name.trim()) return;
+    if (!form.name.trim() || savingProduct) return;
 
 
-    if (plan.maxProducts !== null && getSellerProductCount() >= plan.maxProducts) {
+    if (plan.maxProducts !== null && productCount >= plan.maxProducts) {
       setLimitReached(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
-    saveSellerProduct({
-      name: form.name.trim(),
-      category: form.category,
-      description: form.description.trim(),
-      image: form.photo || '/foods/ikansayur.jpg',
-      originalPrice: form.normalPrice,
-      surplusPrice: form.surplusPrice,
-      discountPercent:
-        form.normalPrice > 0
-          ? Math.max(0, Math.round((1 - form.surplusPrice / form.normalPrice) * 100))
-          : 0,
-      stock: form.stock,
-      startTime: form.startTime,
-      endTime: form.endTime,
-      isSurplusToday: form.isSurplusToday,
-      featured: false,
-    });
+    setSavingProduct(true);
 
-    setSavedName(form.name.trim());
-    setSaved(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    (async () => {
+      let imageUrl = form.photo || '/foods/ikansayur.jpg';
+
+      if (form.photo instanceof File || form.photo instanceof Blob) {
+        const uploaded = await uploadProductImage(
+          form.photo,
+          form.photo instanceof File ? form.photo.name : undefined
+        );
+        if (uploaded) imageUrl = uploaded;
+      }
+
+      const created = await saveSellerProduct({
+        name: form.name.trim(),
+        category: form.category,
+        description: form.description.trim(),
+        image: imageUrl,
+        originalPrice: form.normalPrice,
+        surplusPrice: form.surplusPrice,
+        discountPercent:
+          form.normalPrice > 0
+            ? Math.max(0, Math.round((1 - form.surplusPrice / form.normalPrice) * 100))
+            : 0,
+        stock: form.stock,
+        startTime: form.startTime,
+        endTime: form.endTime,
+        isSurplusToday: form.isSurplusToday,
+        featured: false,
+      });
+
+      setSavingProduct(false);
+      if (!created) return;
+
+      setSavedName(form.name.trim());
+      setSaved(true);
+      refreshCount();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })();
   };
 
   const handleReset = () => {

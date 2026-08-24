@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Bell, CheckCheck } from 'lucide-react';
-import { getCurrentUserId } from '@/lib/current-user';
+import { useCurrentUser } from '@/lib/current-user';
 import { useNotifications } from '@/hooks/use-notifications';
 import type { NotificationType } from '@/lib/notification-storage';
 import { ensurePromoNotifications } from '@/lib/promo-notifications';
@@ -28,12 +28,13 @@ const PAYMENT_TYPES: NotificationType[] = ['payment_success'];
 const PROMO_TYPES: NotificationType[] = ['promo'];
 
 export function BuyerNotificationView() {
-  const userId = getCurrentUserId();
+  const { userId } = useCurrentUser();
   const { notifications, unreadCount, markRead, markAllRead } =
     useNotifications(userId, 'buyer');
   const [filter, setFilter] = useState<NotificationFilter>('all');
 
   useEffect(() => {
+    if (!userId) return;
     ensurePromoNotifications(userId);
   }, [userId]);
 

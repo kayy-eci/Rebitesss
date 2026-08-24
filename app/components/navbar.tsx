@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
-import { getCurrentUserId } from '@/lib/current-user';
+import { useCurrentUser } from '@/lib/current-user';
 import { useNotifications } from '@/hooks/use-notifications';
 import { AccountSidebar, type SidebarUser } from './account-sidebar';
 
@@ -51,10 +51,8 @@ export function ProfileNavbar() {
   const [overDark, setOverDark] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [sessionUser, setSessionUser] = useState<SidebarUser | null>(null);
-  const { unreadCount: unreadNotifCount } = useNotifications(
-    getCurrentUserId(),
-    'buyer'
-  );
+  const { userId } = useCurrentUser();
+  const { unreadCount: unreadNotifCount } = useNotifications(userId, 'buyer');
 
   useEffect(() => {
     let cancelled = false;
