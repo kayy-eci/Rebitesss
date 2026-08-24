@@ -1,33 +1,48 @@
 'use client';
 
+import { supabase } from './supabase';
 import type { OrderReview } from './types';
 
-const REVIEWS_KEY = 'rebites-reviews';
+type ReviewRow = Record<string, any>;
 
-function readReviews(): OrderReview[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = window.localStorage.getItem(REVIEWS_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+function rowToOrderReview(row: ReviewRow): OrderReview {
+  return {
+    orderId: row.order_code ?? '',
+    userId: row.user_id,
+    rating: Number(row.rating),
+    comment: row.comment ?? '',
+    createdAt: row.created_at,
+  };
 }
 
-export function getReviewFor(
+export async function getReviewFor(
   orderId: string,
   userId: string
-): OrderReview | undefined {
-  return readReviews().find((r) => r.orderId === orderId && r.userId === userId);
+): Promise<OrderReview | undefined> {
+  if (!orderId || !userId) return undefined;
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('order_code', orderId)
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (error || !data) return undefined;
+  return rowToOrderReview(data);
 }
 
-export function saveReview(review: OrderReview): void {
-  const reviews = readReviews().filter(
-    (r) => !(r.orderId === review.orderId && r.userId === review.userId)
+export async function saveReview(review: OrderReview): Promise<void> {
+  const { error } = await supabase.from('reviews').upsert(
+    {
+      order_code: review.orderId,
+      user_id: review.userId,
+      kind: 'product',
+      rating: review.rating,
+      comment: review.comment,
+    },
+    { onConflict: 'user_id,order_code' }
   );
-  window.localStorage.setItem(
-    REVIEWS_KEY,
-    JSON.stringify([review, ...reviews].slice(0, 100))
-  );
+  if (error) {
+    console.error('[review-storage] gagal menyimpan review:', error.message);
+    throw error;
+  }
 }

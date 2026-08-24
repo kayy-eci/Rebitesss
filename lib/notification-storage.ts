@@ -1,8 +1,8 @@
 'use client';
 
-const STORAGE_KEY = 'rebites-notifications';
+import { supabase } from './supabase';
+
 export const NOTIFICATIONS_UPDATED_EVENT = 'rebites-notifications-updated';
-const MAX_NOTIFICATIONS = 100;
 
 export type NotificationRole = 'buyer' | 'seller';
 
@@ -21,130 +21,140 @@ export type NotificationType =
 
 export interface Notification {
   id: string;
-
   userId: string;
-
   role: NotificationRole;
-
   type: NotificationType;
-
   title: string;
-
   message: string;
-
   createdAt: string;
-
   read: boolean;
-
   referenceId?: string;
-
   href?: string;
 }
 
-function createNotificationId(): string {
-  const stamp = Date.now().toString(36).toUpperCase();
-  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
-  return `NTF-${stamp}${rand}`;
+function dispatchUpdated(): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new Event(NOTIFICATIONS_UPDATED_EVENT));
 }
 
-function readAll(): Notification[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (item): item is Notification =>
-        !!item &&
-        typeof item === 'object' &&
-        typeof (item as Notification).id === 'string' &&
-        typeof (item as Notification).userId === 'string' &&
-        typeof (item as Notification).type === 'string'
-    );
-  } catch {
+type NotificationRow = Record<string, any>;
+
+function rowToNotification(row: NotificationRow): Notification {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    role: row.role,
+    type: row.type,
+    title: row.title,
+    message: row.message ?? '',
+    createdAt: row.created_at,
+    read: row.read ?? false,
+    referenceId: row.reference_id ?? undefined,
+    href: row.href ?? undefined,
+  };
+}
+
+export async function createNotification(
+  input: Omit<Notification, 'id' | 'createdAt' | 'read'>
+): Promise<Notification | null> {
+  const { data, error } = await supabase
+    .from('notifications')
+    .insert({
+      user_id: input.userId,
+      role: input.role,
+      type: input.type,
+      title: input.title,
+      message: input.message,
+      reference_id: input.referenceId ?? null,
+      href: input.href ?? null,
+      read: false,
+    })
+    .select()
+    .maybeSingle();
+  if (error) {
+    console.error('[notification-storage] gagal membuat notifikasi:', error.message);
+    return null;
+  }
+  dispatchUpdated();
+  return data ? rowToNotification(data) : null;
+}
+
+export async function getNotifications(
+  userId: string,
+  role: NotificationRole
+): Promise<Notification[]> {
+  if (!userId) return [];
+  const { data, error } = await supabase
+    .from('notifications')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('role', role)
+    .order('created_at', { ascending: false })
+    .limit(100);
+  if (error) {
+    console.error('[notification-storage] gagal memuat notifikasi:', error.message);
     return [];
   }
+  return (data ?? []).map(rowToNotification);
 }
 
-function writeAll(notifications: Notification[]): void {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(notifications.slice(0, MAX_NOTIFICATIONS))
-    );
-    window.dispatchEvent(new Event(NOTIFICATIONS_UPDATED_EVENT));
-  } catch {
-
-  }
-}
-
-export function createNotification(
-  input: Omit<Notification, 'id' | 'createdAt' | 'read'>
-): Notification {
-  const notification: Notification = {
-    ...input,
-    id: createNotificationId(),
-    createdAt: new Date().toISOString(),
-    read: false,
-  };
-
-  const all = readAll();
-  const next = [notification, ...all].slice(0, MAX_NOTIFICATIONS);
-  writeAll(next);
-  return notification;
-}
-
-export function getNotifications(
+export async function getUnreadCount(
   userId: string,
   role: NotificationRole
-): Notification[] {
-  return readAll()
-    .filter((n) => n.userId === userId && n.role === role)
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+): Promise<number> {
+  if (!userId) return 0;
+  const { count, error } = await supabase
+    .from('notifications')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('role', role)
+    .eq('read', false);
+  if (error) return 0;
+  return count ?? 0;
 }
 
-export function getUnreadCount(
+export async function markAsRead(notificationId: string): Promise<void> {
+  await supabase.from('notifications').update({ read: true }).eq('id', notificationId);
+  dispatchUpdated();
+}
+
+export async function markAllAsRead(
   userId: string,
   role: NotificationRole
-): number {
-  return readAll().filter(
-    (n) => n.userId === userId && n.role === role && !n.read
-  ).length;
+): Promise<void> {
+  await supabase
+    .from('notifications')
+    .update({ read: true })
+    .eq('user_id', userId)
+    .eq('role', role)
+    .eq('read', false);
+  dispatchUpdated();
 }
 
-export function markAsRead(notificationId: string): void {
-  const all = readAll();
-  const next = all.map((n) =>
-    n.id === notificationId ? { ...n, read: true } : n
-  );
-  writeAll(next);
+export async function deleteNotification(notificationId: string): Promise<void> {
+  await supabase.from('notifications').delete().eq('id', notificationId);
+  dispatchUpdated();
 }
 
-export function markAllAsRead(
+export async function clearNotifications(
   userId: string,
   role: NotificationRole
-): void {
-  const all = readAll();
-  const next = all.map((n) =>
-    n.userId === userId && n.role === role ? { ...n, read: true } : n
-  );
-  writeAll(next);
+): Promise<void> {
+  await supabase
+    .from('notifications')
+    .delete()
+    .eq('user_id', userId)
+    .eq('role', role);
+  dispatchUpdated();
 }
 
-export function deleteNotification(notificationId: string): void {
-  const all = readAll();
-  writeAll(all.filter((n) => n.id !== notificationId));
-}
-
-export function clearNotifications(
-  userId: string,
-  role: NotificationRole
-): void {
-  const all = readAll();
-  writeAll(all.filter((n) => !(n.userId === userId && n.role === role)));
+/** Cari user_id pemilik UMKM berdasarkan slug toko (untuk notifikasi penjual). */
+export async function getUmkmOwnerUserId(slug: string): Promise<string | null> {
+  const { data, error } = await supabase
+    .from('umkm_profiles')
+    .select('user_id')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (error || !data?.user_id) return null;
+  return data.user_id as string;
 }

@@ -11,21 +11,17 @@ export function useSellerProducts() {
   const [products, setProducts] = useState<SellerProduct[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  const refresh = useCallback(() => {
-    setProducts(getSellerProducts());
+  const refresh = useCallback(async () => {
+    const list = await getSellerProducts();
+    setProducts(list);
+    setHydrated(true);
   }, []);
 
   useEffect(() => {
     refresh();
-    setHydrated(true);
-
-    const onUpdate = () => setProducts(getSellerProducts());
-    window.addEventListener(PRODUCTS_UPDATED_EVENT, onUpdate);
-    window.addEventListener('storage', onUpdate);
-
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, refresh);
     return () => {
-      window.removeEventListener(PRODUCTS_UPDATED_EVENT, onUpdate);
-      window.removeEventListener('storage', onUpdate);
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, refresh);
     };
   }, [refresh]);
 
@@ -38,5 +34,5 @@ export function useSellerProducts() {
     [products]
   );
 
-  return { products: sorted, hydrated };
+  return { products: sorted, hydrated, refresh };
 }

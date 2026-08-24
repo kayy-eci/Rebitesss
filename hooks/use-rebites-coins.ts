@@ -1,15 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 import type { CoinTransaction, CoinTransactionType } from '@/lib/types';
 
-const TRANSACTIONS_KEY = 'rebites-coin-transactions';
-
-const LEGACY_KEY = 'rebites-coins';
 const COINS_UPDATED_EVENT = 'rebites-coins-updated';
-const MAX_TRANSACTIONS = 200;
 
-interface CoinsSnapshot {
+export interface CoinsSnapshot {
   balance: number;
   totalEarned: number;
   transactions: CoinTransaction[];
@@ -21,68 +18,22 @@ const EMPTY_SNAPSHOT: CoinsSnapshot = {
   transactions: [],
 };
 
-function readLegacyBalance(): number {
-  try {
-    const raw = window.localStorage.getItem(LEGACY_KEY);
-    if (!raw) return 0;
-    const parsed = JSON.parse(raw) as { balance?: unknown };
-    return Number(parsed.balance) || 0;
-  } catch {
-    return 0;
-  }
-}
-
-function readTransactions(): CoinTransaction[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    let raw = window.localStorage.getItem(TRANSACTIONS_KEY);
-
-    if (!raw) {
-      const legacy = readLegacyBalance();
-      const seeded: CoinTransaction[] = legacy
-        ? [
-            {
-              id: 'coin-migrasi-saldo-awal',
-              type: 'earned',
-              amount: legacy,
-              createdAt: new Date().toISOString(),
-              description: 'Saldo awal',
-            },
-          ]
-        : [];
-      if (seeded.length > 0) {
-        window.localStorage.setItem(
-          TRANSACTIONS_KEY,
-          JSON.stringify(seeded),
-        );
-      }
-      window.localStorage.removeItem(LEGACY_KEY);
-      return seeded;
-    }
-
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-
-    return parsed.filter(
-      (tx): tx is CoinTransaction =>
-        !!tx &&
-        typeof tx === 'object' &&
-        typeof (tx as CoinTransaction).id === 'string' &&
-        ((tx as CoinTransaction).type === 'earned' ||
-          (tx as CoinTransaction).type === 'spent') &&
-        Number.isFinite((tx as CoinTransaction).amount),
-    );
-  } catch {
-    return [];
-  }
-}
-
-function writeTransactions(transactions: CoinTransaction[]) {
-  window.localStorage.setItem(
-    TRANSACTIONS_KEY,
-    JSON.stringify(transactions.slice(0, MAX_TRANSACTIONS)),
-  );
+function dispatchUpdated(): void {
+  if (typeof window === 'undefined') return;
   window.dispatchEvent(new Event(COINS_UPDATED_EVENT));
+}
+
+type CoinRow = Record<string, any>;
+
+function rowToTransaction(row: CoinRow): CoinTransaction {
+  return {
+    id: row.id,
+    orderId: row.order_code ?? undefined,
+    type: row.type as CoinTransactionType,
+    amount: Number(row.amount),
+    createdAt: row.created_at,
+    description: row.description ?? '',
+  };
 }
 
 function deriveSnapshot(transactions: CoinTransaction[]): CoinsSnapshot {
@@ -99,74 +50,100 @@ function deriveSnapshot(transactions: CoinTransaction[]): CoinsSnapshot {
   };
 }
 
-function hasTransactionFor(
-  transactions: CoinTransaction[],
-  orderId: string,
-  type: CoinTransactionType,
-): boolean {
-  return transactions.some((tx) => tx.type === type && tx.orderId === orderId);
+async function fetchTransactions(userId: string): Promise<CoinTransaction[]> {
+  const { data, error } = await supabase
+    .from('coin_transactions')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(200);
+  if (error) {
+    console.error('[use-rebites-coins] gagal memuat transaksi:', error.message);
+    return [];
+  }
+  return (data ?? []).map(rowToTransaction);
 }
 
-export function settleOrderCoins(
+export async function settleOrderCoins(
   orderId: string,
-  { spent, earned }: { spent: number; earned: number },
-): boolean {
-  if (typeof window === 'undefined') return false;
+  { spent, earned }: { spent: number; earned: number }
+): Promise<boolean> {
   if (!orderId) return false;
 
-  const transactions = readTransactions();
-  const pending: CoinTransaction[] = [];
-  const now = new Date().toISOString();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const userId = session?.user?.id;
+  if (!userId) return false;
 
-  if (
-    Number.isFinite(spent) &&
-    spent > 0 &&
-    !hasTransactionFor(transactions, orderId, 'spent')
-  ) {
+  const { data: existing } = await supabase
+    .from('coin_transactions')
+    .select('order_code, type')
+    .eq('user_id', userId)
+    .eq('order_code', orderId);
+  const existingTypes = new Set((existing ?? []).map((row) => row.type));
+
+  const pending: Record<string, unknown>[] = [];
+  if (Number.isFinite(spent) && spent > 0 && !existingTypes.has('spent')) {
     pending.push({
-      id: `coin-tx-${orderId}-spent`,
-      orderId,
+      user_id: userId,
+      order_code: orderId,
       type: 'spent',
       amount: Math.round(spent),
-      createdAt: now,
       description: 'Potongan pesanan',
     });
   }
-
-  if (
-    Number.isFinite(earned) &&
-    earned > 0 &&
-    !hasTransactionFor(transactions, orderId, 'earned')
-  ) {
+  if (Number.isFinite(earned) && earned > 0 && !existingTypes.has('earned')) {
     pending.push({
-      id: `coin-tx-${orderId}-earned`,
-      orderId,
+      user_id: userId,
+      order_code: orderId,
       type: 'earned',
       amount: Math.round(earned),
-      createdAt: now,
       description: 'Reward pembelian',
     });
   }
 
   if (pending.length === 0) return false;
-
-  writeTransactions([...pending.reverse(), ...transactions]);
+  const { error } = await supabase.from('coin_transactions').insert(pending);
+  if (error) {
+    console.error('[use-rebites-coins] gagal mencatat koin:', error.message);
+    return false;
+  }
+  dispatchUpdated();
   return true;
 }
 
 export function useRebitesCoins(): CoinsSnapshot {
   const [snapshot, setSnapshot] = useState<CoinsSnapshot>(EMPTY_SNAPSHOT);
 
-  useEffect(() => {
-    setSnapshot(deriveSnapshot(readTransactions()));
-    const onUpdate = () => setSnapshot(deriveSnapshot(readTransactions()));
-    window.addEventListener(COINS_UPDATED_EVENT, onUpdate);
-    window.addEventListener('storage', onUpdate);
-    return () => {
-      window.removeEventListener(COINS_UPDATED_EVENT, onUpdate);
-      window.removeEventListener('storage', onUpdate);
-    };
+  const refresh = useCallback(async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) {
+      setSnapshot(EMPTY_SNAPSHOT);
+      return;
+    }
+    setSnapshot(deriveSnapshot(await fetchTransactions(userId)));
   }, []);
 
-  return snapshot;
+  useEffect(() => {
+    refresh();
+
+    const channel = supabase
+      .channel('rebites-coin-transactions')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'coin_transactions' },
+        () => refresh()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refresh]);
+
+  return useMemo(() => snapshot, [snapshot]);
 }

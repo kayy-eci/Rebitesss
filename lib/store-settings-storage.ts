@@ -1,23 +1,18 @@
 'use client';
 
-const STORAGE_KEY = 'rebites-seller-store-settings';
+import { supabase } from './supabase';
 
 export const STORE_SETTINGS_UPDATED_EVENT = 'rebites-seller-store-updated';
 
 export interface SellerStoreSettings {
-
   isOpen: boolean;
-
   storeName: string;
-
   description: string;
-
   image: string;
-
   address: string;
 }
 
-const DEFAULT_SETTINGS: SellerStoreSettings = {
+export const DEFAULT_STORE_SETTINGS: SellerStoreSettings = {
   isOpen: true,
   storeName: 'Dapur Ibu Tini',
   description:
@@ -27,36 +22,65 @@ const DEFAULT_SETTINGS: SellerStoreSettings = {
   address: 'Jl. Raya Tajur No. 12, Bogor',
 };
 
-function readSettings(): SellerStoreSettings {
-  if (typeof window === 'undefined') return { ...DEFAULT_SETTINGS };
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { ...DEFAULT_SETTINGS };
-    const parsed = JSON.parse(raw) as Partial<SellerStoreSettings>;
-    return { ...DEFAULT_SETTINGS, ...parsed };
-  } catch {
-    return { ...DEFAULT_SETTINGS };
-  }
-}
-
-export function getSellerStoreSettings(): SellerStoreSettings {
-  return readSettings();
-}
-
-export function setStoreOpen(isOpen: boolean): void {
-  const current = readSettings();
-  window.localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({ ...current, isOpen } satisfies SellerStoreSettings)
-  );
+function dispatchUpdated(): void {
+  if (typeof window === 'undefined') return;
   window.dispatchEvent(new Event(STORE_SETTINGS_UPDATED_EVENT));
+}
+
+export async function getSellerStoreSettings(): Promise<SellerStoreSettings | null> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const uid = session?.user?.id;
+  if (!uid) return null;
+
+  const { data, error } = await supabase
+    .from('umkm_profiles')
+    .select('business_name, description, logo_url, address, is_open')
+    .eq('user_id', uid)
+    .maybeSingle();
+  if (error || !data) return null;
+
+  return {
+    isOpen: data.is_open ?? true,
+    storeName: data.business_name ?? DEFAULT_STORE_SETTINGS.storeName,
+    description: data.description ?? '',
+    image: data.logo_url ?? DEFAULT_STORE_SETTINGS.image,
+    address: data.address ?? '',
+  };
+}
+
+async function patchOwnUmkm(patch: Record<string, unknown>): Promise<boolean> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const uid = session?.user?.id;
+  if (!uid) return false;
+
+  const { error } = await supabase
+    .from('umkm_profiles')
+    .update(patch)
+    .eq('user_id', uid);
+  if (error) {
+    console.error('[store-settings] gagal update toko:', error.message);
+    return false;
+  }
+  dispatchUpdated();
+  return true;
+}
+
+export function setStoreOpen(isOpen: boolean): Promise<boolean> {
+  return patchOwnUmkm({ is_open: isOpen });
 }
 
 export function updateStoreSettings(
   patch: Partial<Omit<SellerStoreSettings, 'isOpen'>>
-): void {
-  const current = readSettings();
-  const next = { ...current, ...patch };
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  window.dispatchEvent(new Event(STORE_SETTINGS_UPDATED_EVENT));
+): Promise<boolean> {
+  const payload: Record<string, unknown> = {};
+  if (patch.storeName !== undefined) payload.business_name = patch.storeName;
+  if (patch.description !== undefined) payload.description = patch.description;
+  if (patch.image !== undefined) payload.logo_url = patch.image;
+  if (patch.address !== undefined) payload.address = patch.address;
+  if (Object.keys(payload).length === 0) return Promise.resolve(true);
+  return patchOwnUmkm(payload);
 }

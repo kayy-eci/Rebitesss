@@ -1,0 +1,177 @@
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import { supabase } from './supabase';
+import type { FoodItem, PromoCode, UrgentItem, UrgentSlot, Vendor } from './types';
+
+export interface CatalogData {
+  foodItems: FoodItem[];
+  urgentItems: UrgentItem[];
+  vendors: Vendor[];
+}
+
+const EMPTY_CATALOG: CatalogData = {
+  foodItems: [],
+  urgentItems: [],
+  vendors: [],
+};
+
+type ProductRow = Record<string, any>;
+type UmkmRow = Record<string, any>;
+
+function parseStockFromLabel(label: string | null | undefined, fallback: number): number {
+  const match = (label ?? '').match(/\d+/);
+  return match ? Number(match[0]) : fallback;
+}
+
+function productToFoodItem(row: ProductRow): FoodItem {
+  return {
+    id: row.slug ?? row.id,
+    name: row.name ?? '',
+    vendorName: row.umkm?.business_name ?? '',
+    image: row.image_url ?? '/foods/ikansayur.jpg',
+    category: row.category ?? 'Lainnya',
+    rating: Number(row.rating ?? 5),
+    distanceKm: Number(row.distance_km ?? 1),
+    availableFrom: (row.sell_window_start ?? '09:00').slice(0, 5),
+    availableTo: (row.sell_window_end ?? '21:00').slice(0, 5),
+    stockLabel:
+      row.stock_label ?? `${row.stock ?? 0} porsi tersisa`,
+    originalPrice: row.original_price ?? 0,
+    discountedPrice: row.surplus_price ?? 0,
+    discountPercent: row.discount_percent ?? 0,
+    expiresAt: row.expires_at ?? undefined,
+  };
+}
+
+function umkmToVendor(row: UmkmRow, itemCount: number): Vendor {
+  return {
+    id: row.slug ?? row.id,
+    name: row.business_name ?? '',
+    image:
+      row.logo_url ??
+      'https://images.pexels.com/photos/37193132/pexels-photo-37193132.jpeg?auto=compress&cs=tinysrgb&w=800',
+    isRescuePartner: row.is_rescue_partner ?? false,
+    rating: Number(row.rating ?? 5),
+    distanceKm: Number(row.distance_km ?? 1),
+    category: row.category ?? 'Makanan Berat',
+    itemCount,
+    address: row.address ?? '',
+    openHours: row.open_hours ?? '09.00–21.00',
+    description: row.description ?? '',
+  };
+}
+
+export async function fetchFoodItems(): Promise<FoodItem[]> {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, umkm:umkm_profiles(business_name)')
+    .is('slot', null)
+    .eq('status', 'available')
+    .order('created_at', { ascending: true });
+  if (error) {
+    console.error('[catalog] gagal memuat produk:', error.message);
+    return [];
+  }
+  return (data ?? []).map(productToFoodItem);
+}
+
+export async function fetchUrgentItems(): Promise<UrgentItem[]> {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, umkm:umkm_profiles(business_name)')
+    .not('slot', 'is', null)
+    .eq('status', 'available')
+    .order('expires_at', { ascending: true });
+  if (error) {
+    console.error('[catalog] gagal memuat urgent deals:', error.message);
+    return [];
+  }
+  return (data ?? []).map((row) => ({
+    ...productToFoodItem(row),
+    slot: (row.slot ?? '09-12') as UrgentSlot,
+  }));
+}
+
+export async function fetchVendors(): Promise<Vendor[]> {
+  const [{ data: umkms }, { data: products }] = await Promise.all([
+    supabase.from('umkm_profiles').select('*').order('rating', { ascending: false }),
+    supabase.from('products').select('umkm_id'),
+  ]);
+  if (error_umkms(umkms)) return [];
+
+  const counts = new Map<string, number>();
+  for (const p of products ?? []) {
+    counts.set(p.umkm_id, (counts.get(p.umkm_id) ?? 0) + 1);
+  }
+  return (umkms ?? []).map((row: UmkmRow) =>
+    umkmToVendor(row, counts.get(row.id) ?? 0)
+  );
+}
+
+function error_umkms(result: unknown): boolean {
+  // helper kecil untuk menandai hasil null dari query pertama
+  return !Array.isArray(result);
+}
+
+export async function fetchCatalog(): Promise<CatalogData> {
+  const [foodItems, urgentItems, vendors] = await Promise.all([
+    fetchFoodItems(),
+    fetchUrgentItems(),
+    fetchVendors(),
+  ]);
+  return { foodItems, urgentItems, vendors };
+}
+
+export function useCatalog() {
+  const [data, setData] = useState<CatalogData>(EMPTY_CATALOG);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    const result = await fetchCatalog();
+    setData(result);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  return { ...data, loading, refresh };
+}
+
+// ---- promo codes ----
+
+function rowToPromoCode(row: Record<string, any>): PromoCode {
+  return {
+    code: row.code,
+    percentOff: row.percent_off,
+    isValid: Boolean(row.is_valid),
+  };
+}
+
+export async function getValidPromoCodes(): Promise<PromoCode[]> {
+  const { data, error } = await supabase
+    .from('promo_codes')
+    .select('*')
+    .eq('is_valid', true);
+  if (error) {
+    console.error('[catalog] gagal memuat promo codes:', error.message);
+    return [];
+  }
+  return (data ?? []).map(rowToPromoCode);
+}
+
+export async function validatePromoCode(code: string): Promise<PromoCode | null> {
+  const trimmed = code.trim().toUpperCase();
+  if (!trimmed) return null;
+  const { data, error } = await supabase
+    .from('promo_codes')
+    .select('*')
+    .eq('code', trimmed)
+    .eq('is_valid', true)
+    .maybeSingle();
+  if (error || !data) return null;
+  return rowToPromoCode(data);
+}
