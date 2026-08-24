@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -18,7 +18,7 @@ import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/app/components/ui/popover";
 import { Skeleton } from "@/app/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { foodItems } from "@/lib/data";
+import { useCatalog } from "@/lib/catalog";
 import type { FoodItem } from "@/lib/types";
 import { getCategoryBySlug } from "@/lib/categories";
 import { getProductById } from "@/app/detail/product/data";
@@ -149,15 +149,20 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
     category?.description ??
     "Temukan makanan berlebih yang masih layak dinikmati di sekitarmu.";
 
-  const [status] = useState<"loading" | "ready">("ready");
+  const [status, setStatus] = useState<"loading" | "ready">("loading");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterState, setFilterState] = useState<FilterState>(DEFAULT_FILTER_STATE);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const { foodItems, loading: catalogLoading } = useCatalog();
+
+  useEffect(() => {
+    if (!catalogLoading) setStatus("ready");
+  }, [catalogLoading]);
 
   const baseCategoryItems = useMemo(
     () => foodItems.filter((item) => item.category === name),
-    [name],
+    [name, foodItems],
   );
 
   const filteredItems = useMemo(() => {

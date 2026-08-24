@@ -89,6 +89,8 @@ export async function fetchUrgentItems(): Promise<UrgentItem[]> {
   }
   return (data ?? []).map((row) => ({
     ...productToFoodItem(row),
+    expiresAt:
+      row.expires_at ?? new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
     slot: (row.slot ?? '09-12') as UrgentSlot,
   }));
 }

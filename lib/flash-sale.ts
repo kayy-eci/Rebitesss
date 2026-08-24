@@ -3,6 +3,7 @@
 import { readSellerPlan, type SellerEntitlements } from './seller-plan';
 import {
   SELLER_VENDOR_NAME,
+  SELLER_VENDOR_SLUG,
   getSellerProducts,
   isProductAvailable,
   patchSellerProduct,
@@ -199,3 +200,5 @@ export async function getActiveFlashSaleProducts(
       } satisfies FlashSaleCardItem;
     });
 }
+
+export const FLASH_SELLER_STORE_HREF = `/detail/toko?id=${SELLER_VENDOR_SLUG}`;

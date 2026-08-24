@@ -4,7 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { foodItems } from "@/lib/data";
+import { useCatalog } from "@/lib/catalog";
+import type { FoodItem } from "@/lib/types";
 import { FoodCard } from "@/app/components/FoodCard";
 import { SoftBlob } from "@/app/components/ornaments";
 
@@ -23,6 +24,7 @@ const FILTERS: { key: FoodFilter; label: string }[] = [
 const MAX_ITEMS = 8;
 
 export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id: string) => void }) {
+  const { foodItems, loading } = useCatalog();
   const [activeFilter, setActiveFilter] = useState<FoodFilter>("semua");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -76,7 +78,7 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
     }
 
     return list.slice(0, MAX_ITEMS);
-  }, [activeFilter]);
+  }, [activeFilter, foodItems]);
 
   const scrollToVendors = () => {
     document.getElementById("umkm")?.scrollIntoView({ behavior: "smooth" });
@@ -175,7 +177,18 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
             }}
             className="mt-10 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {items.map((item) => (
+            {loading && (
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500">
+                Memuat rekomendasi...
+              </div>
+            )}
+            {!loading && items.length === 0 && (
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500">
+                Belum ada menu tersedia.
+              </div>
+            )}
+            {!loading &&
+              items.map((item) => (
               <motion.div
                 key={item.id}
                 variants={{
@@ -190,7 +203,7 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
               >
                 <FoodCard item={item} onViewDetail={onViewDetail} />
               </motion.div>
-            ))}
+              ))}
           </motion.div>
 
           <button
