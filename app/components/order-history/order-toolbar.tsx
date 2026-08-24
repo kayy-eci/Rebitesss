@@ -6,11 +6,6 @@ import { cn } from '@/lib/utils';
 export type OrderTab = 'active' | 'completed';
 export type FulfillmentFilter = 'all' | 'delivery' | 'pickup';
 
-/**
- * Toolbar Pesanan Saya — sederhana dan relevan hanya dengan transaksi:
- * tab status (dengan jumlah aktual), pencarian order, dan filter
- * Semua / Pickup / Delivery.
- */
 export function OrderToolbar({
   tab,
   onTabChange,
@@ -33,7 +28,7 @@ export function OrderToolbar({
   return (
     <div className="flex flex-col gap-3.5">
       <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
-        {/* Tabs — jumlah dari data aktual */}
+        { }
         <div className="grid w-full grid-cols-2 gap-1 rounded-full border border-hairline bg-cream-100 p-1 sm:inline-grid sm:w-auto sm:grid-cols-none">
           <TabButton
             label="Sedang Berlangsung"
@@ -49,7 +44,7 @@ export function OrderToolbar({
           />
         </div>
 
-        {/* Filter fulfillment — hanya yang berhubungan dengan transaksi */}
+        { }
         <div className="flex flex-wrap items-center gap-1.5 lg:ml-4">
           {(
             [
@@ -75,7 +70,7 @@ export function OrderToolbar({
         </div>
       </div>
 
-      {/* Search — hanya bekerja pada riwayat pesanan */}
+      { }
       <label className="relative w-full">
         <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-charcoal-500" />
         <input

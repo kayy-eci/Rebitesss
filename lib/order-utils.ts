@@ -1,8 +1,6 @@
 import type { StoredOrder } from './types';
 import { paymentMethods } from '@/app/components/checkout/payment-methods';
 
-/** Helper tampilan bersama untuk Order Center. */
-
 export function paymentMethodName(id?: string): string {
   if (!id) return '—';
   return paymentMethods.find((m) => m.id === id)?.name ?? id;
@@ -33,13 +31,11 @@ export function formatOrderTime(iso: string): string {
   });
 }
 
-/** Milidetik tersisa menuju estimasi selesai (≥0). */
 export function getRemainingMs(order: StoredOrder): number {
   if (!order.estimatedCompletionAt) return 0;
   return Math.max(0, new Date(order.estimatedCompletionAt).getTime() - Date.now());
 }
 
-/** Rasio waktu berjalan 0→1 berdasarkan createdAt vs estimatedCompletionAt. */
 export function getOrderProgress(order: StoredOrder): number {
   if (!order.estimatedCompletionAt || order.status === 'completed') return 1;
   const start = new Date(order.createdAt).getTime();
@@ -56,17 +52,12 @@ export type OrderSubStatus =
   | 'siap-diambil'
   | 'selesai';
 
-/**
- * Sub-status tampilan per fulfillment — delivery dan pickup punya alur
- * berbeda. Ditentukan dari sisa waktu (implementasi sederhana sesuai
- * spesifikasi), bukan dari status terpisah.
- */
 export function getOrderSubStatus(
   order: StoredOrder,
   progress = getOrderProgress(order)
 ): OrderSubStatus {
   if (order.status === 'completed') return 'selesai';
-  /* Setelah ~60% waktu berjalan, pesanan dianggap dalam perjalanan/siap. */
+
   return progress >= 0.6
     ? order.fulfillment === 'delivery'
       ? 'diantar'
@@ -84,16 +75,10 @@ export const SUB_STATUS_LABEL: Record<OrderSubStatus, string> = {
   selesai: 'Selesai',
 };
 
-/** Link Google Maps untuk alamat toko / tujuan. */
 export function mapsUrl(address: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 }
 
-/**
- * Timeline aktivitas order — SEMUA timestamp diturunkan dari data yang
- * tersimpan saat checkout (createdAt, preparationMinutes,
- * estimatedCompletionAt/completedAt). Tidak ada angka acak.
- */
 export interface OrderTimelineEntry {
   timeIso: string;
   label: string;

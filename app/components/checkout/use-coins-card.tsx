@@ -40,16 +40,11 @@ function CoinSwitch({
   );
 }
 
-/**
- * Section "Gunakan ReBites Coin" — opsional, default OFF.
- * Toggle hanya menandai niat memakai Coin; saldo benar-benar dipotong
- * saat order berhasil dibuat (settleOrderCoins di checkout-context).
- */
 export function UseCoinsCard() {
   const { coinBalance, useCoins, toggleUseCoins, summary } = useCheckout();
 
   const hasCoins = coinBalance > 0;
-  /* Saldo lebih besar dari tagihan → Coin terpakai maks sebesar tagihan. */
+
   const cappedByTotal =
     hasCoins && summary.coinUsed > 0 && coinBalance > summary.totalBeforeCoin;
 

@@ -37,10 +37,6 @@ type OrderTab = 'berlangsung' | 'selesai' | 'semua';
 
 const SWEEP_INTERVAL_MS = 5_000;
 
-/**
- * Semua order perangkat ini untuk toko penjual (demo satu perangkat).
- * Sweep berkala dipakai ulang agar status kedaluwarsa ikut segar.
- */
 function useVendorOrders() {
   const [orders, setOrders] = useState<StoredOrder[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -200,16 +196,13 @@ export default function PesananMasukPage() {
   const { orders, ongoing, completed, hydrated } = useVendorOrders();
   const [tab, setTab] = useState<OrderTab>('berlangsung');
 
-  /* Aksi nyata: menandai pesanan selesai mem-patch storage yang sama
-     dengan milik pembeli (Riwayat Pesanan ikut berubah).
-     Notifikasi dikirim ke pembeli terkait. */
   const handleComplete = useCallback((orderId: string) => {
     const order = getOrderById(orderId);
     patchOrder(orderId, {
       status: 'completed',
       completedAt: new Date().toISOString(),
     });
-    // Notifikasi ke pembeli bahwa pesanan selesai
+
     if (order) {
       notifyOrderCompleted({
         ...order,

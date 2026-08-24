@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,6 +11,11 @@ import { SmartImage } from "@/app/components/SmartImage";
 import { SoftBlob } from "@/app/components/ornaments";
 import { Marquee } from "@/app/components/marquee";
 import type { UrgentItem, UrgentSlot } from "@/lib/types";
+import {
+  FLASH_SELLER_STORE_HREF,
+  getActiveFlashSaleProducts,
+  type FlashSaleCardItem,
+} from "@/lib/flash-sale";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
@@ -84,7 +90,7 @@ function useSlotRotation() {
   const realSlot = getSlotFromHour(getWibParts().hour);
   const activeSlot = selectedSlot ?? realSlot;
 
-  return { realSlot, selectedSlot, setSelectedSlot, activeSlot };
+  return { realSlot, selectedSlot, setSelectedSlot, activeSlot, tick };
 }
 
 function parseStockCount(label: string) {
@@ -154,12 +160,24 @@ function UrgentCard({
   startsAtIso,
   endsAtIso,
   onViewDetail,
+  detailHref,
 }: {
   item: UrgentItem;
   startsAtIso: string;
   endsAtIso: string;
   onViewDetail?: (id: string) => void;
+
+  detailHref?: string;
 }) {
+  const router = useRouter();
+  const openDetail = () => {
+    if (detailHref) {
+      router.push(detailHref);
+      return;
+    }
+    onViewDetail?.(item.id);
+  };
+
   const remainingToStart = useCountdown(startsAtIso);
   const remainingToEnd = useCountdown(endsAtIso);
   const isEnded = remainingToEnd === 0;
@@ -175,11 +193,13 @@ function UrgentCard({
       role="button"
       tabIndex={0}
       aria-label={`Lihat detail ${item.name}`}
-      onClick={() => !isEnded && onViewDetail?.(item.id)}
+      onClick={() => {
+        if (!isEnded) openDetail();
+      }}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          if (!isEnded) onViewDetail?.(item.id);
+          if (!isEnded) openDetail();
         }
       }}
       className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 outline-none transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-green-700/30 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
@@ -283,7 +303,7 @@ function UrgentCard({
             type="button"
             onClick={(event) => {
               event.stopPropagation();
-              onViewDetail?.(item.id);
+              openDetail();
             }}
             aria-label={`Lihat detail ${item.name}`}
             className={cn(
@@ -317,7 +337,7 @@ export function FlashSaleSection({
 }: {
   onViewDetail?: (id: string) => void;
 }) {
-  const { realSlot, setSelectedSlot, activeSlot } = useSlotRotation();
+  const { realSlot, setSelectedSlot, activeSlot, tick } = useSlotRotation();
 
   const activeSlotDef = activeSlot
     ? (SLOTS.find((s) => s.key === activeSlot) ?? null)
@@ -330,9 +350,29 @@ export function FlashSaleSection({
     : null;
   const nextStartIso = new Date(nextStartEpoch()).toISOString();
 
-  const visibleItems = activeSlot
+
+  const [sellerFlashItems, setSellerFlashItems] = useState<
+    FlashSaleCardItem[]
+  >([]);
+
+  useEffect(() => {
+    setSellerFlashItems(getActiveFlashSaleProducts());
+  }, [tick]);
+
+  const staticSlotItems: FlashSaleCardItem[] = activeSlot
     ? urgentItems.filter((i) => i.slot === activeSlot)
     : [];
+  const dynamicSlotItems = sellerFlashItems.filter(
+    (item) => item.slot === activeSlot
+  );
+  const staticIds = new Set(staticSlotItems.map((item) => item.id));
+  const visibleItems: FlashSaleCardItem[] = [
+    ...staticSlotItems,
+    ...dynamicSlotItems.filter((item) => !staticIds.has(item.id)),
+  ];
+  const dynamicIds = new Set(
+    dynamicSlotItems.map((item) => item.id)
+  );
 
   return (
     <section
@@ -555,9 +595,14 @@ export function FlashSaleSection({
                 >
                   <UrgentCard
                     item={item}
-                    startsAtIso={slotStartIso!}
-                    endsAtIso={slotEndIso!}
+                    startsAtIso={item.startsAt ?? slotStartIso!}
+                    endsAtIso={item.endsAt ?? slotEndIso!}
                     onViewDetail={onViewDetail}
+                    detailHref={
+                      dynamicIds.has(item.id)
+                        ? `${FLASH_SELLER_STORE_HREF}#menu-surplus`
+                        : undefined
+                    }
                   />
                 </motion.div>
               ))}

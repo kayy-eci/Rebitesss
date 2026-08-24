@@ -10,10 +10,6 @@ import { useCheckout } from './checkout-context';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/**
- * Informasi pengambilan pesanan — hanya tampil pada mode Pickup.
- * Data toko diambil dari data vendor yang sudah ada (lib/data.ts).
- */
 export function PickupInfoCard() {
   const { draft, fulfillment } = useCheckout();
 

@@ -37,10 +37,6 @@ function formatFullAddress(address: DeliveryAddress) {
     .join(', ');
 }
 
-/**
- * Section alamat pengiriman — hanya tampil pada mode Diantar.
- * Satu popup dengan dua tampilan: daftar pilih alamat ↔ form tambah/edit.
- */
 export function DeliveryAddressSection() {
   const {
     fulfillment,
@@ -76,7 +72,6 @@ export function DeliveryAddressSection() {
     setPopupOpen(false);
   };
 
-  /* Pilih alamat → beri jeda agar centang sempat terlihat → tutup popup. */
   const handleSelect = (id: string) => {
     if (id === selectedAddressId) {
       setPopupOpen(false);
@@ -87,8 +82,6 @@ export function DeliveryAddressSection() {
     closeTimer.current = window.setTimeout(() => setPopupOpen(false), 200);
   };
 
-  /* Setelah simpan/batal di form: kembali ke daftar bila dibuka dari daftar,
-     selain itu tutup popup sepenuhnya. */
   const handleFormDone = () => {
     if (returnToList) {
       setEditing(null);
@@ -197,8 +190,7 @@ export function DeliveryAddressSection() {
         )}
       </AnimatePresence>
 
-      {/* ── Popup alamat tunggal — DI LUAR section collapse agar tidak
-             ikut ter-unmount saat pengguna berganti mode Ambil/Diantar ── */}
+      { }
       <Dialog open={popupOpen} onOpenChange={closePopup}>
         <DialogContent handle className="sm:max-w-md">
           {view === 'list' ? (
@@ -212,7 +204,7 @@ export function DeliveryAddressSection() {
                 </DialogDescription>
               </DialogHeader>
 
-              {/* Area scroll — judul tetap terlihat saat daftar panjang */}
+              { }
               <div className="mt-3 min-h-0 flex-1 space-y-3 overflow-y-auto pr-0.5">
                 {addresses.map((address) => {
                   const active = address.id === selectedAddressId;

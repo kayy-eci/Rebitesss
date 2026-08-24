@@ -1,12 +1,3 @@
-/**
- * Storage langganan penjual — pattern sama dengan order-storage:
- * satu sumber data di localStorage, aman dipanggil di server (no-op),
- * dan menyebar update via CustomEvent agar UI lain ikut segar.
- *
- * Demo: pembayaran disimulasikan di halaman /langganan/pembayaran,
- * jadi subscription langsung aktif saat disimpan.
- */
-
 const STORAGE_KEY = 'rebites-subscription';
 
 export const SUBSCRIPTION_UPDATED_EVENT = 'rebites-subscription-updated';
@@ -26,7 +17,7 @@ export interface StoredSubscription {
   id: string;
   planSlug: 'basic' | 'standar' | 'premium';
   billing: BillingCycle;
-  /** Harga yang "dibayar" pada transaksi ini (0 untuk paket gratis). */
+
   pricePaid: number;
   status: StoredSubscriptionStatus;
   startedAt: string;
@@ -55,7 +46,7 @@ function writeRaw(subscription: StoredSubscription | null) {
     }
     window.dispatchEvent(new Event(SUBSCRIPTION_UPDATED_EVENT));
   } catch {
-    /* storage penuh / private mode — abaikan. */
+
   }
 }
 
@@ -72,10 +63,6 @@ export interface SaveSubscriptionInput {
   paymentMethodId: string | null;
 }
 
-/**
- * Simpan (atau ganti) langganan penjual. Satu penjual = satu langganan
- * aktif; berlangganan ulang menimpa record sebelumnya.
- */
 export function saveSubscription(
   input: SaveSubscriptionInput
 ): StoredSubscription | null {
@@ -97,7 +84,6 @@ export function saveSubscription(
 
   writeRaw(subscription);
 
-  // Notifikasi ke penjual tentang langganan
   const billingLabel = input.billing === 'yearly' ? 'Tahunan' : 'Bulanan';
   const periodEnd = computePeriodEnd(input.billing, now).toLocaleDateString('id-ID', {
     day: 'numeric',
@@ -122,7 +108,6 @@ export function getSubscription(): StoredSubscription | null {
   return readRaw();
 }
 
-/** Langganan aktif — null bila tidak ada, kadaluarsa, atau dibatalkan. */
 export function getActiveSubscription(): StoredSubscription | null {
   const subscription = readRaw();
   if (!subscription) return null;

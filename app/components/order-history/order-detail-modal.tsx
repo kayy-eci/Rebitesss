@@ -38,11 +38,6 @@ import {
   DialogTitle,
 } from '@/app/components/ui/dialog';
 
-/**
- * Detail pesanan ala mini-invoice: produk, pengambilan/pengiriman
- * (beda pickup vs delivery), pembayaran, reward Coin, timeline dari
- * data tersimpan, Order ID yang bisa disalin, review, dan reorder.
- */
 export function OrderDetailModal({
   order,
   userId,
@@ -102,7 +97,7 @@ export function OrderDetailModal({
             </DialogHeader>
 
             <div className="-mx-1 mt-1 min-h-0 flex-1 overflow-y-auto px-1">
-              {/* Order ID + salin */}
+              { }
               <div className="flex items-center justify-between gap-2 rounded-xl bg-cream-100 px-3 py-2">
                 <p className="truncate font-display text-sm font-semibold tabular-nums text-charcoal-900">
                   #{order.orderId}
@@ -123,7 +118,7 @@ export function OrderDetailModal({
 
               <StatusStrip order={order} />
 
-              {/* Produk */}
+              { }
               <SectionTitle>Produk</SectionTitle>
               <div className="mt-2 flex items-center gap-3 rounded-xl ring-1 ring-hairline p-3">
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-sage-100">
@@ -145,13 +140,13 @@ export function OrderDetailModal({
                 </div>
               </div>
 
-              {/* Pengambilan / Pengiriman */}
+              { }
               <SectionTitle>
                 {order.fulfillment === 'delivery' ? 'Pengiriman' : 'Pengambilan'}
               </SectionTitle>
               <FulfillmentSection order={order} />
 
-              {/* Pembayaran */}
+              { }
               <SectionTitle>Pembayaran</SectionTitle>
               <dl className="mt-2 space-y-2 rounded-xl ring-1 ring-hairline p-3.5 text-sm">
                 <Row label="Subtotal" value={formatRupiah(order.subtotal)} />
@@ -181,7 +176,7 @@ export function OrderDetailModal({
                 </div>
               </dl>
 
-              {/* Reward */}
+              { }
               {(order.coinEarned ?? 0) > 0 && (
                 <div className="mt-3 flex items-center gap-3 rounded-xl bg-gold-100 px-4 py-3">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white">
@@ -198,7 +193,7 @@ export function OrderDetailModal({
                 </div>
               )}
 
-              {/* Timeline */}
+              { }
               <SectionTitle>Riwayat Status</SectionTitle>
               <ol className="mt-2 space-y-2.5 rounded-xl ring-1 ring-hairline p-3.5">
                 {getOrderTimeline(order).map((entry) => (
@@ -224,7 +219,7 @@ export function OrderDetailModal({
                 ))}
               </ol>
 
-              {/* Informasi order */}
+              { }
               <SectionTitle>Informasi Pesanan</SectionTitle>
               <dl className="mt-2 space-y-2 rounded-xl ring-1 ring-hairline p-3.5 text-sm">
                 <Row label="Order ID" value={`#${order.orderId}`} mono />
@@ -249,7 +244,7 @@ export function OrderDetailModal({
                 )}
               </dl>
 
-              {/* Review untuk pesanan selesai */}
+              { }
               {order.status === 'completed' && (
                 <ReviewBlock
                   orderId={order.orderId}
@@ -265,7 +260,7 @@ export function OrderDetailModal({
               )}
             </div>
 
-            {/* Footer aksi */}
+            { }
             <div className="mt-3 flex items-center gap-2 border-t border-hairline pt-3">
               {order.status === 'completed' && (
                 <button
@@ -292,7 +287,6 @@ export function OrderDetailModal({
   );
 }
 
-/* ── Strip status + countdown (jika masih berlangsung) ── */
 function StatusStrip({ order }: { order: StoredOrder }) {
   const remaining = useCountdown(order.estimatedCompletionAt ?? order.createdAt);
   if (order.status === 'completed') {
@@ -334,7 +328,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
 
   return (
     <div className="mt-2 space-y-3 rounded-xl ring-1 ring-hairline p-3.5">
-      {/* Dari toko */}
+      { }
       <div className="flex items-start gap-3">
         <span
           className={
@@ -410,7 +404,6 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
   );
 }
 
-/* ── Review pesanan selesai ── */
 function ReviewBlock({
   orderId,
   vendorName,
@@ -432,7 +425,6 @@ function ReviewBlock({
   const [comment, setComment] = useState(existing?.comment ?? '');
   const [saving, setSaving] = useState(false);
 
-  /* Sudah dinilai → jangan tampilkan form penilaian lagi. */
   if (existing) {
     return (
       <div className="mt-6">

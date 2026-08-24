@@ -9,10 +9,6 @@ import { useSellerPlan } from '@/lib/seller-plan';
 import { patchSellerProduct } from '@/lib/product-storage';
 import { useSellerProducts } from '@/hooks/use-seller-products';
 
-/**
- * Promo Unggulan — eksklusif paket Max. Produk unggulan tampil lebih
- * dulu di halaman toko; toggle di sini menulis ke penyimpanan produk.
- */
 export function FeaturedPromoCard() {
   const { plan } = useSellerPlan();
   const { products } = useSellerProducts();

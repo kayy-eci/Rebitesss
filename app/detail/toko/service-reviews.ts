@@ -1,8 +1,3 @@
-/**
- * Review pelayanan per toko — satu sumber data untuk halaman detail
- * toko dan ringkasan rating di dashboard penjual.
- */
-
 export interface ServiceReview {
   name: string;
   avatar: string;

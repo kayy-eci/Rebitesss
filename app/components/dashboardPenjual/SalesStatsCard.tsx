@@ -73,11 +73,6 @@ function SalesTooltip({
   );
 }
 
-/**
- * Statistik penjualan — fokus utama dashboard. Seluruh angka
- * (pendapatan, porsi terjual, tersisa, grafik) mengikuti periode yang
- * dipilih lewat dropdown 7/14/30 hari.
- */
 export function SalesStatsCard({
   period,
   onPeriodChange,
@@ -156,7 +151,7 @@ export function SalesStatsCard({
         </div>
       </div>
 
-      {/* Metrik utama periode terpilih */}
+      { }
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="rounded-2xl bg-cream-50 p-4">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">

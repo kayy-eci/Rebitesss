@@ -8,11 +8,6 @@ export const metadata: Metadata = {
     'Lacak pesanan yang sedang berlangsung dan lihat riwayat belanja makanan di ReBites.',
 };
 
-/**
- * Halaman Pesanan Saya — full-width application page TANPA sidebar.
- * Layout mandiri: container terpusat max-w-6xl, tanpa offset bekas
- * sidebar (margin-left, padding-left, atau fixed width).
- */
 export default function OrderHistoryPage() {
   return (
     <main className="min-h-screen bg-cream">

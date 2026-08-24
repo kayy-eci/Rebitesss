@@ -50,7 +50,7 @@ export interface RelatedProduct {
 
 export const formatIDR = (value: number): string => value.toLocaleString('id-ID');
 
-/* ─── Products Map (keyed by id) ─── */
+
 
 const VENDORS: Record<string, VendorInfo> = {
   'warung-nusantara': {
@@ -322,7 +322,7 @@ export function getProductById(id: string): ProductDetail | undefined {
   return undefined;
 }
 
-/* ─── Single product (legacy, for detail page) ─── */
+
 
 export const PRODUCT: ProductDetail = PRODUCTS['geprek-sambal-bawang'] ?? {
   id: 'rb-001',

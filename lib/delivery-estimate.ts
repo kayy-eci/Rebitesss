@@ -1,18 +1,5 @@
 import type { FulfillmentMode, GeoPoint } from './types';
 
-/**
- * Mesin estimasi waktu pesanan — SATU sumber kebenaran.
- *
- * Pickup  : estimasi = preparationMinutes vendor.
- * Delivery: estimasi = preparationMinutes vendor + travelMinutes(jarak).
- *
- * Tidak ada angka acak. Jarak berasal dari data vendor/produk yang
- * sudah ada (draft.distanceKm). Bila suatu saat data koordinat
- * tersedia, gunakan haversineDistanceKm() untuk jarak yang lebih
- * presisi — struktur GeoPoint sudah disiapkan.
- */
-
-/** Waktu persiapan memasak per toko (menit) — menentukan estimasi pickup. */
 export const VENDOR_PREPARATION_MINUTES: Record<string, number> = {
   'warung-nusantara': 15,
   'dapur-ibu-tini': 25,
@@ -26,12 +13,6 @@ export function getVendorPreparationMinutes(vendorSlug?: string): number {
   return VENDOR_PREPARATION_MINUTES[vendorSlug] ?? DEFAULT_PREPARATION_MINUTES;
 }
 
-/**
- * Tier perjalanan kurir berdasarkan jarak — monotonic:
- *   0–2 km → 10–15 mnt | >2–4 km → 15–25 | >4–6 km → 25–35 | >6–10 km → 35–50
- * Di dalam tier, posisi diinterpolasi linear dari jarak sehingga toko
- * 1 km SELALU lebih cepat daripada toko 8 km.
- */
 interface TravelTier {
   minKm: number;
   maxKm: number;
@@ -50,7 +31,6 @@ export function calculateTravelMinutes(distanceKm: number): number {
   const d = Math.max(0, distanceKm);
   const tier = TRAVEL_TIERS.find((t) => d <= t.maxKm);
 
-  /* Di luar 10 km: tetap monotonic (+3 mnt tiap km). */
   if (!tier) return Math.round(50 + (d - 10) * 3);
 
   const span = tier.maxKm - tier.minKm || 1;
@@ -66,10 +46,6 @@ export interface OrderEstimate {
   estimatedMinutes: number;
 }
 
-/**
- * Hitung estimasi penyelesaian pesanan dalam menit.
- * Delivery = persiapan + perjalanan; Pickup = persiapan saja.
- */
 export function estimateOrderMinutes({
   fulfillment,
   distanceKm = 0,
@@ -89,7 +65,6 @@ export function estimateOrderMinutes({
   };
 }
 
-/** Jarak geografis dua titik (km) via rumus Haversine. */
 export function haversineDistanceKm(a: GeoPoint, b: GeoPoint): number {
   const R = 6371;
   const toRad = (deg: number) => (deg * Math.PI) / 180;

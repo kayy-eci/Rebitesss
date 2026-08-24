@@ -35,7 +35,6 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const profile = getVendorProfile(vendor.id);
   const { plan } = useSellerPlan();
 
-  /* Gunakan data toko dari storage bila ini adalah toko penjual yang aktif */
   const isSellerVendor = vendor.id === SELLER_VENDOR_SLUG;
   const [storeName, setStoreName] = useState(vendor.name);
   const [storeDesc, setStoreDesc] = useState(vendor.description);

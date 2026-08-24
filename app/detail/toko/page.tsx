@@ -48,11 +48,15 @@ import {
 } from "@/lib/product-storage";
 import type { SellerProduct } from "@/lib/product-storage";
 import {
+  getDisplayPricing,
+  getFlashDiscountPercent,
+} from "@/lib/flash-sale";
+import {
   getSellerStoreSettings,
   STORE_SETTINGS_UPDATED_EVENT,
 } from "@/lib/store-settings-storage";
 
-/* ─── Data Helpers ─── */
+
 function getVendorFoods(vendorName: string): FoodItem[] {
   const merged: FoodItem[] = [
     ...foodItems.filter((item) => item.vendorName === vendorName),
@@ -69,14 +73,13 @@ function getVendorFoods(vendorName: string): FoodItem[] {
   });
 }
 
-/**
- * Ubah SellerProduct (dari storage penjual) menjadi FoodItem
- * agar bisa ditampilkan di halaman toko user.
- */
+
 function sellerProductToFoodItem(
   sp: SellerProduct,
   vendor: Vendor
 ): FoodItem {
+
+  const pricing = getDisplayPricing(sp);
   return {
     id: sp.id,
     name: sp.name,
@@ -89,15 +92,14 @@ function sellerProductToFoodItem(
     availableTo: sp.endTime,
     stockLabel: sp.stock > 0 ? `${sp.stock} porsi tersisa` : "Habis",
     originalPrice: sp.originalPrice,
-    discountedPrice: sp.surplusPrice,
-    discountPercent: sp.discountPercent,
+    discountedPrice: pricing.price,
+    discountPercent: pricing.isFlash
+      ? getFlashDiscountPercent(sp)
+      : sp.discountPercent,
   };
 }
 
-/**
- * Ambil data produk penjual dari storage yang sama dengan dashboard.
- * Hanya dipanggil untuk vendor yang sedang login (Dapur Ibu Tini).
- */
+
 function getSellerVendorFoods(vendor: Vendor): FoodItem[] {
   const sellerProducts = getSellerProducts();
   return sellerProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
@@ -124,7 +126,7 @@ function isOpenNow(openHours: string): boolean {
     : minutes >= open || minutes < close;
 }
 
-/* ─── Review Pelanggan tentang Pelayanan Toko ─── */
+
 
 function initialsOf(name: string) {
   return name
@@ -274,7 +276,7 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
   );
 }
 
-/* ─── Not Found State ─── */
+
 function StoreNotFound() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-cream-50 px-5 font-sans text-charcoal-900">
@@ -303,7 +305,7 @@ function StoreNotFound() {
   );
 }
 
-/* ─── Food Card ─── */
+
 function FoodCard({
   item,
   onSelect,
@@ -311,10 +313,7 @@ function FoodCard({
 }: {
   item: FoodItem;
   onSelect: () => void;
-  /**
-   * Bila diisi, menimpa ketersediaan berdasarkan data penjual.
-   * true = tidak tersedia, false = tersedia, undefined = gunakan default.
-   */
+
   forceUnavailable?: boolean;
 }) {
   const stock = parseStock(item.stockLabel);
@@ -416,7 +415,7 @@ function FoodCard({
   );
 }
 
-/* ─── Main Content ─── */
+
 function StoreDetailContent() {
   const searchParams = useSearchParams();
   const storeId = searchParams.get("id");
@@ -424,7 +423,7 @@ function StoreDetailContent() {
     (item) => item.id === storeId,
   );
 
-  /* Sinkron data penjual — tampilan terbaru dari dashboard langsung terbaca. */
+
   const [sellerProducts, setSellerProducts] = useState<SellerProduct[]>([]);
   const isSellerVendor = vendor?.id === SELLER_VENDOR_SLUG;
 
@@ -495,7 +494,7 @@ function StoreDetailContent() {
 
   const displayCategories = ["Semua", ...categories];
 
-  /* Menu unggulan penjual (paket Max) tampil paling atas di tokonya. */
+
   const featuredIds = useMemo(
     () =>
       vendor?.id === SELLER_VENDOR_SLUG
@@ -504,7 +503,7 @@ function StoreDetailContent() {
     [vendor]
   );
 
-  /* Cek ketersediaan real-time berdasarkan data penjual */
+
   const sellerAvailability = useMemo(() => {
     if (!isSellerVendor) return new Map<string, boolean>();
     const map = new Map<string, boolean>();
@@ -542,10 +541,10 @@ function StoreDetailContent() {
 
   return (
     <main className="min-h-screen bg-cream-50 font-sans text-charcoal-900">
-      {/* ─── Hero ─── */}
+      { }
       <StoreHeroCard vendor={vendor} openNow={openNow} />
 
-      {/* ─── Menu Surplus ─── */}
+      { }
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <section id="menu-surplus" className="pt-9">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
@@ -556,7 +555,7 @@ function StoreDetailContent() {
           </h2>
 
           <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center">
-            {/* Search */}
+            { }
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-charcoal-500" />
               <input
@@ -579,7 +578,7 @@ function StoreDetailContent() {
               )}
             </div>
 
-            {/* Kategori accordion */}
+            { }
             <div className="relative shrink-0 self-start lg:self-auto">
               <button
                 type="button"
@@ -696,10 +695,10 @@ function StoreDetailContent() {
         </section>
       </div>
 
-      {/* ─── Tentang & Dampak Toko ─── */}
+      { }
       <StoreAboutImpact vendor={vendor} />
 
-      {/* ─── Review Pelanggan tentang Pelayanan Toko ─── */}
+      { }
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <section id="tentang-toko" className="mt-14 pb-4">
           <StoreServiceReviews vendor={vendor} />
@@ -720,7 +719,7 @@ function StoreDetailContent() {
   );
 }
 
-/* ─── Page ─── */
+
 export default function DetailTokoPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-cream-50" />}>

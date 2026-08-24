@@ -37,7 +37,7 @@ export function ProductDetailModal({
   const dialogRef = useRef<HTMLDivElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
 
-  /* ── focus trap & escape ── */
+
   useEffect(() => {
     prevFocusRef.current = document.activeElement as HTMLElement;
     document.body.style.overflow = "hidden";
@@ -64,7 +64,7 @@ export function ProductDetailModal({
     };
 
     document.addEventListener("keydown", handleKey);
-    // focus first element
+
     requestAnimationFrame(() => {
       dialogRef.current
         ?.querySelector<HTMLElement>("button, [tabindex]")
@@ -117,7 +117,7 @@ export function ProductDetailModal({
           transition={{ duration: 0.3, ease: EASE }}
           className="relative flex h-full max-h-[90vh] w-full max-w-[1100px] flex-col overflow-hidden rounded-[28px] border border-sage-100 bg-cream-50 shadow-[0_40px_80px_-20px_rgba(47,66,53,0.35)] lg:max-h-[760px] lg:flex-row"
         >
-          {/* ── Close button ── */}
+          { }
           <button
             type="button"
             aria-label="Tutup detail produk"
@@ -130,9 +130,9 @@ export function ProductDetailModal({
             <X className="h-5 w-5" />
           </button>
 
-          {/* ═══════ LEFT: Image ═══════ */}
+          { }
           <div className="relative flex flex-col lg:w-[45%]">
-            {/* Main image */}
+            { }
             <div className="relative aspect-square flex-1 bg-[#F5E7CF] p-6 sm:p-10">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -154,13 +154,13 @@ export function ProductDetailModal({
                 </motion.div>
               </AnimatePresence>
 
-              {/* Discount badge */}
+              { }
               <div className="absolute left-4 top-4 rounded-full bg-[#E53935] px-3 py-1.5 text-xs font-bold text-white shadow-lg">
                 Hemat {savingsPercent}%
               </div>
             </div>
 
-            {/* Thumbnails */}
+            { }
             <div className="flex items-center gap-3 bg-cream-50 px-6 py-4">
               {product.images.map((img, i) => (
                 <button
@@ -188,19 +188,19 @@ export function ProductDetailModal({
             </div>
           </div>
 
-          {/* ═══════ RIGHT: Info ═══════ */}
+          { }
           <div className="flex flex-1 flex-col overflow-y-auto px-7 py-7 sm:px-9 lg:px-10 lg:py-8">
-            {/* Category */}
+            { }
             <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-stone">
               {product.category}
             </p>
 
-            {/* Title */}
+            { }
             <h2 className="mt-2 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-forest-dark">
               {product.title}
             </h2>
 
-            {/* Vendor */}
+            { }
             <p className="mt-1.5 text-sm text-charcoal-500">
               oleh{" "}
               <span className="font-medium text-charcoal-900">
@@ -208,7 +208,7 @@ export function ProductDetailModal({
               </span>
             </p>
 
-            {/* Rating & stock */}
+            { }
             <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-charcoal-500">
               <span className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -245,7 +245,7 @@ export function ProductDetailModal({
               </span>
             </div>
 
-            {/* Price */}
+            { }
             <div className="mt-5 flex flex-wrap items-baseline gap-3">
               <span className="font-display text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-tight text-forest-dark">
                 Rp{formatIDR(product.discountedPrice)}
@@ -258,12 +258,12 @@ export function ProductDetailModal({
               </span>
             </div>
 
-            {/* Description */}
+            { }
             <p className="mt-4 max-w-md font-inter text-[15px] leading-relaxed text-charcoal-500">
               {product.description}
             </p>
 
-            {/* Info pills */}
+            { }
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-100 px-3 py-1.5 text-xs font-medium text-charcoal-500">
                 <Clock className="h-3.5 w-3.5 text-green-700" />
@@ -279,12 +279,12 @@ export function ProductDetailModal({
               </span>
             </div>
 
-            {/* Spacer */}
+            { }
             <div className="flex-1" />
 
-            {/* Quantity + CTA */}
+            { }
             <div className="mt-6 flex items-center gap-3">
-              {/* Quantity */}
+              { }
               <div className="flex h-[52px] items-center overflow-hidden rounded-full border border-hairline bg-white shadow-sm">
                 <button
                   type="button"
@@ -317,7 +317,7 @@ export function ProductDetailModal({
                 </button>
               </div>
 
-              {/* Add to cart */}
+              { }
               <button
                 type="button"
                 onClick={handleAddToCart}
@@ -349,7 +349,7 @@ export function ProductDetailModal({
               </button>
             </div>
 
-            {/* Trust */}
+            { }
             <div className="mt-4 flex items-center gap-1.5 text-xs text-charcoal-500">
               <Shield className="h-3.5 w-3.5 text-green-700" />
               Pembayaran aman · Ambil sendiri di lokasi mitra

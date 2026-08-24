@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import { Plus, ShoppingBag, Wallet } from 'lucide-react';
+import { Plus, ShoppingBag } from 'lucide-react';
 
 const actions = [
   { label: 'Tambah Menu', icon: Plus, href: '/dashboard/penjual/tambahMenu' },
   { label: 'Pesanan Masuk', icon: ShoppingBag, href: '/dashboard/penjual/pesanan' },
-  { label: 'Pencairan Dana', icon: Wallet, href: '/dashboard/penjual/penarikan' },
 ] as const;
 
 type Action = (typeof actions)[number];
@@ -25,7 +24,7 @@ function ActionContent({ action }: { action: Action }) {
 
 export function QuickActionsRow() {
   return (
-    <div className="mt-5 grid grid-cols-3 gap-3">
+    <div className="mt-5 grid grid-cols-2 gap-3">
       {actions.map((action) => (
         <Link
           key={action.label}

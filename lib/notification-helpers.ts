@@ -1,10 +1,3 @@
-/**
- * Helper utilities untuk notifikasi ReBites.
- */
-
-/**
- * Format waktu notifikasi — relatif untuk < 7 hari, absolute untuk lebih.
- */
 export function formatNotificationTime(iso: string): string {
   const now = Date.now();
   const then = new Date(iso).getTime();

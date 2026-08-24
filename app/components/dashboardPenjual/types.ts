@@ -19,13 +19,6 @@ export interface VendorInfo {
   partnerTier: string;
   storeIdMasked: string;
   partnerSince: string;
-  withdrawableBalance: number;
-}
-
-export interface BestMenu {
-  id: string;
-  name: string;
-  image: string;
 }
 
 export type OrderStatus = 'selesai' | 'menunggu-diambil' | 'dibatalkan';

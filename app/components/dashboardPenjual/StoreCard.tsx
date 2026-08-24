@@ -5,13 +5,10 @@ import { ArrowUpRight, BadgeCheck, Store } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { QuickActionsRow } from './QuickActionsRow';
-import { useCountUp } from './useCountUp';
 import { vendorInfo } from './data';
 import { DotPattern, LeafSprig } from './decor';
-import { formatRupiah } from '@/lib/data';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
-import { getSellerWallet, WALLET_UPDATED_EVENT } from '@/lib/wallet-storage';
 import {
   getSellerStoreSettings,
   setStoreOpen,
@@ -19,14 +16,8 @@ import {
 } from '@/lib/store-settings-storage';
 import { useEffect, useState } from 'react';
 
-/**
- * Kartu profil toko: saldo live dari wallet-storage, status Buka/Tutup
- * yang tersimpan (store-settings-storage), lencana UMKM Terverifikasi
- * bila paket mengizinkan, plus label paket aktif.
- */
 export function StoreCard() {
   const { plan } = useSellerPlan();
-  const { ref, value } = useCountUp(getSellerWallet().balance);
 
   const [isOpen, setIsOpen] = useState(true);
 
@@ -34,11 +25,9 @@ export function StoreCard() {
     const refresh = () => setIsOpen(getSellerStoreSettings().isOpen);
     refresh();
     window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-    window.addEventListener(WALLET_UPDATED_EVENT, refresh);
     window.addEventListener('storage', refresh);
     return () => {
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-      window.removeEventListener(WALLET_UPDATED_EVENT, refresh);
       window.removeEventListener('storage', refresh);
     };
   }, []);
@@ -110,23 +99,13 @@ export function StoreCard() {
           {isOpen ? 'Toko Buka' : 'Toko Tutup'}
         </button>
 
-        <div className="relative mt-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="font-display text-lg font-medium leading-tight text-cream-50">
-              {vendorInfo.ownerName}
-            </p>
-            <p className="mt-1 text-[11px] text-cream-50/60">
-              Partner sejak {vendorInfo.partnerSince} · {vendorInfo.storeIdMasked}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-cream-50/70">
-              Bisa Dicairkan
-            </p>
-            <p className="mt-1 font-display text-2xl font-semibold leading-none text-cream-50">
-              <span ref={ref}>{formatRupiah(value)}</span>
-            </p>
-          </div>
+        <div className="relative mt-6">
+          <p className="font-display text-lg font-medium leading-tight text-cream-50">
+            {vendorInfo.ownerName}
+          </p>
+          <p className="mt-1 text-[11px] text-cream-50/60">
+            Partner sejak {vendorInfo.partnerSince} · {vendorInfo.storeIdMasked}
+          </p>
         </div>
       </div>
 

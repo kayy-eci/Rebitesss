@@ -10,12 +10,10 @@ import {
   ShoppingBag,
   TrendingUp,
   Utensils,
-  Wallet,
   X,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ReferralCard } from './ReferralCard';
 import { DotPattern } from './decor';
 
 interface SidebarProps {
@@ -28,8 +26,7 @@ interface NavItem {
   label: string;
   icon: LucideIcon;
   href: string;
-  /** Hanya aktif pada exact match — dipakai Dashboard agar tidak
-      ikut aktif di subroute /pesanan, /menu, dst. */
+
   exact?: boolean;
 }
 
@@ -64,12 +61,6 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Performa Toko',
     icon: TrendingUp,
     href: '/dashboard/penjual/performa',
-  },
-  {
-    id: 'dana',
-    label: 'Penarikan Dana',
-    icon: Wallet,
-    href: '/dashboard/penjual/penarikan',
   },
 ];
 
@@ -145,10 +136,6 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
           <NavItemLink key={item.id} item={item} onClose={onClose} />
         ))}
       </nav>
-
-      <div className="relative px-4 pb-6 pt-4">
-        <ReferralCard />
-      </div>
     </motion.div>
   );
 }

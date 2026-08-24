@@ -3,21 +3,8 @@
 import { useEffect, useState } from 'react';
 import type { CoinTransaction, CoinTransactionType } from '@/lib/types';
 
-/**
- * ReBites Coin — buku besar transaksi di localStorage.
- *
- * - Reward  : 2% dari subtotal produk, diberikan HANYA setelah order
- *             berhasil (sekali per orderId).
- * - Potongan: 1 Coin = Rp1, dipotong HANYA saat order berhasil
- *             (sekali per orderId).
- *
- * Saldo & totalEarned SELALU diturunkan dari daftar transaksi, dan
- * settleOrderCoins menulis potongan+reward dalam SATU penulisan sehingga
- * aman dari double click / double tab.
- */
-
 const TRANSACTIONS_KEY = 'rebites-coin-transactions';
-/* Key lama Fase 5 — hanya untuk migrasi sekali lalu dibuang. */
+
 const LEGACY_KEY = 'rebites-coins';
 const COINS_UPDATED_EVENT = 'rebites-coins-updated';
 const MAX_TRANSACTIONS = 200;
@@ -50,7 +37,6 @@ function readTransactions(): CoinTransaction[] {
   try {
     let raw = window.localStorage.getItem(TRANSACTIONS_KEY);
 
-    /* Migrasi sekali dari penyimpanan Fase 5. */
     if (!raw) {
       const legacy = readLegacyBalance();
       const seeded: CoinTransaction[] = legacy
@@ -76,7 +62,7 @@ function readTransactions(): CoinTransaction[] {
 
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
-    /* Abaikan entri bermasalah agar saldo tetap konsisten. */
+
     return parsed.filter(
       (tx): tx is CoinTransaction =>
         !!tx &&
@@ -121,11 +107,6 @@ function hasTransactionFor(
   return transactions.some((tx) => tx.type === type && tx.orderId === orderId);
 }
 
-/**
- * Selesaikan transaksi Coin satu order — potongan dan/atau reward —
- * dalam SATU penulisan. Idempotent per (orderId, jenis): dipanggil ulang
- * untuk order yang sama tidak akan mengubah saldo lagi.
- */
 export function settleOrderCoins(
   orderId: string,
   { spent, earned }: { spent: number; earned: number },
@@ -173,10 +154,6 @@ export function settleOrderCoins(
   return true;
 }
 
-/**
- * Hook untuk membaca saldo Coin secara realtime (lintas komponen).
- * Sidebar & checkout memakai hook yang sama → sumber data tunggal.
- */
 export function useRebitesCoins(): CoinsSnapshot {
   const [snapshot, setSnapshot] = useState<CoinsSnapshot>(EMPTY_SNAPSHOT);
 

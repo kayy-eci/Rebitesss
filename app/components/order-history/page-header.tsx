@@ -3,11 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 
-/**
- * Header halaman Pesanan Saya — compact dan fungsional.
- * Sidebar global tidak tersedia di halaman ini, jadi navigasi kembali
- * berupa tombol "← Kembali" (router.back()) di atas judul.
- */
 export function OrderPageHeader() {
   const router = useRouter();
 

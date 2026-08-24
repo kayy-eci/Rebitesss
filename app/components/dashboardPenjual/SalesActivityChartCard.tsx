@@ -18,6 +18,7 @@ import { Card } from './Card';
 import { FilterDropdown } from './FilterDropdown';
 import { useCountUp } from './useCountUp';
 import { AVG_PRICE_PER_PORSI, salesActivityPeriod, salesActivityWeek } from './data';
+import { PartnerScoreGauge } from './PartnerScoreGauge';
 import { formatRupiah } from '@/lib/data';
 
 type Period = '7-hari' | '14-hari' | '30-hari';
@@ -83,7 +84,7 @@ export function SalesActivityChartCard() {
     return salesActivityPeriod.slice(-days);
   }, [period]);
 
-  /* Seluruh angka kartu diturunkan dari periode terpilih. */
+
   const totalTerjual = useMemo(
     () => data.reduce((sum, point) => sum + point.terjual, 0),
     [data]
@@ -97,7 +98,7 @@ export function SalesActivityChartCard() {
   const { ref, value } = useCountUp(totalTerjual);
 
   return (
-    <Card className="h-full">
+    <Card>
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
         <div>
           <div className="flex items-baseline gap-2">
@@ -154,21 +155,24 @@ export function SalesActivityChartCard() {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-4 text-xs font-medium text-charcoal-900">
-          <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-green-700" />
-            Terjual
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-sage-500" />
-            Tersisa
-          </span>
-        </div>
-        <p className="text-xs text-sage-500">{totalTersisa} porsi tersisa pada periode ini</p>
-      </div>
+      { }
+      <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_232px]">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-4 text-xs font-medium text-charcoal-900">
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-green-700" />
+                Terjual
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-sage-500" />
+                Tersisa
+              </span>
+            </div>
+            <p className="text-xs text-sage-500">{totalTersisa} porsi tersisa pada periode ini</p>
+          </div>
 
-      <div className="mt-4 h-[230px] w-full">
+          <div className="mt-4 h-[230px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           {kind === 'bar' ? (
             <BarChart data={data} margin={{ top: 6, right: 4, left: -14, bottom: 0 }}>
@@ -244,11 +248,18 @@ export function SalesActivityChartCard() {
             </LineChart>
           )}
         </ResponsiveContainer>
-      </div>
+          </div>
 
-      <p className="sr-only">
-        Statistik penjualan {periodLabel}: {totalTerjual} porsi terjual, {totalTersisa} porsi tersisa.
-      </p>
+          <p className="sr-only">
+            Statistik penjualan {periodLabel}: {totalTerjual} porsi terjual, {totalTersisa} porsi
+            tersisa.
+          </p>
+        </div>
+
+        <div className="lg:border-l lg:border-sage-100 lg:pl-6">
+          <PartnerScoreGauge />
+        </div>
+      </div>
     </Card>
   );
 }

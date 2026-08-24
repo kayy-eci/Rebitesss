@@ -17,14 +17,6 @@ import { OrderDetailModal } from './order-detail-modal';
 import { OrderPageHeader } from './page-header';
 import { Toaster } from '@/app/components/ui/toaster';
 
-/**
- * Pesanan Saya — Transaction History + Order Tracking.
- *
- * Struktur sederhana: Header → Search/Filter → Tab → Daftar Pesanan.
- * Bukan dashboard: tanpa statistik spending/Coin/analytics — semua
- * angka hanya berkaitan dengan transaksi yang pernah dibuat user
- * (identitas via getCurrentUserId).
- */
 export function OrderHistoryView() {
   const { orders, activeOrders, completedOrders, loading } = useOrders();
 
@@ -32,10 +24,9 @@ export function OrderHistoryView() {
   const [query, setQuery] = useState('');
   const [fulfillment, setFulfillment] = useState<FulfillmentFilter>('all');
   const [detailOrder, setDetailOrder] = useState<StoredOrder | null>(null);
-  /* Naikkan tiap review tersimpan agar indikator "✓ Sudah Dinilai" ikut segar. */
+
   const [reviewsTick, setReviewsTick] = useState(0);
 
-  /* Urutan tetap: ongoing terbaru dulu; selesai per completedAt desc. */
   const baseList =
     tab === 'active' ? activeOrders : completedOrders;
 
@@ -60,7 +51,7 @@ export function OrderHistoryView() {
       if (getReviewFor(order.orderId, getCurrentUserId())) map.add(order.orderId);
     }
     return map;
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+
   }, [completedOrders, reviewsTick]);
 
   if (loading) {
@@ -80,7 +71,7 @@ export function OrderHistoryView() {
       <div className="w-full space-y-6">
         <OrderPageHeader />
 
-        {/* Tab + Search/Filter */}
+        { }
         <div className="rounded-2xl border border-hairline bg-white p-4 shadow-[0_10px_30px_-22px_rgba(27,77,50,0.35)] sm:p-5">
           <OrderToolbar
             tab={tab}
@@ -94,7 +85,7 @@ export function OrderHistoryView() {
           />
         </div>
 
-        {/* Daftar pesanan */}
+        { }
         {filteredList.length > 0 ? (
           <div className="space-y-4">
             {filteredList.map((order) => (
@@ -131,7 +122,6 @@ export function OrderHistoryView() {
   );
 }
 
-/* ── Empty states sesuai kondisi ── */
 function EmptyState({
   variant,
   isCompletedTab,
@@ -165,7 +155,7 @@ function EmptyState({
   }
 
   if (variant === 'tab') {
-    /* Tab ini kosong, tapi user punya pesanan di tab sebelah. */
+
     return (
       <div className="flex flex-col items-center rounded-2xl border border-dashed border-hairline bg-cream-50 px-6 py-12 text-center">
         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-green-50 text-green-700">

@@ -90,7 +90,7 @@ export function AccountSidebar({
             transition={{ duration: 0.3, ease: EASE }}
             className="fixed right-0 top-0 z-[80] flex h-full w-[88vw] max-w-[92vw] flex-col overflow-y-auto bg-cream-50 shadow-2xl md:w-[360px] md:max-w-none lg:w-[400px]"
           >
-            {/* Header */}
+            { }
             <header className="flex items-center justify-between px-8 pb-5 pt-7">
               <h2 className="font-inter text-xl font-semibold text-charcoal-900">
                 Profil Pengguna
@@ -109,7 +109,7 @@ export function AccountSidebar({
             </header>
             <div className="mx-8 h-px bg-hairline" />
 
-            {/* Identitas user */}
+            { }
             <div className="flex items-center gap-4 px-8 py-6">
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-green-50 ring-1 ring-hairline">
                 {initials ? (
@@ -131,7 +131,7 @@ export function AccountSidebar({
             </div>
             <div className="mx-8 h-px bg-hairline" />
 
-            {/* Saldo ReBites Coin */}
+            { }
             <div className="px-8 pt-6">
               <div className="flex items-center gap-3.5 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow-sm">
@@ -148,7 +148,7 @@ export function AccountSidebar({
               </div>
             </div>
 
-            {/* CTA Mulai Jualan */}
+            { }
             <div className="px-8 pt-6">
               <Link
                 href="/auth/register/penjual"
@@ -162,7 +162,7 @@ export function AccountSidebar({
               </Link>
             </div>
 
-            {/* Menu akun */}
+            { }
             <nav aria-label="Menu akun" className="mt-5 px-8">
               {ACCOUNT_MENU.map(({ href, label, icon: Icon }) => (
                 <Link
@@ -180,7 +180,7 @@ export function AccountSidebar({
               ))}
             </nav>
 
-            {/* Spacer mendorong logout ke bawah */}
+            { }
             <div className="flex-1" />
 
             <div className="mx-8 h-px bg-hairline" />

@@ -132,7 +132,7 @@ export default function AuthForm({
         if (signInError) throw signInError;
       }
 
-      /* Param ?redirect= menang atas target statis halaman. */
+
       const params = new URLSearchParams(window.location.search);
       window.location.href = params.get("redirect") || redirectTo;
     } catch (err) {

@@ -1,8 +1,3 @@
-/**
- * Single source of truth untuk kategori makanan ReBites.
- * Slug dipakai sebagai URL (`/makanan/[category]`), `name` harus sama persis
- * dengan nilai `FoodItem.category` pada `lib/data.ts`.
- */
 export interface BrowseCategory {
   id: string;
   name: string;

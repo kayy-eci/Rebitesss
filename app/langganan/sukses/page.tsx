@@ -33,7 +33,6 @@ export default function SubscriptionSuccessPage({ searchParams }: SuccessPagePro
     ? METHOD_NAMES[searchParams.method]
     : undefined;
 
-  /* Fallback bila dibuka langsung tanpa param. */
   if (!plan) {
     return (
       <main className="min-h-screen bg-cream">

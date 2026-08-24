@@ -274,9 +274,7 @@ html.lenis body {
   }
 }
 
-/* ── Dialog responsif: bottom-sheet di mobile, modal tercenter di desktop ──
-   Hanya menangani struktur/posisi/animasi; skin visual via utility Tailwind
-   di ui/dialog.tsx agar tetap bisa di-override per pemakaian. */
+
 .dialog-panel {
   position: fixed;
   inset-inline: 0;

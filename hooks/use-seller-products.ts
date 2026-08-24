@@ -7,10 +7,6 @@ import {
   type SellerProduct,
 } from '@/lib/product-storage';
 
-/**
- * Menu milik penjual — tersinkron lintas komponen & tab
- * (custom event + `storage`), pola sama dengan useOrders.
- */
 export function useSellerProducts() {
   const [products, setProducts] = useState<SellerProduct[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -33,7 +29,6 @@ export function useSellerProducts() {
     };
   }, [refresh]);
 
-  /* Unggulan selalu tampil paling atas (benefit ReBites Max). */
   const sorted = useMemo(
     () =>
       [...products].sort((a, b) => {

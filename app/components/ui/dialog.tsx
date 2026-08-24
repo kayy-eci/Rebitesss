@@ -29,21 +29,10 @@ const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-/**
- * Panel dialog responsif:
- * - Mobile (< sm): bottom-sheet menempel bawah layar, slide-up,
- *   tinggi maksimum memakai satuan dvh agar akurat saat keyboard/browser bar muncul.
- * - Desktop (>= sm): modal tercenter dengan zoom halus.
- *
- * Struktur konten yang disarankan (flex-col dari .dialog-panel):
- *   <header tetap terlihat />           ← di luar area scroll
- *   <div className="min-h-0 flex-1 overflow-y-auto">isi panjang</div>
- *   <footer tetap terlihat />           ← opsional, untuk tombol aksi
- */
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-    /** Tampilkan handle bar khas bottom-sheet (hanya tampil di mobile). */
+
     handle?: boolean;
   }
 >(({ className, children, handle = false, ...props }, ref) => (

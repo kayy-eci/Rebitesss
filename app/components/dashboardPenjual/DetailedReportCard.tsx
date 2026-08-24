@@ -17,10 +17,6 @@ interface ReportRow {
   revenue: number;
 }
 
-/**
- * Laporan rinci per hari — fitur paket Standar ke atas. Basic melihat
- * panel terkunci dengan ajakan upgrade.
- */
 export function DetailedReportCard({ period }: { period: StatsPeriod }) {
   const { plan } = useSellerPlan();
 

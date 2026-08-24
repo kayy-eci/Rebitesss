@@ -1,14 +1,5 @@
 'use client';
 
-/**
- * Pembuat notifikasi promosi berdasarkan data nyata aplikasi:
- * - Flash sale items dari urgentItems
- * - Kode promo dari promoCodes
- *
- * Dipanggil saat pembeli pertama kali membuka halaman notifikasi
- * untuk memastikan promosi selalu up-to-date dengan data produk.
- */
-
 import { createNotification, getNotifications } from './notification-storage';
 import { urgentItems, promoCodes } from './data';
 import type { NotificationType } from './notification-storage';
@@ -29,14 +20,10 @@ function markPromosCreated(): void {
   try {
     window.localStorage.setItem(PROMO_STORAGE_KEY, 'true');
   } catch {
-    // ignore
+
   }
 }
 
-/**
- * Buat notifikasi promosi dari data flash sale yang tersedia.
- * Hanya dipanggil sekali per sesi agar tidak spam.
- */
 export function ensurePromoNotifications(userId: string): void {
   if (typeof window === 'undefined') return;
   if (hasCreatedPromos()) return;
@@ -44,7 +31,6 @@ export function ensurePromoNotifications(userId: string): void {
   const now = new Date();
   const hours = now.getHours();
 
-  // Buat notifikasi untuk item flash sale yang sedang aktif
   const activeItems = urgentItems.filter((item) => {
     const [fromH] = item.availableFrom.split(':').map(Number);
     const [toH] = item.availableTo.split(':').map(Number);
@@ -52,7 +38,7 @@ export function ensurePromoNotifications(userId: string): void {
   });
 
   if (activeItems.length > 0) {
-    const item = activeItems[0]; // Ambil item pertama yang aktif
+    const item = activeItems[0];
     createNotification({
       userId,
       role: 'buyer',
@@ -63,7 +49,6 @@ export function ensurePromoNotifications(userId: string): void {
     });
   }
 
-  // Buat notifikasi untuk kode promo yang tersedia
   const validPromo = promoCodes.find((p) => p.isValid);
   if (validPromo) {
     createNotification({
@@ -76,7 +61,6 @@ export function ensurePromoNotifications(userId: string): void {
     });
   }
 
-  // Tambahkan notifikasi umum tentang makanan baru
   createNotification({
     userId,
     role: 'buyer',

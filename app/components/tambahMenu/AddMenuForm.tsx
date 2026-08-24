@@ -60,7 +60,7 @@ export function AddMenuForm() {
     setTouched(true);
     if (!form.name.trim()) return;
 
-    /* Batasan paket ditegakkan saat penyimpanan — bukan sekadar UI. */
+
     if (plan.maxProducts !== null && getSellerProductCount() >= plan.maxProducts) {
       setLimitReached(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -3,11 +3,6 @@
 import { Banknote, QrCode, Wallet } from 'lucide-react';
 import type { PaymentMethod } from '@/lib/types';
 
-/**
- * Semua metode memakai biaya layanan global 2% dari subtotal
- * (lihat SERVICE_FEE_RATE di lib/useOrderCalculation.ts).
- * Tidak ada biaya tetap per metode.
- */
 export const paymentMethods: PaymentMethod[] = [
   {
     id: 'qris',

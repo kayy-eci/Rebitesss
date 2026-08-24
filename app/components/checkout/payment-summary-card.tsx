@@ -59,7 +59,7 @@ export function PaymentSummaryCard() {
           Ringkasan Pesanan
         </p>
 
-        {/* Produk */}
+        { }
         <div className="mt-4 flex items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-charcoal-900">
@@ -74,7 +74,7 @@ export function PaymentSummaryCard() {
           </p>
         </div>
 
-        {/* Rincian biaya */}
+        { }
         <dl className="mt-5 space-y-3 border-t border-sage-500/20 pt-4 text-sm">
           <div className="flex items-center justify-between gap-4">
             <dt className="text-charcoal-500">Subtotal ({quantity} porsi)</dt>
@@ -114,7 +114,7 @@ export function PaymentSummaryCard() {
             </div>
           )}
 
-          {/* Potongan ReBites Coin — hanya muncul saat toggle ON */}
+          { }
           <AnimatePresence initial={false}>
             {summary.coinUsed > 0 && (
               <motion.div
@@ -136,7 +136,7 @@ export function PaymentSummaryCard() {
           </AnimatePresence>
         </dl>
 
-        {/* Reward ReBites Coin */}
+        { }
         <div className="mt-5 flex items-center gap-3 rounded-xl border border-gold-500/30 bg-gold-100/60 px-3.5 py-2.5">
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow-sm">
             <Coins className="h-4 w-4" />

@@ -42,7 +42,7 @@ export function SellerNotificationView() {
 
   return (
     <SellerShell>
-      {/* Header */}
+      { }
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
@@ -68,7 +68,7 @@ export function SellerNotificationView() {
         )}
       </div>
 
-      {/* Filter tabs */}
+      { }
       <div className="mt-6 flex flex-wrap gap-2" role="tablist">
         {FILTER_TABS.map((tab) => (
           <button
@@ -89,7 +89,7 @@ export function SellerNotificationView() {
         ))}
       </div>
 
-      {/* Notification list */}
+      { }
       <div className="mt-5 space-y-2.5">
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center rounded-2xl border border-dashed border-hairline bg-cream-50 px-6 py-14 text-center">

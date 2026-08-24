@@ -68,7 +68,7 @@ const OptionWheel = ({
   draggable = true,
   className = '',
   renderItem,
-  plateSize = 440, 
+  plateSize = 440,
   autoRotate = false,
   autoRotateInterval = 1000
 }: OptionWheelProps) => {
@@ -126,7 +126,7 @@ const OptionWheel = ({
     const els = itemRefs.current;
     const n = cfg.count;
     const mirror = cfg.side === 'right' ? -1 : 1;
-    
+
     const tiltRad = (cfg.tilt * Math.PI) / 180;
     const R = tiltRad > 0.0005 ? cfg.rowH / tiltRad : 0;
     for (let i = 0; i < n; i++) {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, MotionConfig } from 'framer-motion';
 import { Crown } from 'lucide-react';
 import { Reveal } from '@/app/components/reveal';
@@ -13,16 +14,9 @@ import { DetailedReportCard, type StatsPeriod } from '@/app/components/dashboard
 import { DemandAnalyticsCard } from '@/app/components/dashboardPenjual/DemandAnalyticsCard';
 import { FeaturedPromoCard } from '@/app/components/dashboardPenjual/FeaturedPromoCard';
 import { StoreCard } from '@/app/components/dashboardPenjual/StoreCard';
-import { RatingSummaryCard } from '@/app/components/dashboardPenjual/RatingSummaryCard';
-import { PackageStatusCard } from '@/app/components/dashboardPenjual/PackageStatusCard';
+import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
 import { useSellerPlan } from '@/lib/seller-plan';
 
-/**
- * Dashboard Penjual — fokus pada empat hal inti: statistik penjualan,
- * profil & status toko, rating pelayanan, dan status paket. Fitur
- * lanjutan (laporan rinci, analisis pasar, menu unggulan) mengikuti
- * paket langganan aktif.
- */
 export default function VendorDashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [period, setPeriod] = useState<StatsPeriod>('7-hari');
@@ -57,28 +51,34 @@ export default function VendorDashboardPage() {
                     terselamatkan.
                   </p>
                 </div>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-100 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
-                  <Crown className="h-3.5 w-3.5 text-gold-500" />
-                  Paket Aktif · ReBites {plan.label}
-                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-100 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+                    <Crown className="h-3.5 w-3.5 text-gold-500" />
+                    Paket Aktif · ReBites {plan.label}
+                  </span>
+                  { }
+                  <Link
+                    href="/dashboard/penjual/langganan"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-3.5 py-1.5 text-[11px] font-semibold text-green-700 transition-colors hover:bg-green-700/10"
+                  >
+                    Kelola Paket Langganan
+                  </Link>
+                </div>
               </div>
             </motion.div>
 
             <div className="mt-7 grid grid-cols-1 gap-5 lg:grid-cols-12 lg:gap-6">
-              {/* Wilayah kanan — tampil lebih dulu di mobile agar kartu toko dekat atas */}
+              { }
               <div className="order-1 space-y-5 lg:order-2 lg:col-span-4 lg:space-y-6">
                 <Reveal delay={0.05}>
                   <StoreCard />
                 </Reveal>
                 <Reveal delay={0.1}>
-                  <RatingSummaryCard />
-                </Reveal>
-                <Reveal delay={0.15}>
-                  <PackageStatusCard />
+                  <StoreRatingCard />
                 </Reveal>
               </div>
 
-              {/* Wilayah kiri */}
+              { }
               <div className="order-2 space-y-5 lg:order-1 lg:col-span-8 lg:space-y-6">
                 <Reveal delay={0.05}>
                   <SalesStatsCard period={period} onPeriodChange={setPeriod} />

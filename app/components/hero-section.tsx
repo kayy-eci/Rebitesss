@@ -358,7 +358,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Mobile carousel – stays in flow below text */}
+          { }
           <div className="relative z-10 mx-auto mt-12 w-full max-w-[360px] lg:hidden">
             <div className="relative h-[480px] w-full sm:h-[540px]">
               <OptionWheel
@@ -395,11 +395,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/*
-          Desktop carousel – absolutely positioned within the section (full-width)
-          so its right offset is relative to the viewport, not the 1200px container.
-          overflow-hidden lives here only, keeping the hero section itself unclipped.
-        */}
+        { }
         <div className="pointer-events-none absolute right-[clamp(8px,2vw,50px)] top-1/2 z-10 hidden -translate-y-1/2 lg:block">
           <div
             className="pointer-events-auto relative overflow-hidden rounded-[28px]"

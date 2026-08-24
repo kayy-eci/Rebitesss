@@ -7,9 +7,9 @@ import { Card } from './Card';
 interface LockedFeatureCardProps {
   title: string;
   description: string;
-  /** Label paket yang membuka fitur ini, mis. "ReBites Standar". */
+
   requiredPlanLabel: string;
-  /** Slug tujuan upgrade di /langganan/pembayaran. */
+
   upgradeSlug?: 'standar' | 'premium';
   compact?: boolean;
 }

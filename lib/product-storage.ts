@@ -3,15 +3,6 @@
 import { foodItems } from './data';
 import type { FoodItem } from './types';
 
-/**
- * Penyimpanan menu milik penjual (demo: Dapur Ibu Tini) — pola sama
- * dengan order-storage: satu sumber data di localStorage, no-op di
- * server, dan CustomEvent agar seluruh UI ikut segar.
- *
- * Saat storage masih kosong, daftar di-seed dari foodItems milik
- * vendor yang sama sehingga data konsisten dengan sisi pembeli.
- */
-
 export const SELLER_VENDOR_SLUG = 'dapur-ibu-tini';
 export const SELLER_VENDOR_NAME = 'Dapur Ibu Tini';
 
@@ -20,7 +11,7 @@ const STORAGE_KEY = 'rebites-seller-products';
 export const PRODUCTS_UPDATED_EVENT = 'rebites-seller-products-updated';
 
 export interface SellerProduct {
-  /** Id stabil — seed memakai id foodItem asli, tambahan baru PRD-xxx. */
+
   id: string;
   name: string;
   category: string;
@@ -32,11 +23,17 @@ export interface SellerProduct {
   stock: number;
   startTime: string;
   endTime: string;
-  /** Apakah menu dijual sepanjang hari tanpa batas jam. */
+
   allDay?: boolean;
   isSurplusToday: boolean;
-  /** Promosi unggulan — benefit khusus ReBites Max. */
+
   featured?: boolean;
+
+  flashSale?: {
+    price: number;
+    startIso: string;
+    endIso: string;
+  } | null;
   createdAt: string;
 }
 
@@ -90,11 +87,12 @@ function readRaw(): SellerProduct[] | null {
 }
 
 function writeRaw(products: SellerProduct[]): void {
+
+  if (typeof window === 'undefined') return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
   window.dispatchEvent(new Event(PRODUCTS_UPDATED_EVENT));
 }
 
-/** Daftar menu penjual — seed otomatis dari foodItems saat kosong. */
 export function getSellerProducts(): SellerProduct[] {
   const existing = readRaw();
   if (existing) return existing;
@@ -150,26 +148,18 @@ export function deleteSellerProduct(productId: string): void {
   writeRaw(products.filter((product) => product.id !== productId));
 }
 
-/** Menu unggulan aktif (Max) — dipakai lintas halaman. */
 export function getFeaturedProductIds(): string[] {
   return getSellerProducts()
     .filter((product) => product.featured)
     .map((product) => product.id);
 }
 
-/**
- * Cek apakah produk tersedia berdasarkan stok dan waktu penjualan saat ini.
- * Dipakai oleh halaman detail toko (user) agar sinkron dengan dashboard penjual.
- */
 export function isProductAvailable(product: SellerProduct): boolean {
   if (product.stock <= 0) return false;
   if (product.allDay) return true;
   return isWithinSaleWindow(product.startTime, product.endTime);
 }
 
-/**
- * Cek apakah waktu sekarang berada di dalam jam penjualan.
- */
 export function isWithinSaleWindow(
   startTime: string,
   endTime: string
@@ -181,7 +171,7 @@ export function isWithinSaleWindow(
   if (start <= end) {
     return currentMinutes >= start && currentMinutes < end;
   }
-  // melewati tengah malam (mis. 22:00–06:00)
+
   return currentMinutes >= start || currentMinutes < end;
 }
 
@@ -191,10 +181,6 @@ function parseTimeToMinutes(time: string): number {
   return Number(match[1]) * 60 + Number(match[2]);
 }
 
-/**
- * Cari produk penjual berdasarkan id — dipakai halaman detail toko untuk
- * mengambil data stok & jam jual terkini.
- */
 export function getSellerProductById(
   id: string
 ): SellerProduct | undefined {

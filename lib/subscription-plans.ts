@@ -1,10 +1,5 @@
 export type BillingCycle = 'monthly' | 'yearly';
 
-/**
- * Paket langganan penjual ReBites — satu-satunya sumber data paket.
- * Dipakai oleh section pricing landing page & home, halaman pembayaran
- * langganan, dan storage langganan. Slug stabil untuk URL (?plan=…).
- */
 export interface SubscriptionPlan {
   slug: 'basic' | 'standar' | 'premium';
   name: string;
@@ -72,7 +67,6 @@ export function getSubscriptionPlan(
   return SUBSCRIPTION_PLANS.find((plan) => plan.slug === slug);
 }
 
-/** Harga sesuai siklus billing. */
 export function getPlanPrice(
   plan: SubscriptionPlan,
   billing: BillingCycle
@@ -80,7 +74,6 @@ export function getPlanPrice(
   return billing === 'yearly' ? plan.yearly : plan.monthly;
 }
 
-/** Akhir periode langganan dari waktu mulai. */
 export function computePeriodEnd(billing: BillingCycle, from = Date.now()): Date {
   const end = new Date(from);
   if (billing === 'yearly') end.setFullYear(end.getFullYear() + 1);

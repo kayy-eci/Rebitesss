@@ -149,9 +149,6 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
     category?.description ??
     "Temukan makanan berlebih yang masih layak dinikmati di sekitarmu.";
 
-  // Data diimpor dari lib/data secara lokal & sinkron sehingga langsung siap.
-  // Ketika sudah memakai fetch API nanti, set status "loading" selama request
-  // berjalan — skeleton grid di bawah sudah siap dipakai tanpa perlu delay buatan.
   const [status] = useState<"loading" | "ready">("ready");
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -166,7 +163,6 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
-    // Urutan pipeline: kategori → search → lokasi → rating.
     const result = baseCategoryItems
       .filter((item) => {
         if (query === "") return true;
@@ -178,7 +174,6 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
       .filter((item) => matchesDistance(item, filterState.distance))
       .filter((item) => matchesRating(item, filterState.rating));
 
-    // filter() mengembalikan array baru sehingga sort tidak memutasi data sumber.
     const sorted = [...result];
     switch (filterState.sort) {
       case "terdekat":
@@ -192,10 +187,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
         break;
       case "terbaru":
       default:
-        // TODO(sort): pakai `new Date(b.createdAt).getTime() -
-        // new Date(a.createdAt).getTime()` begitu field createdAt tersedia
-        // dari backend. Untuk prototype, urutan data saat ini dipakai
-        // sebagai fallback sementara.
+
         break;
     }
     return sorted;
@@ -227,7 +219,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
       <main className="flex-1 pt-28">
         <section data-nav="cream" className="bg-cream-50 pb-16 pt-6 lg:pb-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {/* Breadcrumb + tombol kembali */}
+            { }
             <Link
               href="/home "
               className={cn(
@@ -239,7 +231,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
               Kembali
             </Link>
 
-            {/* Header kategori */}
+            { }
             <header className="mt-6 max-w-2xl">
               <h1 className="font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
                 {name}
@@ -255,7 +247,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
               </p>
             </header>
 
-            {/* Search — reuse SearchFilterBar (search bar section Rekomendasi di Home/Landing), variant light = struktur glass dengan warna tema terang */}
+            { }
             <div className="mt-8 lg:mt-10">
               <SearchFilterBar
                 query={searchQuery}
@@ -268,7 +260,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
               />
             </div>
 
-            {/* Filter (filter + sorting dalam satu panel) */}
+            { }
             <div className="mt-4">
               <Popover>
                 <PopoverTrigger asChild>
@@ -386,7 +378,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
               </Popover>
             </div>
 
-            {/* Konten utama */}
+            { }
             {isLoading ? (
               <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 sm:gap-5 xl:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, index) => (

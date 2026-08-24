@@ -59,7 +59,7 @@ export function Hero() {
         animate="visible"
         className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.55fr_1fr]"
       >
-  
+
         <motion.div
           variants={item}
           className="relative min-h-[420px] overflow-hidden rounded-3xl shadow-2xl shadow-forest-900/30 lg:min-h-[560px]"

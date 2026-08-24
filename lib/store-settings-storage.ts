@@ -5,15 +5,15 @@ const STORAGE_KEY = 'rebites-seller-store-settings';
 export const STORE_SETTINGS_UPDATED_EVENT = 'rebites-seller-store-updated';
 
 export interface SellerStoreSettings {
-  /** Status toko yang diatur penjual dari card Profil Toko. */
+
   isOpen: boolean;
-  /** Nama toko — bisa diedit dari dashboard. */
+
   storeName: string;
-  /** Deskripsi toko. */
+
   description: string;
-  /** URL foto/logo toko. */
+
   image: string;
-  /** Alamat toko. */
+
   address: string;
 }
 

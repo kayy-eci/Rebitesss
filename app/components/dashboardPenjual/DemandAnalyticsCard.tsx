@@ -6,7 +6,8 @@ import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { LockedFeatureCard } from './LockedFeatureCard';
 import { useSellerPlan } from '@/lib/seller-plan';
-import { bestSellingMenus, salesActivityPeriod } from './data';
+import { salesActivityPeriod } from './data';
+import { useSellerBestSellingMenus } from '@/hooks/use-seller-best-selling';
 
 interface DemandInsight {
   name: string;
@@ -14,12 +15,9 @@ interface DemandInsight {
   trend: number;
 }
 
-/**
- * Analisis permintaan pasar — eksklusif paket Max. Insight diturunkan
- * dari data penjualan 30 hari + menu terlaris (bukan angka acak).
- */
 export function DemandAnalyticsCard() {
   const { plan } = useSellerPlan();
+  const { menus: bestSellers } = useSellerBestSellingMenus();
 
   const insights = useMemo<DemandInsight[]>(() => {
     const last30 = salesActivityPeriod;
@@ -27,21 +25,19 @@ export function DemandAnalyticsCard() {
     const secondHalf = last30.slice(15).reduce((sum, point) => sum + point.terjual, 0);
     const weeklyDemand = Math.round(last30.reduce((sum, point) => sum + point.terjual, 0) / 4);
 
-    /* Bobot deterministik menurun per peringkat menu terlaris, lalu
-       dibagi proporsional dari permintaan mingguan keseluruhan. */
-    const weights = bestSellingMenus.map((_, index) => 1 / (index + 1));
+    const weights = bestSellers.map((_, index) => 1 / (index + 1));
     const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
 
-    return bestSellingMenus.map((menu, index) => {
+    return bestSellers.map((menu, index) => {
       const base = Math.max(4, Math.round(weeklyDemand * (weights[index] / totalWeight)));
-      const swing = ((index % 3) - 1) / 12; // -8.3% .. +8.3% deterministik
+      const swing = ((index % 3) - 1) / 12;
       return {
         name: menu.name,
         demand: base,
         trend: secondHalf > firstHalf ? swing + 0.04 : -Math.abs(swing) - 0.02,
       };
     });
-  }, []);
+  }, [bestSellers]);
 
   if (!plan.demandAnalytics) {
     return (
@@ -70,7 +66,12 @@ export function DemandAnalyticsCard() {
         </span>
       </div>
 
-      <ul className="mt-4 space-y-3">
+      {insights.length === 0 ? (
+        <p className="mt-4 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 p-6 text-center text-xs leading-relaxed text-sage-500">
+          Belum ada menu untuk dianalisis. Tambahkan menu di halaman Menu Saya.
+        </p>
+      ) : (
+        <ul className="mt-4 space-y-3">
         {insights.map((insight) => (
           <li key={insight.name}>
             <div className="flex items-baseline justify-between gap-2 text-xs">
@@ -102,6 +103,7 @@ export function DemandAnalyticsCard() {
           </li>
         ))}
       </ul>
+      )}
       <p className="mt-4 text-[11px] leading-relaxed text-sage-500">
         Estimasi dihitung dari pola penjualan 30 hari terakhirmu. Gunakan untuk menyesuaikan
         stok masak harian.

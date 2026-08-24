@@ -143,7 +143,7 @@ export function OrderSidebar({ open, onClose }: SidebarProps) {
           </ul>
         </nav>
 
-        {/* CTA tanpa angka palsu — hanya ajakan kembali berbelanja. */}
+        { }
         <div className="relative mx-4 mb-6 mt-4 overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/20">
           <Sprout className="pointer-events-none absolute -right-3 -bottom-4 h-24 w-24 text-white/10" />
           <div className="relative p-4">

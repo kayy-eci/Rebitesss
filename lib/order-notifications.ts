@@ -1,18 +1,8 @@
 'use client';
 
-/**
- * Helper untuk membuat notifikasi terkait pesanan.
- * Dipanggil dari order-storage (auto-complete) dan
- * dashboard penjual (manual complete) untuk menghindari duplikasi.
- */
-
 import type { StoredOrder } from './types';
 import { createNotification } from './notification-storage';
 
-/**
- * Tandai order sudah diberi notifikasi "selesai" agar tidak duplikat.
- * Disimpan di field custom `completedNotified` pada order patch.
- */
 const NOTIFIED_ORDERS_KEY = 'rebites-notified-orders';
 
 function getNotifiedOrderIds(): Set<string> {
@@ -37,10 +27,6 @@ function markOrderNotified(orderId: string): void {
   );
 }
 
-/**
- * Buat notifikasi "pesanan selesai" untuk pembeli jika belum pernah dikirim.
- * Aman dipanggil berkali-kali — hanya membuat notifikasi sekali per orderId.
- */
 export function notifyOrderCompleted(order: StoredOrder): void {
   if (!order.userId) return;
 

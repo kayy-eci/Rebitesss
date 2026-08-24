@@ -22,7 +22,6 @@ import { StickyMobileBar } from './sticky-mobile-bar';
 
 const RESERVATION_MINUTES = 35;
 
-/** Bangun OrderDraft dinamis dari produk asli yang dipilih user. */
 function buildOrderDraft(product: NonNullable<
   ReturnType<typeof getProductById>
 >): OrderDraft {
@@ -68,7 +67,7 @@ export function CheckoutView() {
         <CheckoutDecor />
 
         <div className="relative mx-auto max-w-[1400px] px-5 pt-6 sm:px-8 lg:px-12 lg:pt-10">
-          {/* Header mini */}
+          { }
           <div className="flex items-center gap-3">
             <Link
               href="/home"
@@ -91,7 +90,7 @@ export function CheckoutView() {
           </h1>
 
           <div className="mt-8 grid items-start gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:gap-10">
-            {/* Kolom kiri — detail pesanan */}
+            { }
             <div className="space-y-4 sm:space-y-6">
               <OrderItemCard />
 
@@ -107,7 +106,7 @@ export function CheckoutView() {
               <PaymentMethodList />
             </div>
 
-            {/* Kolom kanan — ringkasan pesanan (sticky) */}
+            { }
             <div className="space-y-4 lg:sticky lg:top-28 lg:self-start">
               <PaymentSummaryCard />
               <PickupCodeNote />

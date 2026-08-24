@@ -21,11 +21,6 @@ import { saveSubscription } from '@/lib/subscription-storage';
 import { paymentMethods } from '@/app/components/checkout/payment-methods';
 import { cn } from '@/lib/utils';
 
-/**
- * Checkout langganan penjual — ringkasan paket + metode pembayaran
- * simulasi (pattern sama dengan checkout pembeli). Paket gratis aktif
- * tanpa memilih metode. Demo: tidak ada transaksi sungguhan.
- */
 export function SubscriptionCheckoutView() {
   const router = useRouter();
   const params = useSearchParams();
@@ -37,7 +32,6 @@ export function SubscriptionCheckoutView() {
   const [selectedMethodId, setSelectedMethodId] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
 
-  /* Plan tak dikenal → arahkan balik ke daftar paket. */
   if (!plan) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-2xl border border-dashed border-hairline bg-cream-50 px-6 py-14 text-center">
@@ -48,7 +42,7 @@ export function SubscriptionCheckoutView() {
           Silakan pilih paket langganan terlebih dahulu.
         </p>
         <Link
-          href="/#langganan"
+          href="/dashboard/penjual/langganan"
           className="mt-6 inline-flex h-11 items-center gap-2 rounded-full bg-green-700 px-6 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
         >
           Lihat Paket Langganan
@@ -65,7 +59,6 @@ export function SubscriptionCheckoutView() {
     if (processing || !canPay) return;
     setProcessing(true);
 
-    /* Simulasi proses pembayaran, lalu simpan & lanjut ke sukses. */
     window.setTimeout(() => {
       saveSubscription({
         planSlug: plan.slug,
@@ -80,7 +73,7 @@ export function SubscriptionCheckoutView() {
 
   return (
     <>
-      {/* Kembali */}
+      { }
       <button
         type="button"
         onClick={() => router.back()}
@@ -102,7 +95,7 @@ export function SubscriptionCheckoutView() {
       </section>
 
       <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-5">
-        {/* Ringkasan paket */}
+        { }
         <div className="rounded-2xl border border-hairline bg-white p-5 shadow-[0_10px_30px_-22px_rgba(27,77,50,0.35)] sm:p-6 lg:col-span-3">
           <div className="flex items-start justify-between gap-3">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-600">
@@ -150,7 +143,7 @@ export function SubscriptionCheckoutView() {
           </ul>
         </div>
 
-        {/* Pembayaran */}
+        { }
         <div className="rounded-2xl border border-hairline bg-white p-5 shadow-[0_10px_30px_-22px_rgba(27,77,50,0.35)] sm:p-6 lg:col-span-2">
           <h2 className="font-display text-base font-semibold text-charcoal-900">
             {isFree ? 'Aktivasi' : 'Metode Pembayaran'}
@@ -210,7 +203,7 @@ export function SubscriptionCheckoutView() {
             </div>
           )}
 
-          {/* Total */}
+          { }
           <div className="mt-5 flex items-center justify-between border-t border-hairline pt-4">
             <span className="text-sm font-medium text-charcoal-900">Total bayar</span>
             <span className="font-display text-lg font-semibold tabular-nums text-green-700">

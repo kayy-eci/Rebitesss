@@ -19,7 +19,7 @@ export function VendorSection() {
   const [canRight, setCanRight] = useState(false);
   const { plan } = useSellerPlan();
 
-  /* Benefit paket Standar/Max: toko prioritas tampil paling depan. */
+
   const sortedVendors = plan.priorityListing
     ? [...vendors].sort(
         (a, b) =>

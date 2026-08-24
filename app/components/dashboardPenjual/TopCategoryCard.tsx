@@ -12,11 +12,6 @@ import { useSellerPlan } from '@/lib/seller-plan';
 
 const SEGMENT_COLORS = ['#0F2E1F', '#1B4D32', '#2D6A4F', '#6B9080', '#E4EBE4', '#EAE0C8'];
 
-/**
- * Breakdown kategori per bulan. Paket dengan `historyDays` terbatas
- * (Basic = 30 hari) tidak bisa membuka bulan-bulan sebelum bulan ini —
- * datanya benar-benar disembunyikan, bukan sekadar diberi tanda.
- */
 function useLockedMonths(): string[] {
   const { plan } = useSellerPlan();
 
@@ -30,8 +25,7 @@ function useLockedMonths(): string[] {
 
     return monthOptions
       .filter((option) => {
-        /* Bulan berjalan selalu bisa dibuka; bulan sebelumnya hanya bila
-           masih dalam jendela riwayat paket. */
+
         const [year, month] = option.value.split('-').map(Number);
         const monthStart = new Date(year, month - 1, 1).getTime();
         const isCurrentMonth =

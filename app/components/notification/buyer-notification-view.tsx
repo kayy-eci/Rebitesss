@@ -33,7 +33,6 @@ export function BuyerNotificationView() {
     useNotifications(userId, 'buyer');
   const [filter, setFilter] = useState<NotificationFilter>('all');
 
-  // Pastikan notifikasi promosi dibuat saat pertama kali dibuka
   useEffect(() => {
     ensurePromoNotifications(userId);
   }, [userId]);
@@ -51,7 +50,7 @@ export function BuyerNotificationView() {
 
   return (
     <div className="w-full space-y-5">
-      {/* Header */}
+      { }
       <div className="flex items-center justify-between gap-3">
         <div>
           <Link
@@ -81,7 +80,7 @@ export function BuyerNotificationView() {
         )}
       </div>
 
-      {/* Filter tabs */}
+      { }
       <div className="flex flex-wrap gap-2" role="tablist">
         {FILTER_TABS.map((tab) => (
           <button
@@ -102,7 +101,7 @@ export function BuyerNotificationView() {
         ))}
       </div>
 
-      {/* Notification list */}
+      { }
       <div className="space-y-2.5">
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center rounded-2xl border border-dashed border-hairline bg-cream-50 px-6 py-14 text-center">

@@ -7,30 +7,24 @@ import {
   type StoredSubscription,
 } from './subscription-storage';
 
-/**
- * Entitlement paket penjual — satu-satunya sumber kebenaran untuk
- * pembatasan fitur berdasarkan langganan.
- *
- * - Tanpa langganan aktif (kosong/kadaluarsa/dibatalkan) → ReBites Basic.
- * - Slug `premium` pada subscription-storage ditampilkan sebagai "Max".
- */
-
 export type SellerTier = 'basic' | 'standar' | 'max';
 
 export interface SellerEntitlements {
   tier: SellerTier;
   label: string;
-  /** Maksimal produk yang boleh disimpan; null = tanpa batas. */
+
   maxProducts: number | null;
-  /** Lama riwayat penjualan (hari); null = tanpa batas. */
+
   historyDays: number | null;
+
+  maxFlashSaleProducts: number | null;
   detailedReport: boolean;
   verifiedBadge: boolean;
   priorityListing: boolean;
   featuredPromo: boolean;
   demandAnalytics: boolean;
   prioritySupport: boolean;
-  /** Slug paket untuk CTA upgrade; null = sudah tertinggi. */
+
   upgradeSlug: 'standar' | 'premium' | null;
 }
 
@@ -40,6 +34,7 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
     label: 'ReBites Basic',
     maxProducts: 5,
     historyDays: 30,
+    maxFlashSaleProducts: 0,
     detailedReport: false,
     verifiedBadge: false,
     priorityListing: false,
@@ -53,6 +48,7 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
     label: 'ReBites Standar',
     maxProducts: 25,
     historyDays: null,
+    maxFlashSaleProducts: 1,
     detailedReport: true,
     verifiedBadge: true,
     priorityListing: true,
@@ -66,6 +62,7 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
     label: 'ReBites Max',
     maxProducts: null,
     historyDays: null,
+    maxFlashSaleProducts: null,
     detailedReport: true,
     verifiedBadge: true,
     priorityListing: true,
@@ -85,16 +82,11 @@ export function getSellerEntitlements(
   return ENTITLEMENTS.basic;
 }
 
-/** Pembacaan sinkron (client-only) tanpa hook. */
 export function readSellerPlan(): SellerEntitlements {
   if (typeof window === 'undefined') return ENTITLEMENTS.basic;
   return getSellerEntitlements(getActiveSubscription());
 }
 
-/**
- * Paket penjual saat ini sebagai React state — ikut segar ketika
- * langganan dibeli/ganti di tab lain maupun tab yang sama.
- */
 export function useSellerPlan() {
   const [plan, setPlan] = useState<SellerEntitlements>(ENTITLEMENTS.basic);
   const [hydrated, setHydrated] = useState(false);

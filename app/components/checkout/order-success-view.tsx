@@ -39,16 +39,11 @@ const PAYMENT_NAMES: Record<string, string> = {
   'transfer-bank': 'Transfer Bank',
 };
 
-/**
- * Halaman "Pesanan Berhasil".
- * HANYA menampilkan data order — Coin sudah diberikan saat submit
- * di halaman checkout, sehingga refresh halaman ini tidak menambah Coin.
- */
 export function OrderSuccessView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
-  /* undefined = memuat; null = tidak ditemukan */
+
   const [order, setOrder] = useState<StoredOrder | null | undefined>(
     undefined
   );
@@ -77,7 +72,7 @@ export function OrderSuccessView() {
         transition={{ duration: 0.45, ease: EASE }}
         className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
       >
-        {/* Header sukses */}
+        { }
         <div className="relative overflow-hidden bg-green-700 px-8 pb-10 pt-9 text-center text-white">
           <motion.span
             initial={{ scale: 0, rotate: -30 }}
@@ -99,7 +94,7 @@ export function OrderSuccessView() {
           </p>
         </div>
 
-        {/* Reward Coin */}
+        { }
         <div className="-mt-5 px-6">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
@@ -127,7 +122,7 @@ export function OrderSuccessView() {
           </motion.div>
         </div>
 
-        {/* Ringkasan pesanan */}
+        { }
         <div className="px-6 pb-7 pt-5">
           <div className="flex items-start gap-4 rounded-2xl border border-sage-100 bg-cream-50 p-4">
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-sage-100">

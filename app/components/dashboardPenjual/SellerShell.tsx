@@ -11,10 +11,6 @@ interface SellerShellProps {
   children: ReactNode;
 }
 
-/**
- * Kerangka halaman dashboard penjual — decor, sidebar, topbar, dan
- * container main dipasang sekali agar seluruh route penjual konsisten.
- */
 export function SellerShell({ children }: SellerShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

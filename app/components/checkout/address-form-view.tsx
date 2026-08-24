@@ -41,11 +41,6 @@ function toFormValues(editing: DeliveryAddress | null): AddressFormValues {
   };
 }
 
-/**
- * Tampilan form tambah/edit alamat — dirender DI DALAM popup alamat tunggal
- * (lihat delivery-address-section). Header & footer tetap terlihat;
- * hanya area tengah yang bisa di-scroll saat konten melebihi tinggi sheet.
- */
 export function AddressFormView({
   editing,
   onDone,
@@ -100,9 +95,9 @@ export function AddressFormView({
         </DialogDescription>
       </DialogHeader>
 
-      {/* Area scroll — header di atas dan footer di bawah tetap terlihat */}
+      { }
       <div className="mt-4 min-h-0 flex-1 space-y-4 overflow-y-auto pr-0.5">
-        {/* Label alamat */}
+        { }
         <fieldset>
           <legend className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-charcoal-500">
             Label Alamat
@@ -232,7 +227,7 @@ export function AddressFormView({
         </label>
       </div>
 
-      {/* Footer sticky — tombol aksi tidak pernah ikut tergulung */}
+      { }
       <div className="mt-3 shrink-0 border-t border-sage-100 pt-3">
         {error && (
           <p role="alert" className="mb-2.5 text-xs font-medium text-[#DC2626]">

@@ -1,58 +1,45 @@
 'use client';
 
-/**
- * Sistem notifikasi ReBites — SATU sumber data untuk notifikasi
- * pembeli dan penjual, dipisahkan berdasarkan `role` dan `userId`.
- *
- * Pola sama dengan order-storage / subscription-storage:
- * localStorage sebagai persistence, CustomEvent untuk sinkronisasi
- * lintas komponen, no-op aman di server.
- */
-
 const STORAGE_KEY = 'rebites-notifications';
 export const NOTIFICATIONS_UPDATED_EVENT = 'rebites-notifications-updated';
 const MAX_NOTIFICATIONS = 100;
 
-// ── Types ──
-
 export type NotificationRole = 'buyer' | 'seller';
 
 export type NotificationType =
-  | 'order_created'       // Pesanan dibuat (buyer)
-  | 'payment_success'     // Pembayaran berhasil (buyer)
-  | 'order_delivering'    // Pesanan sedang diantar (buyer)
-  | 'order_completed'     // Pesanan selesai (buyer)
-  | 'promo'               // Promosi makanan (buyer)
-  | 'incoming_order'      // Pesanan masuk (seller)
-  | 'subscription_active' // Langganan aktif (seller)
-  | 'subscription_renewed'// Langganan diperpanjang (seller)
-  | 'subscription_expiring'// Langganan akan berakhir (seller)
-  | 'subscription_changed' // Paket diubah (seller)
-  | 'subscription_expired';// Langganan berakhir (seller)
+  | 'order_created'
+  | 'payment_success'
+  | 'order_delivering'
+  | 'order_completed'
+  | 'promo'
+  | 'incoming_order'
+  | 'subscription_active'
+  | 'subscription_renewed'
+  | 'subscription_expiring'
+  | 'subscription_changed'
+  | 'subscription_expired';
 
 export interface Notification {
   id: string;
-  /** ID user penerima notifikasi. */
+
   userId: string;
-  /** Role penerima: buyer atau seller. */
+
   role: NotificationRole;
-  /** Tipe notifikasi. */
+
   type: NotificationType;
-  /** Judul notifikasi. */
+
   title: string;
-  /** Pesan/deskripsi notifikasi. */
+
   message: string;
-  /** Waktu notifikasi dibuat (ISO string). */
+
   createdAt: string;
-  /** Status sudah dibaca atau belum. */
+
   read: boolean;
-  /** Referensi terkait (orderId, storeId, dll). */
+
   referenceId?: string;
-  /** Link navigasi saat notifikasi diklik. */
+
   href?: string;
 }
-
-// ── Helpers ──
 
 function createNotificationId(): string {
   const stamp = Date.now().toString(36).toUpperCase();
@@ -89,16 +76,10 @@ function writeAll(notifications: Notification[]): void {
     );
     window.dispatchEvent(new Event(NOTIFICATIONS_UPDATED_EVENT));
   } catch {
-    // Storage penuh — abaikan.
+
   }
 }
 
-// ── Public API ──
-
-/**
- * Buat notifikasi baru dan simpan ke localStorage.
- * Return notifikasi yang dibuat.
- */
 export function createNotification(
   input: Omit<Notification, 'id' | 'createdAt' | 'read'>
 ): Notification {
@@ -115,7 +96,6 @@ export function createNotification(
   return notification;
 }
 
-/** Ambil semua notifikasi untuk user + role tertentu. */
 export function getNotifications(
   userId: string,
   role: NotificationRole
@@ -128,7 +108,6 @@ export function getNotifications(
     );
 }
 
-/** Jumlah notifikasi belum dibaca untuk user + role. */
 export function getUnreadCount(
   userId: string,
   role: NotificationRole
@@ -138,7 +117,6 @@ export function getUnreadCount(
   ).length;
 }
 
-/** Tandai satu notifikasi sebagai sudah dibaca. */
 export function markAsRead(notificationId: string): void {
   const all = readAll();
   const next = all.map((n) =>
@@ -147,7 +125,6 @@ export function markAsRead(notificationId: string): void {
   writeAll(next);
 }
 
-/** Tandai semua notifikasi untuk user + role sebagai sudah dibaca. */
 export function markAllAsRead(
   userId: string,
   role: NotificationRole
@@ -159,13 +136,11 @@ export function markAllAsRead(
   writeAll(next);
 }
 
-/** Hapus notifikasi tertentu. */
 export function deleteNotification(notificationId: string): void {
   const all = readAll();
   writeAll(all.filter((n) => n.id !== notificationId));
 }
 
-/** Hapus semua notifikasi untuk user + role. */
 export function clearNotifications(
   userId: string,
   role: NotificationRole

@@ -6,12 +6,6 @@ import type {
   DeliveryAddress,
 } from '@/lib/types';
 
-/**
- * Buku alamat user dengan persistensi localStorage.
- * Alamat tidak pernah hilang saat menambah/mengedit — hanya
- * dipilih mana yang aktif untuk checkout.
- */
-
 const STORAGE_KEY_ADDRESSES = 'rebites-addresses';
 const STORAGE_KEY_SELECTED = 'rebites-selected-address-id';
 
@@ -71,7 +65,6 @@ export function useAddresses() {
     DEFAULT_ADDRESSES[0].id
   );
 
-  /* Hydrate dari localStorage setelah mount (aman SSR/hydration). */
   useEffect(() => {
     const stored = loadAddresses();
     if (stored) setAddresses(stored);
@@ -84,7 +77,6 @@ export function useAddresses() {
     );
   }, []);
 
-  /* Persist setiap perubahan. */
   useEffect(() => {
     window.localStorage.setItem(
       STORAGE_KEY_ADDRESSES,

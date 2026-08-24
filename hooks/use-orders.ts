@@ -11,22 +11,13 @@ import { getCurrentUserId } from '@/lib/current-user';
 
 const SWEEP_INTERVAL_MS = 5_000;
 
-/**
- * Order milik user saat ini (demo: `demo-user`) — satu-satunya sumber
- * data halaman Pesanan Saya.
- *
- * - Filter ketat `order.userId === getCurrentUserId()`.
- * - Sweep berkala: order ongoing yang melewati `estimatedCompletionAt`
- *   otomatis menjadi `completed` (persist di storage, refresh-safe).
- * - Sinkron realtime lintas komponen & tab (custom event + `storage`).
- */
 export function useOrders() {
   const userId = getCurrentUserId();
   const [orders, setOrders] = useState<StoredOrder[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   const refresh = useCallback(() => {
-    /* Sweep dulu agar status kedaluwarsa ikut terbaca. */
+
     completeExpiredOrders();
     setOrders(getUserOrders(userId));
   }, [userId]);
@@ -39,8 +30,6 @@ export function useOrders() {
     window.addEventListener(ORDERS_UPDATED_EVENT, onUpdate);
     window.addEventListener('storage', onUpdate);
 
-    /* Pemindaian status berkala — data statis tidak di-fetch ulang,
-       hanya sweep status yang murah dan idempotent. */
     const intervalId = window.setInterval(onUpdate, SWEEP_INTERVAL_MS);
 
     return () => {

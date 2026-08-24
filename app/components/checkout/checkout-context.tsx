@@ -63,7 +63,6 @@ interface CheckoutContextValue {
   applyPromo: () => void;
   clearPromo: () => void;
 
-  /** Saldo ReBites Coin dari sumber data tunggal (realtime). */
   coinBalance: number;
   useCoins: boolean;
   toggleUseCoins: (on: boolean) => void;
@@ -103,7 +102,6 @@ export function CheckoutProvider({
   const [useCoins, setUseCoins] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  /* Sumber saldo Coin tunggal — sama dengan sidebar. */
   const { balance: coinBalance } = useRebitesCoins();
 
   const submittedRef = useRef(false);
@@ -116,7 +114,6 @@ export function CheckoutProvider({
     updateAddress,
   } = useAddresses();
 
-  /* ── Quantity ── */
   const increment = useCallback(
     () =>
       setQuantity((q) =>
@@ -130,7 +127,6 @@ export function CheckoutProvider({
     []
   );
 
-  /* ── Payment method ── */
   const selectMethod = useCallback((id: string) => setSelectedMethodId(id), []);
 
   const selectedMethod = useMemo(
@@ -138,7 +134,6 @@ export function CheckoutProvider({
     [selectedMethodId]
   );
 
-  /* ── Promo ── */
   const applyPromo = useCallback(() => {
     const code = promoInput.trim().toUpperCase();
     if (!code) return;
@@ -160,7 +155,6 @@ export function CheckoutProvider({
     setPromoError(null);
   }, []);
 
-  /* ── Kalkulasi & validasi ── */
   const summary = useOrderCalculation({
     draft,
     quantity,
@@ -170,7 +164,6 @@ export function CheckoutProvider({
     coinBalance,
   });
 
-  /* Coin opsional — toggle tidak boleh aktif tanpa saldo. */
   const toggleUseCoins = useCallback(
     (on: boolean) => setUseCoins(on && coinBalance > 0),
     [coinBalance],
@@ -186,14 +179,6 @@ export function CheckoutProvider({
 
   const canPay = missingRequirement === null && !submitting;
 
-  /* ── Submit order ──
-     Demo: tidak ada login yang diwajibkan — order langsung diproses dan
-     teratribusi ke identitas demo (getCurrentUserId).
-     Potongan & reward Coin DIPROSES HANYA di sini (sekali per orderId
-     via settleOrderCoins), bukan saat toggle diaktifkan maupun saat
-     halaman sukses dibuka — aman dari refresh/double click.
-     Semua field snapshot (harga, nama, alamat, coin, estimasi) adalah
-     kondisi SAAT transaksi — tidak ikut berubah bila produk berubah. */
   const submitOrder = useCallback(() => {
     if (submitting || submittedRef.current) return;
     if (!selectedMethod && summary.total > 0) return;
@@ -205,8 +190,6 @@ export function CheckoutProvider({
     const orderId = createOrderId();
     const createdAt = new Date().toISOString();
 
-    /* Estimasi deterministik: pickup = persiapan toko;
-       delivery = persiapan + waktu tempuh sesuai jarak toko → alamat. */
     const estimate = estimateOrderMinutes({
       fulfillment,
       distanceKm: draft.distanceKm,
@@ -252,7 +235,6 @@ export function CheckoutProvider({
       coinEarned: summary.coinEarned,
       createdAt,
 
-      /* Snapshot Order Center */
       unitPrice: draft.discountedPrice,
       promoCode: promo?.code ?? null,
       status: 'ongoing',
@@ -274,12 +256,10 @@ export function CheckoutProvider({
       earned: summary.coinEarned,
     });
 
-    /* ── Buat notifikasi setelah order tersimpan ── */
     const buyerUserId = getCurrentUserId();
     const paymentMethodName =
       paymentMethods.find((m) => m.id === selectedMethod?.id)?.name ?? '—';
 
-    // Notifikasi pembeli: pembayaran berhasil
     createNotification({
       userId: buyerUserId,
       role: 'buyer',
@@ -290,7 +270,6 @@ export function CheckoutProvider({
       href: `/riwayatPesanan`,
     });
 
-    // Notifikasi pembeli: pesanan dibuat
     createNotification({
       userId: buyerUserId,
       role: 'buyer',
@@ -301,7 +280,6 @@ export function CheckoutProvider({
       href: `/riwayatPesanan`,
     });
 
-    // Notifikasi penjual: pesanan masuk (hanya untuk toko yang relevan)
     const buyerName =
       order.addressSnapshot?.receiverName ?? 'Pembeli';
     createNotification({

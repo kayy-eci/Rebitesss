@@ -25,11 +25,6 @@ import { useCountdown, formatCountdown } from '@/lib/useCountdown';
 import { formatOrderDate } from '@/lib/order-utils';
 import { toast } from '@/hooks/use-toast';
 
-/**
- * Kartu pesanan. Delivery dan Pickup sengaja TIDAK disamakan:
- *   Delivery → alamat tujuan + jarak + "Perkiraan tiba dalam …"
- *   Pickup   → lokasi toko + "Pesanan siap diambil dalam …"
- */
 export function OrderCard({
   order,
   reviewed,
@@ -55,7 +50,7 @@ export function OrderCard({
       return;
     }
     setReordering(true);
-    /* Arahkan ke checkout dengan produk & quantity dari snapshot order. */
+
     router.push(
       `/detail/pesanan?product=${encodeURIComponent(order.productId)}&qty=${order.quantity}`
     );
@@ -63,7 +58,7 @@ export function OrderCard({
 
   return (
     <article className="group relative flex flex-col rounded-2xl border border-hairline bg-white p-4 shadow-[0_10px_30px_-24px_rgba(27,77,50,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:border-sage-500/40 hover:shadow-[0_16px_38px_-24px_rgba(27,77,50,0.45)] sm:p-5">
-      {/* Baris toko + status */}
+      { }
       <div className="flex items-center gap-2.5">
         <span
           className={
@@ -85,7 +80,7 @@ export function OrderCard({
         <StatusBadge order={order} subStatus={subStatus} />
       </div>
 
-      {/* Produk */}
+      { }
       <div className="mt-3.5 flex items-center gap-3">
         <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-sage-100">
           <SmartImage src={order.image} alt={order.productName} sizes="56px" />
@@ -113,14 +108,14 @@ export function OrderCard({
         </div>
       </div>
 
-      {/* Blok fulfillment — beda antara pickup & delivery */}
+      { }
       {isOngoing ? (
         <OngoingFulfillmentBlock order={order} />
       ) : (
         <CompletedFulfillmentBlock order={order} reviewed={reviewed} />
       )}
 
-      {/* Aksi */}
+      { }
       <div className="mt-auto flex items-center gap-2 pt-3">
         {isOngoing ? (
           <button
@@ -183,7 +178,6 @@ function StatusBadge({
   );
 }
 
-/* ── Ongoing: countdown live ── */
 function OngoingFulfillmentBlock({ order }: { order: StoredOrder }) {
   const remaining = useCountdown(order.estimatedCompletionAt ?? order.createdAt);
   const progress =
@@ -280,7 +274,6 @@ function OngoingFulfillmentBlock({ order }: { order: StoredOrder }) {
   );
 }
 
-/* ── Completed: waktu selesai + indikator review ── */
 function CompletedFulfillmentBlock({
   order,
   reviewed,

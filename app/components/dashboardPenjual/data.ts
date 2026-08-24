@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import type {
   AchievementBadge,
-  BestMenu,
   FavoriteCategory,
   IncomingOrder,
   MonthCategoryData,
@@ -86,16 +85,7 @@ export const vendorInfo: VendorInfo = {
   partnerTier: 'UMKM Partner · Level 3',
   storeIdMasked: 'RB-****-0427',
   partnerSince: '2023',
-  withdrawableBalance: 2450000,
 };
-
-export const bestSellingMenus: BestMenu[] = [
-  { id: 'rice-bowl-ayam', name: 'Rice Bowl Ayam', image: '/foods/ikansayur.jpg' },
-  { id: 'sup-krim-labu', name: 'Sup Krim Labu Hangat', image: '/foods/supkrimlabu.jpg' },
-  { id: 'urap-sayur', name: 'Urap Sayur Segar', image: '/foods/saladkebun.jpg' },
-  { id: 'es-teh-manis', name: 'Es Teh Manis', image: '/foods/kopisusu.jpg' },
-  { id: 'donat-kampung', name: 'Donat Kampung', image: '/foods/boxdonat.jpg' },
-];
 
 export const incomingOrders: IncomingOrder[] = [
   {

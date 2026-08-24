@@ -7,11 +7,7 @@ import { SERVICE_REVIEWS } from '@/app/detail/toko/service-reviews';
 import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
 import { useCountUp } from './useCountUp';
 
-/**
- * Ringkasan rating pelayanan toko — diambil dari data review yang sama
- * dengan halaman detail toko (SERVICE_REVIEWS).
- */
-export function RatingSummaryCard() {
+export function StoreRatingCard() {
   const reviews = useMemo(
     () => SERVICE_REVIEWS[SELLER_VENDOR_SLUG] ?? [],
     []
@@ -35,20 +31,17 @@ export function RatingSummaryCard() {
 
   return (
     <Card>
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-            Rating Pelayanan
-          </p>
-          <h3 className="mt-1 font-display text-lg font-medium tracking-tight text-forest-900">
-            Penilaian Pembeli
-          </h3>
-        </div>
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-sm font-bold text-charcoal-900">Rating Toko</h2>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-sage-500">
+          Penilaian pembeli
+        </span>
       </div>
 
       <div className="mt-4 flex items-center gap-4">
         <p className="font-display text-[38px] font-medium leading-none tracking-tight text-forest-900">
           <span ref={ref}>{value.toFixed(1)}</span>
+          <span className="ml-1 align-middle text-xs font-medium text-sage-500">/ 5.0</span>
         </p>
         <div>
           <div className="flex items-center gap-0.5" aria-hidden>
@@ -63,8 +56,8 @@ export function RatingSummaryCard() {
               />
             ))}
           </div>
-          <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-charcoal-900">
-            {reviews.length} Ulasan
+          <p className="mt-1 whitespace-nowrap text-[11px] font-semibold text-charcoal-900">
+            Total rating: {reviews.length} orang
           </p>
         </div>
       </div>
@@ -74,15 +67,20 @@ export function RatingSummaryCard() {
           const count = distribution[star - 1];
           const percent = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
           return (
-            <li key={star} className="flex items-center gap-2 text-[11px] text-sage-500">
-              <span className="w-8 shrink-0 font-medium">{star} ★</span>
+            <li key={star} className="flex items-center gap-2 text-[11px]">
+              <span className="flex w-7 shrink-0 items-center gap-0.5 font-medium text-charcoal-900">
+                {star}
+                <Star className="h-3 w-3 fill-gold-500 text-gold-500" aria-hidden />
+              </span>
               <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-cream-100">
                 <span
                   className="block h-full rounded-full bg-gold-400"
                   style={{ width: `${percent}%` }}
                 />
               </span>
-              <span className="w-4 shrink-0 text-right tabular-nums">{count}</span>
+              <span className="w-12 shrink-0 text-right tabular-nums text-sage-500">
+                {count} orang
+              </span>
             </li>
           );
         })}

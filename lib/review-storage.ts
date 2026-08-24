@@ -2,12 +2,6 @@
 
 import type { OrderReview } from './types';
 
-/**
- * Review pesanan selesai — penyimpanan localStorage minimal.
- * Terikat orderId + userId agar satu user tidak menilai ulang order
- * yang sama, dan review milik akun lain tidak ikut tampil.
- */
-
 const REVIEWS_KEY = 'rebites-reviews';
 
 function readReviews(): OrderReview[] {
