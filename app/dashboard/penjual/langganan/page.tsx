@@ -35,13 +35,13 @@ export default function LanggananPenjualPage() {
   );
 
   useEffect(() => {
-    const refresh = () => setSubscription(getActiveSubscription());
+    const refresh = () => {
+      getActiveSubscription().then(setSubscription);
+    };
     refresh();
     window.addEventListener(SUBSCRIPTION_UPDATED_EVENT, refresh);
-    window.addEventListener('storage', refresh);
     return () => {
       window.removeEventListener(SUBSCRIPTION_UPDATED_EVENT, refresh);
-      window.removeEventListener('storage', refresh);
     };
   }, []);
 

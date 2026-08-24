@@ -41,25 +41,23 @@ function useVendorOrders() {
   const [orders, setOrders] = useState<StoredOrder[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  const refresh = useCallback(() => {
-    completeExpiredOrders();
+  const refresh = useCallback(async () => {
+    const all = await getAllOrders();
     setOrders(
-      getAllOrders().filter((order) => order.vendorSlug === SELLER_VENDOR_SLUG)
+      all.filter((order) => order.vendorSlug === SELLER_VENDOR_SLUG)
     );
+    setHydrated(true);
   }, []);
 
   useEffect(() => {
     refresh();
-    setHydrated(true);
 
     const onUpdate = () => refresh();
     window.addEventListener(ORDERS_UPDATED_EVENT, onUpdate);
-    window.addEventListener('storage', onUpdate);
-    const intervalId = window.setInterval(onUpdate, SWEEP_INTERVAL_MS);
+    const intervalId = window.setInterval(onUpdate, SWEEP_INTERVAL_MS * 6);
 
     return () => {
       window.removeEventListener(ORDERS_UPDATED_EVENT, onUpdate);
-      window.removeEventListener('storage', onUpdate);
       window.clearInterval(intervalId);
     };
   }, [refresh]);
@@ -197,19 +195,20 @@ export default function PesananMasukPage() {
   const [tab, setTab] = useState<OrderTab>('berlangsung');
 
   const handleComplete = useCallback((orderId: string) => {
-    const order = getOrderById(orderId);
-    patchOrder(orderId, {
-      status: 'completed',
-      completedAt: new Date().toISOString(),
-    });
-
-    if (order) {
-      notifyOrderCompleted({
-        ...order,
+    getOrderById(orderId).then((order) => {
+      patchOrder(orderId, {
         status: 'completed',
         completedAt: new Date().toISOString(),
       });
-    }
+
+      if (order) {
+        notifyOrderCompleted({
+          ...order,
+          status: 'completed',
+          completedAt: new Date().toISOString(),
+        });
+      }
+    });
   }, []);
 
   const tabs = [

@@ -64,10 +64,15 @@ export function SubscriptionCheckoutView() {
         planSlug: plan.slug,
         billing,
         paymentMethodId: isFree ? null : selectedMethodId,
+      }).then((result) => {
+        if (!result) {
+          setProcessing(false);
+          return;
+        }
+        router.push(
+          `/langganan/sukses?plan=${plan.slug}&billing=${billing}`
+        );
       });
-      router.push(
-        `/langganan/sukses?plan=${plan.slug}&billing=${billing}`
-      );
     }, 1_100);
   };
 

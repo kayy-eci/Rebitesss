@@ -365,16 +365,17 @@ function FlashSalePanel({
       setError('Periode Flash Sale tidak valid.');
       return;
     }
-    const result = setFlashSale(product.id, {
+    setFlashSale(product.id, {
       price: priceNum,
       startIso: startDate.toISOString(),
       endIso: endDate.toISOString(),
+    }).then((result) => {
+      if (!result.ok) {
+        setError(result.error ?? 'Gagal menyimpan Flash Sale.');
+        return;
+      }
+      setEditing(false);
     });
-    if (!result.ok) {
-      setError(result.error ?? 'Gagal menyimpan Flash Sale.');
-      return;
-    }
-    setEditing(false);
   };
 
   const draftDiscount =

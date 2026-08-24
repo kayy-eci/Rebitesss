@@ -24,6 +24,16 @@ const inputCls =
 const labelCls =
   'mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-charcoal-900';
 
+async function uploadDataUrl(dataUrl: string): Promise<string | null> {
+  try {
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    return await uploadProductImage(blob, `menu-${Date.now()}.jpg`);
+  } catch {
+    return null;
+  }
+}
+
 function SectionTitle({ number, title }: { number: string; title: string }) {
   return (
     <div className="mb-4 flex items-center gap-2.5">
@@ -88,11 +98,8 @@ export function AddMenuForm() {
     (async () => {
       let imageUrl = form.photo || '/foods/ikansayur.jpg';
 
-      if (form.photo instanceof File || form.photo instanceof Blob) {
-        const uploaded = await uploadProductImage(
-          form.photo,
-          form.photo instanceof File ? form.photo.name : undefined
-        );
+      if (typeof form.photo === 'string' && form.photo.startsWith('data:image')) {
+        const uploaded = await uploadDataUrl(form.photo);
         if (uploaded) imageUrl = uploaded;
       }
 
@@ -149,7 +156,7 @@ export function AddMenuForm() {
           <p className="mt-2 text-sm leading-relaxed text-sage-500">
             Paket {plan.label} membatasi{' '}
             <span className="font-bold text-charcoal-900">
-              {getSellerProductCount()}/{plan.maxProducts} produk
+              {productCount}/{plan.maxProducts} produk
             </span>
             . Hapus salah satu menu di Menu Saya, atau upgrade ke{' '}
             {plan.tier === 'basic' ? 'ReBites Standar (25 produk)' : 'ReBites Max (tanpa batas)'}{' '}
@@ -464,7 +471,7 @@ export function AddMenuForm() {
                 </button>
                 <p className="text-center text-[11px] text-sage-500">
                   {plan.maxProducts !== null
-                    ? `Kuota terpakai ${getSellerProductCount()}/${plan.maxProducts} produk · paket ${plan.label}`
+                    ? `Kuota terpakai ${productCount}/${plan.maxProducts} produk · paket ${plan.label}`
                     : `Kuota produk tanpa batas · paket ${plan.label}`}
                 </p>
               </div>
