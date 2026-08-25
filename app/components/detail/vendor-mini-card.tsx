@@ -33,7 +33,7 @@ export function VendorMiniCard({ vendor }: { vendor: VendorInfo }) {
       </div>
 
       <Link
-        href="/detail/product"
+        href={`/detail/toko?id=${encodeURIComponent(vendor.id)}`}
         className="group inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-sage-500/50 px-4 py-2 text-sm font-semibold text-green-700 transition-colors duration-200 hover:bg-green-700 hover:text-white sm:self-auto"
       >
         Lihat Toko

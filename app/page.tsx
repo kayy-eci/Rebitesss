@@ -216,6 +216,19 @@ export default function Home() {
                   lebih terjangkau.
                 </p>
               </Reveal>
+
+              <Reveal delay={0.25}>
+                <p className="mt-4 max-w-lg font-sans text-sm leading-[1.85] text-muted-foreground">
+                  Saat ini{" "}
+                  <span className="font-semibold text-[#C8A882]">ReBites</span>{" "}
+                  beroperasi khusus di{" "}
+                  <span className="font-semibold text-[#C8A882]">
+                    Kota Depok
+                  </span>
+                  , sebagai langkah awal membangun ekosistem penyelamatan
+                  makanan berbasis komunitas sebelum meluas ke kota lain.
+                </p>
+              </Reveal>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">

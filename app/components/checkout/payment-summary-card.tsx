@@ -93,7 +93,7 @@ export function PaymentSummaryCard() {
           )}
 
           <div className="flex items-center justify-between gap-4">
-            <dt className="text-charcoal-500">Biaya layanan (2%)</dt>
+            <dt className="text-charcoal-500">Biaya admin</dt>
             <dd className="font-medium tabular-nums text-charcoal-900">
               <AnimatedNumber
                 value={summary.serviceFee}
@@ -184,7 +184,7 @@ export function PaymentSummaryCard() {
           whileTap={canPay ? { scale: 0.98 } : undefined}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
-            "mt-6 w-full rounded-full py-3.5 text-sm font-semibold transition-colors duration-200",
+            "mx-auto mt-6 flex w-fit items-center whitespace-nowrap rounded-full px-8 py-3.5 text-sm font-semibold transition-colors duration-200",
             canPay
               ? "bg-green-700 text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
               : "cursor-not-allowed bg-sage-100 text-sage-500"

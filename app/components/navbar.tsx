@@ -176,7 +176,7 @@ export function ProfileNavbar() {
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
             className={cn(
-              'flex h-16 items-center justify-between rounded-full border px-4 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-5 lg:px-7',
+              'flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8',
               overDark
                 ? 'border-white/15 bg-forest-dark/75 text-white'
                 : 'border-hairline/70 bg-cream/80 text-forest-dark'

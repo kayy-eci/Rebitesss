@@ -8,11 +8,11 @@ import type {
   PromoCode,
 } from './types';
 
-export const SERVICE_FEE_RATE = 0.02;
+export const ADMIN_FEE_AMOUNT = 2000;
 
 export const DELIVERY_FEE = 8000;
 
-export const REBITES_COIN_RATE = 0.02;
+export const REBITES_COIN_RATE = 0.005;
 
 export const COIN_VALUE = 1;
 
@@ -42,7 +42,7 @@ export function useOrderCalculation({
     const discount = promo?.isValid
       ? Math.round((subtotal * promo.percentOff) / 100)
       : 0;
-    const serviceFee = Math.round(subtotal * SERVICE_FEE_RATE);
+    const serviceFee = ADMIN_FEE_AMOUNT;
     const deliveryFee = fulfillment === 'delivery' ? DELIVERY_FEE : 0;
     const totalBeforeCoin = Math.max(
       0,

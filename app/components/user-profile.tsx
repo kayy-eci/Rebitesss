@@ -226,7 +226,7 @@ function ProfileSidebar() {
           type="button"
           onClick={() => setEditing((v) => !v)}
           className={cn(
-            'mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full border px-5 py-2.5 font-inter text-sm font-semibold transition-colors duration-300',
+            'mx-auto mt-5 inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full border px-5 py-2.5 font-inter text-sm font-semibold transition-colors duration-300',
             editing
               ? 'bg-forest text-white'
               : 'border-forest/30 text-forest hover:bg-forest hover:text-white',

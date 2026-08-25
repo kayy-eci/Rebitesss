@@ -404,7 +404,7 @@ function FoodCard({
           <Link
             href={`/auth/register?produk=${item.id}`}
             onClick={(event) => event.stopPropagation()}
-            className="mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]"
+            className="mx-auto mt-1 flex w-fit items-center gap-2 whitespace-nowrap rounded-full bg-green-700 px-8 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]"
           >
             <ShoppingCart className="h-4 w-4" />
             Beli Sekarang

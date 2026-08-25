@@ -111,7 +111,7 @@ export function StoreCard() {
 
       <Link
         href={`/detail/toko?id=${SELLER_VENDOR_SLUG}`}
-        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-sage-100 bg-white px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
+        className="mt-4 inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full border border-sage-100 bg-white px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
       >
         <Store className="h-3.5 w-3.5 text-green-700" />
         Lihat Profil Toko

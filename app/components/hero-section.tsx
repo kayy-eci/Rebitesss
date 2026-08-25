@@ -122,7 +122,7 @@ export function HeroSection() {
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
             className={cn(
-              "flex h-16 items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
+              "flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
               navIsDark
                 ? "border-white/15 bg-forest-dark/70 text-white"
                 : "border-hairline/70 bg-transparent text-forest-dark",

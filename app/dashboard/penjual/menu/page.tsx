@@ -34,7 +34,6 @@ import {
   type FlashSaleStatus,
 } from '@/lib/flash-sale';
 import type { SellerProduct } from '@/lib/product-storage';
-import { MENU_CATEGORIES } from '@/app/components/tambahMenu/types';
 import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
 import { Card } from '@/app/components/dashboardPenjual/Card';
 import { SmartImage } from '@/app/components/SmartImage';
@@ -45,6 +44,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/app/components/ui/dialog';
+import { EditProductModal } from '@/app/components/tambahMenu/EditProductModal';
 
 function ProductLimitMeter() {
   const { plan } = useSellerPlan();
@@ -616,71 +616,17 @@ function MenuCard({
   flashUsed,
   onUpgradeClick,
   onQuotaBlocked,
+  onEdit,
 }: {
   product: SellerProduct;
   flashQuota: number;
   flashUsed: number;
   onUpgradeClick: () => void;
   onQuotaBlocked: () => void;
+  onEdit: () => void;
 }) {
   const { plan } = useSellerPlan();
   const [confirmingDelete, setConfirmingDelete] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [editName, setEditName] = useState(product.name);
-  const [editCategory, setEditCategory] = useState(product.category);
-  const [editPrice, setEditPrice] = useState(product.surplusPrice);
-  const [editError, setEditError] = useState('');
-  const [editSuccess, setEditSuccess] = useState(false);
-
-  const startEdit = () => {
-    setEditName(product.name);
-    setEditCategory(product.category);
-    setEditPrice(product.surplusPrice);
-    setEditError('');
-    setEditSuccess(false);
-    setEditing(true);
-  };
-
-  const cancelEdit = () => {
-    setEditName(product.name);
-    setEditCategory(product.category);
-    setEditPrice(product.surplusPrice);
-    setEditError('');
-    setEditing(false);
-  };
-
-  const saveEdit = () => {
-    setEditError('');
-    const name = editName.trim();
-    if (!name) {
-      setEditError('Nama menu tidak boleh kosong.');
-      return;
-    }
-    if (!editCategory) {
-      setEditError('Kategori tidak boleh kosong.');
-      return;
-    }
-    if (typeof editPrice !== 'number' || editPrice < 0) {
-      setEditError('Harga harus berupa angka dan tidak boleh negatif.');
-      return;
-    }
-    const discountPercent =
-      product.originalPrice > 0
-        ? Math.max(
-            0,
-            Math.round((1 - editPrice / product.originalPrice) * 100)
-          )
-        : 0;
-    patchSellerProduct(product.id, {
-      name,
-      category: editCategory,
-      surplusPrice: editPrice,
-      discountPercent,
-    });
-    setEditing(false);
-    setEditSuccess(true);
-    setTimeout(() => setEditSuccess(false), 2500);
-  };
 
   const handleToggleFeatured = () => {
     patchSellerProduct(product.id, { featured: !product.featured });
@@ -724,124 +670,31 @@ function MenuCard({
         </span>
       </div>
 
-      {editing ? (
-        <div className="mt-3 space-y-3">
-          { }
-          <div>
-            <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-charcoal-900">
-              Nama Menu
-            </label>
-            <input
-              type="text"
-              value={editName}
-              onChange={(e) => setEditName(e.target.value)}
-              className="w-full rounded-lg border border-sage-200 bg-white px-3 py-2 text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-600/20"
-              placeholder="Nama menu"
-            />
-          </div>
-
-          { }
-          <div>
-            <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-charcoal-900">
-              Kategori
-            </label>
-            <select
-              value={editCategory}
-              onChange={(e) => setEditCategory(e.target.value)}
-              className="w-full rounded-lg border border-sage-200 bg-white px-3 py-2 text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-600/20"
-            >
-              {MENU_CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          { }
-          <div>
-            <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-charcoal-900">
-              Harga Jual (Rp)
-            </label>
-            <input
-              type="number"
-              value={editPrice}
-              onChange={(e) => setEditPrice(Number(e.target.value))}
-              className="w-full rounded-lg border border-sage-200 bg-white px-3 py-2 text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-600/20"
-              min={0}
-            />
-          </div>
-
-          { }
-          {editError && (
-            <p className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-2.5 py-1.5 text-[11px] font-medium text-red-600">
-              <XCircle className="h-3.5 w-3.5 shrink-0" />
-              {editError}
-            </p>
-          )}
-          {editSuccess && (
-            <p className="inline-flex items-center gap-1.5 rounded-lg bg-green-50 px-2.5 py-1.5 text-[11px] font-medium text-green-700">
-              <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-              Berhasil disimpan!
-            </p>
-          )}
-
-          { }
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={saveEdit}
-              className="inline-flex items-center gap-1.5 rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/20 transition-colors hover:bg-green-600"
-            >
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              Simpan
-            </button>
-            <button
-              type="button"
-              onClick={cancelEdit}
-              className="inline-flex items-center gap-1.5 rounded-full border border-sage-200 bg-white px-4 py-2 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-sage-50"
-            >
-              <XCircle className="h-3.5 w-3.5" />
-              Batal
-            </button>
-          </div>
+      <div className="mt-3 flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className="truncate text-sm font-bold text-charcoal-900">
+            {product.name}
+          </h3>
+          <p className="mt-0.5 text-xs text-sage-500">{product.category}</p>
         </div>
-      ) : (
-        <>
-          <div className="mt-3 flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <h3 className="truncate text-sm font-bold text-charcoal-900">
-                {product.name}
-              </h3>
-              <p className="mt-0.5 text-xs text-sage-500">{product.category}</p>
-            </div>
-            <button
-              type="button"
-              onClick={startEdit}
-              aria-label={`Edit ${product.name}`}
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sage-200 text-charcoal-500 transition-colors hover:border-green-600 hover:bg-green-50 hover:text-green-700"
-            >
-              <Pencil className="h-3 w-3" />
-            </button>
-          </div>
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label={`Edit ${product.name}`}
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sage-200 text-charcoal-500 transition-colors hover:border-green-600 hover:bg-green-50 hover:text-green-700"
+        >
+          <Pencil className="h-3 w-3" />
+        </button>
+      </div>
 
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-sm font-bold text-green-700">
-              {formatRupiah(product.surplusPrice)}
-            </span>
-            <span className="text-xs text-charcoal-500 line-through">
-              {formatRupiah(product.originalPrice)}
-            </span>
-          </div>
-
-          {editSuccess && !editing && (
-            <p className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-green-50 px-2.5 py-1.5 text-[11px] font-medium text-green-700">
-              <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-              Perubahan tersimpan
-            </p>
-          )}
-        </>
-      )}
+      <div className="mt-2 flex items-baseline gap-2">
+        <span className="text-sm font-bold text-green-700">
+          {formatRupiah(product.surplusPrice)}
+        </span>
+        <span className="text-xs text-charcoal-500 line-through">
+          {formatRupiah(product.originalPrice)}
+        </span>
+      </div>
 
       { }
       <div className="mt-3">
@@ -984,6 +837,9 @@ export default function MenuSayaPage() {
 
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [quotaBlocked, setQuotaBlocked] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<SellerProduct | null>(
+    null,
+  );
 
   const [, setStatusTick] = useState(0);
 
@@ -1078,9 +934,16 @@ export default function MenuSayaPage() {
             flashUsed={flashUsed}
             onUpgradeClick={() => setUpgradeOpen(true)}
             onQuotaBlocked={() => setQuotaBlocked(true)}
+            onEdit={() => setEditingProduct(product)}
           />
         ))}
       </div>
+
+      <EditProductModal
+        product={editingProduct}
+        open={editingProduct !== null}
+        onClose={() => setEditingProduct(null)}
+      />
 
       { }
       <Dialog open={upgradeOpen} onOpenChange={setUpgradeOpen}>

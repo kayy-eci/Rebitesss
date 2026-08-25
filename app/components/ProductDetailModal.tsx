@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -13,6 +14,7 @@ import {
   MapPin,
   Truck,
   Shield,
+  ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatIDR, type ProductDetail } from "@/app/detail/product/data";
@@ -201,11 +203,19 @@ export function ProductDetailModal({
             </h2>
 
             { }
-            <p className="mt-1.5 text-sm text-charcoal-500">
-              oleh{" "}
-              <span className="font-medium text-charcoal-900">
+            <p className="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-charcoal-500">
+              <span>oleh</span>
+              <Link
+                href={`/detail/toko?id=${encodeURIComponent(product.vendor.id)}`}
+                onClick={onClose}
+                className={cn(
+                  "group inline-flex items-center gap-1 rounded-full font-medium text-charcoal-900 underline-offset-4 transition-colors hover:text-green-700 hover:underline",
+                  FOCUS_RING,
+                )}
+              >
                 {product.vendor.name}
-              </span>
+                <ArrowUpRight className="h-3.5 w-3.5 text-charcoal-500 transition-colors group-hover:text-green-700" />
+              </Link>
             </p>
 
             { }
@@ -323,7 +333,7 @@ export function ProductDetailModal({
                 onClick={handleAddToCart}
                 disabled={added}
                 className={cn(
-                  "flex h-[52px] flex-1 items-center justify-center gap-2 rounded-full bg-forest-dark px-6 text-sm font-semibold text-white shadow-lg shadow-forest-900/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest hover:shadow-xl active:scale-[0.98]",
+                  "flex h-[52px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-forest-dark px-6 text-sm font-semibold text-white shadow-lg shadow-forest-900/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest hover:shadow-xl active:scale-[0.98] sm:flex-none sm:min-w-[180px]",
                   added && "bg-green-600",
                   FOCUS_RING,
                 )}

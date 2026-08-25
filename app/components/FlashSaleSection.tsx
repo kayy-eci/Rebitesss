@@ -307,7 +307,7 @@ function UrgentCard({
             }}
             aria-label={`Lihat detail ${item.name}`}
             className={cn(
-              "mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
+              "mx-auto mt-1 flex w-fit items-center gap-2 whitespace-nowrap rounded-full px-8 py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
               "bg-[#225138] text-white hover:bg-[#C8A882]",
               FOCUS_RING,
             )}

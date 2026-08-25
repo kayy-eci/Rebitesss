@@ -157,7 +157,7 @@ export function OrderDetailModal({
                     accent
                   />
                 )}
-                <Row label="Biaya layanan" value={formatRupiah(order.serviceFee)} />
+                <Row label="Biaya admin" value={formatRupiah(order.serviceFee)} />
                 {order.deliveryFee > 0 && (
                   <Row label="Biaya pengantaran" value={formatRupiah(order.deliveryFee)} />
                 )}

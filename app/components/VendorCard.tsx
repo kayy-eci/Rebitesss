@@ -98,7 +98,7 @@ export function VendorCard({
         <Link
           href={`/detail/toko?id=${vendor.id}`}
           className={cn(
-            'group/cta mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#C8A882] active:scale-[0.98]',
+            'group/cta mt-3 inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#C8A882] active:scale-[0.98]',
             FOCUS_RING
           )}
         >

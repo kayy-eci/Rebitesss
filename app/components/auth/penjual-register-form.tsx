@@ -15,6 +15,7 @@ import {
   Mail,
   Lock,
   CheckCircle2,
+  ChevronDown,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,6 +38,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/app/components/ui/popover";
+import { Checkbox } from "@/app/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -78,7 +86,9 @@ const step1Schema = z
 
 const step2Schema = z.object({
   businessName: z.string().min(1, "Nama usaha wajib diisi."),
-  category: z.string().min(1, "Kategori usaha wajib dipilih."),
+  categories: z
+    .array(z.string())
+    .min(1, "Pilih minimal satu kategori usaha."),
   address: z.string().min(1, "Alamat usaha wajib diisi."),
   city: z.string().min(1, "Kota wajib dipilih."),
   description: z.string().optional(),
@@ -175,7 +185,7 @@ export default function PenjualRegisterForm() {
     resolver: zodResolver(step2Schema),
     defaultValues: {
       businessName: "",
-      category: "",
+      categories: [],
       address: "",
       city: "",
       description: "",
@@ -296,7 +306,7 @@ export default function PenjualRegisterForm() {
           user_id: userId,
           business_name: s2.businessName,
           description: s2.description || null,
-          category: s2.category,
+          category: s2.categories.join(", "),
           address: s2.address,
           city: s2.city,
           logo_url: logoUrl,
@@ -549,37 +559,82 @@ export default function PenjualRegisterForm() {
 
                   <FormField
                     control={step2Form.control}
-                    name="category"
-                    render={({ field }) => (
-                      <FormItem>
-                        <div>
-                          <div className="mb-2.5 flex items-baseline gap-4">
-                            <label className="block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6B6A63]">
-                              Kategori Usaha
-                            </label>
+                    name="categories"
+                    render={({ field }) => {
+                      const selected = (field.value ?? []) as string[];
+                      const toggleCategory = (k: string) => {
+                        const next = selected.includes(k)
+                          ? selected.filter((c) => c !== k)
+                          : [...selected, k];
+                        field.onChange(next);
+                      };
+                      return (
+                        <FormItem>
+                          <div>
+                            <div className="mb-2.5 flex items-baseline gap-4">
+                              <label className="block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6B6A63]">
+                                Kategori Jualan
+                              </label>
+                              <span className="font-sans text-[10px] text-[#6B6A63]/50">
+                                Bisa pilih lebih dari satu
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3 border-b border-[#DEDACF] pb-2 transition-colors duration-200 focus-within:border-[#225138]">
+                              <Tag className="h-4 w-4 shrink-0 text-[#6B6A63]/60" />
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <button
+                                    type="button"
+                                    aria-label="Pilih kategori jualan"
+                                    className={cn(
+                                      "flex w-full items-center justify-between gap-2 bg-transparent px-0 py-1 text-left font-sans text-[15px] outline-none",
+                                      selected.length > 0
+                                        ? "text-[#1B3F2C]"
+                                        : "text-[#6B6A63]/40"
+                                    )}
+                                  >
+                                    <span className="truncate">
+                                      {selected.length > 0
+                                        ? selected.join(", ")
+                                        : "Pilih kategori kuliner"}
+                                    </span>
+                                    <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                                  </button>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                  align="start"
+                                  className="w-72 rounded-xl p-2"
+                                >
+                                  <div className="space-y-0.5">
+                                    {KATEGORI_KULINER.map((k) => {
+                                      const checked = selected.includes(k);
+                                      return (
+                                        <label
+                                          key={k}
+                                          className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-[#F7F5EF]"
+                                        >
+                                          <Checkbox
+                                            checked={checked}
+                                            onCheckedChange={() =>
+                                              toggleCategory(k)
+                                            }
+                                            className="data-[state=checked]:border-[#225138] data-[state=checked]:bg-[#225138]"
+                                          />
+                                          <span className="font-sans text-sm text-[#1B3F2C]">
+                                            {k}
+                                          </span>
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3 border-b border-[#DEDACF] pb-2 transition-colors duration-200 focus-within:border-[#225138]">
-                            <Tag className="h-4 w-4 shrink-0 text-[#6B6A63]/60" />
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <SelectTrigger className="w-full border-0 border-b-[#DEDACF] bg-transparent px-0 py-1 font-sans text-[15px] text-[#1B3F2C] shadow-none focus:ring-0 focus:ring-offset-0 [&>span]:text-left">
-                                <SelectValue placeholder="Pilih kategori kuliner" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {KATEGORI_KULINER.map((k) => (
-                                  <SelectItem key={k} value={k}>
-                                    {k}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                        <FormMessage className="font-sans text-[13px]" />
-                      </FormItem>
-                    )}
+                          <FormMessage className="font-sans text-[13px]" />
+                        </FormItem>
+                      );
+                    }}
                   />
 
                   <FormField
