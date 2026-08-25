@@ -1,7 +1,16 @@
-'use client';
+﻿'use client';
 
-import { supabase } from './supabase';
+import { supabase, hasSupabaseConfig } from './supabase';
+import { DATA_SOURCE } from './data-source';
+import * as localOrders from './local/order-storage';
 import type { StoredOrder, FulfillmentMode, DeliveryAddress } from './types';
+
+/** true = pesanan disimpan lokal (localStorage), bukan Supabase. */
+function isLocalStore(): boolean {
+  return (
+    DATA_SOURCE === 'local' || (DATA_SOURCE === 'auto' && !hasSupabaseConfig)
+  );
+}
 
 export const ORDERS_UPDATED_EVENT = 'rebites-orders-updated';
 
@@ -95,6 +104,10 @@ function storedOrderToRow(order: StoredOrder): OrderRow {
 }
 
 export async function saveOrder(order: StoredOrder): Promise<void> {
+  if (isLocalStore()) {
+    localOrders.saveOrder(order);
+    return;
+  }
   const { error } = await supabase
     .from('orders')
     .insert(storedOrderToRow(order));
@@ -106,6 +119,9 @@ export async function saveOrder(order: StoredOrder): Promise<void> {
 }
 
 export async function getUserOrders(userId: string | null | undefined): Promise<StoredOrder[]> {
+  if (isLocalStore()) {
+    return localOrders.getUserOrders(userId);
+  }
   if (!userId) return [];
   const { data, error } = await supabase
     .from('orders')
@@ -120,6 +136,9 @@ export async function getUserOrders(userId: string | null | undefined): Promise<
 }
 
 export async function getAllOrders(): Promise<StoredOrder[]> {
+  if (isLocalStore()) {
+    return localOrders.getAllOrders();
+  }
   const { data, error } = await supabase
     .from('orders')
     .select('*')
@@ -132,6 +151,9 @@ export async function getAllOrders(): Promise<StoredOrder[]> {
 }
 
 export async function getOrderById(orderId: string): Promise<StoredOrder | undefined> {
+  if (isLocalStore()) {
+    return localOrders.getAllOrders().find((order) => order.orderId === orderId);
+  }
   const { data, error } = await supabase
     .from('orders')
     .select('*')
@@ -152,6 +174,9 @@ export async function patchOrder(
   orderId: string,
   patch: Partial<StoredOrder>
 ): Promise<StoredOrder | undefined> {
+  if (isLocalStore()) {
+    return localOrders.patchOrder(orderId, patch);
+  }
   const payload: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(patch)) {
     const column = PATCH_COLUMN_MAP[key] ?? key;
@@ -176,6 +201,9 @@ export async function patchOrder(
 
 /** Menandai pesanan ongoing yang lewat estimasi selesai sebagai completed. */
 export async function completeExpiredOrders(userId: string | null | undefined): Promise<boolean> {
+  if (isLocalStore()) {
+    return localOrders.completeExpiredOrders();
+  }
   if (!userId) return false;
   const orders = await getUserOrders(userId);
   const now = Date.now();
@@ -198,6 +226,10 @@ export async function completeExpiredOrders(userId: string | null | undefined): 
 
 /** Kurangi stok produk secara atomik lewat RPC reserve_stock. */
 export async function reserveStock(productSlug: string, quantity: number): Promise<boolean> {
+  if (isLocalStore()) {
+    // Mode lokal: stok divalidasi di UI seperti sebelum integrasi database.
+    return quantity > 0;
+  }
   const { data, error } = await supabase.rpc('reserve_stock', {
     p_slug: productSlug,
     p_quantity: quantity,

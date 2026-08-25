@@ -1,10 +1,22 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, hasSupabaseConfig } from '@/lib/supabase';
+import { DATA_SOURCE } from '@/lib/data-source';
+import {
+  settleOrderCoins as localSettleOrderCoins,
+  useRebitesCoins as useLocalRebitesCoins,
+} from '@/lib/local/rebites-coins';
 import type { CoinTransaction, CoinTransactionType } from '@/lib/types';
 
 const COINS_UPDATED_EVENT = 'rebites-coins-updated';
+
+/** true = buku transaksi koin disimpan lokal (localStorage). */
+function isLocalLedger(): boolean {
+  return (
+    DATA_SOURCE === 'local' || (DATA_SOURCE === 'auto' && !hasSupabaseConfig)
+  );
+}
 
 export interface CoinsSnapshot {
   balance: number;
@@ -69,6 +81,9 @@ export async function settleOrderCoins(
   { spent, earned }: { spent: number; earned: number }
 ): Promise<boolean> {
   if (!orderId) return false;
+  if (isLocalLedger()) {
+    return localSettleOrderCoins(orderId, { spent, earned });
+  }
 
   const {
     data: { session },
@@ -114,9 +129,14 @@ export async function settleOrderCoins(
 }
 
 export function useRebitesCoins(): CoinsSnapshot {
+  // Dipanggil tanpa syarat agar urutan hooks selalu konsisten; hasilnya
+  // hanya dipakai saat mode lokal aktif.
+  const localSnapshot = useLocalRebitesCoins();
+
   const [snapshot, setSnapshot] = useState<CoinsSnapshot>(EMPTY_SNAPSHOT);
 
   const refresh = useCallback(async () => {
+    if (isLocalLedger()) return;
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -129,6 +149,8 @@ export function useRebitesCoins(): CoinsSnapshot {
   }, []);
 
   useEffect(() => {
+    if (isLocalLedger()) return;
+
     refresh();
 
     const channel = supabase
@@ -145,5 +167,8 @@ export function useRebitesCoins(): CoinsSnapshot {
     };
   }, [refresh]);
 
-  return useMemo(() => snapshot, [snapshot]);
+  return useMemo(
+    () => (isLocalLedger() ? localSnapshot : snapshot),
+    [localSnapshot, snapshot]
+  );
 }

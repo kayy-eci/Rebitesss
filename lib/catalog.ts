@@ -1,8 +1,22 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { supabase } from './supabase';
+import { supabase, hasSupabaseConfig } from './supabase';
+import { DATA_SOURCE } from './data-source';
+import {
+  foodItems as localFoodItems,
+  urgentItems as localUrgentItems,
+  vendors as localVendors,
+  promoCodes as localPromoCodes,
+} from './local/data';
 import type { FoodItem, PromoCode, UrgentItem, UrgentSlot, Vendor } from './types';
+
+/** true = katalog dilayani dari dataset lokal, bukan database Supabase. */
+function isLocalSource(): boolean {
+  return (
+    DATA_SOURCE === 'local' || (DATA_SOURCE === 'auto' && !hasSupabaseConfig)
+  );
+}
 
 export interface CatalogData {
   foodItems: FoodItem[];
@@ -60,7 +74,7 @@ function umkmToVendor(row: UmkmRow, itemCount: number): Vendor {
     category: row.category ?? 'Makanan Berat',
     itemCount,
     address: row.address ?? '',
-    openHours: row.open_hours ?? '09.00–21.00',
+    openHours: row.open_hours ?? '09.00â€“21.00',
     description: row.description ?? '',
   };
 }
@@ -72,6 +86,9 @@ export async function fetchFoodItems(): Promise<FoodItem[]> {
 }
 
 async function queryFoodItems(): Promise<FetchResult<FoodItem>> {
+  if (isLocalSource()) {
+    return { items: localFoodItems, error: null };
+  }
   const { data, error } = await supabase
     .from('products')
     .select('*, umkm:umkm_profiles(business_name)')
@@ -90,6 +107,9 @@ export async function fetchUrgentItems(): Promise<UrgentItem[]> {
 }
 
 async function queryUrgentItems(): Promise<FetchResult<UrgentItem>> {
+  if (isLocalSource()) {
+    return { items: localUrgentItems, error: null };
+  }
   const { data, error } = await supabase
     .from('products')
     .select('*, umkm:umkm_profiles(business_name)')
@@ -116,6 +136,9 @@ export async function fetchVendors(): Promise<Vendor[]> {
 }
 
 async function queryVendors(): Promise<FetchResult<Vendor>> {
+  if (isLocalSource()) {
+    return { items: localVendors, error: null };
+  }
   const [umkmResult, productResult] = await Promise.all([
     supabase.from('umkm_profiles').select('*').order('rating', { ascending: false }),
     supabase.from('products').select('umkm_id'),
@@ -184,6 +207,9 @@ function rowToPromoCode(row: Record<string, any>): PromoCode {
 }
 
 export async function getValidPromoCodes(): Promise<PromoCode[]> {
+  if (isLocalSource()) {
+    return localPromoCodes.filter((promo) => promo.isValid);
+  }
   const { data, error } = await supabase
     .from('promo_codes')
     .select('*')
@@ -198,6 +224,13 @@ export async function getValidPromoCodes(): Promise<PromoCode[]> {
 export async function validatePromoCode(code: string): Promise<PromoCode | null> {
   const trimmed = code.trim().toUpperCase();
   if (!trimmed) return null;
+  if (isLocalSource()) {
+    return (
+      localPromoCodes.find(
+        (promo) => promo.code.toUpperCase() === trimmed && promo.isValid
+      ) ?? null
+    );
+  }
   const { data, error } = await supabase
     .from('promo_codes')
     .select('*')
