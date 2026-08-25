@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, Info, Lock, Minus, Plus, Save } from 'lucide-react';
@@ -8,8 +8,10 @@ import { cn } from '@/lib/utils';
 import { Card } from '@/app/components/dashboardPenjual/Card';
 import { Reveal } from '@/app/components/reveal';
 import {
+  PRODUCTS_UPDATED_EVENT,
   getSellerProductCount,
   saveSellerProduct,
+  uploadProductImage,
 } from '@/lib/product-storage';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { PhotoPicker } from './PhotoPicker';
@@ -21,6 +23,16 @@ const inputCls =
   'w-full rounded-xl border border-sage-100 bg-white px-4 py-3 text-sm text-charcoal-900 placeholder:text-sage-500 transition-colors focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-600/20';
 const labelCls =
   'mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-charcoal-900';
+
+async function uploadDataUrl(dataUrl: string): Promise<string | null> {
+  try {
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    return await uploadProductImage(blob, `menu-${Date.now()}.jpg`);
+  } catch {
+    return null;
+  }
+}
 
 function SectionTitle({ number, title }: { number: string; title: string }) {
   return (
@@ -48,46 +60,75 @@ export function AddMenuForm() {
   const [saved, setSaved] = useState(false);
   const [savedName, setSavedName] = useState('');
   const [limitReached, setLimitReached] = useState(false);
+  const [savingProduct, setSavingProduct] = useState(false);
+  const [productCount, setProductCount] = useState(0);
   const { plan } = useSellerPlan();
 
+  const refreshCount = useCallback(() => {
+    getSellerProductCount().then(setProductCount);
+  }, []);
+
+  useEffect(() => {
+    refreshCount();
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, refreshCount);
+    return () => {
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, refreshCount);
+    };
+  }, [refreshCount]);
+
   const isQuotaFull =
-    plan.maxProducts !== null && getSellerProductCount() >= plan.maxProducts;
+    plan.maxProducts !== null && productCount >= plan.maxProducts;
 
   const set = <K extends keyof MenuFormState>(key: K, value: MenuFormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
   const handleSave = () => {
     setTouched(true);
-    if (!form.name.trim()) return;
+    if (!form.name.trim() || savingProduct) return;
 
 
-    if (plan.maxProducts !== null && getSellerProductCount() >= plan.maxProducts) {
+    if (plan.maxProducts !== null && productCount >= plan.maxProducts) {
       setLimitReached(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
-    saveSellerProduct({
-      name: form.name.trim(),
-      category: form.category,
-      description: form.description.trim(),
-      image: form.photo || '/foods/ikansayur.jpg',
-      originalPrice: form.normalPrice,
-      surplusPrice: form.surplusPrice,
-      discountPercent:
-        form.normalPrice > 0
-          ? Math.max(0, Math.round((1 - form.surplusPrice / form.normalPrice) * 100))
-          : 0,
-      stock: form.stock,
-      startTime: form.startTime,
-      endTime: form.endTime,
-      isSurplusToday: form.isSurplusToday,
-      featured: false,
-    });
+    setSavingProduct(true);
 
-    setSavedName(form.name.trim());
-    setSaved(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    (async () => {
+      let imageUrl = form.photo || '/foods/ikansayur.jpg';
+
+      if (typeof form.photo === 'string' && form.photo.startsWith('data:image')) {
+        const uploaded = await uploadDataUrl(form.photo);
+        if (uploaded) imageUrl = uploaded;
+      }
+
+      const created = await saveSellerProduct({
+        name: form.name.trim(),
+        category: form.category,
+        description: form.description.trim(),
+        image: imageUrl,
+        originalPrice: form.normalPrice,
+        surplusPrice: form.surplusPrice,
+        discountPercent:
+          form.normalPrice > 0
+            ? Math.max(0, Math.round((1 - form.surplusPrice / form.normalPrice) * 100))
+            : 0,
+        stock: form.stock,
+        startTime: form.startTime,
+        endTime: form.endTime,
+        isSurplusToday: form.isSurplusToday,
+        featured: false,
+      });
+
+      setSavingProduct(false);
+      if (!created) return;
+
+      setSavedName(form.name.trim());
+      setSaved(true);
+      refreshCount();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })();
   };
 
   const handleReset = () => {
@@ -115,7 +156,7 @@ export function AddMenuForm() {
           <p className="mt-2 text-sm leading-relaxed text-sage-500">
             Paket {plan.label} membatasi{' '}
             <span className="font-bold text-charcoal-900">
-              {getSellerProductCount()}/{plan.maxProducts} produk
+              {productCount}/{plan.maxProducts} produk
             </span>
             . Hapus salah satu menu di Menu Saya, atau upgrade ke{' '}
             {plan.tier === 'basic' ? 'ReBites Standar (25 produk)' : 'ReBites Max (tanpa batas)'}{' '}
@@ -430,7 +471,7 @@ export function AddMenuForm() {
                 </button>
                 <p className="text-center text-[11px] text-sage-500">
                   {plan.maxProducts !== null
-                    ? `Kuota terpakai ${getSellerProductCount()}/${plan.maxProducts} produk · paket ${plan.label}`
+                    ? `Kuota terpakai ${productCount}/${plan.maxProducts} produk · paket ${plan.label}`
                     : `Kuota produk tanpa batas · paket ${plan.label}`}
                 </p>
               </div>

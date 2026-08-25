@@ -2,16 +2,16 @@
 
 import { Bell, CircleHelp, Menu, Search } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/app/components/ui/avatar';
-import { getCurrentUser } from '@/lib/current-user';
+import { useCurrentUser } from '@/lib/current-user';
 
 type HeaderProps = {
   onOpenMenu: () => void;
 };
 
 export function OrderHeader({ onOpenMenu }: HeaderProps) {
-  const user = getCurrentUser();
-  const displayName = user.fullName || user.email || 'Tamu';
-  const initials = (user.fullName || user.email || '?')
+  const { user } = useCurrentUser();
+  const displayName = user?.fullName || user?.email || 'Tamu';
+  const initials = (user?.fullName || user?.email || '?')
     .split(/[\s@.]+/)
     .filter(Boolean)
     .slice(0, 2)

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formatRupiah, urgentItems } from "@/lib/data";
+import { formatRupiah } from "@/lib/data";
+import { useCatalog } from "@/lib/catalog";
 import { useCountdown, formatCountdown } from "@/lib/useCountdown";
 import { SmartImage } from "@/app/components/SmartImage";
 import { SoftBlob } from "@/app/components/ornaments";
@@ -354,9 +355,16 @@ export function FlashSaleSection({
   const [sellerFlashItems, setSellerFlashItems] = useState<
     FlashSaleCardItem[]
   >([]);
+  const { urgentItems, loading: catalogLoading } = useCatalog();
 
   useEffect(() => {
-    setSellerFlashItems(getActiveFlashSaleProducts());
+    let mounted = true;
+    getActiveFlashSaleProducts().then((items) => {
+      if (mounted) setSellerFlashItems(items);
+    });
+    return () => {
+      mounted = false;
+    };
   }, [tick]);
 
   const staticSlotItems: FlashSaleCardItem[] = activeSlot

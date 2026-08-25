@@ -1,13 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type {
-  AddressLabel,
-  DeliveryAddress,
-} from '@/lib/types';
-
-const STORAGE_KEY_ADDRESSES = 'rebites-addresses';
-const STORAGE_KEY_SELECTED = 'rebites-selected-address-id';
+import { supabase } from '@/lib/supabase';
+import { useCurrentUser } from '@/lib/current-user';
+import type { AddressLabel, DeliveryAddress } from '@/lib/types';
 
 export interface AddressFormValues {
   label: AddressLabel;
@@ -20,99 +16,132 @@ export interface AddressFormValues {
   note?: string;
 }
 
-const DEFAULT_ADDRESSES: DeliveryAddress[] = [
-  {
-    id: 'addr-rumah',
-    label: 'Rumah',
-    receiverName: 'Arga',
-    phone: '081234567890',
-    province: 'Jawa Barat',
-    city: 'Bogor',
-    district: 'Bogor Utara',
-    fullAddress: 'Jl. Contoh No. 123, Tegal Gundil',
-    note: 'Titip di pos ronda jika saya sedang keluar.',
-  },
-];
+type AddressRow = Record<string, any>;
 
-function loadAddresses(): DeliveryAddress[] | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY_ADDRESSES);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as DeliveryAddress[];
-    if (!Array.isArray(parsed) || parsed.length === 0) return null;
-    return parsed.filter((item) => item && item.id && item.fullAddress);
-  } catch {
-    return null;
-  }
+function rowToAddress(row: AddressRow): DeliveryAddress {
+  return {
+    id: row.id,
+    label: row.label as AddressLabel,
+    receiverName: row.receiver_name ?? '',
+    phone: row.phone ?? '',
+    province: row.province ?? '',
+    city: row.city ?? '',
+    district: row.district ?? '',
+    fullAddress: row.full_address ?? '',
+    note: row.note ?? undefined,
+  };
 }
 
-function loadSelectedId(): string | null {
-  if (typeof window === 'undefined') return null;
-  return window.localStorage.getItem(STORAGE_KEY_SELECTED);
-}
-
-function createAddressId(): string {
-  return `addr-${Date.now().toString(36)}-${Math.random()
-    .toString(36)
-    .slice(2, 6)}`;
+function valuesToRow(values: AddressFormValues): AddressRow {
+  return {
+    label: values.label,
+    receiver_name: values.receiverName,
+    phone: values.phone,
+    province: values.province,
+    city: values.city,
+    district: values.district,
+    full_address: values.fullAddress,
+    note: values.note ?? null,
+  };
 }
 
 export function useAddresses() {
-  const [addresses, setAddresses] =
-    useState<DeliveryAddress[]>(DEFAULT_ADDRESSES);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>(
-    DEFAULT_ADDRESSES[0].id
+  const { userId, loading: userLoading } = useCurrentUser();
+  const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (userLoading) return;
+    if (!userId) {
+      setAddresses([]);
+      setSelectedAddressId(null);
+      setLoading(false);
+      return;
+    }
+
+    (async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('addresses')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true });
+      if (!mounted) return;
+      const list = error ? [] : (data ?? []).map(rowToAddress);
+      setAddresses(list);
+      const selected = list.find((item) => item.id) ?? null;
+      setSelectedAddressId((prev) =>
+        prev && list.some((item) => item.id === prev) ? prev : selected?.id ?? null
+      );
+      setLoading(false);
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [userId, userLoading]);
+
+  const selectAddress = useCallback(
+    (id: string) => {
+      setSelectedAddressId(id);
+      if (!userId) return;
+      (async () => {
+        await supabase
+          .from('addresses')
+          .update({ is_selected: false })
+          .eq('user_id', userId)
+          .neq('id', id);
+        await supabase.from('addresses').update({ is_selected: true }).eq('id', id);
+      })();
+    },
+    [userId]
   );
 
-  useEffect(() => {
-    const stored = loadAddresses();
-    if (stored) setAddresses(stored);
-    const list = stored ?? DEFAULT_ADDRESSES;
-    const storedId = loadSelectedId();
-    setSelectedAddressId(
-      storedId && list.some((item) => item.id === storedId)
-        ? storedId
-        : list[0].id
-    );
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(
-      STORAGE_KEY_ADDRESSES,
-      JSON.stringify(addresses)
-    );
-  }, [addresses]);
-
-  useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY_SELECTED, selectedAddressId);
-  }, [selectedAddressId]);
-
-  const selectAddress = useCallback((id: string) => {
-    setSelectedAddressId(id);
-  }, []);
-
-  const addAddress = useCallback((values: AddressFormValues) => {
-    const newAddress: DeliveryAddress = { id: createAddressId(), ...values };
-    setAddresses((prev) => [...prev, newAddress]);
-    setSelectedAddressId(newAddress.id);
-    return newAddress;
-  }, []);
+  const addAddress = useCallback(
+    async (values: AddressFormValues): Promise<DeliveryAddress | null> => {
+      if (!userId) return null;
+      const { data, error } = await supabase
+        .from('addresses')
+        .insert({ user_id: userId, ...valuesToRow(values) })
+        .select()
+        .maybeSingle();
+      if (error || !data) {
+        console.error('[use-addresses] gagal menambah alamat:', error?.message);
+        return null;
+      }
+      const created = rowToAddress(data);
+      setAddresses((prev) => [...prev, created]);
+      selectAddress(created.id);
+      return created;
+    },
+    [userId, selectAddress]
+  );
 
   const updateAddress = useCallback(
-    (id: string, values: AddressFormValues) => {
-      setAddresses((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, ...values } : item))
-      );
+    async (id: string, values: AddressFormValues): Promise<void> => {
+      if (!userId) return;
+      const { data, error } = await supabase
+        .from('addresses')
+        .update(valuesToRow(values))
+        .eq('id', id)
+        .eq('user_id', userId)
+        .select()
+        .maybeSingle();
+      if (error || !data) {
+        console.error('[use-addresses] gagal memperbarui alamat:', error?.message);
+        return;
+      }
+      const updated = rowToAddress(data);
+      setAddresses((prev) => prev.map((item) => (item.id === id ? updated : item)));
     },
-    []
+    [userId]
   );
 
   const selectedAddress = useMemo(
-    () =>
-      addresses.find((item) => item.id === selectedAddressId) ??
-      addresses[0] ??
-      null,
+    () => addresses.find((item) => item.id === selectedAddressId) ?? addresses[0] ?? null,
     [addresses, selectedAddressId]
   );
 
@@ -123,5 +152,6 @@ export function useAddresses() {
     selectAddress,
     addAddress,
     updateAddress,
+    loading,
   };
 }

@@ -7,37 +7,39 @@ import {
   completeExpiredOrders,
   getUserOrders,
 } from '@/lib/order-storage';
-import { getCurrentUserId } from '@/lib/current-user';
+import { useCurrentUser } from '@/lib/current-user';
 
-const SWEEP_INTERVAL_MS = 5_000;
+const SWEEP_INTERVAL_MS = 30_000;
 
 export function useOrders() {
-  const userId = getCurrentUserId();
+  const { userId, loading: userLoading } = useCurrentUser();
   const [orders, setOrders] = useState<StoredOrder[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  const refresh = useCallback(() => {
-
-    completeExpiredOrders();
-    setOrders(getUserOrders(userId));
+  const refresh = useCallback(async () => {
+    if (!userId) {
+      setOrders([]);
+      setHydrated(true);
+      return;
+    }
+    await completeExpiredOrders(userId);
+    const list = await getUserOrders(userId);
+    setOrders(list);
+    setHydrated(true);
   }, [userId]);
 
   useEffect(() => {
+    if (userLoading) return;
     refresh();
-    setHydrated(true);
 
-    const onUpdate = () => setOrders(getUserOrders(userId));
-    window.addEventListener(ORDERS_UPDATED_EVENT, onUpdate);
-    window.addEventListener('storage', onUpdate);
-
-    const intervalId = window.setInterval(onUpdate, SWEEP_INTERVAL_MS);
+    window.addEventListener(ORDERS_UPDATED_EVENT, refresh);
+    const intervalId = window.setInterval(refresh, SWEEP_INTERVAL_MS);
 
     return () => {
-      window.removeEventListener(ORDERS_UPDATED_EVENT, onUpdate);
-      window.removeEventListener('storage', onUpdate);
+      window.removeEventListener(ORDERS_UPDATED_EVENT, refresh);
       window.clearInterval(intervalId);
     };
-  }, [userId, refresh]);
+  }, [userLoading, refresh]);
 
   const activeOrders = useMemo(
     () =>
@@ -63,6 +65,6 @@ export function useOrders() {
     activeOrders,
     completedOrders,
     hydrated,
-    loading: !hydrated,
+    loading: !hydrated || userLoading,
   };
 }

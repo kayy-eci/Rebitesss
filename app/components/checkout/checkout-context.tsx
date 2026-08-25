@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -16,22 +17,30 @@ import type {
   PaymentMethod,
   PromoCode,
   StoredOrder,
+  Vendor,
 } from '@/lib/types';
 import { useOrderCalculation } from '@/lib/useOrderCalculation';
 import {
   estimateOrderMinutes,
   getVendorPreparationMinutes,
 } from '@/lib/delivery-estimate';
-import { createOrderId, saveOrder } from '@/lib/order-storage';
-import { createNotification } from '@/lib/notification-storage';
-import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
+import {
+  createOrderId,
+  reserveStock,
+  saveOrder,
+} from '@/lib/order-storage';
+import {
+  createNotification,
+  getUmkmOwnerUserId,
+} from '@/lib/notification-storage';
 import { settleOrderCoins, useRebitesCoins } from '@/hooks/use-rebites-coins';
-import { getCurrentUserId } from '@/lib/current-user';
+import { useCurrentUser } from '@/lib/current-user';
 import {
   useAddresses,
   type AddressFormValues,
 } from '@/hooks/use-addresses';
-import { promoCodes, vendors, formatRupiah } from '@/lib/data';
+import { formatRupiah } from '@/lib/data';
+import { fetchVendors, validatePromoCode } from '@/lib/catalog';
 import { paymentMethods } from './payment-methods';
 
 interface CheckoutContextValue {
@@ -92,6 +101,12 @@ export function CheckoutProvider({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const { user } = useCurrentUser();
+
+  const [vendors, setVendors] = useState<Vendor[]>([]);
+  useEffect(() => {
+    fetchVendors().then(setVendors);
+  }, []);
 
   const [quantity, setQuantity] = useState(initialQuantity);
   const [fulfillment, setFulfillment] = useState<FulfillmentMode>('pickup');
@@ -137,16 +152,15 @@ export function CheckoutProvider({
   const applyPromo = useCallback(() => {
     const code = promoInput.trim().toUpperCase();
     if (!code) return;
-    const match = promoCodes.find(
-      (p) => p.code.toUpperCase() === code && p.isValid
-    );
-    if (match) {
-      setPromo(match);
-      setPromoError(null);
-    } else {
-      setPromo(null);
-      setPromoError('Kode promo tidak valid');
-    }
+    validatePromoCode(code).then((match) => {
+      if (match) {
+        setPromo(match);
+        setPromoError(null);
+      } else {
+        setPromo(null);
+        setPromoError('Kode promo tidak valid');
+      }
+    });
   }, [promoInput]);
 
   const clearPromo = useCallback(() => {
@@ -181,118 +195,146 @@ export function CheckoutProvider({
 
   const submitOrder = useCallback(() => {
     if (submitting || submittedRef.current) return;
+    if (!user) {
+      router.push('/auth/login');
+      return;
+    }
     if (!selectedMethod && summary.total > 0) return;
     if (fulfillment === 'delivery' && !selectedAddress) return;
 
     submittedRef.current = true;
     setSubmitting(true);
 
-    const orderId = createOrderId();
-    const createdAt = new Date().toISOString();
+    (async () => {
+      try {
+        // 1. Kunci stok secara atomik; batal kalau stok kurang.
+        const reserved = await reserveStock(draft.productId, quantity);
+        if (!reserved) {
+          setSubmitting(false);
+          submittedRef.current = false;
+          setPromoError('Stok tidak mencukupi, pesanan dibatalkan.');
+          return;
+        }
 
-    const estimate = estimateOrderMinutes({
-      fulfillment,
-      distanceKm: draft.distanceKm,
-      vendorSlug: draft.vendorSlug,
-    });
-    const estimatedCompletionAt = new Date(
-      Date.now() + estimate.estimatedMinutes * 60_000
-    ).toISOString();
+        const orderId = createOrderId();
+        const createdAt = new Date().toISOString();
 
-    const vendorInfo = vendors.find((v) => v.id === draft.vendorSlug);
+        const estimate = estimateOrderMinutes({
+          fulfillment,
+          distanceKm: draft.distanceKm,
+          vendorSlug: draft.vendorSlug,
+        });
+        const estimatedCompletionAt = new Date(
+          Date.now() + estimate.estimatedMinutes * 60_000
+        ).toISOString();
 
-    const order: StoredOrder = {
-      orderId,
-      userId: getCurrentUserId(),
-      productId: draft.productId,
-      productName: draft.productName,
-      vendorName: draft.vendorName,
-      vendorSlug: draft.vendorSlug,
-      image: draft.image,
-      quantity,
-      fulfillment,
-      addressSnapshot:
-        fulfillment === 'delivery' && selectedAddress
-          ? {
-              label: selectedAddress.label,
-              receiverName: selectedAddress.receiverName,
-              phone: selectedAddress.phone,
-              province: selectedAddress.province,
-              city: selectedAddress.city,
-              district: selectedAddress.district,
-              fullAddress: selectedAddress.fullAddress,
-              note: selectedAddress.note,
-            }
-          : null,
-      paymentMethodId: selectedMethod?.id ?? 'tanpa-pembayaran',
-      subtotal: summary.subtotal,
-      discount: summary.discount,
-      serviceFee: summary.serviceFee,
-      deliveryFee: summary.deliveryFee,
-      totalBeforeCoin: summary.totalBeforeCoin,
-      coinUsed: summary.coinUsed,
-      total: summary.total,
-      coinEarned: summary.coinEarned,
-      createdAt,
+        const vendorInfo = vendors.find((v) => v.id === draft.vendorSlug);
 
-      unitPrice: draft.discountedPrice,
-      promoCode: promo?.code ?? null,
-      status: 'ongoing',
-      estimatedMinutes: estimate.estimatedMinutes,
-      estimatedCompletionAt,
-      completedAt: undefined,
-      distanceKm: fulfillment === 'delivery' ? draft.distanceKm : undefined,
-      vendorAddress: vendorInfo?.address ?? draft.pickupLocation,
-      vendorOpenHours: vendorInfo?.openHours,
-      preparationMinutes:
-        estimate.preparationMinutes ||
-        getVendorPreparationMinutes(draft.vendorSlug),
-      co2eSavedKg: draft.co2ePerUnitKg * quantity,
-    };
+        const order: StoredOrder = {
+          orderId,
+          userId: user.id,
+          productId: draft.productId,
+          productName: draft.productName,
+          vendorName: draft.vendorName,
+          vendorSlug: draft.vendorSlug,
+          image: draft.image,
+          quantity,
+          fulfillment,
+          addressSnapshot:
+            fulfillment === 'delivery' && selectedAddress
+              ? {
+                  label: selectedAddress.label,
+                  receiverName: selectedAddress.receiverName,
+                  phone: selectedAddress.phone,
+                  province: selectedAddress.province,
+                  city: selectedAddress.city,
+                  district: selectedAddress.district,
+                  fullAddress: selectedAddress.fullAddress,
+                  note: selectedAddress.note,
+                }
+              : null,
+          paymentMethodId: selectedMethod?.id ?? 'tanpa-pembayaran',
+          subtotal: summary.subtotal,
+          discount: summary.discount,
+          serviceFee: summary.serviceFee,
+          deliveryFee: summary.deliveryFee,
+          totalBeforeCoin: summary.totalBeforeCoin,
+          coinUsed: summary.coinUsed,
+          total: summary.total,
+          coinEarned: summary.coinEarned,
+          createdAt,
 
-    saveOrder(order);
-    settleOrderCoins(order.orderId, {
-      spent: summary.coinUsed,
-      earned: summary.coinEarned,
-    });
+          unitPrice: draft.discountedPrice,
+          promoCode: promo?.code ?? null,
+          status: 'ongoing',
+          estimatedMinutes: estimate.estimatedMinutes,
+          estimatedCompletionAt,
+          completedAt: undefined,
+          distanceKm: fulfillment === 'delivery' ? draft.distanceKm : undefined,
+          vendorAddress: vendorInfo?.address ?? draft.pickupLocation,
+          vendorOpenHours: vendorInfo?.openHours,
+          preparationMinutes:
+            estimate.preparationMinutes ||
+            getVendorPreparationMinutes(draft.vendorSlug),
+          co2eSavedKg: draft.co2ePerUnitKg * quantity,
+        };
 
-    const buyerUserId = getCurrentUserId();
-    const paymentMethodName =
-      paymentMethods.find((m) => m.id === selectedMethod?.id)?.name ?? '—';
+        await saveOrder(order);
+        settleOrderCoins(order.orderId, {
+          spent: summary.coinUsed,
+          earned: summary.coinEarned,
+        });
 
-    createNotification({
-      userId: buyerUserId,
-      role: 'buyer',
-      type: 'payment_success',
-      title: 'Pembayaran Berhasil',
-      message: `Pembayaran ${formatRupiah(order.total)} untuk pesanan ${order.productName} telah berhasil diproses melalui ${paymentMethodName}.`,
-      referenceId: orderId,
-      href: `/riwayatPesanan`,
-    });
+        const buyerUserId = user.id;
+        const paymentMethodName =
+          paymentMethods.find((m) => m.id === selectedMethod?.id)?.name ?? '—';
 
-    createNotification({
-      userId: buyerUserId,
-      role: 'buyer',
-      type: 'order_created',
-      title: 'Pesanan Berhasil Dibuat',
-      message: `Pesanan #${orderId} dari ${order.vendorName} sedang diproses. Estimasi ${order.estimatedMinutes ?? 20} menit.`,
-      referenceId: orderId,
-      href: `/riwayatPesanan`,
-    });
+        createNotification({
+          userId: buyerUserId,
+          role: 'buyer',
+          type: 'payment_success',
+          title: 'Pembayaran Berhasil',
+          message: `Pembayaran ${formatRupiah(order.total)} untuk pesanan ${order.productName} telah berhasil diproses melalui ${paymentMethodName}.`,
+          referenceId: orderId,
+          href: `/riwayatPesanan`,
+        });
 
-    const buyerName =
-      order.addressSnapshot?.receiverName ?? 'Pembeli';
-    createNotification({
-      userId: SELLER_VENDOR_SLUG,
-      role: 'seller',
-      type: 'incoming_order',
-      title: 'Pesanan Masuk!',
-      message: `${buyerName} memesan ${order.productName}${order.quantity > 1 ? ` ×${order.quantity}` : ''} seharga ${formatRupiah(order.total)}. Segera siapkan pesanan.`,
-      referenceId: orderId,
-      href: `/dashboard/penjual/pesanan`,
-    });
+        createNotification({
+          userId: buyerUserId,
+          role: 'buyer',
+          type: 'order_created',
+          title: 'Pesanan Berhasil Dibuat',
+          message: `Pesanan #${orderId} dari ${order.vendorName} sedang diproses. Estimasi ${order.estimatedMinutes ?? 20} menit.`,
+          referenceId: orderId,
+          href: `/riwayatPesanan`,
+        });
 
-    router.push(`/detail/pesanan/sukses?orderId=${encodeURIComponent(orderId)}`);
+        const sellerUserId =
+          (await getUmkmOwnerUserId(order.vendorSlug)) ?? null;
+        if (sellerUserId) {
+          const buyerName =
+            order.addressSnapshot?.receiverName ?? 'Pembeli';
+          createNotification({
+            userId: sellerUserId,
+            role: 'seller',
+            type: 'incoming_order',
+            title: 'Pesanan Masuk!',
+            message: `${buyerName} memesan ${order.productName}${order.quantity > 1 ? ` ×${order.quantity}` : ''} seharga ${formatRupiah(order.total)}. Segera siapkan pesanan.`,
+            referenceId: orderId,
+            href: `/dashboard/penjual/pesanan`,
+          });
+        }
+
+        router.push(
+          `/detail/pesanan/sukses?orderId=${encodeURIComponent(orderId)}`
+        );
+      } catch (error) {
+        console.error('[checkout] gagal memproses pesanan:', error);
+        setSubmitting(false);
+        submittedRef.current = false;
+        setPromoError('Terjadi kesalahan saat memproses pesanan.');
+      }
+    })();
   }, [
     draft,
     fulfillment,
@@ -303,6 +345,8 @@ export function CheckoutProvider({
     selectedMethod,
     submitting,
     summary,
+    user,
+    vendors,
   ]);
 
   const value = useMemo<CheckoutContextValue>(

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { foodItems } from "@/lib/data";
+import { useCatalog } from "@/lib/catalog";
 import { FoodCard } from "@/app/components/FoodCard";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { SoftBlob } from "@/app/components/ornaments";
@@ -35,6 +35,7 @@ export function UrgentDealsSection({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
+  const { foodItems, loading } = useCatalog();
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
@@ -65,7 +66,7 @@ export function UrgentDealsSection({
   const items = useMemo(
     () =>
       [...foodItems].sort((a, b) => b.rating - a.rating).slice(0, MAX_ITEMS),
-    [],
+    [foodItems],
   );
 
   return (
@@ -160,7 +161,13 @@ export function UrgentDealsSection({
             }}
             className="mt-2 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {items.map((item) => (
+            {loading && (
+              <div className="flex h-56 items-center justify-center text-sm text-white/70">
+                Memuat menu...
+              </div>
+            )}
+            {!loading &&
+              items.map((item) => (
               <motion.div
                 key={item.id}
                 variants={{

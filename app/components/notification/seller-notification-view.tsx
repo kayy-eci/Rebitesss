@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { Bell, CheckCheck } from 'lucide-react';
-import { getCurrentUserId } from '@/lib/current-user';
+import { useCurrentUser } from '@/lib/current-user';
 import { useNotifications } from '@/hooks/use-notifications';
 import type { NotificationType } from '@/lib/notification-storage';
 import { NotificationCard } from './notification-card';
@@ -28,7 +28,7 @@ const SUBSCRIPTION_TYPES: NotificationType[] = [
 ];
 
 export function SellerNotificationView() {
-  const userId = getCurrentUserId();
+  const { userId } = useCurrentUser();
   const { notifications, unreadCount, markRead, markAllRead } =
     useNotifications(userId, 'seller');
   const [filter, setFilter] = useState<NotificationFilter>('all');

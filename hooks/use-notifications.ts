@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 import {
   NOTIFICATIONS_UPDATED_EVENT,
   getNotifications,
@@ -18,38 +19,57 @@ export function useNotifications(
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
     if (!userId) {
       setNotifications([]);
       setUnreadCount(0);
       return;
     }
-    setNotifications(getNotifications(userId, role));
-    setUnreadCount(getUnreadCount(userId, role));
+    const [list, unread] = await Promise.all([
+      getNotifications(userId, role),
+      getUnreadCount(userId, role),
+    ]);
+    setNotifications(list);
+    setUnreadCount(unread);
   }, [userId, role]);
 
   useEffect(() => {
     refresh();
     window.addEventListener(NOTIFICATIONS_UPDATED_EVENT, refresh);
-    window.addEventListener('storage', refresh);
+
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    if (userId) {
+      channel = supabase
+        .channel(`rebites-notifications-${role}-${userId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'notifications',
+            filter: `user_id=eq.${userId}`,
+          },
+          () => refresh()
+        )
+        .subscribe();
+    }
+
     return () => {
       window.removeEventListener(NOTIFICATIONS_UPDATED_EVENT, refresh);
-      window.removeEventListener('storage', refresh);
+      if (channel) supabase.removeChannel(channel);
     };
-  }, [refresh]);
+  }, [refresh, userId, role]);
 
   const markRead = useCallback(
     (notificationId: string) => {
-      storageMarkAsRead(notificationId);
-      refresh();
+      storageMarkAsRead(notificationId).then(() => refresh());
     },
     [refresh]
   );
 
   const markAllRead = useCallback(() => {
     if (!userId) return;
-    storageMarkAllAsRead(userId, role);
-    refresh();
+    storageMarkAllAsRead(userId, role).then(() => refresh());
   }, [userId, role, refresh]);
 
   return { notifications, unreadCount, markRead, markAllRead, refresh };

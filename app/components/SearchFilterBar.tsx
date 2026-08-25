@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, MapPin, Search, SearchX, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { LOCATIONS, foodItems, formatRupiah } from "@/lib/data";
+import { LOCATIONS, formatRupiah } from "@/lib/data";
+import { useCatalog } from "@/lib/catalog";
 import { SmartImage } from "@/app/components/SmartImage";
 import type { FilterKey, FoodItem } from "@/lib/types";
 
@@ -85,6 +86,7 @@ export function SearchFilterBar({
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { foodItems } = useCatalog();
 
   const trimmedQuery = query.trim();
 
@@ -111,7 +113,7 @@ export function SearchFilterBar({
     }
 
     return [...items].sort(applySort(activeFilter));
-  }, [showInlineResults, trimmedQuery, activeFilter]);
+  }, [showInlineResults, trimmedQuery, activeFilter, foodItems]);
 
   const dropdownVisible =
     showInlineResults && isDropdownOpen && trimmedQuery.length > 0;

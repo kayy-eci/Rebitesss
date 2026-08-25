@@ -27,13 +27,13 @@ function markOrderNotified(orderId: string): void {
   );
 }
 
-export function notifyOrderCompleted(order: StoredOrder): void {
+export async function notifyOrderCompleted(order: StoredOrder): Promise<void> {
   if (!order.userId) return;
 
   const notified = getNotifiedOrderIds();
   if (notified.has(order.orderId)) return;
 
-  createNotification({
+  await createNotification({
     userId: order.userId,
     role: 'buyer',
     type: 'order_completed',

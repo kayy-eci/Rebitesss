@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { vendors } from '@/lib/data';
+import { useCatalog } from '@/lib/catalog';
 import { VendorCard } from '@/app/components/VendorCard';
 import { SoftBlob } from '@/app/components/ornaments';
 import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
@@ -18,7 +18,7 @@ export function VendorSection() {
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
   const { plan } = useSellerPlan();
-
+  const { vendors, loading } = useCatalog();
 
   const sortedVendors = plan.priorityListing
     ? [...vendors].sort(

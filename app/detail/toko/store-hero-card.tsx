@@ -44,18 +44,18 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   useEffect(() => {
     if (!isSellerVendor) return;
     const refresh = () => {
-      const s = getSellerStoreSettings();
-      setStoreName(s.storeName || vendor.name);
-      setStoreDesc(s.description || vendor.description);
-      setStoreAddress(s.address || vendor.address);
-      if (s.image) setStoreImage(s.image);
+      getSellerStoreSettings().then((s) => {
+        if (!s) return;
+        setStoreName(s.storeName || vendor.name);
+        setStoreDesc(s.description || vendor.description);
+        setStoreAddress(s.address || vendor.address);
+        if (s.image) setStoreImage(s.image);
+      });
     };
     refresh();
     window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-    window.addEventListener("storage", refresh);
     return () => {
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-      window.removeEventListener("storage", refresh);
     };
   }, [isSellerVendor, vendor]);
 

@@ -1,15 +1,12 @@
-const STORAGE_KEY = 'rebites-subscription';
+'use client';
 
-export const SUBSCRIPTION_UPDATED_EVENT = 'rebites-subscription-updated';
-
+import { supabase } from './supabase';
 import {
   computePeriodEnd,
-  getPlanPrice,
-  getSubscriptionPlan,
   type BillingCycle,
 } from './subscription-plans';
 import { createNotification } from './notification-storage';
-import { SELLER_VENDOR_SLUG } from './product-storage';
+import { getSellerUmkm } from './product-storage';
 
 export type StoredSubscriptionStatus = 'active' | 'expired' | 'cancelled';
 
@@ -17,7 +14,6 @@ export interface StoredSubscription {
   id: string;
   planSlug: 'basic' | 'standar' | 'premium';
   billing: BillingCycle;
-
   pricePaid: number;
   status: StoredSubscriptionStatus;
   startedAt: string;
@@ -26,35 +22,59 @@ export interface StoredSubscription {
   updatedAt: string;
 }
 
-function readRaw(): StoredSubscription | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as StoredSubscription) : null;
-  } catch {
+export const SUBSCRIPTION_UPDATED_EVENT = 'rebites-subscription-updated';
+
+function dispatchUpdated(): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new Event(SUBSCRIPTION_UPDATED_EVENT));
+}
+
+type SubscriptionRow = Record<string, any>;
+
+function rowToStoredSubscription(row: SubscriptionRow): StoredSubscription | null {
+  const planSlug = row.plans?.slug as string | undefined;
+  if (!planSlug) return null;
+  return {
+    id: row.id,
+    planSlug: planSlug as StoredSubscription['planSlug'],
+    billing: (row.billing ?? 'monthly') as BillingCycle,
+    pricePaid: row.price_paid ?? row.plans?.price_monthly ?? 0,
+    status: row.status,
+    startedAt: row.current_period_start ?? row.created_at,
+    currentPeriodEnd: row.current_period_end ?? '',
+    paymentMethodId: row.payment_method_id ?? null,
+    updatedAt: row.updated_at ?? row.created_at,
+  };
+}
+
+async function getOwnUmkmId(): Promise<string | null> {
+  const umkm = await getSellerUmkm();
+  return umkm?.id ?? null;
+}
+
+export async function getSubscription(): Promise<StoredSubscription | null> {
+  const umkmId = await getOwnUmkmId();
+  if (!umkmId) return null;
+
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('*, plans(slug, name, price_monthly, price_yearly)')
+    .eq('umkm_id', umkmId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error || !data) return null;
+  return rowToStoredSubscription(data);
+}
+
+export async function getActiveSubscription(): Promise<StoredSubscription | null> {
+  const subscription = await getSubscription();
+  if (!subscription) return null;
+  if (subscription.status !== 'active') return null;
+  if (new Date(subscription.currentPeriodEnd).getTime() <= Date.now()) {
     return null;
   }
-}
-
-function writeRaw(subscription: StoredSubscription | null) {
-  if (typeof window === 'undefined') return;
-  try {
-    if (subscription === null) {
-      window.localStorage.removeItem(STORAGE_KEY);
-    } else {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(subscription));
-    }
-    window.dispatchEvent(new Event(SUBSCRIPTION_UPDATED_EVENT));
-  } catch {
-
-  }
-}
-
-export function createSubscriptionId(): string {
-  return `SUB-${Date.now().toString(36).toUpperCase()}${Math.random()
-    .toString(36)
-    .slice(2, 6)
-    .toUpperCase()}`;
+  return subscription;
 }
 
 export interface SaveSubscriptionInput {
@@ -63,57 +83,77 @@ export interface SaveSubscriptionInput {
   paymentMethodId: string | null;
 }
 
-export function saveSubscription(
+export async function saveSubscription(
   input: SaveSubscriptionInput
-): StoredSubscription | null {
-  const plan = getSubscriptionPlan(input.planSlug);
-  if (!plan || typeof window === 'undefined') return null;
-
-  const now = Date.now();
-  const subscription: StoredSubscription = {
-    id: createSubscriptionId(),
-    planSlug: plan.slug,
-    billing: input.billing,
-    pricePaid: getPlanPrice(plan, input.billing),
-    status: 'active',
-    startedAt: new Date(now).toISOString(),
-    currentPeriodEnd: computePeriodEnd(input.billing, now).toISOString(),
-    paymentMethodId: input.paymentMethodId,
-    updatedAt: new Date(now).toISOString(),
-  };
-
-  writeRaw(subscription);
-
-  const billingLabel = input.billing === 'yearly' ? 'Tahunan' : 'Bulanan';
-  const periodEnd = computePeriodEnd(input.billing, now).toLocaleDateString('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-
-  createNotification({
-    userId: SELLER_VENDOR_SLUG,
-    role: 'seller',
-    type: 'subscription_active',
-    title: 'Langganan Aktif!',
-    message: `Paket ReBites ${plan.name} (${billingLabel}) berhasil diaktifkan. Berlaku hingga ${periodEnd}.`,
-    referenceId: subscription.id,
-    href: '/dashboard/penjual',
-  });
-
-  return subscription;
-}
-
-export function getSubscription(): StoredSubscription | null {
-  return readRaw();
-}
-
-export function getActiveSubscription(): StoredSubscription | null {
-  const subscription = readRaw();
-  if (!subscription) return null;
-  if (subscription.status !== 'active') return null;
-  if (new Date(subscription.currentPeriodEnd).getTime() <= Date.now()) {
+): Promise<StoredSubscription | null> {
+  const umkmId = await getOwnUmkmId();
+  if (!umkmId) {
+    console.error('[subscription] tidak ada profil UMKM untuk user ini.');
     return null;
   }
+
+  const { data: plan, error: planError } = await supabase
+    .from('plans')
+    .select('id, slug, name, price_monthly, price_yearly')
+    .eq('slug', input.planSlug)
+    .maybeSingle();
+  if (planError || !plan) {
+    console.error('[subscription] paket tidak ditemukan:', planError?.message);
+    return null;
+  }
+
+  const now = new Date();
+  const periodStart = now.toISOString();
+  const periodEnd = computePeriodEnd(input.billing, now.getTime()).toISOString();
+  const pricePaid =
+    input.billing === 'yearly' ? plan.price_yearly : plan.price_monthly;
+
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .insert({
+      umkm_id: umkmId,
+      plan_id: plan.id,
+      status: 'active',
+      billing: input.billing,
+      price_paid: pricePaid,
+      payment_method_id: input.paymentMethodId,
+      current_period_start: periodStart,
+      current_period_end: periodEnd,
+    })
+    .select('*, plans(slug, name, price_monthly, price_yearly)')
+    .maybeSingle();
+  if (error || !data) {
+    console.error('[subscription] gagal menyimpan langganan:', error?.message);
+    return null;
+  }
+
+  dispatchUpdated();
+
+  const subscription = rowToStoredSubscription(data);
+  if (subscription) {
+    const billingLabel = input.billing === 'yearly' ? 'Tahunan' : 'Bulanan';
+    const periodEndLabel = new Date(periodEnd).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const uid = session?.user?.id;
+    if (uid) {
+      await createNotification({
+        userId: uid,
+        role: 'seller',
+        type: 'subscription_active',
+        title: 'Langganan Aktif!',
+        message: `Paket ReBites ${plan.name} (${billingLabel}) berhasil diaktifkan. Berlaku hingga ${periodEndLabel}.`,
+        referenceId: subscription.id,
+        href: '/dashboard/penjual',
+      });
+    }
+  }
+
   return subscription;
 }

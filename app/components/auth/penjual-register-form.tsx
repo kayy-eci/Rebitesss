@@ -274,7 +274,7 @@ export default function PenjualRegisterForm() {
       const userId = session.user.id;
 
       await supabase.auth.signUp({
-        email: session.user.email,
+        email: session.user.email ?? "",
         password: step1Form.getValues("password"),
         options: {
           data: {

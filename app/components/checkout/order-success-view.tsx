@@ -53,7 +53,13 @@ export function OrderSuccessView() {
       router.replace('/home');
       return;
     }
-    setOrder(getOrderById(orderId));
+    let mounted = true;
+    getOrderById(orderId).then((result) => {
+      if (mounted) setOrder(result ?? null);
+    });
+    return () => {
+      mounted = false;
+    };
   }, [orderId, router]);
 
   useEffect(() => {

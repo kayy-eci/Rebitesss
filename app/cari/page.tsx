@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Search, SearchX, Sparkles } from "lucide-react";
-import { foodItems } from "@/lib/data";
-import type { FilterKey } from "@/lib/types";
+import { useCatalog } from "@/lib/catalog";
+import type { FilterKey, FoodItem } from "@/lib/types";
 import { Navbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
@@ -29,7 +29,7 @@ function parseFilter(value: string | null): FilterKey {
 }
 
 function applyFilter(key: FilterKey) {
-  return (a: (typeof foodItems)[number], b: (typeof foodItems)[number]) => {
+  return (a: FoodItem, b: FoodItem) => {
     switch (key) {
       case "terdekat":
         return a.distanceKm - b.distanceKm;
@@ -59,6 +59,7 @@ function CariContent() {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null,
   );
+  const { foodItems, loading } = useCatalog();
 
   const handleViewDetail = useCallback((id: string) => {
     setSelectedProductId(id);
@@ -97,7 +98,7 @@ function CariContent() {
 
     items.sort(applyFilter(activeFilter));
     return items;
-  }, [query, activeFilter]);
+  }, [query, activeFilter, foodItems]);
 
   const resetAll = () => {
     setQuery("");
@@ -139,14 +140,20 @@ function CariContent() {
               <>
                 <div className="mt-8 flex items-center justify-between">
                   <p className="font-sans text-sm text-charcoal-500">
-                    <span className="font-semibold text-green-700">
-                      {filteredItems.length}
-                    </span>{" "}
-                    makanan ditemukan untuk &ldquo;
-                    <span className="font-semibold text-charcoal-900">
-                      {query.trim()}
-                    </span>
-                    &rdquo;
+                    {loading ? (
+                      "Memuat..."
+                    ) : (
+                      <>
+                        <span className="font-semibold text-green-700">
+                          {filteredItems.length}
+                        </span>{" "}
+                        makanan ditemukan untuk &ldquo;
+                        <span className="font-semibold text-charcoal-900">
+                          {query.trim()}
+                        </span>
+                        &rdquo;
+                      </>
+                    )}
                   </p>
                   <button
                     type="button"

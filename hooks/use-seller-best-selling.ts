@@ -12,25 +12,21 @@ export function useSellerBestSellingMenus() {
   const [menus, setMenus] = useState<BestSellingMenu[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  const refresh = useCallback(() => {
-    setMenus(getSellerBestSellingMenus());
+  const refresh = useCallback(async () => {
+    const list = await getSellerBestSellingMenus();
+    setMenus(list);
+    setHydrated(true);
   }, []);
 
   useEffect(() => {
     refresh();
-    setHydrated(true);
-
-    const onUpdate = () => setMenus(getSellerBestSellingMenus());
-    window.addEventListener(PRODUCTS_UPDATED_EVENT, onUpdate);
-    window.addEventListener(ORDERS_UPDATED_EVENT, onUpdate);
-    window.addEventListener('storage', onUpdate);
-
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, refresh);
+    window.addEventListener(ORDERS_UPDATED_EVENT, refresh);
     return () => {
-      window.removeEventListener(PRODUCTS_UPDATED_EVENT, onUpdate);
-      window.removeEventListener(ORDERS_UPDATED_EVENT, onUpdate);
-      window.removeEventListener('storage', onUpdate);
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, refresh);
+      window.removeEventListener(ORDERS_UPDATED_EVENT, refresh);
     };
   }, [refresh]);
 
-  return { menus, hydrated };
+  return { menus, hydrated, refresh };
 }

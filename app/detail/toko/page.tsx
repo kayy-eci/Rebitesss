@@ -20,7 +20,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Badge } from "@/app/components/Badge";
 import { SmartImage } from "@/app/components/SmartImage";
-import { foodItems, formatRupiah, urgentItems, vendors } from "@/lib/data";
+import { formatRupiah } from "@/lib/data";
+import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
@@ -57,7 +58,11 @@ import {
 } from "@/lib/store-settings-storage";
 
 
-function getVendorFoods(vendorName: string): FoodItem[] {
+function getVendorFoods(
+  vendorName: string,
+  foodItems: FoodItem[],
+  urgentItems: FoodItem[]
+): FoodItem[] {
   const merged: FoodItem[] = [
     ...foodItems.filter((item) => item.vendorName === vendorName),
     ...urgentItems.filter((item) => item.vendorName === vendorName),
@@ -100,8 +105,8 @@ function sellerProductToFoodItem(
 }
 
 
-function getSellerVendorFoods(vendor: Vendor): FoodItem[] {
-  const sellerProducts = getSellerProducts();
+async function getSellerVendorFoods(vendor: Vendor): Promise<FoodItem[]> {
+  const sellerProducts = await getSellerProducts();
   return sellerProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
 }
 
@@ -419,25 +424,37 @@ function FoodCard({
 function StoreDetailContent() {
   const searchParams = useSearchParams();
   const storeId = searchParams.get("id");
+  const { foodItems, urgentItems, vendors, loading: catalogLoading } =
+    useCatalog();
   const vendor: Vendor | undefined = vendors.find(
     (item) => item.id === storeId,
   );
 
 
   const [sellerProducts, setSellerProducts] = useState<SellerProduct[]>([]);
+  const [featuredIdsState, setFeaturedIdsState] = useState<Set<string>>(
+    new Set()
+  );
   const isSellerVendor = vendor?.id === SELLER_VENDOR_SLUG;
 
   useEffect(() => {
     if (!isSellerVendor) return;
-    const refresh = () => setSellerProducts(getSellerProducts());
+    let mounted = true;
+    const refresh = () => {
+      getSellerProducts().then((list) => {
+        if (mounted) setSellerProducts(list);
+      });
+      getFeaturedProductIds().then((ids) => {
+        if (mounted) setFeaturedIdsState(new Set(ids));
+      });
+    };
     refresh();
     window.addEventListener(PRODUCTS_UPDATED_EVENT, refresh);
     window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-    window.addEventListener("storage", refresh);
     return () => {
+      mounted = false;
       window.removeEventListener(PRODUCTS_UPDATED_EVENT, refresh);
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
-      window.removeEventListener("storage", refresh);
     };
   }, [isSellerVendor]);
 
@@ -447,9 +464,9 @@ function StoreDetailContent() {
       if (isSellerVendor && sellerProducts.length > 0) {
         return sellerProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
       }
-      return getVendorFoods(vendor.name);
+      return getVendorFoods(vendor.name, foodItems, urgentItems);
     },
-    [vendor, isSellerVendor, sellerProducts]
+    [vendor, isSellerVendor, sellerProducts, foodItems, urgentItems]
   );
 
   const categories = useMemo(
@@ -497,10 +514,8 @@ function StoreDetailContent() {
 
   const featuredIds = useMemo(
     () =>
-      vendor?.id === SELLER_VENDOR_SLUG
-        ? new Set(getFeaturedProductIds())
-        : new Set<string>(),
-    [vendor]
+      vendor?.id === SELLER_VENDOR_SLUG ? featuredIdsState : new Set<string>(),
+    [vendor, featuredIdsState]
   );
 
 

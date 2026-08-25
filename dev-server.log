@@ -4,166 +4,18 @@
 
   ▲ Next.js 14.2.35
   - Local:        http://localhost:3000
+  - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 12.5s
- ○ Compiling /api/flash-selftest ...
- ✓ Compiled /api/flash-selftest in 2.3s (60 modules)
- ⨯ TypeError: (0 , _lib_flash_sale__WEBPACK_IMPORTED_MODULE_1__.getFlashQuota) is not a function
-    at GET (webpack-internal:///(rsc)/./app/api/flash-selftest/route.ts:59:123)
-    at C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:57234
-    at C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\lib\trace\tracer.js:140:36
-    at NoopContextManager.with (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\@opentelemetry\api\index.js:1:7062)
-    at ContextAPI.with (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\@opentelemetry\api\index.js:1:518)
-    at NoopTracer.startActiveSpan (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\@opentelemetry\api\index.js:1:18093)
-    at ProxyTracer.startActiveSpan (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\@opentelemetry\api\index.js:1:18854)
-    at C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\lib\trace\tracer.js:122:103
-    at NoopContextManager.with (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\@opentelemetry\api\index.js:1:7062)
-    at ContextAPI.with (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\@opentelemetry\api\index.js:1:518)
-    at NextTracerImpl.trace (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\lib\trace\tracer.js:122:28)
-    at C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:48896
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
-    at Object.wrap (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:40958)
-    at C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:47472
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
-    at Object.wrap (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:38293)
-    at C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:47434
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
-    at eT.execute (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:46881)
-    at eT.handle (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:58771)
-    at doRender (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\base-server.js:1366:60)
-    at cacheEntry.responseCache.get.routeKind (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\base-server.js:1588:34)
-    at ResponseCache.get (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\response-cache\index.js:49:26)
-    at DevServer.renderToResponseWithComponentsImpl (C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\base-server.js:1496:53)
- GET /api/flash-selftest 500 in 6338ms
- ✓ Compiled in 28ms
- ✓ Compiled in 3.4s (203 modules)
- ○ Compiling /dashboard/penjual/menu ...
-The user aborted a request.
-
-Retrying 1/3...
-The user aborted a request.
-
-Retrying 1/3...
-The user aborted a request.
-
-Retrying 1/3...
-The user aborted a request.
-
-Retrying 1/3...
-The user aborted a request.
-
-Retrying 2/3...
-The user aborted a request.
-
-Retrying 2/3...
-The user aborted a request.
-
-Retrying 2/3...
- ✓ Compiled /dashboard/penjual/menu in 30.9s (1593 modules)
- GET /dashboard/penjual/menu 200 in 32248ms
+ ✓ Ready in 6.2s
  ○ Compiling /home ...
- ✓ Compiled /home in 15.8s (1764 modules)
-[ReBites] Supabase env vars tidak ditemukan. Menggunakan mock client untuk development.
- GET /home 200 in 15582ms
+ ✓ Compiled /home in 36.8s (1622 modules)
+ GET /home 200 in 14724ms
+ GET /home 200 in 32387ms
+ ✓ Compiled in 3.8s (812 modules)
  ○ Compiling /detail/toko ...
- ✓ Compiled /detail/toko in 1189ms (1818 modules)
- GET /detail/toko?id=dapur-ibu-tini 200 in 1462ms
- ○ Compiling /dashboard/penjual/langganan ...
- ✓ Compiled /dashboard/penjual/langganan in 713ms (1830 modules)
- GET /dashboard/penjual/langganan 200 in 867ms
- GET /dashboard/penjual/menu 200 in 97ms
-[ReBites] Supabase env vars tidak ditemukan. Menggunakan mock client untuk development.
- GET /home 200 in 155ms
- GET /detail/toko?id=dapur-ibu-tini 200 in 99ms
- GET /home 200 in 144ms
- GET /dashboard/penjual/menu 200 in 73ms
- GET /dashboard/penjual/menu 200 in 61ms
- ○ Compiling / ...
- ✓ Compiled / in 6.2s (1687 modules)
- GET / 200 in 9096ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 3.4s (1676 modules)
- GET /_next/static/css/app/layout.css?v=1787545870730 404 in 941ms
- GET /_next/static/chunks/main-app.js?v=1787545870730 404 in 936ms
- GET /_next/static/chunks/app-pages-internals.js 404 in 935ms
-<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app'
-<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/_not-found/page' in C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\_not-found\page.js', but to 'Error: Can't resolve '../../../../.next/server/app/_not-found/page' in 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
-<w>  at resolve commonjs file ../../../../.next/server/app/_not-found/page (expected C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\_not-found\page.js)
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at resolve commonjs C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/detail/toko/page' in C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\detail\toko\page.js', but to 'Error: Can't resolve '../../../../.next/server/app/detail/toko/page' in 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
-<w>  at resolve commonjs file ../../../../.next/server/app/detail/toko/page (expected C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\detail\toko\page.js)
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at resolve commonjs C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/home/page' in C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\home\page.js', but to 'Error: Can't resolve '../../../../.next/server/app/home/page' in 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
-<w>  at resolve commonjs file ../../../../.next/server/app/home/page (expected C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\home\page.js)
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at resolve commonjs C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/dashboard/penjual/menu/page' in C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\dashboard\penjual\menu\page.js', but to 'Error: Can't resolve '../../../../.next/server/app/dashboard/penjual/menu/page' in 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
-<w>  at resolve commonjs file ../../../../.next/server/app/dashboard/penjual/menu/page (expected C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\dashboard\penjual\menu\page.js)
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at resolve commonjs C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/dashboard/penjual/langganan/page' in C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\dashboard\penjual\langganan\page.js', but to 'Error: Can't resolve '../../../../.next/server/app/dashboard/penjual/langganan/page' in 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
-<w>  at resolve commonjs file ../../../../.next/server/app/dashboard/penjual/langganan/page (expected C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\dashboard\penjual\langganan\page.js)
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at resolve commonjs C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/api/flash-selftest/route' in C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server for build dependencies doesn't lead to expected result 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\api\flash-selftest\route.js', but to 'Error: Can't resolve '../../../../.next/server/app/api/flash-selftest/route' in 'C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server'' instead. Resolving dependencies are ignored for this path.
-<w>  at resolve commonjs file ../../../../.next/server/app/api/flash-selftest/route (expected C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\.next\server\app\api\flash-selftest\route.js)
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\require.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\server\load-components.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\utils.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\handle-externals.js
-<w>  at file dependencies C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at file C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-<w>  at resolve commonjs C:\Users\User\Desktop\KELAS 11\ReBites-SMK_Taruna_Bhakti\Rebitesss\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
-[?25h
+ ✓ Compiled /detail/toko in 8.4s (1664 modules)
+ GET /detail/toko?id=dapur-ibu-tini 200 in 13385ms
+ ○ Compiling /cari ...
+ ✓ Compiled /cari in 586ms (1674 modules)
+ GET /cari 200 in 853ms

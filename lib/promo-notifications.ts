@@ -1,7 +1,7 @@
 'use client';
 
-import { createNotification, getNotifications } from './notification-storage';
-import { urgentItems, promoCodes } from './data';
+import { createNotification } from './notification-storage';
+import { fetchUrgentItems, getValidPromoCodes } from './catalog';
 import type { NotificationType } from './notification-storage';
 
 const PROMO_STORAGE_KEY = 'rebites-promo-notifications-created';
@@ -24,13 +24,15 @@ function markPromosCreated(): void {
   }
 }
 
-export function ensurePromoNotifications(userId: string): void {
+export async function ensurePromoNotifications(userId: string): Promise<void> {
   if (typeof window === 'undefined') return;
+  if (!userId) return;
   if (hasCreatedPromos()) return;
 
   const now = new Date();
   const hours = now.getHours();
 
+  const urgentItems = await fetchUrgentItems();
   const activeItems = urgentItems.filter((item) => {
     const [fromH] = item.availableFrom.split(':').map(Number);
     const [toH] = item.availableTo.split(':').map(Number);
@@ -39,7 +41,7 @@ export function ensurePromoNotifications(userId: string): void {
 
   if (activeItems.length > 0) {
     const item = activeItems[0];
-    createNotification({
+    await createNotification({
       userId,
       role: 'buyer',
       type: 'promo',
@@ -49,9 +51,9 @@ export function ensurePromoNotifications(userId: string): void {
     });
   }
 
-  const validPromo = promoCodes.find((p) => p.isValid);
+  const validPromo = (await getValidPromoCodes()).find((p) => p.isValid);
   if (validPromo) {
-    createNotification({
+    await createNotification({
       userId,
       role: 'buyer',
       type: 'promo',
@@ -61,7 +63,7 @@ export function ensurePromoNotifications(userId: string): void {
     });
   }
 
-  createNotification({
+  await createNotification({
     userId,
     role: 'buyer',
     type: 'promo',
