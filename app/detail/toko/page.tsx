@@ -25,7 +25,7 @@ import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detail/product/data";
+import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import {
   Avatar,
   AvatarImage,
@@ -493,9 +493,7 @@ function StoreDetailContent() {
     setSelectedProductId(null);
   }, []);
 
-  const selectedProduct = selectedProductId
-    ? getProductById(selectedProductId)
-    : undefined;
+  const selectedProduct = useProductDetail(selectedProductId);
 
   useEffect(() => {
     setQuery("");

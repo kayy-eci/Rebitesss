@@ -12,7 +12,7 @@ import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
 import { MagneticButton } from "@/app/components/magnetic-button";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detail/product/data";
+import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import { SUBSCRIPTION_PLANS } from "@/lib/subscription-plans";
 
 import { ArrowRight } from "lucide-react";
@@ -31,9 +31,7 @@ export default function HomePage() {
     setSelectedProductId(null);
   }, []);
 
-  const selectedProduct = selectedProductId
-    ? getProductById(selectedProductId)
-    : undefined;
+  const selectedProduct = useProductDetail(selectedProductId);
 
   return (
     <div>

@@ -21,7 +21,7 @@ import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detail/product/data";
+import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import { HeroSection } from "@/app/components/hero-section";
 import {
   Carousel,
@@ -136,9 +136,7 @@ export default function Home() {
     setSelectedProductId(null);
   };
 
-  const selectedProduct = selectedProductId
-    ? getProductById(selectedProductId)
-    : undefined;
+  const selectedProduct = useProductDetail(selectedProductId);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";

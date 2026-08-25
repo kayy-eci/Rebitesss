@@ -84,9 +84,9 @@ export function OrderDetailModal({
     }
   };
 
-  const handleReorder = () => {
+  const handleReorder = async () => {
     if (!order) return;
-    const product = getProductById(order.productId);
+    const product = await fetchProductDetail(order.productId);
     if (!product) {
       toast({ title: 'Produk ini sudah tidak tersedia' });
       return;
