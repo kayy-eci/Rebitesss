@@ -24,7 +24,7 @@ const FILTERS: { key: FoodFilter; label: string }[] = [
 const MAX_ITEMS = 8;
 
 export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id: string) => void }) {
-  const { foodItems, loading } = useCatalog();
+  const { foodItems, loading, error } = useCatalog();
   const [activeFilter, setActiveFilter] = useState<FoodFilter>("semua");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -182,7 +182,12 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
                 Memuat rekomendasi...
               </div>
             )}
-            {!loading && items.length === 0 && (
+            {!loading && error && (
+              <div className="flex h-56 items-center justify-center text-sm text-red-600">
+                Gagal memuat katalog: {error}
+              </div>
+            )}
+            {!loading && !error && items.length === 0 && (
               <div className="flex h-56 items-center justify-center text-sm text-charcoal-500">
                 Belum ada menu tersedia.
               </div>

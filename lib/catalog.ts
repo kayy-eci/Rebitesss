@@ -8,12 +8,15 @@ export interface CatalogData {
   foodItems: FoodItem[];
   urgentItems: UrgentItem[];
   vendors: Vendor[];
+  /** Pesan error pertama saat memuat katalog (null = sukses). */
+  error: string | null;
 }
 
 const EMPTY_CATALOG: CatalogData = {
   foodItems: [],
   urgentItems: [],
   vendors: [],
+  error: null,
 };
 
 type ProductRow = Record<string, any>;
@@ -62,7 +65,13 @@ function umkmToVendor(row: UmkmRow, itemCount: number): Vendor {
   };
 }
 
+type FetchResult<T> = { items: T[]; error: string | null };
+
 export async function fetchFoodItems(): Promise<FoodItem[]> {
+  return (await queryFoodItems()).items;
+}
+
+async function queryFoodItems(): Promise<FetchResult<FoodItem>> {
   const { data, error } = await supabase
     .from('products')
     .select('*, umkm:umkm_profiles(business_name)')
@@ -71,12 +80,16 @@ export async function fetchFoodItems(): Promise<FoodItem[]> {
     .order('created_at', { ascending: true });
   if (error) {
     console.error('[catalog] gagal memuat produk:', error.message);
-    return [];
+    return { items: [], error: error.message };
   }
-  return (data ?? []).map(productToFoodItem);
+  return { items: (data ?? []).map(productToFoodItem), error: null };
 }
 
 export async function fetchUrgentItems(): Promise<UrgentItem[]> {
+  return (await queryUrgentItems()).items;
+}
+
+async function queryUrgentItems(): Promise<FetchResult<UrgentItem>> {
   const { data, error } = await supabase
     .from('products')
     .select('*, umkm:umkm_profiles(business_name)')
@@ -85,42 +98,61 @@ export async function fetchUrgentItems(): Promise<UrgentItem[]> {
     .order('expires_at', { ascending: true });
   if (error) {
     console.error('[catalog] gagal memuat urgent deals:', error.message);
-    return [];
+    return { items: [], error: error.message };
   }
-  return (data ?? []).map((row) => ({
-    ...productToFoodItem(row),
-    expiresAt:
-      row.expires_at ?? new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
-    slot: (row.slot ?? '09-12') as UrgentSlot,
-  }));
+  return {
+    items: (data ?? []).map((row) => ({
+      ...productToFoodItem(row),
+      expiresAt:
+        row.expires_at ?? new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
+      slot: (row.slot ?? '09-12') as UrgentSlot,
+    })),
+    error: null,
+  };
 }
 
 export async function fetchVendors(): Promise<Vendor[]> {
+  return (await queryVendors()).items;
+}
+
+async function queryVendors(): Promise<FetchResult<Vendor>> {
   const [umkmResult, productResult] = await Promise.all([
     supabase.from('umkm_profiles').select('*').order('rating', { ascending: false }),
     supabase.from('products').select('umkm_id'),
   ]);
   if (umkmResult.error) {
     console.error('[catalog] gagal memuat vendor:', umkmResult.error.message);
-    return [];
+    return { items: [], error: umkmResult.error.message };
   }
 
   const counts = new Map<string, number>();
   for (const p of productResult.data ?? []) {
     counts.set(p.umkm_id, (counts.get(p.umkm_id) ?? 0) + 1);
   }
-  return (umkmResult.data ?? []).map((row: UmkmRow) =>
-    umkmToVendor(row, counts.get(row.id) ?? 0)
-  );
+  return {
+    items: (umkmResult.data ?? []).map((row: UmkmRow) =>
+      umkmToVendor(row, counts.get(row.id) ?? 0)
+    ),
+    error: null,
+  };
 }
 
 export async function fetchCatalog(): Promise<CatalogData> {
-  const [foodItems, urgentItems, vendors] = await Promise.all([
-    fetchFoodItems(),
-    fetchUrgentItems(),
-    fetchVendors(),
+  const [foodResult, urgentResult, vendorResult] = await Promise.all([
+    queryFoodItems(),
+    queryUrgentItems(),
+    queryVendors(),
   ]);
-  return { foodItems, urgentItems, vendors };
+  return {
+    foodItems: foodResult.items,
+    urgentItems: urgentResult.items,
+    vendors: vendorResult.items,
+    error:
+      foodResult.error ??
+      urgentResult.error ??
+      vendorResult.error ??
+      null,
+  };
 }
 
 export function useCatalog() {
