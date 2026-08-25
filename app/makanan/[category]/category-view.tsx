@@ -21,7 +21,8 @@ import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
 import type { FoodItem } from "@/lib/types";
 import { getCategoryBySlug } from "@/lib/categories";
-import { getProductById } from "@/app/detail/product/data";
+import type { ProductDetail } from "@/app/detail/product/data";
+import { fetchProductDetail } from "@/app/detail/product/detail-data";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
@@ -203,9 +204,24 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
     (filterState.rating !== "semua" ? 1 : 0) +
     (filterState.sort !== "terbaru" ? 1 : 0);
   const hasFilters = activeFilterCount > 0 || searchQuery.trim() !== "";
-  const selectedProduct = selectedProductId
-    ? getProductById(selectedProductId)
-    : undefined;
+  const [selectedProduct, setSelectedProduct] = useState<ProductDetail | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (!selectedProductId) {
+      setSelectedProduct(null);
+      return;
+    }
+    let active = true;
+    setSelectedProduct(null);
+    fetchProductDetail(selectedProductId).then((detail) => {
+      if (active) setSelectedProduct(detail ?? null);
+    });
+    return () => {
+      active = false;
+    };
+  }, [selectedProductId]);
 
   const resetAll = () => {
     setFilterState(DEFAULT_FILTER_STATE);

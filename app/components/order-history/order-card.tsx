@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { SmartImage } from '@/app/components/SmartImage';
 import { formatRupiah } from '@/lib/data';
-import { getProductById } from '@/app/detail/product/data';
+import { fetchProductDetail } from '@/app/detail/product/detail-data';
 import type { StoredOrder } from '@/lib/types';
 import {
   getOrderProgress,
@@ -39,17 +39,18 @@ export function OrderCard({
   const isOngoing = order.status === 'ongoing';
   const subStatus = getOrderSubStatus(order);
 
-  const handleReorder = () => {
+  const handleReorder = async () => {
     if (reordering) return;
-    const product = getProductById(order.productId);
+    setReordering(true);
+    const product = await fetchProductDetail(order.productId);
     if (!product) {
+      setReordering(false);
       toast({
         title: 'Produk ini sudah tidak tersedia',
         description: 'Coba jelajahi menu lain yang masih tersedia.',
       });
       return;
     }
-    setReordering(true);
 
     router.push(
       `/detail/pesanan?product=${encodeURIComponent(order.productId)}&qty=${order.quantity}`

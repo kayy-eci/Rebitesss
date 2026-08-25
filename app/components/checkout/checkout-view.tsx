@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { getProductById } from '@/app/detail/product/data';
+import type { ProductDetail } from '@/app/detail/product/data';
+import { fetchProductDetail } from '@/app/detail/product/detail-data';
 import { orderDraft } from '@/lib/data';
 import type { OrderDraft } from '@/lib/types';
 import { CheckoutProvider } from './checkout-context';
@@ -22,9 +23,7 @@ import { StickyMobileBar } from './sticky-mobile-bar';
 
 const RESERVATION_MINUTES = 35;
 
-function buildOrderDraft(product: NonNullable<
-  ReturnType<typeof getProductById>
->): OrderDraft {
+function buildOrderDraft(product: ProductDetail): OrderDraft {
   return {
     productId: product.id,
     productSlug: product.slug,
@@ -47,13 +46,23 @@ function buildOrderDraft(product: NonNullable<
 
 export function CheckoutView() {
   const searchParams = useSearchParams();
+  const productId = searchParams.get('product');
 
-  const draft = useMemo<OrderDraft>(() => {
-    const productId = searchParams.get('product');
-    if (!productId) return orderDraft;
-    const product = getProductById(productId);
-    return product ? buildOrderDraft(product) : orderDraft;
-  }, [searchParams]);
+  const [draft, setDraft] = useState<OrderDraft>(orderDraft);
+
+  useEffect(() => {
+    let active = true;
+    if (!productId) {
+      setDraft(orderDraft);
+      return;
+    }
+    fetchProductDetail(productId).then((product) => {
+      if (active) setDraft(product ? buildOrderDraft(product) : orderDraft);
+    });
+    return () => {
+      active = false;
+    };
+  }, [productId]);
 
   const initialQuantity = useMemo(() => {
     const raw = Number.parseInt(searchParams.get('qty') ?? '', 10);
