@@ -5,10 +5,12 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Bell,
+  Heart,
   Home,
   Leaf,
   Receipt,
   Search,
+  Store,
   User,
   X,
 } from 'lucide-react';
@@ -61,6 +63,18 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Cari Makanan',
     icon: Search,
     href: '/cari',
+  },
+  {
+    id: 'toko-diikuti',
+    label: 'Toko Diikuti',
+    icon: Store,
+    href: '/profile#toko-diikuti',
+  },
+  {
+    id: 'sukai',
+    label: 'Sukai Makanan',
+    icon: Heart,
+    href: '/profile#sukai-makanan',
   },
 ];
 

@@ -34,6 +34,7 @@ import { useAddresses } from '@/hooks/use-addresses';
 import { useRebitesCoins } from '@/hooks/use-rebites-coins';
 import { useFollowedStores } from '@/hooks/use-followed-stores';
 import { useLikedFoods } from '@/hooks/use-liked-foods';
+import { useCatalog } from '@/lib/catalog';
 import { formatOrderDateTime } from '@/lib/order-utils';
 import { formatRupiah } from '@/lib/data';
 import type { StoredOrder } from '@/lib/types';
@@ -764,6 +765,95 @@ function FollowedStoresSection() {
   );
 }
 
+function LikedFoodsSection() {
+  const { foods, hydrated } = useLikedFoods();
+  const { foodItems } = useCatalog();
+  const catalogMap = new Map((foodItems || []).map((f: any) => [f.id, f]));
+
+  return (
+    <motion.section
+      id="sukai-makanan"
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.12 }}
+      className="relative scroll-mt-28 rounded-3xl border border-hairline/70 bg-white p-6 shadow-[0_24px_48px_-32px_rgba(42,55,49,0.35)]"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h3 className="font-display text-lg font-semibold text-forest-deep">Makanan Disukai</h3>
+          <p className="mt-0.5 font-inter text-xs text-stone">Makanan yang kamu sukai lewat tombol ❤️ di card produk.</p>
+        </div>
+        <span className="shrink-0 rounded-full bg-sage-100 px-3 py-1 font-inter text-xs font-semibold text-sage-600">
+          {hydrated ? foods.length : '…'} makanan
+        </span>
+      </div>
+
+      {!hydrated ? (
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <div key={i} aria-hidden className="h-28 animate-pulse rounded-2xl bg-cream-50" />
+          ))}
+        </div>
+      ) : foods.length === 0 ? (
+        <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 px-6 py-10 text-center">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-sage-500">
+            <Heart className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="text-sm font-bold text-charcoal-900">Belum ada makanan disukai</p>
+            <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-sage-500">
+              Tekan ikon ❤️ pada card produk di Beranda, Flash Sale, atau halaman detail untuk menambah ke sini.
+            </p>
+          </div>
+          <Link
+            href="/cari"
+            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-4 py-2 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+          >
+            Cari Makanan
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      ) : (
+        <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {foods.map((fav) => {
+            const detail: any = catalogMap.get(fav.productId) || catalogMap.get(fav.id) || null;
+            const name = fav.name || detail?.name || 'Makanan';
+            const image = fav.image || detail?.image || null;
+            const vendor = detail?.vendorName || '';
+            const price = detail ? detail.discountedPrice ?? detail.originalPrice : fav.price;
+            const href = detail ? `/detail/product?id=${detail.id}` : fav.productId ? `/detail/product?id=${fav.productId}` : '/cari';
+            return (
+              <li key={fav.id}>
+                <Link
+                  href={href}
+                  className="group flex h-full items-center gap-3.5 rounded-2xl border border-hairline/70 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-lg hover:shadow-forest-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                >
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sage-100 ring-1 ring-sage-100">
+                    {image ? (
+                      <SmartImage src={image} alt={name} />
+                    ) : (
+                      <span className="font-display text-lg font-semibold text-green-700">{name.charAt(0).toUpperCase()}</span>
+                    )}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-inter text-sm font-bold text-charcoal-900">{name}</span>
+                    {vendor && <span className="mt-0.5 block truncate font-inter text-xs text-stone">{vendor}</span>}
+                    {price != null && (
+                      <span className="mt-1 block font-inter text-xs font-semibold text-green-700">Rp{Number(price).toLocaleString('id-ID')}</span>
+                    )}
+                  </span>
+                  <Heart className="h-4 w-4 shrink-0 fill-[#E53935] text-[#E53935]" />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </motion.section>
+  );
+}
+
 export function UserProfile() {
   const { userId } = useCurrentUser();
   const [orders, setOrders] = useState<StoredOrder[] | null>(null);
@@ -909,27 +999,41 @@ export function UserProfile() {
 
             {/* Stats kanan — 3 kotak: Ikuti Toko, Sukai Makanan, ReBites Coins */}
             <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 lg:w-auto lg:min-w-[520px] lg:max-w-[600px]">
-              <div className="flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-green-700 shadow-sm ring-1 ring-zinc-100">
+              <Link
+                href="#toko-diikuti"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('toko-diikuti')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-green-700 shadow-sm ring-1 ring-zinc-100 group-hover:bg-green-700 group-hover:text-white">
                   <Store className="h-4 w-4" />
                 </span>
                 <span className="font-inter text-sm font-semibold text-forest-deep">Ikuti Toko</span>
                 <span className="font-inter text-xs text-stone">{storesHydrated ? `${stores.length} toko` : '… toko'}</span>
                 <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
-                  {storesHydrated && stores.length > 0 ? `${stores.length} diikuti` : 'Belum ada'}
+                  Lihat <ArrowRight className="h-3 w-3" />
                 </span>
-              </div>
+              </Link>
 
-              <div className="flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#E53935] shadow-sm ring-1 ring-zinc-100">
+              <Link
+                href="#sukai-makanan"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('sukai-makanan')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#E53935] shadow-sm ring-1 ring-zinc-100 group-hover:bg-[#E53935] group-hover:text-white">
                   <Heart className="h-4 w-4" />
                 </span>
                 <span className="font-inter text-sm font-semibold text-forest-deep">Sukai Makanan</span>
                 <span className="font-inter text-xs text-stone">{likedHydrated ? `${likedCount} makanan` : '… makanan'}</span>
                 <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
-                  {likedHydrated && likedCount > 0 ? `${likedCount} disukai` : 'Belum ada'}
+                  Lihat <ArrowRight className="h-3 w-3" />
                 </span>
-              </div>
+              </Link>
 
               <div className="col-span-2 flex flex-col items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:col-span-1">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-amber-600 shadow-sm ring-1 ring-amber-100">
@@ -1219,7 +1323,10 @@ export function UserProfile() {
             </DialogContent>
           </Dialog>
 
-
+          <div className="mt-6 space-y-6">
+            <FollowedStoresSection />
+            <LikedFoodsSection />
+          </div>
         </main>
       </div>
     </div>

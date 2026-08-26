@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import { Clock, Heart, MapPin, Star } from "lucide-react";
 import { formatRupiah } from "@/lib/data";
 import { SmartImage } from "@/app/components/SmartImage";
 import type { FoodItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useLikedFoods } from "@/hooks/use-liked-foods";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?: (id: string) => void }) {
-  const [liked, setLiked] = useState(false);
+  const { isLiked, toggle } = useLikedFoods();
+  const liked = isLiked(item.id);
   const handleOpen = () => onViewDetail?.(item.id);
 
   return (
@@ -48,7 +49,7 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
           aria-pressed={liked}
           onClick={(e) => {
             e.stopPropagation();
-            setLiked((v) => !v);
+            toggle(item.id);
           }}
           className={cn(
             "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935]",

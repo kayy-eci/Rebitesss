@@ -9,6 +9,7 @@ import { formatRupiah } from "@/lib/data";
 import { useCatalog } from "@/lib/catalog";
 import { useCountdown, formatCountdown } from "@/lib/useCountdown";
 import { SmartImage } from "@/app/components/SmartImage";
+import { useLikedFoods } from "@/hooks/use-liked-foods";
 import { SoftBlob } from "@/app/components/ornaments";
 import { Marquee } from "@/app/components/marquee";
 import type { UrgentItem, UrgentSlot } from "@/lib/types";
@@ -188,7 +189,8 @@ function UrgentCard({
   const stockCount = parseStockCount(item.stockLabel);
   const stockPct =
     stockCount === null ? null : Math.max(10, Math.min(95, stockCount * 10));
-  const [liked, setLiked] = useState(false);
+  const { isLiked, toggle } = useLikedFoods();
+  const liked = isLiked(item.id);
 
   return (
     <article
@@ -259,7 +261,7 @@ function UrgentCard({
           disabled={!isActive}
           onClick={(e) => {
             e.stopPropagation();
-            if (isActive) setLiked((v) => !v);
+            if (isActive) toggle(item.id);
           }}
           className={cn(
             "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935]",

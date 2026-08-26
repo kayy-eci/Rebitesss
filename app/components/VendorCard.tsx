@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Clock, Crown, Heart, MapPin, Star } from 'lucide-react';
+import { Clock, Crown, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/SmartImage';
 import type { Vendor } from '@/lib/types';
@@ -36,8 +36,6 @@ export function VendorCard({
   useEffect(() => {
     setIsOpen(isOpenNow(vendor.openHours));
   }, [vendor.openHours]);
-
-  const [liked, setLiked] = useState(false);
 
   return (
     <div
@@ -75,22 +73,6 @@ export function VendorCard({
               {badgeLabel}
             </div>
           ) : null}
-
-          <button
-            type="button"
-            aria-label={liked ? "Hapus favorit" : "Tambah favorit"}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setLiked((v) => !v);
-            }}
-            className={cn(
-              "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935]",
-              liked && "bg-white text-[#E53935]",
-            )}
-          >
-            <Heart className={cn("h-4 w-4", liked && "fill-[#E53935] text-[#E53935]")} />
-          </button>
         </div>
       </Link>
 

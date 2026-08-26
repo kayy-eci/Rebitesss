@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Check, Heart, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLikedFoods } from "@/hooks/use-liked-foods";
 import type { ProductDetail } from "@/app/detail/product/data";
 
 export function CTAButtons({
@@ -15,14 +16,15 @@ export function CTAButtons({
   onOrder: () => void;
   notify: (message: string) => void;
 }) {
-  const [saved, setSaved] = useState(false);
+  const { isLiked, toggle } = useLikedFoods();
+  const saved = isLiked(product.id);
   const [added, setAdded] = useState(false);
   const reduce = useReducedMotion();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const next = !saved;
-    setSaved(next);
-    notify(next ? "Disimpan ke favorit" : "Dihapus dari favorit");
+    const ok = await toggle(product.id);
+    if (ok) notify(next ? "Disimpan ke favorit" : "Dihapus dari favorit");
   };
 
   const handleOrder = () => {

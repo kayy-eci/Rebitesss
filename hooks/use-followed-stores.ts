@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { getFollowedStores, type FollowedStore } from '@/lib/store-follows';
+import { supabase } from '@/lib/supabase';
+import { STORE_FOLLOW_UPDATED_EVENT, getFollowedStores, type FollowedStore } from '@/lib/store-follows';
 
 /** Daftar toko yang diikuti user yang sedang login. */
 export function useFollowedStores() {
@@ -16,7 +17,23 @@ export function useFollowedStores() {
 
   useEffect(() => {
     refresh();
+    const onFollow = () => refresh();
+    const onVis = () => {
+      if (typeof document !== 'undefined' && !document.hidden) refresh();
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener(STORE_FOLLOW_UPDATED_EVENT, onFollow);
+      document.addEventListener('visibilitychange', onVis);
+    }
+    const { data } = supabase.auth.onAuthStateChange(() => refresh());
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener(STORE_FOLLOW_UPDATED_EVENT, onFollow);
+        document.removeEventListener('visibilitychange', onVis);
+      }
+      data.subscription.unsubscribe();
+    };
   }, [refresh]);
 
-  return { stores, hydrated, refresh };
+  return { stores, hydrated, refresh, count: stores.length };
 }
