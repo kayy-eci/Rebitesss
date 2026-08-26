@@ -7,7 +7,6 @@ import {
   Bell,
   Home,
   Leaf,
-  MapPin,
   Receipt,
   Search,
   User,
@@ -62,12 +61,6 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Cari Makanan',
     icon: Search,
     href: '/cari',
-  },
-  {
-    id: 'alamat',
-    label: 'Alamat',
-    icon: MapPin,
-    href: '/profile#alamat',
   },
 ];
 
