@@ -20,6 +20,8 @@ export interface SellerEntitlements {
   priorityListing: boolean;
   featuredPromo: boolean;
   demandAnalytics: boolean;
+  categoryPerformance: boolean;
+  bestSellingMenus: boolean;
   prioritySupport: boolean;
   upgradeSlug: 'standar' | 'premium' | null;
 }
@@ -36,6 +38,8 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
     priorityListing: false,
     featuredPromo: false,
     demandAnalytics: false,
+    categoryPerformance: false,
+    bestSellingMenus: false,
     prioritySupport: false,
     upgradeSlug: 'standar',
   },
@@ -50,6 +54,8 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
     priorityListing: true,
     featuredPromo: false,
     demandAnalytics: false,
+    categoryPerformance: true,
+    bestSellingMenus: true,
     prioritySupport: false,
     upgradeSlug: 'premium',
   },
@@ -64,6 +70,8 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
     priorityListing: true,
     featuredPromo: true,
     demandAnalytics: true,
+    categoryPerformance: true,
+    bestSellingMenus: true,
     prioritySupport: true,
     upgradeSlug: null,
   },

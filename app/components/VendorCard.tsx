@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Clock, Crown, MapPin, Star } from 'lucide-react';
+import { Clock, Crown, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/SmartImage';
 import type { Vendor } from '@/lib/types';
@@ -38,7 +38,14 @@ export function VendorCard({
   }, [vendor.openHours]);
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-forest-900/20">
+    <Link
+      href={`/detail/toko?id=${vendor.id}`}
+      aria-label={`Lihat detail ${vendor.name}`}
+      className={cn(
+        'group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 outline-none transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-forest-900/20 focus-visible:ring-2 focus-visible:ring-green-600',
+        FOCUS_RING
+      )}
+    >
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
           src={vendor.image}
@@ -94,18 +101,7 @@ export function VendorCard({
             {vendor.address}
           </span>
         </div>
-
-        <Link
-          href={`/detail/toko?id=${vendor.id}`}
-          className={cn(
-            'group/cta mt-3 inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-[#C8A882] active:scale-[0.98]',
-            FOCUS_RING
-          )}
-        >
-          Lihat Toko
-          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
-        </Link>
       </div>
-    </article>
+    </Link>
   );
 }

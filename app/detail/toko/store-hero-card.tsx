@@ -24,6 +24,10 @@ import {
   getSellerStoreSettings,
   STORE_SETTINGS_UPDATED_EVENT,
 } from "@/lib/store-settings-storage";
+import {
+  isFollowingStore,
+  setFollowingStore,
+} from "@/lib/store-follows";
 
 interface StoreHeroCardProps {
   vendor: Vendor;
@@ -34,6 +38,23 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [following, setFollowing] = useState(false);
   const profile = getVendorProfile(vendor.id);
   const { plan } = useSellerPlan();
+
+  useEffect(() => {
+    let mounted = true;
+    isFollowingStore(vendor.id).then((value) => {
+      if (mounted) setFollowing(value);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [vendor.id]);
+
+  const handleToggleFollow = async () => {
+    const next = !following;
+    setFollowing(next);
+    const ok = await setFollowingStore(vendor.id, next);
+    if (!ok) setFollowing(!next);
+  };
 
   const isSellerVendor = vendor.id === SELLER_VENDOR_SLUG;
   const [storeName, setStoreName] = useState(vendor.name);
@@ -129,7 +150,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                     </span>
                     <span className="flex items-center gap-1">
                       <Users className="h-3.5 w-3.5 text-sage-500" />
-                      {profile.followers} pengikut
+                      {profile.followers + (following ? 1 : 0)} pengikut
                     </span>
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5 text-sage-500" />
@@ -146,7 +167,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
               <div className="flex flex-col items-stretch gap-2.5 sm:flex-row sm:items-center">
                 <button
                   type="button"
-                  onClick={() => setFollowing((v) => !v)}
+                  onClick={handleToggleFollow}
                   aria-pressed={following}
                   className={cn(
                     "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-200",

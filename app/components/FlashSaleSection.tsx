@@ -191,40 +191,61 @@ function UrgentCard({
 
   return (
     <article
-      role="button"
-      tabIndex={0}
-      aria-label={`Lihat detail ${item.name}`}
-      onClick={() => {
-        if (!isEnded) openDetail();
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          if (!isEnded) openDetail();
-        }
-      }}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 outline-none transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-green-700/30 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+      role={isActive ? "button" : undefined}
+      tabIndex={isActive ? 0 : undefined}
+      aria-label={isActive ? `Lihat detail ${item.name}` : undefined}
+      onClick={isActive ? () => openDetail() : undefined}
+      onKeyDown={
+        isActive
+          ? (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openDetail();
+              }
+            }
+          : undefined
+      }
+      className={cn(
+        "group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 outline-none transition-all duration-300",
+        isActive
+          ? "cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:shadow-green-700/25 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+          : "cursor-default",
+      )}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
           src={item.image}
           alt={`Foto ${item.name} dari ${item.vendorName}`}
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
-          className="transition-transform duration-500 group-hover:scale-105"
+          className={cn(
+            "transition-transform duration-500",
+            isActive && "group-hover:scale-105",
+            !isActive && "scale-105 blur-[2px] brightness-[0.8] saturate-[0.6]",
+          )}
         />
 
-        <motion.span
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 z-10 w-1/3 -skew-x-12 bg-white/30 blur-md"
-          initial={{ left: "-40%" }}
-          animate={{ left: "130%" }}
-          transition={{
-            duration: 2.8,
-            repeat: Infinity,
-            repeatDelay: 2,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        />
+        {isActive && (
+          <motion.span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 z-10 w-1/3 -skew-x-12 bg-white/30 blur-md"
+            initial={{ left: "-40%" }}
+            animate={{ left: "130%" }}
+            transition={{
+              duration: 2.8,
+              repeat: Infinity,
+              repeatDelay: 2,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          />
+        )}
+
+        {!isActive && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/35">
+            <span className="rounded-full bg-white/95 px-4 py-1.5 font-sans text-xs font-bold uppercase tracking-[0.14em] text-charcoal-900 shadow-lg">
+              Akan Datang
+            </span>
+          </div>
+        )}
 
         <motion.div
           className="absolute right-3 top-3 z-20"
@@ -298,36 +319,6 @@ function UrgentCard({
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>
-
-        {isActive ? (
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              openDetail();
-            }}
-            aria-label={`Lihat detail ${item.name}`}
-            className={cn(
-              "mx-auto mt-1 flex w-fit items-center gap-2 whitespace-nowrap rounded-full px-8 py-2.5 text-sm font-semibold shadow-lg transition-colors duration-200 active:scale-[0.98]",
-              "bg-[#225138] text-white hover:bg-[#C8A882]",
-              FOCUS_RING,
-            )}
-          >
-            Beli
-          </button>
-        ) : (
-          <div
-            role="status"
-            aria-label={
-              isEnded
-                ? `${item.name} sudah habis`
-                : `${item.name} belum tersedia`
-            }
-            className="mt-1 flex w-full items-center justify-center rounded-full bg-sage-100 px-3 py-2.5 text-center text-sm font-semibold text-charcoal-500"
-          >
-            {isEnded ? "Produk sudah habis" : "Produk belum tersedia"}
-          </div>
-        )}
       </div>
     </article>
   );

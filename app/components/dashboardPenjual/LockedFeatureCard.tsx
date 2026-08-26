@@ -12,6 +12,8 @@ interface LockedFeatureCardProps {
 
   upgradeSlug?: 'standar' | 'premium';
   compact?: boolean;
+  ctaLabel?: string;
+  ctaHref?: string;
 }
 
 export function LockedFeatureCard({
@@ -20,6 +22,8 @@ export function LockedFeatureCard({
   requiredPlanLabel,
   upgradeSlug = 'standar',
   compact = false,
+  ctaLabel,
+  ctaHref,
 }: LockedFeatureCardProps) {
   return (
     <Card
@@ -40,11 +44,14 @@ export function LockedFeatureCard({
             {description}
           </p>
           <Link
-            href={`/langganan/pembayaran?plan=${upgradeSlug}&billing=monthly`}
+            href={
+              ctaHref ??
+              `/langganan/pembayaran?plan=${upgradeSlug}&billing=monthly`
+            }
             className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
           >
             <ShieldCheck className="h-3.5 w-3.5" />
-            Upgrade ke {requiredPlanLabel}
+            {ctaLabel ?? `Upgrade ke ${requiredPlanLabel}`}
           </Link>
         </div>
       </div>

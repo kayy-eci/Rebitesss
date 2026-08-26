@@ -3,11 +3,14 @@
 import { useMemo } from 'react';
 import { Star } from 'lucide-react';
 import { Card } from './Card';
+import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
 import { SERVICE_REVIEWS } from '@/app/detail/toko/service-reviews';
 import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
 import { useCountUp } from './useCountUp';
+import { useSellerOrders } from '@/hooks/use-seller-orders';
 
 export function StoreRatingCard() {
+  const { hasOrders, hydrated } = useSellerOrders();
   const reviews = useMemo(
     () => SERVICE_REVIEWS[SELLER_VENDOR_SLUG] ?? [],
     []
@@ -38,7 +41,17 @@ export function StoreRatingCard() {
         </span>
       </div>
 
-      <div className="mt-4 flex items-center gap-4">
+      <div className="mt-4">
+        {!hydrated ? (
+          <CardLinesSkeleton />
+        ) : !hasOrders ? (
+          <SalesEmptyState
+            title="Belum ada rating"
+            description="Rating dan ulasan pembeli akan muncul setelah ada pesanan yang diselesaikan di tokomu."
+          />
+        ) : (
+          <>
+      <div className="flex items-center gap-4">
         <p className="font-display text-[38px] font-medium leading-none tracking-tight text-forest-900">
           <span ref={ref}>{value.toFixed(1)}</span>
           <span className="ml-1 align-middle text-xs font-medium text-sage-500">/ 5.0</span>
@@ -85,6 +98,9 @@ export function StoreRatingCard() {
           );
         })}
       </ul>
+          </>
+        )}
+      </div>
     </Card>
   );
 }

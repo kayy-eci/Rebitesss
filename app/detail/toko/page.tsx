@@ -3,29 +3,25 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
   ChevronDown,
-  MapPin,
   Quote,
   Search,
   SearchX,
-  ShoppingCart,
   Star,
   Utensils,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/app/components/Badge";
-import { SmartImage } from "@/app/components/SmartImage";
-import { formatRupiah } from "@/lib/data";
 import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
 import { getProductById } from "@/app/detail/product/data";
+import { CategoryRow } from "./category-row";
 import {
   Avatar,
   AvatarImage,
@@ -42,10 +38,9 @@ import { StoreAboutImpact } from "./store-about-impact";
 import { SERVICE_REVIEWS, type ServiceReview } from "./service-reviews";
 import {
   SELLER_VENDOR_SLUG,
-  getSellerProducts,
+  getStoreProductsBySlug,
   isProductAvailable,
   PRODUCTS_UPDATED_EVENT,
-  getFeaturedProductIds,
 } from "@/lib/product-storage";
 import type { SellerProduct } from "@/lib/product-storage";
 import {
@@ -104,16 +99,6 @@ function sellerProductToFoodItem(
   };
 }
 
-
-async function getSellerVendorFoods(vendor: Vendor): Promise<FoodItem[]> {
-  const sellerProducts = await getSellerProducts();
-  return sellerProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
-}
-
-function parseStock(label: string): number | null {
-  const match = label.match(/\d+/);
-  return match ? Number(match[0]) : null;
-}
 
 function isOpenNow(openHours: string): boolean {
   const match = openHours.match(
@@ -311,116 +296,6 @@ function StoreNotFound() {
 }
 
 
-function FoodCard({
-  item,
-  onSelect,
-  forceUnavailable,
-}: {
-  item: FoodItem;
-  onSelect: () => void;
-
-  forceUnavailable?: boolean;
-}) {
-  const stock = parseStock(item.stockLabel);
-  const lowStock = stock !== null && stock <= 3;
-  const savings = item.originalPrice - item.discountedPrice;
-  const isUnavailable = forceUnavailable === true || item.stockLabel === "Habis";
-
-  return (
-    <article
-      role="button"
-      tabIndex={0}
-      aria-label={`Lihat detail ${item.name}`}
-      onClick={onSelect}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onSelect();
-        }
-      }}
-      className={cn(
-        "group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md outline-none transition-all duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2",
-        isUnavailable
-          ? "opacity-60 shadow-none hover:translate-y-0 hover:shadow-md"
-          : "shadow-forest-900/5 hover:shadow-xl hover:shadow-forest-900/15"
-      )}
-    >
-      <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
-        <SmartImage
-          src={item.image}
-          alt={`Foto ${item.name}`}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className={cn(
-            "transition-transform duration-500 group-hover:scale-105",
-            isUnavailable && "grayscale-[40%]"
-          )}
-        />
-        <div className="absolute right-3 top-3">
-          <Badge variant="gold">{item.discountPercent}% OFF</Badge>
-        </div>
-        {isUnavailable && (
-          <div className="absolute inset-0 flex items-center justify-center bg-charcoal-900/40">
-            <span className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-charcoal-900 shadow-lg">
-              {stock === 0 ? "Stok Habis" : "Tidak Tersedia"}
-            </span>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div>
-          <h3 className="font-sans text-base font-bold leading-snug text-charcoal-900">
-            {item.name}
-          </h3>
-          <p className="mt-0.5 text-sm text-charcoal-500">{item.category}</p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-charcoal-500">
-          <span className="flex items-center gap-1 rounded-full bg-gold-100 px-2 py-0.5 font-medium text-gold-600">
-            <Star className="h-3 w-3 fill-gold-500 text-gold-500" />
-            {item.rating.toFixed(1)}
-          </span>
-          {!lowStock && <span>{item.stockLabel}</span>}
-          <span className="flex items-center gap-1">
-            <MapPin className="h-3 w-3 shrink-0 text-sage-500" />
-            {item.distanceKm} km
-          </span>
-        </div>
-
-        <div className="mt-auto pt-1">
-          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <span className="text-lg font-bold text-green-700">
-              {formatRupiah(item.discountedPrice)}
-            </span>
-            <span className="text-xs text-charcoal-500 line-through">
-              {formatRupiah(item.originalPrice)}
-            </span>
-          </div>
-          <p className="mt-0.5 text-[11px] font-semibold text-green-600">
-            Hemat {formatRupiah(savings)}
-          </p>
-        </div>
-
-        {isUnavailable ? (
-          <div className="mt-1 flex w-full items-center justify-center gap-2 rounded-full border border-sage-200 bg-sage-50 py-2.5 text-sm font-semibold text-charcoal-500">
-            {stock === 0 ? "Stok Habis" : "Di Luar Jam Jual"}
-          </div>
-        ) : (
-          <Link
-            href={`/auth/register?produk=${item.id}`}
-            onClick={(event) => event.stopPropagation()}
-            className="mx-auto mt-1 flex w-fit items-center gap-2 whitespace-nowrap rounded-full bg-green-700 px-8 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]"
-          >
-            <ShoppingCart className="h-4 w-4" />
-            Beli Sekarang
-          </Link>
-        )}
-      </div>
-    </article>
-  );
-}
-
-
 function StoreDetailContent() {
   const searchParams = useSearchParams();
   const storeId = searchParams.get("id");
@@ -431,50 +306,50 @@ function StoreDetailContent() {
   );
 
 
-  const [sellerProducts, setSellerProducts] = useState<SellerProduct[]>([]);
-  const [featuredIdsState, setFeaturedIdsState] = useState<Set<string>>(
-    new Set()
-  );
+  const [storeProducts, setStoreProducts] = useState<SellerProduct[]>([]);
+  const [storeLoading, setStoreLoading] = useState(true);
+  const [storeError, setStoreError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const isSellerVendor = vendor?.id === SELLER_VENDOR_SLUG;
 
   useEffect(() => {
-    if (!isSellerVendor) return;
+    if (!vendor || !isSellerVendor) {
+      setStoreProducts([]);
+      setStoreError(null);
+      setStoreLoading(false);
+      return;
+    }
     let mounted = true;
-    const refresh = () => {
-      getSellerProducts().then((list) => {
-        if (mounted) setSellerProducts(list);
-      });
-      getFeaturedProductIds().then((ids) => {
-        if (mounted) setFeaturedIdsState(new Set(ids));
-      });
+    setStoreLoading(true);
+    setStoreError(null);
+
+    const load = async () => {
+      const result = await getStoreProductsBySlug(storeId ?? "");
+      if (!mounted) return;
+      setStoreProducts(result.products);
+      setStoreError(result.error);
+      setStoreLoading(false);
     };
-    refresh();
-    window.addEventListener(PRODUCTS_UPDATED_EVENT, refresh);
-    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+
+    load();
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, load);
+    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, load);
     return () => {
       mounted = false;
-      window.removeEventListener(PRODUCTS_UPDATED_EVENT, refresh);
-      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, load);
+      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, load);
     };
-  }, [isSellerVendor]);
+  }, [vendor, isSellerVendor, storeId, reloadKey]);
 
   const foods = useMemo(
     () => {
       if (!vendor) return [];
-      if (isSellerVendor && sellerProducts.length > 0) {
-        return sellerProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
+      if (isSellerVendor) {
+        return storeProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
       }
       return getVendorFoods(vendor.name, foodItems, urgentItems);
     },
-    [vendor, isSellerVendor, sellerProducts, foodItems, urgentItems]
-  );
-
-  const categories = useMemo(
-    () =>
-      foods
-        .map((item) => item.category)
-        .filter((cat, index, all) => all.indexOf(cat) === index),
-    [foods],
+    [vendor, isSellerVendor, storeProducts, foodItems, urgentItems]
   );
 
   const [query, setQuery] = useState("");
@@ -509,46 +384,59 @@ function StoreDetailContent() {
     if (vendor) setOpenNow(isOpenNow(vendor.openHours));
   }, [vendor]);
 
-  const displayCategories = ["Semua", ...categories];
-
-
   const featuredIds = useMemo(
-    () =>
-      vendor?.id === SELLER_VENDOR_SLUG ? featuredIdsState : new Set<string>(),
-    [vendor, featuredIdsState]
+    () => new Set(storeProducts.filter((sp) => sp.featured).map((sp) => sp.id)),
+    [storeProducts]
   );
 
 
   const sellerAvailability = useMemo(() => {
     if (!isSellerVendor) return new Map<string, boolean>();
     const map = new Map<string, boolean>();
-    for (const sp of sellerProducts) {
+    for (const sp of storeProducts) {
       map.set(sp.id, isProductAvailable(sp));
     }
     return map;
-  }, [isSellerVendor, sellerProducts]);
+  }, [isSellerVendor, storeProducts]);
 
-  const visibleFoods = useMemo(() => {
-    let items = foods;
-
-    if (activeCategory !== "Semua") {
-      items = items.filter((item) => item.category === activeCategory);
-    }
-
-    const q = query.trim().toLowerCase();
-    if (q) {
-      items = items.filter((item) => item.name.toLowerCase().includes(q));
-    }
-
-    return [...items].sort(
-      (a, b) =>
-        Number(featuredIds.has(b.id)) - Number(featuredIds.has(a.id))
+  const categoryGroups = useMemo(() => {
+    const sorted = [...foods].sort(
+      (a, b) => Number(featuredIds.has(b.id)) - Number(featuredIds.has(a.id))
     );
-  }, [foods, query, activeCategory, featuredIds]);
+    const map = new Map<string, FoodItem[]>();
+    for (const item of sorted) {
+      const list = map.get(item.category);
+      if (list) list.push(item);
+      else map.set(item.category, [item]);
+    }
+    return Array.from(map.entries());
+  }, [foods, featuredIds]);
 
-  const isFiltering = query.trim().length > 0 || activeCategory !== "Semua";
+  const searching = query.trim().length > 0;
 
-  const hasResults = visibleFoods.length > 0;
+  const visibleGroups = useMemo(() => {
+    let groups = categoryGroups;
+    if (activeCategory !== "Semua") {
+      groups = groups.filter(([cat]) => cat === activeCategory);
+    }
+    if (!searching) return groups;
+    const q = query.trim().toLowerCase();
+    return groups
+      .map(([cat, items]) => {
+        const filtered = items.filter((item) =>
+          item.name.toLowerCase().includes(q)
+        );
+        return [cat, filtered] as const;
+      })
+      .filter(([, items]) => items.length > 0);
+  }, [categoryGroups, activeCategory, searching, query]);
+
+  const displayCategories = useMemo(
+    () => ["Semua", ...categoryGroups.map(([cat]) => cat)],
+    [categoryGroups]
+  );
+
+  const hasResults = visibleGroups.length > 0;
 
   if (!vendor) {
     return <StoreNotFound />;
@@ -570,7 +458,6 @@ function StoreDetailContent() {
           </h2>
 
           <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center">
-            { }
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-charcoal-500" />
               <input
@@ -593,7 +480,6 @@ function StoreDetailContent() {
               )}
             </div>
 
-            { }
             <div className="relative shrink-0 self-start lg:self-auto">
               <button
                 type="button"
@@ -653,59 +539,101 @@ function StoreDetailContent() {
             </div>
           </div>
 
-          <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <AnimatePresence mode="popLayout">
-              {visibleFoods.map((item) => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.25 }}
-                  className="relative"
-                >
-                  {featuredIds.has(item.id) && (
-                    <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-charcoal-900 shadow-sm">
-                      <Star className="h-3 w-3 fill-current" />
-                      Unggulan
-                    </span>
-                  )}
-                  <FoodCard
-                    item={item}
-                    onSelect={() => handleViewDetail(item.id)}
-                    forceUnavailable={isSellerVendor && sellerAvailability.has(item.id) ? !sellerAvailability.get(item.id) : undefined}
-                  />
-                </motion.div>
+          {isSellerVendor && storeLoading ? (
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  aria-hidden
+                  className="h-64 animate-pulse rounded-2xl bg-white shadow-md shadow-forest-900/5"
+                />
               ))}
-            </AnimatePresence>
-          </div>
-
-          {!hasResults && (
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-sage-100 bg-white p-10 text-center">
+            </div>
+          ) : isSellerVendor && storeError ? (
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-sage-100 bg-white p-10 text-center">
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
                 <SearchX className="h-6 w-6" />
               </span>
               <div>
                 <p className="text-sm font-bold text-charcoal-900">
-                  Menu tidak ditemukan
+                  Menu gagal dimuat
                 </p>
                 <p className="mt-1 text-xs leading-relaxed text-sage-500">
-                  Coba kata kunci lain atau lihat semua menu surplus di toko
-                  ini.
+                  Terjadi kendala saat memuat menu toko ini. Silakan coba lagi.
                 </p>
               </div>
               <button
                 type="button"
-                onClick={() => {
-                  setQuery("");
-                  setActiveCategory("Semua");
-                }}
-                className="rounded-full border border-green-700 px-5 py-2 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+                onClick={() => setReloadKey((k) => k + 1)}
+                className="rounded-full bg-green-700 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-colors hover:bg-green-600"
               >
-                Lihat Semua Menu
+                Coba Lagi
               </button>
             </div>
+          ) : isSellerVendor && storeProducts.length === 0 ? (
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-sage-100 bg-white p-10 text-center">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
+                <Utensils className="h-6 w-6" />
+              </span>
+              <div>
+                <p className="text-sm font-bold text-charcoal-900">
+                  Belum ada menu surplus
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-sage-500">
+                  Toko ini belum menayangkan menu surplus. Kunjungi lagi nanti,
+                  ya.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mt-6 flex flex-col gap-10">
+                {visibleGroups.map(([cat, items]) => (
+                  <CategoryRow
+                    key={cat}
+                    title={cat}
+                    items={items}
+                    onSelect={handleViewDetail}
+                    featuredIds={featuredIds}
+                    isItemUnavailable={
+                      isSellerVendor
+                        ? (item) =>
+                            sellerAvailability.has(item.id)
+                              ? !sellerAvailability.get(item.id)
+                              : undefined
+                        : undefined
+                    }
+                  />
+                ))}
+              </div>
+
+              {!hasResults && (
+                <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-sage-100 bg-white p-10 text-center">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
+                    <SearchX className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-charcoal-900">
+                      Menu tidak ditemukan
+                    </p>
+                    <p className="mt-1 text-xs leading-relaxed text-sage-500">
+                      Coba kata kunci lain atau lihat semua menu surplus di toko
+                      ini.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuery("");
+                      setActiveCategory("Semua");
+                    }}
+                    className="rounded-full border border-green-700 px-5 py-2 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+                  >
+                    Lihat Semua Menu
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
       </div>

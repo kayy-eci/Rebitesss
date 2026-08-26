@@ -2,10 +2,13 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { Card } from './Card';
+import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
 import { achievements } from './data';
+import { useSellerOrders } from '@/hooks/use-seller-orders';
 
 export function AchievementBadgesCard() {
   const reduced = useReducedMotion();
+  const { hasOrders, hydrated } = useSellerOrders();
   const terkumpul = achievements.filter((badge) => badge.group === 'terkumpul');
   const sedangDiusahakan = achievements.filter(
     (badge) => badge.group === 'sedang-diusahakan'
@@ -15,18 +18,33 @@ export function AchievementBadgesCard() {
     <Card>
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-charcoal-900">Pencapaian & Badge</h2>
-        <button
-          type="button"
-          aria-label="Lihat semua pencapaian"
-          className="text-xs font-semibold text-green-700 transition-colors hover:text-green-600"
-        >
-          Lihat Semua
-        </button>
+        {hasOrders && (
+          <button
+            type="button"
+            aria-label="Lihat semua pencapaian"
+            className="text-xs font-semibold text-green-700 transition-colors hover:text-green-600"
+          >
+            Lihat Semua
+          </button>
+        )}
       </div>
 
-      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
-        Lencana Terkumpul
-      </p>
+      {!hydrated ? (
+        <div className="mt-4">
+          <CardLinesSkeleton />
+        </div>
+      ) : !hasOrders ? (
+        <div className="mt-4">
+          <SalesEmptyState
+            title="Pencapaian belum tersedia"
+            description="Badge dan capaian tokomu akan terbuka seiring aktivitas penjualan yang masuk."
+          />
+        </div>
+      ) : (
+        <>
+        <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
+          Lencana Terkumpul
+        </p>
       <div className="mt-2.5 grid grid-cols-3 gap-2">
         {terkumpul.map((badge, index) => {
           const Icon = badge.icon;
@@ -100,7 +118,9 @@ export function AchievementBadgesCard() {
             </div>
           );
         })}
-      </div>
+        </div>
+        </>
+      )}
     </Card>
   );
 }

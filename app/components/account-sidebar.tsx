@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Bell, LogOut, Coins, Receipt, Settings, Store, User, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRebitesCoins } from '@/hooks/use-rebites-coins';
+import { useSellerStatus } from '@/hooks/use-seller-status';
 
 export interface SidebarUser {
   fullName: string;
@@ -62,9 +63,10 @@ export function AccountSidebar({
     };
   }, [open, onClose]);
 
-  const displayName = user?.fullName?.trim() || 'Wildan Tair';
+  const displayName = user?.fullName?.trim() || 'Akun ReBites';
   const initials = user?.fullName ? getInitials(user.fullName) : '';
   const { balance, totalEarned } = useRebitesCoins();
+  const { isSeller, loading: sellerStatusLoading } = useSellerStatus();
 
   return (
     <AnimatePresence>
@@ -125,7 +127,7 @@ export function AccountSidebar({
                   {displayName}
                 </p>
                 <p className="truncate font-inter text-sm text-stone">
-                  {user?.email || 'alta@rebites.id'}
+                  {user?.email || '—'}
                 </p>
               </div>
             </div>
@@ -149,18 +151,34 @@ export function AccountSidebar({
             </div>
 
             { }
-            <div className="px-8 pt-6">
-              <Link
-                href="/auth/register/penjual"
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-full bg-green-700/10 px-5 py-2.5 font-inter text-sm font-semibold text-green-700 transition-colors duration-200 hover:bg-green-700/[0.18]',
-                  FOCUS_RING,
+            {!sellerStatusLoading && (
+              <div className="px-8 pt-6">
+                {isSeller ? (
+                  <Link
+                    href="/dashboard/penjual"
+                    onClick={onClose}
+                    className={cn(
+                      'inline-flex items-center gap-2 rounded-full bg-green-700 px-5 py-2.5 font-inter text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors duration-200 hover:bg-green-600',
+                      FOCUS_RING,
+                    )}
+                  >
+                    <Store className="h-4 w-4" />
+                    Toko Saya
+                  </Link>
+                ) : (
+                  <Link
+                    href="/auth/register/penjual"
+                    className={cn(
+                      'inline-flex items-center gap-2 rounded-full bg-green-700/10 px-5 py-2.5 font-inter text-sm font-semibold text-green-700 transition-colors duration-200 hover:bg-green-700/[0.18]',
+                      FOCUS_RING,
+                    )}
+                  >
+                    <Store className="h-4 w-4" />
+                    Mulai Jualan
+                  </Link>
                 )}
-              >
-                <Store className="h-4 w-4" />
-                Mulai Jualan
-              </Link>
-            </div>
+              </div>
+            )}
 
             { }
             <nav aria-label="Menu akun" className="mt-5 px-8">

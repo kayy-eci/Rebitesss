@@ -1,31 +1,73 @@
 'use client';
 
-import { MoreVertical } from 'lucide-react';
+import Link from 'next/link';
+import { Lock, MoreVertical, ShieldCheck } from 'lucide-react';
 import { Card } from './Card';
 import { formatRupiah } from '@/lib/data';
 import { SmartImage } from '@/app/components/SmartImage';
+import { useSellerPlan } from '@/lib/seller-plan';
 import { useSellerBestSellingMenus } from '@/hooks/use-seller-best-selling';
 
 const MAX_ITEMS = 5;
 
 export function BestSellingMenuRow() {
-  const { menus } = useSellerBestSellingMenus();
+  const { plan, hydrated } = useSellerPlan();
+  const hasAccess = hydrated && plan.bestSellingMenus;
+  const { menus } = useSellerBestSellingMenus(hasAccess);
   const topMenus = menus.slice(0, MAX_ITEMS);
 
   return (
     <Card>
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-charcoal-900">Menu Terlaris</h2>
-        <button
-          type="button"
-          aria-label="Menu lainnya"
-          className="flex h-8 w-8 items-center justify-center rounded-full text-sage-500 transition-colors hover:bg-sage-100 hover:text-charcoal-900"
-        >
-          <MoreVertical className="h-4 w-4" />
-        </button>
+        {!hydrated ? null : !hasAccess ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-gold-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+            <Lock className="h-3 w-3" />
+            Premium
+          </span>
+        ) : (
+          <button
+            type="button"
+            aria-label="Menu lainnya"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-sage-500 transition-colors hover:bg-sage-100 hover:text-charcoal-900"
+          >
+            <MoreVertical className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
-      {topMenus.length === 0 ? (
+      {!hydrated ? (
+        <div className="mt-4 flex flex-wrap items-start gap-x-3 gap-y-4">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="flex flex-col items-center gap-1.5">
+              <span className="block h-12 w-12 animate-pulse rounded-2xl bg-sage-100" />
+              <span className="block h-3 w-12 animate-pulse rounded-full bg-cream-100" />
+            </div>
+          ))}
+        </div>
+      ) : !hasAccess ? (
+        <div className="mt-4 flex flex-col items-start gap-3 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 p-5 sm:flex-row sm:items-center">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sage-100 text-charcoal-500">
+            <Lock className="h-4 w-4" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="inline-flex items-center rounded-full bg-gold-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+              Fitur Premium
+            </p>
+            <p className="mt-1.5 text-xs leading-relaxed text-sage-500">
+              Lihat menu paling laris di tokomu untuk mengatur stok lebih tepat.
+              Tersedia setelah upgrade ke paket berbayar.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/penjual/langganan"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+          >
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Upgrade Sekarang
+          </Link>
+        </div>
+      ) : topMenus.length === 0 ? (
         <p className="mt-4 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 p-6 text-center text-xs leading-relaxed text-sage-500">
           Belum ada menu untuk diperingkat. Tambahkan menu di halaman Menu Saya.
         </p>

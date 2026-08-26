@@ -5,10 +5,13 @@ import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { Card } from './Card';
 import { FilterDropdown } from './FilterDropdown';
+import { LockedFeatureCard } from './LockedFeatureCard';
+import { SalesEmptyState } from './SalesEmptyState';
 import { useCountUp } from './useCountUp';
 import { monthOptions, topCategoriesByMonth } from './data';
 import { formatRupiah } from '@/lib/data';
 import { useSellerPlan } from '@/lib/seller-plan';
+import { useSellerOrders } from '@/hooks/use-seller-orders';
 
 const SEGMENT_COLORS = ['#0F2E1F', '#1B4D32', '#2D6A4F', '#6B9080', '#E4EBE4', '#EAE0C8'];
 
@@ -37,6 +40,8 @@ function useLockedMonths(): string[] {
 }
 
 export function TopCategoryCard() {
+  const { plan, hydrated } = useSellerPlan();
+  const { hasOrders } = useSellerOrders();
   const lockedMonths = useLockedMonths();
   const firstOpenMonth =
     monthOptions.find((option) => !lockedMonths.includes(option.value))?.value ??
@@ -46,8 +51,56 @@ export function TopCategoryCard() {
   const activeMonth = lockedMonths.includes(month) ? firstOpenMonth : month;
   const data = topCategoriesByMonth[activeMonth];
   const isLocked = lockedMonths.includes(month);
-  const { plan } = useSellerPlan();
   const { ref, value } = useCountUp(data.total);
+
+  if (!hydrated) {
+    return (
+      <Card>
+        <div className="h-9 w-44 animate-pulse rounded-lg bg-cream-100" />
+        <div className="mt-5 h-3 w-full animate-pulse rounded-full bg-cream-100" />
+        <div className="mt-4 space-y-2.5">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="h-4 w-full animate-pulse rounded-full bg-cream-100" />
+          ))}
+        </div>
+      </Card>
+    );
+  }
+
+  if (!plan.categoryPerformance) {
+    return (
+      <LockedFeatureCard
+        title="Kategori Terlaris"
+        description="Lihat rincian penjualan per kategori untuk menemukan menu andalan tokomu. Fitur ini terbuka setelah upgrade ke paket berbayar."
+        requiredPlanLabel="Standar"
+        ctaLabel="Upgrade Sekarang"
+        ctaHref="/dashboard/penjual/langganan"
+      />
+    );
+  }
+
+  if (!hasOrders) {
+    return (
+      <Card>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p className="font-display text-[28px] font-medium leading-none tracking-tight text-forest-900">
+              Rp0
+            </p>
+            <p className="mt-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-sage-500">
+              Kategori Terlaris
+            </p>
+          </div>
+        </div>
+        <div className="mt-4">
+          <SalesEmptyState
+            title="Belum ada data kategori"
+            description="Rincian penjualan per kategori akan muncul otomatis setelah ada pesanan yang masuk ke tokomu."
+          />
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card>

@@ -15,15 +15,12 @@ import type { StoredOrder } from '@/lib/types';
 import {
   ORDERS_UPDATED_EVENT,
   completeExpiredOrders,
-  getAllOrders,
+  getSellerOrders,
   getOrderById,
   patchOrder,
 } from '@/lib/order-storage';
 import { notifyOrderCompleted } from '@/lib/order-notifications';
-import {
-  SELLER_VENDOR_NAME,
-  SELLER_VENDOR_SLUG,
-} from '@/lib/product-storage';
+import { getSellerUmkm } from '@/lib/product-storage';
 import {
   SUB_STATUS_LABEL,
   formatOrderDateTime,
@@ -42,10 +39,8 @@ function useVendorOrders() {
   const [hydrated, setHydrated] = useState(false);
 
   const refresh = useCallback(async () => {
-    const all = await getAllOrders();
-    setOrders(
-      all.filter((order) => order.vendorSlug === SELLER_VENDOR_SLUG)
-    );
+    const list = await getSellerOrders();
+    setOrders(list);
     setHydrated(true);
   }, []);
 
@@ -193,6 +188,17 @@ function EmptyState({ hasAnyOrders }: { hasAnyOrders: boolean }) {
 export default function PesananMasukPage() {
   const { orders, ongoing, completed, hydrated } = useVendorOrders();
   const [tab, setTab] = useState<OrderTab>('berlangsung');
+  const [storeName, setStoreName] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    getSellerUmkm().then((umkm) => {
+      if (!cancelled && umkm) setStoreName(umkm.businessName);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleComplete = useCallback((orderId: string) => {
     getOrderById(orderId).then((order) => {
@@ -239,7 +245,7 @@ export default function PesananMasukPage() {
         </h1>
         <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-sage-500">
           <Store className="h-3.5 w-3.5" />
-          Pesanan pembeli untuk {SELLER_VENDOR_NAME}
+          Pesanan pembeli untuk {storeName || 'tokomu'}
         </p>
       </motion.div>
 

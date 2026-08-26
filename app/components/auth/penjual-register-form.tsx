@@ -45,6 +45,7 @@ import {
 } from "@/app/components/ui/popover";
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { SELLER_STATUS_UPDATED_EVENT } from "@/hooks/use-seller-status";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -273,6 +274,18 @@ export default function PenjualRegisterForm() {
       const s2 = step2Form.getValues();
       const userId = session.user.id;
 
+      // Cegah toko duplikat: kalau user sudah punya UMKM, langsung ke dashboard.
+      const { data: existingUmkm } = await supabase
+        .from("umkm_profiles")
+        .select("id")
+        .eq("user_id", userId)
+        .limit(1);
+      if (existingUmkm && existingUmkm.length > 0) {
+        window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
+        router.push("/dashboard/penjual");
+        return;
+      }
+
       await supabase.auth.signUp({
         email: session.user.email ?? "",
         password: step1Form.getValues("password"),
@@ -314,6 +327,7 @@ export default function PenjualRegisterForm() {
 
       if (insertError) throw insertError;
 
+      window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
       router.push("/dashboard/penjual");
     } catch (err) {
       const message = err instanceof Error ? err.message : "";

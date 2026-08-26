@@ -4,7 +4,9 @@ import { useMemo } from 'react';
 import { FileText } from 'lucide-react';
 import { Card } from './Card';
 import { LockedFeatureCard } from './LockedFeatureCard';
+import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
 import { useSellerPlan } from '@/lib/seller-plan';
+import { useSellerOrders } from '@/hooks/use-seller-orders';
 import { AVG_PRICE_PER_PORSI, salesActivityPeriod, salesActivityWeek } from './data';
 import { formatRupiah } from '@/lib/data';
 
@@ -18,7 +20,8 @@ interface ReportRow {
 }
 
 export function DetailedReportCard({ period }: { period: StatsPeriod }) {
-  const { plan } = useSellerPlan();
+  const { plan, hydrated } = useSellerPlan();
+  const { hasOrders } = useSellerOrders();
 
   const rows = useMemo<ReportRow[]>(() => {
     const source =
@@ -35,6 +38,17 @@ export function DetailedReportCard({ period }: { period: StatsPeriod }) {
       .reverse();
   }, [period]);
 
+  if (!hydrated) {
+    return (
+      <Card>
+        <div className="h-6 w-40 animate-pulse rounded-lg bg-cream-100" />
+        <div className="mt-4">
+          <CardLinesSkeleton />
+        </div>
+      </Card>
+    );
+  }
+
   if (!plan.detailedReport) {
     return (
       <LockedFeatureCard
@@ -42,6 +56,33 @@ export function DetailedReportCard({ period }: { period: StatsPeriod }) {
         description="Laporan harian per porsi beserta estimasi pendapatan per hari."
         requiredPlanLabel="Standar"
       />
+    );
+  }
+
+  if (!hasOrders) {
+    return (
+      <Card>
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
+              Laporan Rinci · {period.replace('-', ' ')}
+            </p>
+            <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-forest-900">
+              <FileText className="h-4 w-4" />
+              Penjualan Harian
+            </h3>
+          </div>
+          <span className="rounded-full bg-sage-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+            Paket {plan.label}
+          </span>
+        </div>
+        <div className="mt-4">
+          <SalesEmptyState
+            title="Laporan belum tersedia"
+            description="Rincian penjualan harian akan terisi otomatis setelah ada pesanan yang masuk ke tokomu."
+          />
+        </div>
+      </Card>
     );
   }
 

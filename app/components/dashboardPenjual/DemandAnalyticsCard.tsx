@@ -16,8 +16,9 @@ interface DemandInsight {
 }
 
 export function DemandAnalyticsCard() {
-  const { plan } = useSellerPlan();
-  const { menus: bestSellers } = useSellerBestSellingMenus();
+  const { plan, hydrated } = useSellerPlan();
+  const hasAccess = plan.demandAnalytics;
+  const { menus: bestSellers } = useSellerBestSellingMenus(hasAccess);
 
   const insights = useMemo<DemandInsight[]>(() => {
     const last30 = salesActivityPeriod;
@@ -38,6 +39,19 @@ export function DemandAnalyticsCard() {
       };
     });
   }, [bestSellers]);
+
+  if (!hydrated) {
+    return (
+      <Card>
+        <div className="h-6 w-36 animate-pulse rounded-lg bg-cream-100" />
+        <div className="mt-4 space-y-3">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-4 w-full animate-pulse rounded-full bg-cream-100" />
+          ))}
+        </div>
+      </Card>
+    );
+  }
 
   if (!plan.demandAnalytics) {
     return (

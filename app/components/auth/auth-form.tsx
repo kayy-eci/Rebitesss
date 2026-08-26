@@ -8,8 +8,23 @@ import {
 } from "react";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
-import { ArrowLeft, ArrowRight, Leaf, Lock, Mail, User } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Leaf,
+  Lock,
+  Mail,
+  MailCheck,
+  User,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/app/components/ui/dialog";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -95,9 +110,11 @@ export default function AuthForm({
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [confirmEmailOpen, setConfirmEmailOpen] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (confirmEmailOpen) return;
     setError("");
 
     if (isSignup && !fullName.trim()) {
@@ -118,12 +135,19 @@ export default function AuthForm({
       const { supabase } = await import("@/lib/supabase");
 
       if (isSignup) {
-        const { error: signUpError } = await supabase.auth.signUp({
-          email: email.trim(),
-          password,
-          options: { data: { full_name: fullName.trim() } },
-        });
+        const { data: signUpData, error: signUpError } =
+          await supabase.auth.signUp({
+            email: email.trim(),
+            password,
+            options: { data: { full_name: fullName.trim() } },
+          });
         if (signUpError) throw signUpError;
+
+        // Email confirmation aktif: belum ada session -> minta user cek email.
+        if (!signUpData.session) {
+          setConfirmEmailOpen(true);
+          return;
+        }
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email: email.trim(),
@@ -252,7 +276,7 @@ export default function AuthForm({
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || confirmEmailOpen}
           className="flex w-full items-center justify-center gap-2 rounded-md bg-[#225138] px-5 py-3.5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F7F5EF] transition-colors duration-200 hover:bg-[#1B3F2C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? (isSignup ? "Mendaftar" : "Masuk") : submitLabel}
@@ -272,6 +296,31 @@ export default function AuthForm({
           {bottomHint.linkText}
         </Link>
       </motion.p>
+
+      <Dialog open={confirmEmailOpen} onOpenChange={setConfirmEmailOpen}>
+        <DialogContent className="max-w-sm rounded-2xl border-[#DEDACF] bg-white p-6">
+          <DialogHeader>
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#225138]/10 text-[#225138]">
+              <MailCheck className="h-6 w-6" />
+            </span>
+            <DialogTitle className="text-center font-display text-lg font-medium tracking-tight text-[#225138]">
+              Cek Email Kamu
+            </DialogTitle>
+            <DialogDescription className="text-center font-sans text-sm leading-relaxed text-[#6B6A63]">
+              Registrasi berhasil! Kami mengirim tautan konfirmasi ke{" "}
+              <span className="font-semibold text-[#1B3F2C]">{email.trim()}</span>
+              . Buka email tersebut, konfirmasi pendaftaran akunmu, lalu masuk
+              untuk mulai menggunakan ReBites.
+            </DialogDescription>
+          </DialogHeader>
+          <Link
+            href="/auth/login"
+            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-md bg-[#225138] px-5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F7F5EF] transition-colors duration-200 hover:bg-[#1B3F2C]"
+          >
+            Ke Halaman Masuk
+          </Link>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }

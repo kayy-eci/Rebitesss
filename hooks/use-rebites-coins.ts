@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { supabase, hasSupabaseConfig } from '@/lib/supabase';
 import { DATA_SOURCE } from '@/lib/data-source';
 import {
@@ -135,6 +135,12 @@ export function useRebitesCoins(): CoinsSnapshot {
 
   const [snapshot, setSnapshot] = useState<CoinsSnapshot>(EMPTY_SNAPSHOT);
 
+  // Nama channel harus unik per instance: channel dengan nama sama akan
+  // di-reuse supabase-js, dan .on() pada channel yang sudah subscribe error.
+  const channelIdRef = useRef(
+    `rebites-coin-transactions-${Math.random().toString(36).slice(2)}`
+  );
+
   const refresh = useCallback(async () => {
     if (isLocalLedger()) return;
     const {
@@ -154,7 +160,7 @@ export function useRebitesCoins(): CoinsSnapshot {
     refresh();
 
     const channel = supabase
-      .channel('rebites-coin-transactions')
+      .channel(channelIdRef.current)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'coin_transactions' },

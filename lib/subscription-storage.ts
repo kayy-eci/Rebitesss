@@ -83,13 +83,31 @@ export interface SaveSubscriptionInput {
   paymentMethodId: string | null;
 }
 
+export interface SaveSubscriptionSuccess {
+  ok: true;
+  subscription: StoredSubscription;
+}
+
+export interface SaveSubscriptionFailure {
+  ok: false;
+  error: string;
+}
+
+export type SaveSubscriptionResult =
+  | SaveSubscriptionSuccess
+  | SaveSubscriptionFailure;
+
 export async function saveSubscription(
   input: SaveSubscriptionInput
-): Promise<StoredSubscription | null> {
+): Promise<SaveSubscriptionResult> {
   const umkmId = await getOwnUmkmId();
   if (!umkmId) {
     console.error('[subscription] tidak ada profil UMKM untuk user ini.');
-    return null;
+    return {
+      ok: false,
+      error:
+        'Profil toko belum terhubung dengan akun ini. Coba keluar lalu masuk kembali.',
+    };
   }
 
   const { data: plan, error: planError } = await supabase
@@ -99,7 +117,10 @@ export async function saveSubscription(
     .maybeSingle();
   if (planError || !plan) {
     console.error('[subscription] paket tidak ditemukan:', planError?.message);
-    return null;
+    return {
+      ok: false,
+      error: 'Paket langganan tidak ditemukan. Silakan pilih paket lainnya.',
+    };
   }
 
   const now = new Date();
@@ -124,13 +145,23 @@ export async function saveSubscription(
     .maybeSingle();
   if (error || !data) {
     console.error('[subscription] gagal menyimpan langganan:', error?.message);
-    return null;
+    return {
+      ok: false,
+      error: 'Pembayaran belum dapat diproses. Silakan coba lagi.',
+    };
   }
 
   dispatchUpdated();
 
   const subscription = rowToStoredSubscription(data);
-  if (subscription) {
+  if (!subscription) {
+    return {
+      ok: false,
+      error: 'Pembayaran belum dapat diproses. Silakan coba lagi.',
+    };
+  }
+
+  try {
     const billingLabel = input.billing === 'yearly' ? 'Tahunan' : 'Bulanan';
     const periodEndLabel = new Date(periodEnd).toLocaleDateString('id-ID', {
       day: 'numeric',
@@ -153,7 +184,9 @@ export async function saveSubscription(
         href: '/dashboard/penjual',
       });
     }
+  } catch (notifyError) {
+    console.error('[subscription] notifikasi gagal dibuat:', notifyError);
   }
 
-  return subscription;
+  return { ok: true, subscription };
 }

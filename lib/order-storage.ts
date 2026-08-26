@@ -3,6 +3,7 @@
 import { supabase, hasSupabaseConfig } from './supabase';
 import { DATA_SOURCE } from './data-source';
 import * as localOrders from './local/order-storage';
+import { getSellerUmkm } from './product-storage';
 import type { StoredOrder, FulfillmentMode, DeliveryAddress } from './types';
 
 /** true = pesanan disimpan lokal (localStorage), bukan Supabase. */
@@ -148,6 +149,22 @@ export async function getAllOrders(): Promise<StoredOrder[]> {
     return [];
   }
   return (data ?? []).map(rowToStoredOrder);
+}
+
+/** Pesanan yang masuk ke toko milik seller yang sedang login. */
+export async function getSellerOrders(): Promise<StoredOrder[]> {
+  const umkm = await getSellerUmkm();
+  // Tanpa profil toko -> tidak ada pesanan masuk.
+  // (Jangan fallback ke toko demo agar data antar-penjual tidak tercampur.)
+  if (!umkm) return [];
+
+  // vendor_slug pada order bisa berupa slug maupun id UMKM
+  // (tergantung nilai yang dipakai saat checkout), jadi cocokkan keduanya.
+  const identifiers = new Set(
+    [umkm.slug, umkm.id].filter((value): value is string => Boolean(value))
+  );
+  const all = await getAllOrders();
+  return all.filter((order) => identifiers.has(order.vendorSlug));
 }
 
 export async function getOrderById(orderId: string): Promise<StoredOrder | undefined> {

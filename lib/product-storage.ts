@@ -154,6 +154,63 @@ export async function getSellerProducts(): Promise<SellerProduct[]> {
   return (data ?? []).map(rowToSellerProduct);
 }
 
+/** Produk milik satu toko (UMKM) berdasarkan slug/id routing, bukan sesi viewer. */
+export async function getStoreProductsBySlug(
+  slug: string
+): Promise<{ products: SellerProduct[]; error: string | null }> {
+  if (!slug) return { products: [], error: null };
+
+  if (isLocalStore()) {
+    if (slug !== SELLER_VENDOR_SLUG) return { products: [], error: null };
+    try {
+      return { products: localStore.getSellerProducts(), error: null };
+    } catch {
+      return { products: [], error: 'Gagal memuat produk toko.' };
+    }
+  }
+
+  const STORE_LOAD_ERROR = 'Gagal memuat produk toko.';
+
+  // Resolusi slug → id UMKM (relasi resmi products.umkm_id).
+  const bySlug = await supabase
+    .from('umkm_profiles')
+    .select('id')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (bySlug.error) {
+    console.error('[product-storage] gagal resolusi slug toko:', bySlug.error.message);
+    return { products: [], error: STORE_LOAD_ERROR };
+  }
+  let umkmId: string | null = bySlug.data?.id ?? null;
+
+  if (!umkmId) {
+    // Vendor tanpa slug memakai id sebagai identitas routing.
+    const byId = await supabase
+      .from('umkm_profiles')
+      .select('id')
+      .eq('id', slug)
+      .maybeSingle();
+    if (byId.error) {
+      console.error('[product-storage] gagal resolusi id toko:', byId.error.message);
+      return { products: [], error: STORE_LOAD_ERROR };
+    }
+    umkmId = byId.data?.id ?? null;
+  }
+
+  if (!umkmId) return { products: [], error: null };
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('umkm_id', umkmId)
+    .order('created_at', { ascending: false });
+  if (error) {
+    console.error('[product-storage] gagal memuat produk toko:', error.message);
+    return { products: [], error: STORE_LOAD_ERROR };
+  }
+  return { products: (data ?? []).map(rowToSellerProduct), error: null };
+}
+
 export async function getSellerProductCount(): Promise<number> {
   if (isLocalStore()) {
     return localStore.getSellerProductCount();
