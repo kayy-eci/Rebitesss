@@ -1,0 +1,60 @@
+/**
+ * Pricing constants — MIRROR dari lib/useOrderCalculation.ts
+ * Wajib sinkron dengan client agar hasil hitung server sama dengan UI.
+ */
+
+export const ADMIN_FEE_AMOUNT = 2000;
+export const DELIVERY_FEE = 8000;
+export const REBITES_COIN_RATE = 0.005;
+export const COIN_VALUE = 1;
+
+export interface PricingInput {
+  unitPrice: number;
+  quantity: number;
+  fulfillment: 'delivery' | 'pickup';
+  promoPercentOff?: number; // 0-100
+  useCoins: boolean;
+  coinBalance: number;
+}
+
+export interface PricingResult {
+  subtotal: number;
+  discount: number;
+  serviceFee: number;
+  deliveryFee: number;
+  totalBeforeCoin: number;
+  coinUsed: number;
+  total: number;
+  coinEarned: number;
+}
+
+export function calculatePricing(input: PricingInput): PricingResult {
+  const subtotal = input.unitPrice * input.quantity;
+  const discount = input.promoPercentOff
+    ? Math.round((subtotal * input.promoPercentOff) / 100)
+    : 0;
+  const serviceFee = ADMIN_FEE_AMOUNT;
+  const deliveryFee = input.fulfillment === 'delivery' ? DELIVERY_FEE : 0;
+  const totalBeforeCoin = Math.max(
+    0,
+    subtotal - discount + serviceFee + deliveryFee
+  );
+
+  const coinUsed = input.useCoins
+    ? Math.min(Math.max(0, Math.floor(input.coinBalance)), totalBeforeCoin)
+    : 0;
+
+  const total = Math.max(0, totalBeforeCoin - coinUsed);
+  const coinEarned = Math.floor(subtotal * REBITES_COIN_RATE);
+
+  return {
+    subtotal,
+    discount,
+    serviceFee,
+    deliveryFee,
+    totalBeforeCoin,
+    coinUsed,
+    total,
+    coinEarned,
+  };
+}

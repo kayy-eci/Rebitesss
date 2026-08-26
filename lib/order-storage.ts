@@ -191,14 +191,33 @@ export async function patchOrder(
   return rowToStoredOrder(data);
 }
 
-/** Menandai pesanan ongoing yang lewat estimasi selesai sebagai completed. */
+/** Menandai pesanan ongoing yang lewat estimasi sebagai completed.
+ *  Hanya untuk pesanan yang sudah lunas (payment_status = paid) — pesanan
+ *  belum bayar (Xendit unpaid/expired) tidak akan di-auto-complete. */
 export async function completeExpiredOrders(userId: string | null | undefined): Promise<boolean> {
   if (!userId) return false;
+
+  // Ambil payment_status langsung dari DB agar tidak mengandalkan StoredOrder
+  const { data: paymentRows } = await supabase
+    .from('orders')
+    .select('order_code, payment_status, total_price')
+    .eq('buyer_id', userId);
+
+  const paidSet = new Set<string>();
+  for (const row of (paymentRows ?? []) as Array<Record<string, unknown>>) {
+    const code = row.order_code as string;
+    const status = row.payment_status as string | null;
+    const total = Number(row.total_price ?? 0);
+    // Free orders (total 0) dianggap lunas walau payment_status masih unpaid sekilas
+    if (status === 'paid' || total === 0) paidSet.add(code);
+  }
+
   const orders = await getUserOrders(userId);
   const now = Date.now();
   let changed = false;
   for (const order of orders) {
     if (order.status !== 'ongoing') continue;
+    if (!paidSet.has(order.orderId)) continue;
     const deadline = order.estimatedCompletionAt
       ? new Date(order.estimatedCompletionAt).getTime()
       : new Date(order.createdAt).getTime() + (order.estimatedMinutes ?? 20) * 60_000;

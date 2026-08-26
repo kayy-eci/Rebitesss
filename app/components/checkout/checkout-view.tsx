@@ -15,7 +15,7 @@ import { QuantityStepperCard } from './quantity-stepper-card';
 import { FulfillmentToggle } from './fulfillment-toggle';
 import { PickupInfoCard } from './pickup-info-row';
 import { DeliveryAddressSection } from './delivery-address-section';
-import { PaymentMethodList } from './payment-method-list';
+import { ShieldCheck } from 'lucide-react';
 import { PaymentSummaryCard } from './payment-summary-card';
 import { PickupCodeNote } from './pickup-code-note';
 import { StickyMobileBar } from './sticky-mobile-bar';
@@ -145,7 +145,21 @@ export function CheckoutView() {
               <PickupInfoCard />
               <DeliveryAddressSection />
 
-              <PaymentMethodList />
+              <div className="rounded-2xl border border-sage-100 bg-white p-5 shadow-sm sm:p-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-green-700" />
+                  <h3 className="font-display text-base font-medium text-charcoal-900">
+                    Pembayaran aman via Xendit
+                  </h3>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-charcoal-500">
+                  Setelah klik Bayar, kamu akan diarahkan ke halaman Xendit untuk memilih metode:
+                  QRIS, GoPay, OVO, DANA, ShopeePay, Virtual Account, atau Kartu. Pembayaran diverifikasi otomatis.
+                </p>
+                <p className="mt-2 text-xs text-sage-500">
+                  Pesanan gratis yang tertutup koin akan langsung berhasil tanpa redirect.
+                </p>
+              </div>
             </div>
 
             { }

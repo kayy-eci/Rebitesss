@@ -17,30 +17,17 @@ import type {
   PaymentMethod,
   PromoCode,
   StoredOrder,
-  Vendor,
 } from '@/lib/types';
 import { useOrderCalculation } from '@/lib/useOrderCalculation';
-import {
-  estimateOrderMinutes,
-  getVendorPreparationMinutes,
-} from '@/lib/delivery-estimate';
-import {
-  createOrderId,
-  reserveStock,
-  saveOrder,
-} from '@/lib/order-storage';
-import {
-  createNotification,
-  getUmkmOwnerUserId,
-} from '@/lib/notification-storage';
-import { settleOrderCoins, useRebitesCoins } from '@/hooks/use-rebites-coins';
+import { useRebitesCoins } from '@/hooks/use-rebites-coins';
 import { useCurrentUser } from '@/lib/current-user';
 import {
   useAddresses,
   type AddressFormValues,
 } from '@/hooks/use-addresses';
-import { formatRupiah } from '@/lib/data';
-import { fetchVendors, validatePromoCode } from '@/lib/catalog';
+import { validatePromoCode } from '@/lib/catalog';
+import { supabase } from '@/lib/supabase';
+import { getOrderById } from '@/lib/order-storage';
 import { paymentMethods } from './payment-methods';
 
 interface CheckoutContextValue {
@@ -82,7 +69,7 @@ interface CheckoutContextValue {
   submitting: boolean;
   submitOrder: () => void;
 
-  /** Terisi tepat setelah checkout sukses -> pemicu popup konfirmasi. */
+  /** Terisi tepat setelah checkout sukses -> pemicu popup konfirmasi (hanya untuk pesanan gratis lunas coin). */
   successOrder: StoredOrder | null;
 }
 
@@ -105,11 +92,6 @@ export function CheckoutProvider({
 }) {
   const router = useRouter();
   const { user } = useCurrentUser();
-
-  const [vendors, setVendors] = useState<Vendor[]>([]);
-  useEffect(() => {
-    fetchVendors().then(setVendors);
-  }, []);
 
   const [quantity, setQuantity] = useState(initialQuantity);
   const [fulfillment, setFulfillment] = useState<FulfillmentMode>('pickup');
@@ -187,13 +169,13 @@ export function CheckoutProvider({
     [coinBalance],
   );
 
+  // Xendit: pemilihan metode terjadi di halaman invoice Xendit, jadi
+  // checkout lokal hanya butuh alamat bila delivery.
   const missingRequirement = useMemo<string | null>(() => {
-    if (!selectedMethod && summary.total > 0)
-      return 'Pilih metode pembayaran terlebih dahulu.';
     if (fulfillment === 'delivery' && !selectedAddress)
       return 'Pilih alamat pengiriman terlebih dahulu.';
     return null;
-  }, [selectedMethod, fulfillment, selectedAddress, summary.total]);
+  }, [fulfillment, selectedAddress]);
 
   const canPay = missingRequirement === null && !submitting;
 
@@ -203,135 +185,83 @@ export function CheckoutProvider({
       router.push('/auth/login');
       return;
     }
-    if (!selectedMethod && summary.total > 0) return;
     if (fulfillment === 'delivery' && !selectedAddress) return;
 
     submittedRef.current = true;
     setSubmitting(true);
+    setPromoError(null);
 
     (async () => {
       try {
-        // 1. Kunci stok secara atomik; batal kalau stok kurang.
-        const reserved = await reserveStock(draft.productId, quantity);
-        if (!reserved) {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData.session?.access_token;
+        if (!token) {
           setSubmitting(false);
           submittedRef.current = false;
-          setPromoError('Stok tidak mencukupi, pesanan dibatalkan.');
+          setPromoError('Sesi login habis. Silakan login ulang.');
+          router.push('/auth/login');
           return;
         }
 
-        const orderId = createOrderId();
-        const createdAt = new Date().toISOString();
-
-        const estimate = estimateOrderMinutes({
-          fulfillment,
-          distanceKm: draft.distanceKm,
-          vendorSlug: draft.vendorSlug,
-        });
-        const estimatedCompletionAt = new Date(
-          Date.now() + estimate.estimatedMinutes * 60_000
-        ).toISOString();
-
-        const vendorInfo = vendors.find((v) => v.id === draft.vendorSlug);
-
-        const order: StoredOrder = {
-          orderId,
-          userId: user.id,
-          productId: draft.productId,
-          productName: draft.productName,
-          vendorName: draft.vendorName,
-          vendorSlug: draft.vendorSlug,
-          image: draft.image,
+        const payload: Record<string, unknown> = {
+          productSlug: draft.productSlug,
           quantity,
           fulfillment,
-          addressSnapshot:
-            fulfillment === 'delivery' && selectedAddress
-              ? {
-                  label: selectedAddress.label,
-                  receiverName: selectedAddress.receiverName,
-                  phone: selectedAddress.phone,
-                  province: selectedAddress.province,
-                  city: selectedAddress.city,
-                  district: selectedAddress.district,
-                  fullAddress: selectedAddress.fullAddress,
-                  note: selectedAddress.note,
-                }
-              : null,
-          paymentMethodId: selectedMethod?.id ?? 'tanpa-pembayaran',
-          subtotal: summary.subtotal,
-          discount: summary.discount,
-          serviceFee: summary.serviceFee,
-          deliveryFee: summary.deliveryFee,
-          totalBeforeCoin: summary.totalBeforeCoin,
-          coinUsed: summary.coinUsed,
-          total: summary.total,
-          coinEarned: summary.coinEarned,
-          createdAt,
-
-          unitPrice: draft.discountedPrice,
           promoCode: promo?.code ?? null,
-          status: 'ongoing',
-          estimatedMinutes: estimate.estimatedMinutes,
-          estimatedCompletionAt,
-          completedAt: undefined,
-          distanceKm: fulfillment === 'delivery' ? draft.distanceKm : undefined,
-          vendorAddress: vendorInfo?.address ?? draft.pickupLocation,
-          vendorOpenHours: vendorInfo?.openHours,
-          preparationMinutes:
-            estimate.preparationMinutes ||
-            getVendorPreparationMinutes(draft.vendorSlug),
-          co2eSavedKg: draft.co2ePerUnitKg * quantity,
+          useCoins,
         };
-
-        await saveOrder(order);
-        settleOrderCoins(order.orderId, {
-          spent: summary.coinUsed,
-          earned: summary.coinEarned,
-        });
-
-        const buyerUserId = user.id;
-        const paymentMethodName =
-          paymentMethods.find((m) => m.id === selectedMethod?.id)?.name ?? '—';
-
-        createNotification({
-          userId: buyerUserId,
-          role: 'buyer',
-          type: 'payment_success',
-          title: 'Pembayaran Berhasil',
-          message: `Pembayaran ${formatRupiah(order.total)} untuk pesanan ${order.productName} telah berhasil diproses melalui ${paymentMethodName}.`,
-          referenceId: orderId,
-          href: `/riwayatPesanan`,
-        });
-
-        createNotification({
-          userId: buyerUserId,
-          role: 'buyer',
-          type: 'order_created',
-          title: 'Pesanan Berhasil Dibuat',
-          message: `Pesanan #${orderId} dari ${order.vendorName} sedang diproses. Estimasi ${order.estimatedMinutes ?? 20} menit.`,
-          referenceId: orderId,
-          href: `/riwayatPesanan`,
-        });
-
-        const sellerUserId =
-          (await getUmkmOwnerUserId(order.vendorSlug)) ?? null;
-        if (sellerUserId) {
-          const buyerName =
-            order.addressSnapshot?.receiverName ?? 'Pembeli';
-          createNotification({
-            userId: sellerUserId,
-            role: 'seller',
-            type: 'incoming_order',
-            title: 'Pesanan Masuk!',
-            message: `${buyerName} memesan ${order.productName}${order.quantity > 1 ? ` ×${order.quantity}` : ''} seharga ${formatRupiah(order.total)}. Segera siapkan pesanan.`,
-            referenceId: orderId,
-            href: `/dashboard/penjual/pesanan`,
-          });
+        if (fulfillment === 'delivery' && selectedAddress) {
+          payload.addressSnapshot = {
+            label: selectedAddress.label,
+            receiverName: selectedAddress.receiverName,
+            phone: selectedAddress.phone,
+            province: selectedAddress.province,
+            city: selectedAddress.city,
+            district: selectedAddress.district,
+            fullAddress: selectedAddress.fullAddress,
+            note: selectedAddress.note,
+          };
         }
 
-        // Checkout selesai -> tampilkan popup konfirmasi (bukan halaman baru).
+        const res = await fetch('/api/checkout/xendit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const json = (await res.json().catch(() => null)) as
+          | { error?: string; invoiceUrl?: string; orderCode?: string; free?: boolean }
+          | null;
+
+        if (!res.ok) {
+          const msg = json?.error ?? `Gagal membuat pembayaran (${res.status}).`;
+          setSubmitting(false);
+          submittedRef.current = false;
+          setPromoError(msg);
+          return;
+        }
+
+        if (json?.free && json.orderCode) {
+          // Pesanan gratis (tertutup koin) — langsung tampilkan popup sukses
+          const order = await getOrderById(json.orderCode);
+          if (order) setSuccessOrder(order);
+          setSubmitting(false);
+          return;
+        }
+
+        if (json?.invoiceUrl) {
+          // Redirect ke halaman bayar Xendit (external)
+          window.location.href = json.invoiceUrl;
+          return;
+        }
+
+        // Fallback: tidak ada invoiceUrl
         setSubmitting(false);
-        setSuccessOrder(order);
+        submittedRef.current = false;
+        setPromoError('Respons pembayaran tidak valid.');
       } catch (error) {
         console.error('[checkout] gagal memproses pesanan:', error);
         setSubmitting(false);
@@ -346,11 +276,9 @@ export function CheckoutProvider({
     quantity,
     router,
     selectedAddress,
-    selectedMethod,
     submitting,
-    summary,
+    useCoins,
     user,
-    vendors,
   ]);
 
   const value = useMemo<CheckoutContextValue>(
