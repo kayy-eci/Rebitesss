@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
 import type { FoodItem } from "@/lib/types";
 import { getCategoryBySlug } from "@/lib/categories";
-import { getProductById } from "@/app/detail/product/data";
+import { useProductDetail } from "@/app/detail/product/use-product-detail";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
@@ -203,9 +203,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
     (filterState.rating !== "semua" ? 1 : 0) +
     (filterState.sort !== "terbaru" ? 1 : 0);
   const hasFilters = activeFilterCount > 0 || searchQuery.trim() !== "";
-  const selectedProduct = selectedProductId
-    ? getProductById(selectedProductId)
-    : undefined;
+  const selectedProduct = useProductDetail(selectedProductId);
 
   const resetAll = () => {
     setFilterState(DEFAULT_FILTER_STATE);

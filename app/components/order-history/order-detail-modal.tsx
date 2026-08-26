@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { SmartImage } from '@/app/components/SmartImage';
 import { formatRupiah } from '@/lib/data';
-import { getProductById } from '@/app/detail/product/data';
+import { fetchProductDetail } from '@/app/detail/product/detail-data';
 import type { StoredOrder } from '@/lib/types';
 import {
   getOrderSubStatus,
@@ -84,9 +84,9 @@ export function OrderDetailModal({
     }
   };
 
-  const handleReorder = () => {
+  const handleReorder = async () => {
     if (!order) return;
-    const product = getProductById(order.productId);
+    const product = await fetchProductDetail(order.productId);
     if (!product) {
       toast({ title: 'Produk ini sudah tidak tersedia' });
       return;

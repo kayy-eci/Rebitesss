@@ -12,7 +12,7 @@ import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { FoodCard } from "@/app/components/FoodCard";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detail/product/data";
+import { useProductDetail } from "@/app/detail/product/use-product-detail";
 
 const VALID_FILTERS: FilterKey[] = [
   "terdekat",
@@ -69,9 +69,7 @@ function CariContent() {
     setSelectedProductId(null);
   }, []);
 
-  const selectedProduct = selectedProductId
-    ? getProductById(selectedProductId)
-    : undefined;
+  const selectedProduct = useProductDetail(selectedProductId);
 
   const fromPage = searchParams.get("from") === "home" ? "/homePage" : "/";
 

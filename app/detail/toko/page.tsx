@@ -20,11 +20,15 @@ import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+<<<<<<< HEAD
 import {
   getProductById,
   type ProductDetail,
 } from "@/app/detail/product/data";
 import { CategoryRow } from "./category-row";
+=======
+import { useProductDetail } from "@/app/detail/product/use-product-detail";
+>>>>>>> 764eaa38018e62d62d2dce54a59e3d695ff5f98f
 import {
   Avatar,
   AvatarImage,
@@ -424,6 +428,7 @@ function StoreDetailContent() {
     setSelectedProductId(null);
   }, []);
 
+<<<<<<< HEAD
   const selectedProduct = useMemo<ProductDetail | undefined>(() => {
     if (!selectedProductId || !vendor) return undefined;
     // Produk toko database dibaca dari data toko itu sendiri (harga/stok akurat).
@@ -432,6 +437,9 @@ function StoreDetailContent() {
     // Fallback statis hanya untuk vendor demo legacy.
     return getProductById(selectedProductId);
   }, [selectedProductId, storeProducts, vendor]);
+=======
+  const selectedProduct = useProductDetail(selectedProductId);
+>>>>>>> 764eaa38018e62d62d2dce54a59e3d695ff5f98f
 
   useEffect(() => {
     setQuery("");
