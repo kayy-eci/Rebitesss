@@ -104,7 +104,7 @@ export function UrgentDealsSection({
       ))}
 
       <div className="relative mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
@@ -116,10 +116,22 @@ export function UrgentDealsSection({
               </span>
             </div>
 
-            <h2 className="mt-3 font-sans text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-3 font-sans text-[22px] font-bold tracking-tight text-white sm:text-[28px]">
               Menu <span className="text-caramel">unggulan</span> hari ini
             </h2>
+            <p className="mt-2 max-w-xl font-sans text-sm text-white/70">
+              Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat — diperbarui setiap hari.
+            </p>
           </div>
+          <a
+            href="/cari"
+            className={cn(
+              "hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex",
+              FOCUS_RING,
+            )}
+          >
+            Lihat Semua <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
 
         <div className="mb-10 mt-8 lg:mt-10">
@@ -201,6 +213,14 @@ export function UrgentDealsSection({
           >
             <ChevronRight className="h-5 w-5" />
           </button>
+        </div>
+        <div className="mt-4 flex justify-end sm:hidden">
+          <a
+            href="/cari"
+            className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-white/90"
+          >
+            Lihat Semua <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </section>

@@ -65,32 +65,22 @@ export function VendorSection() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
+            <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
               Rekomendasi buat kamu sayang
             </h2>
-            <p className="mt-2 max-w-md font-sans text-sm text-charcoal-500">
-              Toko lokal yang rutin menyelamatkan makanan surplusnya setiap
-              hari. Dukung mereka.
+            <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
+              Toko lokal yang rutin menyelamatkan makanan surplusnya setiap hari. Dukung mereka.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <a
-              href="#how-it-works"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById('how-it-works')
-                  ?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className={cn(
-                'group inline-flex w-fit items-center gap-1.5 font-sans text-sm font-semibold text-green-700 transition-colors hover:text-[#C8A882]',
-                FOCUS_RING
-              )}
-            >
-              Lihat Semua
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
-          </div>
+          <a
+            href="/cari"
+            className={cn(
+              'hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-primary transition-colors hover:text-caramel sm:inline-flex',
+              FOCUS_RING,
+            )}
+          >
+            Lihat Semua <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
         </div>
 
         <div className="relative">
@@ -157,6 +147,11 @@ export function VendorSection() {
           >
             <ChevronRight className="h-5 w-5" />
           </button>
+        </div>
+        <div className="mt-2 flex justify-end sm:hidden">
+          <a href="/cari" className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary">
+            Lihat Semua <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </section>

@@ -3,7 +3,7 @@
 import { useEffect, useState, useId } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Sparkles, Star, User, Menu, X } from "lucide-react";
+import { ArrowRight, Star, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import OptionWheel from "@/app/components/ui/korosel";
 
@@ -38,7 +38,6 @@ export function HeroSection() {
   const [overDark, setOverDark] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [foodIndex, setFoodIndex] = useState(0);
-  const [barOpen, setBarOpen] = useState<boolean>(true);
 
   const lang = "id" as "id" | "en";
 
@@ -120,40 +119,8 @@ export function HeroSection() {
   return (
     <div className="overflow-x-hidden bg-cream" data-nav="cream">
       <header className="fixed inset-x-0 top-0 z-50">
-        <AnimatePresence initial={false}>
-          {barOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="overflow-hidden bg-forest-dark text-primary-foreground"
-            >
-              <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center gap-2 px-10 py-2 sm:px-8">
-                <Sparkles className="h-3 w-3 shrink-0 text-caramel" />
-                <p className="truncate text-center font-sans text-[11px] tracking-tight text-primary-foreground/90">
-                  <span className="font-semibold text-caramel">
-                    Khusus Depok
-                  </span>{" "}
-                  — makanan surplus berkualitas mulai Rp5.000, selamatkan
-                  sekarang
-                </p>
-
-                <button
-                  type="button"
-                  onClick={() => setBarOpen(false)}
-                  aria-label="Tutup pengumuman"
-                  className="absolute right-4 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-white sm:right-8"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div className="px-5 pt-3 sm:px-8 sm:pt-4">
-        <div className="mx-auto w-full max-w-[1200px]">
+        <div className="px-4 pt-3 sm:px-6 lg:px-8 sm:pt-4">
+        <div className="mx-auto w-full max-w-7xl">
           <nav
             className={cn(
               "flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
@@ -312,7 +279,7 @@ export function HeroSection() {
 
       <section
         id="top"
-        className="relative flex min-h-[100svh] flex-col items-center bg-cream px-5 pb-32 pt-24 sm:px-8 lg:px-12 lg:pb-40 lg:pt-28"
+        className="relative flex min-h-[640px] flex-col items-center justify-center bg-cream px-4 pb-20 pt-28 sm:px-6 lg:min-h-[620px] lg:px-8 lg:pb-24 lg:pt-32"
       >
         <svg
           aria-hidden="true"
@@ -355,7 +322,7 @@ export function HeroSection() {
           />
         </svg>
 
-        <div className="relative mx-auto max-w-[1200px]">
+        <div className="relative mx-auto w-full max-w-7xl">
           <HeroOrganicArt />
 
           <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+7rem)]">

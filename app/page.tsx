@@ -222,7 +222,7 @@ export default function Home() {
       <section
         id="about"
         data-nav="cream"
-        className="grain-overlay relative overflow-hidden bg-cream py-20 lg:py-28"
+        className="grain-overlay relative overflow-hidden bg-cream py-16 lg:py-20"
       >
         <div
           aria-hidden
@@ -234,7 +234,7 @@ export default function Home() {
           className="pointer-events-none absolute right-20 top-32 h-32 w-32 rounded-full border border-caramel/40"
         />
 
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
             <div>
               <Reveal delay={0.15}>
@@ -351,11 +351,11 @@ export default function Home() {
       <section
         id="langganan"
         data-nav="cream"
-        className="grain-overlay relative overflow-hidden bg-cream py-24 lg:py-32"
+        className="grain-overlay relative overflow-hidden bg-cream py-16 lg:py-20"
       >
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-3xl" />
 
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <Reveal delay={0.1}>
               <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
@@ -569,11 +569,11 @@ export default function Home() {
       <section
         id="testimoni"
         data-nav="green"
-        className="grain-overlay relative overflow-hidden bg-primary py-24 lg:py-32"
+        className="grain-overlay relative overflow-hidden bg-primary py-16 lg:py-20"
       >
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary-foreground/[0.06] blur-3xl" />
 
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
               <Reveal delay={0.1}>

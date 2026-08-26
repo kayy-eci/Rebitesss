@@ -3,14 +3,34 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import {
+  Apple,
+  Beef,
+  CakeSlice,
+  Cookie,
+  CupSoda,
+  IceCreamCone,
+  Sandwich,
+  Soup,
+  UtensilsCrossed,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/categories";
 import { fetchCategoryCounts } from "@/lib/catalog";
-import { SmartImage } from "@/app/components/SmartImage";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  "makanan-berat": Beef,
+  jajanan: Cookie,
+  japanese: Soup,
+  "roti-kue": CakeSlice,
+  "makanan-cepat-saji": Sandwich,
+  dessert: IceCreamCone,
+  "buah-sayur": Apple,
+  minuman: CupSoda,
+};
 
 export function CategorySection() {
   // Kategori hanya tampil kalau benar-benar ada produknya di database.
@@ -44,13 +64,22 @@ export function CategorySection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
+            <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
               Jelajahi Kategori
             </h2>
-            <p className="mt-2 max-w-md font-sans text-sm text-charcoal-500">
+            <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
               Temukan berbagai makanan sesuai seleramu yang masih layak dinikmati
             </p>
           </div>
+          <Link
+            href="/cari"
+            className={cn(
+              "hidden items-center gap-1.5 font-sans text-sm font-semibold text-primary transition-colors hover:text-caramel sm:inline-flex",
+              FOCUS_RING,
+            )}
+          >
+            Lihat Semua <span aria-hidden>→</span>
+          </Link>
         </div>
 
         <motion.div
@@ -59,55 +88,52 @@ export function CategorySection() {
           viewport={{ once: true, amount: 0.1 }}
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.05 } },
+            visible: { transition: { staggerChildren: 0.04 } },
           }}
-          className="mt-10 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4"
+          className="mt-8 flex gap-3 overflow-x-auto pb-3 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] lg:grid lg:grid-cols-8 lg:gap-4 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
         >
-          {visibleCategories.map((category) => (
-            <motion.div
-              key={category.id}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-                },
-              }}
-            >
-              <Link
-                href={`/makanan/${category.id}`}
-                aria-label={`Lihat makanan kategori ${category.name}`}
-                className={cn(
-                  "group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15",
-                  FOCUS_RING,
-                )}
+          {visibleCategories.map((category) => {
+            const Icon = CATEGORY_ICONS[category.id] ?? UtensilsCrossed;
+            return (
+              <motion.div
+                key={category.id}
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+                className="min-w-[148px] snap-start lg:min-w-0"
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-sage-100">
-                  <SmartImage
-                    src={category.image}
-                    alt={`Foto makanan kategori ${category.name}`}
-                    sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
-                    className="transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 bg-gradient-to-t from-forest-900/70 via-forest-900/10 to-transparent"
-                  />
-                </div>
-
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-4 sm:p-5">
-                  <span className="font-sans text-sm font-bold leading-snug text-white drop-shadow-md sm:text-base">
+                <Link
+                  href={`/makanan/${category.id}`}
+                  aria-label={`Lihat makanan kategori ${category.name}`}
+                  className={cn(
+                    "group flex h-[132px] w-full flex-col items-center justify-center gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-6 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md",
+                    FOCUS_RING,
+                  )}
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-cream-100 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className="font-sans text-[13px] font-semibold leading-tight text-charcoal-900">
                     {category.name}
                   </span>
-                  <span className="flex h-7 w-7 shrink-0 translate-y-1 items-center justify-center rounded-full bg-white/90 text-green-700 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                </Link>
+              </motion.div>
+            );
+          })}
         </motion.div>
+        <div className="mt-2 flex justify-end sm:hidden">
+          <Link
+            href="/cari"
+            className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary"
+          >
+            Lihat Semua <span aria-hidden>→</span>
+          </Link>
+        </div>
       </div>
     </section>
   );

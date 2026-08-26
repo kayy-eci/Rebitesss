@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { MapPin, Star } from "lucide-react";
+import { Heart, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRupiah } from "@/lib/data";
 import { useCatalog } from "@/lib/catalog";
@@ -188,6 +188,7 @@ function UrgentCard({
   const stockCount = parseStockCount(item.stockLabel);
   const stockPct =
     stockCount === null ? null : Math.max(10, Math.min(95, stockCount * 10));
+  const [liked, setLiked] = useState(false);
 
   return (
     <article
@@ -206,10 +207,10 @@ function UrgentCard({
           : undefined
       }
       className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/15 outline-none transition-all duration-300",
+        "group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300",
         isActive
-          ? "cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:shadow-green-700/25 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
-          : "cursor-default",
+          ? "cursor-pointer hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-forest-900/10 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          : "cursor-default opacity-95",
       )}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
@@ -220,14 +221,14 @@ function UrgentCard({
           className={cn(
             "transition-transform duration-500",
             isActive && "group-hover:scale-105",
-            !isActive && "scale-105 blur-[2px] brightness-[0.8] saturate-[0.6]",
+            !isActive && "scale-105 blur-[1.5px] brightness-[0.85] saturate-[0.7]",
           )}
         />
 
         {isActive && (
           <motion.span
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 z-10 w-1/3 -skew-x-12 bg-white/30 blur-md"
+            className="pointer-events-none absolute inset-y-0 z-10 w-1/3 -skew-x-12 bg-white/20 blur-md"
             initial={{ left: "-40%" }}
             animate={{ left: "130%" }}
             transition={{
@@ -240,44 +241,45 @@ function UrgentCard({
         )}
 
         {!isActive && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/35">
-            <span className="rounded-full bg-white/95 px-4 py-1.5 font-sans text-xs font-bold uppercase tracking-[0.14em] text-charcoal-900 shadow-lg">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/30 backdrop-blur-[1px]">
+            <span className="rounded-full bg-white px-4 py-1.5 font-sans text-xs font-bold uppercase tracking-[0.14em] text-charcoal-900 shadow">
               Akan Datang
             </span>
           </div>
         )}
 
-        <motion.div
-          className="absolute right-3 top-3 z-20"
-          animate={{ y: [0, -3, 0] }}
-          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div className="relative rounded-lg bg-[#E53935] px-3 py-2 text-center text-white shadow-[0_10px_22px_-10px_rgba(229,57,53,0.85)]">
-            <span className="block font-sans text-base font-black leading-none tabular-nums">
-              {item.discountPercent}%
-            </span>
-            <span className="block font-sans text-[9px] font-bold uppercase leading-tight tracking-[0.18em]">
-              Off
-            </span>
-            <span
-              aria-hidden
-              className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-[#E53935]"
-            />
-          </div>
-        </motion.div>
-      </div>
-
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div>
-          <h3 className="font-sans text-base font-bold leading-snug text-charcoal-900">
-            {item.name}
-          </h3>
-          <p className="mt-0.5 text-sm text-charcoal-500">{item.vendorName}</p>
+        <div className="absolute left-3 top-3 z-20 rounded-full bg-[#E53935] px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
+          Hemat {item.discountPercent}%
         </div>
 
-        <div className="flex items-center gap-3 text-xs text-charcoal-500">
-          <span className="flex items-center gap-1 font-medium">
-            <Star className="h-3.5 w-3.5 fill-gold-500 text-gold-500" />
+        <button
+          type="button"
+          aria-label={liked ? "Hapus dari favorit" : "Tambah ke favorit"}
+          aria-pressed={liked}
+          disabled={!isActive}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (isActive) setLiked((v) => !v);
+          }}
+          className={cn(
+            "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935]",
+            liked && isActive && "bg-white text-[#E53935]",
+            !isActive && "opacity-60",
+          )}
+        >
+          <Heart className={cn("h-4 w-4", liked && isActive && "fill-[#E53935] text-[#E53935]")} />
+        </button>
+      </div>
+
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="line-clamp-1 font-sans text-[15px] font-bold leading-snug text-charcoal-900">
+          {item.name}
+        </h3>
+        <p className="mt-0.5 line-clamp-1 font-sans text-[13px] text-charcoal-500">{item.vendorName}</p>
+
+        <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
+          <span className="flex items-center gap-1 font-medium text-charcoal-900">
+            <Star className="h-3.5 w-3.5 fill-amber text-amber" />
             {item.rating.toFixed(1)}
           </span>
           <span className="flex items-center gap-1">
@@ -288,15 +290,13 @@ function UrgentCard({
 
         {isActive &&
           (stockPct === null ? (
-            <span className="w-fit rounded-full bg-cream-100 px-3 py-1 text-xs font-medium text-charcoal-500">
+            <span className="mt-2.5 w-fit rounded-full bg-cream-100 px-3 py-1 text-[11px] font-medium text-charcoal-600">
               {item.stockLabel}
             </span>
           ) : (
-            <div>
+            <div className="mt-2.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#DC2626]">
-                  Sisa {stockCount}
-                </span>
+                <span className="font-bold text-[#DC2626]">Sisa {stockCount}</span>
                 <span className="text-[#DC2626]">Buru!</span>
               </div>
               <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream-100">
@@ -311,14 +311,31 @@ function UrgentCard({
             </div>
           ))}
 
-        <div className="mt-auto flex items-baseline gap-2 pt-1">
-          <span className="text-sm text-charcoal-500 line-through">
+        <div className="mt-3 flex items-baseline gap-2">
+          <span className="text-xs text-charcoal-500 line-through">
             {formatRupiah(item.originalPrice)}
           </span>
-          <span className="text-xl font-bold text-green-700">
+          <span className="text-[16px] font-bold leading-none text-green-700">
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>
+
+        <button
+          type="button"
+          disabled={!isActive}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (isActive) openDetail();
+          }}
+          className={cn(
+            "mt-4 inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2",
+            isActive
+              ? "bg-primary text-white hover:bg-caramel"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-400",
+          )}
+        >
+          {isActive ? "Lihat Detail" : "Akan Datang"}
+        </button>
       </div>
     </article>
   );
@@ -479,7 +496,7 @@ export function FlashSaleSection({
           />
         ))}
 
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
@@ -491,29 +508,33 @@ export function FlashSaleSection({
               </span>
             </div>
 
-            <h2 className="mt-3 flex items-center gap-3 font-sans text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Segera <span>Beli</span>
+            <h2 className="mt-3 font-sans text-[22px] font-bold tracking-tight text-white sm:text-[28px]">
+              Segera <span className="text-caramel">Beli</span>
             </h2>
 
-            <p className="mt-3 max-w-md font-sans text-sm text-white/80">
-              Makanan surplus pilihan dengan harga lebih hemat. Jangan sampai
-              kelewatan sebelum stoknya habis!
+            <p className="mt-2 max-w-md font-sans text-sm text-white/80">
+              Makanan surplus pilihan dengan harga lebih hemat. Jangan sampai kelewatan sebelum stoknya habis!
             </p>
           </div>
 
-          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <div className="flex flex-col items-end gap-3 sm:flex-row sm:items-center">
             {slotEndIso ? (
-              <SectionCountdown
-                deadlineIso={slotEndIso}
-                label="Berakhir dalam"
-              />
+              <SectionCountdown deadlineIso={slotEndIso} label="Berakhir dalam" />
             ) : (
-              <SectionCountdown
-                deadlineIso={nextStartIso}
-                label="Flash sale dimulai dalam"
-              />
+              <SectionCountdown deadlineIso={nextStartIso} label="Flash sale dimulai dalam" />
             )}
+            <a
+              href="/cari"
+              className="hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex"
+            >
+              Lihat Semua <span aria-hidden>→</span>
+            </a>
           </div>
+        </div>
+        <div className="mt-3 flex justify-end sm:hidden">
+          <a href="/cari" className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-white/90">
+            Lihat Semua <span aria-hidden>→</span>
+          </a>
         </div>
 
         <div className="relative mt-9 flex flex-wrap items-center justify-center gap-3 md:flex-nowrap md:gap-8">

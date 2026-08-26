@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
-import { Navbar } from "@/app/components/navbar";
+import { Navbar } from "@/app/components/Navbar";
 import { SiteFooter } from "@/app/components/Footer";
 
 export default function CategoryNotFound() {

@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Navbar } from "@/app/components/navbar";
+import { Navbar } from "@/app/components/Navbar";
 import { Hero } from "@/app/components/Hero";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { FlashSaleSection } from "@/app/components/FlashSaleSection";
@@ -47,11 +47,11 @@ export default function HomePage() {
         <section
           id="langganan"
           data-nav="cream"
-          className="grain-overlay relative overflow-hidden bg-cream py-24 lg:py-32"
+          className="grain-overlay relative overflow-hidden bg-cream py-16 lg:py-20"
         >
           <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-3xl" />
 
-          <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <Reveal delay={0.1}>
                 <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">

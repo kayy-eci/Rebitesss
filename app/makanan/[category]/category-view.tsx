@@ -10,7 +10,7 @@ import {
   SearchX,
   SlidersHorizontal,
 } from "lucide-react";
-import { Navbar } from "@/app/components/navbar";
+import { Navbar } from "@/app/components/Navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { FoodCard } from "@/app/components/FoodCard";
 import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";

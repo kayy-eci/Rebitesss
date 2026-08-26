@@ -35,9 +35,9 @@ export default function HowItWorks() {
     <section
       id="cara-kerja"
       data-nav="green"
-      className="flex h-screen min-h-[640px] flex-col justify-center overflow-hidden bg-primary"
+      className="flex min-h-[640px] flex-col justify-center overflow-hidden bg-primary py-16 lg:py-20"
     >
-      <div className="mx-auto w-full max-w-[1240px] px-5 sm:px-8">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal delay={0.05}>
           <h2 className="text-center font-display text-[clamp(2rem,4vw,3.375rem)] font-medium leading-[1.1] tracking-[-0.01em] text-primary-foreground">
             Cara Kerja ReBites

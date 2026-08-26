@@ -10,7 +10,7 @@ export function SiteFooter() {
       data-nav="green"
       className="grain-overlay relative overflow-hidden bg-primary text-primary-foreground"
     >
-      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <Reveal className="grid gap-12 lg:grid-cols-[1.1fr_0.8fr_1fr_1.3fr]">
           <div>
             <Link href="/" className="flex items-center gap-3">

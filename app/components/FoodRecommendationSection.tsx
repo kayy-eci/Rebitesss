@@ -97,13 +97,26 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="mt-3 font-sans text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
+            <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
               Menu unggulan hari ini
             </h2>
-            <p className="mt-2 max-w-md font-sans text-sm text-charcoal-500">
+            <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
               Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat.
             </p>
           </div>
+          <a
+            href="#umkm"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToVendors();
+            }}
+            className={cn(
+              "hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-primary transition-colors hover:text-caramel sm:inline-flex",
+              FOCUS_RING,
+            )}
+          >
+            Lihat Semua <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
 
         <div
@@ -133,20 +146,16 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
           })}
         </div>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-4 flex justify-end sm:hidden">
           <a
             href="#umkm"
             onClick={(e) => {
               e.preventDefault();
               scrollToVendors();
             }}
-            className={cn(
-              "group inline-flex w-fit items-center gap-1.5 font-sans text-sm font-semibold text-green-700 transition-colors hover:text-[#C8A882]",
-              FOCUS_RING,
-            )}
+            className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary"
           >
-            Lihat Semua
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            Lihat Semua <ArrowRight className="h-4 w-4" />
           </a>
         </div>
 
