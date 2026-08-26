@@ -2,7 +2,6 @@ import { Clock, Leaf, MapPin, Navigation, Utensils } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Vendor } from "@/lib/types";
 import { DotPattern, LeafSprig } from "@/app/components/dashboardPenjual/decor";
-import { getVendorProfile } from "./vendor-profiles";
 
 interface InfoChip {
   icon: LucideIcon;
@@ -28,23 +27,24 @@ interface ImpactRow {
   value: string;
 }
 
-function buildImpactRows(vendorId: string): ImpactRow[] {
-  const profile = getVendorProfile(vendorId);
-
+function buildImpactRows(vendor: Vendor): ImpactRow[] {
   return [
     {
       label: "Porsi terselamatkan",
-      value: `${profile.porsiTerselamatkan} porsi`,
+      value: `${vendor.porsiTerselamatkan ?? 0} porsi`,
     },
-    { label: "CO₂e terhindar", value: `${profile.co2eSavedKg} kg` },
-    { label: "Mitra ReBites sejak", value: String(profile.memberSince) },
+    { label: "CO₂e terhindar", value: `${vendor.co2eSavedKg ?? 0} kg` },
+    {
+      label: "Mitra ReBites sejak",
+      value: String(vendor.memberSince ?? new Date().getFullYear()),
+    },
     { label: "Komitmen", value: "Zero Food Waste" },
   ];
 }
 
 export function StoreAboutImpact({ vendor }: { vendor: Vendor }) {
   const infoChips = buildInfoChips(vendor);
-  const impactRows = buildImpactRows(vendor.id);
+  const impactRows = buildImpactRows(vendor);
 
   return (
     <section className="mx-auto max-w-[1200px] px-5 sm:px-8">

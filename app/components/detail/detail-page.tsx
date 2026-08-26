@@ -13,18 +13,42 @@ import { ProductInfo } from "./product-info";
 import { ReviewSection } from "./review-section";
 import { RelatedProducts } from "./related-products";
 import { StickyMobileBar } from "./sticky-mobile-bar";
-import { PRODUCT, RELATED_PRODUCTS, REVIEWS } from "@/app/detail/product/data";
+import type {
+  ProductDetail,
+  RelatedProduct,
+  Review,
+} from "@/app/detail/product/data";
 import { EASE } from "./anim";
 
-export default function DetailPage() {
+export default function DetailPage({
+  product,
+  reviews,
+  relatedProducts,
+}: {
+  product: ProductDetail;
+  reviews: Review[];
+  relatedProducts: RelatedProduct[];
+}) {
   return (
     <CartProvider>
-      <DetailPageContent />
+      <DetailPageContent
+        product={product}
+        reviews={reviews}
+        relatedProducts={relatedProducts}
+      />
     </CartProvider>
   );
 }
 
-function DetailPageContent() {
+function DetailPageContent({
+  product,
+  reviews,
+  relatedProducts,
+}: {
+  product: ProductDetail;
+  reviews: Review[];
+  relatedProducts: RelatedProduct[];
+}) {
   const router = useRouter();
   const rightColRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -44,10 +68,10 @@ function DetailPageContent() {
   }, [toast]);
 
   const handleOrder = useCallback(() => {
-    addToCart(PRODUCT);
+    addToCart(product);
     notify("Ditambahkan ke keranjang");
-    router.push(`/detail/pesanan?product=${encodeURIComponent(PRODUCT.id)}`);
-  }, [addToCart, notify, router]);
+    router.push(`/detail/pesanan?product=${encodeURIComponent(product.id)}`);
+  }, [addToCart, notify, router, product]);
 
   const handleShare = useCallback(async () => {
     try {
@@ -64,16 +88,16 @@ function DetailPageContent() {
       <ProfileNavbar />
 
       <main className="relative mx-auto max-w-[1200px] px-5 pb-10 pt-24 sm:px-8 lg:pt-28">
-        <ProductBreadcrumb product={PRODUCT} onShare={handleShare} />
+        <ProductBreadcrumb product={product} onShare={handleShare} />
 
         <div className="mt-8 grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="lg:sticky lg:top-28">
-            <ProductGallery product={PRODUCT} scrollTargetRef={rightColRef} />
+            <ProductGallery product={product} scrollTargetRef={rightColRef} />
           </div>
 
           <div ref={rightColRef} className="min-w-0">
             <ProductInfo
-              product={PRODUCT}
+              product={product}
               ctaRef={ctaRef}
               onOrder={handleOrder}
               notify={notify}
@@ -81,12 +105,12 @@ function DetailPageContent() {
           </div>
         </div>
 
-        <ReviewSection reviews={REVIEWS} product={PRODUCT} />
-        <RelatedProducts products={RELATED_PRODUCTS} />
+        <ReviewSection reviews={reviews} product={product} />
+        <RelatedProducts products={relatedProducts} />
       </main>
 
       <StickyMobileBar
-        product={PRODUCT}
+        product={product}
         ctaRef={ctaRef}
         onOrder={handleOrder}
       />

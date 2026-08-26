@@ -20,15 +20,8 @@ import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-<<<<<<< HEAD
-import {
-  getProductById,
-  type ProductDetail,
-} from "@/app/detail/product/data";
 import { CategoryRow } from "./category-row";
-=======
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
->>>>>>> 764eaa38018e62d62d2dce54a59e3d695ff5f98f
 import {
   Avatar,
   AvatarImage,
@@ -42,9 +35,8 @@ import {
 } from "@/app/components/ui/carousel";
 import { StoreHeroCard } from "./store-hero-card";
 import { StoreAboutImpact } from "./store-about-impact";
-import { SERVICE_REVIEWS, type ServiceReview } from "./service-reviews";
+import { getServiceReviews } from "@/lib/review-storage";
 import {
-  SELLER_VENDOR_SLUG,
   getStoreProductsBySlug,
   isProductAvailable,
   PRODUCTS_UPDATED_EVENT,
@@ -55,29 +47,6 @@ import {
   getFlashDiscountPercent,
 } from "@/lib/flash-sale";
 import { STORE_SETTINGS_UPDATED_EVENT } from "@/lib/store-settings-storage";
-import { hasSupabaseConfig } from "@/lib/supabase";
-import { DATA_SOURCE } from "@/lib/data-source";
-
-
-function getVendorFoods(
-  vendorName: string,
-  foodItems: FoodItem[],
-  urgentItems: FoodItem[]
-): FoodItem[] {
-  const merged: FoodItem[] = [
-    ...foodItems.filter((item) => item.vendorName === vendorName),
-    ...urgentItems.filter((item) => item.vendorName === vendorName),
-  ];
-
-  const seen = new Set<string>();
-
-  return merged.filter((item) => {
-    const key = item.name.trim().toLowerCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
 
 
 function sellerProductToFoodItem(
@@ -102,43 +71,6 @@ function sellerProductToFoodItem(
     discountPercent: pricing.isFlash
       ? getFlashDiscountPercent(sp)
       : sp.discountPercent,
-  };
-}
-
-function sellerProductToProductDetail(
-  sp: SellerProduct,
-  vendor: Vendor
-): ProductDetail {
-  const pricing = getDisplayPricing(sp);
-  return {
-    id: sp.id,
-    slug: sp.id,
-    category: sp.category,
-    vendor: {
-      id: vendor.id,
-      name: vendor.name,
-      avatar: vendor.image,
-      rating: vendor.rating,
-      isRescuePartner: true,
-    },
-    title: sp.name,
-    images: [sp.image],
-    discountPercent: pricing.isFlash
-      ? getFlashDiscountPercent(sp)
-      : sp.discountPercent,
-    stockLabel: sp.stock > 0 ? `Sisa ${sp.stock} porsi` : "Habis",
-    stockRemaining: sp.stock,
-    rating: 4.7,
-    reviewCount: 0,
-    distanceKm: vendor.distanceKm,
-    originalPrice: sp.originalPrice,
-    discountedPrice: pricing.price,
-    description: sp.description,
-    pickupTime: { from: sp.startTime, to: sp.endTime },
-    pickupLocation: vendor.address,
-    consumeWindow: "Maks. 4 jam setelah diambil",
-    co2eSavedKg: 0.4,
-    packageContents: [],
   };
 }
 
@@ -170,15 +102,39 @@ function initialsOf(name: string) {
     .toUpperCase();
 }
 
+interface ServiceReview {
+  id: string;
+  name: string;
+  avatar: string;
+  rating: number;
+  comment: string;
+  timeAgo: string;
+}
+
 function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
-  const reviews = SERVICE_REVIEWS[vendor.id] ?? [];
+  const [reviews, setReviews] = useState<ServiceReview[]>([]);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Toko database tanpa review -> section tetap kosong (tanpa data toko lain).
-  if (reviews.length === 0) {
-    return null;
-  }
+  useEffect(() => {
+    let active = true;
+    getServiceReviews(vendor.id).then((rows) => {
+      if (!active) return;
+      setReviews(
+        rows.map((r) => ({
+          id: r.id,
+          name: r.reviewerName,
+          avatar: r.avatar,
+          rating: r.rating,
+          comment: r.comment,
+          timeAgo: r.date,
+        }))
+      );
+    });
+    return () => {
+      active = false;
+    };
+  }, [vendor.id]);
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -194,6 +150,11 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
       carouselApi.off("reInit", onSelect);
     };
   }, [carouselApi]);
+
+  // Toko database tanpa review -> section disembunyikan.
+  if (reviews.length === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -229,7 +190,7 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
           <CarouselContent className="-ml-4 lg:-ml-5">
             {reviews.map((review) => (
               <CarouselItem
-                key={review.name}
+                key={review.id}
                 className="basis-full pl-4 sm:basis-1/2 sm:pl-4 lg:basis-1/3 lg:pl-5"
               >
                 <div className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-white p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel/40 hover:shadow-[0_30px_60px_-28px_rgba(34,81,56,0.35)] lg:p-9">
@@ -298,7 +259,7 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
       <div className="mt-7 flex justify-center gap-2">
         {reviews.map((review, i) => (
           <button
-            key={review.name}
+            key={review.id}
             type="button"
             aria-label={`Ke review ${i + 1}`}
             onClick={() => carouselApi?.scrollTo(i)}
@@ -347,7 +308,7 @@ function StoreNotFound() {
 function StoreDetailContent() {
   const searchParams = useSearchParams();
   const storeId = searchParams.get("id");
-  const { foodItems, urgentItems, vendors, loading: catalogLoading } =
+  const { vendors, loading: catalogLoading } =
     useCatalog();
   const vendor: Vendor | undefined = vendors.find(
     (item) => item.id === storeId,
@@ -359,18 +320,9 @@ function StoreDetailContent() {
   const [storeError, setStoreError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
-  // DEMO/LOCAL VENDOR vs AUTHENTICATED SELLER:
-  // - Mode Supabase: SEMUA vendor berasal dari database (umkm_profiles) ->
-  //   produk SELALU dari toko itu sendiri. Kosong = tetap kosong, tanpa fallback.
-  // - Mode lokal/demo: hanya vendor demo penjual yang punya storage produk;
-  //   vendor demo lain memakai katalog statis (getVendorFoods).
-  const isLocalDataMode =
-    DATA_SOURCE === "local" || (DATA_SOURCE === "auto" && !hasSupabaseConfig);
-  const loadsOwnProducts = vendor
-    ? isLocalDataMode
-      ? vendor.id === SELLER_VENDOR_SLUG
-      : true
-    : false;
+  // Mode Supabase: SEMUA vendor berasal dari database (umkm_profiles) ->
+  // produk SELALU dari toko itu sendiri. Kosong = tetap kosong, tanpa fallback.
+  const loadsOwnProducts = Boolean(vendor);
 
   useEffect(() => {
     if (!vendor || !loadsOwnProducts) {
@@ -404,12 +356,9 @@ function StoreDetailContent() {
   const foods = useMemo(
     () => {
       if (!vendor) return [];
-      if (loadsOwnProducts) {
-        return storeProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
-      }
-      return getVendorFoods(vendor.name, foodItems, urgentItems);
+      return storeProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
     },
-    [vendor, loadsOwnProducts, storeProducts, foodItems, urgentItems]
+    [vendor, storeProducts]
   );
 
   const [query, setQuery] = useState("");
@@ -428,18 +377,7 @@ function StoreDetailContent() {
     setSelectedProductId(null);
   }, []);
 
-<<<<<<< HEAD
-  const selectedProduct = useMemo<ProductDetail | undefined>(() => {
-    if (!selectedProductId || !vendor) return undefined;
-    // Produk toko database dibaca dari data toko itu sendiri (harga/stok akurat).
-    const own = storeProducts.find((sp) => sp.id === selectedProductId);
-    if (own) return sellerProductToProductDetail(own, vendor);
-    // Fallback statis hanya untuk vendor demo legacy.
-    return getProductById(selectedProductId);
-  }, [selectedProductId, storeProducts, vendor]);
-=======
   const selectedProduct = useProductDetail(selectedProductId);
->>>>>>> 764eaa38018e62d62d2dce54a59e3d695ff5f98f
 
   useEffect(() => {
     setQuery("");

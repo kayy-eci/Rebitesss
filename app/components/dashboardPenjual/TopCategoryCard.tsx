@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { Card } from './Card';
@@ -8,14 +8,14 @@ import { FilterDropdown } from './FilterDropdown';
 import { LockedFeatureCard } from './LockedFeatureCard';
 import { SalesEmptyState } from './SalesEmptyState';
 import { useCountUp } from './useCountUp';
-import { monthOptions, topCategoriesByMonth } from './data';
 import { formatRupiah } from '@/lib/data';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
+import { useSellerAnalytics } from '@/hooks/use-seller-analytics';
 
 const SEGMENT_COLORS = ['#0F2E1F', '#1B4D32', '#2D6A4F', '#6B9080', '#E4EBE4', '#EAE0C8'];
 
-function useLockedMonths(): string[] {
+function useLockedMonths(monthOptions: { value: string; label: string }[]): string[] {
   const { plan } = useSellerPlan();
 
   return useMemo(() => {
@@ -36,20 +36,30 @@ function useLockedMonths(): string[] {
         return !isCurrentMonth && monthStart < limitMs;
       })
       .map((option) => option.value);
-  }, [plan.historyDays]);
+  }, [plan.historyDays, monthOptions]);
 }
 
 export function TopCategoryCard() {
   const { plan, hydrated } = useSellerPlan();
   const { hasOrders } = useSellerOrders();
-  const lockedMonths = useLockedMonths();
+  const { months: topCategoriesByMonth, monthOptions } = useSellerAnalytics();
+  const lockedMonths = useLockedMonths(monthOptions);
   const firstOpenMonth =
     monthOptions.find((option) => !lockedMonths.includes(option.value))?.value ??
-    monthOptions[0].value;
+    monthOptions[0]?.value ??
+    '';
+  const activeMonthData = topCategoriesByMonth[firstOpenMonth] ?? {
+    label: '',
+    total: 0,
+    categories: [],
+  };
 
   const [month, setMonth] = useState(firstOpenMonth);
+  useEffect(() => {
+    if (firstOpenMonth && !month) setMonth(firstOpenMonth);
+  }, [firstOpenMonth, month]);
   const activeMonth = lockedMonths.includes(month) ? firstOpenMonth : month;
-  const data = topCategoriesByMonth[activeMonth];
+  const data = topCategoriesByMonth[activeMonth] ?? activeMonthData;
   const isLocked = lockedMonths.includes(month);
   const { ref, value } = useCountUp(data.total);
 

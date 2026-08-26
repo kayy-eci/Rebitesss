@@ -7,7 +7,7 @@ import { LockedFeatureCard } from './LockedFeatureCard';
 import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
-import { AVG_PRICE_PER_PORSI, salesActivityPeriod, salesActivityWeek } from './data';
+import { useSellerAnalytics } from '@/hooks/use-seller-analytics';
 import { formatRupiah } from '@/lib/data';
 
 export type StatsPeriod = '7-hari' | '14-hari' | '30-hari';
@@ -22,21 +22,19 @@ interface ReportRow {
 export function DetailedReportCard({ period }: { period: StatsPeriod }) {
   const { plan, hydrated } = useSellerPlan();
   const { hasOrders } = useSellerOrders();
+  const { days30 } = useSellerAnalytics();
 
   const rows = useMemo<ReportRow[]>(() => {
-    const source =
-      period === '7-hari'
-        ? salesActivityWeek
-        : salesActivityPeriod.slice(-(period === '14-hari' ? 14 : 30));
-    return [...source]
+    const count = period === '7-hari' ? 7 : period === '14-hari' ? 14 : 30;
+    return [...days30.slice(-count)]
       .map((point) => ({
         day: point.day,
         terjual: point.terjual,
         tersisa: point.tersisa,
-        revenue: point.terjual * AVG_PRICE_PER_PORSI,
+        revenue: point.revenue,
       }))
       .reverse();
-  }, [period]);
+  }, [period, days30]);
 
   if (!hydrated) {
     return (

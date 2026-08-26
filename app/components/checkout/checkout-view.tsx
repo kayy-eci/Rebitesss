@@ -6,7 +6,6 @@ import { ArrowLeft } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import type { ProductDetail } from '@/app/detail/product/data';
 import { fetchProductDetail } from '@/app/detail/product/detail-data';
-import { orderDraft } from '@/lib/data';
 import type { OrderDraft } from '@/lib/types';
 import { CheckoutProvider } from './checkout-context';
 import { CheckoutDecor } from './checkout-decor';
@@ -48,16 +47,26 @@ export function CheckoutView() {
   const searchParams = useSearchParams();
   const productId = searchParams.get('product');
 
-  const [draft, setDraft] = useState<OrderDraft>(orderDraft);
+  const [draft, setDraft] = useState<OrderDraft | null>(null);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'not-found'>(
+    'loading'
+  );
 
   useEffect(() => {
     let active = true;
     if (!productId) {
-      setDraft(orderDraft);
+      setStatus('not-found');
       return;
     }
+    setStatus('loading');
     fetchProductDetail(productId).then((product) => {
-      if (active) setDraft(product ? buildOrderDraft(product) : orderDraft);
+      if (!active) return;
+      if (product) {
+        setDraft(buildOrderDraft(product));
+        setStatus('ready');
+      } else {
+        setStatus('not-found');
+      }
     });
     return () => {
       active = false;
@@ -67,8 +76,31 @@ export function CheckoutView() {
   const initialQuantity = useMemo(() => {
     const raw = Number.parseInt(searchParams.get('qty') ?? '', 10);
     if (!Number.isFinite(raw)) return 1;
-    return Math.min(Math.max(raw, 1), Math.max(1, draft.stockRemaining));
-  }, [searchParams, draft.stockRemaining]);
+    return Math.min(Math.max(raw, 1), Math.max(1, draft?.stockRemaining ?? 1));
+  }, [searchParams, draft?.stockRemaining]);
+
+  if (status === 'loading') {
+    return <div className="min-h-screen bg-cream-50" />;
+  }
+
+  if (status === 'not-found' || !draft) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
+        <p className="font-sans text-lg font-bold text-charcoal-900">
+          Produk tidak ditemukan
+        </p>
+        <p className="max-w-sm text-sm leading-relaxed text-charcoal-500">
+          Menu yang akan kamu pesan sudah tidak tersedia.
+        </p>
+        <Link
+          href="/home"
+          className="mt-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-800"
+        >
+          Kembali ke Beranda
+        </Link>
+      </main>
+    );
+  }
 
   return (
     <CheckoutProvider draft={draft} initialQuantity={initialQuantity}>

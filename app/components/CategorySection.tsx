@@ -1,16 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/categories";
+import { fetchCategoryCounts } from "@/lib/catalog";
 import { SmartImage } from "@/app/components/SmartImage";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function CategorySection() {
+  // Kategori hanya tampil kalau benar-benar ada produknya di database.
+  // null = belum termuat -> tampilkan semua agar layout tidak melompat.
+  const [counts, setCounts] = useState<Record<string, number> | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetchCategoryCounts().then((result) => {
+      if (active) setCounts(result);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const visibleCategories = counts
+    ? CATEGORIES.filter((category) => (counts[category.name] ?? 0) > 0)
+    : CATEGORIES;
+
+  if (counts && visibleCategories.length === 0) {
+    return null;
+  }
 
   return (
     <section
@@ -40,7 +63,7 @@ export function CategorySection() {
           }}
           className="mt-10 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4"
         >
-          {CATEGORIES.map((category) => (
+          {visibleCategories.map((category) => (
             <motion.div
               key={category.id}
               variants={{

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { LockedFeatureCard } from './LockedFeatureCard';
 import { useSellerPlan } from '@/lib/seller-plan';
-import { salesActivityPeriod } from './data';
+import { useSellerAnalytics } from '@/hooks/use-seller-analytics';
 import { useSellerBestSellingMenus } from '@/hooks/use-seller-best-selling';
 
 interface DemandInsight {
@@ -19,9 +19,10 @@ export function DemandAnalyticsCard() {
   const { plan, hydrated } = useSellerPlan();
   const hasAccess = plan.demandAnalytics;
   const { menus: bestSellers } = useSellerBestSellingMenus(hasAccess);
+  const { days30 } = useSellerAnalytics();
 
   const insights = useMemo<DemandInsight[]>(() => {
-    const last30 = salesActivityPeriod;
+    const last30 = days30;
     const firstHalf = last30.slice(0, 15).reduce((sum, point) => sum + point.terjual, 0);
     const secondHalf = last30.slice(15).reduce((sum, point) => sum + point.terjual, 0);
     const weeklyDemand = Math.round(last30.reduce((sum, point) => sum + point.terjual, 0) / 4);
@@ -38,7 +39,7 @@ export function DemandAnalyticsCard() {
         trend: secondHalf > firstHalf ? swing + 0.04 : -Math.abs(swing) - 0.02,
       };
     });
-  }, [bestSellers]);
+  }, [bestSellers, days30]);
 
   if (!hydrated) {
     return (

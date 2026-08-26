@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { getProductById, type ProductDetail } from './data';
+import type { ProductDetail, RelatedProduct } from './data';
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -59,9 +59,6 @@ function rowToProductDetail(row: Record<string, any>): ProductDetail {
 export async function fetchProductDetail(
   id: string
 ): Promise<ProductDetail | undefined> {
-  const hardcoded = getProductById(id);
-  if (hardcoded) return hardcoded;
-
   try {
     let { data } = await supabase
       .from('products')
@@ -82,5 +79,44 @@ export async function fetchProductDetail(
   } catch (error) {
     console.error('[detail] gagal memuat detail produk:', error);
     return undefined;
+  }
+}
+
+/** Produk lain se-kategori dari database (untuk section terkait). */
+export async function fetchRelatedProducts(
+  category: string,
+  excludeSlug: string
+): Promise<RelatedProduct[]> {
+  if (!category) return [];
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select(
+        'slug, name, image_url, original_price, surplus_price, umkm:umkm_profiles(business_name)'
+      )
+      .eq('category', category)
+      .neq('slug', excludeSlug)
+      .order('rating', { ascending: false })
+      .limit(5);
+    if (error || !data) return [];
+    return data.map((row: Record<string, any>) => {
+      const umkm = (row.umkm ?? {}) as Record<string, any>;
+      const slug: string = row.slug ?? row.id;
+      return {
+        id: slug,
+        slug,
+        vendorName: umkm.business_name ?? 'UMKM ReBites',
+        name: row.name ?? '',
+        image:
+          row.image_url && row.image_url.length > 0
+            ? row.image_url
+            : '/makanan1.jpeg',
+        originalPrice: Number(row.original_price ?? 0),
+        discountedPrice: Number(row.surplus_price ?? 0),
+      };
+    });
+  } catch (error) {
+    console.error('[detail] gagal memuat produk terkait:', error);
+    return [];
   }
 }

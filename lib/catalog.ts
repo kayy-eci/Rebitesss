@@ -1,22 +1,8 @@
 ﻿'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { supabase, hasSupabaseConfig } from './supabase';
-import { DATA_SOURCE } from './data-source';
-import {
-  foodItems as localFoodItems,
-  urgentItems as localUrgentItems,
-  vendors as localVendors,
-  promoCodes as localPromoCodes,
-} from './local/data';
+import { supabase } from './supabase';
 import type { FoodItem, PromoCode, UrgentItem, UrgentSlot, Vendor } from './types';
-
-/** true = katalog dilayani dari dataset lokal, bukan database Supabase. */
-function isLocalSource(): boolean {
-  return (
-    DATA_SOURCE === 'local' || (DATA_SOURCE === 'auto' && !hasSupabaseConfig)
-  );
-}
 
 export interface CatalogData {
   foodItems: FoodItem[];
@@ -75,8 +61,27 @@ function umkmToVendor(row: UmkmRow, itemCount: number): Vendor {
     category: row.category ?? 'Makanan Berat',
     itemCount,
     address: row.address ?? '',
-    openHours: row.open_hours ?? '09.00â€“21.00',
+    openHours: row.open_hours ?? '09.00–21.00',
     description: row.description ?? '',
+    tagline: row.tagline ?? undefined,
+    tier: row.partner_tier ?? undefined,
+    followers:
+      row.followers === null || row.followers === undefined
+        ? undefined
+        : Number(row.followers),
+    memberSince:
+      row.member_since === null || row.member_since === undefined
+        ? undefined
+        : Number(row.member_since),
+    responseTime: row.response_time ?? undefined,
+    porsiTerselamatkan:
+      row.porsi_terselamatkan === null || row.porsi_terselamatkan === undefined
+        ? undefined
+        : Number(row.porsi_terselamatkan),
+    co2eSavedKg:
+      row.co2e_saved_kg === null || row.co2e_saved_kg === undefined
+        ? undefined
+        : Number(row.co2e_saved_kg),
   };
 }
 
@@ -87,9 +92,6 @@ export async function fetchFoodItems(): Promise<FoodItem[]> {
 }
 
 async function queryFoodItems(): Promise<FetchResult<FoodItem>> {
-  if (isLocalSource()) {
-    return { items: localFoodItems, error: null };
-  }
   const { data, error } = await supabase
     .from('products')
     .select('*, umkm:umkm_profiles(business_name)')
@@ -108,9 +110,6 @@ export async function fetchUrgentItems(): Promise<UrgentItem[]> {
 }
 
 async function queryUrgentItems(): Promise<FetchResult<UrgentItem>> {
-  if (isLocalSource()) {
-    return { items: localUrgentItems, error: null };
-  }
   const { data, error } = await supabase
     .from('products')
     .select('*, umkm:umkm_profiles(business_name)')
@@ -136,10 +135,26 @@ export async function fetchVendors(): Promise<Vendor[]> {
   return (await queryVendors()).items;
 }
 
-async function queryVendors(): Promise<FetchResult<Vendor>> {
-  if (isLocalSource()) {
-    return { items: localVendors, error: null };
+/** Jumlah produk tersedia per kategori — dipakai section kategori browse. */
+export async function fetchCategoryCounts(): Promise<Record<string, number>> {
+  const { data, error } = await supabase
+    .from('products')
+    .select('category')
+    .eq('status', 'available');
+  if (error) {
+    console.error('[catalog] gagal memuat kategori:', error.message);
+    return {};
   }
+  const counts: Record<string, number> = {};
+  for (const row of data ?? []) {
+    const key = (row as Record<string, any>).category;
+    if (!key) continue;
+    counts[key] = (counts[key] ?? 0) + 1;
+  }
+  return counts;
+}
+
+async function queryVendors(): Promise<FetchResult<Vendor>> {
   const [umkmResult, productResult] = await Promise.all([
     supabase.from('umkm_profiles').select('*').order('rating', { ascending: false }),
     supabase.from('products').select('umkm_id'),
@@ -208,9 +223,6 @@ function rowToPromoCode(row: Record<string, any>): PromoCode {
 }
 
 export async function getValidPromoCodes(): Promise<PromoCode[]> {
-  if (isLocalSource()) {
-    return localPromoCodes.filter((promo) => promo.isValid);
-  }
   const { data, error } = await supabase
     .from('promo_codes')
     .select('*')
@@ -225,13 +237,6 @@ export async function getValidPromoCodes(): Promise<PromoCode[]> {
 export async function validatePromoCode(code: string): Promise<PromoCode | null> {
   const trimmed = code.trim().toUpperCase();
   if (!trimmed) return null;
-  if (isLocalSource()) {
-    return (
-      localPromoCodes.find(
-        (promo) => promo.code.toUpperCase() === trimmed && promo.isValid
-      ) ?? null
-    );
-  }
   const { data, error } = await supabase
     .from('promo_codes')
     .select('*')

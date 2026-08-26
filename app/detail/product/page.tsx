@@ -1,17 +1,17 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import DetailPage from '@/app/components/detail/detail-page';
-import { PRODUCT } from './data';
+import { DetailProductContent } from './detail-product-content';
 
 export const metadata: Metadata = {
-  title: `${PRODUCT.title} - ReBites`,
-  description: PRODUCT.description,
+  title: 'Detail Produk - ReBites',
+  description:
+    'Selamatkan porsi makanan surplus favoritmu langsung dari UMKM pilihan di Depok.',
 };
 
 export default function DetailProductPage() {
   return (
-    <Suspense>
-      <DetailPage />
+    <Suspense fallback={<div className="min-h-screen bg-cream-50" />}>
+      <DetailProductContent />
     </Suspense>
   );
 }

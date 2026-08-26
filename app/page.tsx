@@ -35,17 +35,7 @@ import {
   AvatarFallback,
 } from "@/app/components/ui/avatar";
 import { SUBSCRIPTION_PLANS } from "@/lib/subscription-plans";
-
-const PARTNERS = [
-  "Warung Mang Teten",
-  "Roti Boy",
-  "Dapur Ibu Sri",
-  "Kue Mbok Darmi",
-  "Segar Sigit",
-  "Satay Pak Tigiset",
-  "Toko Sehat Jaya",
-  "Kopi Pagi",
-];
+import { fetchVendors } from "@/lib/catalog";
 
 type Testimonial = {
   name: string;
@@ -127,6 +117,18 @@ export default function Home() {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null,
   );
+  // Nama mitra diambil langsung dari daftar toko di database.
+  const [partners, setPartners] = useState<string[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    fetchVendors().then((vendors) => {
+      if (active) setPartners(vendors.map((v) => v.name).filter(Boolean));
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleViewDetail = (id: string) => {
     setSelectedProductId(id);
@@ -688,22 +690,24 @@ export default function Home() {
         </div>
       </section>
 
-      <section
-        data-nav="green"
-        className="border-y border-white/15 bg-caramel py-5"
-      >
-        <Marquee reverse pauseOnHover>
-          {PARTNERS.map((p, i) => (
-            <span
-              key={i}
-              className="mx-8 flex items-center gap-3 font-display text-lg font-light tracking-tight text-white lg:text-xl"
-            >
-              <Store className="h-4 w-4 text-white/60" />
-              {p}
-            </span>
-          ))}
-        </Marquee>
-      </section>
+      {partners.length > 0 && (
+        <section
+          data-nav="green"
+          className="border-y border-white/15 bg-caramel py-5"
+        >
+          <Marquee reverse pauseOnHover>
+            {partners.map((p, i) => (
+              <span
+                key={i}
+                className="mx-8 flex items-center gap-3 font-display text-lg font-light tracking-tight text-white lg:text-xl"
+              >
+                <Store className="h-4 w-4 text-white/60" />
+                {p}
+              </span>
+            ))}
+          </Marquee>
+        </section>
+      )}
 
       <AnimatePresence>
         {selectedProduct && (

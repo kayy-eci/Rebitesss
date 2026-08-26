@@ -3,12 +3,13 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { Card } from './Card';
 import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
-import { achievements } from './data';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
+import { useSellerAnalytics } from '@/hooks/use-seller-analytics';
 
 export function AchievementBadgesCard() {
   const reduced = useReducedMotion();
   const { hasOrders, hydrated } = useSellerOrders();
+  const { achievements } = useSellerAnalytics();
   const terkumpul = achievements.filter((badge) => badge.group === 'terkumpul');
   const sedangDiusahakan = achievements.filter(
     (badge) => badge.group === 'sedang-diusahakan'

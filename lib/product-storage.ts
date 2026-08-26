@@ -1,16 +1,6 @@
 ﻿'use client';
 
 import { supabase } from './supabase';
-import { hasSupabaseConfig } from './supabase';
-import { DATA_SOURCE } from './data-source';
-import * as localStore from './local/product-storage';
-
-/** true = data produk penjual disimpan lokal (localStorage), bukan Supabase. */
-function isLocalStore(): boolean {
-  return (
-    DATA_SOURCE === 'local' || (DATA_SOURCE === 'auto' && !hasSupabaseConfig)
-  );
-}
 
 export const SELLER_VENDOR_SLUG = 'dapur-ibu-tini';
 export const SELLER_VENDOR_NAME = 'Dapur Ibu Tini';
@@ -109,13 +99,6 @@ function sellerProductToRow(product: Partial<SellerProduct>): Record<string, unk
 
 /** UMKM milik user yang sedang login. */
 export async function getSellerUmkm(): Promise<SellerUmkm | null> {
-  if (isLocalStore()) {
-    return {
-      id: 'local-dapur-ibu-tini',
-      slug: SELLER_VENDOR_SLUG,
-      businessName: SELLER_VENDOR_NAME,
-    };
-  }
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -136,9 +119,6 @@ export async function getSellerUmkm(): Promise<SellerUmkm | null> {
 }
 
 export async function getSellerProducts(): Promise<SellerProduct[]> {
-  if (isLocalStore()) {
-    return localStore.getSellerProducts();
-  }
   const umkm = await getSellerUmkm();
   if (!umkm) return [];
 
@@ -159,15 +139,6 @@ export async function getStoreProductsBySlug(
   slug: string
 ): Promise<{ products: SellerProduct[]; error: string | null }> {
   if (!slug) return { products: [], error: null };
-
-  if (isLocalStore()) {
-    if (slug !== SELLER_VENDOR_SLUG) return { products: [], error: null };
-    try {
-      return { products: localStore.getSellerProducts(), error: null };
-    } catch {
-      return { products: [], error: 'Gagal memuat produk toko.' };
-    }
-  }
 
   const STORE_LOAD_ERROR = 'Gagal memuat produk toko.';
 
@@ -212,9 +183,6 @@ export async function getStoreProductsBySlug(
 }
 
 export async function getSellerProductCount(): Promise<number> {
-  if (isLocalStore()) {
-    return localStore.getSellerProductCount();
-  }
   const products = await getSellerProducts();
   return products.length;
 }
@@ -236,9 +204,6 @@ function ownProductMatch(umkmId: string, productId: string): Record<string, unkn
 export async function saveSellerProduct(
   input: Omit<SellerProduct, 'id' | 'createdAt'>
 ): Promise<SellerProduct | null> {
-  if (isLocalStore()) {
-    return localStore.saveSellerProduct(input);
-  }
   const umkm = await getSellerUmkm();
   if (!umkm) {
     console.error('[product-storage] tidak ada profil UMKM untuk user ini.');
@@ -268,9 +233,6 @@ export async function patchSellerProduct(
   productId: string,
   patch: Partial<Omit<SellerProduct, 'id'>>
 ): Promise<SellerProduct | undefined> {
-  if (isLocalStore()) {
-    return localStore.patchSellerProduct(productId, patch);
-  }
   const umkm = await getSellerUmkm();
   if (!umkm) {
     console.error('[product-storage] tidak ada profil UMKM untuk user ini.');
@@ -291,10 +253,6 @@ export async function patchSellerProduct(
 }
 
 export async function deleteSellerProduct(productId: string): Promise<void> {
-  if (isLocalStore()) {
-    localStore.deleteSellerProduct(productId);
-    return;
-  }
   const umkm = await getSellerUmkm();
   if (!umkm) {
     console.error('[product-storage] tidak ada profil UMKM untuk user ini.');
@@ -312,17 +270,11 @@ export async function deleteSellerProduct(productId: string): Promise<void> {
 }
 
 export async function getFeaturedProductIds(): Promise<string[]> {
-  if (isLocalStore()) {
-    return localStore.getFeaturedProductIds();
-  }
   const products = await getSellerProducts();
   return products.filter((p) => p.featured).map((p) => p.id);
 }
 
 export async function getSellerProductById(id: string): Promise<SellerProduct | undefined> {
-  if (isLocalStore()) {
-    return localStore.getSellerProductById(id);
-  }
   const products = await getSellerProducts();
   return products.find((p) => p.id === id);
 }
@@ -332,16 +284,6 @@ export async function uploadProductImage(
   file: File | Blob,
   fileName?: string
 ): Promise<string | null> {
-  if (isLocalStore()) {
-    // Mode lokal: simpan sebagai data URL (pratinjau langsung, tanpa server).
-    if (typeof window === 'undefined') return null;
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
-  }
   const umkm = await getSellerUmkm();
   const folder = umkm?.id ?? 'misc';
   const safeName = (fileName ?? (file as File).name ?? 'menu.jpg').replace(/[^\w.\-]+/g, '_');

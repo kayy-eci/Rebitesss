@@ -5,7 +5,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { TrendingUp } from 'lucide-react';
 import { FilterDropdown } from './FilterDropdown';
 import { useCountUp } from './useCountUp';
-import { partnerScoreByPeriod, periodOptions } from './data';
+import { useSellerAnalytics } from '@/hooks/use-seller-analytics';
 
 const SIZE = 150;
 const STROKE = 12;
@@ -15,7 +15,16 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 export function PartnerScoreGauge() {
   const [period, setPeriod] = useState('30-hari');
   const reduced = useReducedMotion();
-  const data = partnerScoreByPeriod[period];
+  const { partnerScores, periodOptions } = useSellerAnalytics();
+  const data =
+    partnerScores[period] ?? partnerScores['30-hari'] ?? {
+      label: '30 Hari',
+      score: 0,
+      deltaPercent: 0,
+    };
+  const options = periodOptions.length > 0
+    ? periodOptions
+    : [{ value: '30-hari', label: '30 Hari' }];
   const { ref, value } = useCountUp(data.score);
   const svgRef = useRef<SVGSVGElement>(null);
   const inView = useInView(svgRef, { once: true, margin: '-10% 0px' });
@@ -29,7 +38,7 @@ export function PartnerScoreGauge() {
         <FilterDropdown
           value={period}
           onChange={setPeriod}
-          options={periodOptions}
+          options={options}
           ariaLabel="Pilih rentang waktu skor"
         />
       </div>

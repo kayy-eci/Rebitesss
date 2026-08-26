@@ -40,7 +40,7 @@ export function ProductBreadcrumb({
             ·
           </span>
           <Link
-            href="/detail/product"
+            href={`/detail/toko?id=${encodeURIComponent(product.vendor.id)}`}
             className="truncate text-[11px] font-semibold uppercase tracking-[0.2em] text-sage-500 transition-colors hover:text-green-700"
           >
             {product.vendor.name}

@@ -54,6 +54,14 @@ export interface Vendor {
   address: string;
   openHours: string;
   description: string;
+  /** Profil tambahan dari umkm_profiles */
+  tagline?: string;
+  tier?: string;
+  followers?: number;
+  memberSince?: number;
+  responseTime?: string;
+  porsiTerselamatkan?: number;
+  co2eSavedKg?: number;
 }
 
 export interface ImpactStat {

@@ -17,7 +17,6 @@ import type { Vendor } from "@/lib/types";
 import { Badge } from "@/app/components/Badge";
 import { SmartImage } from "@/app/components/SmartImage";
 import { DotPattern, LeafSprig } from "@/app/components/dashboardPenjual/decor";
-import { getVendorProfile } from "./vendor-profiles";
 import {
   getStoreSettingsByStoreId,
   STORE_SETTINGS_UPDATED_EVENT,
@@ -26,8 +25,6 @@ import {
   isFollowingStore,
   setFollowingStore,
 } from "@/lib/store-follows";
-import { hasSupabaseConfig } from "@/lib/supabase";
-import { DATA_SOURCE } from "@/lib/data-source";
 
 interface StoreHeroCardProps {
   vendor: Vendor;
@@ -36,7 +33,9 @@ interface StoreHeroCardProps {
 
 export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [following, setFollowing] = useState(false);
-  const profile = getVendorProfile(vendor.id);
+  const tier = vendor.tier ?? "UMKM Partner";
+  const tagline = vendor.tagline ?? "Mitra surplus makanan ReBites.";
+  const followers = vendor.followers ?? 0;
 
   useEffect(() => {
     let mounted = true;
@@ -61,9 +60,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [storeImage, setStoreImage] = useState(vendor.image);
 
   // Identitas toko dibaca dari DATABASE berdasarkan id/slug toko yang dilihat
-  // (bukan sesi viewer). Mode lokal/demo memakai data statis apa adanya.
-  const isDbStore =
-    !(DATA_SOURCE === "local" || (DATA_SOURCE === "auto" && !hasSupabaseConfig));
+  // (bukan sesi viewer).
 
   useEffect(() => {
     setStoreName(vendor.name);
@@ -73,7 +70,6 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   }, [vendor]);
 
   useEffect(() => {
-    if (!isDbStore) return;
     let mounted = true;
     const refresh = () => {
       getStoreSettingsByStoreId(vendor.id).then((s) => {
@@ -90,7 +86,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
       mounted = false;
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
     };
-  }, [isDbStore, vendor]);
+  }, [vendor]);
 
   return (
     <section>
@@ -121,7 +117,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                     <h1 className="font-display text-2xl font-medium leading-tight tracking-tight text-forest-900 sm:text-3xl">
                       {storeName}
                     </h1>
-                    <Badge variant="cream">{profile.tier}</Badge>
+                    <Badge variant="cream">{tier}</Badge>
                     {vendor.isRescuePartner && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-green-700 px-2.5 py-1 text-[10px] font-bold text-white">
                         <BadgeCheck className="h-3 w-3" />
@@ -162,7 +158,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                     </span>
                     <span className="flex items-center gap-1">
                       <Users className="h-3.5 w-3.5 text-sage-500" />
-                      {profile.followers + (following ? 1 : 0)} pengikut
+                      {followers + (following ? 1 : 0)} pengikut
                     </span>
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5 text-sage-500" />
@@ -171,7 +167,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                   </div>
 
                   <p className="mt-2 text-xs font-medium text-green-700">
-                    {profile.tagline}
+                    {tagline}
                   </p>
                 </div>
               </div>
