@@ -6,16 +6,16 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  weight: ['200', '300', '400', '500', '600', '700', '800'],
-  style: ['normal', 'italic'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal'],
 });
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal'],
 });
 
 export const metadata: Metadata = {
