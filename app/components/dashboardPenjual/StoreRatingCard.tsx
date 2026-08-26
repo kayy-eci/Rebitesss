@@ -1,34 +1,65 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Star } from 'lucide-react';
 import { Card } from './Card';
 import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
-import { SERVICE_REVIEWS } from '@/app/detail/toko/service-reviews';
-import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
+import { getSellerUmkm } from '@/lib/product-storage';
+import { supabase } from '@/lib/supabase';
 import { useCountUp } from './useCountUp';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
 
 export function StoreRatingCard() {
   const { hasOrders, hydrated } = useSellerOrders();
+  const [reviewsLoaded, setReviewsLoaded] = useState(false);
+  const [ratings, setRatings] = useState<number[]>([]);
+
+  // Rating di-scope ke toko milik user aktif (tabel reviews, bukan data demo).
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const umkm = await getSellerUmkm();
+      if (!umkm) {
+        if (!cancelled) {
+          setRatings([]);
+          setReviewsLoaded(true);
+        }
+        return;
+      }
+      const { data } = await supabase
+        .from('reviews')
+        .select('rating')
+        .eq('umkm_id', umkm.id);
+      if (!cancelled) {
+        setRatings((data ?? []).map((row) => Number(row.rating ?? 0)));
+        setReviewsLoaded(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const reviews = useMemo(
-    () => SERVICE_REVIEWS[SELLER_VENDOR_SLUG] ?? [],
-    []
+    () => ratings.filter((rating) => rating >= 1 && rating <= 5),
+    [ratings]
   );
 
   const average = useMemo(() => {
     if (reviews.length === 0) return 0;
-    const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const total = reviews.reduce((sum, review) => sum + review, 0);
     return Math.round((total / reviews.length) * 10) / 10;
   }, [reviews]);
 
   const distribution = useMemo(() => {
     const counts = [0, 0, 0, 0, 0];
-    for (const review of reviews) {
-      counts[review.rating - 1] = (counts[review.rating - 1] ?? 0) + 1;
+    for (const rating of reviews) {
+      counts[rating - 1] = (counts[rating - 1] ?? 0) + 1;
     }
     return counts;
   }, [reviews]);
+
+  const loading = !hydrated || !reviewsLoaded;
 
   const { ref, value } = useCountUp(average, 1200, 1);
 
@@ -42,9 +73,9 @@ export function StoreRatingCard() {
       </div>
 
       <div className="mt-4">
-        {!hydrated ? (
+        {loading ? (
           <CardLinesSkeleton />
-        ) : !hasOrders ? (
+        ) : !hasOrders || reviews.length === 0 ? (
           <SalesEmptyState
             title="Belum ada rating"
             description="Rating dan ulasan pembeli akan muncul setelah ada pesanan yang diselesaikan di tokomu."

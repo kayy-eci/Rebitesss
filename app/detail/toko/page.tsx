@@ -20,7 +20,10 @@ import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
-import { getProductById } from "@/app/detail/product/data";
+import {
+  getProductById,
+  type ProductDetail,
+} from "@/app/detail/product/data";
 import { CategoryRow } from "./category-row";
 import {
   Avatar,
@@ -47,10 +50,9 @@ import {
   getDisplayPricing,
   getFlashDiscountPercent,
 } from "@/lib/flash-sale";
-import {
-  getSellerStoreSettings,
-  STORE_SETTINGS_UPDATED_EVENT,
-} from "@/lib/store-settings-storage";
+import { STORE_SETTINGS_UPDATED_EVENT } from "@/lib/store-settings-storage";
+import { hasSupabaseConfig } from "@/lib/supabase";
+import { DATA_SOURCE } from "@/lib/data-source";
 
 
 function getVendorFoods(
@@ -99,6 +101,43 @@ function sellerProductToFoodItem(
   };
 }
 
+function sellerProductToProductDetail(
+  sp: SellerProduct,
+  vendor: Vendor
+): ProductDetail {
+  const pricing = getDisplayPricing(sp);
+  return {
+    id: sp.id,
+    slug: sp.id,
+    category: sp.category,
+    vendor: {
+      id: vendor.id,
+      name: vendor.name,
+      avatar: vendor.image,
+      rating: vendor.rating,
+      isRescuePartner: true,
+    },
+    title: sp.name,
+    images: [sp.image],
+    discountPercent: pricing.isFlash
+      ? getFlashDiscountPercent(sp)
+      : sp.discountPercent,
+    stockLabel: sp.stock > 0 ? `Sisa ${sp.stock} porsi` : "Habis",
+    stockRemaining: sp.stock,
+    rating: 4.7,
+    reviewCount: 0,
+    distanceKm: vendor.distanceKm,
+    originalPrice: sp.originalPrice,
+    discountedPrice: pricing.price,
+    description: sp.description,
+    pickupTime: { from: sp.startTime, to: sp.endTime },
+    pickupLocation: vendor.address,
+    consumeWindow: "Maks. 4 jam setelah diambil",
+    co2eSavedKg: 0.4,
+    packageContents: [],
+  };
+}
+
 
 function isOpenNow(openHours: string): boolean {
   const match = openHours.match(
@@ -131,6 +170,11 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
   const reviews = SERVICE_REVIEWS[vendor.id] ?? [];
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Toko database tanpa review -> section tetap kosong (tanpa data toko lain).
+  if (reviews.length === 0) {
+    return null;
+  }
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -310,10 +354,22 @@ function StoreDetailContent() {
   const [storeLoading, setStoreLoading] = useState(true);
   const [storeError, setStoreError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
-  const isSellerVendor = vendor?.id === SELLER_VENDOR_SLUG;
+
+  // DEMO/LOCAL VENDOR vs AUTHENTICATED SELLER:
+  // - Mode Supabase: SEMUA vendor berasal dari database (umkm_profiles) ->
+  //   produk SELALU dari toko itu sendiri. Kosong = tetap kosong, tanpa fallback.
+  // - Mode lokal/demo: hanya vendor demo penjual yang punya storage produk;
+  //   vendor demo lain memakai katalog statis (getVendorFoods).
+  const isLocalDataMode =
+    DATA_SOURCE === "local" || (DATA_SOURCE === "auto" && !hasSupabaseConfig);
+  const loadsOwnProducts = vendor
+    ? isLocalDataMode
+      ? vendor.id === SELLER_VENDOR_SLUG
+      : true
+    : false;
 
   useEffect(() => {
-    if (!vendor || !isSellerVendor) {
+    if (!vendor || !loadsOwnProducts) {
       setStoreProducts([]);
       setStoreError(null);
       setStoreLoading(false);
@@ -339,17 +395,17 @@ function StoreDetailContent() {
       window.removeEventListener(PRODUCTS_UPDATED_EVENT, load);
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, load);
     };
-  }, [vendor, isSellerVendor, storeId, reloadKey]);
+  }, [vendor, loadsOwnProducts, storeId, reloadKey]);
 
   const foods = useMemo(
     () => {
       if (!vendor) return [];
-      if (isSellerVendor) {
+      if (loadsOwnProducts) {
         return storeProducts.map((sp) => sellerProductToFoodItem(sp, vendor));
       }
       return getVendorFoods(vendor.name, foodItems, urgentItems);
     },
-    [vendor, isSellerVendor, storeProducts, foodItems, urgentItems]
+    [vendor, loadsOwnProducts, storeProducts, foodItems, urgentItems]
   );
 
   const [query, setQuery] = useState("");
@@ -368,9 +424,14 @@ function StoreDetailContent() {
     setSelectedProductId(null);
   }, []);
 
-  const selectedProduct = selectedProductId
-    ? getProductById(selectedProductId)
-    : undefined;
+  const selectedProduct = useMemo<ProductDetail | undefined>(() => {
+    if (!selectedProductId || !vendor) return undefined;
+    // Produk toko database dibaca dari data toko itu sendiri (harga/stok akurat).
+    const own = storeProducts.find((sp) => sp.id === selectedProductId);
+    if (own) return sellerProductToProductDetail(own, vendor);
+    // Fallback statis hanya untuk vendor demo legacy.
+    return getProductById(selectedProductId);
+  }, [selectedProductId, storeProducts, vendor]);
 
   useEffect(() => {
     setQuery("");
@@ -391,13 +452,13 @@ function StoreDetailContent() {
 
 
   const sellerAvailability = useMemo(() => {
-    if (!isSellerVendor) return new Map<string, boolean>();
+    if (!loadsOwnProducts) return new Map<string, boolean>();
     const map = new Map<string, boolean>();
     for (const sp of storeProducts) {
       map.set(sp.id, isProductAvailable(sp));
     }
     return map;
-  }, [isSellerVendor, storeProducts]);
+  }, [loadsOwnProducts, storeProducts]);
 
   const categoryGroups = useMemo(() => {
     const sorted = [...foods].sort(
@@ -539,7 +600,7 @@ function StoreDetailContent() {
             </div>
           </div>
 
-          {isSellerVendor && storeLoading ? (
+          {loadsOwnProducts && storeLoading ? (
             <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {[0, 1, 2].map((i) => (
                 <div
@@ -549,7 +610,7 @@ function StoreDetailContent() {
                 />
               ))}
             </div>
-          ) : isSellerVendor && storeError ? (
+          ) : loadsOwnProducts && storeError ? (
             <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-sage-100 bg-white p-10 text-center">
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
                 <SearchX className="h-6 w-6" />
@@ -570,7 +631,7 @@ function StoreDetailContent() {
                 Coba Lagi
               </button>
             </div>
-          ) : isSellerVendor && storeProducts.length === 0 ? (
+          ) : loadsOwnProducts && storeProducts.length === 0 ? (
             <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-sage-100 bg-white p-10 text-center">
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
                 <Utensils className="h-6 w-6" />
@@ -596,7 +657,7 @@ function StoreDetailContent() {
                     onSelect={handleViewDetail}
                     featuredIds={featuredIds}
                     isItemUnavailable={
-                      isSellerVendor
+                      loadsOwnProducts
                         ? (item) =>
                             sellerAvailability.has(item.id)
                               ? !sellerAvailability.get(item.id)

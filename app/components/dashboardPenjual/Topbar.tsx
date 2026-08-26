@@ -7,19 +7,18 @@ import {
   getSellerStoreSettings,
   STORE_SETTINGS_UPDATED_EVENT,
 } from '@/lib/store-settings-storage';
-import { VENDOR } from './data';
 
 interface TopbarProps {
   onMenuClick: () => void;
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
-  const [storeName, setStoreName] = useState(VENDOR.storeName);
+  const [storeName, setStoreName] = useState('');
 
   useEffect(() => {
     const refresh = () => {
       getSellerStoreSettings().then((settings) => {
-        if (settings?.storeName) setStoreName(settings.storeName);
+        setStoreName(settings?.storeName ?? '');
       });
     };
     refresh();
@@ -47,7 +46,9 @@ export function Topbar({ onMenuClick }: TopbarProps) {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-700 text-white">
             <Store className="h-4 w-4" />
           </div>
-          <span className="text-sm font-bold text-charcoal-900">{storeName}</span>
+          <span className="text-sm font-bold text-charcoal-900">
+            {storeName || '—'}
+          </span>
         </Link>
       </div>
     </header>

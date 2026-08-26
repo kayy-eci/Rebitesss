@@ -59,6 +59,7 @@ export function AddMenuForm() {
   const [touched, setTouched] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savedName, setSavedName] = useState('');
+  const [saveError, setSaveError] = useState('');
   const [limitReached, setLimitReached] = useState(false);
   const [savingProduct, setSavingProduct] = useState(false);
   const [productCount, setProductCount] = useState(0);
@@ -86,6 +87,7 @@ export function AddMenuForm() {
     setTouched(true);
     if (!form.name.trim() || savingProduct) return;
 
+    setSaveError('');
 
     if (plan.maxProducts !== null && productCount >= plan.maxProducts) {
       setLimitReached(true);
@@ -122,7 +124,13 @@ export function AddMenuForm() {
       });
 
       setSavingProduct(false);
-      if (!created) return;
+      if (!created) {
+        setSaveError(
+          'Menu gagal disimpan. Pastikan toko kamu sudah terdaftar dan koneksi stabil, lalu coba lagi.'
+        );
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        return;
+      }
 
       setSavedName(form.name.trim());
       setSaved(true);
@@ -135,6 +143,7 @@ export function AddMenuForm() {
     setForm(DEFAULT_MENU_FORM);
     setTouched(false);
     setSaved(false);
+    setSaveError('');
     setLimitReached(false);
   };
 
@@ -208,10 +217,10 @@ export function AddMenuForm() {
           </p>
           <div className="mt-6 grid gap-3">
             <Link
-              href="/dashboard/penjual"
+              href="/dashboard/penjual/menu"
               className="inline-flex w-full items-center justify-center rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
             >
-              Lihat Dashboard
+              Lihat Menu Saya
             </Link>
             <button
               type="button"
@@ -220,6 +229,12 @@ export function AddMenuForm() {
             >
               Tambah Menu Lagi
             </button>
+            <Link
+              href="/dashboard/penjual"
+              className="text-center text-xs font-medium text-sage-500 underline underline-offset-4 transition-colors hover:text-charcoal-900"
+            >
+              Kembali ke Dashboard
+            </Link>
           </div>
         </Card>
       </motion.div>
@@ -454,7 +469,16 @@ export function AddMenuForm() {
               </div>
             </section>
 
-            <div className="flex flex-col-reverse gap-3 border-t border-sage-100 pt-6 sm:flex-row sm:items-center">
+              {saveError && (
+                <p
+                  role="alert"
+                  className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] font-medium text-red-600"
+                >
+                  {saveError}
+                </p>
+              )}
+
+              <div className="flex flex-col-reverse gap-3 border-t border-sage-100 pt-6 sm:flex-row sm:items-center">
               <Link
                 href="/dashboard/penjual"
                 className="inline-flex items-center justify-center rounded-full border border-sage-100 bg-white px-5 py-3 text-sm font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"

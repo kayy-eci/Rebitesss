@@ -7,6 +7,7 @@ import {
   Bell,
   LayoutGrid,
   Leaf,
+  Settings,
   ShoppingBag,
   TrendingUp,
   Utensils,
@@ -61,6 +62,12 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Performa Toko',
     icon: TrendingUp,
     href: '/dashboard/penjual/performa',
+  },
+  {
+    id: 'pengaturan',
+    label: 'Pengaturan Toko',
+    icon: Settings,
+    href: '/dashboard/penjual/pengaturan',
   },
 ];
 

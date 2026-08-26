@@ -57,20 +57,31 @@ export function ProfileNavbar() {
   useEffect(() => {
     let cancelled = false;
 
-    supabase.auth
-      .getSession()
-      .then(({ data }: { data: { session: { user: AuthSessionUser | null } | null } }) => {
-        if (cancelled) return;
-        const user = data.session?.user;
-        if (!user) return;
-        setSessionUser({
-          fullName: user.user_metadata?.full_name ?? '',
-          email: user.email ?? '',
-        });
+    const readUser = ({ data }: { data: { session: { user: AuthSessionUser | null } | null } }) => {
+      if (cancelled) return;
+      const user = data.session?.user;
+      if (!user) {
+        setSessionUser(null);
+        return;
+      }
+      setSessionUser({
+        fullName: user.user_metadata?.full_name ?? '',
+        email: user.email ?? '',
       });
+    };
+
+    supabase.auth.getSession().then(readUser);
+
+    // Session user harus reaktif: SIGNED_IN/SIGNED_OUT update UI tanpa refresh.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      readUser({ data: { session } as { session: { user: AuthSessionUser | null } | null } });
+    });
 
     return () => {
       cancelled = true;
+      subscription.unsubscribe();
     };
   }, []);
 

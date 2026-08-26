@@ -46,6 +46,7 @@ export interface Vendor {
   name: string;
   image: string;
   isRescuePartner: boolean;
+  isVerified?: boolean;
   rating: number;
   distanceKm: number;
   category: string;

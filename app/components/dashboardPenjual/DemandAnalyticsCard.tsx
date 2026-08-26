@@ -82,7 +82,7 @@ export function DemandAnalyticsCard() {
 
       {insights.length === 0 ? (
         <p className="mt-4 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 p-6 text-center text-xs leading-relaxed text-sage-500">
-          Belum ada menu untuk dianalisis. Tambahkan menu di halaman Menu Saya.
+          Belum ada data penjualan untuk dianalisis. Tambahkan menu dan raih pesanan pertamamu.
         </p>
       ) : (
         <ul className="mt-4 space-y-3">

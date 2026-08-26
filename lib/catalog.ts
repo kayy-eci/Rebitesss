@@ -69,6 +69,7 @@ function umkmToVendor(row: UmkmRow, itemCount: number): Vendor {
       row.logo_url ??
       'https://images.pexels.com/photos/37193132/pexels-photo-37193132.jpeg?auto=compress&cs=tinysrgb&w=800',
     isRescuePartner: row.is_rescue_partner ?? false,
+    isVerified: row.is_verified ?? false,
     rating: Number(row.rating ?? 5),
     distanceKm: Number(row.distance_km ?? 1),
     category: row.category ?? 'Makanan Berat',

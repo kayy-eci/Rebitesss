@@ -157,6 +157,21 @@ function inputClass(additional?: string) {
   return `w-full bg-transparent py-1 font-sans text-[15px] text-[#1B3F2C] outline-none placeholder:text-[#6B6A63]/40 ${additional ?? ""}`;
 }
 
+function slugify(text: string): string {
+  return (
+    text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 48) || "toko"
+  );
+}
+
+function randomSuffix(): string {
+  return Math.random().toString(36).slice(2, 7);
+}
+
 export default function PenjualRegisterForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -286,16 +301,16 @@ export default function PenjualRegisterForm() {
         return;
       }
 
-      await supabase.auth.signUp({
+      // Verifikasi identitas: konfirmasi ulang password sesi yang aktif.
+      // TIDAK membuat akun baru dan TIDAK mengganti user yang sedang login.
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
         email: session.user.email ?? "",
         password: step1Form.getValues("password"),
-        options: {
-          data: {
-            full_name: session.user.user_metadata?.full_name || step1Form.getValues("fullName"),
-            role: "umkm",
-          },
-        },
-      }).catch(() => {});
+      });
+      if (verifyError) {
+        setError("Kata sandi salah. Konfirmasi kata sandi akun kamu.");
+        return;
+      }
 
       let logoUrl: string | null = null;
       if (logoFile) {
@@ -313,10 +328,14 @@ export default function PenjualRegisterForm() {
         }
       }
 
-      const { error: insertError } = await supabase
-        .from("umkm_profiles")
-        .insert({
+      const slugBase = slugify(s2.businessName);
+      let slug = `${slugBase}-${randomSuffix()}`;
+      let insertPayloadError: { code?: string; message: string } | null = null;
+
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const { error } = await supabase.from("umkm_profiles").insert({
           user_id: userId,
+          slug,
           business_name: s2.businessName,
           description: s2.description || null,
           category: s2.categories.join(", "),
@@ -324,8 +343,18 @@ export default function PenjualRegisterForm() {
           city: s2.city,
           logo_url: logoUrl,
         });
+        if (!error) {
+          insertPayloadError = null;
+          break;
+        }
+        insertPayloadError = error as { code?: string; message: string };
+        if (error.code !== "23505") break;
+        slug = `${slugBase}-${randomSuffix()}`;
+      }
 
-      if (insertError) throw insertError;
+      if (insertPayloadError) {
+        throw new Error(insertPayloadError.message);
+      }
 
       window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
       router.push("/dashboard/penjual");

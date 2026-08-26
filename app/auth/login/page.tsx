@@ -20,7 +20,7 @@ export default function LoginPage() {
       }
       subtitle="Enter your credentials to access your curated dashboard."
       submitLabel="Sign In"
-      redirectTo="/"
+      redirectTo="/home"
       bottomHint={{
         text: "Belum punya akun?",
         linkText: "Daftar di sini",

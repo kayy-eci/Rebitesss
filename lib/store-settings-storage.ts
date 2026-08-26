@@ -15,12 +15,10 @@ export interface SellerStoreSettings {
 
 export const DEFAULT_STORE_SETTINGS: SellerStoreSettings = {
   isOpen: true,
-  storeName: 'Dapur Ibu Tini',
-  description:
-    'Dapur rumahan spesialis kudapan pasar buatan sendiri, dari martabak dan pancong hangat sampai ketoprak dan salad buah segar.',
-  image:
-    'https://images.pexels.com/photos/30294334/pexels-photo-30294334.jpeg?auto=compress&cs=tinysrgb&w=800',
-  address: 'Jl. Raya Tajur No. 12, Bogor',
+  storeName: '',
+  description: '',
+  image: '',
+  address: '',
 };
 
 function dispatchUpdated(): void {
@@ -44,10 +42,42 @@ export async function getSellerStoreSettings(): Promise<SellerStoreSettings | nu
 
   return {
     isOpen: data.is_open ?? true,
-    storeName: data.business_name ?? DEFAULT_STORE_SETTINGS.storeName,
+    storeName: data.business_name ?? '',
     description: data.description ?? '',
-    image: data.logo_url ?? DEFAULT_STORE_SETTINGS.image,
+    image: data.logo_url ?? '',
     address: data.address ?? '',
+  };
+}
+
+export interface StorePublicSettings {
+  storeName: string;
+  description: string;
+  address: string;
+  image: string;
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Identitas publik toko berdasarkan id/slug routing (bukan sesi viewer).
+ * Dipakai Detail Toko agar semua pengunjung melihat data DB terbaru.
+ */
+export async function getStoreSettingsByStoreId(
+  storeId: string
+): Promise<StorePublicSettings | null> {
+  if (!storeId) return null;
+  const column = UUID_RE.test(storeId) ? 'id' : 'slug';
+  const { data, error } = await supabase
+    .from('umkm_profiles')
+    .select('business_name, description, logo_url, address')
+    .eq(column, storeId)
+    .maybeSingle();
+  if (error || !data) return null;
+  return {
+    storeName: data.business_name ?? '',
+    description: data.description ?? '',
+    address: data.address ?? '',
+    image: data.logo_url ?? '',
   };
 }
 
@@ -72,6 +102,10 @@ async function patchOwnUmkm(patch: Record<string, unknown>): Promise<boolean> {
 
 export function setStoreOpen(isOpen: boolean): Promise<boolean> {
   return patchOwnUmkm({ is_open: isOpen });
+}
+
+export function setStoreOpenHours(openHours: string): Promise<boolean> {
+  return patchOwnUmkm({ open_hours: openHours });
 }
 
 export function updateStoreSettings(

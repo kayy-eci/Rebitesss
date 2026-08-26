@@ -4,7 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Camera, ChevronDown, ChevronUp, ImagePlus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/SmartImage';
-import { patchSellerProduct, type SellerProduct } from '@/lib/product-storage';
+import {
+  patchSellerProduct,
+  uploadProductImage,
+  type SellerProduct,
+} from '@/lib/product-storage';
 import { MENU_CATEGORIES } from './types';
 import {
   Dialog,
@@ -75,6 +79,7 @@ export function EditProductModal({
   const [isSurplusToday, setIsSurplusToday] = useState(true);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -99,13 +104,23 @@ export function EditProductModal({
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setError('File harus berupa gambar.');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setError('Ukuran gambar maksimal 2MB.');
+      return;
+    }
+    setError('');
     const reader = new FileReader();
     reader.onload = () => setImage(reader.result as string);
     reader.readAsDataURL(file);
     event.target.value = '';
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (saving) return;
     setError('');
     const trimmedName = name.trim();
     if (!trimmedName) {
@@ -124,29 +139,58 @@ export function EditProductModal({
       setError('Harga normal tidak boleh negatif.');
       return;
     }
-    const nextStock = Math.max(0, Math.floor(stock) || 0);
-    const discountPercent =
-      normalPrice > 0
-        ? Math.max(
-            0,
-            Math.round((1 - Math.max(0, price) / normalPrice) * 100)
-          )
-        : 0;
-    patchSellerProduct(product.id, {
-      name: trimmedName,
-      image: image || '/foods/ikansayur.jpg',
-      category,
-      surplusPrice: Math.max(0, price),
-      stock: nextStock,
-      description,
-      originalPrice: normalPrice,
-      startTime,
-      endTime,
-      allDay,
-      isSurplusToday,
-      discountPercent,
-    });
-    onClose();
+
+    setSaving(true);
+    try {
+      // Foto baru di-upload ke storage, bukan menyimpan data URL mentah.
+      let finalImage = image;
+      if (image.startsWith('data:image')) {
+        try {
+          const res = await fetch(image);
+          const blob = await res.blob();
+          finalImage =
+            (await uploadProductImage(blob, `menu-${Date.now()}.jpg`)) ?? image;
+        } catch {
+          setError('Upload foto gagal. Coba lagi atau pilih foto lain.');
+          return;
+        }
+      }
+
+      const nextStock = Math.max(0, Math.floor(stock) || 0);
+      const discountPercent =
+        normalPrice > 0
+          ? Math.max(
+              0,
+              Math.round((1 - Math.max(0, price) / normalPrice) * 100)
+            )
+          : 0;
+      const updated = await patchSellerProduct(product.id, {
+        name: trimmedName,
+        image: finalImage || '/foods/ikansayur.jpg',
+        category,
+        surplusPrice: Math.max(0, price),
+        stock: nextStock,
+        description,
+        originalPrice: normalPrice,
+        startTime,
+        endTime,
+        allDay,
+        isSurplusToday,
+        discountPercent,
+      });
+
+      // Gagal simpan -> modal tetap terbuka dengan pesan error yang jelas.
+      if (!updated) {
+        setError(
+          'Perubahan gagal disimpan. Pastikan menu ini milik tokomu lalu coba lagi.'
+        );
+        return;
+      }
+
+      onClose();
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -371,10 +415,11 @@ export function EditProductModal({
           </button>
           <button
             type="button"
-            onClick={handleSave}
-            className="inline-flex items-center whitespace-nowrap rounded-full bg-green-700 px-5 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+            onClick={() => void handleSave()}
+            disabled={saving}
+            className="inline-flex items-center whitespace-nowrap rounded-full bg-green-700 px-5 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Simpan Perubahan
+            {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
           </button>
         </div>
       </DialogContent>

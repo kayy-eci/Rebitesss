@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion, MotionConfig } from 'framer-motion';
 import { Crown } from 'lucide-react';
 import { Reveal } from '@/app/components/reveal';
-import { VENDOR } from '@/app/components/dashboardPenjual/data';
 import { DashboardDecor } from '@/app/components/dashboardPenjual/decor';
 import { Sidebar } from '@/app/components/dashboardPenjual/Sidebar';
 import { Topbar } from '@/app/components/dashboardPenjual/Topbar';
@@ -16,11 +15,39 @@ import { FeaturedPromoCard } from '@/app/components/dashboardPenjual/FeaturedPro
 import { StoreCard } from '@/app/components/dashboardPenjual/StoreCard';
 import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
 import { useSellerPlan } from '@/lib/seller-plan';
+import { useRequireSeller } from '@/hooks/use-require-seller';
 
 export default function VendorDashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [period, setPeriod] = useState<StatsPeriod>('7-hari');
   const { plan } = useSellerPlan();
+  const { loading } = useRequireSeller();
+  const [firstName, setFirstName] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      // Sapaan memakai NAMA USER (metadata auth), bukan nama toko.
+      const { supabase } = await import('@/lib/supabase');
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (cancelled) return;
+      const fullName = (session?.user.user_metadata?.full_name as string) ?? '';
+      setFirstName(fullName.split(' ')[0] || '');
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-cream-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-green-700 border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <MotionConfig reducedMotion="user">
@@ -44,7 +71,7 @@ export default function VendorDashboardPage() {
                     Dashboard Penjual
                   </p>
                   <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
-                    Halo, <span className="font-extralight italic">{VENDOR.firstName}</span>
+                    Halo, <span className="font-extralight italic">{firstName}</span>
                   </h1>
                   <p className="mt-1 text-sm text-sage-500">
                     Pantau penjualan, pesanan masuk, dan limbah tokomu dari tiap porsi yang

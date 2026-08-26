@@ -6,6 +6,7 @@ import { MotionConfig } from 'framer-motion';
 import { DashboardDecor } from './decor';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { useRequireSeller } from '@/hooks/use-require-seller';
 
 interface SellerShellProps {
   children: ReactNode;
@@ -13,6 +14,15 @@ interface SellerShellProps {
 
 export function SellerShell({ children }: SellerShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { loading } = useRequireSeller();
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-cream-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-green-700 border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <MotionConfig reducedMotion="user">

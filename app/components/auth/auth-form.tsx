@@ -139,7 +139,10 @@ export default function AuthForm({
           await supabase.auth.signUp({
             email: email.trim(),
             password,
-            options: { data: { full_name: fullName.trim() } },
+            options: {
+              data: { full_name: fullName.trim() },
+              emailRedirectTo: `${window.location.origin}/auth/callback`,
+            },
           });
         if (signUpError) throw signUpError;
 
@@ -169,6 +172,13 @@ export default function AuthForm({
         setError("Email atau kata sandi salah.");
       } else if (message.includes("User already registered")) {
         setError("Email sudah terdaftar. Silakan masuk.");
+      } else if (
+        message.includes("Email not confirmed") ||
+        message.includes("email_not_confirmed")
+      ) {
+        setError(
+          "Email belum diverifikasi. Buka email Anda dan klik tautan konfirmasi.",
+        );
       } else {
         setError(message || "Terjadi kesalahan. Silakan coba lagi.");
       }
@@ -309,8 +319,9 @@ export default function AuthForm({
             <DialogDescription className="text-center font-sans text-sm leading-relaxed text-[#6B6A63]">
               Registrasi berhasil! Kami mengirim tautan konfirmasi ke{" "}
               <span className="font-semibold text-[#1B3F2C]">{email.trim()}</span>
-              . Buka email tersebut, konfirmasi pendaftaran akunmu, lalu masuk
-              untuk mulai menggunakan ReBites.
+              . Langkah selanjutnya: buka email tersebut, klik tautan
+              konfirmasinya, dan kamu akan diarahkan kembali ke ReBites untuk
+              masuk.
             </DialogDescription>
           </DialogHeader>
           <Link

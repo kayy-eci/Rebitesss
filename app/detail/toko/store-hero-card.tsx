@@ -18,16 +18,16 @@ import { Badge } from "@/app/components/Badge";
 import { SmartImage } from "@/app/components/SmartImage";
 import { DotPattern, LeafSprig } from "@/app/components/dashboardPenjual/decor";
 import { getVendorProfile } from "./vendor-profiles";
-import { useSellerPlan } from "@/lib/seller-plan";
-import { SELLER_VENDOR_SLUG } from "@/lib/product-storage";
 import {
-  getSellerStoreSettings,
+  getStoreSettingsByStoreId,
   STORE_SETTINGS_UPDATED_EVENT,
 } from "@/lib/store-settings-storage";
 import {
   isFollowingStore,
   setFollowingStore,
 } from "@/lib/store-follows";
+import { hasSupabaseConfig } from "@/lib/supabase";
+import { DATA_SOURCE } from "@/lib/data-source";
 
 interface StoreHeroCardProps {
   vendor: Vendor;
@@ -37,7 +37,6 @@ interface StoreHeroCardProps {
 export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [following, setFollowing] = useState(false);
   const profile = getVendorProfile(vendor.id);
-  const { plan } = useSellerPlan();
 
   useEffect(() => {
     let mounted = true;
@@ -56,17 +55,29 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
     if (!ok) setFollowing(!next);
   };
 
-  const isSellerVendor = vendor.id === SELLER_VENDOR_SLUG;
   const [storeName, setStoreName] = useState(vendor.name);
   const [storeDesc, setStoreDesc] = useState(vendor.description);
   const [storeAddress, setStoreAddress] = useState(vendor.address);
   const [storeImage, setStoreImage] = useState(vendor.image);
 
+  // Identitas toko dibaca dari DATABASE berdasarkan id/slug toko yang dilihat
+  // (bukan sesi viewer). Mode lokal/demo memakai data statis apa adanya.
+  const isDbStore =
+    !(DATA_SOURCE === "local" || (DATA_SOURCE === "auto" && !hasSupabaseConfig));
+
   useEffect(() => {
-    if (!isSellerVendor) return;
+    setStoreName(vendor.name);
+    setStoreDesc(vendor.description);
+    setStoreAddress(vendor.address);
+    setStoreImage(vendor.image);
+  }, [vendor]);
+
+  useEffect(() => {
+    if (!isDbStore) return;
+    let mounted = true;
     const refresh = () => {
-      getSellerStoreSettings().then((s) => {
-        if (!s) return;
+      getStoreSettingsByStoreId(vendor.id).then((s) => {
+        if (!mounted || !s) return;
         setStoreName(s.storeName || vendor.name);
         setStoreDesc(s.description || vendor.description);
         setStoreAddress(s.address || vendor.address);
@@ -76,9 +87,10 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
     refresh();
     window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
     return () => {
+      mounted = false;
       window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, refresh);
     };
-  }, [isSellerVendor, vendor]);
+  }, [isDbStore, vendor]);
 
   return (
     <section>
@@ -116,7 +128,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                         Rescue Partner
                       </span>
                     )}
-                    {plan.verifiedBadge && (
+                    {vendor.isVerified && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-bold text-charcoal-900">
                         <BadgeCheck className="h-3 w-3" />
                         UMKM Terverifikasi

@@ -5,10 +5,9 @@ import { ArrowUpRight, BadgeCheck, Store } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { QuickActionsRow } from './QuickActionsRow';
-import { vendorInfo } from './data';
 import { DotPattern, LeafSprig } from './decor';
 import { useSellerPlan } from '@/lib/seller-plan';
-import { SELLER_VENDOR_SLUG, getSellerUmkm } from '@/lib/product-storage';
+import { getSellerUmkm } from '@/lib/product-storage';
 import { supabase } from '@/lib/supabase';
 import {
   getSellerStoreSettings,
@@ -71,8 +70,8 @@ export function StoreCard() {
     });
   };
 
-  const storeName = businessName || vendorInfo.storeName;
-  const displayedOwner = ownerName || vendorInfo.ownerName;
+  const storeName = businessName ?? '';
+  const displayedOwner = ownerName ?? '';
 
   return (
     <Card>
@@ -94,7 +93,7 @@ export function StoreCard() {
               ReBites Partner
             </p>
             <p className="mt-2 inline-flex flex-wrap items-center gap-1.5 rounded-full bg-cream-50/15 px-2.5 py-1 text-[11px] font-semibold text-cream-50">
-              {storeName}
+              {storeName || '—'}
               {plan.verifiedBadge && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-cream-50 text-forest-900">
                   <BadgeCheck className="h-3 w-3" />
@@ -137,7 +136,7 @@ export function StoreCard() {
 
         <div className="relative mt-6">
           <p className="font-display text-lg font-medium leading-tight text-cream-50">
-            {displayedOwner}
+            {displayedOwner || '—'}
           </p>
           <p className="mt-1 text-[11px] text-cream-50/60">
             {storeSlug
@@ -148,7 +147,7 @@ export function StoreCard() {
       </div>
 
       <Link
-        href={`/detail/toko?id=${storeSlug ?? storeId ?? SELLER_VENDOR_SLUG}`}
+        href={`/detail/toko?id=${storeSlug ?? storeId ?? ''}`}
         className="mt-4 inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full border border-sage-100 bg-white px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
       >
         <Store className="h-3.5 w-3.5 text-green-700" />

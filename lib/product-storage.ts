@@ -223,6 +223,16 @@ function generateProductSlug(): string {
   return `prd-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Filter ownership: produk HARUS milik UMKM user aktif. id klien tidak dipercaya mentah. */
+function ownProductMatch(umkmId: string, productId: string): Record<string, unknown> {
+  // Identifier bisa berupa slug (row baru) atau uuid (row legacy tanpa slug).
+  return UUID_RE.test(productId)
+    ? { umkm_id: umkmId, id: productId }
+    : { umkm_id: umkmId, slug: productId };
+}
+
 export async function saveSellerProduct(
   input: Omit<SellerProduct, 'id' | 'createdAt'>
 ): Promise<SellerProduct | null> {
@@ -261,14 +271,19 @@ export async function patchSellerProduct(
   if (isLocalStore()) {
     return localStore.patchSellerProduct(productId, patch);
   }
+  const umkm = await getSellerUmkm();
+  if (!umkm) {
+    console.error('[product-storage] tidak ada profil UMKM untuk user ini.');
+    return undefined;
+  }
   const { data, error } = await supabase
     .from('products')
     .update(sellerProductToRow(patch))
-    .eq('slug', productId)
+    .match(ownProductMatch(umkm.id, productId))
     .select()
     .maybeSingle();
   if (error || !data) {
-    console.error('[product-storage] gagal update produk:', error?.message);
+    console.error('[product-storage] gagal update produk:', error?.message ?? 'produk bukan milik toko ini.');
     return undefined;
   }
   dispatchUpdated();
@@ -280,7 +295,15 @@ export async function deleteSellerProduct(productId: string): Promise<void> {
     localStore.deleteSellerProduct(productId);
     return;
   }
-  const { error } = await supabase.from('products').delete().eq('slug', productId);
+  const umkm = await getSellerUmkm();
+  if (!umkm) {
+    console.error('[product-storage] tidak ada profil UMKM untuk user ini.');
+    return;
+  }
+  const { error } = await supabase
+    .from('products')
+    .delete()
+    .match(ownProductMatch(umkm.id, productId));
   if (error) {
     console.error('[product-storage] gagal menghapus produk:', error.message);
     return;
