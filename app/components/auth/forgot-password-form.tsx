@@ -49,7 +49,13 @@ export default function ForgotPasswordForm() {
       const { supabase } = await import("@/lib/supabase");
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(
         email.trim(),
-        { redirectTo: `${window.location.origin}/` },
+        {
+          // Token recovery diverifikasi lewat /auth/callback lalu user
+          // diarahkan ke halaman "Buat Kata Sandi Baru".
+          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(
+            "/auth/buat-sandi-baru",
+          )}`,
+        },
       );
       if (resetError) throw resetError;
       setSent(true);
