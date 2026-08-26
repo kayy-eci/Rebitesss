@@ -25,9 +25,17 @@ export interface XenditInvoice {
 }
 
 function getSecretKey(): string {
-  const key = process.env.XENDIT_SECRET_KEY;
-  if (!key) throw new Error('Missing env: XENDIT_SECRET_KEY');
-  return key;
+  const raw = process.env.XENDIT_SECRET_KEY?.trim();
+  if (!raw) throw new Error('Missing env: XENDIT_SECRET_KEY');
+  return raw;
+}
+
+export function getCallbackToken(): string | null {
+  const raw =
+    process.env.XENDIT_CALLBACK_TOKEN?.trim() ||
+    process.env.XENDIT_WEBHOOK_TOKEN?.trim() ||
+    null;
+  return raw || null;
 }
 
 export async function createXenditInvoice(

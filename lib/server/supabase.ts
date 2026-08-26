@@ -8,7 +8,8 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
  */
 
 function requireEnv(name: string): string {
-  const value = process.env[name];
+  const raw = process.env[name];
+  const value = raw?.trim();
   if (!value) throw new Error(`Missing env: ${name}`);
   return value;
 }

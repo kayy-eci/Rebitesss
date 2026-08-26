@@ -26,13 +26,17 @@ interface XenditCallback {
 }
 
 export async function POST(req: NextRequest) {
-  const token = req.headers.get('x-callback-token');
-  const expected = process.env.XENDIT_CALLBACK_TOKEN;
+  const token = req.headers.get('x-callback-token')?.trim() ?? null;
+  const rawExpected =
+    process.env.XENDIT_CALLBACK_TOKEN?.trim() ||
+    process.env.XENDIT_WEBHOOK_TOKEN?.trim() ||
+    null;
 
-  if (!expected) {
-    console.error('[webhook/xendit] XENDIT_CALLBACK_TOKEN belum di-set');
+  if (!rawExpected) {
+    console.error('[webhook/xendit] XENDIT_CALLBACK_TOKEN / XENDIT_WEBHOOK_TOKEN belum di-set');
     return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
   }
+  const expected = rawExpected.trim();
   if (!token || !timingSafeEqual(token, expected)) {
     console.warn('[webhook/xendit] invalid callback token');
     return NextResponse.json({ error: 'Invalid callback token' }, { status: 401 });
