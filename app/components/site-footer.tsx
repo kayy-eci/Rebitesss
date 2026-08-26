@@ -11,7 +11,7 @@ export function SiteFooter() {
       className="grain-overlay relative overflow-hidden bg-primary text-primary-foreground"
     >
       <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-        <Reveal className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <Reveal className="grid gap-12 lg:grid-cols-[1.1fr_0.8fr_1fr_1.3fr]">
           <div>
             <Link href="/" className="flex items-center gap-3">
               <img
@@ -107,6 +107,32 @@ export function SiteFooter() {
               </li>
             </ul>
           </div>
+
+          <div className="lg:text-right">
+            <p className="font-display text-[clamp(3.5rem,6.5vw,6rem)] font-medium leading-none tracking-tight text-primary-foreground-strong">
+              Re
+              <span className="font-light italic">Bites</span>
+            </p>
+
+            <div className="mt-6 flex flex-col items-start gap-4 lg:items-end">
+              <div className="flex items-center gap-2.5 rounded-full border border-primary-foreground/20 px-4 py-2">
+                <span
+                  aria-hidden
+                  className="h-4 w-4 overflow-hidden rounded-full bg-white"
+                >
+                  <span className="block h-1/2 w-full rounded-t-full bg-[#CE1126]" />
+                </span>
+                <span className="font-sans text-xs text-primary-foreground/80">
+                  Indonesia (ID)
+                </span>
+              </div>
+
+              <p className="flex items-center gap-2 font-sans text-xs text-primary-foreground/50">
+                <Leaf className="h-3.5 w-3.5" />
+                Selamatkan Makanan, selamatkan bumi.
+              </p>
+            </div>
+          </div>
         </Reveal>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-primary-foreground/15 pt-8 sm:flex-row sm:items-center">
@@ -115,9 +141,19 @@ export function SiteFooter() {
             <span className="text-primary-foreground/80">Tim Sixquit</span> -
             SMK Taruna Bhakti.
           </p>
-          <div className="flex items-center gap-2 font-sans text-xs text-primary-foreground/50">
-            <Leaf className="h-3.5 w-3.5" />
-            Selamatkan Makanan, selamatkan bumi.
+
+          <div className="flex flex-wrap items-center gap-6 font-sans text-xs text-primary-foreground/50">
+            <span className="cursor-pointer transition-colors hover:text-primary-foreground">
+              Privacy Policy
+            </span>
+
+            <span className="cursor-pointer transition-colors hover:text-primary-foreground">
+              Terms of Use
+            </span>
+
+            <span className="cursor-pointer transition-colors hover:text-primary-foreground">
+              Disclaimer
+            </span>
           </div>
         </div>
       </div>

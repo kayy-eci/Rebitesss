@@ -3,7 +3,7 @@
 import { useEffect, useState, useId } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, User, Menu, X } from "lucide-react";
+import { ArrowRight, Sparkles, Star, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import OptionWheel from "@/app/components/ui/korosel";
 
@@ -38,6 +38,7 @@ export function HeroSection() {
   const [overDark, setOverDark] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [foodIndex, setFoodIndex] = useState(0);
+  const [barOpen, setBarOpen] = useState<boolean>(true);
 
   const lang = "id" as "id" | "en";
 
@@ -118,7 +119,40 @@ export function HeroSection() {
 
   return (
     <div className="overflow-x-hidden bg-cream" data-nav="cream">
-      <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
+      <header className="fixed inset-x-0 top-0 z-50">
+        <AnimatePresence initial={false}>
+          {barOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden bg-forest-dark text-primary-foreground"
+            >
+              <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center gap-2 px-10 py-2 sm:px-8">
+                <Sparkles className="h-3 w-3 shrink-0 text-caramel" />
+                <p className="truncate text-center font-sans text-[11px] tracking-tight text-primary-foreground/90">
+                  <span className="font-semibold text-caramel">
+                    Khusus Depok
+                  </span>{" "}
+                  — makanan surplus berkualitas mulai Rp5.000, selamatkan
+                  sekarang
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => setBarOpen(false)}
+                  aria-label="Tutup pengumuman"
+                  className="absolute right-4 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-white sm:right-8"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="px-5 pt-3 sm:px-8 sm:pt-4">
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
             className={cn(
@@ -272,6 +306,7 @@ export function HeroSection() {
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
         </div>
       </header>
 
@@ -324,37 +359,60 @@ export function HeroSection() {
           <HeroOrganicArt />
 
           <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+7rem)]">
-            <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
-              <span className="text-forest-dark">
-                <span className="text-caramel">Khusus Depok,</span>
-              </span>
+            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-forest">
+              Coba Sekarang
+            </p>
 
-              <span className="block text-forest">
-                Selamatkan <span className="text-caramel">Makanan Surplus.</span>
+            <h1 className="mt-4 font-display text-[clamp(2.7rem,5vw,4.6rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-forest-dark">
+              Ubah cara kamu
+              <span className="block">menyelamatkan</span>
+              <span className="block font-light italic text-caramel">
+                makanan.
               </span>
             </h1>
 
-            <div className="mt-9 flex flex-wrap items-center gap-4">
-              <Link
-                href="/#cara-kerja"
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-full border border-hairline bg-white px-7 py-3.5 font-inter text-sm font-semibold text-forest-dark shadow-[0_14px_30px_-20px_rgba(34,81,56,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:border-caramel/50 hover:text-caramel",
-                  FOCUS_RING,
-                )}
-              >
-                Lihat Cara Kerja
-              </Link>
+            <p className="mt-7 max-w-md font-sans text-sm leading-[1.85] text-muted-foreground">
+              Dari makan siang hingga usaha kuliner, ReBites membantu kamu
+              menemukan makanan surplus berkualitas dari dapur UMKM Depok
+              dengan harga lebih hemat — tanpa food waste.
+            </p>
 
+            <div className="mt-9 flex flex-wrap items-center gap-5">
               <Link
-                href="/#cta"
+                href="/auth/register"
                 className={cn(
-                  "group inline-flex items-center gap-2 rounded-full bg-gradient-to-r bg-forest px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(34,81,56,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel",
+                  "group inline-flex items-center gap-2 rounded-full bg-forest-dark px-7 py-3.5 font-inter text-sm font-semibold text-white shadow-[0_16px_32px_-16px_rgba(34,81,56,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel",
                   FOCUS_RING,
                 )}
               >
-                Mulai Selamatkan Makanan
+                Mulai Sekarang
+
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
+
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-3.5 w-3.5 fill-amber text-amber"
+                      />
+                    ))}
+                  </div>
+
+                  <span className="font-sans text-sm font-bold text-forest-dark">
+                    5.0
+                  </span>
+                </div>
+
+                <p className="font-sans text-[11px] leading-tight text-muted-foreground">
+                  dari{" "}
+                  <span className="font-semibold text-forest-dark">500+</span>
+                  <br />
+                  ulasan pengguna
+                </p>
+              </div>
             </div>
           </div>
 

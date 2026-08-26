@@ -2,15 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowRight,
-  Store,
-  Scale,
-  Wallet,
-  Users,
-  Star,
-  Quote,
-} from "lucide-react";
+import { ArrowRight, Scale, Store, Users, Wallet, Star, Quote } from "lucide-react";
 import { SmoothScroll } from "@/app/components/smooth-scroll";
 import { Preloader } from "@/app/components/preloader";
 import { SiteFooter } from "@/app/components/site-footer";
@@ -23,6 +15,7 @@ import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { ProductDetailModal } from "@/app/components/ProductDetailModal";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import { HeroSection } from "@/app/components/hero-section";
+import { FaqSection } from "@/app/components/faq-section";
 import {
   Carousel,
   CarouselContent,
@@ -109,6 +102,33 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+const IMPACT_STATS = [
+  {
+    icon: Scale,
+    value: 184,
+    prefix: "",
+    suffix: " kg",
+    label: "rata-rata pangan terbuang",
+    subtext: "115–184 kg per kapita/tahun",
+  },
+  {
+    icon: Wallet,
+    value: 551,
+    prefix: "Rp ",
+    suffix: " T",
+    label: "kerugian ekonomi per tahun",
+    subtext: "Rp213–551 triliun",
+  },
+  {
+    icon: Users,
+    value: 125,
+    prefix: "",
+    suffix: " jt",
+    label: "orang berpotensi makan",
+    subtext: "61–125 juta orang",
+  },
+];
+
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
@@ -177,6 +197,26 @@ export default function Home() {
         <HeroSection />
       </div>
 
+      {partners.length > 0 && (
+        <section
+          data-nav="cream"
+          aria-label="Mitra ReBites"
+          className="border-y border-border bg-cream-50 py-7"
+        >
+          <Marquee reverse pauseOnHover>
+            {partners.map((p, i) => (
+              <span
+                key={i}
+                className="mx-8 flex items-center gap-3 font-display text-lg font-medium tracking-tight text-forest-dark/60 lg:text-xl"
+              >
+                <Store className="h-4 w-4 text-caramel" />
+                {p}
+              </span>
+            ))}
+          </Marquee>
+        </section>
+      )}
+
       <UrgentDealsSection onViewDetail={handleViewDetail} />
 
       <section
@@ -194,8 +234,8 @@ export default function Home() {
           className="pointer-events-none absolute right-20 top-32 h-32 w-32 rounded-full border border-caramel/40"
         />
 
-        <div className="relative mx-auto max-w-[1400px]">
-          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
+        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
             <div>
               <Reveal delay={0.15}>
                 <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary">
@@ -232,41 +272,18 @@ export default function Home() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                {
-                  icon: Scale,
-                  value: 184,
-                  suffix: " kg",
-                  label: "rata-rata pangan terbuang",
-                  subtext: "115–184 kg per kapita/tahun",
-                },
-                {
-                  icon: Wallet,
-                  value: 551,
-                  prefix: "Rp ",
-                  suffix: " T",
-                  label: "kerugian ekonomi per tahun",
-                  subtext: "Rp213–551 triliun",
-                },
-                {
-                  icon: Users,
-                  value: 125,
-                  suffix: " jt",
-                  label: "orang berpotensi makan",
-                  subtext: "61–125 juta orang",
-                },
-              ].map((stat, i) => (
+              {IMPACT_STATS.map((stat, i) => (
                 <Reveal key={stat.label} delay={0.15 + i * 0.08}>
                   <div className="group flex h-full cursor-pointer flex-col rounded-[var(--radius)] border border-border bg-white p-5 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel sm:p-6">
                     <stat.icon className="mb-3 h-5 w-5 text-[#C8A882]" />
 
-                    <p className="flex items-baseline gap-1 font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-none tracking-tight text-primary">
+                    <p className="flex items-baseline gap-1 whitespace-nowrap font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-none tracking-tight text-primary">
                       <Counter
                         to={stat.value}
-                        prefix={stat.prefix ?? ""}
+                        prefix={stat.prefix}
                         suffix={stat.suffix}
-                        className="tabular-nums"
                         duration={8}
+                        className="whitespace-nowrap tabular-nums"
                       />
                     </p>
 
@@ -690,24 +707,7 @@ export default function Home() {
         </div>
       </section>
 
-      {partners.length > 0 && (
-        <section
-          data-nav="green"
-          className="border-y border-white/15 bg-caramel py-5"
-        >
-          <Marquee reverse pauseOnHover>
-            {partners.map((p, i) => (
-              <span
-                key={i}
-                className="mx-8 flex items-center gap-3 font-display text-lg font-light tracking-tight text-white lg:text-xl"
-              >
-                <Store className="h-4 w-4 text-white/60" />
-                {p}
-              </span>
-            ))}
-          </Marquee>
-        </section>
-      )}
+      <FaqSection />
 
       <AnimatePresence>
         {selectedProduct && (
