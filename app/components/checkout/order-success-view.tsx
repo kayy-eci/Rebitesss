@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -8,13 +8,16 @@ import {
   ArrowRight,
   Check,
   Coins,
+  Clock,
   MapPin,
   ReceiptText,
   Truck,
+  XCircle,
 } from 'lucide-react';
 import { SmartImage } from '@/app/components/SmartImage';
 import { formatRupiah } from '@/lib/data';
 import { getOrderById } from '@/lib/order-storage';
+import { supabase } from '@/lib/supabase';
 import type { StoredOrder } from '@/lib/types';
 import { AnimatedNumber } from './animated-number';
 
@@ -47,6 +50,8 @@ export function OrderSuccessView() {
   const [order, setOrder] = useState<StoredOrder | null | undefined>(
     undefined
   );
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!orderId) {
@@ -62,6 +67,46 @@ export function OrderSuccessView() {
     };
   }, [orderId, router]);
 
+  // Poll payment_status sampai webhook Xendit masuk (max 90 detik)
+  useEffect(() => {
+    if (!orderId || order === undefined) return;
+    let cancelled = false;
+    let elapsed = 0;
+
+    const fetchStatus = async () => {
+      const { data } = await supabase
+        .from('orders')
+        .select('payment_status')
+        .eq('order_code', orderId)
+        .maybeSingle();
+      if (cancelled || !data) return;
+      const row = data as Record<string, unknown>;
+      setPaymentStatus((row.payment_status as string) ?? null);
+      if (
+        row.payment_status === 'paid' ||
+        row.payment_status === 'failed' ||
+        row.payment_status === 'refunded'
+      ) {
+        if (pollRef.current) clearInterval(pollRef.current);
+      }
+    };
+
+    fetchStatus();
+    pollRef.current = setInterval(() => {
+      elapsed += 3000;
+      if (elapsed >= 90_000 && pollRef.current) {
+        clearInterval(pollRef.current);
+        return;
+      }
+      fetchStatus();
+    }, 3000);
+
+    return () => {
+      cancelled = true;
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, [orderId, order]);
+
   useEffect(() => {
     if (order === null) router.replace('/home');
   }, [order, router]);
@@ -69,6 +114,9 @@ export function OrderSuccessView() {
   if (order === undefined || order === null) {
     return <main className="min-h-screen bg-cream-50" />;
   }
+
+  const isPending = paymentStatus === 'unpaid' || paymentStatus === null;
+  const isFailed = paymentStatus === 'failed';
 
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-cream-50 px-5 py-16">
@@ -78,27 +126,57 @@ export function OrderSuccessView() {
         transition={{ duration: 0.45, ease: EASE }}
         className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
       >
-        { }
-        <div className="relative overflow-hidden bg-green-700 px-8 pb-10 pt-9 text-center text-white">
-          <motion.span
-            initial={{ scale: 0, rotate: -30 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.15 }}
-            className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-green-700 shadow-lg"
-          >
-            <Check className="h-8 w-8" strokeWidth={3} />
-          </motion.span>
-          <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
-            Pesanan Berhasil!
-          </h1>
-          <p className="mt-1.5 text-sm text-white/85">
-            Pesanan kamu sedang diproses oleh{' '}
-            <span className="font-semibold">{order.vendorName}</span>
-          </p>
-          <p className="mt-2 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tabular-nums">
-            #{order.orderId}
-          </p>
-        </div>
+        {isFailed ? (
+          <div className="relative overflow-hidden bg-red-600 px-8 pb-10 pt-9 text-center text-white">
+            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-red-600 shadow-lg">
+              <XCircle className="h-8 w-8" strokeWidth={2.5} />
+            </span>
+            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
+              Pembayaran Gagal
+            </h1>
+            <p className="mt-1.5 text-sm text-white/85">
+              Pembayaran untuk pesanan #{order.orderId} kadaluarsa atau dibatalkan.
+            </p>
+            <p className="mt-2 text-xs text-white/70">Stok telah dikembalikan.</p>
+          </div>
+        ) : isPending ? (
+          <div className="relative overflow-hidden bg-amber-500 px-8 pb-10 pt-9 text-center text-white">
+            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-amber-600 shadow-lg">
+              <Clock className="h-8 w-8" strokeWidth={2.2} />
+            </span>
+            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
+              Menunggu Pembayaran
+            </h1>
+            <p className="mt-1.5 text-sm text-white/85">
+              Selesaikan pembayaran di halaman Xendit. Halaman ini akan otomatis ter-update.
+            </p>
+            <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tabular-nums">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+              #{order.orderId} · memverifikasi…
+            </p>
+          </div>
+        ) : (
+          <div className="relative overflow-hidden bg-green-700 px-8 pb-10 pt-9 text-center text-white">
+            <motion.span
+              initial={{ scale: 0, rotate: -30 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.15 }}
+              className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-green-700 shadow-lg"
+            >
+              <Check className="h-8 w-8" strokeWidth={3} />
+            </motion.span>
+            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
+              Pesanan Berhasil!
+            </h1>
+            <p className="mt-1.5 text-sm text-white/85">
+              Pesanan kamu sedang diproses oleh{' '}
+              <span className="font-semibold">{order.vendorName}</span>
+            </p>
+            <p className="mt-2 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tabular-nums">
+              #{order.orderId}
+            </p>
+          </div>
+        )}
 
         { }
         <div className="-mt-5 px-6">

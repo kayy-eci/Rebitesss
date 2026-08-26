@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion, MotionConfig } from 'framer-motion';
 import { Crown } from 'lucide-react';
 import { Reveal } from '@/app/components/reveal';
 import { DashboardDecor } from '@/app/components/dashboardPenjual/decor';
 import { Sidebar } from '@/app/components/dashboardPenjual/Sidebar';
 import { Topbar } from '@/app/components/dashboardPenjual/Topbar';
-import { SalesStatsCard } from '@/app/components/dashboardPenjual/SalesStatsCard';
 import { DetailedReportCard, type StatsPeriod } from '@/app/components/dashboardPenjual/DetailedReportCard';
 import { DemandAnalyticsCard } from '@/app/components/dashboardPenjual/DemandAnalyticsCard';
 import { FeaturedPromoCard } from '@/app/components/dashboardPenjual/FeaturedPromoCard';
@@ -16,6 +16,20 @@ import { StoreCard } from '@/app/components/dashboardPenjual/StoreCard';
 import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { useRequireSeller } from '@/hooks/use-require-seller';
+
+// Recharts berat (~ratusan KB) — dimuat hanya saat komponen ini tampil.
+const SalesStatsCard = dynamic(
+  () =>
+    import('@/app/components/dashboardPenjual/SalesStatsCard').then(
+      (m) => m.SalesStatsCard
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[300px] animate-pulse rounded-3xl border border-sage-200/60 bg-sage-100/40" />
+    ),
+  }
+);
 
 export default function VendorDashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

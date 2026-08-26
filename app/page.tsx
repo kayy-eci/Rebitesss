@@ -12,7 +12,7 @@ import { Marquee } from "@/app/components/marquee";
 import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
-import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import { HeroSection } from "@/app/components/hero-section";
 import { FaqSection } from "@/app/components/faq-section";

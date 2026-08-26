@@ -20,8 +20,7 @@ import {
   type BillingCycle,
 } from '@/lib/subscription-plans';
 import { saveSubscription } from '@/lib/subscription-storage';
-import { paymentMethods } from '@/app/components/checkout/payment-methods';
-import { cn } from '@/lib/utils';
+import { supabase } from '@/lib/supabase';
 
 export function SubscriptionCheckoutView() {
   const router = useRouter();
@@ -32,7 +31,6 @@ export function SubscriptionCheckoutView() {
   const billing: BillingCycle =
     params.get('billing') === 'yearly' ? 'yearly' : 'monthly';
 
-  const [selectedMethodId, setSelectedMethodId] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -63,34 +61,71 @@ export function SubscriptionCheckoutView() {
 
   const isFree = plan.monthly === 0 && plan.yearly === 0;
   const price = getPlanPrice(plan, billing);
-  const canPay = isFree || selectedMethodId !== null;
+  const canPay = true;
   const periodEndLabel = computePeriodEnd(billing).toLocaleDateString('id-ID', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
 
-  const handlePay = () => {
-    if (processing || !canPay) return;
+  const handlePay = async () => {
+    if (processing) return;
     setProcessing(true);
     setErrorMessage(null);
 
-    window.setTimeout(() => {
-      saveSubscription({
+    if (isFree) {
+      const result = await saveSubscription({
         planSlug: plan.slug,
         billing,
-        paymentMethodId: isFree ? null : selectedMethodId,
-      }).then((result) => {
-        if (!result.ok) {
-          setProcessing(false);
-          setErrorMessage(result.error);
-          return;
-        }
-        router.push(
-          `/langganan/sukses?plan=${plan.slug}&billing=${billing}`
-        );
+        paymentMethodId: null,
       });
-    }, 1_100);
+      if (!result.ok) {
+        setProcessing(false);
+        setErrorMessage(result.error);
+        return;
+      }
+      router.push(`/langganan/sukses?plan=${plan.slug}&billing=${billing}`);
+      return;
+    }
+
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        setProcessing(false);
+        setErrorMessage('Sesi habis, silakan login ulang.');
+        router.push('/auth/login');
+        return;
+      }
+      const res = await fetch('/api/subscriptions/xendit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ planSlug: plan.slug, billing }),
+      });
+      const json = (await res.json().catch(() => null)) as
+        | { error?: string; invoiceUrl?: string }
+        | null;
+      if (!res.ok) {
+        setProcessing(false);
+        setErrorMessage(json?.error ?? 'Gagal membuat invoice.');
+        return;
+      }
+      if (json?.invoiceUrl) {
+        window.location.href = json.invoiceUrl;
+        return;
+      }
+      setProcessing(false);
+      setErrorMessage('Respons pembayaran tidak valid.');
+    } catch (err) {
+      console.error('[subscription] handlePay error', err);
+      setProcessing(false);
+      setErrorMessage('Terjadi kesalahan saat memproses pembayaran.');
+    }
   };
 
   return (
@@ -170,7 +205,7 @@ export function SubscriptionCheckoutView() {
         <div className="flex flex-col gap-5 lg:col-span-2">
           <div className="rounded-2xl border border-hairline bg-white p-5 shadow-[0_10px_30px_-22px_rgba(27,77,50,0.35)] sm:p-6">
             <h2 className="font-display text-base font-semibold text-charcoal-900">
-              {isFree ? 'Aktivasi' : 'Metode Pembayaran'}
+              {isFree ? 'Aktivasi' : 'Pembayaran'}
             </h2>
 
             {isFree ? (
@@ -179,51 +214,14 @@ export function SubscriptionCheckoutView() {
                 setelah dikonfirmasi.
               </p>
             ) : (
-              <div className="mt-3 space-y-2" role="radiogroup" aria-label="Metode pembayaran">
-                {paymentMethods.map((method) => {
-                  const Icon = method.icon;
-                  const active = selectedMethodId === method.id;
-                  return (
-                    <button
-                      key={method.id}
-                      type="button"
-                      role="radio"
-                      aria-checked={active}
-                      onClick={() => setSelectedMethodId(method.id)}
-                      className={cn(
-                        'flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all duration-200',
-                        active
-                          ? 'border-green-700 bg-green-50 ring-2 ring-green-700/15'
-                          : 'border-hairline hover:border-sage-500/50'
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
-                          active ? 'bg-green-700 text-white' : 'bg-cream-100 text-charcoal-500'
-                        )}
-                      >
-                        <Icon className="h-4 w-4" />
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-[13px] font-semibold text-charcoal-900">
-                          {method.name}
-                        </span>
-                        <span className="block truncate text-xs text-charcoal-500">
-                          {method.description}
-                        </span>
-                      </span>
-                      <span
-                        className={cn(
-                          'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2',
-                          active ? 'border-green-700 bg-green-700 text-white' : 'border-hairline'
-                        )}
-                      >
-                        {active && <Check className="h-2.5 w-2.5" strokeWidth={4} />}
-                      </span>
-                    </button>
-                  );
-                })}
+              <div className="mt-3 rounded-xl border border-green-100 bg-green-50/60 p-4">
+                <p className="flex items-center gap-2 text-sm font-semibold text-green-700">
+                  <ShieldCheck className="h-4 w-4" /> Pembayaran aman via Xendit
+                </p>
+                <p className="mt-1.5 text-sm leading-relaxed text-charcoal-500">
+                  Kamu akan diarahkan ke halaman Xendit untuk memilih: QRIS, GoPay, OVO, DANA,
+                  ShopeePay, Virtual Account, atau Kartu. Pembayaran diverifikasi otomatis.
+                </p>
               </div>
             )}
 
@@ -313,8 +311,9 @@ export function SubscriptionCheckoutView() {
 
             <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-charcoal-500">
               <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-700" />
-              Mode demo — tidak ada transaksi sungguhan. Pada versi produksi,
-              pembayaran diproses melalui payment gateway (Midtrans).
+              {isFree
+                ? 'Paket ini gratis dan langsung aktif.'
+                : 'Kamu akan diarahkan ke halaman pembayaran Xendit yang aman.'}
             </p>
           </div>
         </div>

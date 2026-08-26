@@ -11,7 +11,7 @@ import { VendorSection } from "@/app/components/VendorSection";
 import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
 import { MagneticButton } from "@/app/components/magnetic-button";
-import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import { SUBSCRIPTION_PLANS } from "@/lib/subscription-plans";
 
