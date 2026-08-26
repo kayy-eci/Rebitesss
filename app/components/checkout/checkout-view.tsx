@@ -19,6 +19,7 @@ import { PaymentMethodList } from './payment-method-list';
 import { PaymentSummaryCard } from './payment-summary-card';
 import { PickupCodeNote } from './pickup-code-note';
 import { StickyMobileBar } from './sticky-mobile-bar';
+import { CheckoutSuccessDialog } from './checkout-success-dialog';
 
 const RESERVATION_MINUTES = 35;
 
@@ -157,6 +158,8 @@ export function CheckoutView() {
 
         <StickyMobileBar />
       </main>
+
+      <CheckoutSuccessDialog />
     </CheckoutProvider>
   );
 }

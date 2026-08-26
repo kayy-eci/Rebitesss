@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Menu, Store } from 'lucide-react';
+import { Bell, Menu, Store } from 'lucide-react';
 import {
   getSellerStoreSettings,
   STORE_SETTINGS_UPDATED_EVENT,
 } from '@/lib/store-settings-storage';
+import { useCurrentUser } from '@/lib/current-user';
+import { useNotifications } from '@/hooks/use-notifications';
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -14,6 +16,9 @@ interface TopbarProps {
 
 export function Topbar({ onMenuClick }: TopbarProps) {
   const [storeName, setStoreName] = useState('');
+  const { userId } = useCurrentUser();
+  // Notifikasi penjual kini hanya diakses lewat ikon bell di topbar.
+  const { unreadCount } = useNotifications(userId, 'seller');
 
   useEffect(() => {
     const refresh = () => {
@@ -50,6 +55,21 @@ export function Topbar({ onMenuClick }: TopbarProps) {
             {storeName || '—'}
           </span>
         </Link>
+
+        <div className="ml-auto flex items-center gap-1.5">
+          <Link
+            href="/dashboard/penjual/notifikasi"
+            aria-label={`Notifikasi${unreadCount > 0 ? ` (${unreadCount} belum dibaca)` : ''}`}
+            className="relative flex h-9 w-9 items-center justify-center rounded-full border border-sage-100 bg-white text-green-700 shadow-sm transition-colors duration-200 hover:border-caramel hover:bg-caramel hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2"
+          >
+            <Bell className="h-[18px] w-[18px]" />
+            {unreadCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </Link>
+        </div>
       </div>
     </header>
   );

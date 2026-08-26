@@ -81,6 +81,9 @@ interface CheckoutContextValue {
   missingRequirement: string | null;
   submitting: boolean;
   submitOrder: () => void;
+
+  /** Terisi tepat setelah checkout sukses -> pemicu popup konfirmasi. */
+  successOrder: StoredOrder | null;
 }
 
 const CheckoutContext = createContext<CheckoutContextValue | null>(null);
@@ -116,6 +119,7 @@ export function CheckoutProvider({
   const [promoError, setPromoError] = useState<string | null>(null);
   const [useCoins, setUseCoins] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [successOrder, setSuccessOrder] = useState<StoredOrder | null>(null);
 
   const { balance: coinBalance } = useRebitesCoins();
 
@@ -325,9 +329,9 @@ export function CheckoutProvider({
           });
         }
 
-        router.push(
-          `/detail/pesanan/sukses?orderId=${encodeURIComponent(orderId)}`
-        );
+        // Checkout selesai -> tampilkan popup konfirmasi (bukan halaman baru).
+        setSubmitting(false);
+        setSuccessOrder(order);
       } catch (error) {
         console.error('[checkout] gagal memproses pesanan:', error);
         setSubmitting(false);
@@ -382,6 +386,7 @@ export function CheckoutProvider({
       missingRequirement,
       submitting,
       submitOrder,
+      successOrder,
     }),
     [
       draft,
@@ -410,6 +415,7 @@ export function CheckoutProvider({
       missingRequirement,
       submitting,
       submitOrder,
+      successOrder,
     ]
   );
 

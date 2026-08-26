@@ -33,7 +33,6 @@ import { useFollowedStores } from '@/hooks/use-followed-stores';
 import { formatOrderDateTime } from '@/lib/order-utils';
 import { formatRupiah } from '@/lib/data';
 import type { StoredOrder } from '@/lib/types';
-import { ProfileNavbar } from './navbar';
 import { SmartImage } from './SmartImage';
 import {
   ArcLines,
@@ -780,8 +779,6 @@ export function UserProfile() {
 
   return (
     <div className="relative min-h-screen bg-cream-50">
-      <ProfileNavbar />
-
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <SoftBlob className="-left-32 -top-24 h-96 w-96 bg-sage-100/70" />
         <SoftBlob className="-right-32 top-40 h-[26rem] w-[26rem] bg-gold-100/50" />
@@ -795,7 +792,7 @@ export function UserProfile() {
         <LeafSprig className="-left-8 top-40 hidden h-44 w-44 -rotate-12 text-sage-500/25 lg:block" />
       </div>
 
-      <main className="relative mx-auto max-w-7xl px-4 pb-20 pt-24 sm:px-6 lg:px-8 lg:pt-28">
+      <main className="relative mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8 lg:pt-14">
         <motion.header
           id="profil"
           initial={{ opacity: 0, y: 16 }}

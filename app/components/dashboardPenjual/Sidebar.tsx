@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Bell,
   LayoutGrid,
   Leaf,
   Settings,
@@ -38,12 +37,6 @@ const NAV_ITEMS: NavItem[] = [
     icon: LayoutGrid,
     href: '/dashboard/penjual',
     exact: true,
-  },
-  {
-    id: 'notifikasi',
-    label: 'Notifikasi',
-    icon: Bell,
-    href: '/dashboard/penjual/notifikasi',
   },
   {
     id: 'pesanan',
@@ -117,17 +110,21 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
       <DotPattern className="left-0 top-0 h-36 w-36 text-sage-100" />
 
       <div className="relative flex items-center gap-2.5 px-6 pb-6 pt-7">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-700 text-cream-50">
+        <Link
+          href="/home"
+          aria-label="Ke beranda ReBites"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-700 text-cream-50 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2"
+        >
           <Leaf className="h-5 w-5" />
-        </div>
-        <div className="flex-1">
+        </Link>
+        <Link href="/home" className="min-w-0 flex-1">
           <p className="font-display text-xl font-semibold leading-none tracking-tight text-forest-900">
             ReBites
           </p>
           <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-sage-500">
             Food Rescue
           </p>
-        </div>
+        </Link>
         <button
           type="button"
           onClick={onClose}
