@@ -11,6 +11,8 @@ import { motion, type Variants } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
+  Eye,
+  EyeOff,
   Leaf,
   Lock,
   Mail,
@@ -57,8 +59,12 @@ function Field({
   icon: Icon,
   hint,
   className,
+  type = "text",
   ...inputProps
 }: FieldProps) {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === "password";
+
   return (
     <div>
       <div className="mb-2.5 flex items-baseline justify-between gap-4">
@@ -74,9 +80,27 @@ function Field({
         <Icon className="h-4 w-4 shrink-0 text-[#6B6A63]/60 transition-colors duration-200 group-focus-within:text-[#225138]" />
         <input
           id={id}
+          type={isPassword && showPassword ? "text" : type}
           {...inputProps}
           className="w-full bg-transparent py-1 font-sans text-[15px] text-[#1B3F2C] outline-none placeholder:text-[#6B6A63]/40"
         />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((value) => !value)}
+            aria-label={
+              showPassword ? "Sembunyikan password" : "Tampilkan password"
+            }
+            aria-pressed={showPassword}
+            className="shrink-0 rounded-sm p-0.5 text-[#6B6A63]/60 transition-colors duration-200 hover:text-[#225138] focus-visible:text-[#225138] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#225138]/40"
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </button>
+        )}
       </div>
     </div>
   );

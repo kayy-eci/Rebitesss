@@ -50,11 +50,13 @@ export function UrgentDealsSection({
     if (!el) return;
     el.addEventListener("scroll", updateArrows, { passive: true });
     window.addEventListener("resize", updateArrows);
+    // Data katalog datang async -> hitung ulang state chevron saat jumlah
+    // item berubah, bukan hanya saat mount.
     return () => {
       el.removeEventListener("scroll", updateArrows);
       window.removeEventListener("resize", updateArrows);
     };
-  }, [updateArrows]);
+  }, [updateArrows, foodItems.length]);
 
   const scrollByStep = useCallback((dir: number) => {
     const el = scrollRef.current;

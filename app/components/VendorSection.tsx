@@ -41,11 +41,12 @@ export function VendorSection() {
     if (!el) return;
     el.addEventListener('scroll', updateArrows, { passive: true });
     window.addEventListener('resize', updateArrows);
+    // Data vendor datang async -> hitung ulang state chevron saat daftar berubah.
     return () => {
       el.removeEventListener('scroll', updateArrows);
       window.removeEventListener('resize', updateArrows);
     };
-  }, [updateArrows]);
+  }, [updateArrows, vendors.length]);
 
   const scrollByStep = useCallback((dir: number) => {
     const el = scrollRef.current;

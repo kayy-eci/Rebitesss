@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import {
   DialogDescription,
   DialogHeader,
@@ -13,6 +14,24 @@ import { useCheckout } from './checkout-context';
 
 const LABELS: AddressLabel[] = ['Rumah', 'Kos', 'Sekolah', 'Lainnya'];
 
+// ReBites hanya melayani Kota Depok -> provinsi & kota otomatis,
+// kecamatan dipilih dari daftar resmi kecamatan di Kota Depok.
+const DEFAULT_PROVINCE = 'Jawa Barat';
+const DEFAULT_CITY = 'Kota Depok';
+const DEPOK_DISTRICTS = [
+  'Beji',
+  'Bojongsari',
+  'Cilodong',
+  'Cimanggis',
+  'Cinere',
+  'Depok',
+  'Limo',
+  'Pancoran Mas',
+  'Sawangan',
+  'Sukmajaya',
+  'Tapos',
+];
+
 const INPUT_CLASS =
   'w-full rounded-xl border border-sage-100 bg-white px-3.5 py-2.5 text-sm text-charcoal-900 placeholder:text-sage-500 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-700/20';
 
@@ -22,19 +41,21 @@ function toFormValues(editing: DeliveryAddress | null): AddressFormValues {
       label: 'Rumah',
       receiverName: '',
       phone: '',
-      province: '',
-      city: '',
+      province: DEFAULT_PROVINCE,
+      city: DEFAULT_CITY,
       district: '',
       fullAddress: '',
       note: '',
     };
   }
+  // Data lama tetap dipertahankan apa adanya; provinsi/kota tidak diedit
+  // lewat form ini lagi.
   return {
     label: editing.label,
     receiverName: editing.receiverName,
     phone: editing.phone,
-    province: editing.province,
-    city: editing.city,
+    province: editing.province || DEFAULT_PROVINCE,
+    city: editing.city || DEFAULT_CITY,
     district: editing.district,
     fullAddress: editing.fullAddress,
     note: editing.note,
@@ -63,9 +84,7 @@ export function AddressFormView({
     if (!form.receiverName.trim()) return setError('Nama penerima wajib diisi.');
     if (!/^[0-9+\-\s]{9,16}$/.test(form.phone.trim()))
       return setError('Nomor telepon tidak valid (9–16 digit).');
-    if (!form.province.trim()) return setError('Provinsi wajib diisi.');
-    if (!form.city.trim()) return setError('Kota/Kabupaten wajib diisi.');
-    if (!form.district.trim()) return setError('Kecamatan wajib diisi.');
+    if (!form.district.trim()) return setError('Kecamatan wajib dipilih.');
     if (form.fullAddress.trim().length < 8)
       return setError('Alamat lengkap minimal 8 karakter.');
 
@@ -153,49 +172,36 @@ export function AddressFormView({
           </label>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          <label className="block">
-            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-charcoal-500">
-              Provinsi
+        <label className="block">
+          <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-charcoal-500">
+            Kecamatan{' '}
+            <span className="normal-case text-sage-500">
+              (wilayah Kota Depok)
             </span>
-            <input
-              value={form.province}
-              onChange={(e) => setField('province', e.target.value)}
-              placeholder="Jawa Barat"
-              autoComplete="address-level1"
-              aria-label="Provinsi"
-              className={INPUT_CLASS}
-            />
-          </label>
-
-          <label className="block">
-            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-charcoal-500">
-              Kota/Kabupaten
-            </span>
-            <input
-              value={form.city}
-              onChange={(e) => setField('city', e.target.value)}
-              placeholder="Bogor"
-              autoComplete="address-level2"
-              aria-label="Kota atau kabupaten"
-              className={INPUT_CLASS}
-            />
-          </label>
-
-          <label className="block">
-            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-charcoal-500">
-              Kecamatan
-            </span>
-            <input
+          </span>
+          <span className="relative block">
+            <select
               value={form.district}
               onChange={(e) => setField('district', e.target.value)}
-              placeholder="Bogor Utara"
-              autoComplete="address-level3"
-              aria-label="Kecamatan"
-              className={INPUT_CLASS}
-            />
-          </label>
-        </div>
+              aria-label="Kecamatan di Kota Depok"
+              className={cn(
+                INPUT_CLASS,
+                'appearance-none pr-10',
+                !form.district && 'text-sage-500',
+              )}
+            >
+              <option value="" disabled>
+                Pilih kecamatan
+              </option>
+              {DEPOK_DISTRICTS.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-sage-500" />
+          </span>
+        </label>
 
         <label className="block">
           <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-charcoal-500">

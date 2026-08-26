@@ -326,11 +326,11 @@ export function HeroSection() {
           <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+7rem)]">
             <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
               <span className="text-forest-dark">
-                <span className="text-caramel">Selamatkan</span> Makanan,
+                <span className="text-caramel">Khusus Depok,</span>
               </span>
 
               <span className="block text-forest">
-                <span className="text-caramel">Selamatkan</span> Bumi.
+                Selamatkan <span className="text-caramel">Makanan Surplus.</span>
               </span>
             </h1>
 

@@ -7,6 +7,8 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
+  Eye,
+  EyeOff,
   Store,
   MapPin,
   Tag,
@@ -129,11 +131,13 @@ function FieldUnderline({
   label,
   icon: Icon,
   children,
+  trailing,
 }: {
   id: string;
   label: string;
   icon: React.ElementType;
   children: React.ReactNode;
+  trailing?: React.ReactNode;
 }) {
   return (
     <div>
@@ -148,8 +152,33 @@ function FieldUnderline({
       <div className="group flex items-center gap-3 border-b border-[#DEDACF] pb-2 transition-colors duration-200 focus-within:border-[#225138]">
         <Icon className="h-4 w-4 shrink-0 text-[#6B6A63]/60 transition-colors duration-200 group-focus-within:text-[#225138]" />
         {children}
+        {trailing}
       </div>
     </div>
+  );
+}
+
+function PasswordVisibilityButton({
+  visible,
+  onToggle,
+}: {
+  visible: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={visible ? "Sembunyikan password" : "Tampilkan password"}
+      aria-pressed={visible}
+      className="shrink-0 rounded-sm p-0.5 text-[#6B6A63]/60 transition-colors duration-200 hover:text-[#225138] focus-visible:text-[#225138] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#225138]/40"
+    >
+      {visible ? (
+        <EyeOff className="h-4 w-4" />
+      ) : (
+        <Eye className="h-4 w-4" />
+      )}
+    </button>
   );
 }
 
@@ -179,6 +208,8 @@ export default function PenjualRegisterForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [sessionReady, setSessionReady] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [sessionUser, setSessionUser] = useState<{
     fullName: string;
     email: string;
@@ -503,10 +534,17 @@ export default function PenjualRegisterForm() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FieldUnderline id="password" label="Password" icon={Lock}>
+                        <FieldUnderline id="password" label="Password" icon={Lock}
+                          trailing={
+                            <PasswordVisibilityButton
+                              visible={showPassword}
+                              onToggle={() => setShowPassword((v) => !v)}
+                            />
+                          }
+                        >
                           <input
                             id="password"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             autoComplete="new-password"
                             placeholder="••••••••"
                             className={inputClass()}
@@ -527,10 +565,16 @@ export default function PenjualRegisterForm() {
                           id="confirmPassword"
                           label="Konfirmasi Password"
                           icon={Lock}
+                          trailing={
+                            <PasswordVisibilityButton
+                              visible={showConfirmPassword}
+                              onToggle={() => setShowConfirmPassword((v) => !v)}
+                            />
+                          }
                         >
                           <input
                             id="confirmPassword"
-                            type="password"
+                            type={showConfirmPassword ? "text" : "password"}
                             autoComplete="new-password"
                             placeholder="••••••••"
                             className={inputClass()}

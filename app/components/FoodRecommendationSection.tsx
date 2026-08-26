@@ -43,11 +43,12 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
     if (!el) return;
     el.addEventListener("scroll", updateArrows, { passive: true });
     window.addEventListener("resize", updateArrows);
+    // Data katalog & filter datang/berubah async -> hitung ulang chevron.
     return () => {
       el.removeEventListener("scroll", updateArrows);
       window.removeEventListener("resize", updateArrows);
     };
-  }, [updateArrows]);
+  }, [updateArrows, foodItems.length, activeFilter]);
 
   const scrollByStep = useCallback((dir: number) => {
     const el = scrollRef.current;
