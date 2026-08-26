@@ -1,14 +1,28 @@
 'use client';
 
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { Crown, TrendingUp } from 'lucide-react';
 import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
-import { SalesActivityChartCard } from '@/app/components/dashboardPenjual/SalesActivityChartCard';
 import { TopCategoryCard } from '@/app/components/dashboardPenjual/TopCategoryCard';
 import { BestSellingMenuRow } from '@/app/components/dashboardPenjual/BestSellingMenuRow';
 import { AchievementBadgesCard } from '@/app/components/dashboardPenjual/AchievementBadgesCard';
 import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
+
+// Recharts berat (~ratusan KB) — dimuat hanya saat komponen ini tampil.
+const SalesActivityChartCard = dynamic(
+  () =>
+    import('@/app/components/dashboardPenjual/SalesActivityChartCard').then(
+      (m) => m.SalesActivityChartCard
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[340px] animate-pulse rounded-3xl border border-sage-200/60 bg-sage-100/40" />
+    ),
+  }
+);
 
 export default function PerformaTokoPage() {
   return (

@@ -13,7 +13,7 @@ import {
 import { Navbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { FoodCard } from "@/app/components/FoodCard";
-import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/app/components/ui/popover";
 import { Skeleton } from "@/app/components/ui/skeleton";

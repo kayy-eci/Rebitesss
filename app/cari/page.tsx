@@ -11,7 +11,7 @@ import { Navbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { FoodCard } from "@/app/components/FoodCard";
-import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 
 const VALID_FILTERS: FilterKey[] = [

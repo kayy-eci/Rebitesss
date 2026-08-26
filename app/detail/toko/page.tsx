@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
 import { SiteFooter } from "@/app/components/site-footer";
-import { ProductDetailModal } from "@/app/components/ProductDetailModal";
+import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
 import { CategoryRow } from "./category-row";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import {
