@@ -683,7 +683,7 @@ function FollowedStoresSection() {
             Toko Diikuti
           </h3>
           <p className="mt-0.5 font-inter text-xs text-stone">
-            Toko yang kamu ikuti lewat tombol “Ikuti Toko” di halaman detail
+            Toko yang kamu ikuti lewat tombol "Ikuti Toko" di halaman detail
             toko.
           </p>
         </div>
@@ -693,46 +693,46 @@ function FollowedStoresSection() {
       </div>
 
       {!hydrated ? (
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid gap-2 sm:grid-cols-1">
           {[0, 1, 2].map((i) => (
             <div
               key={i}
               aria-hidden
-              className="h-28 animate-pulse rounded-2xl bg-cream-50"
+              className="h-16 rounded-xl bg-cream-100"
             />
           ))}
         </div>
       ) : stores.length === 0 ? (
-        <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 px-6 py-10 text-center">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-sage-500">
-            <Store className="h-5 w-5" />
+        <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-xl border border-sage-100 bg-cream-50/70 px-4 py-6 text-center">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-sage-100 text-sage-500">
+            <Store className="h-4 w-4" />
           </span>
           <div>
-            <p className="text-sm font-bold text-charcoal-900">
+            <p className="text-xs font-medium text-charcoal-900">
               Belum ada toko yang diikuti
             </p>
-            <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-sage-500">
-              Tekan tombol “Ikuti Toko” pada halaman detail toko favoritmu agar
+            <p className="mt-1 max-w-sm text-[10px] leading-relaxed text-sage-500">
+              Tekan tombol "Ikuti Toko" pada halaman detail toko favoritmu agar
               tampil di sini.
             </p>
           </div>
           <Link
             href="/home#umkm"
-            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-4 py-2 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-3 py-1.5 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
           >
             Jelajahi Toko
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
       ) : (
-        <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-4 grid gap-2 sm:grid-cols-1">
           {stores.map((store) => (
             <li key={store.umkmId}>
               <Link
                 href={`/detail/toko?id=${store.slug ?? store.umkmId}`}
-                className="group flex h-full items-center gap-3.5 rounded-2xl border border-hairline/70 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-lg hover:shadow-forest-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-forest-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
               >
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sage-100 ring-1 ring-sage-100">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
                   {store.logoUrl ? (
                     <SmartImage src={store.logoUrl} alt={`Logo ${store.name}`} />
                   ) : (
@@ -742,20 +742,19 @@ function FollowedStoresSection() {
                   )}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-inter text-sm font-bold text-charcoal-900">
+                  <span className="block truncate font-inter text-xs font-medium text-charcoal-900">
                     {store.name}
                   </span>
                   {store.category && (
-                    <span className="mt-0.5 block truncate font-inter text-xs text-stone">
+                    <span className="mt-0.5 block truncate font-inter text-[10px] text-stone">
                       {store.category}
                     </span>
                   )}
-                  <span className="mt-1 flex items-center gap-1 font-inter text-xs font-semibold text-charcoal-900">
-                    <Star className="h-3 w-3 fill-gold-500 text-gold-500" />
+                  <span className="mt-1 flex items-center gap-1 font-inter text-[9px] font-semibold text-charcoal-900">
+                    <Star className="h-2 w-2 fill-gold-500 text-gold-500" />
                     {store.rating.toFixed(1)}
                   </span>
                 </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-sage-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-green-700" />
               </Link>
             </li>
           ))}
@@ -790,32 +789,32 @@ function LikedFoodsSection() {
       </div>
 
       {!hydrated ? (
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid gap-2 sm:grid-cols-1">
           {[0, 1, 2].map((i) => (
-            <div key={i} aria-hidden className="h-28 animate-pulse rounded-2xl bg-cream-50" />
+            <div key={i} aria-hidden className="h-16 rounded-xl bg-cream-100" />
           ))}
         </div>
       ) : foods.length === 0 ? (
-        <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-sage-100 bg-cream-50/70 px-6 py-10 text-center">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-sage-500">
-            <Heart className="h-5 w-5" />
+        <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-xl border border-sage-100 bg-cream-50/70 px-4 py-6 text-center">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-sage-100 text-sage-500">
+            <Heart className="h-4 w-4" />
           </span>
           <div>
-            <p className="text-sm font-bold text-charcoal-900">Belum ada makanan disukai</p>
-            <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-sage-500">
+            <p className="text-xs font-bold text-charcoal-900">Belum ada makanan disukai</p>
+            <p className="mt-1 max-w-sm text-[10px] leading-relaxed text-sage-500">
               Tekan ikon ❤️ pada card produk di Beranda, Flash Sale, atau halaman detail untuk menambah ke sini.
             </p>
           </div>
           <Link
             href="/cari"
-            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-4 py-2 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-3 py-1.5 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
           >
             Cari Makanan
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
       ) : (
-        <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-4 grid gap-2 sm:grid-cols-1">
           {foods.map((fav) => {
             const detail: any = catalogMap.get(fav.productId) || catalogMap.get(fav.id) || null;
             const name = fav.name || detail?.name || 'Makanan';
@@ -827,9 +826,9 @@ function LikedFoodsSection() {
               <li key={fav.id}>
                 <Link
                   href={href}
-                  className="group flex h-full items-center gap-3.5 rounded-2xl border border-hairline/70 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-lg hover:shadow-forest-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                  className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-forest-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
                 >
-                  <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sage-100 ring-1 ring-sage-100">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
                     {image ? (
                       <SmartImage src={image} alt={name} />
                     ) : (
@@ -837,13 +836,13 @@ function LikedFoodsSection() {
                     )}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-inter text-sm font-bold text-charcoal-900">{name}</span>
-                    {vendor && <span className="mt-0.5 block truncate font-inter text-xs text-stone">{vendor}</span>}
+                    <span className="block truncate font-inter text-xs font-medium text-charcoal-900">{name}</span>
+                    {vendor && <span className="mt-0.5 block truncate font-inter text-[10px] text-stone">{vendor}</span>}
                     {price != null && (
-                      <span className="mt-1 block font-inter text-xs font-semibold text-green-700">Rp{Number(price).toLocaleString('id-ID')}</span>
+                      <span className="mt-1 block font-inter text-[9px] font-medium text-green-700">Rp{Number(price).toLocaleString('id-ID')}</span>
                     )}
                   </span>
-                  <Heart className="h-4 w-4 shrink-0 fill-[#E53935] text-[#E53935]" />
+                  <Heart className="h-3 w-3 shrink-0 fill-[#E53935] text-[#E53935]" />
                 </Link>
               </li>
             );
@@ -858,6 +857,8 @@ export function UserProfile() {
   const { userId } = useCurrentUser();
   const [orders, setOrders] = useState<StoredOrder[] | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isIkutiTokoDialogOpen, setIsIkutiTokoDialogOpen] = useState(false);
+  const [isSukaiMakananDialogOpen, setIsSukaiMakananDialogOpen] = useState(false);
 
   // Data untuk header & info pribadi (reuse logic ProfileSidebar)
   const [fullName, setFullName] = useState('');
@@ -999,12 +1000,9 @@ export function UserProfile() {
 
             {/* Stats kanan — 3 kotak: Ikuti Toko, Sukai Makanan, ReBites Coins */}
             <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 lg:w-auto lg:min-w-[520px] lg:max-w-[600px]">
-              <Link
-                href="#toko-diikuti"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('toko-diikuti')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+              <button
+                type="button"
+                onClick={() => setIsIkutiTokoDialogOpen(true)}
                 className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-green-700 shadow-sm ring-1 ring-zinc-100 group-hover:bg-green-700 group-hover:text-white">
@@ -1015,14 +1013,11 @@ export function UserProfile() {
                 <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
                   Lihat <ArrowRight className="h-3 w-3" />
                 </span>
-              </Link>
+              </button>
 
-              <Link
-                href="#sukai-makanan"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('sukai-makanan')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+              <button
+                type="button"
+                onClick={() => setIsSukaiMakananDialogOpen(true)}
                 className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#E53935] shadow-sm ring-1 ring-zinc-100 group-hover:bg-[#E53935] group-hover:text-white">
@@ -1033,7 +1028,7 @@ export function UserProfile() {
                 <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
                   Lihat <ArrowRight className="h-3 w-3" />
                 </span>
-              </Link>
+              </button>
 
               <div className="col-span-2 flex flex-col items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:col-span-1">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-amber-600 shadow-sm ring-1 ring-amber-100">
@@ -1045,6 +1040,46 @@ export function UserProfile() {
               </div>
             </div>
           </motion.section>
+
+          {/* Dialog: Ikuti Toko */}
+          <Dialog open={isIkutiTokoDialogOpen} onOpenChange={setIsIkutiTokoDialogOpen}>
+            <DialogContent className="bg-white p-6 sm:p-7">
+              <DialogHeader>
+                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">Toko Diikuti</DialogTitle>
+                <DialogDescription className="font-inter text-sm text-stone">Toko yang kamu ikuti lewat tombol "Ikuti Toko" di halaman detail toko.</DialogDescription>
+              </DialogHeader>
+              <FollowedStoresSection />
+              <DialogFooter>
+                <button
+                  type="button"
+                  onClick={() => setIsIkutiTokoDialogOpen(false)}
+                  className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-charcoal-900 hover:bg-zinc-50"
+                >
+                  Tutup
+                </button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* Dialog: Sukai Makanan */}
+          <Dialog open={isSukaiMakananDialogOpen} onOpenChange={setIsSukaiMakananDialogOpen}>
+            <DialogContent className="bg-white p-6 sm:p-7">
+              <DialogHeader>
+                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">Makanan Disukai</DialogTitle>
+                <DialogDescription className="font-inter text-sm text-stone">Makanan yang kamu sukai lewat tombol ❤️ di card produk.</DialogDescription>
+              </DialogHeader>
+              <LikedFoodsSection />
+              <DialogFooter>
+                <button
+                  type="button"
+                  onClick={() => setIsSukaiMakananDialogOpen(false)}
+                  className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-charcoal-900 hover:bg-zinc-50"
+                >
+                  Tutup
+                </button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           {/* PERSONAL INFORMATION — gaya referensi 3 kolom */}
           <motion.section
@@ -1323,10 +1358,7 @@ export function UserProfile() {
             </DialogContent>
           </Dialog>
 
-          <div className="mt-6 space-y-6">
-            <FollowedStoresSection />
-            <LikedFoodsSection />
-          </div>
+          <div className="mt-6 space-y-6"></div>
         </main>
       </div>
     </div>

@@ -64,18 +64,6 @@ const NAV_ITEMS: NavItem[] = [
     icon: Search,
     href: '/cari',
   },
-  {
-    id: 'toko-diikuti',
-    label: 'Toko Diikuti',
-    icon: Store,
-    href: '/profile#toko-diikuti',
-  },
-  {
-    id: 'sukai',
-    label: 'Sukai Makanan',
-    icon: Heart,
-    href: '/profile#sukai-makanan',
-  },
 ];
 
 function useActiveHref(href: string, exact?: boolean) {
