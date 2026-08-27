@@ -50,6 +50,9 @@ export async function POST(req: NextRequest) {
 
     const umkmId = (umkm as Record<string, string>).id;
     const planPrice = getPlanPrice(plan, billing);
+    // Pajak 2% menggantikan Platform Fee $4 di desain referensi
+    const tax = Math.round(planPrice * 0.02);
+    const totalAmount = planPrice + tax;
 
     // Cari plan_id dari DB berdasarkan slug
     const { data: planRow } = await service
@@ -71,14 +74,14 @@ export async function POST(req: NextRequest) {
     const successUrl = `${siteUrl}/langganan/sukses?plan=${plan.slug}&billing=${billing}&external_id=${encodeURIComponent(externalId)}`;
     const failureUrl = `${siteUrl}/dashboard/penjual/langganan?payment=failed`;
 
-    // Buat invoice Xendit
+    // Buat invoice Xendit (total sudah termasuk pajak 2%)
     let invoice;
     try {
       invoice = await createXenditInvoice({
         externalId,
-        amount: planPrice,
+        amount: totalAmount,
         payerEmail: user.email,
-        description: `ReBites ${plan.name} (${billing}) - ${shortId}`,
+        description: `ReBites ${plan.name} (${billing}) - Subtotal ${planPrice} + Pajak 2% ${tax} - ${shortId}`,
         successRedirectUrl: successUrl,
         failureRedirectUrl: failureUrl,
       });
@@ -95,7 +98,7 @@ export async function POST(req: NextRequest) {
       plan_id: planId,
       status: 'pending',
       billing,
-      price_paid: planPrice,
+      price_paid: totalAmount,
       xendit_invoice_id: invoice.id,
       xendit_status: 'PENDING',
       // current_period akan diisi webhook saat paid
@@ -111,7 +114,9 @@ export async function POST(req: NextRequest) {
       externalId,
       invoiceUrl: invoice.invoice_url,
       invoiceId: invoice.id,
-      amount: planPrice,
+      amount: totalAmount,
+      subtotal: planPrice,
+      tax,
     });
   } catch (err: unknown) {
     console.error('[subscriptions/xendit] unexpected', err);

@@ -2,26 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Check,
-  Coins,
-  MapPin,
-  ReceiptText,
-  RotateCcw,
-  Star,
-  Store,
-  Truck,
-} from 'lucide-react';
+import { Check, ChevronRight, Coins } from 'lucide-react';
 import { SmartImage } from '@/app/components/SmartImage';
 import { formatRupiah } from '@/lib/data';
 import { fetchProductDetail } from '@/app/detail/product/detail-data';
 import type { StoredOrder } from '@/lib/types';
-import {
-  getOrderProgress,
-  getOrderSubStatus,
-  SUB_STATUS_LABEL,
-} from '@/lib/order-utils';
-import { useCountdown, formatCountdown } from '@/lib/useCountdown';
 import { formatOrderDate } from '@/lib/order-utils';
 import { toast } from '@/hooks/use-toast';
 
@@ -35,296 +20,67 @@ export function OrderCard({
   onViewDetail: (order: StoredOrder) => void;
 }) {
   const router = useRouter();
-  const [reordering, setReordering] = useState(false);
+  const [reordering] = useState(false);
   const isOngoing = order.status === 'ongoing';
-  const subStatus = getOrderSubStatus(order);
 
-  const handleReorder = async () => {
-    if (reordering) return;
-    setReordering(true);
-    const product = await fetchProductDetail(order.productId);
-    if (!product) {
-      setReordering(false);
-      toast({
-        title: 'Produk ini sudah tidak tersedia',
-        description: 'Coba jelajahi menu lain yang masih tersedia.',
-      });
-      return;
-    }
+  // For photo-style: show dot + In progress / Delivered
+  const badge = isOngoing
+    ? { label: 'In progress', dot: 'bg-[#EA580C]', bg: 'bg-[#FFF7ED] text-[#EA580C]', ring: 'ring-[#FDBA74]/30' }
+    : { label: 'Delivered', dot: 'bg-[#16A34A]', bg: 'bg-[#F0FDF4] text-[#16A34A]', ring: 'ring-[#86EFAC]/30' };
 
-    router.push(
-      `/detail/pesanan?product=${encodeURIComponent(order.productId)}&qty=${order.quantity}`
-    );
-  };
+  const dateStr = formatOrderDate(order.createdAt);
+
+  // Build description like photo: productName | vendorName | & 2 more items (if quantity >1)
+  const moreText = order.quantity > 1 ? ` & ${order.quantity} items` : '';
+  // Combine to look like "Blue & pink ... | Linen ... & 2 more items"
+  const description = `${order.productName} | ${order.vendorName}${moreText}`;
 
   return (
-    <article className="group relative flex flex-col rounded-2xl border border-hairline bg-white p-4 shadow-[0_10px_30px_-24px_rgba(27,77,50,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:border-sage-500/40 hover:shadow-[0_16px_38px_-24px_rgba(27,77,50,0.45)] sm:p-5">
-      { }
-      <div className="flex items-center gap-2.5">
-        <span
-          className={
-            order.fulfillment === 'pickup'
-              ? 'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold-100 text-gold-600'
-              : 'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-50 text-green-700'
-          }
-        >
-          <Store className="h-4 w-4" strokeWidth={2.1} />
+    <article
+      onClick={() => onViewDetail(order)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onViewDetail(order);
+        }
+      }}
+      className="group flex cursor-pointer flex-col rounded-xl border border-zinc-200 bg-white p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-50/50 sm:p-5"
+    >
+      {/* Top line: badge + date */}
+      <div className="flex items-center gap-2">
+        <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${badge.bg} ${badge.ring}`}>
+          <span className={`h-1.5 w-1.5 rounded-full ${badge.dot}`} />
+          {badge.label}
         </span>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-charcoal-900">
-            {order.vendorName}
-          </p>
-          <p className="text-[11px] text-charcoal-500">
-            #{order.orderId}
-          </p>
-        </div>
-        <StatusBadge order={order} subStatus={subStatus} />
+        <span className="text-[11px] text-zinc-400">|</span>
+        <span className="text-[11px] text-zinc-500">{dateStr}</span>
       </div>
 
-      { }
-      <div className="mt-3.5 flex items-center gap-3">
-        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-sage-100">
+      {/* Middle: image + order id + desc + price + chevron */}
+      <div className="mt-3 flex items-start gap-3">
+        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
           <SmartImage src={order.image} alt={order.productName} sizes="56px" />
+          {/* small badge +4 like foto if needed - hidden */}
         </div>
+
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[13px] font-medium text-charcoal-900">
-            {order.productName}
+          <p className="truncate text-[13px] font-semibold text-[#7A1C1C]">
+            Order ID: {order.orderId}
           </p>
-          <p className="mt-0.5 text-xs text-charcoal-500">
-            ×{order.quantity}
-            {typeof order.unitPrice === 'number'
-              ? ` · ${formatRupiah(order.unitPrice)} / porsi`
-              : ''}
+          <p className="mt-0.5 line-clamp-2 text-[13px] leading-snug text-zinc-700">
+            {description}
+            {/* 2 more items in maroon like foto if quantity >1 */}
+            {order.quantity > 1 && (
+              <span className="font-medium text-[#7A1C1C]"> & {order.quantity} items</span>
+            )}
           </p>
+          <p className="mt-1 text-[13px] font-semibold text-zinc-900">Rp{order.total.toLocaleString('id-ID')}</p>
         </div>
-        <div className="shrink-0 text-right">
-          <p className="font-display text-sm font-semibold tabular-nums text-charcoal-900">
-            {formatRupiah(order.total)}
-          </p>
-          {(order.coinEarned ?? 0) > 0 && (
-            <p className="mt-0.5 inline-flex items-center gap-0.5 text-[11px] font-medium text-gold-600">
-              <Coins className="h-3 w-3" />+{order.coinEarned.toLocaleString('id-ID')}
-            </p>
-          )}
-        </div>
-      </div>
 
-      { }
-      {isOngoing ? (
-        <OngoingFulfillmentBlock order={order} />
-      ) : (
-        <CompletedFulfillmentBlock order={order} reviewed={reviewed} />
-      )}
-
-      { }
-      <div className="mt-auto flex items-center gap-2 pt-3">
-        {isOngoing ? (
-          <button
-            type="button"
-            onClick={() => onViewDetail(order)}
-            className="inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-full bg-green-700 px-3 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
-          >
-            <ReceiptText className="h-3.5 w-3.5" />
-            Lihat Detail Pesanan
-          </button>
-        ) : (
-          <>
-            <button
-              type="button"
-              onClick={() => onViewDetail(order)}
-              className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full border border-green-700 px-3 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
-            >
-              <ReceiptText className="h-3.5 w-3.5" />
-              Lihat Detail
-            </button>
-            <button
-              type="button"
-              onClick={handleReorder}
-              className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-green-700 px-3 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600 disabled:opacity-60"
-              disabled={reordering}
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              Pesan Lagi
-            </button>
-          </>
-        )}
+        <ChevronRight className="mt-2 h-5 w-5 shrink-0 text-[#7A1C1C] transition-transform group-hover:translate-x-0.5" />
       </div>
     </article>
-  );
-}
-
-function StatusBadge({
-  order,
-  subStatus,
-}: {
-  order: StoredOrder;
-  subStatus: ReturnType<typeof getOrderSubStatus>;
-}) {
-  if (order.status !== 'ongoing') {
-    return (
-      <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-sage-100 px-2.5 py-1 text-[11px] font-semibold text-sage-600">
-        <Check className="h-3 w-3" strokeWidth={3} />
-        Selesai
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700 ring-1 ring-green-700/15">
-      <span className="relative flex h-1.5 w-1.5">
-        <span className="absolute h-full w-full animate-ping rounded-full bg-green-600 opacity-60" />
-        <span className="relative h-1.5 w-1.5 rounded-full bg-green-700" />
-      </span>
-      {SUB_STATUS_LABEL[subStatus]}
-    </span>
-  );
-}
-
-function OngoingFulfillmentBlock({ order }: { order: StoredOrder }) {
-  const remaining = useCountdown(order.estimatedCompletionAt ?? order.createdAt);
-  const progress =
-    remaining === null ? undefined : getOrderProgress(order);
-  const subStatus = getOrderSubStatus(order, progress);
-  const isDelivery = order.fulfillment === 'delivery';
-  const minutes = Math.max(1, Math.ceil((remaining ?? 0) / 60));
-  const almostThere = remaining !== null && remaining > 0 && remaining <= 180;
-
-  return (
-    <div className="mt-3.5 rounded-xl bg-cream-50 p-3.5 ring-1 ring-hairline">
-      <p
-        className={
-          isDelivery
-            ? 'flex items-center gap-1.5 text-xs font-semibold text-green-700'
-            : 'flex items-center gap-1.5 text-xs font-semibold text-gold-600'
-        }
-      >
-        {isDelivery ? (
-          <>
-            <Truck className="h-3.5 w-3.5" /> Diantar
-          </>
-        ) : (
-          <>
-            <MapPin className="h-3.5 w-3.5" /> Ambil Sendiri
-          </>
-        )}
-      </p>
-
-      <p className="mt-1 truncate text-xs text-charcoal-500">
-        {isDelivery ? (
-          order.addressSnapshot ? (
-            <>
-              Ke {order.addressSnapshot.label} ·{' '}
-              {order.addressSnapshot.fullAddress}
-              {typeof order.distanceKm === 'number' &&
-                ` · ${order.distanceKm.toLocaleString('id-ID')} km`}
-            </>
-          ) : (
-            'Alamat pengiriman'
-          )
-        ) : (
-          order.vendorAddress ?? order.vendorName
-        )}
-      </p>
-
-      <div className="mt-2.5 flex items-end justify-between gap-3">
-        <p className="text-xs font-medium text-charcoal-900">
-          {remaining !== null && remaining <= 0 ? (
-            'Pesanan selesai'
-          ) : almostThere ? (
-            isDelivery ? (
-              'Hampir sampai!'
-            ) : (
-              'Hampir siap!'
-            )
-          ) : isDelivery ? (
-            <>Perkiraan tiba dalam {minutes} menit</>
-          ) : (
-            <>Siap diambil dalam {minutes} menit</>
-          )}
-        </p>
-        <p
-          className={`font-display text-base font-semibold tabular-nums ${
-            almostThere ? 'text-gold-600' : 'text-charcoal-900'
-          }`}
-        >
-          {remaining === null ? (
-            <span className="inline-block h-4 w-14 animate-pulse rounded bg-sage-100" />
-          ) : (
-            formatCountdown(remaining)
-          )}
-        </p>
-      </div>
-
-      <div
-        role="progressbar"
-        aria-label="Progres pesanan"
-        aria-valuenow={Math.round(getOrderProgress(order) * 100)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        className="mt-2 h-1 w-full overflow-hidden rounded-full bg-sage-100"
-      >
-        <div
-          className="h-full rounded-full bg-green-700 transition-all duration-1000"
-          style={{ width: `${getOrderProgress(order) * 100}%` }}
-        />
-      </div>
-
-      <p className="mt-2 text-[11px] text-charcoal-500">
-        {SUB_STATUS_LABEL[subStatus]}
-      </p>
-    </div>
-  );
-}
-
-function CompletedFulfillmentBlock({
-  order,
-  reviewed,
-}: {
-  order: StoredOrder;
-  reviewed: boolean;
-}) {
-  const finishedIso = order.completedAt ?? order.estimatedCompletionAt;
-  return (
-    <div className="mt-3.5 rounded-xl bg-cream-50 p-3.5 ring-1 ring-hairline">
-      <p
-        className={
-          order.fulfillment === 'delivery'
-            ? 'flex items-center gap-1.5 text-xs font-semibold text-green-700'
-            : 'flex items-center gap-1.5 text-xs font-semibold text-gold-600'
-        }
-      >
-        {order.fulfillment === 'delivery' ? (
-          <>
-            <Truck className="h-3.5 w-3.5" /> Diantar
-          </>
-        ) : (
-          <>
-            <MapPin className="h-3.5 w-3.5" /> Ambil Sendiri
-          </>
-        )}
-      </p>
-      <p className="mt-1 truncate text-xs text-charcoal-500">
-        {order.fulfillment === 'delivery'
-          ? `Ke ${order.addressSnapshot?.label ?? 'alamat'}${
-              typeof order.distanceKm === 'number'
-                ? ` · ${order.distanceKm.toLocaleString('id-ID')} km`
-                : ''
-            }`
-          : `Di ${order.vendorAddress ?? order.vendorName}`}
-      </p>
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <p className="text-[11px] text-charcoal-500">
-          {finishedIso
-            ? `Selesai pada ${formatOrderDate(finishedIso)} · ${new Date(finishedIso)
-                .toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`
-            : `Dibuat ${formatOrderDate(order.createdAt)}`}
-        </p>
-        {reviewed && (
-          <span className="inline-flex shrink-0 items-center gap-1 text-[11px] font-medium text-green-700">
-            <Star className="h-3 w-3 fill-gold-500 text-gold-500" />
-            Sudah dinilai
-          </span>
-        )}
-      </div>
-    </div>
   );
 }
