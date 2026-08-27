@@ -90,9 +90,7 @@ const step1Schema = z
 
 const step2Schema = z.object({
   businessName: z.string().min(1, "Nama usaha wajib diisi."),
-  categories: z
-    .array(z.string())
-    .min(1, "Pilih minimal satu kategori usaha."),
+  categories: z.array(z.string()).min(1, "Pilih minimal satu kategori usaha."),
   address: z.string().min(1, "Alamat usaha wajib diisi."),
   city: z.string().min(1, "Kota wajib dipilih."),
   description: z.string().optional(),
@@ -109,10 +107,9 @@ const containerVariants: Variants = {
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    y: 0,
     transition: { duration: 0.5, ease: EASE },
   },
 };
@@ -174,11 +171,7 @@ function PasswordVisibilityButton({
       aria-pressed={visible}
       className="shrink-0 rounded-sm p-0.5 text-[#6B6A63]/60 transition-colors duration-200 hover:text-[#225138] focus-visible:text-[#225138] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#225138]/40"
     >
-      {visible ? (
-        <EyeOff className="h-4 w-4" />
-      ) : (
-        <Eye className="h-4 w-4" />
-      )}
+      {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
     </button>
   );
 }
@@ -240,7 +233,7 @@ export default function PenjualRegisterForm() {
     },
   });
 
-useEffect(() => {
+  useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
@@ -497,7 +490,11 @@ useEffect(() => {
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FieldUnderline id="fullName" label="Nama Lengkap" icon={User}>
+                        <FieldUnderline
+                          id="fullName"
+                          label="Nama Lengkap"
+                          icon={User}
+                        >
                           <input
                             id="fullName"
                             {...field}
@@ -515,7 +512,11 @@ useEffect(() => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FieldUnderline id="email" label="Email Address" icon={Mail}>
+                        <FieldUnderline
+                          id="email"
+                          label="Email Address"
+                          icon={Mail}
+                        >
                           <input
                             id="email"
                             type="email"
@@ -534,7 +535,10 @@ useEffect(() => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FieldUnderline id="password" label="Password" icon={Lock}
+                        <FieldUnderline
+                          id="password"
+                          label="Password"
+                          icon={Lock}
                           trailing={
                             <PasswordVisibilityButton
                               visible={showPassword}
@@ -587,7 +591,10 @@ useEffect(() => {
                   />
 
                   {error && (
-                    <p role="alert" className="font-sans text-[13px] text-red-600">
+                    <p
+                      role="alert"
+                      className="font-sans text-[13px] text-red-600"
+                    >
                       {error}
                     </p>
                   )}
@@ -677,7 +684,7 @@ useEffect(() => {
                                       "flex w-full items-center justify-between gap-2 bg-transparent px-0 py-1 text-left font-sans text-[15px] outline-none",
                                       selected.length > 0
                                         ? "text-[#1B3F2C]"
-                                        : "text-[#6B6A63]/40"
+                                        : "text-[#6B6A63]/40",
                                     )}
                                   >
                                     <span className="truncate">
@@ -860,7 +867,10 @@ useEffect(() => {
                   </div>
 
                   {error && (
-                    <p role="alert" className="font-sans text-[13px] text-red-600">
+                    <p
+                      role="alert"
+                      className="font-sans text-[13px] text-red-600"
+                    >
                       {error}
                     </p>
                   )}

@@ -24,10 +24,9 @@ const containerVariants: Variants = {
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    y: 0,
     transition: { duration: 0.55, ease: EASE },
   },
 };
@@ -92,7 +91,7 @@ export default function BuatSandiBaruForm() {
       setError(
         err instanceof Error && err.message
           ? err.message
-          : "Terjadi kesalahan. Silakan coba lagi."
+          : "Terjadi kesalahan. Silakan coba lagi.",
       );
     } finally {
       setLoading(false);

@@ -3,13 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  Leaf,
-  Mail,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Leaf, Mail } from "lucide-react";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -21,10 +15,9 @@ const containerVariants: Variants = {
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    y: 0,
     transition: { duration: 0.55, ease: EASE },
   },
 };

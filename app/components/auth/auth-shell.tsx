@@ -12,9 +12,7 @@ interface AuthShellProps {
 export default function AuthShell({ brand, children }: AuthShellProps) {
   return (
     <main className="relative min-h-screen bg-[#F7F5EF] lg:grid lg:grid-cols-2">
-      <BrandPanel title={brand.title} description={brand.description} />
-
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F7F5EF] px-6 py-16 sm:px-10">
+      <section className="relative order-2 flex min-h-screen items-center justify-center overflow-hidden bg-[#F7F5EF] px-6 py-16 sm:px-10 lg:order-2">
         <div className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-[#AEB89B]/30 blur-[110px]" />
         <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-[#D6A54A]/15 blur-[120px]" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#DEDACF_1.5px,transparent_1.5px)] [background-size:26px_26px]" />
@@ -24,6 +22,7 @@ export default function AuthShell({ brand, children }: AuthShellProps) {
 
         <div className="relative z-10 w-full max-w-[380px]">{children}</div>
       </section>
+      <BrandPanel title={brand.title} description={brand.description} />
     </main>
   );
 }

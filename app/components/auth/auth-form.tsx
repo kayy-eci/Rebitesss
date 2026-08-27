@@ -38,10 +38,9 @@ const containerVariants: Variants = {
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    y: 0,
     transition: { duration: 0.55, ease: EASE },
   },
 };
@@ -182,7 +181,6 @@ export default function AuthForm({
         });
         if (signInError) throw signInError;
       }
-
 
       const params = new URLSearchParams(window.location.search);
       window.location.href = params.get("redirect") || redirectTo;
@@ -342,7 +340,9 @@ export default function AuthForm({
             </DialogTitle>
             <DialogDescription className="text-center font-sans text-sm leading-relaxed text-[#6B6A63]">
               Registrasi berhasil! Kami mengirim tautan konfirmasi ke{" "}
-              <span className="font-semibold text-[#1B3F2C]">{email.trim()}</span>
+              <span className="font-semibold text-[#1B3F2C]">
+                {email.trim()}
+              </span>
               . Langkah selanjutnya: buka email tersebut, klik tautan
               konfirmasinya, dan kamu akan diarahkan kembali ke ReBites untuk
               masuk.
