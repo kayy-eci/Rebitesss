@@ -11,7 +11,7 @@ export default function HomeLoading() {
             <div
               key={i}
               className="h-64 animate-pulse rounded-[var(--radius)] bg-white shadow-sm"
-              style={{ animationDelay: `${i * 90}ms` }}
+              style={{ animationDelay: `${i * 91}ms` }}
             />
           ))}
         </div>
