@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function DiscountCoupoun() {
     return (
         <div className="absolute bottom-[18px] right-[32px] z-30 w-[min(430px,46%)] rounded-[18px] border border-white/15 bg-white/10 p-3.5 text-[#f5f0e7] shadow-[0_20px_30px_rgba(34,81,56,0.18)] backdrop-blur-sm">
@@ -13,7 +15,12 @@ export default function DiscountCoupoun() {
 
                       <div className="grid grid-cols-[88px_1fr_auto_auto] items-center gap-3.5 pt-3">
                         <div className="h-[88px] w-[88px] overflow-hidden rounded-[14px] bg-[#d9b55d]">
-                          <img src="https://images.pexels.com/photos/8697516/pexels-photo-8697516.jp  eg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Truffle Pasta" className="h-full w-full object-cover" />
+                          <Image
+                            src="https://images.pexels.com/photos/8697516/pexels-photo-8697516.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+                            alt="Truffle Pasta"
+                            fill
+                            className="object-cover"
+                          />
                         </div>
 
                         <div className="flex min-w-0 flex-col gap-1">

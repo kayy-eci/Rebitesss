@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Leaf, Instagram, Mail, MapPin } from 'lucide-react';
 import { Reveal } from './reveal';
 
@@ -14,9 +15,11 @@ export function SiteFooter() {
         <Reveal className="grid gap-12 lg:grid-cols-[1.1fr_0.8fr_1fr_1.3fr]">
           <div>
             <Link href="/" className="flex items-center gap-3">
-              <img
+              <Image
                 src="/logo.png"
                 alt="ReBites"
+                width={48}
+                height={48}
                 className="h-12 w-12 rounded-full object-cover shadow-[0_10px_24px_-12px_rgba(0,0,0,0.5)] ring-1 ring-primary-foreground/20"
               />
               <span className="flex items-baseline gap-0.5">

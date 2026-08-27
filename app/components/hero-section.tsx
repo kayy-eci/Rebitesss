@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState, useId } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -134,9 +135,11 @@ export function HeroSection() {
               aria-label="ReBites"
               className="flex shrink-0 items-center gap-2.5"
             >
-              <img
+              <Image
                 src="/logo.png"
                 alt="ReBites"
+                width={36}
+                height={36}
                 className="h-9 w-9 rounded-full object-cover"
               />
 
