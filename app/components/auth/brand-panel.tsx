@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Check, Leaf, Sparkles } from "lucide-react";
@@ -122,10 +123,12 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
       className="grain-overlay relative hidden min-h-screen overflow-hidden bg-[#1B3F2C] lg:block"
     >
       <div className="absolute inset-0">
-        <img
+        <Image
           src={IMG_MAIN}
           alt=""
-          className="h-full w-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(34,81,56,0.88)_0%,rgba(34,81,56,0.55)_48%,rgba(18,45,32,0.94)_100%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#122D20]/70 via-transparent to-[#1B3F2C]/45" />
@@ -178,7 +181,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           delay={0.5}
           distance={14}
         >
-          <img
+          <Image
             src={IMG_BOWL}
             alt=""
             width={200}
@@ -193,7 +196,7 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           delay={1}
           distance={10}
         >
-          <img
+          <Image
             src={IMG_PASTA}
             alt=""
             width={160}

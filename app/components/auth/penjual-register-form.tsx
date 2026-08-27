@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect, useRef, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -239,7 +240,7 @@ export default function PenjualRegisterForm() {
     },
   });
 
-  useEffect(() => {
+useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
@@ -271,8 +272,7 @@ export default function PenjualRegisterForm() {
     return () => {
       cancelled = true;
     };
-
-  }, []);
+  }, [router, step1Form]);
 
   function goNext() {
     setDirection(1);
@@ -826,10 +826,12 @@ export default function PenjualRegisterForm() {
                     <div className="flex items-center gap-3">
                       <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-md border border-[#DEDACF] bg-[#F7F5EF]">
                         {logoPreview ? (
-                          <img
+                          <Image
                             src={logoPreview}
                             alt="Logo preview"
-                            className="h-full w-full object-cover"
+                            fill
+                            className="object-cover"
+                            unoptimized
                           />
                         ) : (
                           <ImageIcon className="h-6 w-6 text-[#6B6A63]/40" />
