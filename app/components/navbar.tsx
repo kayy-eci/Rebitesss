@@ -42,7 +42,11 @@ interface AuthSessionUser {
   user_metadata?: { full_name?: string };
 }
 
-export function ProfileNavbar() {
+interface ProfileNavbarProps {
+  showLocationDropdown?: boolean;
+}
+
+export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProps) {
   const router = useRouter();
   const [active, setActive] = useState('profil');
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -193,7 +197,7 @@ export function ProfileNavbar() {
           >
 
             <Link
-              href="/"
+              href="/home"
               className={cn('flex shrink-0 items-center gap-2 rounded-full', FOCUS_RING)}
             >
               <span
@@ -246,77 +250,79 @@ export function ProfileNavbar() {
 
             <div className="flex items-center gap-1 sm:gap-0.5">
 
-              <div className="relative hidden lg:block">
-                <button
-                  type="button"
-                  aria-label="Pilih lokasi"
-                  aria-expanded={locationOpen}
-                  onClick={() => setLocationOpen((v) => !v)}
-                  className={cn(
-                    'flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200',
-                    overDark
-                      ? 'text-white/80 hover:bg-white/10 hover:text-white'
-                      : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
-                    FOCUS_RING
-                  )}
-                >
-                  <MapPin
+              {showLocationDropdown && (
+                <div className="relative hidden lg:block">
+                  <button
+                    type="button"
+                    aria-label="Pilih lokasi"
+                    aria-expanded={locationOpen}
+                    onClick={() => setLocationOpen((v) => !v)}
                     className={cn(
-                      'h-4 w-4 transition-colors duration-500',
-                      overDark ? 'text-gold-500' : 'text-green-700'
+                      'flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200',
+                      overDark
+                        ? 'text-white/80 hover:bg-white/10 hover:text-white'
+                        : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
+                      FOCUS_RING
                     )}
-                  />
-                  <span className="max-w-[100px] truncate">{location}</span>
-                  <ChevronDown
-                    className={cn(
-                      'h-4 w-4 transition-transform duration-200',
-                      locationOpen && 'rotate-180'
-                    )}
-                  />
-                </button>
+                  >
+                    <MapPin
+                      className={cn(
+                        'h-4 w-4 transition-colors duration-500',
+                        overDark ? 'text-gold-500' : 'text-green-700'
+                      )}
+                    />
+                    <span className="max-w-[100px] truncate">{location}</span>
+                    <ChevronDown
+                      className={cn(
+                        'h-4 w-4 transition-transform duration-200',
+                        locationOpen && 'rotate-180'
+                      )}
+                    />
+                  </button>
 
-                <AnimatePresence>
-                  {locationOpen && (
-                    <>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-40"
-                        onClick={() => setLocationOpen(false)}
-                      />
-                      <motion.ul
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-sage-100 bg-white p-1.5 text-forest-dark shadow-xl"
-                      >
-                        {LOCATIONS.map((loc) => (
-                          <li key={loc}>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setLocation(loc);
-                                setLocationOpen(false);
-                              }}
-                              className={cn(
-                                'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150',
-                                loc === location
-                                  ? 'bg-cream-100 font-semibold text-green-700'
-                                  : 'text-charcoal-500 hover:bg-cream-50 hover:text-green-700'
-                              )}
-                            >
-                              <MapPin className="h-3.5 w-3.5 shrink-0" />
-                              {loc}
-                            </button>
-                          </li>
-                        ))}
-                      </motion.ul>
-                    </>
-                  )}
-                </AnimatePresence>
-              </div>
+                  <AnimatePresence>
+                    {locationOpen && (
+                      <>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="fixed inset-0 z-40"
+                          onClick={() => setLocationOpen(false)}
+                        />
+                        <motion.ul
+                          initial={{ opacity: 0, y: -6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.18 }}
+                          className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-sage-100 bg-white p-1.5 text-forest-dark shadow-xl"
+                        >
+                          {LOCATIONS.map((loc) => (
+                            <li key={loc}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setLocation(loc);
+                                  setLocationOpen(false);
+                                }}
+                                className={cn(
+                                  'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150',
+                                  loc === location
+                                    ? 'bg-cream-100 font-semibold text-green-700'
+                                    : 'text-charcoal-500 hover:bg-cream-50 hover:text-green-700'
+                                )}
+                              >
+                                <MapPin className="h-3.5 w-3.5 shrink-0" />
+                                {loc}
+                              </button>
+                            </li>
+                          ))}
+                        </motion.ul>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
 
 
               <div className="hidden items-center gap-2 sm:flex">

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
-import { Navbar } from "@/app/components/navbar";
+import { Navbar } from "@/app/components/Navbar";
 import { SiteFooter } from "@/app/components/Footer";
 
 export default function CategoryNotFound() {
@@ -20,7 +20,7 @@ export default function CategoryNotFound() {
           </p>
           <Link
             href="/homePage"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-green-700 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary-700/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Kembali ke Beranda

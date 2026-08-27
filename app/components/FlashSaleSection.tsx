@@ -595,8 +595,7 @@ export function FlashSaleSection({
             <motion.div
               key={activeSlot}
               initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
+              animate="visible"
               variants={{
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.07 } },

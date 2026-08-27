@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
+  ArrowLeft,
   BadgeCheck,
   ChevronRight,
   Heart,
@@ -93,6 +94,16 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
       <div className="relative h-44 overflow-hidden bg-gradient-to-br from-forest-900 via-forest-800 to-green-600 sm:h-56">
         <DotPattern className="right-0 top-0 h-56 w-56 text-cream-50/10" />
         <LeafSprig className="-bottom-10 -right-6 h-56 w-56 text-cream-50/15" />
+
+        <div className="mx-auto max-w-[1200px] px-5 sm:px-8 pt-4">
+          <Link
+            href="/home"
+            className="inline-flex items-center gap-1.5 rounded-full border border-sage-100/50 bg-white/10 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cream-50 transition-colors hover:border-green-300 hover:text-white hover:bg-white/20"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Kembali ke Beranda
+          </Link>
+        </div>
       </div>
 
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
@@ -102,7 +113,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="relative -mt-14 sm:-mt-16"
         >
-          <div className="rounded-3xl border border-sage-100 bg-white p-6 shadow-xl shadow-forest-900/10 sm:p-8">
+          <div className="rounded-3xl border border-sage-100 bg-white p-6 shadow-xl shadow-forest-900/10 sm:p-8 pt-12 sm:pt-16">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <div className="relative -mt-16 h-28 w-28 shrink-0 overflow-hidden rounded-full bg-sage-100 ring-4 ring-white shadow-lg sm:-mt-20 sm:h-32 sm:w-32">

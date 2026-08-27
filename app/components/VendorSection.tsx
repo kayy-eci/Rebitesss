@@ -98,41 +98,54 @@ export function VendorSection() {
             <ChevronLeft className="h-5 w-5" />
           </button>
 
-          <motion.div
-            ref={scrollRef}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.06 } },
-            }}
-            className="mt-10 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {sortedVendors.map((vendor) => (
+          <div ref={scrollRef} className="mt-10 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {loading && (
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500 col-span-full">
+                Memuat toko...
+              </div>
+            )}
+            {!loading && sortedVendors.length === 0 && (
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500 col-span-full">
+                Belum ada toko tersedia.
+              </div>
+            )}
+            {!loading && sortedVendors.length > 0 && (
               <motion.div
-                key={vendor.id}
+                initial="hidden"
+                animate="visible"
                 variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                  },
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.06 } },
                 }}
-                className="min-w-0 snap-start"
+                className="grid gap-5 grid-flow-col"
+                style={{ gridAutoColumns: '85%' }}
               >
-                <VendorCard
-                  vendor={vendor}
-                  badgeLabel={
-                    plan.priorityListing && vendor.id === SELLER_VENDOR_SLUG
-                      ? 'Prioritas'
-                      : undefined
-                  }
-                />
+                {sortedVendors.map((vendor) => (
+                  <motion.div
+                    key={vendor.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 24 },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                      },
+                    }}
+                    className="min-w-0 snap-start"
+                  >
+                    <VendorCard
+                      vendor={vendor}
+                      badgeLabel={
+                        plan.priorityListing && vendor.id === SELLER_VENDOR_SLUG
+                          ? 'Prioritas'
+                          : undefined
+                      }
+                    />
+                  </motion.div>
+                ))}
               </motion.div>
-            ))}
-          </motion.div>
+            )}
+          </div>
 
           <button
             type="button"

@@ -8,6 +8,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: 'swap',
   weight: ['400', '500', '600', '700'],
   style: ['normal'],
+  preload: false,
 });
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -16,6 +17,7 @@ const beVietnamPro = Be_Vietnam_Pro({
   display: 'swap',
   weight: ['400', '500', '600', '700'],
   style: ['normal'],
+  preload: false,
 });
 
 export const metadata: Metadata = {

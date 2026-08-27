@@ -10,12 +10,16 @@ import {
   SearchX,
   SlidersHorizontal,
 } from "lucide-react";
-import { Navbar } from "@/app/components/navbar";
+import { Navbar } from "@/app/components/Navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { FoodCard } from "@/app/components/FoodCard";
 import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/app/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/app/components/ui/popover";
 import { Skeleton } from "@/app/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
@@ -143,7 +147,13 @@ function FoodCardSkeleton() {
   );
 }
 
-export default function CategoryView({ slug, name }: { slug: string; name: string }) {
+export default function CategoryView({
+  slug,
+  name,
+}: {
+  slug: string;
+  name: string;
+}) {
   const category = getCategoryBySlug(slug);
   const description =
     category?.description ??
@@ -152,8 +162,11 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
   const [status, setStatus] = useState<"loading" | "ready">("loading");
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterState, setFilterState] = useState<FilterState>(DEFAULT_FILTER_STATE);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [filterState, setFilterState] =
+    useState<FilterState>(DEFAULT_FILTER_STATE);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null,
+  );
   const { foodItems, loading: catalogLoading } = useCatalog();
 
   useEffect(() => {
@@ -192,7 +205,6 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
         break;
       case "terbaru":
       default:
-
         break;
     }
     return sorted;
@@ -222,7 +234,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
       <main className="flex-1 pt-28">
         <section data-nav="cream" className="bg-cream-50 pb-16 pt-6 lg:pb-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            { }
+            {}
             <Link
               href="/home "
               className={cn(
@@ -234,7 +246,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
               Kembali
             </Link>
 
-            { }
+            {}
             <header className="mt-6 max-w-2xl">
               <h1 className="font-display text-3xl font-bold tracking-tight text-charcoal-900 sm:text-4xl">
                 {name}
@@ -246,11 +258,13 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
                 aria-live="polite"
                 className="mt-3 inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700"
               >
-                {isLoading ? "Memuat makanan…" : `${filteredItems.length} makanan tersedia`}
+                {isLoading
+                  ? "Memuat makanan…"
+                  : `${filteredItems.length} makanan tersedia`}
               </p>
             </header>
 
-            { }
+            {}
             <div className="mt-8 lg:mt-10">
               <SearchFilterBar
                 query={searchQuery}
@@ -263,7 +277,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
               />
             </div>
 
-            { }
+            {}
             <div className="mt-4">
               <Popover>
                 <PopoverTrigger asChild>
@@ -294,7 +308,9 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
                   className="max-h-[70vh] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-2xl border-hairline bg-white p-4 shadow-xl shadow-forest-900/10"
                 >
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-bold text-charcoal-900">Filter</p>
+                    <p className="text-sm font-bold text-charcoal-900">
+                      Filter
+                    </p>
                     <button
                       type="button"
                       onClick={() => setFilterState(DEFAULT_FILTER_STATE)}
@@ -327,7 +343,10 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
                           active={filterState.distance === option.value}
                           label={option.label}
                           onSelect={() =>
-                            setFilterState((prev) => ({ ...prev, distance: option.value }))
+                            setFilterState((prev) => ({
+                              ...prev,
+                              distance: option.value,
+                            }))
                           }
                         />
                       ))}
@@ -349,7 +368,10 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
                           active={filterState.rating === option.value}
                           label={option.label}
                           onSelect={() =>
-                            setFilterState((prev) => ({ ...prev, rating: option.value }))
+                            setFilterState((prev) => ({
+                              ...prev,
+                              rating: option.value,
+                            }))
                           }
                         />
                       ))}
@@ -371,7 +393,10 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
                           active={filterState.sort === option.value}
                           label={option.label}
                           onSelect={() =>
-                            setFilterState((prev) => ({ ...prev, sort: option.value }))
+                            setFilterState((prev) => ({
+                              ...prev,
+                              sort: option.value,
+                            }))
                           }
                         />
                       ))}
@@ -381,7 +406,7 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
               </Popover>
             </div>
 
-            { }
+            {}
             {isLoading ? (
               <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 sm:gap-5 xl:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, index) => (
@@ -396,7 +421,10 @@ export default function CategoryView({ slug, name }: { slug: string; name: strin
                 className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-16 text-center"
               >
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-100">
-                  <PackageOpen className="h-7 w-7 text-charcoal-500" aria-hidden />
+                  <PackageOpen
+                    className="h-7 w-7 text-charcoal-500"
+                    aria-hidden
+                  />
                 </span>
                 <h2 className="mt-4 font-sans text-lg font-bold text-charcoal-900">
                   Belum ada makanan di kategori ini

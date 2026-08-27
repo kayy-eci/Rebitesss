@@ -175,51 +175,56 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
             <ChevronLeft className="h-5 w-5" />
           </button>
 
-          <motion.div
+          <div
             key={activeFilter}
             ref={scrollRef}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.06 } },
-            }}
             className="mt-10 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {loading && (
-              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500">
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500 col-span-full">
                 Memuat rekomendasi...
               </div>
             )}
             {!loading && error && (
-              <div className="flex h-56 items-center justify-center text-sm text-red-600">
+              <div className="flex h-56 items-center justify-center text-sm text-red-600 col-span-full">
                 Gagal memuat katalog: {error}
               </div>
             )}
             {!loading && !error && items.length === 0 && (
-              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500">
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500 col-span-full">
                 Belum ada menu tersedia.
               </div>
             )}
-            {!loading &&
-              items.map((item) => (
+            {!loading && !error && items.length > 0 && (
               <motion.div
-                key={item.id}
+                initial="hidden"
+                animate="visible"
                 variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                  },
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.06 } },
                 }}
-                className="min-w-0 snap-start"
+                className="grid gap-5 grid-flow-col"
+                style={{ gridAutoColumns: '85%' }}
               >
-                <FoodCard item={item} onViewDetail={onViewDetail} />
+                {items.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 24 },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                      },
+                    }}
+                    className="min-w-0 snap-start"
+                  >
+                    <FoodCard item={item} onViewDetail={onViewDetail} />
+                  </motion.div>
+                ))}
               </motion.div>
-              ))}
-          </motion.div>
+            )}
+          </div>
 
           <button
             type="button"

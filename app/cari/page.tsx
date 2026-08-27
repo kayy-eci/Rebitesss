@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Search, SearchX, Sparkles } from "lucide-react";
 import { useCatalog } from "@/lib/catalog";
 import type { FilterKey, FoodItem } from "@/lib/types";
-import { Navbar } from "@/app/components/navbar";
+import { Navbar } from "@/app/components/Navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { FoodCard } from "@/app/components/FoodCard";
@@ -25,7 +25,9 @@ const VALID_FILTERS: FilterKey[] = [
 ];
 
 function parseFilter(value: string | null): FilterKey {
-  return VALID_FILTERS.includes(value as FilterKey) ? (value as FilterKey) : "terdekat";
+  return VALID_FILTERS.includes(value as FilterKey)
+    ? (value as FilterKey)
+    : "terdekat";
 }
 
 function applyFilter(key: FilterKey) {
@@ -87,7 +89,12 @@ function CariContent() {
       );
     }
 
-    const categoryFilters: FilterKey[] = ["umkm", "bakery", "restoran", "minuman"];
+    const categoryFilters: FilterKey[] = [
+      "umkm",
+      "bakery",
+      "restoran",
+      "minuman",
+    ];
     if (categoryFilters.includes(activeFilter)) {
       items = items.filter((item) => item.category === activeFilter);
     } else if (activeFilter === "segera-habis") {
@@ -195,7 +202,10 @@ function CariContent() {
                   </motion.div>
                 ) : (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-16 text-center">
-                    <SearchX className="h-12 w-12 text-sage-400" strokeWidth={1.5} />
+                    <SearchX
+                      className="h-12 w-12 text-sage-400"
+                      strokeWidth={1.5}
+                    />
                     <p className="mt-4 font-sans text-lg font-semibold text-charcoal-900">
                       Makanan tidak ditemukan
                     </p>
