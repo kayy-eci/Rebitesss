@@ -20,10 +20,10 @@ const beVietnamPro = Be_Vietnam_Pro({
   preload: false,
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? 'http://localhost:3000'
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-  ),
+  metadataBase: new URL(siteUrl),
   title: 'ReBites - Selamatkan Makanan Surplus, Kurangi Food Waste',
   description:
     'Marketplace yang mempertemukan pelaku UMKM kuliner dengan pembeli untuk menyelamatkan makanan surplus yang masih layak konsumsi. Dari dapur UMKM, ke piring yang butuh.',
