@@ -10,7 +10,7 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const containerVariants: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.08 },
+    transition: { staggerChildren: 0.06, delayChildren: 0.04 },
   },
 };
 
@@ -18,9 +18,36 @@ const itemVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { duration: 0.55, ease: EASE },
+    transition: { duration: 0.45, ease: EASE },
   },
 };
+
+function FieldBox({
+  id,
+  label,
+  icon: Icon,
+  children,
+}: {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="mb-1.5 block font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6B6A63]"
+      >
+        {label}
+      </label>
+      <div className="group flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 transition-colors duration-200 focus-within:border-[#225138] focus-within:ring-1 focus-within:ring-[#225138]/15">
+        <Icon className="h-3.5 w-3.5 shrink-0 text-[#6B6A63]/55 transition-colors duration-200 group-focus-within:text-[#225138]" />
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
@@ -43,8 +70,6 @@ export default function ForgotPasswordForm() {
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(
         email.trim(),
         {
-          // Token recovery diverifikasi lewat /auth/callback lalu user
-          // diarahkan ke halaman "Buat Kata Sandi Baru".
           redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(
             "/auth/buat-sandi-baru",
           )}`,
@@ -69,25 +94,25 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <motion.div variants={containerVariants} initial="hidden" animate="show">
-      <motion.div variants={itemVariants} className="mb-4">
+    <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex h-full min-h-0 flex-col overflow-hidden">
+      <motion.div variants={itemVariants} className="mb-3 flex-shrink-0">
         <Link
-          href="/"
-          className="group inline-flex items-center gap-2 rounded-full py-1.5 pr-3 font-sans text-sm font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#225138]"
+          href="/auth/login"
+          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#225138]"
         >
-          <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
           Kembali
         </Link>
       </motion.div>
 
       <motion.div
         variants={itemVariants}
-        className="mb-8 flex items-center justify-center gap-2.5 lg:hidden"
+        className="mb-5 flex items-center justify-center gap-2 lg:hidden flex-shrink-0"
       >
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#225138] text-[#F7F5EF]">
-          <Leaf className="h-[18px] w-[18px]" strokeWidth={1.75} />
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#225138] text-[#F7F5EF]">
+          <Leaf className="h-[15px] w-[15px]" strokeWidth={1.75} />
         </span>
-        <span className="font-display text-xl font-medium tracking-tight text-[#225138]">
+        <span className="font-display text-lg font-semibold tracking-tight text-[#225138]">
           ReBites
         </span>
       </motion.div>
@@ -95,27 +120,27 @@ export default function ForgotPasswordForm() {
       {sent ? (
         <motion.div
           variants={itemVariants}
-          className="flex flex-col items-center rounded-3xl border border-hairline/70 bg-white px-7 py-10 text-center shadow-[0_28px_56px_-28px_rgba(34,81,56,0.4)]"
+          className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-[#E5E7EB] bg-[#FCFCF9] px-6 py-8 text-center"
         >
           <motion.span
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-[#225138] text-[#F7F5EF]"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-[#225138] text-white"
           >
-            <CheckCircle2 className="h-7 w-7" />
+            <CheckCircle2 className="h-6 w-6" />
           </motion.span>
-          <h1 className="mt-5 font-display text-2xl font-semibold tracking-[-0.02em] text-[#225138]">
+          <h1 className="mt-4 font-display text-[22px] font-bold tracking-[-0.02em] text-[#14261E]">
             Cek Email Kamu
           </h1>
-          <p className="mt-3 font-sans text-sm leading-relaxed text-[#6B6A63]">
+          <p className="mt-2 font-sans text-[13px] leading-relaxed text-[#6B6A63]">
             Kami sudah mengirimkan tautan reset kata sandi ke{" "}
             <span className="font-semibold text-[#225138]">{email}</span>. Ikuti
             tautan tersebut untuk membuat kata sandi baru.
           </p>
           <Link
             href="/auth/login"
-            className="mt-7 inline-flex items-center gap-2 font-sans text-sm font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
+            className="mt-6 inline-flex items-center gap-2 font-sans text-[13px] font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
           >
             Kembali ke halaman login
             <ArrowRight className="h-4 w-4" />
@@ -125,7 +150,7 @@ export default function ForgotPasswordForm() {
         <>
           <motion.h1
             variants={itemVariants}
-            className="font-display text-[2rem] font-semibold leading-[1.1] tracking-[-0.02em] text-[#225138]"
+            className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-[#14261E] flex-shrink-0"
           >
             Lupa Kata
             <br />
@@ -133,7 +158,7 @@ export default function ForgotPasswordForm() {
           </motion.h1>
           <motion.p
             variants={itemVariants}
-            className="mt-3 font-sans text-sm leading-relaxed text-[#6B6A63]"
+            className="mt-1.5 font-sans text-[13px] leading-relaxed text-[#6B6A63] flex-shrink-0"
           >
             Masukkan email yang terdaftar. Kami akan mengirimkan tautan untuk
             mengatur ulang kata sandimu.
@@ -141,44 +166,35 @@ export default function ForgotPasswordForm() {
 
           <motion.form
             variants={itemVariants}
-            className="mt-10 space-y-8"
+            className="mt-6 flex flex-1 flex-col gap-4 overflow-hidden min-h-0"
             onSubmit={handleSubmit}
             noValidate
           >
-            <div>
-              <div className="mb-2.5 flex items-baseline justify-between gap-4">
-                <label
-                  htmlFor="email"
-                  className="block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6B6A63]"
-                >
-                  Email Address
-                </label>
-              </div>
-              <div className="group flex items-center gap-3 border-b border-[#DEDACF] pb-2 transition-colors duration-200 focus-within:border-[#225138]">
-                <Mail className="h-4 w-4 shrink-0 text-[#6B6A63]/60 transition-colors duration-200 group-focus-within:text-[#225138]" />
+            <div className="grid gap-4 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#E5E7EB] [&::-webkit-scrollbar-track]:bg-transparent min-h-0">
+              <FieldBox id="email" label="Email Address" icon={Mail}>
                 <input
                   id="email"
                   name="email"
                   type="email"
                   autoComplete="email"
-                  placeholder="editorial@example.com"
+                  placeholder="nama@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent py-1 font-sans text-[15px] text-[#1B3F2C] outline-none placeholder:text-[#6B6A63]/40"
+                  className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-[#1B3F2C] outline-none placeholder:text-[#9A9994]"
                 />
-              </div>
-            </div>
+              </FieldBox>
 
-            {error && (
-              <p role="alert" className="font-sans text-[13px] text-red-600">
-                {error}
-              </p>
-            )}
+              {error && (
+                <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 font-sans text-[12px] leading-relaxed text-red-700">
+                  {error}
+                </p>
+              )}
+            </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-md bg-[#225138] px-5 py-3.5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F7F5EF] transition-colors duration-200 hover:bg-[#1B3F2C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70"
+              className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-[#143B2D] px-5 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-[#0F2E24] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70 flex-shrink-0"
             >
               {loading ? "Mengirim..." : "Kirim Tautan Reset"}
               <ArrowRight className="h-4 w-4" />
@@ -187,7 +203,7 @@ export default function ForgotPasswordForm() {
 
           <motion.p
             variants={itemVariants}
-            className="mt-8 text-center font-sans text-sm text-[#6B6A63]"
+            className="mt-5 text-center font-sans text-[13px] text-[#6B6A63] flex-shrink-0"
           >
             Ingat kata sandi?{" "}
             <Link

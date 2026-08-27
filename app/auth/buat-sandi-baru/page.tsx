@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AuthShell from "@/app/components/auth/auth-shell";
+import AuthCenteredShell from "@/app/components/auth/auth-centered-shell";
 import BuatSandiBaruForm from "@/app/components/auth/buat-sandi-baru-form";
 
 export const metadata: Metadata = {
@@ -10,20 +10,19 @@ export const metadata: Metadata = {
 
 export default function BuatSandiBaruPage() {
   return (
-    <AuthShell
-      brand={{
-        title: (
-          <>
-            Amankan Akunmu,
-            <br />
-            Lanjutkan Misimu.
-          </>
-        ),
-        description:
-          "Tautan reset kamu sudah terverifikasi. Buat kata sandi baru agar akun ReBites-mu kembali aman dan siap dipakai.",
-      }}
+    <AuthCenteredShell
+      imageSrc="/hero-makanan.jpeg"
+      variant="buyer"
+      title={
+        <>
+          Buat Kata
+          <br />
+          Sandi Baru
+        </>
+      }
+      description="Tautan reset kamu sudah terverifikasi. Buat kata sandi baru agar akun ReBites-mu kembali aman dan siap dipakai."
     >
       <BuatSandiBaruForm />
-    </AuthShell>
+    </AuthCenteredShell>
   );
 }

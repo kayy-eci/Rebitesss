@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AuthShell from "@/app/components/auth/auth-shell";
+import AuthCenteredShell from "@/app/components/auth/auth-centered-shell";
 import ForgotPasswordForm from "@/app/components/auth/forgot-password-form";
 
 export const metadata: Metadata = {
@@ -10,20 +10,19 @@ export const metadata: Metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthShell
-      brand={{
-        title: (
-          <>
-            Kembali Ke
-            <br />
-            Rasa Terbaik.
-          </>
-        ),
-        description:
-          "Tidak apa-apa jika lupa. Kami kirimkan tautan reset ke emailmu agar kamu bisa segera kembali menikmati makanan surplus terbaik.",
-      }}
+    <AuthCenteredShell
+      imageSrc="/hero-makanan.jpeg"
+      variant="buyer"
+      title={
+        <>
+          Lupa Kata
+          <br />
+          Sandi?
+        </>
+      }
+      description="Tidak apa-apa jika lupa. Kami kirimkan tautan reset ke emailmu agar kamu bisa segera kembali menikmati makanan surplus terbaik."
     >
       <ForgotPasswordForm />
-    </AuthShell>
+    </AuthCenteredShell>
   );
 }

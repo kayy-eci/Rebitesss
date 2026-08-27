@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import AuthSplit from "@/app/components/auth/auth-split";
+import AuthCenteredShell from "@/app/components/auth/auth-centered-shell";
+import AuthForm from "@/app/components/auth/auth-form";
 
 export const metadata: Metadata = {
   title: "Masuk - ReBites",
@@ -9,34 +10,36 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <AuthSplit
-      mode="signin"
+    <AuthCenteredShell
+      imageSrc="/hero-makanan.jpeg"
+      variant="buyer"
       title={
         <>
-          Selamat Datang
+          Selamatkan
           <br />
-          Kembali
+          Pangan.
         </>
       }
-      subtitle="Enter your credentials to access your curated dashboard."
-      submitLabel="Sign In"
-      redirectTo="/home"
-      bottomHint={{
-        text: "Belum punya akun?",
-        linkText: "Daftar di sini",
-        href: "/auth/register",
-      }}
-      brand={{
-        title: (
+      description="Masuk untuk temukan makanan surplus enak dengan harga miring. Hemat enak, selamatkan bumi."
+    >
+      <AuthForm
+        mode="signin"
+        title={
           <>
-            Elevate the
+            Selamat Datang
             <br />
-            Everyday.
+            Kembali
           </>
-        ),
-        description:
-          "Join our curated marketplace connecting premium palates with sustainable culinary surplus. Reducing waste, beautifully.",
-      }}
-    />
+        }
+        subtitle="Masukkan kredensial Anda untuk melanjutkan."
+        submitLabel="Masuk"
+        redirectTo="/home"
+        bottomHint={{
+          text: "Belum punya akun?",
+          linkText: "Daftar di sini",
+          href: "/auth/register",
+        }}
+      />
+    </AuthCenteredShell>
   );
 }

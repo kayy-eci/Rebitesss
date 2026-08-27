@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AuthShell from "@/app/components/auth/auth-shell";
+import AuthCenteredShell from "@/app/components/auth/auth-centered-shell";
 import PenjualRegisterForm from "@/app/components/auth/penjual-register-form";
 
 export const metadata: Metadata = {
@@ -10,20 +10,19 @@ export const metadata: Metadata = {
 
 export default function RegisterPenjualPage() {
   return (
-    <AuthShell
-      brand={{
-        title: (
-          <>
-            Taste good,
-            <br />
-            do good.
-          </>
-        ),
-        description:
-          "Join our curated marketplace connecting premium palates with sustainable culinary surplus. Reducing waste, beautifully.",
-      }}
+    <AuthCenteredShell
+      imageSrc="/penjual-login.jpg"
+      variant="seller"
+      title={
+        <>
+          Taste good,
+          <br />
+          do good.
+        </>
+      }
+      description="Join our curated marketplace connecting premium palates with sustainable culinary surplus. Reducing waste, beautifully."
     >
       <PenjualRegisterForm />
-    </AuthShell>
+    </AuthCenteredShell>
   );
 }

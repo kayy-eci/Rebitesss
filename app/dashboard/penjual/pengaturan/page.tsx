@@ -12,7 +12,7 @@ import {
 import { supabase } from "@/lib/supabase";
 
 function inputClass() {
-  return "w-full rounded-xl border border-sage-100 bg-white px-4 py-2.5 text-sm text-charcoal-900 outline-none transition-colors placeholder:text-charcoal-500/50 focus:border-green-700";
+  return "w-full rounded-xl border border-sage-100 bg-white px-3 py-1.5 text-sm text-charcoal-900 outline-none transition-colors placeholder:text-charcoal-500/50 focus:border-green-700";
 }
 
 export default function PengaturanTokoPage() {
@@ -121,17 +121,17 @@ export default function PengaturanTokoPage() {
   return (
     <SellerShell>
       <div className="mx-auto max-w-3xl">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sage-500">
           Pengaturan
         </p>
-        <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
+        <h1 className="mt-0.5 font-display text-[clamp(1.5rem,3vw,2rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
           Pengaturan Toko
         </h1>
-        <p className="mt-1 text-sm text-sage-500">
+        <p className="mt-0.5 text-xs text-sage-500">
           Identitas toko ini ditampilkan di marketplace dan halaman Detail Toko.
         </p>
 
-        <Card className="mt-7">
+        <Card className="mt-4">
           {loading ? (
             <div className="space-y-4">
               {[0, 1, 2].map((i) => (
@@ -140,7 +140,7 @@ export default function PengaturanTokoPage() {
             </div>
           ) : (
             <form
-              className="space-y-5"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4"
               onSubmit={(e) => {
                 e.preventDefault();
                 void handleSave();
@@ -164,7 +164,7 @@ export default function PengaturanTokoPage() {
                 />
               </div>
 
-              <div>
+              <div className="lg:col-span-2">
                 <label
                   htmlFor="settings-description"
                   className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-sage-500"
@@ -216,11 +216,11 @@ export default function PengaturanTokoPage() {
               </div>
 
               <div>
-                <span className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-sage-500">
+                <span className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-sage-500">
                   Logo / Foto Toko
                 </span>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-md border border-sage-100 bg-cream-50">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-md border border-sage-100 bg-cream-50">
                     {logoPreview || imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -229,18 +229,18 @@ export default function PengaturanTokoPage() {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <ImageIcon className="h-6 w-6 text-sage-500/40" />
+                      <ImageIcon className="h-5 w-5 text-sage-500/40" />
                     )}
                   </div>
                   <div>
                     <button
                       type="button"
                       onClick={() => logoInputRef.current?.click()}
-                      className="rounded-md border border-sage-100 bg-cream-50 px-4 py-2 text-xs font-medium text-green-700 transition-colors hover:bg-sage-100/40"
+                      className="rounded-md border border-sage-100 bg-cream-50 px-3 py-1.5 text-[10px] font-medium text-green-700 transition-colors hover:bg-sage-100/40"
                     >
                       {logoFile ? "Ganti Logo" : "Pilih Logo"}
                     </button>
-                    <p className="mt-1 text-[10px] text-charcoal-500/60">
+                    <p className="mt-0.5 text-[10px] text-charcoal-500/60">
                       PNG/JPG, maks 2MB
                     </p>
                   </div>
@@ -255,13 +255,13 @@ export default function PengaturanTokoPage() {
               </div>
 
               {error && (
-                <p role="alert" className="text-[13px] text-red-600">
+                <p role="alert" className="text-[12px] text-red-600 lg:col-span-2">
                   {error}
                 </p>
               )}
               {message && (
-                <p role="status" className="flex items-center gap-1.5 text-[13px] text-green-700">
-                  <Store className="h-4 w-4" />
+                <p role="status" className="flex items-center gap-1.5 text-[12px] text-green-700 lg:col-span-2">
+                  <Store className="h-3.5 w-3.5" />
                   {message}
                 </p>
               )}
@@ -269,7 +269,7 @@ export default function PengaturanTokoPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-green-700 px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-forest-800 disabled:cursor-not-allowed disabled:opacity-70"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-green-700 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-forest-800 disabled:cursor-not-allowed disabled:opacity-70 lg:col-span-2"
               >
                 {saving ? "Menyimpan..." : "Simpan Perubahan"}
               </button>

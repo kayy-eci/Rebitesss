@@ -33,7 +33,7 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const containerVariants: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.08 },
+    transition: { staggerChildren: 0.06, delayChildren: 0.04 },
   },
 };
 
@@ -41,7 +41,7 @@ const itemVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { duration: 0.55, ease: EASE },
+    transition: { duration: 0.45, ease: EASE },
   },
 };
 
@@ -66,22 +66,22 @@ function Field({
 
   return (
     <div>
-      <div className="mb-2.5 flex items-baseline justify-between gap-4">
+      <div className="mb-1.5 flex items-baseline justify-between gap-4">
         <label
           htmlFor={id}
-          className="block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6B6A63]"
+          className="block font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6B6A63]"
         >
           {label}
         </label>
         {hint}
       </div>
-      <div className="group flex items-center gap-3 border-b border-[#DEDACF] pb-2 transition-colors duration-200 focus-within:border-[#225138]">
-        <Icon className="h-4 w-4 shrink-0 text-[#6B6A63]/60 transition-colors duration-200 group-focus-within:text-[#225138]" />
+      <div className="group flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 transition-colors duration-200 focus-within:border-[#225138] focus-within:ring-1 focus-within:ring-[#225138]/15">
+        <Icon className="h-3.5 w-3.5 shrink-0 text-[#6B6A63]/55 transition-colors duration-200 group-focus-within:text-[#225138]" />
         <input
           id={id}
           type={isPassword && showPassword ? "text" : type}
           {...inputProps}
-          className="w-full bg-transparent py-1 font-sans text-[15px] text-[#1B3F2C] outline-none placeholder:text-[#6B6A63]/40"
+          className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-[#1B3F2C] outline-none placeholder:text-[#9A9994]"
         />
         {isPassword && (
           <button
@@ -91,7 +91,7 @@ function Field({
               showPassword ? "Sembunyikan password" : "Tampilkan password"
             }
             aria-pressed={showPassword}
-            className="shrink-0 rounded-sm p-0.5 text-[#6B6A63]/60 transition-colors duration-200 hover:text-[#225138] focus-visible:text-[#225138] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#225138]/40"
+            className="shrink-0 rounded-sm p-0.5 text-[#6B6A63]/55 transition-colors duration-200 hover:text-[#225138] focus-visible:text-[#225138] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#225138]/30"
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4" />
@@ -210,48 +210,49 @@ export default function AuthForm({
   }
 
   return (
-    <motion.div variants={containerVariants} initial="hidden" animate="show">
-      <motion.div variants={itemVariants} className="mb-4">
+    <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex h-full min-h-0 flex-col overflow-hidden">
+      <motion.div variants={itemVariants} className="mb-3 flex-shrink-0">
         <Link
           href="/"
-          className="group inline-flex items-center gap-2 rounded-full py-1.5 pr-3 font-sans text-sm font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#225138]"
+          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#225138]"
         >
-          <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
           Kembali
         </Link>
       </motion.div>
 
       <motion.div
         variants={itemVariants}
-        className="mb-8 flex items-center justify-center gap-2.5 lg:hidden"
+        className="mb-5 flex items-center justify-center gap-2 lg:hidden flex-shrink-0"
       >
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#225138] text-[#F7F5EF]">
-          <Leaf className="h-[18px] w-[18px]" strokeWidth={1.75} />
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#225138] text-[#F7F5EF]">
+          <Leaf className="h-[15px] w-[15px]" strokeWidth={1.75} />
         </span>
-        <span className="font-display text-xl font-medium tracking-tight text-[#225138]">
+        <span className="font-display text-lg font-semibold tracking-tight text-[#225138]">
           ReBites
         </span>
       </motion.div>
 
       <motion.h1
         variants={itemVariants}
-        className="font-display text-[2rem] font-semibold leading-[1.1] tracking-[-0.02em] text-[#225138]"
+        className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-[#14261E] flex-shrink-0"
       >
         {title}
       </motion.h1>
       <motion.p
         variants={itemVariants}
-        className="mt-3 font-sans text-sm leading-relaxed text-[#6B6A63]"
+        className="mt-1.5 font-sans text-[13px] leading-relaxed text-[#6B6A63] flex-shrink-0"
       >
         {subtitle}
       </motion.p>
 
       <motion.form
         variants={itemVariants}
-        className="mt-10 space-y-8"
+        className="mt-4 flex flex-1 flex-col gap-4 overflow-hidden min-h-0"
         onSubmit={handleSubmit}
         noValidate
       >
+        <div className="grid gap-4 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#E5E7EB] [&::-webkit-scrollbar-track]:bg-transparent min-h-0">
         {isSignup && (
           <Field
             id="fullName"
@@ -292,24 +293,25 @@ export default function AuthForm({
             !isSignup ? (
               <Link
                 href="/auth/forgotPassword"
-                className="font-sans text-xs text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
+                className="font-sans text-[11px] text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
               >
-                Forgot Password?
+                Lupa password?
               </Link>
             ) : undefined
           }
         />
 
         {error && (
-          <p role="alert" className="font-sans text-[13px] text-red-600">
+          <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 font-sans text-[12px] leading-relaxed text-red-700">
             {error}
           </p>
         )}
+        </div>
 
         <button
           type="submit"
           disabled={loading || confirmEmailOpen}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-[#225138] px-5 py-3.5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F7F5EF] transition-colors duration-200 hover:bg-[#1B3F2C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-[#143B2D] px-5 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-[#0F2E24] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70 flex-shrink-0"
         >
           {loading ? (isSignup ? "Mendaftar" : "Masuk") : submitLabel}
           <ArrowRight className="h-4 w-4" />
@@ -318,7 +320,7 @@ export default function AuthForm({
 
       <motion.p
         variants={itemVariants}
-        className="mt-8 text-center font-sans text-sm text-[#6B6A63]"
+        className="mt-5 text-center font-sans text-[13px] text-[#6B6A63] flex-shrink-0"
       >
         {bottomHint.text}{" "}
         <Link
