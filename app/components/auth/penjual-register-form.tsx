@@ -589,7 +589,7 @@ export default function PenjualRegisterForm() {
           ? "Verifikasi akun Anda untuk melanjutkan. Email & nama sudah sesuai sesi login."
           : step === 2
             ? "Ceritakan tentang usaha kuliner Anda untuk tampil di ReBites."
-            : "Pilih paket untuk memulai berjualan — Basic 24.999/bulan wajib bayar via Xendit."}
+            : "Pilih paket untuk memulai berjualan, Basic 24.999/bulan wajib bayar via Xendit."}
       </motion.p>
 
       <div className="mt-4 flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#E5E7EB] [&::-webkit-scrollbar-track]:bg-transparent">
@@ -1105,7 +1105,7 @@ export default function PenjualRegisterForm() {
                   <div className="rounded-xl border border-[#DEDACF] bg-[#FCFCF9] p-4">
                     <div className="flex items-center justify-between text-[13px]">
                       <span className="text-[#6B6A63]">Paket terpilih</span>
-                      <span className="font-semibold text-[#225138]">ReBites {plan.name} — {billing==='yearly'?'Tahunan':'Bulanan'}</span>
+                      <span className="font-semibold text-[#225138]">ReBites {plan.name} {billing==='yearly'?'Tahunan':'Bulanan'}</span>
                     </div>
                     <div className="flex items-center justify-between text-[13px] mt-1.5">
                       <span className="text-[#6B6A63]">Total bayar</span>
@@ -1138,7 +1138,7 @@ export default function PenjualRegisterForm() {
                   {!payProcessing && <ArrowRight className="h-3.5 w-3.5" />}
                 </button>
               </div>
-              <p className="text-center text-[11px] text-[#9A9994]">Wajib bayar — Basic 24.999 untuk memulai berjualan. Belum bisa tambah produk sebelum paid.</p>
+              <p className="text-center text-[11px] text-[#9A9994]">Wajib bayar, Basic 24.999 untuk memulai berjualan. Belum bisa tambah produk sebelum paid.</p>
             </motion.div>
           )}
         </AnimatePresence>

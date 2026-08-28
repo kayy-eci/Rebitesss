@@ -58,7 +58,7 @@ export function StoreAboutImpact({ vendor }: { vendor: Vendor }) {
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-charcoal-500">
             {vendor.description} Setiap menu surplus yang ditawarkan lewat
-            ReBites adalah kelebihan porsi hari itu — masih layak, tetap segar,
+            ReBites adalah kelebihan porsi hari itu, masih layak, tetap segar,
             dan dijual dengan harga lebih hemat agar tidak berakhir di tempat
             sampah.
           </p>

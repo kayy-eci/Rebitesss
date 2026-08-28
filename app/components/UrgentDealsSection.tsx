@@ -154,7 +154,7 @@ export function UrgentDealsSection({
               Menu <span className="text-caramel">unggulan</span> hari ini
             </h2>
             <p className="mt-2 max-w-xl font-sans text-sm text-white/70">
-              Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat — diperbarui setiap hari.
+              Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat, diperbarui setiap hari.
             </p>
           </div>
         </div>

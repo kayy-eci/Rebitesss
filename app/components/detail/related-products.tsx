@@ -16,7 +16,7 @@ export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
             Selamatkan Juga
           </h2>
           <p className="mt-2 max-w-md font-inter text-sm leading-relaxed text-charcoal-500">
-            Masih ada porsi lain yang menunggu diselamatkan hari ini — jangan
+            Masih ada porsi lain yang menunggu diselamatkan hari ini, jangan
             sampai terbuang.
           </p>
         </div>

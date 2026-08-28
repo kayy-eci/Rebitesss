@@ -27,7 +27,7 @@ const BENEFITS: Benefit[] = [
     icon: PiggyBank,
     title: 'Harga Lebih Hemat',
     description:
-      'Makanan surplus dijual dengan diskon besar — nikmati kualitas sama, harga lebih ringan.',
+      'Makanan surplus dijual dengan diskon besar, nikmati kualitas sama, harga lebih ringan.',
   },
   {
     icon: Store,
@@ -58,7 +58,7 @@ export function BenefitsSection() {
             Belanja Hemat. Selamatkan Makanan.
           </h2>
           <p className="mt-3 font-inter text-sm leading-relaxed text-charcoal-500 sm:text-base">
-            Satu platform, tiga kemenangan — untuk dompetmu, untuk UMKM, dan
+            Satu platform, tiga kemenangan, untuk dompetmu, untuk UMKM, dan
             untuk bumi.
           </p>
         </div>

@@ -344,7 +344,7 @@ export function HeroSection() {
             <p className="mt-7 max-w-md font-sans text-sm leading-[1.85] text-muted-foreground">
               Dari makan siang hingga usaha kuliner, ReBites membantu kamu
               menemukan makanan surplus berkualitas dari dapur UMKM Depok
-              dengan harga lebih hemat — tanpa food waste.
+              dengan harga lebih hemat, tanpa food waste.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-5">

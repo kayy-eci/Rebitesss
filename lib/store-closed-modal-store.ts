@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useSyncExternalStore } from "react";
 
 interface StoreClosedState {
@@ -31,6 +33,10 @@ function getSnapshot() {
   return state;
 }
 
+function getServerSnapshot() {
+  return { isOpen: false, availableFrom: "", availableTo: "" };
+}
+
 export function openStoreClosedModal(availableFrom: string, availableTo: string) {
   state = { isOpen: true, availableFrom, availableTo };
   emitChange();
@@ -42,7 +48,7 @@ export function closeStoreClosedModal() {
 }
 
 export function useStoreClosedModal() {
-  const currentState = useSyncExternalStore(subscribe, getSnapshot);
+  const currentState = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const open = useCallback((availableFrom: string, availableTo: string) => {
     openStoreClosedModal(availableFrom, availableTo);

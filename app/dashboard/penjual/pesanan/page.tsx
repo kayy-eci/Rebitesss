@@ -178,7 +178,7 @@ function EmptyState({ hasAnyOrders }: { hasAnyOrders: boolean }) {
         <p className="mt-1 text-xs leading-relaxed text-sage-500">
           {hasAnyOrders
             ? 'Coba buka tab lain untuk melihat pesanan berlangsung atau selesai.'
-            : 'Pesanan dari pembeli akan muncul di sini. Untuk demo, buat pesanan lewat halaman toko sebagai pembeli — datanya langsung tersinkron.'}
+            : 'Pesanan dari pembeli akan muncul di sini. Untuk demo, buat pesanan lewat halaman toko sebagai pembeli, datanya langsung tersinkron.'}
         </p>
       </div>
     </Card>

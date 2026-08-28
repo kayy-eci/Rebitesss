@@ -201,7 +201,7 @@ export function ProductDetailModal({
                 "inline-block h-1.5 w-1.5 rounded-full mr-1.5",
                 lowStock ? "bg-[#E53935]" : "bg-primary/100",
               )} />
-              {lowStock ? `Stok terbatas — ${product.stockRemaining} tersisa` : `${product.stockRemaining} tersedia`}
+              {lowStock ? `Stok terbatas, ${product.stockRemaining} tersisa` : `${product.stockRemaining} tersedia`}
             </p>
 
             {/* Price + Quantity + CTA */}

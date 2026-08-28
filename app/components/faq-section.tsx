@@ -9,7 +9,7 @@ import { Reveal } from './reveal';
 const FAQS = [
   {
     q: 'Apa itu ReBites?',
-    a: 'ReBites adalah marketplace makanan surplus yang mempertemukan dapur UMKM dengan pembeli di Kota Depok. Makanan yang masih layak konsumsi namun berpotensi terbuang dijual dengan harga lebih hemat — mengurangi food waste sekaligus menambah pendapatan UMKM.',
+    a: 'ReBites adalah marketplace makanan surplus yang mempertemukan dapur UMKM dengan pembeli di Kota Depok. Makanan yang masih layak konsumsi namun berpotensi terbuang dijual dengan harga lebih hemat, mengurangi food waste sekaligus menambah pendapatan UMKM.',
   },
   {
     q: 'Bagaimana cara memesan makanan di ReBites?',
@@ -17,7 +17,7 @@ const FAQS = [
   },
   {
     q: 'Apakah makanan surplus aman dikonsumsi?',
-    a: 'Aman. Makanan yang dijual adalah makanan yang masih layak konsumsi — biasanya kelebihan produksi atau mendekati jam penyajian berikutnya. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
+    a: 'Aman. Makanan yang dijual adalah makanan yang masih layak konsumsi, biasanya kelebihan produksi atau mendekati jam penyajian berikutnya. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
   },
   {
     q: 'Bagaimana cara UMKM mulai berjualan?',

@@ -137,7 +137,7 @@ export async function settleOrderPaid(
             role: 'seller',
             type: 'incoming_order',
             title: 'Pesanan Masuk!',
-            message: `Pesanan #${externalId} — ${productName} telah dibayar. Segera siapkan pesanan.`,
+            message: `Pesanan #${externalId}, ${productName} telah dibayar. Segera siapkan pesanan.`,
             reference_id: externalId,
             href: '/dashboard/penjual/pesanan',
           });

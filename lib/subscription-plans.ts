@@ -15,7 +15,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
     slug: 'basic',
     name: 'Basic',
-    tagline: 'Mulai berjualan — 3 produk, riwayat 30 hari.',
+    tagline: 'Mulai berjualan, 3 produk, riwayat 30 hari.',
     monthly: 24_999,
     yearly: 249_990,
     features: [
@@ -45,7 +45,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
     slug: 'premium',
     name: 'Max',
-    tagline: 'Akses semua fitur — maksimal 15 produk.',
+    tagline: 'Akses semua fitur, maksimal 15 produk.',
     monthly: 99_000,
     yearly: 990_000,
     features: [

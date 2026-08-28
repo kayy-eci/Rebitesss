@@ -116,7 +116,7 @@ export default function LanggananPenjualPage() {
           {!subscription && (
             <p className="mt-3 inline-flex items-start gap-1.5 rounded-lg bg-amber-100 px-3 py-2 text-[11px] font-medium text-charcoal-900">
               <BadgeCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-600" />
-              Kamu belum berlangganan aktif. Pilih paket di bawah — Basic 24.999/bulan wajib untuk mulai berjualan.
+              Kamu belum berlangganan aktif. Pilih paket di bawah, Basic 24.999/bulan wajib untuk mulai berjualan.
             </p>
           )}
         </Card>

@@ -315,7 +315,7 @@ function EcoImpactBanner({ savedPorsi }: { savedPorsi: number }) {
         </h2>
         <p className="mt-4 max-w-xl font-inter text-sm leading-relaxed text-cream-100/80 sm:text-[0.95rem]">
           {savedPorsi > 0
-            ? `Sejauh ini kamu sudah menyelamatkan ${savedPorsi.toLocaleString("id-ID")} porsi makanan — berhemat sambil menjaga planet.`
+            ? `Sejauh ini kamu sudah menyelamatkan ${savedPorsi.toLocaleString("id-ID")} porsi makanan, berhemat sambil menjaga planet.`
             : "Belum ada porsi terselamatkan. Pesanan pertamamu adalah langkah kecil yang berarti bagi bumi."}
         </p>
       </div>
@@ -441,7 +441,7 @@ function ImpactStats({
           </motion.div>
           {totalPesanan === 0 && (
             <p className="relative mt-4 font-inter text-xs text-cream-100/60">
-              Belum ada pesanan — statistik akan terisi otomatis begitu kamu
+              Belum ada pesanan, statistik akan terisi otomatis begitu kamu
               memesan.
             </p>
           )}

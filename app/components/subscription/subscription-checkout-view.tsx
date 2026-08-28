@@ -152,7 +152,7 @@ export function SubscriptionCheckoutView() {
           Pilih Paket Langganan
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-[#6B6A63]">
-          Pilih Basic, Standar atau Max. Klik card untuk mengganti — detail di bawah akan mengikuti pilihanmu. Semua paket berbayar via Xendit (Basic 24.999).
+          Pilih Basic, Standar atau Max. Klik card untuk mengganti, detail di bawah akan mengikuti pilihanmu. Semua paket berbayar via Xendit (Basic 24.999).
         </p>
       </section>
 
@@ -213,12 +213,12 @@ export function SubscriptionCheckoutView() {
         <div className="rounded-2xl border border-[#DEDACF] bg-white p-6 shadow-sm sm:p-7 lg:col-span-3">
           <h2 className="font-display text-[18px] font-semibold tracking-tight text-[#225138]">Rincian Pembayaran</h2>
           <p className="mt-1 text-[13px] leading-relaxed text-[#6B6A63]">
-            ReBites {plan.name} — {billing === 'yearly' ? 'Tahunan' : 'Bulanan'} • berlaku s.d. {periodEndLabel}
+            ReBites {plan.name} {billing === 'yearly' ? 'Tahunan' : 'Bulanan'} • berlaku s.d. {periodEndLabel}
           </p>
 
           {userEmail && (
             <p className="mt-4 rounded-lg bg-[#F7F5EF] px-3 py-2 text-[12px] text-[#6B6A63]">
-              Pembayaran untuk <span className="font-semibold text-[#225138]">{userEmail}</span> — akan diproses via Xendit
+              Pembayaran untuk <span className="font-semibold text-[#225138]">{userEmail}</span> , akan diproses via Xendit
             </p>
           )}
 
@@ -326,7 +326,7 @@ export function SubscriptionCheckoutView() {
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#225138] text-white">
                 <Check className="h-3.5 w-3.5" strokeWidth={3} />
               </span>
-              <span className="text-[12px] font-medium text-[#225138]">Pembayaran via Xendit — aman & instan</span>
+              <span className="text-[12px] font-medium text-[#225138]">Pembayaran via Xendit, aman & instan</span>
             </div>
           </div>
         </div>
