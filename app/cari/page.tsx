@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Search, SearchX, Sparkles } from "lucide-react";
 import { useCatalog } from "@/lib/catalog";
 import type { FilterKey, FoodItem } from "@/lib/types";
-import { Navbar } from "@/app/components/Navbar";
+import { Navbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { FoodCard } from "@/app/components/FoodCard";
