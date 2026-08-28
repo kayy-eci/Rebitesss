@@ -193,7 +193,7 @@ export function ProfileNavbar({
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
-        <div className="mx-auto w-full max-w-[1200px]">
+        <div className="mx-auto w-full max-w-[1400px]">
           <nav
             className={cn(
               "flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
@@ -345,7 +345,13 @@ export function ProfileNavbar({
                 >
                   {avatarUrl ? (
                     <span className="relative h-7 w-7 overflow-hidden rounded-full ring-1 ring-black/5">
-                      <Image src={avatarUrl} alt="Foto profil" fill className="object-cover" unoptimized />
+                      <Image
+                        src={avatarUrl}
+                        alt="Foto profil"
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
                     </span>
                   ) : (
                     <User className="h-5 w-5" />

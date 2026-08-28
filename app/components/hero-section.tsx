@@ -121,7 +121,7 @@ export function HeroSection() {
     <div className="overflow-x-hidden bg-cream" data-nav="cream">
       <header className="fixed inset-x-0 top-0 z-50">
         <div className="px-4 pt-3 sm:px-6 lg:px-8 sm:pt-4">
-        <div className="mx-auto w-full max-w-7xl">
+        <div className="mx-auto w-full max-w-[1400px]">
           <nav
             className={cn(
               "flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(34,81,56,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",

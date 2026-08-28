@@ -1,17 +1,14 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { ArrowRight, Recycle, } from "lucide-react";
+import { ArrowRight, Recycle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/app/components/Button";
 import { SmartImage } from "@/app/components/SmartImage";
-import {
-  ArcLines,
-  DotPattern,
-  FloatingLeaf,
-  LeafSprig,
-  SoftBlob,
-} from "@/app/components/ornaments";
 import { scrollToId } from "@/lib/scroll";
+import { useCurrentUser } from "@/lib/current-user";
+import { getSellerStoreSettings } from "@/lib/store-settings-storage";
+import { useEffect, useState } from "react";
 
 const HERO_IMAGE =
   "https://images.pexels.com/photos/16134564/pexels-photo-16134564.jpeg?auto=compress&cs=tinysrgb&w=1200";
@@ -35,31 +32,41 @@ const item: Variants = {
 };
 
 export function Hero() {
+  const router = useRouter();
+  const { userId } = useCurrentUser();
+  const [hasStore, setHasStore] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const settings = await getSellerStoreSettings();
+      if (mounted) setHasStore(!!settings);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [userId]);
+
+  const handleMulaiJual = () => {
+    if (!userId || !hasStore) {
+      router.push("/auth/register/penjual");
+    } else {
+      router.push("/dashboard/penjual");
+    }
+  };
+
   return (
     <section
       id="home"
       data-nav="cream"
       className="relative overflow-hidden scroll-mt-24 bg-cream-50 px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pb-24 lg:pt-28"
     >
-
-      <SoftBlob className="-left-28 -top-28 h-80 w-80 bg-sage-100/70" />
-      <SoftBlob className="-right-24 top-36 h-96 w-96 bg-primary/10" />
-      <ArcLines className="right-0 top-6 hidden h-[420px] w-[720px] text-sage-500/25 md:block" />
-      <DotPattern className="bottom-12 left-6 hidden h-28 w-28 text-primary/15 lg:block" />
-      <FloatingLeaf className="left-10 top-40 hidden h-6 w-6 text-sage-500/50 lg:block" />
-      <FloatingLeaf
-        className="right-16 top-72 hidden h-5 w-5 text-gold-500/50 lg:block"
-        delay={1.4}
-      />
-      <LeafSprig className="-left-6 bottom-6 hidden h-48 w-48 -rotate-12 text-sage-500/30 lg:block" />
-
       <motion.div
         variants={container}
         initial="hidden"
         animate="visible"
         className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.55fr_1fr]"
       >
-
         <motion.div
           variants={item}
           className="relative min-h-[420px] overflow-hidden rounded-3xl shadow-2xl shadow-primary/30 lg:min-h-[560px]"
@@ -92,7 +99,7 @@ export function Hero() {
               <Button
                 variant="cream"
                 size="lg"
-                onClick={() => scrollToId("explore")}
+                onClick={() => scrollToId("rekomendasi")}
                 className="group"
               >
                 Jelajahi Makanan
@@ -107,9 +114,7 @@ export function Hero() {
           </div>
         </motion.div>
 
-
         <div className="grid gap-6">
-
           <motion.div
             variants={item}
             className="group relative overflow-hidden rounded-3xl shadow-lg shadow-primary/25 transition-transform duration-300 hover:scale-[1.02]"
@@ -125,26 +130,24 @@ export function Hero() {
 
             <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
               <h2 className="mt-4 font-sans text-2xl font-bold leading-snug text-cream-50 sm:text-[1.7rem]">
-                Diskon Besar,
+                Flash Sale,
                 <br />
-                Dampak Besar.
+                Hemat Besar.
               </h2>
               <p className="mt-2 max-w-[260px] font-inter text-sm leading-relaxed text-cream-50/80">
-                Satu pesanan menghemat pengeluaranmu sekaligus menyelamatkan porsi
-                makanan dari tempat sampah.
+                Dapatkan diskon spesial untuk makanan favoritmu sekarang.
               </p>
               <Button
                 variant="outlineCream"
                 size="sm"
                 className="mt-5"
-                onClick={() => scrollToId("explore")}
+                onClick={() => scrollToId("flashSale")}
               >
                 Lihat Promo
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
           </motion.div>
-
 
           <motion.div
             variants={item}
@@ -170,7 +173,7 @@ export function Hero() {
                 variant="cream"
                 size="sm"
                 className="mt-5"
-                onClick={() => scrollToId("umkm-cta")}
+                onClick={handleMulaiJual}
               >
                 Mulai Jual
                 <ArrowRight className="h-3.5 w-3.5" />

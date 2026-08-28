@@ -4,7 +4,7 @@ import { Leaf } from 'lucide-react';
 export function StoreHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-sage-100 bg-cream-50/85 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <Link href="/" className="flex items-center gap-2" aria-label="ReBites beranda">
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white">
             <Leaf className="h-4 w-4" />
