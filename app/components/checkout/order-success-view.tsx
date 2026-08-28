@@ -137,6 +137,28 @@ export function OrderSuccessView() {
     let elapsed = 0;
 
     const fetchStatus = async () => {
+      // Fallback verifikasi: kalau webhook Xendit tidak terjangkau (mis. dev
+      // lokal tanpa tunnel), cek status invoice langsung ke Xendit API supaya
+      // pesanan tetap lunas + notifikasi tetap dibuat. Best-effort saja.
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (token) {
+          await fetch('/api/checkout/xendit/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ orderCode: orderId }),
+          });
+        }
+      } catch {
+        // verifikasi gagal — lanjut baca status dari DB
+      }
+
       const { data } = await supabase
         .from('orders')
         .select('payment_status')
