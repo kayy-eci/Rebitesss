@@ -105,16 +105,26 @@ export async function getSellerUmkm(): Promise<SellerUmkm | null> {
   const uid = session?.user?.id;
   if (!uid) return null;
 
+  // Pakai limit(1) + order alih-alih maybeSingle(): bila user (salah)
+  // memiliki lebih dari satu row umkm_profiles, maybeSingle() melempar
+  // error dan fungsi ini return null — akibatnya user yang jelas sudah
+  // punya toko terus-menerus dialihkan ke halaman registrasi ulang.
   const { data, error } = await supabase
     .from('umkm_profiles')
     .select('id, slug, business_name')
     .eq('user_id', uid)
-    .maybeSingle();
-  if (error || !data) return null;
+    .order('created_at', { ascending: false })
+    .limit(1);
+  if (error) {
+    console.error('[product-storage] gagal memuat UMKM penjual:', error.message);
+    return null;
+  }
+  const row = data?.[0];
+  if (!row) return null;
   return {
-    id: data.id,
-    slug: data.slug ?? null,
-    businessName: data.business_name ?? '',
+    id: row.id,
+    slug: row.slug ?? null,
+    businessName: row.business_name ?? '',
   };
 }
 
