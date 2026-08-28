@@ -525,18 +525,7 @@ export function FlashSaleSection({
             ) : (
               <SectionCountdown deadlineIso={nextStartIso} label="Flash sale dimulai dalam" />
             )}
-            <a
-              href="/cari"
-              className="hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex"
-            >
-              Lihat Semua <span aria-hidden>→</span>
-            </a>
           </div>
-        </div>
-        <div className="mt-3 flex justify-end sm:hidden">
-          <a href="/cari" className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-white/90">
-            Lihat Semua <span aria-hidden>→</span>
-          </a>
         </div>
 
         <div className="relative mt-9 flex flex-wrap items-center justify-center gap-3 md:flex-nowrap md:gap-8">

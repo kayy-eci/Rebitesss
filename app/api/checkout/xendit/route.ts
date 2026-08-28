@@ -224,7 +224,7 @@ export async function POST(req: NextRequest) {
       if (insertErr) {
         // Rollback stok
         await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
-        console.error('[checkout/xendit] insert free order error', insertErr.message);
+        console.error('[checkout/xendit] insert free order error', insertErr.message, { orderCode, productSlug: body.productSlug });
         return NextResponse.json({ error: 'Gagal membuat pesanan.' }, { status: 500 });
       }
 
@@ -237,12 +237,13 @@ export async function POST(req: NextRequest) {
         if (pricing.coinEarned > 0) {
           pending.push({ user_id: user.id, order_code: orderCode, type: 'earned', amount: pricing.coinEarned, description: 'Reward pembelian' });
         }
-        await serviceClient.from('coin_transactions').insert(pending);
+        const { error: coinErr } = await serviceClient.from('coin_transactions').insert(pending);
+        if (coinErr) console.error('[checkout/xendit] coin settle error', coinErr.message, { orderCode });
       }
 
       // Notifikasi (best-effort)
       const siteUrl = getSiteUrl();
-      await serviceClient.from('notifications').insert([
+      const { error: notifErr } = await serviceClient.from('notifications').insert([
         {
           user_id: user.id,
           role: 'buyer',
@@ -253,11 +254,48 @@ export async function POST(req: NextRequest) {
           href: '/riwayatPesanan',
         },
       ]);
+      if (notifErr) console.error('[checkout/xendit] notif free error', notifErr.message);
+
+      console.log('[checkout/xendit] free order created', { orderCode, total: 0, coinUsed: pricing.coinUsed });
+
+      // Kirim StoredOrder langsung agar client tidak perlu fetch via anon RLS (bisa gagal)
+      const freeStoredOrder = {
+        orderId: orderCode,
+        userId: user.id,
+        productId: body.productSlug,
+        productName,
+        vendorName,
+        vendorSlug,
+        image: imageUrl,
+        quantity,
+        fulfillment: body.fulfillment,
+        addressSnapshot: body.fulfillment === 'delivery' ? body.addressSnapshot : null,
+        paymentMethodId: 'rebites-coin',
+        subtotal: pricing.subtotal,
+        discount: pricing.discount,
+        serviceFee: pricing.serviceFee,
+        deliveryFee: pricing.deliveryFee,
+        totalBeforeCoin: pricing.totalBeforeCoin,
+        coinUsed: pricing.coinUsed,
+        total: 0,
+        coinEarned: pricing.coinEarned,
+        createdAt: nowIso,
+        unitPrice,
+        promoCode: body.promoCode?.toUpperCase() ?? null,
+        status: 'ongoing' as const,
+        estimatedMinutes: 25,
+        estimatedCompletionAt: new Date(Date.now() + 25 * 60_000).toISOString(),
+        completedAt: undefined,
+        vendorAddress,
+        vendorOpenHours,
+        co2eSavedKg: undefined,
+      };
 
       return NextResponse.json({
         orderCode,
         invoiceUrl: `${siteUrl}/detail/pesanan/sukses?orderId=${encodeURIComponent(orderCode)}`,
         free: true,
+        order: freeStoredOrder,
       });
     }
 

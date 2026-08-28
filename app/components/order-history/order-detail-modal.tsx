@@ -28,6 +28,7 @@ import {
 } from '@/lib/order-utils';
 import { useCountdown, formatCountdown } from '@/lib/useCountdown';
 import { getReviewFor, saveReview } from '@/lib/review-storage';
+import { notifyNewReview } from '@/lib/order-notifications';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -478,9 +479,22 @@ function ReviewBlock({
       comment: comment.trim(),
       createdAt: new Date().toISOString(),
     })
-      .then(() => onSaved())
-      .catch(() => {
-        toast({ title: 'Gagal menyimpan penilaian', description: 'Coba lagi sebentar.' });
+      .then(() => {
+        // Notifikasi ke penjual (best-effort, jangan block UI)
+        notifyNewReview({
+          orderCode: orderId,
+          productName,
+          rating,
+          authorName: 'Pembeli',
+        }).catch(() => {});
+        onSaved();
+      })
+      .catch((err: unknown) => {
+        const msg = err instanceof Error ? err.message : '';
+        toast({
+          title: 'Gagal menyimpan penilaian',
+          description: msg || 'Coba lagi sebentar.',
+        });
       })
       .finally(() => setSaving(false));
   };

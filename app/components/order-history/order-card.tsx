@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, ChevronRight, Coins } from 'lucide-react';
+import { Check, ChevronRight, Coins, Star } from 'lucide-react';
 import { SmartImage } from '@/app/components/SmartImage';
 import { formatRupiah } from '@/lib/data';
 import { fetchProductDetail } from '@/app/detail/product/detail-data';
@@ -77,6 +77,19 @@ export function OrderCard({
             )}
           </p>
           <p className="mt-1 text-[13px] font-semibold text-zinc-900">Rp{order.total.toLocaleString('id-ID')}</p>
+          {order.status === 'completed' && (
+            <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold">
+              {reviewed ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2 py-0.5 text-sage-600">
+                  <Star className="h-3 w-3 fill-gold-500 text-gold-500" /> Sudah dinilai
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 rounded-full bg-gold-100 px-2 py-0.5 text-amber-700">
+                  <Star className="h-3 w-3" /> Belum dinilai · Beri ulasan
+                </span>
+              )}
+            </p>
+          )}
         </div>
 
         <ChevronRight className="mt-2 h-5 w-5 shrink-0 text-[#7A1C1C] transition-transform group-hover:translate-x-0.5" />

@@ -8,6 +8,7 @@ import { getSellerUmkm } from '@/lib/product-storage';
 import { supabase } from '@/lib/supabase';
 import { useCountUp } from './useCountUp';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
+import { REVIEWS_UPDATED_EVENT } from '@/lib/review-storage';
 
 export function StoreRatingCard() {
   const { hasOrders, hydrated } = useSellerOrders();
@@ -17,7 +18,7 @@ export function StoreRatingCard() {
   // Rating di-scope ke toko milik user aktif (tabel reviews, bukan data demo).
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    const load = async () => {
       const umkm = await getSellerUmkm();
       if (!umkm) {
         if (!cancelled) {
@@ -34,9 +35,13 @@ export function StoreRatingCard() {
         setRatings((data ?? []).map((row) => Number(row.rating ?? 0)));
         setReviewsLoaded(true);
       }
-    })();
+    };
+    load();
+    const onReview = () => load();
+    window.addEventListener(REVIEWS_UPDATED_EVENT, onReview);
     return () => {
       cancelled = true;
+      window.removeEventListener(REVIEWS_UPDATED_EVENT, onReview);
     };
   }, []);
 

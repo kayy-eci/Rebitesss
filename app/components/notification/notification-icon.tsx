@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   Crown,
   XCircle,
+  Star,
 } from 'lucide-react';
 import type { NotificationType } from '@/lib/notification-storage';
 import { cn } from '@/lib/utils';
@@ -57,6 +58,11 @@ const ICON_CONFIG: Record<
     icon: ShoppingBag,
     bg: 'bg-green-50',
     color: 'text-green-700',
+  },
+  new_review: {
+    icon: Star,
+    bg: 'bg-gold-50',
+    color: 'text-gold-600',
   },
   subscription_active: {
     icon: Crown,

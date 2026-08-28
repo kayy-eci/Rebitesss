@@ -289,17 +289,18 @@ export default function AuthForm({
           placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          hint={
-            !isSignup ? (
-              <Link
-                href="/auth/forgotPassword"
-                className="font-sans text-[11px] text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
-              >
-                Lupa password?
-              </Link>
-            ) : undefined
-          }
         />
+
+        {!isSignup && (
+          <div className="flex justify-end -mt-1">
+            <Link
+              href="/auth/forgotPassword"
+              className="font-sans text-[11px] text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
+            >
+              Lupa password?
+            </Link>
+          </div>
+        )}
 
         {error && (
           <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 font-sans text-[12px] leading-relaxed text-red-700">

@@ -62,24 +62,13 @@ export function CategorySection() {
       className="relative scroll-mt-24 bg-cream-50 py-16 lg:py-20"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
-              Jelajahi Kategori
-            </h2>
-            <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
-              Temukan berbagai makanan sesuai seleramu yang masih layak dinikmati
-            </p>
-          </div>
-          <Link
-            href="/cari"
-            className={cn(
-              "hidden items-center gap-1.5 font-sans text-sm font-semibold text-primary transition-colors hover:text-caramel sm:inline-flex",
-              FOCUS_RING,
-            )}
-          >
-            Lihat Semua <span aria-hidden>→</span>
-          </Link>
+        <div>
+          <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
+            Jelajahi Kategori
+          </h2>
+          <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
+            Temukan berbagai makanan sesuai seleramu yang masih layak dinikmati
+          </p>
         </div>
 
         <motion.div
@@ -125,14 +114,6 @@ export function CategorySection() {
             );
           })}
         </motion.div>
-        <div className="mt-2 flex justify-end sm:hidden">
-          <Link
-            href="/cari"
-            className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary"
-          >
-            Lihat Semua <span aria-hidden>→</span>
-          </Link>
-        </div>
       </div>
     </section>
   );

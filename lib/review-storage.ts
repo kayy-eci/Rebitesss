@@ -121,14 +121,124 @@ export async function getReviewFor(
   return rowToOrderReview(data);
 }
 
+export const REVIEWS_UPDATED_EVENT = 'rebites-reviews-updated';
+
+function dispatchReviewsUpdated(): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new Event(REVIEWS_UPDATED_EVENT));
+}
+
+export interface SellerReview {
+  id: string;
+  orderCode: string;
+  orderId: string | null;
+  productId: string | null;
+  umkmId: string | null;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  authorName: string;
+  authorAvatar: string;
+  menuName: string;
+  userId: string;
+}
+
+function rowToSellerReview(row: ReviewRow): SellerReview {
+  return {
+    id: String(row.id ?? ''),
+    orderCode: row.order_code ?? '',
+    orderId: row.order_id ?? null,
+    productId: row.product_id ?? null,
+    umkmId: row.umkm_id ?? null,
+    rating: Number(row.rating ?? 0),
+    comment: row.comment ?? '',
+    createdAt: row.created_at ?? new Date().toISOString(),
+    authorName: row.author_name?.trim() || 'Pembeli ReBites',
+    authorAvatar: row.author_avatar ?? '',
+    menuName: row.menu_name ?? '',
+    userId: row.user_id ?? '',
+  };
+}
+
+export async function getSellerReviews(): Promise<SellerReview[]> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const uid = session?.user?.id;
+  if (!uid) return [];
+  const { data: umkm } = await supabase
+    .from('umkm_profiles')
+    .select('id')
+    .eq('user_id', uid)
+    .maybeSingle();
+  if (!umkm?.id) return [];
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('umkm_id', umkm.id)
+    .order('created_at', { ascending: false })
+    .limit(100);
+  if (error || !data) return [];
+  return data.map(rowToSellerReview);
+}
+
 export async function saveReview(review: OrderReview): Promise<void> {
+  if (review.rating < 1 || review.rating > 5) {
+    throw new Error('Rating harus 1-5');
+  }
+  // Ambil data pesanan untuk validasi & enrichment (hanya pesanan selesai milik pembeli yang boleh direview)
+  const { data: orderRow, error: orderError } = await supabase
+    .from('orders')
+    .select('id, product_id, umkm_id, product_name, lifecycle_status, buyer_id')
+    .eq('order_code', review.orderId)
+    .maybeSingle();
+  if (orderError || !orderRow) {
+    console.error('[review-storage] pesanan tidak ditemukan:', orderError?.message);
+    throw new Error('Pesanan tidak ditemukan');
+  }
+  if ((orderRow as Record<string, any>).lifecycle_status !== 'completed') {
+    throw new Error('Pesanan belum selesai, belum bisa diberi ulasan');
+  }
+  if ((orderRow as Record<string, any>).buyer_id !== review.userId) {
+    throw new Error('Hanya pembeli pesanan yang dapat memberi ulasan');
+  }
+  // Ambil profil pembeli untuk author_name/avatar
+  let authorName: string | null = null;
+  let authorAvatar: string | null = null;
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('full_name, avatar_url, email')
+    .eq('id', review.userId)
+    .maybeSingle();
+  if (profile) {
+    const p = profile as Record<string, any>;
+    authorName = p.full_name?.trim() || p.email?.split('@')[0] || null;
+    authorAvatar = p.avatar_url || null;
+  }
+  if (!authorName) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    authorName =
+      (user?.user_metadata as Record<string, any>)?.full_name ||
+      user?.email?.split('@')[0] ||
+      'Pembeli ReBites';
+    authorAvatar = (user?.user_metadata as Record<string, any>)?.avatar_url || null;
+  }
+
   const { error } = await supabase.from('reviews').upsert(
     {
+      order_id: (orderRow as Record<string, any>).id,
+      product_id: (orderRow as Record<string, any>).product_id,
+      umkm_id: (orderRow as Record<string, any>).umkm_id,
       order_code: review.orderId,
       user_id: review.userId,
       kind: 'product',
       rating: review.rating,
-      comment: review.comment,
+      comment: review.comment?.trim() ?? '',
+      author_name: authorName,
+      author_avatar: authorAvatar,
+      menu_name: (orderRow as Record<string, any>).product_name ?? '',
     },
     { onConflict: 'user_id,order_code' }
   );
@@ -136,4 +246,5 @@ export async function saveReview(review: OrderReview): Promise<void> {
     console.error('[review-storage] gagal menyimpan review:', error.message);
     throw error;
   }
+  dispatchReviewsUpdated();
 }

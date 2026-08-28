@@ -47,8 +47,14 @@ export async function getUserFromBearer(
 }
 
 export function getSiteUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ??
-    'http://localhost:3000'
-  );
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/$/, '');
+  if (!raw) {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(
+        '[supabase] NEXT_PUBLIC_SITE_URL tidak di-set di production — fallback ke http://localhost:3000. Set di Vercel Env (mis. https://rebites.vercel.app) agar redirect Xendit benar.'
+      );
+    }
+    return 'http://localhost:3000';
+  }
+  return raw;
 }

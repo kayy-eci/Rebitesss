@@ -88,10 +88,10 @@ The system is designed around two main users:
                               │
                          Payment
                               │
-                              ▼
-                       ┌─────────────┐
-                       │   Midtrans  │
-                       └─────────────┘
+                               ▼
+                        ┌─────────────┐
+                        │   Xendit    │
+                        └─────────────┘
 ```
 
 ### UMKM Flow
@@ -148,7 +148,7 @@ Track Order
 | Language           | TypeScript     |
 | Backend & Database | Supabase       |
 | CSS Framework      | Tailwind CSS   |
-| Payment Gateway    | Midtrans       |
+| Payment Gateway    | Xendit       |
 | Hosting            | Vercel         |
 | Authentication     | JWT            |
 | Dashboard / Charts | Recharts       |
@@ -178,7 +178,7 @@ Track Order
             │                 │
             ▼                 ▼
 ┌───────────────────┐   ┌────────────────┐
-│     Supabase      │   │    Midtrans    │
+│     Supabase      │   │    Xendit      │
 │                   │   │                │
 │ Database          │   │ Payment        │
 │ Authentication    │   │ Processing     │
@@ -239,7 +239,7 @@ The platform does not cover food production, raw-material procurement, or indepe
 * UMKM must have an active subscription to sell products after the free trial period.
 * Packaging and order handover remain the responsibility of the UMKM.
 * ReBites does not operate its own logistics service.
-* Midtrans transactions are currently handled in Indonesian Rupiah (IDR).
+* Xendit transactions are currently handled in Indonesian Rupiah (IDR).
 
 ---
 
@@ -282,7 +282,7 @@ Make sure you have installed:
 * npm / pnpm / yarn
 * Git
 
-You will also need a configured Supabase project and Midtrans credentials.
+You will also need a configured Supabase project and Xendit credentials (XENDIT_SECRET_KEY + XENDIT_CALLBACK_TOKEN).
 
 ### Installation
 
@@ -323,14 +323,15 @@ http://localhost:3000
 
 ## 🔑 Environment Variables
 
-Example:
+Example (see `.env.example`):
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-
-MIDTRANS_SERVER_KEY=
-MIDTRANS_CLIENT_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+XENDIT_SECRET_KEY= # dari https://dashboard.xendit.co/settings/developers#api-keys
+XENDIT_CALLBACK_TOKEN= # dari Xendit Dashboard → Callbacks
+NEXT_PUBLIC_SITE_URL=https://rebites.vercel.app
 ```
 
 > Never commit your actual API keys, secret keys, or credentials to GitHub.

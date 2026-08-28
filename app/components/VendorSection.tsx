@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useCatalog } from '@/lib/catalog';
@@ -13,6 +13,18 @@ import { useSellerPlan } from '@/lib/seller-plan';
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
+function isOpenNow(openHours: string): boolean {
+  const match = openHours.match(/(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/);
+  if (!match) return true;
+  const open = Number(match[1]) * 60 + Number(match[2]);
+  const close = Number(match[3]) * 60 + Number(match[4]);
+  const now = new Date();
+  const minutes = now.getHours() * 60 + now.getMinutes();
+  return open <= close
+    ? minutes >= open && minutes < close
+    : minutes >= open || minutes < close;
+}
+
 export function VendorSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -20,13 +32,16 @@ export function VendorSection() {
   const { plan } = useSellerPlan();
   const { vendors, loading } = useCatalog();
 
+  // Hanya tampilkan toko yang masih buka
+  const openVendors = vendors.filter((v) => isOpenNow(v.openHours));
+
   const sortedVendors = plan.priorityListing
-    ? [...vendors].sort(
+    ? [...openVendors].sort(
         (a, b) =>
           Number(b.id === SELLER_VENDOR_SLUG) -
           Number(a.id === SELLER_VENDOR_SLUG)
       )
-    : vendors;
+    : openVendors;
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
@@ -41,17 +56,30 @@ export function VendorSection() {
     if (!el) return;
     el.addEventListener('scroll', updateArrows, { passive: true });
     window.addEventListener('resize', updateArrows);
-    // Data vendor datang async -> hitung ulang state chevron saat daftar berubah.
     return () => {
       el.removeEventListener('scroll', updateArrows);
       window.removeEventListener('resize', updateArrows);
     };
-  }, [updateArrows, vendors.length]);
+  }, [updateArrows, openVendors.length]);
 
   const scrollByStep = useCallback((dir: number) => {
     const el = scrollRef.current;
     if (!el) return;
-    const step = Math.max(el.clientWidth * 0.8, 320);
+    const gap = 20;
+    const vw = window.innerWidth;
+    let step: number;
+    if (vw >= 1024) {
+      const visible = 4;
+      const itemWidth = (el.clientWidth - gap * (visible - 1)) / visible;
+      step = itemWidth + gap;
+    } else if (vw >= 640) {
+      const visible = 2;
+      const itemWidth = (el.clientWidth - gap) / visible;
+      step = itemWidth + gap;
+    } else {
+      const itemWidth = el.clientWidth * 0.85;
+      step = itemWidth + gap;
+    }
     el.scrollBy({ left: dir * step, behavior: 'smooth' });
   }, []);
 
@@ -63,24 +91,13 @@ export function VendorSection() {
     >
       <SoftBlob className="-right-24 top-1/4 h-80 w-80 bg-sage-100/60" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
-              Rekomendasi buat kamu sayang
-            </h2>
-            <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
-              Toko lokal yang rutin menyelamatkan makanan surplusnya setiap hari. Dukung mereka.
-            </p>
-          </div>
-          <a
-            href="/cari"
-            className={cn(
-              'hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-primary transition-colors hover:text-caramel sm:inline-flex',
-              FOCUS_RING,
-            )}
-          >
-            Lihat Semua <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+        <div>
+          <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
+            Rekomendasi buat kamu sayang
+          </h2>
+          <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
+            Toko lokal yang rutin menyelamatkan makanan surplusnya setiap hari. Dukung mereka.
+          </p>
         </div>
 
         <div className="relative">
@@ -100,13 +117,13 @@ export function VendorSection() {
 
           <div ref={scrollRef} className="mt-10 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {loading && (
-              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500 col-span-full">
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500">
                 Memuat toko...
               </div>
             )}
             {!loading && sortedVendors.length === 0 && (
-              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500 col-span-full">
-                Belum ada toko tersedia.
+              <div className="flex h-56 items-center justify-center text-sm text-charcoal-500">
+                Belum ada toko yang buka saat ini.
               </div>
             )}
             {!loading && sortedVendors.length > 0 && (
@@ -117,8 +134,7 @@ export function VendorSection() {
                   hidden: {},
                   visible: { transition: { staggerChildren: 0.06 } },
                 }}
-                className="grid gap-5 grid-flow-col"
-                style={{ gridAutoColumns: '85%' }}
+                className="contents"
               >
                 {sortedVendors.map((vendor) => (
                   <motion.div
@@ -160,11 +176,6 @@ export function VendorSection() {
           >
             <ChevronRight className="h-5 w-5" />
           </button>
-        </div>
-        <div className="mt-2 flex justify-end sm:hidden">
-          <a href="/cari" className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary">
-            Lihat Semua <ArrowRight className="h-4 w-4" />
-          </a>
         </div>
       </div>
     </section>

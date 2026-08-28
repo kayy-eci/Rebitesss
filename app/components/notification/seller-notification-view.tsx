@@ -18,7 +18,7 @@ const FILTER_TABS: { value: NotificationFilter; label: string }[] = [
   { value: 'subscription', label: 'Langganan' },
 ];
 
-const ORDER_TYPES: NotificationType[] = ['incoming_order'];
+const ORDER_TYPES: NotificationType[] = ['incoming_order', 'new_review'];
 const SUBSCRIPTION_TYPES: NotificationType[] = [
   'subscription_active',
   'subscription_renewed',

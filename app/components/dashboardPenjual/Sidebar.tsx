@@ -8,6 +8,7 @@ import {
   Leaf,
   Settings,
   ShoppingBag,
+  Star,
   TrendingUp,
   Utensils,
   X,
@@ -43,6 +44,12 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Pesanan Masuk',
     icon: ShoppingBag,
     href: '/dashboard/penjual/pesanan',
+  },
+  {
+    id: 'ulasan',
+    label: 'Ulasan',
+    icon: Star,
+    href: '/dashboard/penjual/ulasan',
   },
   {
     id: 'menu',

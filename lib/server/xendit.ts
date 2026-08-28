@@ -64,24 +64,50 @@ export async function createXenditInvoice(
     body.customer = { given_names: params.customerName };
   }
 
-  const res = await fetch(`${XENDIT_API_BASE}/v2/invoices`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${auth}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
+  // Timeout 10 detik agar tidak hang saat Xendit lambat
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10_000);
+  let res: Response;
+  try {
+    res = await fetch(`${XENDIT_API_BASE}/v2/invoices`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${auth}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } catch (e) {
+    if ((e as Error).name === 'AbortError') {
+      throw new Error('Xendit timeout (10s) — coba lagi');
+    }
+    throw e;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   const json: unknown = await res.json().catch(() => null);
 
   if (!res.ok) {
     const msg =
       (json as { message?: string })?.message ??
+      (json as { errors?: Array<{ message?: string }> })?.errors?.[0]?.message ??
       (json as { error_code?: string })?.error_code ??
       `Xendit error ${res.status}`;
+    console.error('[xendit] create invoice failed', {
+      status: res.status,
+      body,
+      response: json,
+    });
     throw new Error(msg);
   }
+
+  console.log('[xendit] invoice created', {
+    external_id: params.externalId,
+    amount: params.amount,
+    invoice_url: (json as XenditInvoice).invoice_url,
+  });
 
   return json as XenditInvoice;
 }

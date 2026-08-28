@@ -23,6 +23,29 @@ const FILTERS: { key: FoodFilter; label: string }[] = [
 
 const MAX_ITEMS = 8;
 
+// === Daily rotation helpers: stabil per hari, berubah tiap hari ===
+function hashStringToInt(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+function getDailySeed(): number {
+  // local date (client) agar ganti tepat tengah malam waktu user
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  return hashStringToInt(dateStr);
+}
+
+function getDailyOffset(seed: number, length: number, pageSize: number): number {
+  if (length <= pageSize) return 0;
+  const maxStart = length - pageSize;
+  return seed % (maxStart + 1);
+}
+
 export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id: string) => void }) {
   const { foodItems, loading, error } = useCatalog();
   const [activeFilter, setActiveFilter] = useState<FoodFilter>("semua");
@@ -43,7 +66,6 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
     if (!el) return;
     el.addEventListener("scroll", updateArrows, { passive: true });
     window.addEventListener("resize", updateArrows);
-    // Data katalog & filter datang/berubah async -> hitung ulang chevron.
     return () => {
       el.removeEventListener("scroll", updateArrows);
       window.removeEventListener("resize", updateArrows);
@@ -53,7 +75,23 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
   const scrollByStep = useCallback((dir: number) => {
     const el = scrollRef.current;
     if (!el) return;
-    const step = Math.max(el.clientWidth * 0.8, 320);
+    // Geser 1 produk per klik dengan animasi slide
+    const gap = 20; // gap-5
+    const vw = window.innerWidth;
+    let step: number;
+    if (vw >= 1024) {
+      const visible = 4;
+      const itemWidth = (el.clientWidth - gap * (visible - 1)) / visible;
+      step = itemWidth + gap;
+    } else if (vw >= 640) {
+      const visible = 2;
+      const itemWidth = (el.clientWidth - gap) / visible;
+      step = itemWidth + gap;
+    } else {
+      // mobile: auto-cols-[85%]
+      const itemWidth = el.clientWidth * 0.85;
+      step = itemWidth + gap;
+    }
     el.scrollBy({ left: dir * step, behavior: "smooth" });
   }, []);
 
@@ -78,7 +116,11 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
         list.sort((a, b) => b.rating - a.rating);
     }
 
-    return list.slice(0, MAX_ITEMS);
+    // Rotasi harian: window 8 produk berbeda tiap hari, stabil saat refresh
+    const dailySeed = getDailySeed();
+    const filterSeed = dailySeed ^ hashStringToInt(activeFilter);
+    const offset = getDailyOffset(filterSeed, list.length, MAX_ITEMS);
+    return list.slice(offset, offset + MAX_ITEMS);
   }, [activeFilter, foodItems]);
 
   const scrollToVendors = () => {
@@ -104,19 +146,6 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
               Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat.
             </p>
           </div>
-          <a
-            href="#umkm"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToVendors();
-            }}
-            className={cn(
-              "hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-primary transition-colors hover:text-caramel sm:inline-flex",
-              FOCUS_RING,
-            )}
-          >
-            Lihat Semua <ArrowRight className="h-4 w-4" />
-          </a>
         </div>
 
         <div
@@ -144,19 +173,6 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
               </button>
             );
           })}
-        </div>
-
-        <div className="mt-4 flex justify-end sm:hidden">
-          <a
-            href="#umkm"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToVendors();
-            }}
-            className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary"
-          >
-            Lihat Semua <ArrowRight className="h-4 w-4" />
-          </a>
         </div>
 
         <div className="relative">
@@ -203,8 +219,7 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
                   hidden: {},
                   visible: { transition: { staggerChildren: 0.06 } },
                 }}
-                className="grid gap-5 grid-flow-col"
-                style={{ gridAutoColumns: '85%' }}
+                className="contents"
               >
                 {items.map((item) => (
                   <motion.div

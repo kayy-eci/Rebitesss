@@ -233,11 +233,12 @@ export function CheckoutProvider({
         });
 
         const json = (await res.json().catch(() => null)) as
-          | { error?: string; invoiceUrl?: string; orderCode?: string; free?: boolean }
+          | { error?: string; invoiceUrl?: string; orderCode?: string; free?: boolean; order?: StoredOrder | null }
           | null;
 
         if (!res.ok) {
           const msg = json?.error ?? `Gagal membuat pembayaran (${res.status}).`;
+          console.error('[checkout] API error', { status: res.status, body: json });
           setSubmitting(false);
           submittedRef.current = false;
           setPromoError(msg);
@@ -246,22 +247,44 @@ export function CheckoutProvider({
 
         if (json?.free && json.orderCode) {
           // Pesanan gratis (tertutup koin) — langsung tampilkan popup sukses
-          const order = await getOrderById(json.orderCode);
-          if (order) setSuccessOrder(order);
+          // Server sudah mengembalikan order via service role agar tidak kena RLS anon
+          let order: StoredOrder | null | undefined = (json as { order?: StoredOrder }).order as StoredOrder | undefined;
+          if (!order) {
+            // Fallback: coba fetch via anon (bisa gagal RLS jika session tidak sinkron)
+            try {
+              order = await getOrderById(json.orderCode);
+            } catch (e) {
+              console.warn('[checkout] getOrderById fallback gagal', e);
+            }
+          }
+          if (order) {
+            setSuccessOrder(order as StoredOrder);
+          } else {
+            console.warn('[checkout] free orderCode tanpa order payload', json.orderCode);
+            // Tetap tampilkan sukses minimal dengan orderCode (biar user tidak stuck)
+            // Buat order minimal dari draft agar popup tidak kosong
+            setPromoError(null);
+            // Redirect ke sukses page sebagai fallback agar tidak stuck
+            window.location.href = `/detail/pesanan/sukses?orderId=${encodeURIComponent(json.orderCode)}`;
+            return;
+          }
           setSubmitting(false);
+          submittedRef.current = false;
           return;
         }
 
         if (json?.invoiceUrl) {
-          // Redirect ke halaman bayar Xendit (external)
+          // Redirect ke halaman bayar Xendit (external) — harus dipicu user gesture, pakai href langsung
+          console.log('[checkout] redirect ke Xendit', { orderCode: json.orderCode, invoiceUrl: json.invoiceUrl });
           window.location.href = json.invoiceUrl;
           return;
         }
 
         // Fallback: tidak ada invoiceUrl
+        console.error('[checkout] respons tanpa invoiceUrl', json);
         setSubmitting(false);
         submittedRef.current = false;
-        setPromoError('Respons pembayaran tidak valid.');
+        setPromoError('Respons pembayaran tidak valid. Silakan coba lagi atau hubungi admin.');
       } catch (error) {
         console.error('[checkout] gagal memproses pesanan:', error);
         setSubmitting(false);

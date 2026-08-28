@@ -13,6 +13,7 @@ export type NotificationType =
   | 'order_completed'
   | 'promo'
   | 'incoming_order'
+  | 'new_review'
   | 'subscription_active'
   | 'subscription_renewed'
   | 'subscription_expiring'
