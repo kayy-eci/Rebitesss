@@ -66,6 +66,12 @@ export function OrderSuccessView() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const retryRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Turunan status pembayaran — didefinisikan sejak awal karena dipakai
+  // oleh effect countdown popup sebelum early-return guard.
+  const isPending = paymentStatus === 'unpaid' || paymentStatus === null;
+  const isFailed = paymentStatus === 'failed';
+  const isPaid = !isPending && !isFailed;
+
   useEffect(() => {
     if (!orderId) return;
     let mounted = true;
@@ -239,9 +245,7 @@ export function OrderSuccessView() {
     );
   }
 
-  const isPending = paymentStatus === 'unpaid' || paymentStatus === null;
-  const isFailed = paymentStatus === 'failed';
-  const isPaid = !isPending && !isFailed;
+  // isPending / isFailed / isPaid sudah didefinisikan di atas
 
   // estimasi text untuk popup
   const estimasiText = order.estimatedMinutes
