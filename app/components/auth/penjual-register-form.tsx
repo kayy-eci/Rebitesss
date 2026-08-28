@@ -406,18 +406,22 @@ export default function PenjualRegisterForm() {
 
       let logoUrl: string | null = null;
       if (logoFile) {
-        const ext = logoFile.name.split(".").pop() ?? "png";
-        const path = `logos/${userId}.${ext}`;
+        const ext = (logoFile.name.split(".").pop() ?? "png").toLowerCase();
+        // Path unik per upload: hindari kebutuhan policy UPDATE storage
+        // (upsert path sama bisa diblokir RLS) dan cache URL lama.
+        const path = `logos/${userId}-${Date.now()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("umkm-logos")
-          .upload(path, logoFile, { upsert: true });
-
-        if (!uploadError) {
-          const {
-            data: { publicUrl },
-          } = supabase.storage.from("umkm-logos").getPublicUrl(path);
-          logoUrl = publicUrl;
+          .upload(path, logoFile, {
+            contentType: logoFile.type || "image/png",
+          });
+        if (uploadError) {
+          throw new Error(`Gagal mengunggah logo: ${uploadError.message}`);
         }
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("umkm-logos").getPublicUrl(path);
+        logoUrl = publicUrl;
       }
 
       const slugBase = slugify(s2.businessName);

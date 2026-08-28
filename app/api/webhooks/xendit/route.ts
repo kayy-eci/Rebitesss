@@ -89,7 +89,6 @@ export async function POST(req: NextRequest) {
           order_status: 'paid',
           payment_method_id: payload.payment_channel ?? payload.payment_method ?? 'xendit',
           xendit_invoice_id: invoiceId,
-          midtrans_order_id: invoiceId,
         } as Record<string, unknown>)
         .eq('order_code', externalId);
 

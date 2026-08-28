@@ -22,7 +22,7 @@ export function PaymentMethodList() {
         </h3>
         <span className="inline-flex items-center gap-1.5 text-xs text-sage-500">
           <ShieldCheck className="h-4 w-4 text-green-700" />
-          Diproses aman lewat Midtrans
+          Diproses aman lewat Xendit
         </span>
       </div>
 
