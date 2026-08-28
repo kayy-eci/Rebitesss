@@ -58,7 +58,7 @@ export function FulfillmentToggle() {
               className={cn(
                 'group relative flex items-center gap-3.5 rounded-2xl border-2 p-4 text-left transition-all duration-200',
                 selected
-                  ? 'border-green-700 bg-green-700/[0.05] shadow-lg shadow-green-700/10'
+                  ? 'border-primary bg-primary/[0.05] shadow-lg shadow-primary/10'
                   : 'border-sage-100 bg-white hover:border-sage-500/50 hover:shadow-md'
               )}
             >
@@ -66,8 +66,8 @@ export function FulfillmentToggle() {
                 className={cn(
                   'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-200',
                   selected
-                    ? 'bg-green-700 text-white'
-                    : 'bg-sage-100 text-green-700'
+                    ? 'bg-primary text-white'
+                    : 'bg-sage-100 text-primary'
                 )}
               >
                 <Icon className="h-5 w-5" />
@@ -77,7 +77,7 @@ export function FulfillmentToggle() {
                 <span
                   className={cn(
                     'block text-sm font-semibold transition-colors duration-200',
-                    selected ? 'text-green-700' : 'text-charcoal-900'
+                    selected ? 'text-primary' : 'text-charcoal-900'
                   )}
                 >
                   {option.title}
@@ -91,7 +91,7 @@ export function FulfillmentToggle() {
                 aria-hidden
                 className={cn(
                   'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200',
-                  selected ? 'border-green-700' : 'border-sage-500/70'
+                  selected ? 'border-primary' : 'border-sage-500/70'
                 )}
               >
                 {selected && (
@@ -100,7 +100,7 @@ export function FulfillmentToggle() {
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.22, ease: EASE }}
                   >
-                    <Check className="h-3 w-3 text-green-700" strokeWidth={3} />
+                    <Check className="h-3 w-3 text-primary" strokeWidth={3} />
                   </motion.span>
                 )}
               </span>

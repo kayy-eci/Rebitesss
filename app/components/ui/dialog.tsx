@@ -48,7 +48,7 @@ const DialogContent = React.forwardRef<
     >
       {handle && <div aria-hidden className="dialog-panel-handle" />}
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white text-charcoal-500 shadow-sm ring-1 ring-hairline transition-colors duration-200 hover:bg-cream-100 hover:text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-green-700/40">
+      <DialogPrimitive.Close className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white text-charcoal-500 shadow-sm ring-1 ring-hairline transition-colors duration-200 hover:bg-cream-100 hover:text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary/40">
         <X className="h-4 w-4" />
         <span className="sr-only">Tutup</span>
       </DialogPrimitive.Close>

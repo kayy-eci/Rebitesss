@@ -54,7 +54,7 @@ export function BuyerNotificationView() {
       {}
       <div className="flex items-center justify-between gap-3">
         <div className="hidden lg:block">
-          <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-forest-deep">
+          <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">
             Notifikasi
           </h1>
           <p className="mt-1 text-sm text-stone">
@@ -66,7 +66,7 @@ export function BuyerNotificationView() {
           <button
             type="button"
             onClick={markAllRead}
-            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-4 py-2 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
           >
             <CheckCheck className="h-3.5 w-3.5" />
             Tandai semua dibaca
@@ -86,7 +86,7 @@ export function BuyerNotificationView() {
             className={cn(
               "rounded-full px-4 py-2 text-xs font-semibold transition-colors",
               filter === tab.value
-                ? "bg-green-700 text-white shadow-sm shadow-green-700/25"
+                ? "bg-primary text-white shadow-sm shadow-primary/25"
                 : "border border-sage-100 bg-white text-charcoal-500 hover:text-charcoal-900",
             )}
           >

@@ -55,11 +55,11 @@ function SalesTooltip({
     <div className="rounded-xl border border-sage-100 bg-white/95 px-3.5 py-2.5 text-xs shadow-lg backdrop-blur">
       <p className="font-semibold text-charcoal-900">{point.day}</p>
       <div className="mt-1.5 flex items-center gap-1.5 text-charcoal-900">
-        <span className="h-2 w-2 rounded-full bg-green-700" />
+        <span className="h-2 w-2 rounded-full bg-primary" />
         Terjual
         <span className="ml-auto pl-3 font-semibold">{point.terjual} porsi</span>
       </div>
-      <p className="mt-2 border-t border-sage-100 pt-1.5 font-medium text-green-700">
+      <p className="mt-2 border-t border-sage-100 pt-1.5 font-medium text-primary">
         Pendapatan hari itu {formatRupiah(point.revenue)}
       </p>
     </div>
@@ -122,7 +122,7 @@ export function SalesStatsCard({
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
             Statistik Penjualan
           </p>
-          <h2 className="mt-1 font-display text-xl font-medium tracking-tight text-forest-900">
+          <h2 className="mt-1 font-display text-xl font-medium tracking-tight text-primary">
             Performa penjualan tokomu
           </h2>
         </div>
@@ -143,7 +143,7 @@ export function SalesStatsCard({
                 className={cn(
                   'flex h-7 w-7 items-center justify-center rounded-full transition-colors',
                   kind === 'bar'
-                    ? 'bg-white text-green-700 shadow-sm'
+                    ? 'bg-white text-primary shadow-sm'
                     : 'text-sage-500 hover:text-charcoal-900'
                 )}
               >
@@ -156,7 +156,7 @@ export function SalesStatsCard({
                 className={cn(
                   'flex h-7 w-7 items-center justify-center rounded-full transition-colors',
                   kind === 'line'
-                    ? 'bg-white text-green-700 shadow-sm'
+                    ? 'bg-white text-primary shadow-sm'
                     : 'text-sage-500 hover:text-charcoal-900'
                 )}
               >
@@ -190,7 +190,7 @@ export function SalesStatsCard({
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
                 Pendapatan
               </p>
-              <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-forest-900">
+              <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-primary">
                 <span ref={revenueCount.ref}>{formatRupiah(revenueCount.value)}</span>
               </p>
             </div>
@@ -198,7 +198,7 @@ export function SalesStatsCard({
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
                 Porsi Terjual
               </p>
-              <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-forest-900">
+              <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-primary">
                 <span ref={porsiCount.ref}>{porsiCount.value}</span>{' '}
                 <span className="text-sm font-medium text-charcoal-500">porsi</span>
               </p>
@@ -208,7 +208,7 @@ export function SalesStatsCard({
           <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-4 text-xs font-medium text-charcoal-900">
               <span className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-green-700" />
+                <span className="h-2.5 w-2.5 rounded-full bg-primary" />
                 Terjual
               </span>
             </div>

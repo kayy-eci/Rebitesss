@@ -199,7 +199,7 @@ export function ProductDetailModal({
             <p className="mt-5 text-xs font-medium text-charcoal-500">
               <span className={cn(
                 "inline-block h-1.5 w-1.5 rounded-full mr-1.5",
-                lowStock ? "bg-[#E53935]" : "bg-green-500",
+                lowStock ? "bg-[#E53935]" : "bg-primary/100",
               )} />
               {lowStock ? `Stok terbatas — ${product.stockRemaining} tersisa` : `${product.stockRemaining} tersedia`}
             </p>

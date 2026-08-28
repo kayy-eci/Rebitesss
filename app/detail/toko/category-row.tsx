@@ -34,7 +34,7 @@ export function CategoryRow({
 
   return (
     <section id={categorySectionId(title)} className="scroll-mt-[148px]">
-      <h3 className="font-display text-xl font-medium tracking-tight text-forest-900 sm:text-2xl">
+      <h3 className="font-display text-xl font-medium tracking-tight text-primary sm:text-2xl">
         {title}
         <span className="ml-2 align-middle font-sans text-xs font-normal text-charcoal-500">
           {items.length} menu

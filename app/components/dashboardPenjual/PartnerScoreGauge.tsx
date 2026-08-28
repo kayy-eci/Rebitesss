@@ -96,7 +96,7 @@ export function PartnerScoreGauge() {
         </svg>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <p className="font-display text-[30px] font-medium leading-none tracking-tight text-forest-900">
+          <p className="font-display text-[30px] font-medium leading-none tracking-tight text-primary">
             <span ref={ref}>{value}%</span>
           </p>
           <p className="mt-1 text-[10px] font-medium text-sage-500">Skor Mitra</p>
@@ -105,12 +105,12 @@ export function PartnerScoreGauge() {
 
       <p className="mt-3 text-center text-xs font-medium text-charcoal-900">
         Tokomu mengungguli{' '}
-        <span className="font-bold text-green-700">{data.score}%</span> toko lain bulan ini
+        <span className="font-bold text-primary">{data.score}%</span> toko lain bulan ini
       </p>
       <p className="mt-1 text-center text-[11px] leading-relaxed text-sage-500">
         Berdasarkan kecepatan respons, tingkat keterjualan, dan ulasan pelanggan
       </p>
-      <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-cream-50 px-3 py-1.5 text-[11px] font-semibold text-green-700">
+      <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-cream-50 px-3 py-1.5 text-[11px] font-semibold text-primary">
         <TrendingUp className="h-3.5 w-3.5" />
         +{data.deltaPercent}% dari bulan lalu
       </p>

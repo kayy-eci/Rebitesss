@@ -222,7 +222,7 @@ function EmptyState({
 
   return (
     <div className="flex flex-col items-center rounded-xl border border-dashed border-zinc-200 bg-white px-6 py-10 text-center">
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-cream-100 text-green-700">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-cream-100 text-primary">
         <PackageSearch className="h-5 w-5" />
       </span>
       <h3 className="mt-3 font-display text-base font-medium text-zinc-900">Belum Ada Pesanan</h3>

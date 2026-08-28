@@ -20,7 +20,7 @@ export function OrderItemCard() {
         <div className="min-w-0 flex-1">
           <Link
             href={`/detail/toko?id=${encodeURIComponent(draft.vendorSlug)}`}
-            className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500 transition-colors hover:text-green-700"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500 transition-colors hover:text-primary"
           >
             {draft.vendorName}
             <ChevronRight className="h-3 w-3" />
@@ -31,7 +31,7 @@ export function OrderItemCard() {
           </h2>
 
           <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <span className="font-display text-lg font-semibold text-green-700">
+            <span className="font-display text-lg font-semibold text-primary">
               {formatRupiah(draft.discountedPrice)}
             </span>
             <span className="text-sm text-sage-500 line-through">

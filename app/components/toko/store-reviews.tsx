@@ -56,12 +56,12 @@ export function StoreReviews() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
             Ulasan
           </p>
-          <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-forest-900 sm:text-3xl">
+          <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-primary sm:text-3xl">
             Kata Pembeli
           </h2>
         </div>
         <div className="flex items-center gap-3 rounded-2xl border border-sage-100 bg-white px-4 py-3 shadow-sm">
-          <p className="font-display text-3xl font-medium leading-none text-forest-900">
+          <p className="font-display text-3xl font-medium leading-none text-primary">
             {STORE.rating.toFixed(1)}
           </p>
           <div>

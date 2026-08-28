@@ -34,7 +34,7 @@ export function ProductInfo({
       >
         <motion.h1
           variants={fadeUpSmall}
-          className="font-display text-[clamp(2rem,3.5vw,2.75rem)] font-semibold leading-[1.08] tracking-[-0.02em] text-forest-deep"
+          className="font-display text-[clamp(2rem,3.5vw,2.75rem)] font-semibold leading-[1.08] tracking-[-0.02em] text-primary"
         >
           {product.title}
         </motion.h1>
@@ -45,7 +45,7 @@ export function ProductInfo({
         >
           <a
             href="#ulasan"
-            className="inline-flex items-center gap-1.5 text-charcoal-500 transition-colors hover:text-green-700"
+            className="inline-flex items-center gap-1.5 text-charcoal-500 transition-colors hover:text-primary"
           >
             <Stars rating={product.rating} />
             <span className="font-semibold text-charcoal-900">
@@ -57,7 +57,7 @@ export function ProductInfo({
             ·
           </span>
           <span className="inline-flex items-center gap-1 text-charcoal-500">
-            <MapPin className="h-4 w-4 text-green-700" />
+            <MapPin className="h-4 w-4 text-primary" />
             {product.distanceKm.toLocaleString("id-ID")} km dari kamu
           </span>
         </motion.div>
@@ -71,13 +71,13 @@ export function ProductInfo({
           variants={fadeUpSmall}
           className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2"
         >
-          <span className="font-display text-4xl font-semibold tracking-tight text-green-700">
+          <span className="font-display text-4xl font-semibold tracking-tight text-primary">
             Rp{formatIDR(product.discountedPrice)}
           </span>
           <span className="font-sans text-lg text-charcoal-500 line-through">
             Rp{formatIDR(product.originalPrice)}
           </span>
-          <span className="rounded-full bg-sage-100 px-3 py-1 text-xs font-semibold text-green-700">
+          <span className="rounded-full bg-sage-100 px-3 py-1 text-xs font-semibold text-primary">
             Hemat Rp{formatIDR(savings)}
           </span>
         </motion.div>
@@ -110,7 +110,7 @@ export function ProductInfo({
         <SectionReveal amount={0.4}>
           <CTAButtons product={product} onOrder={onOrder} notify={notify} />
           <p className="mt-3 flex items-center gap-1.5 font-inter text-xs text-charcoal-500">
-            <Lock className="h-3.5 w-3.5 text-green-700" />
+            <Lock className="h-3.5 w-3.5 text-primary" />
             Pembayaran aman via QRIS &amp; e-wallet · Ambil sendiri di lokasi
             mitra
           </p>

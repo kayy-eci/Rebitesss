@@ -118,10 +118,10 @@ export function OrderDetailModal({
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-hairline bg-white px-3 text-xs font-semibold text-charcoal-900 transition-colors hover:border-sage-500/50 hover:text-green-700"
+                  className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-hairline bg-white px-3 text-xs font-semibold text-charcoal-900 transition-colors hover:border-sage-500/50 hover:text-primary"
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-green-700" />
+                    <Check className="h-3.5 w-3.5 text-primary" />
                   ) : (
                     <Copy className="h-3.5 w-3.5" />
                   )}
@@ -183,7 +183,7 @@ export function OrderDetailModal({
                 )}
                 <div className="flex items-center justify-between border-t border-hairline pt-2.5">
                   <dt className="font-display font-medium text-charcoal-900">Total</dt>
-                  <dd className="font-display text-lg font-semibold tabular-nums text-green-700">
+                  <dd className="font-display text-lg font-semibold tabular-nums text-primary">
                     {formatRupiah(order.total)}
                   </dd>
                 </div>
@@ -214,7 +214,7 @@ export function OrderDetailModal({
                     <span
                       className={
                         entry.done
-                          ? 'mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-green-700 text-white'
+                          ? 'mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary text-white'
                           : 'mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 border-hairline bg-white'
                       }
                     >
@@ -279,7 +279,7 @@ export function OrderDetailModal({
                 <button
                   type="button"
                   onClick={handleReorder}
-                  className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-green-700 px-4 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+                  className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
                 >
                   <RotateCcw className="h-4 w-4" />
                   Pesan Lagi
@@ -288,7 +288,7 @@ export function OrderDetailModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-11 flex-1 items-center justify-center rounded-full border border-green-700 px-4 text-sm font-semibold text-green-700 transition-colors hover:bg-green-50"
+                className="inline-flex h-11 flex-1 items-center justify-center rounded-full border border-primary px-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
               >
                 Tutup
               </button>
@@ -313,11 +313,11 @@ function StatusStrip({ order }: { order: StoredOrder }) {
   }
 
   return (
-    <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-green-50 px-3 py-2.5 ring-1 ring-green-700/15">
-      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-700">
+    <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-primary/10 px-3 py-2.5 ring-1 ring-primary/15">
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
         <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute h-full w-full animate-ping rounded-full bg-green-600 opacity-60" />
-          <span className="relative h-1.5 w-1.5 rounded-full bg-green-700" />
+          <span className="absolute h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+          <span className="relative h-1.5 w-1.5 rounded-full bg-primary" />
         </span>
         {SUB_STATUS_LABEL[getOrderSubStatus(order)]}
         {remaining !== null && remaining > 0 && (
@@ -329,7 +329,7 @@ function StatusStrip({ order }: { order: StoredOrder }) {
           </span>
         )}
       </span>
-      <span className="font-display text-base font-semibold tabular-nums text-green-700">
+      <span className="font-display text-base font-semibold tabular-nums text-primary">
         {remaining !== null && remaining > 0 ? formatCountdown(remaining) : '—'}
       </span>
     </div>
@@ -346,7 +346,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
         <span
           className={
             isDelivery
-              ? 'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-50 text-green-700'
+              ? 'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary'
               : 'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gold-100 text-gold-600'
           }
         >
@@ -367,7 +367,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
             href={mapsUrl(order.vendorAddress ?? '')}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-green-700 hover:underline"
+            className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
           >
             <MapPin className="h-3 w-3" /> Lihat Lokasi
           </a>
@@ -378,7 +378,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
         <>
           <div className="ml-4 h-px bg-hairline" style={{ width: 24 }} />
           <div className="flex items-start gap-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-50 text-green-700">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Truck className="h-4 w-4" />
             </span>
             <div className="min-w-0">
@@ -443,7 +443,7 @@ function ReviewBlock({
       <div className="mt-6">
         <SectionTitle>Penilaianmu</SectionTitle>
         <div className="mt-2 rounded-xl ring-1 ring-hairline p-3.5">
-          <p className="inline-flex items-center gap-2 text-[13px] font-semibold text-green-700">
+          <p className="inline-flex items-center gap-2 text-[13px] font-semibold text-primary">
             <Check className="h-4 w-4" strokeWidth={3} />
             Sudah dinilai
           </p>
@@ -530,13 +530,13 @@ function ReviewBlock({
           onChange={(e) => setComment(e.target.value)}
           placeholder="Ceritakan pengalamanmu (opsional)…"
           rows={2}
-          className="mt-2.5 w-full resize-none rounded-lg border border-hairline bg-cream-50 px-3 py-2 text-[13px] text-charcoal-900 placeholder:text-charcoal-500/60 outline-none focus:border-sage-500 focus:ring-4 focus:ring-green-50"
+          className="mt-2.5 w-full resize-none rounded-lg border border-hairline bg-cream-50 px-3 py-2 text-[13px] text-charcoal-900 placeholder:text-charcoal-500/60 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary"
         />
         <button
           type="button"
           onClick={submit}
           disabled={rating < 1 || saving}
-          className="mt-2 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-green-700 px-4 text-[13px] font-semibold text-white transition-colors hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-sage-100 disabled:text-sage-500"
+          className="mt-2 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 text-[13px] font-semibold text-white transition-colors hover:bg-caramel disabled:cursor-not-allowed disabled:bg-sage-100 disabled:text-sage-500"
         >
           Beri Penilaian
         </button>
@@ -570,7 +570,7 @@ function Row({
       <dd
         className={
           accent
-            ? 'text-right font-medium tabular-nums text-green-700'
+            ? 'text-right font-medium tabular-nums text-primary'
             : mono
               ? 'text-right font-medium tabular-nums text-charcoal-900'
               : 'text-right font-medium text-charcoal-900'

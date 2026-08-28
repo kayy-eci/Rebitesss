@@ -22,13 +22,13 @@ export function RiwayatSidebarShell({ children }: { children: React.ReactNode })
           >
             <Menu className="h-5 w-5" />
           </button>
-          <span className="font-display text-base font-semibold text-forest-deep">Riwayat Transaksi</span>
+          <span className="font-display text-base font-semibold text-primary">Riwayat Transaksi</span>
         </div>
 
         <main className="mx-auto max-w-[1100px] px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
           {/* Desktop title - plain, no breadcrumb like photo's Home > My Account > My Orders excluded */}
           <div className="hidden lg:block">
-            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-forest-deep">Riwayat Transaksi</h1>
+            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">Riwayat Transaksi</h1>
             <p className="mt-1 text-sm text-stone">Kelola dan lacak transaksi makanan surplus kamu.</p>
           </div>
           <div className="mt-6">{children}</div>

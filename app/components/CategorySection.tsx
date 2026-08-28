@@ -19,7 +19,7 @@ import { CATEGORIES } from "@/lib/categories";
 import { fetchCategoryCounts } from "@/lib/catalog";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   "makanan-berat": Beef,

@@ -58,7 +58,7 @@ export default function VendorDashboardPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-green-700 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -84,7 +84,7 @@ export default function VendorDashboardPage() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
                     Dashboard Penjual
                   </p>
-                  <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
+                  <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
                     Halo, <span className="font-extralight italic">{firstName}</span>
                   </h1>
                   <p className="mt-1 text-sm text-sage-500">
@@ -100,7 +100,7 @@ export default function VendorDashboardPage() {
                   { }
                   <Link
                     href="/dashboard/penjual/langganan"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-3.5 py-1.5 text-[11px] font-semibold text-green-700 transition-colors hover:bg-green-700/10"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-primary px-3.5 py-1.5 text-[11px] font-semibold text-primary transition-colors hover:bg-caramel/10"
                   >
                     Kelola Paket Langganan
                   </Link>

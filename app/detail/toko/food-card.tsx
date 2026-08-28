@@ -39,10 +39,10 @@ export function FoodCard({
         }
       }}
       className={cn(
-        "group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md outline-none transition-all duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2",
+        "group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md outline-none transition-all duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         isUnavailable
           ? "opacity-60 shadow-none hover:translate-y-0 hover:shadow-md"
-          : "shadow-forest-900/5 hover:shadow-lg hover:shadow-forest-900/10"
+          : "shadow-primary/5 hover:shadow-lg hover:shadow-primary/10"
       )}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-sage-100">
@@ -82,7 +82,7 @@ export function FoodCard({
 
         <div className="mt-auto pt-0.5">
           <div className="flex flex-wrap items-baseline gap-x-1.5">
-            <span className="text-base font-bold text-green-700">
+            <span className="text-base font-bold text-primary">
               {formatRupiah(item.discountedPrice)}
             </span>
             <span className="text-xs text-charcoal-500 line-through">
@@ -99,7 +99,7 @@ export function FoodCard({
           <Link
             href={`/auth/register?produk=${item.id}`}
             onClick={(event) => event.stopPropagation()}
-            className="mx-auto mt-0.5 flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full bg-green-700 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-green-600 active:scale-[0.98]"
+            className="mx-auto mt-0.5 flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-5 py-2 text-xs font-semibold text-white shadow-md shadow-primary/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98]"
           >
             <ShoppingCart className="h-3.5 w-3.5" />
             Beli Sekarang

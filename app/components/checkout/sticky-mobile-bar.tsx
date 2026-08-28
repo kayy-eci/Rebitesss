@@ -41,7 +41,7 @@ export function StickyMobileBar() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
                 Total
               </p>
-              <p className="font-display text-lg font-semibold tabular-nums text-green-700">
+              <p className="font-display text-lg font-semibold tabular-nums text-primary">
                 <AnimatedNumber value={summary.total} format={formatRupiah} />
               </p>
             </div>
@@ -53,7 +53,7 @@ export function StickyMobileBar() {
               className={cn(
                 'rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200',
                 canPay
-                  ? 'bg-green-700 text-white shadow-lg shadow-green-700/25 hover:bg-green-600'
+                  ? 'bg-primary text-white shadow-lg shadow-primary/25 hover:bg-caramel'
                   : 'cursor-not-allowed bg-sage-100 text-sage-500'
               )}
             >

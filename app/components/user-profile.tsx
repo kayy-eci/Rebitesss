@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
+  Camera,
   Check,
   Clock,
   Coins,
   Heart,
   Leaf,
+  Loader2,
   Mail,
   MapPin,
   Menu,
@@ -29,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useSellerStatus } from "@/hooks/use-seller-status";
 import { useCurrentUser } from "@/lib/current-user";
+import { useProfile, uploadAvatar } from "@/hooks/use-profile";
 import { getUserOrders } from "@/lib/order-storage";
 import { useAddresses } from "@/hooks/use-addresses";
 import { useRebitesCoins } from "@/hooks/use-rebites-coins";
@@ -65,7 +68,7 @@ const STATUS_STYLE: Record<
   OrderBadgeStatus,
   { icon: LucideIcon; className: string }
 > = {
-  Selesai: { icon: Check, className: "bg-green-50 text-green-700" },
+  Selesai: { icon: Check, className: "bg-primary/10 text-primary" },
   Diproses: { icon: Clock, className: "bg-gold-100 text-gold-600" },
 };
 
@@ -139,7 +142,7 @@ function InfoRow({ icon: Icon, label, value, chip }: InfoRowProps) {
         <p className="font-inter text-[11px] font-medium uppercase tracking-wider text-stone">
           {label}
         </p>
-        <p className="truncate font-inter text-sm font-medium text-forest-deep">
+        <p className="truncate font-inter text-sm font-medium text-primary">
           {value}
         </p>
       </div>
@@ -152,6 +155,7 @@ function ProfileSidebar() {
   const [email, setEmail] = useState("");
   const [joinedAt, setJoinedAt] = useState("");
   const { isSeller } = useSellerStatus();
+  const { avatarUrl: sidebarAvatarUrl } = useProfile();
   const {
     selectedAddress,
     addresses,
@@ -203,12 +207,18 @@ function ProfileSidebar() {
         <div className="relative mx-auto h-24 w-24">
           <span className="absolute -inset-1.5 rounded-full border border-sage-500/40" />
           <span className="absolute -inset-3 rounded-full border border-dashed border-sage-500/30" />
-          <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-forest to-forest-deep font-display text-2xl font-semibold text-white ring-4 ring-cream-100">
-            {initials || <User className="h-8 w-8" />}
+          <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary to-primary-deep font-display text-2xl font-semibold text-white ring-4 ring-cream-100">
+            {sidebarAvatarUrl ? (
+              <Image src={sidebarAvatarUrl} alt={displayName} fill className="object-cover" unoptimized />
+            ) : initials ? (
+              initials
+            ) : (
+              <User className="h-8 w-8" />
+            )}
           </div>
         </div>
 
-        <h2 className="mt-4 font-display text-xl font-semibold text-forest-deep">
+        <h2 className="mt-4 font-display text-xl font-semibold text-primary">
           {displayName}
         </h2>
         <p className="mt-1 flex items-center justify-center gap-1.5 font-inter text-sm text-stone">
@@ -237,7 +247,7 @@ function ProfileSidebar() {
 
       <section className="relative overflow-hidden rounded-3xl border border-hairline/70 bg-white p-6 shadow-[0_24px_48px_-32px_rgba(42,55,49,0.35)]">
         <SoftBlob className="-right-10 -top-12 h-32 w-32 bg-sage-100/70" />
-        <h3 className="relative font-display text-base font-semibold text-forest-deep">
+        <h3 className="relative font-display text-base font-semibold text-primary">
           Data Akun
         </h3>
         <ul className="relative mt-4 space-y-4">
@@ -245,7 +255,7 @@ function ProfileSidebar() {
             icon={Mail}
             label="Email"
             value={email || "—"}
-            chip="bg-green-50 text-green-700"
+            chip="bg-primary/10 text-primary"
           />
           <InfoRow
             icon={Phone}
@@ -282,7 +292,7 @@ function EcoImpactBanner({ savedPorsi }: { savedPorsi: number }) {
         sizes="(min-width: 1024px) 70vw, 100vw"
         className="object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/95 via-forest-deep/75 to-forest-deep/25" />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary-deep/95 via-primary to-primary-deep/25" />
 
       <Sparkles className="pointer-events-none absolute right-10 top-8 h-5 w-5 text-gold-500/60" />
       <FloatingLeaf
@@ -354,7 +364,7 @@ function ImpactStats({
         : co2eKg.toLocaleString("id-ID", { maximumFractionDigits: 1 }),
       unit: "kg",
       label: "CO₂e Terselamatkan",
-      chip: "bg-green-50/15 text-green-50",
+      chip: "bg-primary/10/15 text-primary",
     },
   ];
 
@@ -365,10 +375,10 @@ function ImpactStats({
       initial="hidden"
       whileInView="visible"
       viewport={VIEWPORT}
-      className="grain-overlay relative scroll-mt-28 overflow-hidden rounded-3xl bg-forest-deep p-6 shadow-[0_32px_64px_-40px_rgba(42,55,49,0.7)] sm:p-8"
+      className="grain-overlay relative scroll-mt-28 overflow-hidden rounded-3xl bg-primary p-6 shadow-[0_32px_64px_-40px_rgba(42,55,49,0.7)] sm:p-8"
     >
       <SoftBlob className="-left-20 -top-20 h-64 w-64 bg-white/5" />
-      <SoftBlob className="-bottom-24 -right-20 h-72 w-72 bg-green-700/25" />
+      <SoftBlob className="-bottom-24 -right-20 h-72 w-72 bg-primary/25" />
       <DotPattern className="right-8 top-8 hidden h-20 w-20 text-white/10 lg:block" />
       <FloatingLeaf className="left-6 top-6 hidden h-5 w-5 text-gold-500/60 lg:block" />
 
@@ -457,7 +467,7 @@ function CoinsAndAddress() {
       >
         <motion.div
           variants={fadeUp}
-          className="grain-overlay relative overflow-hidden rounded-2xl bg-forest-deep p-6 text-cream-50 shadow-[0_20px_40px_-32px_rgba(42,55,49,0.7)]"
+          className="grain-overlay relative overflow-hidden rounded-2xl bg-primary p-6 text-cream-50 shadow-[0_20px_40px_-32px_rgba(42,55,49,0.7)]"
         >
           <Sparkles className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 text-white/10" />
           <FloatingLeaf
@@ -493,7 +503,7 @@ function CoinsAndAddress() {
           className="rounded-2xl border border-hairline/70 bg-white p-6 shadow-[0_20px_40px_-32px_rgba(42,55,49,0.35)]"
         >
           <div className="flex items-start justify-between gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-green-50 text-green-700">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
               <MapPin className="h-5 w-5" />
             </span>
             {selectedAddress && (
@@ -502,7 +512,7 @@ function CoinsAndAddress() {
               </span>
             )}
           </div>
-          <h3 className="mt-4 font-display text-base font-semibold text-forest-deep">
+          <h3 className="mt-4 font-display text-base font-semibold text-primary">
             Alamat Pengiriman Utama
           </h3>
           {loading ? (
@@ -559,13 +569,13 @@ function OrderHistory({
         className="relative scroll-mt-28 rounded-3xl border border-hairline/70 bg-white shadow-[0_24px_48px_-32px_rgba(42,55,49,0.35)]"
       >
         <div className="flex items-center justify-between px-6 pt-6">
-          <h3 className="font-display text-lg font-semibold text-forest-deep">
+          <h3 className="font-display text-lg font-semibold text-primary">
             Riwayat Pesanan
           </h3>
           {!loading && orders && orders.length > 0 && (
             <Link
               href="/riwayatPesanan"
-              className="inline-flex items-center gap-1.5 font-inter text-sm font-semibold text-forest hover:text-forest-dark"
+              className="inline-flex items-center gap-1.5 font-inter text-sm font-semibold text-primary hover:text-primary"
             >
               Lihat Semua
               <ArrowRight className="h-4 w-4" />
@@ -592,7 +602,7 @@ function OrderHistory({
             </div>
             <Link
               href="/home#umkm"
-              className="inline-flex items-center gap-1.5 rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+              className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
             >
               Jelajahi Toko
               <ArrowRight className="h-3.5 w-3.5" />
@@ -617,11 +627,11 @@ function OrderHistory({
                       key={order.orderId}
                       className="border-b border-hairline/60 transition-colors duration-200 last:border-b-0 hover:bg-cream-100/60"
                     >
-                      <td className="py-4 pr-4 font-inter text-sm font-semibold text-forest-deep">
+                      <td className="py-4 pr-4 font-inter text-sm font-semibold text-primary">
                         {order.orderId}
                       </td>
                       <td className="py-4 pr-4">
-                        <p className="font-inter text-sm font-medium text-forest-deep">
+                        <p className="font-inter text-sm font-medium text-primary">
                           {order.vendorName}
                         </p>
                         <p className="font-inter text-xs text-stone">
@@ -631,7 +641,7 @@ function OrderHistory({
                       <td className="py-4 pr-4 font-inter text-sm text-stone">
                         {formatOrderDateTime(order.createdAt)}
                       </td>
-                      <td className="py-4 pr-4 font-inter text-sm font-semibold text-forest-deep">
+                      <td className="py-4 pr-4 font-inter text-sm font-semibold text-primary">
                         {formatRupiah(order.total)}
                       </td>
                       <td className="py-4 text-right">
@@ -650,17 +660,17 @@ function OrderHistory({
                   className="flex items-center justify-between gap-4 py-4"
                 >
                   <div className="min-w-0">
-                    <p className="font-inter text-sm font-semibold text-forest-deep">
+                    <p className="font-inter text-sm font-semibold text-primary">
                       {order.orderId}
                     </p>
-                    <p className="truncate font-inter text-sm text-forest-deep">
+                    <p className="truncate font-inter text-sm text-primary">
                       {order.vendorName}
                     </p>
                     <p className="font-inter text-xs text-stone">
                       {order.productName} ·{" "}
                       {formatOrderDateTime(order.createdAt)}
                     </p>
-                    <p className="mt-1 font-inter text-sm font-semibold text-forest-deep">
+                    <p className="mt-1 font-inter text-sm font-semibold text-primary">
                       {formatRupiah(order.total)}
                     </p>
                   </div>
@@ -689,7 +699,7 @@ function FollowedStoresSection() {
     >
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h3 className="font-display text-lg font-semibold text-forest-deep">
+          <h3 className="font-display text-lg font-semibold text-primary">
             Toko Diikuti
           </h3>
           <p className="mt-0.5 font-inter text-xs text-stone">
@@ -724,7 +734,7 @@ function FollowedStoresSection() {
           </div>
           <Link
             href="/home#umkm"
-            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-3 py-1.5 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
           >
             Jelajahi Toko
             <ArrowRight className="h-3 w-3" />
@@ -736,7 +746,7 @@ function FollowedStoresSection() {
             <li key={store.umkmId}>
               <Link
                 href={`/detail/toko?id=${store.slug ?? store.umkmId}`}
-                className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-forest-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
                   {store.logoUrl ? (
@@ -745,7 +755,7 @@ function FollowedStoresSection() {
                       alt={`Logo ${store.name}`}
                     />
                   ) : (
-                    <span className="font-display text-lg font-semibold text-green-700">
+                    <span className="font-display text-lg font-semibold text-primary">
                       {store.name.charAt(0).toUpperCase()}
                     </span>
                   )}
@@ -789,7 +799,7 @@ function LikedFoodsSection() {
     >
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h3 className="font-display text-lg font-semibold text-forest-deep">
+          <h3 className="font-display text-lg font-semibold text-primary">
             Makanan Disukai
           </h3>
           <p className="mt-0.5 font-inter text-xs text-stone">
@@ -823,7 +833,7 @@ function LikedFoodsSection() {
           </div>
           <Link
             href="/cari"
-            className="inline-flex items-center gap-1.5 rounded-full border border-green-700 px-3 py-1.5 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
           >
             Cari Makanan
             <ArrowRight className="h-3 w-3" />
@@ -849,13 +859,13 @@ function LikedFoodsSection() {
               <li key={fav.id}>
                 <Link
                   href={href}
-                  className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-forest-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                  className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
                     {image ? (
                       <SmartImage src={image} alt={name} />
                     ) : (
-                      <span className="font-display text-lg font-semibold text-green-700">
+                      <span className="font-display text-lg font-semibold text-primary">
                         {name.charAt(0).toUpperCase()}
                       </span>
                     )}
@@ -870,7 +880,7 @@ function LikedFoodsSection() {
                       </span>
                     )}
                     {price != null && (
-                      <span className="mt-1 block font-inter text-[9px] font-medium text-green-700">
+                      <span className="mt-1 block font-inter text-[9px] font-medium text-primary">
                         Rp{Number(price).toLocaleString("id-ID")}
                       </span>
                     )}
@@ -908,12 +918,20 @@ export function UserProfile() {
   const { stores, hydrated: storesHydrated } = useFollowedStores();
   const { count: likedCount, hydrated: likedHydrated } = useLikedFoods();
   const { balance } = useRebitesCoins();
+  const { profile: globalProfile, avatarUrl: globalAvatarUrl, refresh: refreshProfile } = useProfile();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editName, setEditName] = useState("");
   const [editPhone, setEditPhone] = useState("");
   const [editCity, setEditCity] = useState("");
   const [editFullAddress, setEditFullAddress] = useState("");
   const [savingPersonal, setSavingPersonal] = useState(false);
+  // Avatar edit state
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -992,7 +1010,7 @@ export function UserProfile() {
           >
             <Menu className="h-5 w-5" />
           </button>
-          <span className="font-display text-base font-semibold text-forest-deep">
+          <span className="font-display text-base font-semibold text-primary">
             My Profile
           </span>
         </div>
@@ -1000,7 +1018,7 @@ export function UserProfile() {
         <main className="relative mx-auto max-w-[1100px] px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
           {/* Judul halaman — mirip referensi My Profile */}
           <div className="hidden lg:block">
-            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-forest-deep">
+            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">
               Profil
             </h1>
             <p className="mt-1 text-sm text-stone">
@@ -1016,18 +1034,63 @@ export function UserProfile() {
             className="mt-6 flex flex-col gap-6 rounded-[20px] border border-zinc-100 bg-white p-6 shadow-sm sm:p-7 lg:flex-row lg:items-center lg:justify-between"
           >
             <div className="flex items-center gap-5">
-              <div className="relative h-20 w-20 shrink-0 sm:h-24 sm:w-24">
+              <div className="relative h-20 w-20 shrink-0 sm:h-24 sm:w-24 group/avatar">
                 <span className="absolute -inset-1 rounded-full border border-sage-200/70" />
-                <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-forest to-forest-deep text-xl font-semibold text-white ring-4 ring-cream-100 sm:h-24 sm:w-24 sm:text-2xl">
-                  {initials ? (
+                <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary to-primary-deep text-xl font-semibold text-white ring-4 ring-cream-100 sm:h-24 sm:w-24 sm:text-2xl">
+                  {globalAvatarUrl ? (
+                    <Image
+                      src={globalAvatarUrl}
+                      alt={displayName}
+                      fill
+                      sizes="96px"
+                      className="object-cover"
+                      unoptimized
+                    />
+                  ) : initials ? (
                     initials
                   ) : (
                     <User className="h-8 w-8 sm:h-9 sm:w-9" />
                   )}
                 </div>
+                <button
+                  type="button"
+                  aria-label="Ubah foto profil"
+                  onClick={() => avatarInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-white text-primary shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-8 sm:w-8"
+                >
+                  <Camera className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </button>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const allowed = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+                    if (!allowed.includes(file.type)) {
+                      setAvatarError("Format file harus JPG, JPEG, PNG, atau WebP.");
+                      setIsAvatarDialogOpen(true);
+                      return;
+                    }
+                    if (file.size > 2 * 1024 * 1024) {
+                      setAvatarError("Ukuran file maksimal 2MB.");
+                      setIsAvatarDialogOpen(true);
+                      return;
+                    }
+                    setAvatarError(null);
+                    setAvatarFile(file);
+                    const reader = new FileReader();
+                    reader.onload = (ev) => setAvatarPreview(ev.target?.result as string);
+                    reader.readAsDataURL(file);
+                    setIsAvatarDialogOpen(true);
+                    e.target.value = "";
+                  }}
+                />
               </div>
               <div className="min-w-0">
-                <h2 className="font-display text-lg font-semibold leading-tight text-forest-deep sm:text-xl">
+                <h2 className="font-display text-lg font-semibold leading-tight text-primary sm:text-xl">
                   {displayName}
                 </h2>
                 <p className="mt-0.5 font-inter text-sm text-stone">
@@ -1055,16 +1118,16 @@ export function UserProfile() {
                 onClick={() => setIsIkutiTokoDialogOpen(true)}
                 className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-green-700 shadow-sm ring-1 ring-zinc-100 group-hover:bg-green-700 group-hover:text-white">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-primary shadow-sm ring-1 ring-zinc-100 group-hover:bg-caramel group-hover:text-white">
                   <Store className="h-4 w-4" />
                 </span>
-                <span className="font-inter text-sm font-semibold text-forest-deep">
+                <span className="font-inter text-sm font-semibold text-primary">
                   Ikuti Toko
                 </span>
                 <span className="font-inter text-xs text-stone">
                   {storesHydrated ? `${stores.length} toko` : "… toko"}
                 </span>
-                <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
+                <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-primary">
                   Lihat <ArrowRight className="h-3 w-3" />
                 </span>
               </button>
@@ -1077,13 +1140,13 @@ export function UserProfile() {
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#E53935] shadow-sm ring-1 ring-zinc-100 group-hover:bg-[#E53935] group-hover:text-white">
                   <Heart className="h-4 w-4" />
                 </span>
-                <span className="font-inter text-sm font-semibold text-forest-deep">
+                <span className="font-inter text-sm font-semibold text-primary">
                   Sukai Makanan
                 </span>
                 <span className="font-inter text-xs text-stone">
                   {likedHydrated ? `${likedCount} makanan` : "… makanan"}
                 </span>
-                <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
+                <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-primary">
                   Lihat <ArrowRight className="h-3 w-3" />
                 </span>
               </button>
@@ -1092,7 +1155,7 @@ export function UserProfile() {
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-amber-600 shadow-sm ring-1 ring-amber-100">
                   <Coins className="h-4 w-4" />
                 </span>
-                <span className="font-inter text-sm font-semibold text-forest-deep">
+                <span className="font-inter text-sm font-semibold text-primary">
                   ReBites Coins
                 </span>
                 <span className="font-inter text-xs font-bold text-amber-700">
@@ -1103,16 +1166,125 @@ export function UserProfile() {
                 </span>
               </div>
             </div>
-          </motion.section>
+            </motion.section>
 
-          {/* Dialog: Ikuti Toko */}
+            {/* Dialog: Edit Foto Profil */}
+            <Dialog
+              open={isAvatarDialogOpen}
+              onOpenChange={(open) => {
+                setIsAvatarDialogOpen(open);
+                if (!open) {
+                  setAvatarPreview(null);
+                  setAvatarFile(null);
+                  setAvatarError(null);
+                  setUploadingAvatar(false);
+                }
+              }}
+            >
+              <DialogContent className="max-w-sm bg-white p-6 sm:p-7">
+                <DialogHeader>
+                  <DialogTitle className="font-display text-lg font-semibold text-primary">
+                    Ubah Foto Profil
+                  </DialogTitle>
+                  <DialogDescription className="font-inter text-sm text-stone">
+                    Pilih foto JPG, JPEG, PNG, atau WebP maksimal 2MB. Preview akan tampil di bawah sebelum disimpan.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-4 flex flex-col items-center gap-4">
+                  <div className="relative h-28 w-28 overflow-hidden rounded-full bg-gradient-to-br from-primary to-primary-deep ring-4 ring-cream-100 sm:h-32 sm:w-32">
+                    {avatarPreview ? (
+                      <Image src={avatarPreview} alt="Preview foto profil" fill className="object-cover" unoptimized />
+                    ) : globalAvatarUrl ? (
+                      <Image src={globalAvatarUrl} alt={displayName} fill className="object-cover" unoptimized />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-xl font-semibold text-white">
+                        {initials || <User className="h-8 w-8" />}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex w-full flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => avatarInputRef.current?.click()}
+                      disabled={uploadingAvatar}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-charcoal-900 transition-colors hover:bg-zinc-50 disabled:opacity-50"
+                    >
+                      <Camera className="h-4 w-4" />
+                      {avatarFile ? "Ganti Foto" : "Pilih Foto"}
+                    </button>
+                    <p className="text-center font-inter text-[11px] text-stone">JPG, JPEG, PNG, WebP · Maks 2MB</p>
+                  </div>
+
+                  {avatarError && (
+                    <p role="alert" className="w-full rounded-xl bg-red-50 px-3 py-2 text-center font-inter text-xs font-medium text-red-600">
+                      {avatarError}
+                    </p>
+                  )}
+                </div>
+
+                <DialogFooter className="mt-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAvatarDialogOpen(false);
+                      setAvatarPreview(null);
+                      setAvatarFile(null);
+                      setAvatarError(null);
+                    }}
+                    disabled={uploadingAvatar}
+                    className="rounded-full border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-charcoal-900 hover:bg-zinc-50 disabled:opacity-50"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!avatarFile || uploadingAvatar || !!avatarError}
+                    onClick={async () => {
+                      if (!avatarFile) return;
+                      setUploadingAvatar(true);
+                      setAvatarError(null);
+                      try {
+                        const { publicUrl, error } = await uploadAvatar(avatarFile);
+                        if (error) throw new Error(error);
+                        if (publicUrl) {
+                          // globalProfile will refresh via PROFILE_UPDATED_EVENT, but also force refresh here
+                          refreshProfile();
+                        }
+                        setIsAvatarDialogOpen(false);
+                        setAvatarPreview(null);
+                        setAvatarFile(null);
+                      } catch (e) {
+                        const msg = e instanceof Error ? e.message : "Gagal menyimpan foto.";
+                        setAvatarError(msg);
+                      } finally {
+                        setUploadingAvatar(false);
+                      }
+                    }}
+                    className="inline-flex min-w-[110px] items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-caramel disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {uploadingAvatar ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Menyimpan…
+                      </>
+                    ) : (
+                      "Simpan"
+                    )}
+                  </button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            {/* Dialog: Ikuti Toko */}
           <Dialog
             open={isIkutiTokoDialogOpen}
             onOpenChange={setIsIkutiTokoDialogOpen}
           >
             <DialogContent className="bg-white p-6 sm:p-7">
               <DialogHeader>
-                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">
+                <DialogTitle className="font-display text-lg font-semibold text-primary">
                   Toko Diikuti
                 </DialogTitle>
                 <DialogDescription className="font-inter text-sm text-stone">
@@ -1140,7 +1312,7 @@ export function UserProfile() {
           >
             <DialogContent className="bg-white p-6 sm:p-7">
               <DialogHeader>
-                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">
+                <DialogTitle className="font-display text-lg font-semibold text-primary">
                   Makanan Disukai
                 </DialogTitle>
                 <DialogDescription className="font-inter text-sm text-stone">
@@ -1169,7 +1341,7 @@ export function UserProfile() {
             className="mt-6 rounded-[20px] border border-zinc-100 bg-white p-6 shadow-sm sm:p-7"
           >
             <div className="flex items-center justify-between gap-3">
-              <h3 className="font-display text-base font-semibold text-forest-deep">
+              <h3 className="font-display text-base font-semibold text-primary">
                 Personal Information
               </h3>
               <button
@@ -1234,7 +1406,7 @@ export function UserProfile() {
           <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
             <DialogContent className="max-w-lg bg-white p-6 sm:p-7">
               <DialogHeader>
-                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">
+                <DialogTitle className="font-display text-lg font-semibold text-primary">
                   Edit Personal Information
                 </DialogTitle>
                 <DialogDescription className="font-inter text-sm text-stone">
@@ -1252,7 +1424,7 @@ export function UserProfile() {
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
                     placeholder="Nama lengkap"
-                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600"
+                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -1264,7 +1436,7 @@ export function UserProfile() {
                     onChange={(e) => setEditPhone(e.target.value)}
                     placeholder="08xxxxxxxxxx"
                     inputMode="numeric"
-                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600"
+                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -1276,7 +1448,7 @@ export function UserProfile() {
                     onChange={(e) => setEditFullAddress(e.target.value)}
                     placeholder="Jl. Contoh No. 123, RT/RW, Kelurahan..."
                     rows={3}
-                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600"
+                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                 </div>
               </div>
@@ -1344,7 +1516,7 @@ export function UserProfile() {
                       setSavingPersonal(false);
                     }
                   }}
-                  className="inline-flex items-center justify-center rounded-full bg-green-700 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-600 disabled:opacity-60"
+                  className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-caramel disabled:opacity-60"
                 >
                   {savingPersonal ? "Menyimpan…" : "Simpan Perubahan"}
                 </button>

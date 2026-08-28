@@ -76,7 +76,7 @@ export function DetailProductContent() {
         </p>
         <a
           href="/"
-          className="mt-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-800"
+          className="mt-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-caramel"
         >
           Kembali ke Beranda
         </a>

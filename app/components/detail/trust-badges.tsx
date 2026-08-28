@@ -16,7 +16,7 @@ export function TrustBadges() {
           key={label}
           className="inline-flex items-center gap-1.5 rounded-full border border-sage-100 bg-cream-100 px-4 py-2 text-xs font-medium text-charcoal-900"
         >
-          <Icon className="h-3.5 w-3.5 text-green-700" />
+          <Icon className="h-3.5 w-3.5 text-primary" />
           {label}
         </span>
       ))}

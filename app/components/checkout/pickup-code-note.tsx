@@ -8,7 +8,7 @@ export function PickupCodeNote() {
 
   return (
     <div className="flex items-start gap-3 rounded-2xl border border-sage-100 bg-white p-4 shadow-sm">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sage-100 text-green-700">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sage-100 text-primary">
         <Ticket className="h-5 w-5" />
       </span>
       <p className="text-xs leading-relaxed text-charcoal-500">

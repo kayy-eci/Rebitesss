@@ -207,7 +207,7 @@ export default function Home() {
             {partners.map((p, i) => (
               <span
                 key={i}
-                className="mx-8 flex items-center gap-3 font-display text-lg font-medium tracking-tight text-forest-dark/60 lg:text-xl"
+                className="mx-8 flex items-center gap-3 font-display text-lg font-medium tracking-tight text-primary/60 lg:text-xl"
               >
                 <Store className="h-4 w-4 text-caramel" />
                 {p}

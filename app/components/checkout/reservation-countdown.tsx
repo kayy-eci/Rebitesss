@@ -45,7 +45,7 @@ export function ReservationCountdown({
         </div>
         <Link
           href="/"
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-green-600"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-caramel"
         >
           <Search className="h-3.5 w-3.5" />
           Cari lagi
@@ -67,7 +67,7 @@ export function ReservationCountdown({
       className={cn(
         'mt-4 flex items-center justify-between gap-3 rounded-2xl border px-4 py-3',
         urgent
-          ? 'border-green-700/40 bg-green-700/5'
+          ? 'border-primary/40 bg-primary/5'
           : 'border-sage-100 bg-sage-100/50'
       )}
     >
@@ -85,7 +85,7 @@ export function ReservationCountdown({
           <Timer
             className={cn(
               'h-4 w-4 shrink-0',
-              urgent ? 'text-green-700' : 'text-sage-500'
+              urgent ? 'text-primary' : 'text-sage-500'
             )}
           />
         </motion.span>
@@ -94,7 +94,7 @@ export function ReservationCountdown({
       <span
         className={cn(
           'font-display text-base font-semibold tabular-nums',
-          urgent ? 'text-green-700' : 'text-charcoal-900'
+          urgent ? 'text-primary' : 'text-charcoal-900'
         )}
       >
         {formatClock(remaining)}

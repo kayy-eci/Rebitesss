@@ -46,7 +46,7 @@ const BENEFITS: Benefit[] = [
 export function BenefitsSection() {
   return (
     <section className="relative overflow-hidden bg-cream-50 pb-16 pt-2 lg:pb-20">
-      <SoftBlob className="-left-28 bottom-10 h-80 w-80 bg-green-700/5" />
+      <SoftBlob className="-left-28 bottom-10 h-80 w-80 bg-primary/5" />
       <SoftBlob className="-right-20 top-8 h-64 w-64 bg-gold-100/60" />
       <FloatingLeaf
         className="right-10 top-16 hidden h-5 w-5 text-gold-500/45 lg:block"
@@ -84,9 +84,9 @@ export function BenefitsSection() {
                   transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
                 },
               }}
-              className="group rounded-2xl border border-sage-100 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-forest-900/10"
+              className="group rounded-2xl border border-sage-100 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10"
             >
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-green-700 transition-colors duration-300 group-hover:bg-green-700 group-hover:text-cream-50">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-primary transition-colors duration-300 group-hover:bg-caramel group-hover:text-cream-50">
                 <benefit.icon className="h-7 w-7" strokeWidth={1.6} />
               </span>
               <h3 className="mt-5 font-sans text-lg font-bold text-charcoal-900">

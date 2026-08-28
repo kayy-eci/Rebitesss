@@ -36,7 +36,7 @@ export function QuantityStepperCard() {
             className={cn(
               'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-200 active:scale-90',
               canDecrement
-                ? 'border-green-700 text-green-700 hover:bg-green-700 hover:text-white'
+                ? 'border-primary text-primary hover:bg-caramel hover:text-white'
                 : 'cursor-not-allowed border-sage-100 text-sage-100'
             )}
           >
@@ -66,7 +66,7 @@ export function QuantityStepperCard() {
             className={cn(
               'flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 active:scale-90',
               canIncrement
-                ? 'bg-green-700 text-white shadow-md shadow-green-700/25 hover:bg-green-600'
+                ? 'bg-primary text-white shadow-md shadow-primary/25 hover:bg-caramel'
                 : 'cursor-not-allowed bg-sage-100 text-sage-500/60'
             )}
           >

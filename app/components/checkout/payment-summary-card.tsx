@@ -48,11 +48,11 @@ export function PaymentSummaryCard() {
       className={cn(
         "relative overflow-hidden rounded-3xl bg-cream-100 p-5 transition-shadow duration-300 sm:p-6",
         stuck
-          ? "shadow-xl shadow-green-900/10"
-          : "shadow-md shadow-green-900/5"
+          ? "shadow-xl shadow-primary/10"
+          : "shadow-md shadow-primary/5"
       )}
     >
-      <DotPattern className="pointer-events-none absolute inset-0 h-full w-full text-green-700/[0.05]" />
+      <DotPattern className="pointer-events-none absolute inset-0 h-full w-full text-primary/[0.05]" />
 
       <div className="relative">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sage-500">
@@ -85,8 +85,8 @@ export function PaymentSummaryCard() {
 
           {promo && summary.discount > 0 && (
             <div className="flex items-center justify-between gap-4">
-              <dt className="text-green-700">Diskon ({promo.code})</dt>
-              <dd className="font-semibold tabular-nums text-green-700">
+              <dt className="text-primary">Diskon ({promo.code})</dt>
+              <dd className="font-semibold tabular-nums text-primary">
                 −<AnimatedNumber value={summary.discount} format={formatRupiah} />
               </dd>
             </div>
@@ -126,8 +126,8 @@ export function PaymentSummaryCard() {
                 className="overflow-hidden"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <dt className="text-green-700">ReBites Coin</dt>
-                  <dd className="font-semibold tabular-nums text-green-700">
+                  <dt className="text-primary">ReBites Coin</dt>
+                  <dd className="font-semibold tabular-nums text-primary">
                     −<AnimatedNumber value={summary.coinDiscount} format={formatRupiah} />
                   </dd>
                 </div>
@@ -162,12 +162,12 @@ export function PaymentSummaryCard() {
             <span className="font-display text-base font-medium text-charcoal-900">
               Total
             </span>
-            <span className="font-display text-2xl font-semibold tabular-nums text-green-700">
+            <span className="font-display text-2xl font-semibold tabular-nums text-primary">
               <AnimatedNumber value={summary.total} format={formatRupiah} />
             </span>
           </div>
 
-          <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-green-700">
+          <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-primary">
             <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
               Kamu hemat {formatRupiah(summary.totalSavings)} dan mencegah ≈
@@ -186,7 +186,7 @@ export function PaymentSummaryCard() {
           className={cn(
             "mx-auto mt-6 flex w-fit items-center whitespace-nowrap rounded-full px-8 py-3.5 text-sm font-semibold transition-colors duration-200",
             canPay
-              ? "bg-green-700 text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+              ? "bg-primary text-white shadow-lg shadow-primary/25 hover:bg-caramel"
               : "cursor-not-allowed bg-sage-100 text-sage-500"
           )}
         >
@@ -202,7 +202,7 @@ export function PaymentSummaryCard() {
         )}
 
         <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-charcoal-500">
-          <Lock className="h-3.5 w-3.5 text-green-700" />
+          <Lock className="h-3.5 w-3.5 text-primary" />
           Transaksi terenkripsi · Dana ditahan sampai pesanan diterima
         </p>
       </div>

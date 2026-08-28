@@ -23,7 +23,7 @@ export function AchievementBadgesCard() {
           <button
             type="button"
             aria-label="Lihat semua pencapaian"
-            className="text-xs font-semibold text-green-700 transition-colors hover:text-green-600"
+            className="text-xs font-semibold text-primary transition-colors hover:text-primary"
           >
             Lihat Semua
           </button>
@@ -69,7 +69,7 @@ export function AchievementBadgesCard() {
               transition={{ duration: 0.5, delay: 0.15 + index * 0.08 }}
               className="flex flex-col items-center gap-1.5 rounded-2xl bg-cream-50 px-1 py-3"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-green-700 text-cream-50 shadow-md shadow-green-700/30">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-cream-50 shadow-md shadow-primary/30">
                 <Icon className="h-5 w-5" />
               </div>
               <p className="text-center text-[10px] font-semibold leading-tight text-charcoal-900">
@@ -102,12 +102,12 @@ export function AchievementBadgesCard() {
                 <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-sage-100">
                   {reduced ? (
                     <div
-                      className="h-full rounded-full bg-green-700"
+                      className="h-full rounded-full bg-primary"
                       style={{ width: `${percent}%` }}
                     />
                   ) : (
                     <motion.div
-                      className="h-full rounded-full bg-green-700"
+                      className="h-full rounded-full bg-primary"
                       initial={{ width: 0 }}
                       whileInView={{ width: `${percent}%` }}
                       viewport={{ once: true }}

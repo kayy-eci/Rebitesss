@@ -48,7 +48,7 @@ export function LockedFeatureCard({
               ctaHref ??
               `/langganan/pembayaran?plan=${upgradeSlug}&billing=monthly`
             }
-            className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
           >
             <ShieldCheck className="h-3.5 w-3.5" />
             {ctaLabel ?? `Upgrade ke ${requiredPlanLabel}`}

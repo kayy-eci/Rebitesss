@@ -60,7 +60,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="rounded bg-cream-100 px-0.5 font-semibold text-green-700">
+      <mark className="rounded bg-cream-100 px-0.5 font-semibold text-primary">
         {text.slice(idx, idx + q.length)}
       </mark>
       {text.slice(idx + q.length)}
@@ -168,8 +168,8 @@ export function SearchFilterBar({
           isGlass
             ? "rounded-[28px] border border-white/25 bg-white/15 p-2 shadow-lg shadow-black/10 backdrop-blur-md sm:rounded-full"
             : isLight
-              ? "rounded-[28px] border border-sage-100 bg-white p-2 shadow-md shadow-forest-900/5 sm:rounded-full"
-              : "rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-forest-900/5 sm:p-3",
+              ? "rounded-[28px] border border-sage-100 bg-white p-2 shadow-md shadow-primary/5 sm:rounded-full"
+              : "rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-primary/5 sm:p-3",
         )}
       >
         <form
@@ -289,7 +289,7 @@ export function SearchFilterBar({
                           </div>
 
                           <div className="shrink-0 text-right">
-                            <p className="font-sans text-sm font-bold text-green-700">
+                            <p className="font-sans text-sm font-bold text-primary">
                               {formatRupiah(item.discountedPrice)}
                             </p>
                             <p className="font-inter text-xs text-charcoal-500 line-through">

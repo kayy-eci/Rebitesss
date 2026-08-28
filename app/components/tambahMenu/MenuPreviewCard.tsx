@@ -21,7 +21,7 @@ export function MenuPreviewCard({ form }: { form: MenuFormState }) {
 
       <div className="relative mt-3 h-44 overflow-hidden rounded-2xl border border-sage-100">
         <SmartImage src={form.photo} alt="Foto menu" />
-        <span className="absolute left-3 top-3 rounded-full bg-green-700 px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
+        <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
           Surplus
         </span>
         {percent > 0 && (
@@ -32,7 +32,7 @@ export function MenuPreviewCard({ form }: { form: MenuFormState }) {
       </div>
 
       <div className="mt-4">
-        <p className="font-display text-xl font-medium leading-snug tracking-tight text-forest-900">
+        <p className="font-display text-xl font-medium leading-snug tracking-tight text-primary">
           {form.name.trim() || 'Nama Menu'}
         </p>
         <div className="mt-1.5 flex items-center gap-2 text-xs text-sage-500">
@@ -40,13 +40,13 @@ export function MenuPreviewCard({ form }: { form: MenuFormState }) {
             {form.category}
           </span>
           <span className="flex items-center gap-1">
-            <Star className="h-3 w-3 fill-current text-green-700" />
+            <Star className="h-3 w-3 fill-current text-primary" />
             Baru
           </span>
         </div>
 
         <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <p className="font-display text-3xl font-semibold leading-none tracking-tight text-green-700">
+          <p className="font-display text-3xl font-semibold leading-none tracking-tight text-primary">
             Rp{formatPrice(form.surplusPrice)}
           </p>
           {form.normalPrice > form.surplusPrice && (

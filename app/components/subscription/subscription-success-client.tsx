@@ -106,7 +106,7 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
         <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col items-center justify-center px-4 text-center">
           <h1 className="font-display text-2xl font-medium text-charcoal-900">Langganan ReBites</h1>
           <p className="mt-2 text-sm text-charcoal-500">Pilih paket langganan terlebih dahulu.</p>
-          <Link href="/#langganan" className="mt-6 inline-flex h-11 items-center rounded-full bg-green-700 px-6 text-sm font-semibold text-white">
+          <Link href="/#langganan" className="mt-6 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-white">
             Lihat Paket
           </Link>
         </div>
@@ -157,7 +157,7 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
             </span>
             <h1 className="mt-5 font-display text-2xl font-medium tracking-tight text-charcoal-900">Pembayaran Gagal</h1>
             <p className="mt-2 text-sm leading-relaxed text-charcoal-500">Pembayaran kadaluarsa atau dibatalkan. Silakan coba lagi.</p>
-            <Link href="/dashboard/penjual/langganan" className="mt-6 inline-flex h-11 items-center rounded-full bg-green-700 px-6 text-sm font-semibold text-white">
+            <Link href="/dashboard/penjual/langganan" className="mt-6 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-white">
               Kembali ke Langganan
             </Link>
           </div>
@@ -171,7 +171,7 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
     <main className="min-h-screen bg-cream">
       <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col items-center justify-center px-4 py-10">
         <div className="w-full rounded-3xl border border-hairline bg-white p-8 text-center shadow-[0_24px_48px_-32px_rgba(42,55,49,0.35)] sm:p-10">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-700 text-white shadow-[0_16px_32px_-16px_rgba(27,77,50,0.6)]">
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-[0_16px_32px_-16px_rgba(27,77,50,0.6)]">
             <Check className="h-7 w-7" strokeWidth={3} />
           </span>
           <h1 className="mt-5 font-display text-2xl font-medium tracking-tight text-charcoal-900">Langganan Aktif!</h1>
@@ -194,11 +194,11 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
             </div>
           </dl>
           <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
-            <Link href="/dashboard/penjual" className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-green-700 px-5 text-sm font-semibold text-white shadow-sm shadow-green-700/25 hover:bg-green-600">
+            <Link href="/dashboard/penjual" className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-white shadow-sm shadow-primary/25 hover:bg-caramel">
               <LayoutDashboard className="h-4 w-4" />
               Ke Dashboard Penjual
             </Link>
-            <Link href="/home" className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-green-700 px-5 text-sm font-semibold text-green-700 hover:bg-green-50">
+            <Link href="/home" className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-primary px-5 text-sm font-semibold text-primary hover:bg-primary/10">
               <Store className="h-4 w-4" />
               Ke Beranda
             </Link>

@@ -30,7 +30,7 @@ export function PageOrnaments() {
     >
       <motion.div
         style={{ y: reduce ? 0 : y1 }}
-        className="absolute -left-32 -top-28 h-[24rem] w-[24rem] rounded-[55%_45%_60%_40%_/50%_55%_45%_50%] bg-green-700/[0.07] blur-3xl"
+        className="absolute -left-32 -top-28 h-[24rem] w-[24rem] rounded-[55%_45%_60%_40%_/50%_55%_45%_50%] bg-primary/[0.07] blur-3xl"
       />
       <motion.div
         style={{ y: reduce ? 0 : y2 }}
@@ -38,7 +38,7 @@ export function PageOrnaments() {
       />
       <motion.div
         style={{ y: reduce ? 0 : y3 }}
-        className="absolute -left-40 top-[42rem] h-[28rem] w-[28rem] rounded-[40%_60%_55%_45%_/45%_55%_40%_60%] bg-green-50 blur-3xl"
+        className="absolute -left-40 top-[42rem] h-[28rem] w-[28rem] rounded-[40%_60%_55%_45%_/45%_55%_40%_60%] bg-primary/10 blur-3xl"
       />
 
       <motion.div
@@ -50,7 +50,7 @@ export function PageOrnaments() {
 
       <motion.div
         style={{ y: reduce ? 0 : y1 }}
-        className="absolute left-6 top-80 hidden h-24 w-24 text-green-700/10 lg:block"
+        className="absolute left-6 top-80 hidden h-24 w-24 text-primary/10 lg:block"
       >
         <DotPattern className="h-full w-full" />
       </motion.div>

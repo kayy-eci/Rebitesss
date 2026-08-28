@@ -11,7 +11,7 @@ export function StoreMenus() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
             Menu Surplus
           </p>
-          <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-forest-900 sm:text-3xl">
+          <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-primary sm:text-3xl">
             Menu Surplus Hari Ini
           </h2>
           <p className="mt-1.5 text-sm text-sage-500">
@@ -26,7 +26,7 @@ export function StoreMenus() {
         ))}
 
         <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-sage-100 bg-cream-50 p-6 text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-green-700 shadow-sm">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-primary shadow-sm">
             <Utensils className="h-6 w-6" />
           </span>
           <div>
@@ -40,7 +40,7 @@ export function StoreMenus() {
           </div>
           <Link
             href="#"
-            className="inline-flex items-center gap-1.5 rounded-full border-2 border-green-700 px-4 py-2 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-full border-2 border-primary px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
           >
             Lihat Semua Menu
             <ArrowRight className="h-3.5 w-3.5" />

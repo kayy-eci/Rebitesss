@@ -44,7 +44,7 @@ export function CheckoutSuccessDialog() {
         onInteractOutside={(event) => event.preventDefault()}
       >
         <div className="flex flex-col items-center text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-green-700/10 text-green-700">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
             <CheckCircle2 className="h-8 w-8" />
           </span>
           <h2 className="mt-4 font-display text-xl font-semibold tracking-tight text-charcoal-900">
@@ -59,7 +59,7 @@ export function CheckoutSuccessDialog() {
         {successOrder && (
           <>
             <div className="mt-5 flex items-start gap-3.5 rounded-2xl border border-sage-100 bg-cream-50 p-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-700 ring-1 ring-sage-100">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-primary ring-1 ring-sage-100">
                 {successOrder.fulfillment === 'delivery' ? (
                   <Truck className="h-5 w-5" />
                 ) : (
@@ -77,7 +77,7 @@ export function CheckoutSuccessDialog() {
               </div>
             </div>
 
-            <div className="mt-3 flex items-center gap-3 rounded-2xl bg-forest-900 p-4 text-cream-50">
+            <div className="mt-3 flex items-center gap-3 rounded-2xl bg-primary p-4 text-cream-50">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-400/20 text-gold-400">
                 <Coins className="h-5 w-5" />
               </span>
@@ -93,7 +93,7 @@ export function CheckoutSuccessDialog() {
 
             <div className="flex items-center justify-between border-t border-sage-100 pt-3 text-sm mt-3">
               <span className="font-medium text-charcoal-500">Total bayar</span>
-              <span className="font-display text-base font-semibold tabular-nums text-green-700">
+              <span className="font-display text-base font-semibold tabular-nums text-primary">
                 {formatRupiah(successOrder.total)}
               </span>
             </div>
@@ -104,7 +104,7 @@ export function CheckoutSuccessDialog() {
           <button
             type="button"
             onClick={() => router.push('/riwayatPesanan')}
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-green-700 px-4 py-3 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-primary px-4 py-3 text-sm font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
           >
             <ReceiptText className="h-4 w-4" />
             Lihat Riwayat Pesanan
@@ -112,7 +112,7 @@ export function CheckoutSuccessDialog() {
           <button
             type="button"
             onClick={() => router.push('/home')}
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 transition-colors hover:bg-green-600"
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-caramel"
           >
             Kembali ke Beranda
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

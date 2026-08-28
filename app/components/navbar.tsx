@@ -9,6 +9,7 @@ import { Bell, ChevronDown, MapPin, Menu, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useCurrentUser } from "@/lib/current-user";
+import { useProfile } from "@/hooks/use-profile";
 import { useNotifications } from "@/hooks/use-notifications";
 import { AccountSidebar, type SidebarUser } from "./account-sidebar";
 
@@ -23,7 +24,7 @@ const NAV_LINKS = [
 ];
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 function scrollToId(id: string) {
   const el = document.getElementById(id);
@@ -51,6 +52,7 @@ export function ProfileNavbar({
   const [profileOpen, setProfileOpen] = useState(false);
   const [sessionUser, setSessionUser] = useState<SidebarUser | null>(null);
   const { userId } = useCurrentUser();
+  const { avatarUrl } = useProfile();
   const { unreadCount: unreadNotifCount } = useNotifications(userId, "buyer");
 
   useEffect(() => {
@@ -168,7 +170,7 @@ export function ProfileNavbar({
         "relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200",
         overDark
           ? "text-white/80 hover:bg-white/10 hover:text-white"
-          : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+          : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
         FOCUS_RING,
       )}
     >
@@ -179,7 +181,7 @@ export function ProfileNavbar({
             "absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-colors duration-500",
             overDark
               ? "bg-gold-500 text-charcoal-900"
-              : "bg-green-700 text-white",
+              : "bg-primary text-white",
           )}
         >
           {badge}
@@ -196,8 +198,8 @@ export function ProfileNavbar({
             className={cn(
               "flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
               overDark
-                ? "border-white/15 bg-forest-dark/75 text-white"
-                : "border-hairline/70 bg-cream/80 text-forest-dark",
+                ? "border-white/15 bg-primary/75 text-white"
+                : "border-hairline/70 bg-cream/80 text-primary",
             )}
           >
             <Link
@@ -217,7 +219,7 @@ export function ProfileNavbar({
               <span
                 className={cn(
                   "font-sans text-xl font-bold tracking-tight transition-colors duration-500",
-                  overDark ? "text-white" : "text-green-700",
+                  overDark ? "text-white" : "text-primary",
                 )}
               >
                 ReBites
@@ -239,10 +241,10 @@ export function ProfileNavbar({
                       active === link.id
                         ? overDark
                           ? "bg-white/15 font-semibold text-white"
-                          : "bg-cream-100 font-semibold text-green-700"
+                          : "bg-cream-100 font-semibold text-primary"
                         : overDark
                           ? "text-white/75 hover:text-white"
-                          : "text-charcoal-500 hover:text-green-700",
+                          : "text-charcoal-500 hover:text-primary",
                       FOCUS_RING,
                     )}
                   >
@@ -264,14 +266,14 @@ export function ProfileNavbar({
                       "flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200",
                       overDark
                         ? "text-white/80 hover:bg-white/10 hover:text-white"
-                        : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+                        : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
                       FOCUS_RING,
                     )}
                   >
                     <MapPin
                       className={cn(
                         "h-4 w-4 transition-colors duration-500",
-                        overDark ? "text-gold-500" : "text-green-700",
+                        overDark ? "text-gold-500" : "text-primary",
                       )}
                     />
                     <span className="max-w-[100px] truncate">{location}</span>
@@ -298,7 +300,7 @@ export function ProfileNavbar({
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -6 }}
                           transition={{ duration: 0.18 }}
-                          className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-sage-100 bg-white p-1.5 text-forest-dark shadow-xl"
+                          className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-sage-100 bg-white p-1.5 text-primary shadow-xl"
                         >
                           {LOCATIONS.map((loc) => (
                             <li key={loc}>
@@ -311,8 +313,8 @@ export function ProfileNavbar({
                                 className={cn(
                                   "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                                   loc === location
-                                    ? "bg-cream-100 font-semibold text-green-700"
-                                    : "text-charcoal-500 hover:bg-cream-50 hover:text-green-700",
+                                    ? "bg-cream-100 font-semibold text-primary"
+                                    : "text-charcoal-500 hover:bg-cream-50 hover:text-primary",
                                 )}
                               >
                                 <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -341,7 +343,13 @@ export function ProfileNavbar({
                   label="Profil saya"
                   onClick={() => setProfileOpen(true)}
                 >
-                  <User className="h-5 w-5" />
+                  {avatarUrl ? (
+                    <span className="relative h-7 w-7 overflow-hidden rounded-full ring-1 ring-black/5">
+                      <Image src={avatarUrl} alt="Foto profil" fill className="object-cover" unoptimized />
+                    </span>
+                  ) : (
+                    <User className="h-5 w-5" />
+                  )}
                 </IconButton>
               </div>
 
@@ -352,7 +360,7 @@ export function ProfileNavbar({
                 onClick={() => setDrawerOpen((v) => !v)}
                 className={cn(
                   "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
-                  overDark ? "text-white" : "text-forest-dark",
+                  overDark ? "text-white" : "text-primary",
                   FOCUS_RING,
                 )}
               >
@@ -375,7 +383,7 @@ export function ProfileNavbar({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setDrawerOpen(false)}
-              className="fixed inset-0 z-[55] bg-forest-900/40 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-[55] bg-primary/40 backdrop-blur-sm lg:hidden"
             />
             <motion.aside
               initial={{ x: "100%" }}
@@ -393,7 +401,7 @@ export function ProfileNavbar({
                     height={36}
                     className="h-9 w-9 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
                   />
-                  <span className="font-sans text-xl font-bold text-green-700">
+                  <span className="font-sans text-xl font-bold text-primary">
                     ReBites
                   </span>
                 </span>
@@ -419,8 +427,8 @@ export function ProfileNavbar({
                       className={cn(
                         "block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150",
                         active === link.id
-                          ? "bg-cream-100 font-semibold text-green-700"
-                          : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+                          ? "bg-cream-100 font-semibold text-primary"
+                          : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
                       )}
                     >
                       {link.label}
@@ -433,14 +441,14 @@ export function ProfileNavbar({
                 <a
                   href="/notifikasi/pembeli"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-500 hover:bg-cream-100 hover:text-green-700"
+                  className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-500 hover:bg-cream-100 hover:text-primary"
                 >
                   <span className="flex items-center gap-2">
                     <Bell className="h-4 w-4" />
                     Notifikasi
                   </span>
                   {unreadNotifCount > 0 && (
-                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-green-700 px-1 text-[10px] font-bold text-white">
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white">
                       {unreadNotifCount}
                     </span>
                   )}
@@ -460,7 +468,7 @@ export function ProfileNavbar({
                       ],
                     );
                   }}
-                  className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700"
+                  className="mt-2 flex items-center gap-2 text-sm font-medium text-primary"
                 >
                   <MapPin className="h-4 w-4" />
                   {location}

@@ -17,11 +17,11 @@ export function PromoCodeInput() {
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="flex items-center justify-between rounded-xl bg-green-700/[0.06] px-3.5 py-2.5"
+          className="flex items-center justify-between rounded-xl bg-primary/[0.06] px-3.5 py-2.5"
         >
           <div className="flex items-center gap-2">
-            <BadgePercent className="h-4 w-4 text-green-700" />
-            <span className="text-sm font-semibold text-green-700">
+            <BadgePercent className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-primary">
               {promo.code} berlaku · diskon {promo.percentOff}%
             </span>
           </div>
@@ -29,7 +29,7 @@ export function PromoCodeInput() {
             type="button"
             onClick={clearPromo}
             aria-label="Hapus kode promo"
-            className="rounded-full p-1 text-sage-500 transition-colors hover:bg-sage-100 hover:text-green-700"
+            className="rounded-full p-1 text-sage-500 transition-colors hover:bg-sage-100 hover:text-primary"
           >
             <X className="h-4 w-4" />
           </button>
@@ -40,7 +40,7 @@ export function PromoCodeInput() {
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-700 transition-colors hover:text-green-600"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary transition-colors hover:text-primary"
           >
             <BadgePercent className="h-4 w-4" />
             {open ? 'Tutup kode promo' : 'Punya Kode Promo?'}
@@ -70,12 +70,12 @@ export function PromoCodeInput() {
                     placeholder="Masukkan kode promo"
                     aria-label="Kode promo"
                     aria-invalid={promoError !== null}
-                    className="w-full rounded-xl border border-sage-100 bg-white px-3.5 py-2.5 text-sm uppercase text-charcoal-900 placeholder:normal-case placeholder:text-sage-500 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-700/20"
+                    className="w-full rounded-xl border border-sage-100 bg-white px-3.5 py-2.5 text-sm uppercase text-charcoal-900 placeholder:normal-case placeholder:text-sage-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                   <button
                     type="button"
                     onClick={applyPromo}
-                    className="shrink-0 rounded-xl bg-green-700 px-4 text-sm font-semibold text-white transition-colors hover:bg-green-600"
+                    className="shrink-0 rounded-xl bg-primary px-4 text-sm font-semibold text-white transition-colors hover:bg-caramel"
                   >
                     Gunakan
                   </button>
@@ -90,7 +90,7 @@ export function PromoCodeInput() {
                   </p>
                 ) : (
                   <p className="mt-2 flex items-center gap-1.5 text-xs text-sage-500">
-                    <Check className="h-3.5 w-3.5 text-green-600" />
+                    <Check className="h-3.5 w-3.5 text-primary" />
                     Coba kode <span className="font-semibold">REBITES26</span>{' '}
                     untuk diskon 5%
                   </p>

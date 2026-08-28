@@ -45,13 +45,13 @@ export function FaqSection() {
       <div className="relative mx-auto max-w-[1080px] px-5 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-xl text-center">
           <Reveal delay={0.05}>
-            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-forest">
+            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-primary">
               FAQ
             </p>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3.1rem)] font-light leading-[1.08] tracking-[-0.02em] text-forest-dark">
+            <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3.1rem)] font-light leading-[1.08] tracking-[-0.02em] text-primary">
               Punya pertanyaan?{' '}
               <span className="italic text-caramel">Kami siap membantu.</span>
             </h2>
@@ -85,7 +85,7 @@ export function FaqSection() {
                     aria-expanded={isOpen}
                     className="flex w-full items-center justify-between gap-4 text-left"
                   >
-                    <span className="font-sans text-base font-semibold tracking-tight text-forest-dark">
+                    <span className="font-sans text-base font-semibold tracking-tight text-primary">
                       {faq.q}
                     </span>
 
@@ -93,8 +93,8 @@ export function FaqSection() {
                       className={cn(
                         'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all duration-300',
                         isOpen
-                          ? 'rotate-45 bg-forest-dark text-white'
-                          : 'bg-cream-200/70 text-forest-dark',
+                          ? 'rotate-45 bg-primary text-white'
+                          : 'bg-cream-200/70 text-primary',
                       )}
                     >
                       <Plus className="h-4 w-4" />
@@ -126,7 +126,7 @@ export function FaqSection() {
         </div>
 
         <Reveal delay={0.2}>
-          <div className="mt-10 flex flex-col items-center justify-between gap-6 rounded-[1.5rem] bg-forest-dark px-8 py-8 text-center sm:flex-row sm:text-left lg:px-10">
+          <div className="mt-10 flex flex-col items-center justify-between gap-6 rounded-[1.5rem] bg-primary px-8 py-8 text-center sm:flex-row sm:text-left lg:px-10">
             <div className="flex items-center gap-4">
               <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10 sm:flex">
                 <Mail className="h-5 w-5 text-caramel" />
@@ -145,7 +145,7 @@ export function FaqSection() {
 
             <a
               href="mailto:halo@rebites.id"
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 font-inter text-sm font-semibold text-forest-dark shadow-[0_16px_32px_-18px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel hover:text-white"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 font-inter text-sm font-semibold text-primary shadow-[0_16px_32px_-18px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel hover:text-white"
             >
               Hubungi Kami
 

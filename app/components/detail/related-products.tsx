@@ -12,7 +12,7 @@ export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
     <section className="pt-20">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <h2 className="font-sans text-2xl font-bold tracking-tight text-green-700 sm:text-3xl">
+          <h2 className="font-sans text-2xl font-bold tracking-tight text-primary sm:text-3xl">
             Selamatkan Juga
           </h2>
           <p className="mt-2 max-w-md font-inter text-sm leading-relaxed text-charcoal-500">
@@ -22,7 +22,7 @@ export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
         </div>
         <Link
           href="/homePage"
-          className="hidden items-center gap-1.5 font-inter text-sm font-semibold text-green-700 transition-colors hover:text-green-600 sm:inline-flex"
+          className="hidden items-center gap-1.5 font-inter text-sm font-semibold text-primary transition-colors hover:text-primary sm:inline-flex"
         >
           Lihat Semua
           <ArrowRight className="h-4 w-4" />
@@ -60,7 +60,7 @@ export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
                   {product.name}
                 </p>
                 <div className="mt-2 flex items-baseline gap-2">
-                  <span className="font-sans text-base font-bold text-green-700">
+                  <span className="font-sans text-base font-bold text-primary">
                     Rp{formatIDR(product.discountedPrice)}
                   </span>
                   <span className="font-inter text-xs text-charcoal-500 line-through">

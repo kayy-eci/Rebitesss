@@ -25,7 +25,7 @@ export function InfoGrid({ product }: { product: ProductDetail }) {
       {items.map(({ icon: Icon, label, value }) => (
         <StaggerItem key={label} className="h-full">
           <div className="flex h-full items-start gap-4 rounded-2xl border border-sage-100 bg-white p-5 transition-shadow duration-300 hover:shadow-[0_18px_40px_-28px_rgba(47,66,53,0.4)]">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sage-100 text-green-700">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sage-100 text-primary">
               <Icon className="h-5 w-5" />
             </span>
             <div className="min-w-0">

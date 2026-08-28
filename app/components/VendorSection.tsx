@@ -11,7 +11,7 @@ import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
 import { useSellerPlan } from '@/lib/seller-plan';
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
 function isOpenNow(openHours: string): boolean {
   const match = openHours.match(/(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/);
@@ -109,7 +109,7 @@ export function VendorSection() {
             disabled={!canLeft}
             aria-label="Geser rekomendasi ke kiri"
             className={cn(
-              'absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-forest-900/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11',
+              'absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11',
               !canLeft && 'cursor-default opacity-35 hover:bg-white hover:text-charcoal-900',
               FOCUS_RING
             )}
@@ -171,7 +171,7 @@ export function VendorSection() {
             disabled={!canRight}
             aria-label="Geser rekomendasi ke kanan"
             className={cn(
-              'absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-forest-900/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11',
+              'absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11',
               !canRight && 'cursor-default opacity-35 hover:bg-white hover:text-charcoal-900',
               FOCUS_RING
             )}

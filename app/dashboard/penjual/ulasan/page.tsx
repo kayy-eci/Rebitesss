@@ -108,7 +108,7 @@ export default function UlasanPage() {
         transition={{ duration: 0.35, ease: 'easeOut' }}
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">Dashboard Penjual</p>
-        <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
+        <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
           Ulasan Pelanggan
         </h1>
         <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-sage-500">
@@ -130,7 +130,7 @@ export default function UlasanPage() {
                   onClick={() => setFilter(f)}
                   className={cn(
                     'rounded-full px-4 py-2 text-xs font-semibold transition-colors',
-                    filter === f ? 'bg-green-700 text-white' : 'border border-sage-100 bg-white text-charcoal-500 hover:text-charcoal-900'
+                    filter === f ? 'bg-primary text-white' : 'border border-sage-100 bg-white text-charcoal-500 hover:text-charcoal-900'
                   )}
                 >
                   {f === 'all' ? 'Semua' : `${f}★`}
@@ -148,7 +148,7 @@ export default function UlasanPage() {
             <Card className="py-10 text-center text-sm text-sage-500">Memuat ulasan...</Card>
           ) : filtered.length === 0 ? (
             <Card className="flex flex-col items-center justify-center gap-4 py-14 text-center">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-green-700">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-primary">
                 <MessageSquare className="h-6 w-6" />
               </span>
               <div className="max-w-sm">

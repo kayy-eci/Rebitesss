@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useLikedFoods } from "@/hooks/use-liked-foods";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?: (id: string) => void }) {
   const { isLiked, toggle } = useLikedFoods();
@@ -27,7 +27,7 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
           handleOpen();
         }
       }}
-      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-forest-900/10 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
@@ -92,7 +92,7 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
               {formatRupiah(item.originalPrice)}
             </span>
           )}
-          <span className="text-[16px] font-bold leading-none text-green-700">
+          <span className="text-[16px] font-bold leading-none text-primary">
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>

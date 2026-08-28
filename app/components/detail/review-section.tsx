@@ -17,7 +17,7 @@ export function ReviewSection({
     <section id="ulasan" className="scroll-mt-28 pt-20">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="font-sans text-2xl font-bold tracking-tight text-green-700 sm:text-3xl">
+          <h2 className="font-sans text-2xl font-bold tracking-tight text-primary sm:text-3xl">
             Apa Kata Mereka
           </h2>
           <p className="mt-2 max-w-md font-inter text-sm leading-relaxed text-charcoal-500">

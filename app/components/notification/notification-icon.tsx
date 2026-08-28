@@ -36,8 +36,8 @@ const ICON_CONFIG: Record<
   },
   payment_success: {
     icon: CreditCard,
-    bg: 'bg-green-50',
-    color: 'text-green-700',
+    bg: 'bg-primary/10',
+    color: 'text-primary',
   },
   order_delivering: {
     icon: Truck,
@@ -47,7 +47,7 @@ const ICON_CONFIG: Record<
   order_completed: {
     icon: PackageCheck,
     bg: 'bg-sage-100',
-    color: 'text-green-700',
+    color: 'text-primary',
   },
   promo: {
     icon: Gift,
@@ -56,8 +56,8 @@ const ICON_CONFIG: Record<
   },
   incoming_order: {
     icon: ShoppingBag,
-    bg: 'bg-green-50',
-    color: 'text-green-700',
+    bg: 'bg-primary/10',
+    color: 'text-primary',
   },
   new_review: {
     icon: Star,
@@ -71,8 +71,8 @@ const ICON_CONFIG: Record<
   },
   subscription_renewed: {
     icon: RefreshCw,
-    bg: 'bg-green-50',
-    color: 'text-green-700',
+    bg: 'bg-primary/10',
+    color: 'text-primary',
   },
   subscription_expiring: {
     icon: AlertTriangle,
