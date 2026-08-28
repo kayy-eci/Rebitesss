@@ -91,13 +91,15 @@ export function VendorSection() {
     >
       <SoftBlob className="-right-24 top-1/4 h-80 w-80 bg-sage-100/60" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div>
-          <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
-            Rekomendasi buat kamu sayang
-          </h2>
-          <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
-            Toko lokal yang rutin menyelamatkan makanan surplusnya setiap hari. Dukung mereka.
-          </p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
+              Rekomendasi toko buat kamu
+            </h2>
+            <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
+              Toko lokal yang rutin menyelamatkan makanan surplusnya setiap hari. Dukung mereka.
+            </p>
+          </div>
         </div>
 
         <div className="relative">

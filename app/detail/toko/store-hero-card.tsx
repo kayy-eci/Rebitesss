@@ -202,12 +202,6 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                   )}
                   {following ? "Mengikuti" : "Ikuti Toko"}
                 </button>
-                <a
-                  href="#menu-surplus"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/25 transition-colors hover:bg-green-600"
-                >
-                  Pesan Surplus
-                </a>
               </div>
             </div>
 
