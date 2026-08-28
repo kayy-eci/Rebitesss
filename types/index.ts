@@ -95,7 +95,6 @@ export interface Order {
   note: string | null;
   payment_status: PaymentStatus;
   order_status: OrderStatus;
-  midtrans_order_id: string | null;
   created_at: string;
 }
 

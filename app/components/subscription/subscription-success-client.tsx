@@ -42,20 +42,27 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
       if (!userId) return;
 
       // Cari umkm milik user
-      const { data: umkm } = await supabase
+      const { data: umkm, error: umkmError } = await supabase
         .from('umkm_profiles')
         .select('id')
         .eq('user_id', userId)
         .maybeSingle();
+      if (umkmError) {
+        console.error('[subscription-success] gagal memuat UMKM:', umkmError.message);
+      }
       if (!umkm || cancelled) return;
       const umkmId = (umkm as Record<string, string>).id;
 
-      const { data: subs } = await supabase
+      const { data: subs, error: subsError } = await supabase
         .from('subscriptions')
         .select('status, xendit_invoice_id')
         .eq('umkm_id', umkmId)
         .order('created_at', { ascending: false })
         .limit(5);
+      if (subsError) {
+        console.error('[subscription-success] gagal memuat status langganan:', subsError.message);
+        return;
+      }
 
       if (cancelled || !subs) return;
       const rows = subs as Array<Record<string, string>>;

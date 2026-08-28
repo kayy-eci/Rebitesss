@@ -154,11 +154,11 @@ export async function POST(req: NextRequest) {
     if (product.umkm_id) {
       const { data: vendor } = await anon
         .from('umkm_profiles')
-        .select('name, address, open_hours, slug')
+        .select('business_name, address, open_hours, slug')
         .eq('id', product.umkm_id)
         .maybeSingle();
       if (vendor) {
-        vendorName = (vendor as Record<string, unknown>).name as string ?? vendorName;
+        vendorName = (vendor as Record<string, unknown>).business_name as string ?? vendorName;
         vendorAddress = (vendor as Record<string, unknown>).address as string | null;
         vendorOpenHours = (vendor as Record<string, unknown>).open_hours as string | null;
       }
@@ -416,7 +416,7 @@ export async function POST(req: NextRequest) {
     // Simpan invoice id
     await serviceClient
       .from('orders')
-      .update({ xendit_invoice_id: invoice.id, midtrans_order_id: invoice.id })
+      .update({ xendit_invoice_id: invoice.id })
       .eq('order_code', orderCode);
 
     return NextResponse.json({

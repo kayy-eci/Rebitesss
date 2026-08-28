@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     // Cari UMKM milik user
     const { data: umkm } = await service
       .from('umkm_profiles')
-      .select('id, slug, name')
+      .select('id, slug, business_name')
       .eq('user_id', user.id)
       .maybeSingle();
 

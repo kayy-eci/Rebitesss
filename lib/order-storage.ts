@@ -149,13 +149,23 @@ export async function getSellerOrders(): Promise<StoredOrder[]> {
 }
 
 export async function getOrderById(orderId: string): Promise<StoredOrder | undefined> {
+  // Pastikan session sudah di-restore SEBELUM query. Setelah redirect balik
+  // dari Xendit, query yang terlalu dini berjalan sebagai anon sehingga RLS
+  // "orders_select_participants" (khusus authenticated) memblokir baris —
+  // pesanan tampak "tidak ditemukan" padahal ada di database.
+  await supabase.auth.getSession();
+
   const { data, error } = await supabase
     .from('orders')
     .select('*')
     .eq('order_code', orderId)
     .maybeSingle();
-  if (error || !data) return undefined;
-  return rowToStoredOrder(data);
+  if (error) {
+    console.error('[order-storage] gagal memuat pesanan:', error.message);
+    return undefined;
+  }
+  if (data) return rowToStoredOrder(data);
+  return undefined;
 }
 
 const PATCH_COLUMN_MAP: Record<string, string> = {

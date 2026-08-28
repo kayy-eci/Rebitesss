@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ImageIcon, Store } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { AlertTriangle, ImageIcon, Store, Trash2 } from "lucide-react";
 import { SellerShell } from "@/app/components/dashboardPenjual/SellerShell";
 import { Card } from "@/app/components/dashboardPenjual/Card";
 import {
@@ -9,6 +10,7 @@ import {
   setStoreOpenHours,
   updateStoreSettings,
 } from "@/lib/store-settings-storage";
+import { SELLER_STATUS_UPDATED_EVENT } from "@/hooks/use-seller-status";
 import { supabase } from "@/lib/supabase";
 
 function inputClass() {
@@ -16,6 +18,7 @@ function inputClass() {
 }
 
 export default function PengaturanTokoPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -29,6 +32,11 @@ export default function PengaturanTokoPage() {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
+
+  // Hapus toko
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -83,17 +91,26 @@ export default function PengaturanTokoPage() {
         const uid = session?.user.id;
         if (!uid) throw new Error("Sesi berakhir. Silakan masuk kembali.");
 
-        const ext = logoFile.name.split(".").pop() ?? "png";
-        const path = `logos/${uid}.${ext}`;
+        const ext = (logoFile.name.split(".").pop() ?? "png").toLowerCase();
+        // Path unik per upload: hindari kebutuhan policy UPDATE storage
+        // (upsert file dengan path sama bisa diblokir RLS) dan menghindari
+        // cache browser terhadap URL public yang lama.
+        const path = `logos/${uid}-${Date.now()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("umkm-logos")
-          .upload(path, logoFile, { upsert: true });
-        if (!uploadError) {
-          const {
-            data: { publicUrl },
-          } = supabase.storage.from("umkm-logos").getPublicUrl(path);
-          finalImage = publicUrl;
+          .upload(path, logoFile, {
+            contentType: logoFile.type || "image/png",
+          });
+        if (uploadError) {
+          // JANGAN ditelan diam-diam — user harus tahu logo gagal diganti.
+          throw new Error(
+            `Gagal mengunggah logo: ${uploadError.message}`
+          );
         }
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("umkm-logos").getPublicUrl(path);
+        finalImage = publicUrl;
       }
 
       const ok = await updateStoreSettings({
@@ -115,6 +132,34 @@ export default function PengaturanTokoPage() {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan.");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDeleteStore() {
+    if (deleting) return;
+    setDeleting(true);
+    setDeleteError("");
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const uid = session?.user.id;
+      if (!uid) throw new Error("Sesi berakhir. Silakan masuk kembali.");
+
+      // Hapus profil toko milik sesi aktif (RLS: umkm_delete_own).
+      // Produk, langganan, ulasan, follow, dan pesanan terkait ikut
+      // terhapus otomatis via ON DELETE CASCADE di database.
+      const { error: delError } = await supabase
+        .from("umkm_profiles")
+        .delete()
+        .eq("user_id", uid);
+      if (delError) throw new Error(delError.message);
+
+      window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
+      router.replace("/home");
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Terjadi kesalahan.");
+      setDeleting(false);
     }
   }
 
@@ -275,6 +320,76 @@ export default function PengaturanTokoPage() {
               </button>
             </form>
           )}
+        </Card>
+
+        {/* Zona bahaya — hapus toko */}
+        <Card className="mt-4 border-red-200">
+          <div className="flex items-start gap-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500">
+              <AlertTriangle className="h-4 w-4" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-display text-sm font-semibold text-red-600">
+                Hapus Toko
+              </h2>
+              <p className="mt-1 text-[12px] leading-relaxed text-charcoal-500">
+                Menghapus toko akan menghilangkan seluruh menu, pesanan,
+                ulasan, pengikut, dan langganan yang terhubung dengannya.
+                Tindakan ini <strong className="text-red-500">tidak dapat
+                dibatalkan</strong>. Akun kamu tetap ada dan bisa mendaftarkan
+                toko baru kapan saja.
+              </p>
+
+              {deleteError && (
+                <p
+                  role="alert"
+                  className="mt-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-600"
+                >
+                  {deleteError}
+                </p>
+              )}
+
+              {!confirmingDelete ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDeleteError("");
+                    setConfirmingDelete(true);
+                  }}
+                  className="mt-3 inline-flex items-center gap-2 rounded-md border border-red-300 bg-white px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-red-500 transition-colors hover:bg-red-50"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Hapus Toko
+                </button>
+              ) : (
+                <div className="mt-3 rounded-xl border border-red-200 bg-red-50/60 p-3">
+                  <p className="text-[12px] font-semibold text-red-600">
+                    Yakin ingin menghapus toko{" "}
+                    {storeName ? `“${storeName}”` : "ini"} secara permanen?
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      disabled={deleting}
+                      onClick={() => void handleDeleteStore()}
+                      className="inline-flex items-center gap-2 rounded-md bg-red-500 px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      {deleting ? "Menghapus..." : "Ya, Hapus Permanen"}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={deleting}
+                      onClick={() => setConfirmingDelete(false)}
+                      className="rounded-md border border-red-200 bg-white px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal-700 transition-colors hover:bg-cream-50 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      Batal
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </Card>
       </div>
     </SellerShell>

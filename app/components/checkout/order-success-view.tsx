@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { SmartImage } from '@/app/components/SmartImage';
 import { formatRupiah } from '@/lib/data';
-import { getOrderById } from '@/lib/order-storage';
+import { getOrderById, rowToStoredOrder } from '@/lib/order-storage';
 import { supabase } from '@/lib/supabase';
 import type { StoredOrder } from '@/lib/types';
 import { AnimatedNumber } from './animated-number';
@@ -63,15 +63,70 @@ export function OrderSuccessView() {
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(true);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const retryRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!orderId) return;
     let mounted = true;
-    getOrderById(orderId).then((result) => {
-      if (mounted) setOrder(result ?? null);
-    });
+    let attempts = 0;
+
+    // Coba muat pesanan: (1) langsung via client (RLS participants),
+    // (2) fallback ke API service-role yang bypass RLS.
+    const loadOrder = async (): Promise<boolean> => {
+      const direct = await getOrderById(orderId);
+      if (direct) {
+        if (mounted) setOrder(direct);
+        return true;
+      }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (token) {
+        try {
+          const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (res.ok) {
+            const json = (await res.json().catch(() => null)) as
+              | { order?: Record<string, unknown> }
+              | null;
+            if (json?.order) {
+              if (mounted) setOrder(rowToStoredOrder(json.order));
+              return true;
+            }
+          }
+        } catch {
+          // fallback gagal — coba lagi di iterasi berikutnya
+        }
+      }
+      return false;
+    };
+
+    const run = async () => {
+      const found = await loadOrder();
+      if (found || !mounted) return;
+      // Session bisa saja masih dalam proses restore setelah redirect
+      // balik dari Xendit — retry beberapa kali sebelum menyatakan gagal.
+      const maxAttempts = 5;
+      retryRef.current = setInterval(async () => {
+        if (!mounted && retryRef.current) {
+          clearInterval(retryRef.current);
+          return;
+        }
+        const ok = await loadOrder();
+        attempts += 1;
+        if (ok || attempts >= maxAttempts) {
+          if (retryRef.current) clearInterval(retryRef.current);
+          if (!ok && mounted) setOrder(null); // benar-benar tidak ditemukan
+        }
+      }, 2000);
+    };
+
+    void run();
     return () => {
       mounted = false;
+      if (retryRef.current) clearInterval(retryRef.current);
     };
   }, [orderId]);
 

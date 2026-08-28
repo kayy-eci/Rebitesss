@@ -21,8 +21,13 @@ export function PaymentMethodList() {
           Metode pembayaran
         </h3>
         <span className="inline-flex items-center gap-1.5 text-xs text-sage-500">
+<<<<<<< HEAD
           <ShieldCheck className="h-4 w-4 text-primary" />
           Diproses aman lewat Midtrans
+=======
+          <ShieldCheck className="h-4 w-4 text-green-700" />
+          Diproses aman lewat Xendit
+>>>>>>> d0863e72367b4f2e60be2378a497824ff4b965bc
         </span>
       </div>
 
