@@ -218,6 +218,8 @@ export default function PenjualRegisterForm() {
   const [billing, setBilling] = useState<BillingCycle>('monthly');
   const [payProcessing, setPayProcessing] = useState(false);
   const [payError, setPayError] = useState<string | null>(null);
+  // Info untuk user yang sudah punya toko tapi belum berlangganan aktif.
+  const [existingStoreNotice, setExistingStoreNotice] = useState<string | null>(null);
 
   const step1Form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -264,6 +266,45 @@ export default function PenjualRegisterForm() {
         setSessionUser({ fullName, email });
         step1Form.setValue("fullName", fullName);
         step1Form.setValue("email", email);
+
+        // User yang SUDAH punya toko tidak boleh diminta register ulang.
+        const { getSellerUmkm } = await import("@/lib/product-storage");
+        const existingUmkm = await getSellerUmkm();
+        if (cancelled) return;
+
+        if (existingUmkm) {
+          const { getActiveSubscription } = await import(
+            "@/lib/subscription-storage"
+          );
+          const activeSub = await getActiveSubscription();
+          if (cancelled) return;
+          if (activeSub) {
+            // Toko + langganan aktif → langsung dashboard.
+            window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
+            router.replace("/dashboard/penjual");
+            return;
+          }
+          // Toko ada tapi belum/tidak berlangganan aktif → langsung Step 3.
+          setExistingStoreNotice(
+            `Tokomu "${existingUmkm.businessName}" sudah terdaftar. Silakan pilih paket langganan untuk melanjutkan berjualan.`
+          );
+          setDirection(1);
+          setStep(3);
+          setSessionReady(true);
+          return;
+        }
+
+        // Belum punya toko — dukung deep link ?step=3 dari guard dashboard
+        // (sudah punya toko tapi belum bayar; berjaga bila deteksi di atas meleset).
+        if (typeof window !== "undefined") {
+          const params = new URLSearchParams(window.location.search);
+          const stepParam = Number(params.get("step"));
+          if (stepParam === 3) {
+            setDirection(1);
+            setStep(3);
+          }
+        }
+
         setSessionReady(true);
       } catch {
         if (!cancelled) router.replace("/auth/login");
@@ -987,6 +1028,15 @@ export default function PenjualRegisterForm() {
               exit="exit"
               className="space-y-4"
             >
+              {existingStoreNotice && (
+                <p
+                  role="status"
+                  className="rounded-lg border border-[#225138]/25 bg-[#F0F4EC] px-3 py-2 font-sans text-[12px] leading-relaxed text-[#225138]"
+                >
+                  {existingStoreNotice}
+                </p>
+              )}
+
               {/* Billing toggle */}
               <div className="flex justify-center">
                 <div className="inline-flex items-center rounded-full border border-[#DEDACF] bg-white p-1">

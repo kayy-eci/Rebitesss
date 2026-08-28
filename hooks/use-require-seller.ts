@@ -38,8 +38,9 @@ export function useRequireSeller(): {
         const activeSub = await getActiveSubscription();
         if (!mounted) return;
         if (!activeSub) {
-          // Sudah punya toko tapi belum paid → paksa Step 3 pilih paket
-          router.replace("/auth/register/penjual");
+          // Sudah punya toko tapi belum paid → langsung ke Step 3 pilih paket
+          // (bukan register ulang dari awal).
+          router.replace("/auth/register/penjual?step=3");
           return;
         }
         setUmkm(profile);
