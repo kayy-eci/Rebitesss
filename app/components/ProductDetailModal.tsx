@@ -6,23 +6,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  ArrowUpRight,
   Minus,
   Plus,
   Star,
+  Store,
   X,
-  Clock,
-  MapPin,
-  Truck,
-  Shield,
-  ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatIDR, type ProductDetail } from "@/app/detail/product/data";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-
-const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function ProductDetailModal({
   product,
@@ -32,13 +26,11 @@ export function ProductDetailModal({
   onClose: () => void;
 }) {
   const router = useRouter();
-  const [imageIdx, setImageIdx] = useState(0);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
-
 
   useEffect(() => {
     prevFocusRef.current = document.activeElement as HTMLElement;
@@ -66,7 +58,6 @@ export function ProductDetailModal({
     };
 
     document.addEventListener("keydown", handleKey);
-
     requestAnimationFrame(() => {
       dialogRef.current
         ?.querySelector<HTMLElement>("button, [tabindex]")
@@ -87,7 +78,9 @@ export function ProductDetailModal({
     [onClose],
   );
 
-  const handleAddToCart = useCallback(() => {
+  const handleBuy = useCallback(() => {
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 1400);
     onClose();
     router.push(
       `/detail/pesanan?product=${encodeURIComponent(product.id)}&qty=${qty}`,
@@ -96,6 +89,8 @@ export function ProductDetailModal({
 
   const savings = product.originalPrice - product.discountedPrice;
   const savingsPercent = Math.round((savings / product.originalPrice) * 100);
+  const primaryImage = product.images[0];
+  const lowStock = product.stockRemaining <= 3;
 
   return (
     <AnimatePresence>
@@ -105,264 +100,177 @@ export function ProductDetailModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-charcoal-900/40 p-4 backdrop-blur-sm sm:p-6"
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-md sm:p-6"
         role="dialog"
         aria-modal="true"
         aria-label={`Detail produk ${product.title}`}
       >
         <motion.div
           ref={dialogRef}
-          initial={{ opacity: 0, scale: 0.96, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 12 }}
-          transition={{ duration: 0.3, ease: EASE }}
-          className="relative flex h-full max-h-[90vh] w-full max-w-[1100px] flex-col overflow-hidden rounded-[28px] border border-sage-100 bg-cream-50 shadow-[0_40px_80px_-20px_rgba(47,66,53,0.35)] lg:max-h-[760px] lg:flex-row"
+          initial={{ opacity: 0, y: 24, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.97 }}
+          transition={{ duration: 0.35, ease: EASE }}
+          className="relative flex w-full max-w-[900px] flex-col overflow-hidden rounded-[32px] bg-white shadow-[0_60px_120px_-30px_rgba(0,0,0,0.35)] lg:max-h-[640px] lg:flex-row"
         >
-          { }
+          {/* Close */}
           <button
             type="button"
             aria-label="Tutup detail produk"
             onClick={onClose}
-            className={cn(
-              "absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-charcoal-900 shadow-md backdrop-blur-sm transition-all duration-200 hover:bg-white hover:shadow-lg hover:scale-105",
-              FOCUS_RING,
-            )}
+            className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-black/5 text-charcoal-900 backdrop-blur-sm transition-all hover:bg-black/10 hover:scale-110 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            <X className="h-5 w-5" />
+            <X className="h-[18px] w-[18px]" strokeWidth={2.5} />
           </button>
 
-          { }
-          <div className="relative flex flex-col lg:w-[45%]">
-            { }
-            <div className="relative aspect-square flex-1 bg-[#F5E7CF] p-6 sm:p-10">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={imageIdx}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="relative h-full w-full"
-                >
-                  <Image
-                    src={product.images[imageIdx]}
-                    alt={`${product.title} — foto ${imageIdx + 1}`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 45vw"
-                    priority
-                    className="object-contain"
-                  />
-                </motion.div>
-              </AnimatePresence>
-
-              { }
-              <div className="absolute left-4 top-4 rounded-full bg-[#E53935] px-3 py-1.5 text-xs font-bold text-white shadow-lg">
+          {/* LEFT — Product Image — ukuran seragam + ujung rounded */}
+          <div className="relative flex w-full items-center justify-center bg-white px-8 py-10 sm:px-10 sm:py-12 lg:w-[55%] lg:py-8">
+            <div className="relative z-10 aspect-square w-full max-w-[380px] overflow-hidden rounded-[28px] bg-neutral-100 shadow-sm">
+              <Image
+                src={primaryImage}
+                alt={product.title}
+                fill
+                sizes="(max-width: 1024px) 90vw, 50vw"
+                priority
+                className="object-cover"
+              />
+            </div>
+            {/* Savings badge */}
+            {savings > 0 && (
+              <div className="absolute left-5 top-5 z-10 rounded-full bg-charcoal-900 px-3 py-1.5 text-[11px] font-bold text-white shadow-lg">
                 Hemat {savingsPercent}%
               </div>
-            </div>
-
-            { }
-            <div className="flex items-center gap-3 bg-cream-50 px-6 py-4">
-              {product.images.map((img, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-label={`Lihat foto ${i + 1}`}
-                  onClick={() => setImageIdx(i)}
-                  className={cn(
-                    "relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl border-2 transition-all duration-200 sm:h-[80px] sm:w-[80px]",
-                    i === imageIdx
-                      ? "border-green-700 shadow-md shadow-green-700/15"
-                      : "border-transparent opacity-60 hover:opacity-100",
-                    FOCUS_RING,
-                  )}
-                >
-                  <Image
-                    src={img}
-                    alt=""
-                    fill
-                    sizes="80px"
-                    className="object-cover"
-                  />
-                </button>
-              ))}
-            </div>
+            )}
           </div>
 
-          { }
-          <div className="flex flex-1 flex-col overflow-y-auto px-7 py-7 sm:px-9 lg:px-10 lg:py-8">
-            { }
-            <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-stone">
-              {product.category}
-            </p>
+          {/* RIGHT — Info + Purchase */}
+          <div className="flex w-full flex-col p-6 sm:p-8 lg:w-[45%] lg:overflow-y-auto lg:p-8">
+            {/* Vendor */}
+            <Link
+              href={`/detail/toko?id=${encodeURIComponent(product.vendor.id)}`}
+              onClick={onClose}
+              className="inline-flex w-fit items-center gap-1.5 rounded-full bg-charcoal-900/5 px-3 py-1 text-[11px] font-semibold text-charcoal-900 transition-colors hover:bg-charcoal-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              <Store className="h-3 w-3" />
+              {product.vendor.name}
+              <ArrowUpRight className="h-3 w-3 opacity-50" />
+            </Link>
 
-            { }
-            <h2 className="mt-2 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-forest-dark">
+            {/* Title */}
+            <h2 className="mt-4 font-display text-[clamp(1.3rem,2.5vw,1.75rem)] font-bold leading-tight tracking-[-0.02em] text-charcoal-900">
               {product.title}
             </h2>
 
-            { }
-            <p className="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-charcoal-500">
-              <span>oleh</span>
-              <Link
-                href={`/detail/toko?id=${encodeURIComponent(product.vendor.id)}`}
-                onClick={onClose}
-                className={cn(
-                  "group inline-flex items-center gap-1 rounded-full font-medium text-charcoal-900 underline-offset-4 transition-colors hover:text-green-700 hover:underline",
-                  FOCUS_RING,
-                )}
-              >
-                {product.vendor.name}
-                <ArrowUpRight className="h-3.5 w-3.5 text-charcoal-500 transition-colors group-hover:text-green-700" />
-              </Link>
-            </p>
-
-            { }
-            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-charcoal-500">
-              <span className="flex items-center gap-1">
+            {/* Rating */}
+            <div className="mt-2.5 flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
                     className={cn(
                       "h-4 w-4",
                       i < Math.round(product.rating)
-                        ? "fill-gold-500 text-gold-500"
-                        : "text-sage-100",
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "fill-charcoal-900/10 text-charcoal-900/10",
                     )}
                   />
                 ))}
-                <span className="ml-0.5 font-semibold text-charcoal-900">
-                  {product.rating.toFixed(1)}
-                </span>
+              </div>
+              <span className="text-sm font-semibold text-charcoal-900">
+                {product.rating.toFixed(1)}
               </span>
-              <span aria-hidden className="text-sage">
-                ·
-              </span>
-              <span>{product.reviewCount} ulasan</span>
-              <span aria-hidden className="text-sage">
-                ·
-              </span>
-              <span
-                className={cn(
-                  "font-medium",
-                  product.stockRemaining <= 3
-                    ? "text-[#E53935]"
-                    : "text-green-600",
-                )}
-              >
-                {product.stockLabel}
+              <span className="text-sm text-charcoal-500">
+                · {product.reviewCount} ulasan
               </span>
             </div>
 
-            { }
-            <div className="mt-5 flex flex-wrap items-baseline gap-3">
-              <span className="font-display text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-tight text-forest-dark">
-                Rp{formatIDR(product.discountedPrice)}
-              </span>
-              <span className="text-base text-charcoal-500 line-through">
-                Rp{formatIDR(product.originalPrice)}
-              </span>
-              <span className="rounded-full bg-[#E53935]/10 px-2.5 py-0.5 text-xs font-bold text-[#E53935]">
-                -{savingsPercent}%
-              </span>
+            {/* Description */}
+            <div className="mt-5">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-charcoal-400">
+                Deskripsi
+              </h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-charcoal-600">
+                {product.description}
+              </p>
             </div>
 
-            { }
-            <p className="mt-4 max-w-md font-inter text-[15px] leading-relaxed text-charcoal-500">
-              {product.description}
+            {/* Stock */}
+            <p className="mt-5 text-xs font-medium text-charcoal-500">
+              <span className={cn(
+                "inline-block h-1.5 w-1.5 rounded-full mr-1.5",
+                lowStock ? "bg-[#E53935]" : "bg-green-500",
+              )} />
+              {lowStock ? `Stok terbatas — ${product.stockRemaining} tersisa` : `${product.stockRemaining} tersedia`}
             </p>
 
-            { }
-            <div className="mt-5 flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-100 px-3 py-1.5 text-xs font-medium text-charcoal-500">
-                <Clock className="h-3.5 w-3.5 text-green-700" />
-                {product.pickupTime.from}–{product.pickupTime.to}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-100 px-3 py-1.5 text-xs font-medium text-charcoal-500">
-                <MapPin className="h-3.5 w-3.5 text-green-700" />
-                {product.distanceKm} km
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-100 px-3 py-1.5 text-xs font-medium text-charcoal-500">
-                <Truck className="h-3.5 w-3.5 text-green-700" />
-                Ambil sendiri
-              </span>
-            </div>
-
-            { }
-            <div className="flex-1" />
-
-            { }
-            <div className="mt-6 flex items-center gap-3">
-              { }
-              <div className="flex h-[52px] items-center overflow-hidden rounded-full border border-hairline bg-white shadow-sm">
-                <button
-                  type="button"
-                  aria-label="Kurangi jumlah"
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  disabled={qty <= 1}
-                  className={cn(
-                    "flex h-full w-12 items-center justify-center text-lg font-medium text-charcoal-500 transition-colors hover:bg-cream-100 disabled:opacity-30",
-                    FOCUS_RING,
+            {/* Price + Quantity + CTA */}
+            <div className="mt-auto pt-6">
+              <div className="border-t border-charcoal-900/5 pt-5">
+                {/* Price */}
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-2xl font-bold text-charcoal-900">
+                    Rp{formatIDR(product.discountedPrice)}
+                  </span>
+                  {savings > 0 && (
+                    <span className="text-sm text-charcoal-400 line-through">
+                      Rp{formatIDR(product.originalPrice)}
+                    </span>
                   )}
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="flex h-full w-10 items-center justify-center text-sm font-semibold tabular-nums text-charcoal-900">
-                  {qty}
-                </span>
-                <button
-                  type="button"
-                  aria-label="Tambah jumlah"
-                  onClick={() =>
-                    setQty((q) => Math.min(product.stockRemaining, q + 1))
-                  }
-                  disabled={qty >= product.stockRemaining}
-                  className={cn(
-                    "flex h-full w-12 items-center justify-center text-lg font-medium text-charcoal-500 transition-colors hover:bg-cream-100 disabled:opacity-30",
-                    FOCUS_RING,
-                  )}
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
+                </div>
 
-              { }
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                disabled={added}
-                className={cn(
-                  "flex h-[52px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-forest-dark px-6 text-sm font-semibold text-white shadow-lg shadow-forest-900/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest hover:shadow-xl active:scale-[0.98] sm:flex-none sm:min-w-[180px]",
-                  added && "bg-green-600",
-                  FOCUS_RING,
-                )}
-              >
-                {added ? (
-                  <>
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                {/* Quantity + CTA */}
+                <div className="mt-5 flex items-center gap-3">
+                  {/* Quantity */}
+                  <div className="flex h-11 items-center overflow-hidden rounded-2xl border border-charcoal-900/10 bg-white">
+                    <button
+                      type="button"
+                      aria-label="Kurangi jumlah"
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      disabled={qty <= 1}
+                      className="flex h-full w-10 items-center justify-center text-charcoal-900 transition-colors hover:bg-charcoal-900/5 disabled:opacity-25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Ditambahkan!
-                  </>
-                ) : (
-                  "Beli"
-                )}
-              </button>
-            </div>
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="flex h-full w-10 items-center justify-center text-sm font-semibold tabular-nums text-charcoal-900">
+                      {qty}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="Tambah jumlah"
+                      onClick={() =>
+                        setQty((q) => Math.min(product.stockRemaining, q + 1))
+                      }
+                      disabled={qty >= product.stockRemaining}
+                      className="flex h-full w-10 items-center justify-center text-charcoal-900 transition-colors hover:bg-charcoal-900/5 disabled:opacity-25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
 
-            { }
-            <div className="mt-4 flex items-center gap-1.5 text-xs text-charcoal-500">
-              <Shield className="h-3.5 w-3.5 text-green-700" />
-              Pembayaran aman · Ambil sendiri di lokasi mitra
+                  {/* CTA */}
+                  <button
+                    type="button"
+                    onClick={handleBuy}
+                    disabled={added || product.stockRemaining === 0}
+                    className={cn(
+                      "flex h-11 flex-1 items-center justify-center rounded-2xl text-sm font-semibold transition-all active:scale-[0.97]",
+                      product.stockRemaining === 0
+                        ? "bg-charcoal-900/10 text-charcoal-400 cursor-not-allowed"
+                        : added
+                          ? "bg-charcoal-900 text-white"
+                          : "bg-charcoal-900 text-white hover:bg-charcoal-900/90",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                    )}
+                  >
+                    {added
+                      ? "Ditambahkan!"
+                      : product.stockRemaining === 0
+                        ? "Stok Habis"
+                        : "Beli Sekarang"}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>

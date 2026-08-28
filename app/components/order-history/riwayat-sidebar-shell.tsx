@@ -28,8 +28,7 @@ export function RiwayatSidebarShell({ children }: { children: React.ReactNode })
         <main className="mx-auto max-w-[1100px] px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
           {/* Desktop title - plain, no breadcrumb like photo's Home > My Account > My Orders excluded */}
           <div className="hidden lg:block">
-            <p className="font-inter text-xs font-semibold uppercase tracking-widest text-sage-600">Pesanan Saya</p>
-            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-forest-deep">My Orders</h1>
+            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-forest-deep">Riwayat Transaksi</h1>
             <p className="mt-1 text-sm text-stone">Kelola dan lacak transaksi makanan surplus kamu.</p>
           </div>
           <div className="mt-6">{children}</div>
