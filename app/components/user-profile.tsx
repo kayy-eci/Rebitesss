@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   Check,
@@ -24,22 +24,22 @@ import {
   Utensils,
   Edit3,
   type LucideIcon,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { supabase } from '@/lib/supabase';
-import { useSellerStatus } from '@/hooks/use-seller-status';
-import { useCurrentUser } from '@/lib/current-user';
-import { getUserOrders } from '@/lib/order-storage';
-import { useAddresses } from '@/hooks/use-addresses';
-import { useRebitesCoins } from '@/hooks/use-rebites-coins';
-import { useFollowedStores } from '@/hooks/use-followed-stores';
-import { useLikedFoods } from '@/hooks/use-liked-foods';
-import { useCatalog } from '@/lib/catalog';
-import { formatOrderDateTime } from '@/lib/order-utils';
-import { formatRupiah } from '@/lib/data';
-import type { StoredOrder } from '@/lib/types';
-import { SmartImage } from './SmartImage';
-import { ProfileSidebarNav } from './profile-sidebar-nav';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import { useSellerStatus } from "@/hooks/use-seller-status";
+import { useCurrentUser } from "@/lib/current-user";
+import { getUserOrders } from "@/lib/order-storage";
+import { useAddresses } from "@/hooks/use-addresses";
+import { useRebitesCoins } from "@/hooks/use-rebites-coins";
+import { useFollowedStores } from "@/hooks/use-followed-stores";
+import { useLikedFoods } from "@/hooks/use-liked-foods";
+import { useCatalog } from "@/lib/catalog";
+import { formatOrderDateTime } from "@/lib/order-utils";
+import { formatRupiah } from "@/lib/data";
+import type { StoredOrder } from "@/lib/types";
+import { SmartImage } from "./SmartImage";
+import { ProfileSidebarNav } from "./profile-sidebar-nav";
 import {
   Dialog,
   DialogContent,
@@ -47,26 +47,26 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from './ui/dialog';
+} from "./ui/dialog";
 import {
   ArcLines,
   DotPattern,
   FloatingLeaf,
   LeafSprig,
   SoftBlob,
-} from './ornaments';
+} from "./ornaments";
 
 const BANNER_IMAGE =
-  'https://images.pexels.com/photos/406152/pexels-photo-406152.jpeg?auto=compress&cs=tinysrgb&w=1600';
+  "https://images.pexels.com/photos/406152/pexels-photo-406152.jpeg?auto=compress&cs=tinysrgb&w=1600";
 
-type OrderBadgeStatus = 'Selesai' | 'Diproses';
+type OrderBadgeStatus = "Selesai" | "Diproses";
 
 const STATUS_STYLE: Record<
   OrderBadgeStatus,
   { icon: LucideIcon; className: string }
 > = {
-  Selesai: { icon: Check, className: 'bg-green-50 text-green-700' },
-  Diproses: { icon: Clock, className: 'bg-gold-100 text-gold-600' },
+  Selesai: { icon: Check, className: "bg-green-50 text-green-700" },
+  Diproses: { icon: Clock, className: "bg-gold-100 text-gold-600" },
 };
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -89,13 +89,13 @@ const VIEWPORT = { once: true, amount: 0.15 } as const;
 
 function StatusBadge({ order }: { order: StoredOrder }) {
   const status: OrderBadgeStatus =
-    order.status === 'completed' ? 'Selesai' : 'Diproses';
+    order.status === "completed" ? "Selesai" : "Diproses";
   const { icon: Icon, className } = STATUS_STYLE[status];
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-inter text-xs font-semibold',
-        className
+        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-inter text-xs font-semibold",
+        className,
       )}
     >
       <Icon className="h-3.5 w-3.5" />
@@ -108,7 +108,10 @@ function SectionSkeletonRows({ rows = 3 }: { rows?: number }) {
   return (
     <div aria-hidden className="space-y-2.5">
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="h-4 w-full animate-pulse rounded-full bg-cream-100" />
+        <div
+          key={i}
+          className="h-4 w-full animate-pulse rounded-full bg-cream-100"
+        />
       ))}
     </div>
   );
@@ -126,8 +129,8 @@ function InfoRow({ icon: Icon, label, value, chip }: InfoRowProps) {
     <li className="flex items-center gap-3.5">
       <span
         className={cn(
-          'flex h-10 w-10 shrink-0 items-center justify-center rounded-full',
-          chip
+          "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
+          chip,
         )}
       >
         <Icon className="h-[18px] w-[18px]" />
@@ -145,11 +148,15 @@ function InfoRow({ icon: Icon, label, value, chip }: InfoRowProps) {
 }
 
 function ProfileSidebar() {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [joinedAt, setJoinedAt] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [joinedAt, setJoinedAt] = useState("");
   const { isSeller } = useSellerStatus();
-  const { selectedAddress, addresses, loading: addressLoading } = useAddresses();
+  const {
+    selectedAddress,
+    addresses,
+    loading: addressLoading,
+  } = useAddresses();
 
   useEffect(() => {
     let cancelled = false;
@@ -158,15 +165,15 @@ function ProfileSidebar() {
       if (cancelled) return;
       const user = data.session?.user;
       if (!user) return;
-      setFullName(user.user_metadata?.full_name ?? '');
-      setEmail(user.email ?? '');
+      setFullName(user.user_metadata?.full_name ?? "");
+      setEmail(user.email ?? "");
       if (user.created_at) {
         setJoinedAt(
-          new Date(user.created_at).toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })
+          new Date(user.created_at).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }),
         );
       }
     });
@@ -176,15 +183,15 @@ function ProfileSidebar() {
     };
   }, []);
 
-  const displayName = fullName.trim() || 'Akun ReBites';
+  const displayName = fullName.trim() || "Akun ReBites";
   const initials = fullName.trim()
     ? fullName
         .trim()
         .split(/\s+/)
         .slice(0, 2)
         .map((part) => part.charAt(0).toUpperCase())
-        .join('')
-    : '';
+        .join("")
+    : "";
 
   return (
     <aside className="space-y-5 lg:sticky lg:top-28 lg:h-fit">
@@ -207,10 +214,10 @@ function ProfileSidebar() {
         <p className="mt-1 flex items-center justify-center gap-1.5 font-inter text-sm text-stone">
           <MapPin className="h-3.5 w-3.5 text-sage-600" />
           {addressLoading
-            ? 'Memuat…'
+            ? "Memuat…"
             : selectedAddress?.city
               ? `${selectedAddress.city}, Indonesia`
-              : 'Depok, Jawa Barat'}
+              : "Depok, Jawa Barat"}
         </p>
 
         <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-sage-100 px-3.5 py-1 font-inter text-xs font-semibold text-sage-600">
@@ -237,21 +244,19 @@ function ProfileSidebar() {
           <InfoRow
             icon={Mail}
             label="Email"
-            value={email || '—'}
+            value={email || "—"}
             chip="bg-green-50 text-green-700"
           />
           <InfoRow
             icon={Phone}
             label="No. HP"
-            value={
-              addressLoading ? 'Memuat…' : selectedAddress?.phone || '—'
-            }
+            value={addressLoading ? "Memuat…" : selectedAddress?.phone || "—"}
             chip="bg-sage-100 text-sage-600"
           />
           <InfoRow
             icon={Package}
             label="Tanggal Bergabung"
-            value={joinedAt || '—'}
+            value={joinedAt || "—"}
             chip="bg-gold-100 text-gold-600"
           />
         </ul>
@@ -280,8 +285,14 @@ function EcoImpactBanner({ savedPorsi }: { savedPorsi: number }) {
       <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/95 via-forest-deep/75 to-forest-deep/25" />
 
       <Sparkles className="pointer-events-none absolute right-10 top-8 h-5 w-5 text-gold-500/60" />
-      <FloatingLeaf className="bottom-10 right-16 hidden h-5 w-5 text-gold-500/50 lg:block" delay={1.4} />
-      <Leaf className="pointer-events-none absolute -bottom-8 -right-6 h-40 w-40 text-white/10" strokeWidth={1.2} />
+      <FloatingLeaf
+        className="bottom-10 right-16 hidden h-5 w-5 text-gold-500/50 lg:block"
+        delay={1.4}
+      />
+      <Leaf
+        className="pointer-events-none absolute -bottom-8 -right-6 h-40 w-40 text-white/10"
+        strokeWidth={1.2}
+      />
 
       <div className="relative px-7 py-12 sm:px-10 sm:py-16 lg:px-14">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 font-inter text-xs font-semibold tracking-wide text-cream-100 backdrop-blur-sm">
@@ -294,8 +305,8 @@ function EcoImpactBanner({ savedPorsi }: { savedPorsi: number }) {
         </h2>
         <p className="mt-4 max-w-xl font-inter text-sm leading-relaxed text-cream-100/80 sm:text-[0.95rem]">
           {savedPorsi > 0
-            ? `Sejauh ini kamu sudah menyelamatkan ${savedPorsi.toLocaleString('id-ID')} porsi makanan — berhemat sambil menjaga planet.`
-            : 'Belum ada porsi terselamatkan. Pesanan pertamamu adalah langkah kecil yang berarti bagi bumi.'}
+            ? `Sejauh ini kamu sudah menyelamatkan ${savedPorsi.toLocaleString("id-ID")} porsi makanan — berhemat sambil menjaga planet.`
+            : "Belum ada porsi terselamatkan. Pesanan pertamamu adalah langkah kecil yang berarti bagi bumi."}
         </p>
       </div>
     </motion.section>
@@ -324,26 +335,26 @@ function ImpactStats({
   const stats: ImpactStat[] = [
     {
       icon: Utensils,
-      value: loading ? '…' : porsi.toLocaleString('id-ID'),
-      unit: 'porsi',
-      label: 'Porsi Diselamatkan',
-      chip: 'bg-gold-500/15 text-gold-500',
+      value: loading ? "…" : porsi.toLocaleString("id-ID"),
+      unit: "porsi",
+      label: "Porsi Diselamatkan",
+      chip: "bg-gold-500/15 text-gold-500",
     },
     {
       icon: Receipt,
-      value: loading ? '…' : totalPesanan.toLocaleString('id-ID'),
-      unit: 'x',
-      label: 'Total Pesanan',
-      chip: 'bg-sage-500/20 text-sage-500',
+      value: loading ? "…" : totalPesanan.toLocaleString("id-ID"),
+      unit: "x",
+      label: "Total Pesanan",
+      chip: "bg-sage-500/20 text-sage-500",
     },
     {
       icon: Leaf,
       value: loading
-        ? '…'
-        : co2eKg.toLocaleString('id-ID', { maximumFractionDigits: 1 }),
-      unit: 'kg',
-      label: 'CO₂e Terselamatkan',
-      chip: 'bg-green-50/15 text-green-50',
+        ? "…"
+        : co2eKg.toLocaleString("id-ID", { maximumFractionDigits: 1 }),
+      unit: "kg",
+      label: "CO₂e Terselamatkan",
+      chip: "bg-green-50/15 text-green-50",
     },
   ];
 
@@ -398,8 +409,8 @@ function ImpactStats({
               >
                 <span
                   className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-full',
-                    stat.chip
+                    "flex h-10 w-10 items-center justify-center rounded-full",
+                    stat.chip,
                   )}
                 >
                   <stat.icon className="h-5 w-5" />
@@ -463,12 +474,12 @@ function CoinsAndAddress() {
             </span>
           </div>
           <p className="mt-4 font-display text-3xl font-semibold tabular-nums text-cream-50">
-            {balance.toLocaleString('id-ID')}
+            {balance.toLocaleString("id-ID")}
           </p>
           <p className="mt-1 font-inter text-sm text-cream-100/80">
-            Total didapat:{' '}
+            Total didapat:{" "}
             <span className="font-semibold text-cream-50">
-              {totalEarned.toLocaleString('id-ID')} Coin
+              {totalEarned.toLocaleString("id-ID")} Coin
             </span>
           </p>
           <p className="mt-3 font-inter text-xs leading-relaxed text-cream-100/60">
@@ -576,8 +587,7 @@ function OrderHistory({
                 Belum ada pesanan
               </p>
               <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-sage-500">
-                Riwayat pesananmu akan tampil di sini setelah checkout
-                pertama.
+                Riwayat pesananmu akan tampil di sini setelah checkout pertama.
               </p>
             </div>
             <Link
@@ -647,7 +657,7 @@ function OrderHistory({
                       {order.vendorName}
                     </p>
                     <p className="font-inter text-xs text-stone">
-                      {order.productName} ·{' '}
+                      {order.productName} ·{" "}
                       {formatOrderDateTime(order.createdAt)}
                     </p>
                     <p className="mt-1 font-inter text-sm font-semibold text-forest-deep">
@@ -688,18 +698,14 @@ function FollowedStoresSection() {
           </p>
         </div>
         <span className="shrink-0 rounded-full bg-sage-100 px-3 py-1 font-inter text-xs font-semibold text-sage-600">
-          {hydrated ? stores.length : '…'} toko
+          {hydrated ? stores.length : "…"} toko
         </span>
       </div>
 
       {!hydrated ? (
         <div className="mt-4 grid gap-2 sm:grid-cols-1">
           {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              aria-hidden
-              className="h-16 rounded-xl bg-cream-100"
-            />
+            <div key={i} aria-hidden className="h-16 rounded-xl bg-cream-100" />
           ))}
         </div>
       ) : stores.length === 0 ? (
@@ -734,7 +740,10 @@ function FollowedStoresSection() {
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
                   {store.logoUrl ? (
-                    <SmartImage src={store.logoUrl} alt={`Logo ${store.name}`} />
+                    <SmartImage
+                      src={store.logoUrl}
+                      alt={`Logo ${store.name}`}
+                    />
                   ) : (
                     <span className="font-display text-lg font-semibold text-green-700">
                       {store.name.charAt(0).toUpperCase()}
@@ -780,11 +789,15 @@ function LikedFoodsSection() {
     >
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h3 className="font-display text-lg font-semibold text-forest-deep">Makanan Disukai</h3>
-          <p className="mt-0.5 font-inter text-xs text-stone">Makanan yang kamu sukai lewat tombol ❤️ di card produk.</p>
+          <h3 className="font-display text-lg font-semibold text-forest-deep">
+            Makanan Disukai
+          </h3>
+          <p className="mt-0.5 font-inter text-xs text-stone">
+            Makanan yang kamu sukai lewat tombol ❤️ di card produk.
+          </p>
         </div>
         <span className="shrink-0 rounded-full bg-sage-100 px-3 py-1 font-inter text-xs font-semibold text-sage-600">
-          {hydrated ? foods.length : '…'} makanan
+          {hydrated ? foods.length : "…"} makanan
         </span>
       </div>
 
@@ -800,9 +813,12 @@ function LikedFoodsSection() {
             <Heart className="h-4 w-4" />
           </span>
           <div>
-            <p className="text-xs font-bold text-charcoal-900">Belum ada makanan disukai</p>
+            <p className="text-xs font-bold text-charcoal-900">
+              Belum ada makanan disukai
+            </p>
             <p className="mt-1 max-w-sm text-[10px] leading-relaxed text-sage-500">
-              Tekan ikon ❤️ pada card produk di Beranda, Flash Sale, atau halaman detail untuk menambah ke sini.
+              Tekan ikon ❤️ pada card produk di Beranda, Flash Sale, atau
+              halaman detail untuk menambah ke sini.
             </p>
           </div>
           <Link
@@ -816,12 +832,19 @@ function LikedFoodsSection() {
       ) : (
         <ul className="mt-4 grid gap-2 sm:grid-cols-1">
           {foods.map((fav) => {
-            const detail: any = catalogMap.get(fav.productId) || catalogMap.get(fav.id) || null;
-            const name = fav.name || detail?.name || 'Makanan';
+            const detail: any =
+              catalogMap.get(fav.productId) || catalogMap.get(fav.id) || null;
+            const name = fav.name || detail?.name || "Makanan";
             const image = fav.image || detail?.image || null;
-            const vendor = detail?.vendorName || '';
-            const price = detail ? detail.discountedPrice ?? detail.originalPrice : fav.price;
-            const href = detail ? `/detail/product?id=${detail.id}` : fav.productId ? `/detail/product?id=${fav.productId}` : '/cari';
+            const vendor = detail?.vendorName || "";
+            const price = detail
+              ? (detail.discountedPrice ?? detail.originalPrice)
+              : fav.price;
+            const href = detail
+              ? `/detail/product?id=${detail.id}`
+              : fav.productId
+                ? `/detail/product?id=${fav.productId}`
+                : "/cari";
             return (
               <li key={fav.id}>
                 <Link
@@ -832,14 +855,24 @@ function LikedFoodsSection() {
                     {image ? (
                       <SmartImage src={image} alt={name} />
                     ) : (
-                      <span className="font-display text-lg font-semibold text-green-700">{name.charAt(0).toUpperCase()}</span>
+                      <span className="font-display text-lg font-semibold text-green-700">
+                        {name.charAt(0).toUpperCase()}
+                      </span>
                     )}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-inter text-xs font-medium text-charcoal-900">{name}</span>
-                    {vendor && <span className="mt-0.5 block truncate font-inter text-[10px] text-stone">{vendor}</span>}
+                    <span className="block truncate font-inter text-xs font-medium text-charcoal-900">
+                      {name}
+                    </span>
+                    {vendor && (
+                      <span className="mt-0.5 block truncate font-inter text-[10px] text-stone">
+                        {vendor}
+                      </span>
+                    )}
                     {price != null && (
-                      <span className="mt-1 block font-inter text-[9px] font-medium text-green-700">Rp{Number(price).toLocaleString('id-ID')}</span>
+                      <span className="mt-1 block font-inter text-[9px] font-medium text-green-700">
+                        Rp{Number(price).toLocaleString("id-ID")}
+                      </span>
                     )}
                   </span>
                   <Heart className="h-3 w-3 shrink-0 fill-[#E53935] text-[#E53935]" />
@@ -858,29 +891,29 @@ export function UserProfile() {
   const [orders, setOrders] = useState<StoredOrder[] | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isIkutiTokoDialogOpen, setIsIkutiTokoDialogOpen] = useState(false);
-  const [isSukaiMakananDialogOpen, setIsSukaiMakananDialogOpen] = useState(false);
+  const [isSukaiMakananDialogOpen, setIsSukaiMakananDialogOpen] =
+    useState(false);
 
   // Data untuk header & info pribadi (reuse logic ProfileSidebar)
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [joinedAt, setJoinedAt] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [joinedAt, setJoinedAt] = useState("");
   const { isSeller } = useSellerStatus();
-  const { selectedAddress, loading: addressLoading, updateAddress, addAddress } = useAddresses();
+  const {
+    selectedAddress,
+    loading: addressLoading,
+    updateAddress,
+    addAddress,
+  } = useAddresses();
   const { stores, hydrated: storesHydrated } = useFollowedStores();
   const { count: likedCount, hydrated: likedHydrated } = useLikedFoods();
   const { balance } = useRebitesCoins();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editName, setEditName] = useState('');
-  const [editPhone, setEditPhone] = useState('');
+  const [editName, setEditName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editCity, setEditCity] = useState("");
+  const [editFullAddress, setEditFullAddress] = useState("");
   const [savingPersonal, setSavingPersonal] = useState(false);
-  const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
-  const [editReceiverName, setEditReceiverName] = useState('');
-  const [editAddressPhone, setEditAddressPhone] = useState('');
-  const [editCity, setEditCity] = useState('');
-  const [editProvince, setEditProvince] = useState('');
-  const [editDistrict, setEditDistrict] = useState('');
-  const [editFullAddress, setEditFullAddress] = useState('');
-  const [savingAddress, setSavingAddress] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -888,15 +921,15 @@ export function UserProfile() {
       if (cancelled) return;
       const user = data.session?.user;
       if (!user) return;
-      setFullName(user.user_metadata?.full_name ?? '');
-      setEmail(user.email ?? '');
+      setFullName(user.user_metadata?.full_name ?? "");
+      setEmail(user.email ?? "");
       if (user.created_at) {
         setJoinedAt(
-          new Date(user.created_at).toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })
+          new Date(user.created_at).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }),
         );
       }
     });
@@ -924,26 +957,29 @@ export function UserProfile() {
     };
   }, [orders]);
 
-  const displayName = fullName.trim() || 'Akun ReBites';
+  const displayName = fullName.trim() || "Akun ReBites";
   const initials = fullName.trim()
     ? fullName
         .trim()
         .split(/\s+/)
         .slice(0, 2)
         .map((p) => p.charAt(0).toUpperCase())
-        .join('')
-    : '';
+        .join("")
+    : "";
   const cityLabel = addressLoading
-    ? 'Memuat…'
+    ? "Memuat…"
     : selectedAddress?.city
       ? `${selectedAddress.city}, Indonesia`
-      : 'Depok, Indonesia';
-  const phoneLabel = addressLoading ? 'Memuat…' : selectedAddress?.phone || '—';
+      : "Depok, Indonesia";
+  const phoneLabel = addressLoading ? "Memuat…" : selectedAddress?.phone || "—";
 
   return (
     <div className="relative min-h-screen bg-[#F8F9FA] lg:bg-cream-50">
       {/* Sidebar kiri — reuse desain Seller Sidebar */}
-      <ProfileSidebarNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <ProfileSidebarNav
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <div className="lg:pl-[280px]">
         {/* Mobile top bar tanpa header horizontal desktop */}
@@ -956,14 +992,20 @@ export function UserProfile() {
           >
             <Menu className="h-5 w-5" />
           </button>
-          <span className="font-display text-base font-semibold text-forest-deep">My Profile</span>
+          <span className="font-display text-base font-semibold text-forest-deep">
+            My Profile
+          </span>
         </div>
 
         <main className="relative mx-auto max-w-[1100px] px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
           {/* Judul halaman — mirip referensi My Profile */}
           <div className="hidden lg:block">
-            <p className="font-inter text-xs font-semibold uppercase tracking-widest text-sage-600">Akun Saya</p>
-            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-forest-deep">My Profile</h1>
+            <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-forest-deep">
+              Profil
+            </h1>
+            <p className="mt-1 text-sm text-stone">
+              Kelola akun dan lihat aktivitasmu di ReBites
+            </p>
           </div>
 
           {/* PROFILE HEADER CARD — Avatar + Info + Ikuti Toko + Sukai Makanan dalam 1 card */}
@@ -985,15 +1027,23 @@ export function UserProfile() {
                 </div>
               </div>
               <div className="min-w-0">
-                <h2 className="font-display text-lg font-semibold leading-tight text-forest-deep sm:text-xl">{displayName}</h2>
-                <p className="mt-0.5 font-inter text-sm text-stone">{email || '—'}</p>
+                <h2 className="font-display text-lg font-semibold leading-tight text-forest-deep sm:text-xl">
+                  {displayName}
+                </h2>
+                <p className="mt-0.5 font-inter text-sm text-stone">
+                  {email || "—"}
+                </p>
                 <p className="mt-1 flex items-center gap-1.5 font-inter text-xs text-stone">
                   <MapPin className="h-3.5 w-3.5 text-sage-500" />
                   {cityLabel}
                 </p>
                 <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-sage-100 px-3 py-1 font-inter text-xs font-semibold text-sage-700">
-                  {isSeller ? <Store className="h-3.5 w-3.5" /> : <User className="h-3.5 w-3.5" />}
-                  {isSeller ? 'Akun Penjual' : 'Akun Pembeli'}
+                  {isSeller ? (
+                    <Store className="h-3.5 w-3.5" />
+                  ) : (
+                    <User className="h-3.5 w-3.5" />
+                  )}
+                  {isSeller ? "Akun Penjual" : "Akun Pembeli"}
                 </span>
               </div>
             </div>
@@ -1008,8 +1058,12 @@ export function UserProfile() {
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-green-700 shadow-sm ring-1 ring-zinc-100 group-hover:bg-green-700 group-hover:text-white">
                   <Store className="h-4 w-4" />
                 </span>
-                <span className="font-inter text-sm font-semibold text-forest-deep">Ikuti Toko</span>
-                <span className="font-inter text-xs text-stone">{storesHydrated ? `${stores.length} toko` : '… toko'}</span>
+                <span className="font-inter text-sm font-semibold text-forest-deep">
+                  Ikuti Toko
+                </span>
+                <span className="font-inter text-xs text-stone">
+                  {storesHydrated ? `${stores.length} toko` : "… toko"}
+                </span>
                 <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
                   Lihat <ArrowRight className="h-3 w-3" />
                 </span>
@@ -1023,8 +1077,12 @@ export function UserProfile() {
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#E53935] shadow-sm ring-1 ring-zinc-100 group-hover:bg-[#E53935] group-hover:text-white">
                   <Heart className="h-4 w-4" />
                 </span>
-                <span className="font-inter text-sm font-semibold text-forest-deep">Sukai Makanan</span>
-                <span className="font-inter text-xs text-stone">{likedHydrated ? `${likedCount} makanan` : '… makanan'}</span>
+                <span className="font-inter text-sm font-semibold text-forest-deep">
+                  Sukai Makanan
+                </span>
+                <span className="font-inter text-xs text-stone">
+                  {likedHydrated ? `${likedCount} makanan` : "… makanan"}
+                </span>
                 <span className="mt-1 inline-flex items-center gap-1 font-inter text-xs font-semibold text-green-700">
                   Lihat <ArrowRight className="h-3 w-3" />
                 </span>
@@ -1034,19 +1092,33 @@ export function UserProfile() {
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-amber-600 shadow-sm ring-1 ring-amber-100">
                   <Coins className="h-4 w-4" />
                 </span>
-                <span className="font-inter text-sm font-semibold text-forest-deep">ReBites Coins</span>
-                <span className="font-inter text-xs font-bold text-amber-700">{balance.toLocaleString('id-ID')} Coin</span>
-                <span className="font-inter text-[11px] text-stone">Tersedia</span>
+                <span className="font-inter text-sm font-semibold text-forest-deep">
+                  ReBites Coins
+                </span>
+                <span className="font-inter text-xs font-bold text-amber-700">
+                  {balance.toLocaleString("id-ID")} Coin
+                </span>
+                <span className="font-inter text-[11px] text-stone">
+                  Tersedia
+                </span>
               </div>
             </div>
           </motion.section>
 
           {/* Dialog: Ikuti Toko */}
-          <Dialog open={isIkutiTokoDialogOpen} onOpenChange={setIsIkutiTokoDialogOpen}>
+          <Dialog
+            open={isIkutiTokoDialogOpen}
+            onOpenChange={setIsIkutiTokoDialogOpen}
+          >
             <DialogContent className="bg-white p-6 sm:p-7">
               <DialogHeader>
-                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">Toko Diikuti</DialogTitle>
-                <DialogDescription className="font-inter text-sm text-stone">Toko yang kamu ikuti lewat tombol "Ikuti Toko" di halaman detail toko.</DialogDescription>
+                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">
+                  Toko Diikuti
+                </DialogTitle>
+                <DialogDescription className="font-inter text-sm text-stone">
+                  Toko yang kamu ikuti lewat tombol "Ikuti Toko" di halaman
+                  detail toko.
+                </DialogDescription>
               </DialogHeader>
               <FollowedStoresSection />
               <DialogFooter>
@@ -1062,11 +1134,18 @@ export function UserProfile() {
           </Dialog>
 
           {/* Dialog: Sukai Makanan */}
-          <Dialog open={isSukaiMakananDialogOpen} onOpenChange={setIsSukaiMakananDialogOpen}>
+          <Dialog
+            open={isSukaiMakananDialogOpen}
+            onOpenChange={setIsSukaiMakananDialogOpen}
+          >
             <DialogContent className="bg-white p-6 sm:p-7">
               <DialogHeader>
-                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">Makanan Disukai</DialogTitle>
-                <DialogDescription className="font-inter text-sm text-stone">Makanan yang kamu sukai lewat tombol ❤️ di card produk.</DialogDescription>
+                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">
+                  Makanan Disukai
+                </DialogTitle>
+                <DialogDescription className="font-inter text-sm text-stone">
+                  Makanan yang kamu sukai lewat tombol ❤️ di card produk.
+                </DialogDescription>
               </DialogHeader>
               <LikedFoodsSection />
               <DialogFooter>
@@ -1090,15 +1169,19 @@ export function UserProfile() {
             className="mt-6 rounded-[20px] border border-zinc-100 bg-white p-6 shadow-sm sm:p-7"
           >
             <div className="flex items-center justify-between gap-3">
-              <h3 className="font-display text-base font-semibold text-forest-deep">Personal Information</h3>
+              <h3 className="font-display text-base font-semibold text-forest-deep">
+                Personal Information
+              </h3>
               <button
                 type="button"
                 onClick={() => {
                   setEditName(fullName);
-                  setEditPhone(selectedAddress?.phone || '');
+                  setEditPhone(selectedAddress?.phone || "");
+                  setEditCity(selectedAddress?.city || "");
+                  setEditFullAddress(selectedAddress?.fullAddress || "");
                   setIsEditDialogOpen(true);
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full bg-[#FF8A00] px-4 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#EB7D00]"
+                className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-caramel"
               >
                 Edit <Edit3 className="h-3 w-3" />
               </button>
@@ -1107,27 +1190,43 @@ export function UserProfile() {
             <div className="mt-6 grid gap-6 sm:grid-cols-3">
               <div>
                 <p className="font-inter text-xs text-stone">Nama Lengkap</p>
-                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">{displayName}</p>
+                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">
+                  {displayName}
+                </p>
               </div>
               <div>
                 <p className="font-inter text-xs text-stone">Email Address</p>
-                <p className="mt-1 break-all font-inter text-sm font-semibold text-charcoal-900">{email || '—'}</p>
+                <p className="mt-1 break-all font-inter text-sm font-semibold text-charcoal-900">
+                  {email || "—"}
+                </p>
               </div>
               <div>
-                <p className="font-inter text-xs text-stone">Tanggal Bergabung</p>
-                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">{joinedAt || '—'}</p>
+                <p className="font-inter text-xs text-stone">
+                  Tanggal Bergabung
+                </p>
+                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">
+                  {joinedAt || "—"}
+                </p>
               </div>
               <div>
                 <p className="font-inter text-xs text-stone">Phone Number</p>
-                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">{phoneLabel}</p>
+                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">
+                  {phoneLabel}
+                </p>
               </div>
-              <div>
-                <p className="font-inter text-xs text-stone">User Role</p>
-                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">{isSeller ? 'Penjual' : 'Pembeli'}</p>
-              </div>
-              <div>
-                <p className="font-inter text-xs text-stone">Kota</p>
-                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">{addressLoading ? 'Memuat…' : selectedAddress?.city || 'Depok'}</p>
+              <div className="sm:col-span-2">
+                <p className="font-inter text-xs text-stone">Alamat Lengkap</p>
+                <p className="mt-1 font-inter text-sm font-semibold leading-relaxed text-charcoal-900">
+                  {addressLoading
+                    ? "Memuat…"
+                    : selectedAddress?.fullAddress || "—"}
+                </p>
+                {!addressLoading && selectedAddress?.city && (
+                  <p className="mt-1 font-inter text-xs text-stone">
+                    {selectedAddress.city}
+                    {selectedAddress.province ? `, ${selectedAddress.province}` : ""} · Indonesia
+                  </p>
+                )}
               </div>
             </div>
           </motion.section>
@@ -1135,15 +1234,20 @@ export function UserProfile() {
           <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
             <DialogContent className="max-w-lg bg-white p-6 sm:p-7">
               <DialogHeader>
-                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">Edit Personal Information</DialogTitle>
+                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">
+                  Edit Personal Information
+                </DialogTitle>
                 <DialogDescription className="font-inter text-sm text-stone">
-                  Perbarui informasi yang dapat diubah. Email, tanggal bergabung, dan role tidak dapat diubah.
+                  Perbarui informasi yang dapat diubah. Email, tanggal
+                  bergabung, dan role tidak dapat diubah.
                 </DialogDescription>
               </DialogHeader>
 
               <div className="mt-4 space-y-4">
                 <div>
-                  <label className="font-inter text-xs font-medium text-stone">Nama Lengkap</label>
+                  <label className="font-inter text-xs font-medium text-stone">
+                    Nama Lengkap
+                  </label>
                   <input
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
@@ -1152,7 +1256,9 @@ export function UserProfile() {
                   />
                 </div>
                 <div>
-                  <label className="font-inter text-xs font-medium text-stone">Phone Number</label>
+                  <label className="font-inter text-xs font-medium text-stone">
+                    Phone Number
+                  </label>
                   <input
                     value={editPhone}
                     onChange={(e) => setEditPhone(e.target.value)}
@@ -1161,12 +1267,17 @@ export function UserProfile() {
                     className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600"
                   />
                 </div>
-
-                <div className="rounded-xl bg-zinc-50 p-3">
-                  <p className="font-inter text-xs font-medium text-stone">Info</p>
-                  <p className="mt-1 font-inter text-xs leading-relaxed text-stone">
-                    Email <span className="font-semibold text-charcoal-900">{email || '—'}</span>, tanggal bergabung, dan role tidak dapat diubah.
-                  </p>
+                <div>
+                  <label className="font-inter text-xs font-medium text-stone">
+                    Alamat Lengkap
+                  </label>
+                  <textarea
+                    value={editFullAddress}
+                    onChange={(e) => setEditFullAddress(e.target.value)}
+                    placeholder="Jl. Contoh No. 123, RT/RW, Kelurahan..."
+                    rows={3}
+                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600"
+                  />
                 </div>
               </div>
 
@@ -1185,7 +1296,10 @@ export function UserProfile() {
                   onClick={async () => {
                     setSavingPersonal(true);
                     try {
-                      if (editName.trim() && editName.trim() !== fullName.trim()) {
+                      if (
+                        editName.trim() &&
+                        editName.trim() !== fullName.trim()
+                      ) {
                         const { error } = await supabase.auth.updateUser({
                           data: { full_name: editName.trim() },
                         });
@@ -1193,170 +1307,52 @@ export function UserProfile() {
                         setFullName(editName.trim());
                       }
                       const newPhone = editPhone.trim();
-                      if (newPhone !== (selectedAddress?.phone || '')) {
+                      const newCity = editCity.trim();
+                      const newFullAddress = editFullAddress.trim();
+                      const phoneChanged = newPhone !== (selectedAddress?.phone || "");
+                      const cityChanged = newCity !== (selectedAddress?.city || "");
+                      const addressChanged = newFullAddress !== (selectedAddress?.fullAddress || "");
+                      if (phoneChanged || cityChanged || addressChanged) {
                         if (selectedAddress) {
                           await updateAddress(selectedAddress.id, {
                             label: selectedAddress.label,
                             receiverName: selectedAddress.receiverName,
                             phone: newPhone,
                             province: selectedAddress.province,
-                            city: selectedAddress.city,
+                            city: newCity || selectedAddress.city || "Depok",
                             district: selectedAddress.district,
-                            fullAddress: selectedAddress.fullAddress,
+                            fullAddress: newFullAddress,
                             note: selectedAddress.note,
                           });
-                        } else if (newPhone) {
+                        } else if (newPhone || newCity || newFullAddress) {
                           await addAddress({
-                            label: 'Rumah',
+                            label: "Rumah",
                             receiverName: editName.trim() || fullName,
                             phone: newPhone,
-                            province: 'Jawa Barat',
-                            city: 'Depok',
-                            district: '',
-                            fullAddress: '',
+                            province: "Jawa Barat",
+                            city: newCity || "Depok",
+                            district: "",
+                            fullAddress: newFullAddress,
                           });
                         }
                       }
                       setIsEditDialogOpen(false);
                     } catch (e) {
-                      console.error('[profile] gagal simpan:', e);
-                      alert('Gagal menyimpan perubahan. Coba lagi.');
+                      console.error("[profile] gagal simpan:", e);
+                      alert("Gagal menyimpan perubahan. Coba lagi.");
                     } finally {
                       setSavingPersonal(false);
                     }
                   }}
                   className="inline-flex items-center justify-center rounded-full bg-green-700 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-600 disabled:opacity-60"
                 >
-                  {savingPersonal ? 'Menyimpan…' : 'Simpan Perubahan'}
+                  {savingPersonal ? "Menyimpan…" : "Simpan Perubahan"}
                 </button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
 
-          {/* ADDRESS — mirip referensi, data real */}
-          <motion.section
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={VIEWPORT}
-            id="alamat"
-            className="mt-6 scroll-mt-28 rounded-[20px] border border-zinc-100 bg-white p-6 shadow-sm sm:p-7"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="font-display text-base font-semibold text-forest-deep">Address</h3>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditCity(selectedAddress?.city || '');
-                  setEditFullAddress(selectedAddress?.fullAddress || '');
-                  setIsAddressDialogOpen(true);
-                }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-4 py-1.5 text-xs font-semibold text-charcoal-900 hover:bg-zinc-50"
-              >
-                Edit <Edit3 className="h-3 w-3" />
-              </button>
-            </div>
-            <div className="mt-6 grid gap-6 sm:grid-cols-3">
-              <div>
-                <p className="font-inter text-xs text-stone">Negara</p>
-                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">Indonesia</p>
-              </div>
-              <div>
-                <p className="font-inter text-xs text-stone">Kota</p>
-                <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">
-                  {addressLoading ? 'Memuat…' : selectedAddress?.city ? `${selectedAddress.city}, Jawa Barat` : 'Depok, Jawa Barat'}
-                </p>
-              </div>
-              <div>
-                <p className="font-inter text-xs text-stone">Alamat Lengkap</p>
-                <p className="mt-1 font-inter text-sm font-semibold leading-relaxed text-charcoal-900">
-                  {addressLoading ? 'Memuat…' : selectedAddress?.fullAddress || '—'}
-                </p>
-              </div>
-            </div>
-          </motion.section>
 
-          <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
-            <DialogContent className="max-w-lg bg-white p-6 sm:p-7">
-              <DialogHeader>
-                <DialogTitle className="font-display text-lg font-semibold text-forest-deep">Edit Address</DialogTitle>
-                <DialogDescription className="font-inter text-sm text-stone">
-                  Perbarui alamat. Perubahan akan langsung tampil di profil.
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="mt-4 space-y-4">
-                <div>
-                  <label className="font-inter text-xs font-medium text-stone">Kota</label>
-                  <input
-                    value={editCity}
-                    onChange={(e) => setEditCity(e.target.value)}
-                    placeholder="Depok"
-                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600"
-                  />
-                </div>
-                <div>
-                  <label className="font-inter text-xs font-medium text-stone">Alamat Lengkap</label>
-                  <textarea
-                    value={editFullAddress}
-                    onChange={(e) => setEditFullAddress(e.target.value)}
-                    placeholder="Jl. Contoh No. 123, RT/RW, Kelurahan..."
-                    rows={3}
-                    className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 font-inter text-sm text-charcoal-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600"
-                  />
-                </div>
-                <div className="rounded-xl bg-zinc-50 p-3">
-                  <p className="font-inter text-xs leading-relaxed text-stone">
-                    Negara <span className="font-semibold text-charcoal-900">Indonesia</span> tidak dapat diubah.
-                  </p>
-                </div>
-              </div>
-
-              <DialogFooter className="mt-6">
-                <button
-                  type="button"
-                  onClick={() => setIsAddressDialogOpen(false)}
-                  disabled={savingAddress}
-                  className="rounded-full border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-charcoal-900 hover:bg-zinc-50 disabled:opacity-50"
-                >
-                  Batal
-                </button>
-                <button
-                  type="button"
-                  disabled={savingAddress}
-                  onClick={async () => {
-                    setSavingAddress(true);
-                    try {
-                      const payload = {
-                        label: selectedAddress?.label || 'Rumah',
-                        receiverName: selectedAddress?.receiverName || fullName,
-                        phone: selectedAddress?.phone || '',
-                        province: selectedAddress?.province || 'Jawa Barat',
-                        city: editCity.trim() || 'Depok',
-                        district: selectedAddress?.district || '',
-                        fullAddress: editFullAddress.trim(),
-                        note: selectedAddress?.note,
-                      };
-                      if (selectedAddress) {
-                        await updateAddress(selectedAddress.id, payload);
-                      } else {
-                        await addAddress(payload);
-                      }
-                      setIsAddressDialogOpen(false);
-                    } catch (e) {
-                      console.error('[address] gagal simpan:', e);
-                      alert('Gagal menyimpan alamat. Coba lagi.');
-                    } finally {
-                      setSavingAddress(false);
-                    }
-                  }}
-                  className="inline-flex items-center justify-center rounded-full bg-green-700 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-600 disabled:opacity-60"
-                >
-                  {savingAddress ? 'Menyimpan…' : 'Simpan Alamat'}
-                </button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
 
           <div className="mt-6 space-y-6"></div>
         </main>

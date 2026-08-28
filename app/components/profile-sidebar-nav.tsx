@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Bell,
-  Home,
   Receipt,
   User,
   X,
@@ -30,12 +29,6 @@ interface NavItem {
 
 // Menu khusus Profil — visual sama dengan Seller Sidebar, opsi mengarah ke halaman lain
 const NAV_ITEMS: NavItem[] = [
-  {
-    id: 'beranda',
-    label: 'Beranda',
-    icon: Home,
-    href: '/home',
-  },
   {
     id: 'profil',
     label: 'Profil Saya',
