@@ -419,6 +419,22 @@ export async function POST(req: NextRequest) {
       .update({ xendit_invoice_id: invoice.id })
       .eq('order_code', orderCode);
 
+    // Notifikasi awal "pesanan dibuat" (best-effort). Webhook Xendit tidak
+    // selalu terjangkau (dev lokal / callback belum terpasang), jadi tanpa ini
+    // pembeli tidak pernah dapat notifikasi walau pesanan tampil di riwayat.
+    // Webhook sudah dedupe type 'order_created' per order_code, jadi aman.
+    const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(orderCode)}`;
+    const { error: notifErr } = await serviceClient.from('notifications').insert({
+      user_id: user.id,
+      role: 'buyer',
+      type: 'order_created',
+      title: 'Pesanan Dibuat',
+      message: `Pesanan #${orderCode} (${productName} x${quantity}) dari ${vendorName} sudah dibuat. Selesaikan pembayaran agar pesanan segera diproses.`,
+      reference_id: orderCode,
+      href: deepHref,
+    });
+    if (notifErr) console.error('[checkout/xendit] notif order_created error', notifErr.message);
+
     return NextResponse.json({
       orderCode,
       invoiceUrl: invoice.invoice_url,

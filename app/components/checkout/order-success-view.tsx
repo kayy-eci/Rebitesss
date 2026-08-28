@@ -66,6 +66,12 @@ export function OrderSuccessView() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const retryRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Turunan status pembayaran — didefinisikan sejak awal karena dipakai
+  // oleh effect countdown popup sebelum early-return guard.
+  const isPending = paymentStatus === 'unpaid' || paymentStatus === null;
+  const isFailed = paymentStatus === 'failed';
+  const isPaid = !isPending && !isFailed;
+
   useEffect(() => {
     if (!orderId) return;
     let mounted = true;
@@ -138,6 +144,28 @@ export function OrderSuccessView() {
     let elapsed = 0;
 
     const fetchStatus = async () => {
+      // Fallback verifikasi: kalau webhook Xendit tidak terjangkau (mis. dev
+      // lokal tanpa tunnel), cek status invoice langsung ke Xendit API supaya
+      // pesanan tetap lunas + notifikasi tetap dibuat. Best-effort saja.
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (token) {
+          await fetch('/api/checkout/xendit/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ orderCode: orderId }),
+          });
+        }
+      } catch {
+        // verifikasi gagal — lanjut baca status dari DB
+      }
+
       const { data } = await supabase
         .from('orders')
         .select('payment_status')
@@ -217,9 +245,7 @@ export function OrderSuccessView() {
     );
   }
 
-  const isPending = paymentStatus === 'unpaid' || paymentStatus === null;
-  const isFailed = paymentStatus === 'failed';
-  const isPaid = !isPending && !isFailed;
+  // isPending / isFailed / isPaid sudah didefinisikan di atas
 
   // estimasi text untuk popup
   const estimasiText = order.estimatedMinutes

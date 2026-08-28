@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/server/supabase';
+import { settleOrderPaid } from '@/lib/server/order-settlement';
 import { computePeriodEnd } from '@/lib/subscription-plans';
 
 export const runtime = 'nodejs';
@@ -77,111 +78,20 @@ export async function POST(req: NextRequest) {
     const currentPayment = row.payment_status as string;
 
     if (normalizedStatus === 'PAID' || normalizedStatus === 'SETTLED') {
-      if (currentPayment === 'paid') {
+      const result = await settleOrderPaid(
+        service,
+        externalId,
+        invoiceId,
+        payload.payment_channel ?? payload.payment_method ?? null
+      );
+      if (result.reason === 'already_paid') {
         return NextResponse.json({ received: true, already: 'paid' });
       }
-
-      // Mark paid — bypass guard karena pakai service_role
-      const { error: updErr } = await service
-        .from('orders')
-        .update({
-          payment_status: 'paid',
-          order_status: 'paid',
-          payment_method_id: payload.payment_channel ?? payload.payment_method ?? 'xendit',
-          xendit_invoice_id: invoiceId,
-        } as Record<string, unknown>)
-        .eq('order_code', externalId);
-
-      if (updErr) {
-        console.error('[webhook/xendit] update paid error', updErr.message);
+      if (result.reason === 'not_found') {
+        return NextResponse.json({ received: true, note: 'order not found' });
+      }
+      if (result.reason === 'update_failed') {
         return NextResponse.json({ error: 'DB update failed' }, { status: 500 });
-      }
-
-      // Settle coins (idempoten: cek existing)
-      const coinUsed = Number(row.coin_used ?? 0);
-      const coinEarned = Number(row.coin_earned ?? 0);
-      const buyerId = row.buyer_id as string;
-      if (buyerId && (coinUsed > 0 || coinEarned > 0)) {
-        const { data: existing } = await service
-          .from('coin_transactions')
-          .select('type')
-          .eq('user_id', buyerId)
-          .eq('order_code', externalId);
-        const existingTypes = new Set(((existing ?? []) as Array<{ type: string }>).map((r) => r.type));
-        const pending: Record<string, unknown>[] = [];
-        if (coinUsed > 0 && !existingTypes.has('spent')) {
-          pending.push({ user_id: buyerId, order_code: externalId, type: 'spent', amount: coinUsed, description: 'Potongan pesanan' });
-        }
-        if (coinEarned > 0 && !existingTypes.has('earned')) {
-          pending.push({ user_id: buyerId, order_code: externalId, type: 'earned', amount: coinEarned, description: 'Reward pembelian' });
-        }
-        if (pending.length > 0) {
-          await service.from('coin_transactions').insert(pending);
-        }
-      }
-
-      // Notifikasi buyer — deep-link ke riwayat + detail
-      if (buyerId) {
-        const productName = (row.product_name as string) ?? 'Pesanan';
-        const vendorName = (row.vendor_name as string) ?? 'Toko';
-        const totalPrice = Number(row.total_price ?? 0);
-        const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(externalId)}`;
-        // cegah duplikat jika webhook retry
-        const { data: existingNotifs } = await service
-          .from('notifications')
-          .select('type')
-          .eq('user_id', buyerId)
-          .eq('reference_id', externalId)
-          .in('type', ['payment_success', 'order_created']);
-        const existingTypes = new Set(((existingNotifs ?? []) as Array<{ type: string }>).map((r) => r.type));
-        const toInsert: Record<string, unknown>[] = [];
-        if (!existingTypes.has('payment_success')) {
-          toInsert.push({
-            user_id: buyerId,
-            role: 'buyer',
-            type: 'payment_success',
-            title: 'Pembayaran Berhasil',
-            message: `Pembayaran Rp${totalPrice.toLocaleString('id-ID')} untuk ${productName} via ${payload.payment_channel ?? 'Xendit'} berhasil. Pesanan sedang disiapkan.`,
-            reference_id: externalId,
-            href: deepHref,
-          });
-        }
-        if (!existingTypes.has('order_created')) {
-          toInsert.push({
-            user_id: buyerId,
-            role: 'buyer',
-            type: 'order_created',
-            title: 'Pesanan Sedang Disiapkan',
-            message: `Pesanan #${externalId} dari ${vendorName} sedang disiapkan penjual.`,
-            reference_id: externalId,
-            href: deepHref,
-          });
-        }
-        if (toInsert.length > 0) {
-          await service.from('notifications').insert(toInsert);
-        }
-
-        // Notifikasi seller
-        const vendorSlug = (row as Record<string, unknown>).vendor_slug as string | undefined;
-        if (vendorSlug) {
-          const { data: umkm } = await service
-            .from('umkm_profiles')
-            .select('user_id')
-            .eq('slug', vendorSlug)
-            .maybeSingle();
-          const sellerId = umkm ? (umkm as Record<string, string>).user_id : null;
-          if (sellerId) {
-            await service.from('notifications').insert({
-              user_id: sellerId,
-              role: 'seller',
-              type: 'incoming_order',
-              title: 'Pesanan Masuk!',
-              message: `Pesanan #${externalId} — ${productName} telah dibayar. Segera siapkan pesanan.`,
-              reference_id: externalId,
-              href: '/dashboard/penjual/pesanan',
-            });
-          }
-        }
       }
     } else if (normalizedStatus === 'EXPIRED') {
       if (currentPayment === 'paid') {

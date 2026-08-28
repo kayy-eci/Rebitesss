@@ -111,3 +111,37 @@ export async function createXenditInvoice(
 
   return json as XenditInvoice;
 }
+
+/** Ambil status invoice terbaru dari Xendit (untuk verifikasi fallback). */
+export async function getXenditInvoice(
+  invoiceId: string
+): Promise<XenditInvoice & { payment_method?: string; payment_channel?: string }> {
+  const secret = getSecretKey();
+  const auth = Buffer.from(`${secret}:`).toString('base64');
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10_000);
+  let res: Response;
+  try {
+    res = await fetch(`${XENDIT_API_BASE}/v2/invoices/${encodeURIComponent(invoiceId)}`, {
+      headers: { Authorization: `Basic ${auth}` },
+      signal: controller.signal,
+    });
+  } catch (e) {
+    if ((e as Error).name === 'AbortError') {
+      throw new Error('Xendit timeout (10s) — coba lagi');
+    }
+    throw e;
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  const json: unknown = await res.json().catch(() => null);
+  if (!res.ok) {
+    const msg =
+      (json as { message?: string })?.message ??
+      `Xendit error ${res.status}`;
+    throw new Error(msg);
+  }
+  return json as XenditInvoice & { payment_method?: string; payment_channel?: string };
+}
