@@ -3,7 +3,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { Leaf } from "lucide-react";
+
 
 const IMG_MAIN =
   "https://images.pexels.com/photos/16134564/pexels-photo-16134564.jpeg?auto=compress&cs=tinysrgb&w=900";
@@ -35,9 +35,9 @@ export default function BrandPanel({ title, description }: BrandPanelProps) {
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: EASE }}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-sm"
+          className="flex h-9 w-9 shrink-0 overflow-hidden rounded-full border border-white/25 shadow-sm ring-1 ring-white/20"
         >
-          <Leaf className="h-[18px] w-[18px]" strokeWidth={1.75} />
+          <Image src="/logo.png" alt="ReBites" width={36} height={36} className="h-9 w-9 object-cover" />
         </motion.span>
         <motion.span
           initial={{ opacity: 0, x: -8 }}

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bell, ChevronDown, Leaf, MapPin, Menu, User, X } from "lucide-react";
+import { Bell, ChevronDown, MapPin, Menu, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useCurrentUser } from "@/lib/current-user";
@@ -206,16 +207,13 @@ export function ProfileNavbar({
                 FOCUS_RING,
               )}
             >
-              <span
-                className={cn(
-                  "flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500",
-                  overDark
-                    ? "bg-white text-forest-dark"
-                    : "bg-green-700 text-white",
-                )}
-              >
-                <Leaf className="h-4 w-4" />
-              </span>
+              <Image
+                src="/logo.png"
+                alt="ReBites"
+                width={36}
+                height={36}
+                className="h-9 w-9 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
+              />
               <span
                 className={cn(
                   "font-sans text-xl font-bold tracking-tight transition-colors duration-500",
@@ -388,9 +386,13 @@ export function ProfileNavbar({
             >
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-700 text-white">
-                    <Leaf className="h-4 w-4" />
-                  </span>
+                  <Image
+                    src="/logo.png"
+                    alt="ReBites"
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
+                  />
                   <span className="font-sans text-xl font-bold text-green-700">
                     ReBites
                   </span>

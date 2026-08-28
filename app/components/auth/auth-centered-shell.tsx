@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { Leaf } from "lucide-react";
 
 interface AuthCenteredShellProps {
   imageSrc: string;
@@ -75,9 +74,13 @@ export default function AuthCenteredShell({
             <div className="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-overlay [background-image:url('data:image/svg+xml,%3Csvg%20viewBox=%270%200%20200%20200%27%20xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.85%27%20numOctaves=%273%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url(%23n)%27/%3E%3C/svg%3E')]" />
 
             <div className="relative z-10 flex items-center gap-2.5 p-8 xl:p-10">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-sm">
-                <Leaf className="h-[18px] w-[18px] text-white" strokeWidth={1.75} />
-              </span>
+              <Image
+                src="/logo.png"
+                alt="ReBites"
+                width={36}
+                height={36}
+                className="h-9 w-9 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-white/20"
+              />
               <span className="font-display text-[17px] font-semibold tracking-tight text-white">
                 ReBites
               </span>

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -54,25 +55,13 @@ export function OrderSidebar({ open, onClose }: SidebarProps) {
       >
         <div className="flex items-center justify-between px-6 pt-7 pb-6">
           <Link href="/" className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/25">
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
-                <path
-                  d="M12 20C7 18 4 13 4 8c6 0 11 3 12 9Z"
-                  fill="currentColor"
-                  opacity="0.35"
-                />
-                <path
-                  d="M12 20c3-4 4-9 3-14-5 1-8 5-7 10"
-                  fill="currentColor"
-                  opacity="0.6"
-                />
-                <path
-                  d="M12 20c-2-3-2-8 0-12 3 2 4 7 3 11"
-                  fill="currentColor"
-                  opacity="0.9"
-                />
-              </svg>
-            </span>
+            <Image
+              src="/logo.png"
+              alt="ReBites"
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-white/20"
+            />
             <span className="flex flex-col leading-none">
               <span className="font-display text-xl font-medium tracking-tight text-white">
                 Rebites

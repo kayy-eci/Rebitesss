@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
 import {
   ArrowLeft,
@@ -10,7 +11,6 @@ import {
   CheckCircle2,
   Eye,
   EyeOff,
-  Leaf,
   Lock,
 } from "lucide-react";
 
@@ -154,9 +154,13 @@ export default function BuatSandiBaruForm() {
         variants={itemVariants}
         className="mb-5 flex items-center justify-center gap-2 lg:hidden flex-shrink-0"
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#225138] text-[#F7F5EF]">
-          <Leaf className="h-[15px] w-[15px]" strokeWidth={1.75} />
-        </span>
+        <Image
+          src="/logo.png"
+          alt="ReBites"
+          width={28}
+          height={28}
+          className="h-7 w-7 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
+        />
         <span className="font-display text-lg font-semibold tracking-tight text-[#225138]">
           ReBites
         </span>
