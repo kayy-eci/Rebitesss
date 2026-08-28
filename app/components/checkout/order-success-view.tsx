@@ -62,6 +62,7 @@ export function OrderSuccessView() {
   );
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(true);
+  const [countdown, setCountdown] = useState(5);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const retryRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -171,6 +172,22 @@ export function OrderSuccessView() {
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, [orderId, order]);
+
+  // Reset countdown saat popup berhasil muncul
+  useEffect(() => {
+    if (isPaid && showPopup) setCountdown(5);
+  }, [isPaid, showPopup]);
+
+  // Countdown 5 detik → redirect ke home otomatis (hanya untuk pembayaran berhasil)
+  useEffect(() => {
+    if (!isPaid || !showPopup) return;
+    if (countdown <= 0) {
+      router.push('/home');
+      return;
+    }
+    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown, isPaid, showPopup, router]);
 
   if (!orderId) {
     return (
@@ -427,18 +444,18 @@ export function OrderSuccessView() {
               ) : (
                 <>
                   <Link
-                    href={`/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-primary bg-white px-4 py-3 text-sm font-semibold text-primary hover:bg-caramel hover:text-white"
-                    onClick={() => setShowPopup(false)}
-                  >
-                    <ReceiptText className="h-4 w-4" /> Riwayat
-                  </Link>
-                  <Link
                     href="/home"
                     className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:bg-caramel"
                     onClick={() => setShowPopup(false)}
                   >
                     Beranda <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                  <Link
+                    href={`/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-primary bg-white px-4 py-3 text-sm font-semibold text-primary hover:bg-caramel hover:text-white"
+                    onClick={() => setShowPopup(false)}
+                  >
+                    <ReceiptText className="h-4 w-4" /> Riwayat
                   </Link>
                 </>
               )}
@@ -452,6 +469,12 @@ export function OrderSuccessView() {
               >
                 Lihat detail pesanan di belakang
               </button>
+            )}
+
+            {isPaid && (
+              <p className="mt-3 text-center text-xs text-charcoal-400">
+                Beranda dalam <span className="font-semibold tabular-nums text-charcoal-600">{countdown}</span> detik…
+              </p>
             )}
           </div>
         </DialogContent>
