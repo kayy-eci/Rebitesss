@@ -12,6 +12,8 @@ import { SiteFooter } from "@/app/components/Footer";
 import { Reveal } from "@/app/components/reveal";
 import { MagneticButton } from "@/app/components/magnetic-button";
 import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
+import { StoreClosedModal } from "@/app/components/StoreClosedModal";
+import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import { SUBSCRIPTION_PLANS } from "@/lib/subscription-plans";
 
@@ -22,6 +24,7 @@ export default function HomePage() {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null,
   );
+  const storeClosedModal = useStoreClosedModal();
 
   const handleViewDetail = useCallback((id: string) => {
     setSelectedProductId(id);
@@ -273,6 +276,13 @@ export default function HomePage() {
           />
         )}
       </AnimatePresence>
+
+      <StoreClosedModal
+        isOpen={storeClosedModal.isOpen}
+        onClose={storeClosedModal.close}
+        availableFrom={storeClosedModal.availableFrom}
+        availableTo={storeClosedModal.availableTo}
+      />
     </div>
   );
 }

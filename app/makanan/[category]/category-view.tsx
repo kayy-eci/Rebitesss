@@ -14,6 +14,8 @@ import { ProfileNavbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { FoodCard } from "@/app/components/FoodCard";
 import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
+import { StoreClosedModal } from "@/app/components/StoreClosedModal";
+import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import {
   Popover,
@@ -167,6 +169,7 @@ export default function CategoryView({
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null,
   );
+  const storeClosedModal = useStoreClosedModal();
   const { foodItems, loading: catalogLoading } = useCatalog();
 
   useEffect(() => {
@@ -515,6 +518,13 @@ export default function CategoryView({
           />
         )}
       </AnimatePresence>
+
+      <StoreClosedModal
+        isOpen={storeClosedModal.isOpen}
+        onClose={storeClosedModal.close}
+        availableFrom={storeClosedModal.availableFrom}
+        availableTo={storeClosedModal.availableTo}
+      />
     </div>
   );
 }

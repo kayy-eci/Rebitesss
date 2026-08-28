@@ -6,6 +6,8 @@ import { SmartImage } from "@/app/components/SmartImage";
 import type { FoodItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useLikedFoods } from "@/hooks/use-liked-foods";
+import { isStoreOpen } from "@/lib/store-hours";
+import { openStoreClosedModal } from "@/lib/store-closed-modal-store";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
@@ -13,7 +15,14 @@ const FOCUS_RING =
 export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?: (id: string) => void }) {
   const { isLiked, toggle } = useLikedFoods();
   const liked = isLiked(item.id);
-  const handleOpen = () => onViewDetail?.(item.id);
+
+  const handleOpen = () => {
+    if (!isStoreOpen(item.availableFrom, item.availableTo)) {
+      openStoreClosedModal(item.availableFrom, item.availableTo);
+      return;
+    }
+    onViewDetail?.(item.id);
+  };
 
   return (
     <article

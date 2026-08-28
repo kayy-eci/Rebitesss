@@ -12,6 +12,8 @@ import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { FoodCard } from "@/app/components/FoodCard";
 import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
+import { StoreClosedModal } from "@/app/components/StoreClosedModal";
+import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 
 const VALID_FILTERS: FilterKey[] = [
@@ -61,6 +63,7 @@ function CariContent() {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null,
   );
+  const storeClosedModal = useStoreClosedModal();
   const { foodItems, loading } = useCatalog();
 
   const handleViewDetail = useCallback((id: string) => {
@@ -256,6 +259,13 @@ function CariContent() {
           />
         )}
       </AnimatePresence>
+
+      <StoreClosedModal
+        isOpen={storeClosedModal.isOpen}
+        onClose={storeClosedModal.close}
+        availableFrom={storeClosedModal.availableFrom}
+        availableTo={storeClosedModal.availableTo}
+      />
     </div>
   );
 }

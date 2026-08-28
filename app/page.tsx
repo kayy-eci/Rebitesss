@@ -13,6 +13,8 @@ import { MagneticButton } from "@/app/components/magnetic-button";
 import HowItWorks from "@/app/components/HowItWorks";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
+import { StoreClosedModal } from "@/app/components/StoreClosedModal";
+import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 import { HeroSection } from "@/app/components/hero-section";
 import { FaqSection } from "@/app/components/faq-section";
@@ -137,6 +139,7 @@ export default function Home() {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null,
   );
+  const storeClosedModal = useStoreClosedModal();
   // Nama mitra diambil langsung dari daftar toko di database.
   const [partners, setPartners] = useState<string[]>([]);
 
@@ -717,6 +720,13 @@ export default function Home() {
           />
         )}
       </AnimatePresence>
+
+      <StoreClosedModal
+        isOpen={storeClosedModal.isOpen}
+        onClose={storeClosedModal.close}
+        availableFrom={storeClosedModal.availableFrom}
+        availableTo={storeClosedModal.availableTo}
+      />
 
       <SiteFooter />
     </SmoothScroll>

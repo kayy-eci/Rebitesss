@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft,
   BadgeCheck,
-  ChevronRight,
   Heart,
   MapPin,
   Star,
@@ -15,7 +14,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Vendor } from "@/lib/types";
-import { Badge } from "@/app/components/Badge";
 import { SmartImage } from "@/app/components/SmartImage";
 import { DotPattern, LeafSprig } from "@/app/components/dashboardPenjual/decor";
 import {
@@ -34,7 +32,6 @@ interface StoreHeroCardProps {
 
 export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [following, setFollowing] = useState(false);
-  const tier = vendor.tier ?? "UMKM Partner";
   const tagline = vendor.tagline ?? "Mitra surplus makanan ReBites.";
   const followers = vendor.followers ?? 0;
 
@@ -128,13 +125,6 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                     <h1 className="font-display text-2xl font-medium leading-tight tracking-tight text-primary sm:text-3xl">
                       {storeName}
                     </h1>
-                    <Badge variant="cream">{tier}</Badge>
-                    {vendor.isRescuePartner && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-white">
-                        <BadgeCheck className="h-3 w-3" />
-                        Rescue Partner
-                      </span>
-                    )}
                     {vendor.isVerified && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-bold text-charcoal-900">
                         <BadgeCheck className="h-3 w-3" />
@@ -171,10 +161,15 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                       <Users className="h-3.5 w-3.5 text-sage-500" />
                       {followers + (following ? 1 : 0)} pengikut
                     </span>
-                    <span className="flex items-center gap-1">
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(storeAddress)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 hover:underline"
+                    >
                       <MapPin className="h-3.5 w-3.5 text-sage-500" />
                       {storeAddress}
-                    </span>
+                    </a>
                   </div>
 
                   <p className="mt-2 text-xs font-medium text-primary">
