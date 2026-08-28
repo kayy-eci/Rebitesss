@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
-import { Navbar } from "@/app/components/navbar";
+import { ProfileNavbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 
 export default function CategoryNotFound() {
   return (
     <div className="flex min-h-screen flex-col bg-cream-50">
-      <Navbar />
+      <ProfileNavbar />
       <main className="flex flex-1 items-center justify-center px-4 pb-16 pt-28">
         <div className="w-full max-w-md rounded-2xl border border-hairline bg-white px-6 py-14 text-center shadow-md shadow-forest-900/5">
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cream-100">

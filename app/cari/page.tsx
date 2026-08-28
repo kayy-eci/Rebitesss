@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Search, SearchX, Sparkles } from "lucide-react";
 import { useCatalog } from "@/lib/catalog";
 import type { FilterKey, FoodItem } from "@/lib/types";
-import { Navbar } from "@/app/components/navbar";
+import { ProfileNavbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { SearchFilterBar } from "@/app/components/SearchFilterBar";
 import { FoodCard } from "@/app/components/FoodCard";
@@ -112,7 +112,7 @@ function CariContent() {
 
   return (
     <div className="flex min-h-screen flex-col bg-cream-50">
-      <Navbar />
+      <ProfileNavbar />
 
       <main className="flex-1 pt-28">
         <section className="relative overflow-hidden bg-cream-50 pb-16 pt-6 lg:pb-24">

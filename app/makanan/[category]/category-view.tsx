@@ -10,7 +10,7 @@ import {
   SearchX,
   SlidersHorizontal,
 } from "lucide-react";
-import { Navbar } from "@/app/components/navbar";
+import { ProfileNavbar } from "@/app/components/navbar";
 import { SiteFooter } from "@/app/components/Footer";
 import { FoodCard } from "@/app/components/FoodCard";
 import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
@@ -229,7 +229,7 @@ export default function CategoryView({
 
   return (
     <div className="flex min-h-screen flex-col bg-cream-50">
-      <Navbar />
+      <ProfileNavbar />
 
       <main className="flex-1 pt-28">
         <section data-nav="cream" className="bg-cream-50 pb-16 pt-6 lg:pb-24">

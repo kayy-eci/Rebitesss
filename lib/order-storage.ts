@@ -226,10 +226,54 @@ export async function completeExpiredOrders(userId: string | null | undefined): 
         status: 'completed',
         completedAt: new Date().toISOString(),
       });
-      if (updated) changed = true;
+      if (updated) {
+        changed = true;
+        // Kirim notifikasi selesai (best-effort, jangan block)
+        try {
+          const { notifyOrderCompleted } = await import('./order-notifications');
+          await notifyOrderCompleted({ ...order, status: 'completed', completedAt: new Date().toISOString() });
+        } catch {}
+      }
     }
   }
   return changed;
+}
+
+/** Cek progress pesanan dan kirim notifikasi delivering jika sudah 60% durasi.
+ *  Dipanggil bareng completeExpiredOrders polling. */
+export async function syncDeliveringNotifications(userId: string | null | undefined): Promise<boolean> {
+  if (!userId) return false;
+  const { data: paymentRows } = await supabase
+    .from('orders')
+    .select('order_code, payment_status, total_price')
+    .eq('buyer_id', userId);
+  const paidSet = new Set<string>();
+  for (const row of (paymentRows ?? []) as Array<Record<string, unknown>>) {
+    const code = row.order_code as string;
+    const status = row.payment_status as string | null;
+    const total = Number(row.total_price ?? 0);
+    if (status === 'paid' || total === 0) paidSet.add(code);
+  }
+  const orders = await getUserOrders(userId);
+  const now = Date.now();
+  let sent = false;
+  for (const order of orders) {
+    if (order.status !== 'ongoing') continue;
+    if (!paidSet.has(order.orderId)) continue;
+    if (!order.estimatedCompletionAt) continue;
+    const start = new Date(order.createdAt).getTime();
+    const end = new Date(order.estimatedCompletionAt).getTime();
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) continue;
+    const progress = (now - start) / (end - start);
+    if (progress >= 0.6 && progress < 1) {
+      try {
+        const { notifyOrderDelivering } = await import('./order-notifications');
+        await notifyOrderDelivering(order);
+        sent = true;
+      } catch {}
+    }
+  }
+  return sent;
 }
 
 /** Kurangi stok produk secara atomik lewat RPC reserve_stock. */

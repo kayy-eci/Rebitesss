@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { PackageSearch, SearchX } from 'lucide-react';
 import type { StoredOrder } from '@/lib/types';
 import { getReviewFor } from '@/lib/review-storage';
@@ -15,12 +16,26 @@ import { Toaster } from '@/app/components/ui/toaster';
 export function OrderHistoryView() {
   const { orders, activeOrders, completedOrders, loading } = useOrders();
   const { userId } = useCurrentUser();
+  const searchParams = useSearchParams();
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [query, setQuery] = useState('');
   const [fulfillment, setFulfillment] = useState<FulfillmentFilter>('all');
   const [dateRange, setDateRange] = useState('all');
   const [detailOrder, setDetailOrder] = useState<StoredOrder | null>(null);
+  const [highlightOrderId, setHighlightOrderId] = useState<string | null>(null);
+
+  // Deep-link ?orderId=RB-xxx → auto buka popup detail
+  useEffect(() => {
+    const param = searchParams.get('orderId');
+    if (param) setHighlightOrderId(param);
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!highlightOrderId || loading || orders.length === 0) return;
+    const found = orders.find((o) => o.orderId === highlightOrderId);
+    if (found) setDetailOrder(found);
+  }, [highlightOrderId, loading, orders]);
 
   const [reviewsTick, setReviewsTick] = useState(0);
   const [reviewedMap, setReviewedMap] = useState<Set<string>>(new Set());
@@ -121,6 +136,7 @@ export function OrderHistoryView() {
                 order={order}
                 reviewed={reviewedMap.has(order.orderId)}
                 onViewDetail={setDetailOrder}
+                highlighted={order.orderId === highlightOrderId}
               />
             ))}
           </div>
@@ -138,11 +154,21 @@ export function OrderHistoryView() {
         )}
       </div>
 
-      {/* Popup detail - existing feature, click card */}
+      {/* Popup detail - existing feature, click card / deep-link */}
       <OrderDetailModal
         order={detailOrder}
         userId={userId}
-        onClose={() => setDetailOrder(null)}
+        onClose={() => {
+          setDetailOrder(null);
+          setHighlightOrderId(null);
+          // bersihkan query param tanpa reload
+          if (typeof window !== 'undefined') {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('orderId');
+            url.searchParams.delete('payment');
+            window.history.replaceState({}, '', url.toString());
+          }
+        }}
         onReviewed={() => setReviewsTick((t) => t + 1)}
       />
       <Toaster />

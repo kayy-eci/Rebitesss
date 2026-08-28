@@ -20,6 +20,14 @@ import { getOrderById } from '@/lib/order-storage';
 import { supabase } from '@/lib/supabase';
 import type { StoredOrder } from '@/lib/types';
 import { AnimatedNumber } from './animated-number';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/app/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -40,6 +48,8 @@ const PAYMENT_NAMES: Record<string, string> = {
   dana: 'DANA',
   shopeepay: 'ShopeePay',
   'transfer-bank': 'Transfer Bank',
+  xendit: 'Xendit',
+  'rebites-coin': 'ReBites Coin',
 };
 
 export function OrderSuccessView() {
@@ -51,13 +61,11 @@ export function OrderSuccessView() {
     undefined
   );
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState(true);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    if (!orderId) {
-      router.replace('/home');
-      return;
-    }
+    if (!orderId) return;
     let mounted = true;
     getOrderById(orderId).then((result) => {
       if (mounted) setOrder(result ?? null);
@@ -65,7 +73,7 @@ export function OrderSuccessView() {
     return () => {
       mounted = false;
     };
-  }, [orderId, router]);
+  }, [orderId]);
 
   // Poll payment_status sampai webhook Xendit masuk (max 90 detik)
   useEffect(() => {
@@ -89,6 +97,8 @@ export function OrderSuccessView() {
       ) {
         if (pollRef.current) clearInterval(pollRef.current);
       }
+      // saat sudah paid, pastikan popup terbuka
+      if (row.payment_status === 'paid') setShowPopup(true);
     };
 
     fetchStatus();
@@ -107,188 +117,290 @@ export function OrderSuccessView() {
     };
   }, [orderId, order]);
 
-  useEffect(() => {
-    if (order === null) router.replace('/home');
-  }, [order, router]);
+  if (!orderId) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
+        <p className="font-sans text-lg font-bold text-charcoal-900">Order ID tidak ditemukan</p>
+        <p className="max-w-sm text-sm leading-relaxed text-charcoal-500">Link pembayaran tidak valid.</p>
+        <Link href="/home" className="mt-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-800">
+          Kembali ke Beranda
+        </Link>
+      </main>
+    );
+  }
 
-  if (order === undefined || order === null) {
+  if (order === undefined) {
     return <main className="min-h-screen bg-cream-50" />;
+  }
+
+  if (order === null) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
+        <p className="font-sans text-lg font-bold text-charcoal-900">Pesanan tidak ditemukan</p>
+        <p className="max-w-sm text-sm leading-relaxed text-charcoal-500">Pesanan #{orderId} tidak ada atau sudah dihapus.</p>
+        <Link href="/home" className="mt-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-800">
+          Kembali ke Beranda
+        </Link>
+      </main>
+    );
   }
 
   const isPending = paymentStatus === 'unpaid' || paymentStatus === null;
   const isFailed = paymentStatus === 'failed';
+  const isPaid = !isPending && !isFailed;
+
+  // estimasi text untuk popup
+  const estimasiText = order.estimatedMinutes
+    ? `${order.estimatedMinutes} menit`
+    : '—';
+  const jarakText = typeof order.distanceKm === 'number' ? `${order.distanceKm} km` : null;
+  const prepText = typeof order.preparationMinutes === 'number' ? `${order.preparationMinutes} menit persiapan` : null;
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-cream-50 px-5 py-16">
-      <motion.div
-        initial={{ opacity: 0, y: 24, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.45, ease: EASE }}
-        className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
-      >
-        {isFailed ? (
-          <div className="relative overflow-hidden bg-red-600 px-8 pb-10 pt-9 text-center text-white">
-            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-red-600 shadow-lg">
-              <XCircle className="h-8 w-8" strokeWidth={2.5} />
-            </span>
-            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
-              Pembayaran Gagal
-            </h1>
-            <p className="mt-1.5 text-sm text-white/85">
-              Pembayaran untuk pesanan #{order.orderId} kadaluarsa atau dibatalkan.
-            </p>
-            <p className="mt-2 text-xs text-white/70">Stok telah dikembalikan.</p>
-          </div>
-        ) : isPending ? (
-          <div className="relative overflow-hidden bg-amber-500 px-8 pb-10 pt-9 text-center text-white">
-            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-amber-600 shadow-lg">
-              <Clock className="h-8 w-8" strokeWidth={2.2} />
-            </span>
-            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
-              Menunggu Pembayaran
-            </h1>
-            <p className="mt-1.5 text-sm text-white/85">
-              Selesaikan pembayaran di halaman Xendit. Halaman ini akan otomatis ter-update.
-            </p>
-            <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tabular-nums">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
-              #{order.orderId} · memverifikasi…
-            </p>
-          </div>
-        ) : (
-          <div className="relative overflow-hidden bg-green-700 px-8 pb-10 pt-9 text-center text-white">
-            <motion.span
-              initial={{ scale: 0, rotate: -30 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.15 }}
-              className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-green-700 shadow-lg"
-            >
-              <Check className="h-8 w-8" strokeWidth={3} />
-            </motion.span>
-            <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
-              Pesanan Berhasil!
-            </h1>
-            <p className="mt-1.5 text-sm text-white/85">
-              Pesanan kamu sedang diproses oleh{' '}
-              <span className="font-semibold">{order.vendorName}</span>
-            </p>
-            <p className="mt-2 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tabular-nums">
-              #{order.orderId}
-            </p>
-          </div>
+    <main className="relative min-h-screen bg-cream-50">
+      {/* Blurred background — detail pesanan */}
+      <div
+        className={cn(
+          'flex min-h-screen items-center justify-center px-5 py-16 transition-all duration-300',
+          showPopup && (isPaid || isPending || isFailed) ? 'blur-[5px] pointer-events-none select-none scale-[0.98]' : ''
         )}
+        aria-hidden={showPopup}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.45, ease: EASE }}
+          className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
+        >
+          {/* Placeholder header untuk background (akan tertutup popup, jadi tampilkan versi muted) */}
+          <div className="bg-sage-50 px-8 pb-10 pt-9 text-center">
+            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-sage-400 shadow">
+              <ReceiptText className="h-8 w-8" />
+            </span>
+            <h1 className="mt-4 font-display text-2xl font-semibold tracking-tight text-charcoal-900">Detail Pesanan</h1>
+            <p className="mt-1.5 text-sm text-charcoal-500">#{order.orderId} · {formatDateTime(order.createdAt)}</p>
+            {order.estimatedMinutes && (
+              <p className="mt-2 inline-flex rounded-full bg-green-700 px-3 py-1 text-xs font-semibold text-white">
+                Estimasi selesai {estimasiText} {jarakText ? `· ${jarakText}` : ''}
+              </p>
+            )}
+          </div>
 
-        { }
-        <div className="-mt-5 px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.35, ease: EASE }}
-            className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10"
-          >
-            <motion.span
-              initial={{ rotate: -20, scale: 0 }}
-              animate={{ rotate: 0, scale: 1 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.55 }}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow"
+          <div className="-mt-5 px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.35, ease: EASE }}
+              className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10"
             >
-              <Coins className="h-5 w-5" />
-            </motion.span>
-            <div>
-              <p className="font-display text-xl font-bold tabular-nums text-gold-600">
-                +<AnimatedNumber value={order.coinEarned} format={(v) => v.toLocaleString('id-ID')} />{' '}
-                ReBites Coin
-              </p>
-              <p className="text-xs text-charcoal-500">
-                Coin akan ditambahkan ke saldo kamu
-              </p>
-            </div>
-          </motion.div>
-        </div>
-
-        { }
-        <div className="px-6 pb-7 pt-5">
-          <div className="flex items-start gap-4 rounded-2xl border border-sage-100 bg-cream-50 p-4">
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-sage-100">
-              <SmartImage src={order.image} alt={order.productName} sizes="64px" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-charcoal-900">
-                {order.productName}
-              </p>
-              <p className="mt-0.5 text-xs text-charcoal-500">
-                {order.quantity} porsi ·{' '}
-                {formatDateTime(order.createdAt)}
-              </p>
-              <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-sage-100 px-2.5 py-0.5 text-[11px] font-semibold text-green-700">
-                {order.fulfillment === 'delivery' ? (
-                  <>
-                    <Truck className="h-3 w-3" /> Diantar
-                  </>
-                ) : (
-                  <>
-                    <MapPin className="h-3 w-3" /> Ambil Sendiri
-                  </>
-                )}
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow">
+                <Coins className="h-5 w-5" />
               </span>
-            </div>
+              <div>
+                <p className="font-display text-xl font-bold tabular-nums text-gold-600">
+                  +<AnimatedNumber value={order.coinEarned} format={(v) => v.toLocaleString('id-ID')} /> ReBites Coin
+                </p>
+                <p className="text-xs text-charcoal-500">Coin akan ditambahkan ke saldo kamu</p>
+              </div>
+            </motion.div>
           </div>
 
-          <dl className="mt-4 space-y-2 text-sm">
-            <Row label="Subtotal" value={formatRupiah(order.subtotal)} />
-            {order.discount > 0 && (
-              <Row
-                label="Diskon promo"
-                value={`−${formatRupiah(order.discount)}`}
-                accent
-              />
-            )}
-            <Row label="Biaya admin" value={formatRupiah(order.serviceFee)} />
-            {order.deliveryFee > 0 && (
-              <Row
-                label="Biaya pengantaran"
-                value={formatRupiah(order.deliveryFee)}
-              />
-            )}
-            {(order.coinUsed ?? 0) > 0 && (
-              <Row
-                label="ReBites Coin"
-                value={`−${formatRupiah(order.coinUsed ?? 0)}`}
-                accent
-              />
-            )}
-            <div className="flex items-center justify-between border-t border-sage-100 pt-2.5">
-              <dt className="font-display font-medium text-charcoal-900">
-                Total
-              </dt>
-              <dd className="font-display text-lg font-semibold tabular-nums text-green-700">
-                {formatRupiah(order.total)}
-              </dd>
+          <div className="px-6 pb-7 pt-5">
+            <div className="flex items-start gap-4 rounded-2xl border border-sage-100 bg-cream-50 p-4">
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-sage-100">
+                <SmartImage src={order.image} alt={order.productName} sizes="64px" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-charcoal-900">{order.productName}</p>
+                <p className="mt-0.5 text-xs text-charcoal-500">
+                  {order.quantity} porsi · {formatDateTime(order.createdAt)}
+                </p>
+                <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-sage-100 px-2.5 py-0.5 text-[11px] font-semibold text-green-700">
+                  {order.fulfillment === 'delivery' ? (
+                    <>
+                      <Truck className="h-3 w-3" /> Diantar {jarakText ? `· ${jarakText}` : ''}
+                    </>
+                  ) : (
+                    <>
+                      <MapPin className="h-3 w-3" /> Ambil Sendiri {prepText ? `· ${prepText}` : ''}
+                    </>
+                  )}
+                </span>
+              </div>
             </div>
-            <Row
-              label="Metode pembayaran"
-              value={PAYMENT_NAMES[order.paymentMethodId] ?? '—'}
-            />
-          </dl>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <Link
-              href="/riwayatPesanan"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-green-700 px-4 py-3 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
-            >
-              <ReceiptText className="h-4 w-4" />
-              Riwayat
-            </Link>
-            <Link
-              href="/home"
-              className="group inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 transition-colors hover:bg-green-600"
-            >
-              Beranda
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            <dl className="mt-4 space-y-2 text-sm">
+              <Row label="Subtotal" value={formatRupiah(order.subtotal)} />
+              {order.discount > 0 && <Row label="Diskon promo" value={`−${formatRupiah(order.discount)}`} accent />}
+              <Row label="Biaya admin" value={formatRupiah(order.serviceFee)} />
+              {order.deliveryFee > 0 && <Row label="Biaya pengantaran" value={formatRupiah(order.deliveryFee)} />}
+              {(order.coinUsed ?? 0) > 0 && <Row label="ReBites Coin" value={`−${formatRupiah(order.coinUsed ?? 0)}`} accent />}
+              <div className="flex items-center justify-between border-t border-sage-100 pt-2.5">
+                <dt className="font-display font-medium text-charcoal-900">Total</dt>
+                <dd className="font-display text-lg font-semibold tabular-nums text-green-700">{formatRupiah(order.total)}</dd>
+              </div>
+              <Row label="Metode pembayaran" value={PAYMENT_NAMES[order.paymentMethodId] ?? '—'} />
+              {order.estimatedMinutes && <Row label="Estimasi selesai" value={estimasiText} />}
+              {jarakText && order.fulfillment === 'delivery' && <Row label="Jarak toko" value={jarakText} />}
+            </dl>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Popup pembayaran — hanya tampil di atas blur */}
+      <Dialog open={showPopup} onOpenChange={(open) => setShowPopup(open)}>
+        <DialogContent
+          className="max-h-[90dvh] gap-0 overflow-hidden border-0 bg-white p-0 sm:max-w-md sm:rounded-[28px] [&>button]:hidden"
+          onPointerDownOutside={(e) => e.preventDefault()}
+          onInteractOutside={(e) => e.preventDefault()}
+        >
+          <DialogHeader className="sr-only">
+            <DialogTitle>{isFailed ? 'Pembayaran Gagal' : isPending ? 'Menunggu Pembayaran' : 'Pembayaran Berhasil'}</DialogTitle>
+            <DialogDescription>Status pembayaran pesanan {order.orderId}</DialogDescription>
+          </DialogHeader>
+
+          {isFailed ? (
+            <div className="bg-red-600 px-8 pb-10 pt-9 text-center text-white">
+              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-red-600 shadow-lg">
+                <XCircle className="h-8 w-8" strokeWidth={2.5} />
+              </span>
+              <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight">Pembayaran Gagal</h2>
+              <p className="mt-1.5 text-sm text-white/85">Pembayaran untuk pesanan #{order.orderId} kadaluarsa atau dibatalkan.</p>
+              <p className="mt-2 text-xs text-white/70">Stok telah dikembalikan.</p>
+            </div>
+          ) : isPending ? (
+            <div className="bg-amber-500 px-8 pb-10 pt-9 text-center text-white">
+              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-amber-600 shadow-lg">
+                <Clock className="h-8 w-8" strokeWidth={2.2} />
+              </span>
+              <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight">Menunggu Pembayaran</h2>
+              <p className="mt-1.5 text-sm text-white/85">Selesaikan pembayaran di halaman Xendit. Halaman ini akan otomatis ter-update.</p>
+              <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tabular-nums">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+                #{order.orderId} · memverifikasi…
+              </p>
+            </div>
+          ) : (
+            <div className="relative overflow-hidden bg-green-700 px-8 pb-10 pt-9 text-center text-white">
+              <motion.span
+                initial={{ scale: 0, rotate: -30 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.15 }}
+                className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-green-700 shadow-lg"
+              >
+                <Check className="h-8 w-8" strokeWidth={3} />
+              </motion.span>
+              <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight">Pembayaran Berhasil!</h2>
+              <p className="mt-1.5 text-sm text-white/85">
+                Pesanan kamu sedang diproses oleh <span className="font-semibold">{order.vendorName}</span>
+              </p>
+              <p className="mt-2 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tabular-nums">#{order.orderId}</p>
+              {order.estimatedMinutes && (
+                <p className="mt-2 text-xs text-white/80">
+                  Estimasi selesai <span className="font-semibold">{estimasiText}</span>{' '}
+                  {order.fulfillment === 'delivery' && jarakText ? `· jarak ${jarakText}` : ''}
+                  {prepText ? ` · ${prepText}` : ''}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Coin card — hanya untuk success/pending */}
+          {!isFailed && (
+            <div className="px-6 -mt-5">
+              <div className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow">
+                  <Coins className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="font-display text-xl font-bold tabular-nums text-gold-600">
+                    +<AnimatedNumber value={order.coinEarned} format={(v) => v.toLocaleString('id-ID')} /> ReBites Coin
+                  </p>
+                  <p className="text-xs text-charcoal-500">Coin akan ditambahkan ke saldo kamu</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="px-6 pb-7 pt-5">
+            {/* Mini order summary di popup juga */}
+            <div className="flex items-start gap-4 rounded-2xl border border-sage-100 bg-cream-50 p-4">
+              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-sage-100">
+                <SmartImage src={order.image} alt={order.productName} sizes="48px" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-charcoal-900">{order.productName}</p>
+                <p className="mt-0.5 text-xs text-charcoal-500">{order.quantity} porsi · {order.vendorName}</p>
+              </div>
+              <p className="shrink-0 font-display text-sm font-semibold tabular-nums text-green-700">{formatRupiah(order.total)}</p>
+            </div>
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              {isFailed ? (
+                <>
+                  <Link
+                    href={`/detail/pesanan?product=${encodeURIComponent(order.productId)}&qty=${order.quantity}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-green-700 px-4 py-3 text-sm font-semibold text-green-700 hover:bg-green-700 hover:text-white"
+                    onClick={() => setShowPopup(false)}
+                  >
+                    <ArrowRight className="h-4 w-4 rotate-180" /> Coba Lagi
+                  </Link>
+                  <Link
+                    href="/home"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+                    onClick={() => setShowPopup(false)}
+                  >
+                    Beranda
+                  </Link>
+                </>
+              ) : isPending ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setShowPopup(false)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-sage-300 bg-white px-4 py-3 text-sm font-semibold text-charcoal-700 hover:bg-cream-50"
+                  >
+                    Lihat Detail
+                  </button>
+                  <Link
+                    href={`/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+                  >
+                    <ReceiptText className="h-4 w-4" /> Riwayat
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href={`/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-green-700 bg-white px-4 py-3 text-sm font-semibold text-green-700 hover:bg-green-700 hover:text-white"
+                    onClick={() => setShowPopup(false)}
+                  >
+                    <ReceiptText className="h-4 w-4" /> Riwayat
+                  </Link>
+                  <Link
+                    href="/home"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+                    onClick={() => setShowPopup(false)}
+                  >
+                    Beranda <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {!isFailed && (
+              <button
+                type="button"
+                onClick={() => setShowPopup(false)}
+                className="mt-3 w-full text-center text-xs font-medium text-charcoal-500 hover:text-charcoal-700"
+              >
+                Lihat detail pesanan di belakang
+              </button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
@@ -305,13 +417,7 @@ function Row({
   return (
     <div className="flex items-center justify-between gap-4">
       <dt className="text-charcoal-500">{label}</dt>
-      <dd
-        className={
-          accent
-            ? 'font-medium tabular-nums text-green-700'
-            : 'font-medium tabular-nums text-charcoal-900'
-        }
-      >
+      <dd className={accent ? 'font-medium tabular-nums text-green-700' : 'font-medium tabular-nums text-charcoal-900'}>
         {value}
       </dd>
     </div>

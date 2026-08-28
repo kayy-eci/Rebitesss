@@ -49,6 +49,8 @@ import {
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { SELLER_STATUS_UPDATED_EVENT } from "@/hooks/use-seller-status";
+import { SUBSCRIPTION_PLANS, getPlanPrice, type BillingCycle } from "@/lib/subscription-plans";
+import { formatRupiah } from "@/lib/data";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -211,6 +213,11 @@ export default function PenjualRegisterForm() {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  // Step 3 — paket langganan wajib bayar (Basic 24.999)
+  const [selectedPlan, setSelectedPlan] = useState<'basic' | 'standar' | 'premium'>('basic');
+  const [billing, setBilling] = useState<BillingCycle>('monthly');
+  const [payProcessing, setPayProcessing] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
 
   const step1Form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -272,9 +279,20 @@ export default function PenjualRegisterForm() {
     setStep(2);
   }
 
+  function goToStep3() {
+    setDirection(1);
+    setStep(3);
+  }
+
   function goBack() {
     setDirection(-1);
-    setStep(1);
+    if (step === 3) setStep(2);
+    else setStep(1);
+  }
+
+  function goBackToStep2() {
+    setDirection(-1);
+    setStep(2);
   }
 
   function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -313,13 +331,22 @@ export default function PenjualRegisterForm() {
       const s2 = step2Form.getValues();
       const userId = session.user.id;
 
-      // Cegah toko duplikat: kalau user sudah punya UMKM, langsung ke dashboard.
+      // Cegah toko duplikat: kalau user sudah punya UMKM, cek langganan aktif
       const { data: existingUmkm } = await supabase
         .from("umkm_profiles")
         .select("id")
         .eq("user_id", userId)
         .limit(1);
       if (existingUmkm && existingUmkm.length > 0) {
+        // Jika sudah punya toko tapi belum berlangganan aktif → paksa ke Step 3
+        const { getActiveSubscription } = await import("@/lib/subscription-storage");
+        const activeSub = await getActiveSubscription();
+        if (!activeSub) {
+          setLoading(false);
+          setDirection(1);
+          setStep(3);
+          return;
+        }
         window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
         router.push("/dashboard/penjual");
         return;
@@ -381,12 +408,55 @@ export default function PenjualRegisterForm() {
       }
 
       window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
-      router.push("/dashboard/penjual");
+      // Jangan langsung ke dashboard — wajib pilih paket & bayar (Basic 24.999 wajib)
+      setDirection(1);
+      setStep(3);
+      setPayError(null);
     } catch (err) {
       const message = err instanceof Error ? err.message : "";
       setError(message || "Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handlePaySubscription() {
+    if (payProcessing) return;
+    setPayError(null);
+    setPayProcessing(true);
+    try {
+      const { supabase } = await import("@/lib/supabase");
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        setPayError("Sesi habis, silakan login ulang.");
+        router.push("/auth/login");
+        return;
+      }
+      const res = await fetch("/api/subscriptions/xendit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ planSlug: selectedPlan, billing }),
+      });
+      const json = (await res.json().catch(() => null)) as { error?: string; invoiceUrl?: string } | null;
+      if (!res.ok) {
+        setPayError(json?.error ?? "Gagal membuat invoice.");
+        return;
+      }
+      if (json?.invoiceUrl) {
+        window.location.href = json.invoiceUrl;
+        return;
+      }
+      setPayError("Respons pembayaran tidak valid.");
+    } catch (e) {
+      setPayError(e instanceof Error ? e.message : "Terjadi kesalahan pembayaran.");
+    } finally {
+      setPayProcessing(false);
     }
   }
 
@@ -422,36 +492,37 @@ export default function PenjualRegisterForm() {
         </span>
       </motion.div>
 
-      {/* Stepper like reference - minimal dots with line */}
+      {/* Stepper 3 langkah — Akun → Usaha → Paket */}
       <motion.div variants={itemVariants} className="mb-5 flex-shrink-0">
         <div className="flex items-center gap-1.5">
           <div
             className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold transition-colors ${
-              step >= 1
-                ? "bg-[#225138] text-white shadow-sm"
-                : "bg-[#EDE9DE] text-[#6B6A63]"
+              step >= 1 ? "bg-[#225138] text-white shadow-sm" : "bg-[#EDE9DE] text-[#6B6A63]"
             }`}
           >
             {step > 1 ? <CheckCircle2 className="h-3.5 w-3.5" /> : "1"}
           </div>
-          <div
-            className={`h-px flex-1 transition-colors ${
-              step >= 2 ? "bg-[#225138]" : "bg-[#E5E7EB]"
-            }`}
-          />
+          <div className={`h-px flex-1 transition-colors ${step >= 2 ? "bg-[#225138]" : "bg-[#E5E7EB]"}`} />
           <div
             className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold transition-colors ${
-              step >= 2
-                ? "bg-[#225138] text-white shadow-sm"
-                : "bg-[#EDE9DE] text-[#6B6A63]"
+              step >= 2 ? "bg-[#225138] text-white shadow-sm" : "bg-[#EDE9DE] text-[#6B6A63]"
             }`}
           >
-            2
+            {step > 2 ? <CheckCircle2 className="h-3.5 w-3.5" /> : "2"}
+          </div>
+          <div className={`h-px flex-1 transition-colors ${step >= 3 ? "bg-[#225138]" : "bg-[#E5E7EB]"}`} />
+          <div
+            className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold transition-colors ${
+              step >= 3 ? "bg-[#225138] text-white shadow-sm" : "bg-[#EDE9DE] text-[#6B6A63]"
+            }`}
+          >
+            3
           </div>
         </div>
         <div className="mt-2 flex justify-between">
           <span className={`font-sans text-[10px] font-semibold uppercase tracking-widest ${step===1 ? "text-[#225138]" : "text-[#9A9994]"}`}>Akun</span>
           <span className={`font-sans text-[10px] font-semibold uppercase tracking-widest ${step===2 ? "text-[#225138]" : "text-[#9A9994]"}`}>Usaha</span>
+          <span className={`font-sans text-[10px] font-semibold uppercase tracking-widest ${step===3 ? "text-[#225138]" : "text-[#9A9994]"}`}>Paket</span>
         </div>
       </motion.div>
 
@@ -459,7 +530,7 @@ export default function PenjualRegisterForm() {
         variants={itemVariants}
         className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-[#14261E] flex-shrink-0"
       >
-        {step === 1 ? "Buat Akun Penjual" : "Data Usaha"}
+        {step === 1 ? "Buat Akun Penjual" : step === 2 ? "Data Usaha" : "Pilih Paket Langganan"}
       </motion.h1>
       <motion.p
         variants={itemVariants}
@@ -467,7 +538,9 @@ export default function PenjualRegisterForm() {
       >
         {step === 1
           ? "Verifikasi akun Anda untuk melanjutkan. Email & nama sudah sesuai sesi login."
-          : "Ceritakan tentang usaha kuliner Anda untuk tampil di ReBites."}
+          : step === 2
+            ? "Ceritakan tentang usaha kuliner Anda untuk tampil di ReBites."
+            : "Pilih paket untuk memulai berjualan — Basic 24.999/bulan wajib bayar via Xendit."}
       </motion.p>
 
       <div className="mt-4 flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#E5E7EB] [&::-webkit-scrollbar-track]:bg-transparent">
@@ -891,12 +964,123 @@ export default function PenjualRegisterForm() {
                       disabled={loading}
                       className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#143B2D] px-4 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-white shadow-sm transition-colors duration-200 hover:bg-[#0F2E24] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                      {loading ? "Mendaftar..." : "Buat Akun"}
+                      {loading ? "Menyimpan..." : "Lanjut ke Paket"}
                       {!loading && <ArrowRight className="h-3.5 w-3.5" />}
                     </button>
                   </div>
                 </form>
               </Form>
+            </motion.div>
+          )}
+
+          {step === 3 && (
+            <motion.div
+              key="step3"
+              custom={direction}
+              variants={stepSlide}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="space-y-4"
+            >
+              {/* Billing toggle */}
+              <div className="flex justify-center">
+                <div className="inline-flex items-center rounded-full border border-[#DEDACF] bg-white p-1">
+                  {(['monthly','yearly'] as BillingCycle[]).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setBilling(mode)}
+                      aria-pressed={billing===mode}
+                      className={cn('rounded-full px-4 py-1.5 text-xs font-semibold transition-colors', billing===mode ? 'bg-[#225138] text-white shadow-sm' : 'text-[#6B6A63] hover:text-[#225138]')}
+                    >
+                      {mode==='monthly' ? 'Bulanan' : 'Tahunan'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3 cards paket — Basic wajib bayar */}
+              <div className="grid grid-cols-1 gap-3">
+                {SUBSCRIPTION_PLANS.map((plan) => {
+                  const isSelected = selectedPlan===plan.slug;
+                  const price = getPlanPrice(plan as any, billing);
+                  const total = price + Math.round(price*0.02);
+                  return (
+                    <button
+                      key={plan.slug}
+                      type="button"
+                      onClick={() => setSelectedPlan(plan.slug)}
+                      className={cn('relative flex flex-col rounded-2xl border bg-white p-4 text-left transition-all', isSelected ? 'border-[#225138] bg-[#F7F5EF] shadow-sm ring-1 ring-[#225138]/20' : 'border-[#DEDACF] hover:border-[#AEB89B]')}
+                    >
+                      <span className={cn('absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full border-2', isSelected ? 'border-[#225138] bg-[#225138]' : 'border-[#DEDACF] bg-white')}>
+                        {isSelected && <span className="h-2 w-2 rounded-full bg-white" />}
+                      </span>
+                      <h3 className="font-display text-[15px] font-semibold text-[#225138]">ReBites {plan.name}</h3>
+                      <p className="mt-1 text-xs leading-relaxed text-[#6B6A63]">{plan.tagline}</p>
+                      <p className="mt-2">
+                        <span className="font-display text-xl font-bold text-[#225138]">{formatRupiah(price)}</span>
+                        <span className="ml-1 text-xs text-[#6B6A63]">/ {billing==='yearly'?'tahun':'bulan'}</span>
+                      </p>
+                      <p className="text-[11px] text-[#9A9994]">+ Pajak 2% → {formatRupiah(total)}</p>
+                      <ul className="mt-2 space-y-1">
+                        {plan.features.map((f) => (
+                          <li key={f} className="flex gap-1.5 text-[11px] leading-snug text-[#225138]">
+                            <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-[#225138]" />{f}
+                          </li>
+                        ))}
+                      </ul>
+                      {isSelected && <span className="absolute -top-2 right-6 rounded-full bg-[#225138] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">Dipilih</span>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Rincian */}
+              {(() => {
+                const plan = SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)!;
+                const price = getPlanPrice(plan as any, billing);
+                const tax = Math.round(price*0.02);
+                const total = price + tax;
+                const periodEnd = new Date(); if(billing==='yearly') periodEnd.setFullYear(periodEnd.getFullYear()+1); else periodEnd.setMonth(periodEnd.getMonth()+1);
+                return (
+                  <div className="rounded-xl border border-[#DEDACF] bg-[#FCFCF9] p-4">
+                    <div className="flex items-center justify-between text-[13px]">
+                      <span className="text-[#6B6A63]">Paket terpilih</span>
+                      <span className="font-semibold text-[#225138]">ReBites {plan.name} — {billing==='yearly'?'Tahunan':'Bulanan'}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[13px] mt-1.5">
+                      <span className="text-[#6B6A63]">Total bayar</span>
+                      <span className="font-display text-[15px] font-bold text-[#225138]">{formatRupiah(total)}</span>
+                    </div>
+                    <p className="mt-1 text-[11px] text-[#9A9994]">Berlaku s.d. {periodEnd.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})} • via Xendit</p>
+                  </div>
+                );
+              })()}
+
+              {payError && (
+                <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-700">{payError}</p>
+              )}
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={goBackToStep2}
+                  className="flex items-center justify-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6B6A63] hover:bg-[#F7F5EF]"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5" /> Kembali
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePaySubscription}
+                  disabled={payProcessing}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#143B2D] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white hover:bg-[#0F2E24] disabled:opacity-60"
+                >
+                  {payProcessing ? 'Memproses…' : `Bayar ${formatRupiah(getPlanPrice(SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)! as any, billing)+Math.round(getPlanPrice(SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)! as any, billing)*0.02))} via Xendit`}
+                  {!payProcessing && <ArrowRight className="h-3.5 w-3.5" />}
+                </button>
+              </div>
+              <p className="text-center text-[11px] text-[#9A9994]">Wajib bayar — Basic 24.999 untuk memulai berjualan. Belum bisa tambah produk sebelum paid.</p>
             </motion.div>
           )}
         </AnimatePresence>

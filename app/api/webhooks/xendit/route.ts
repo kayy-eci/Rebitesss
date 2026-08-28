@@ -121,31 +121,46 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Notifikasi buyer
+      // Notifikasi buyer — deep-link ke riwayat + detail
       if (buyerId) {
         const productName = (row.product_name as string) ?? 'Pesanan';
         const vendorName = (row.vendor_name as string) ?? 'Toko';
         const totalPrice = Number(row.total_price ?? 0);
-        await service.from('notifications').insert([
-          {
+        const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(externalId)}`;
+        // cegah duplikat jika webhook retry
+        const { data: existingNotifs } = await service
+          .from('notifications')
+          .select('type')
+          .eq('user_id', buyerId)
+          .eq('reference_id', externalId)
+          .in('type', ['payment_success', 'order_created']);
+        const existingTypes = new Set(((existingNotifs ?? []) as Array<{ type: string }>).map((r) => r.type));
+        const toInsert: Record<string, unknown>[] = [];
+        if (!existingTypes.has('payment_success')) {
+          toInsert.push({
             user_id: buyerId,
             role: 'buyer',
             type: 'payment_success',
             title: 'Pembayaran Berhasil',
-            message: `Pembayaran Rp${totalPrice.toLocaleString('id-ID')} untuk ${productName} via ${payload.payment_channel ?? 'Xendit'} berhasil.`,
+            message: `Pembayaran Rp${totalPrice.toLocaleString('id-ID')} untuk ${productName} via ${payload.payment_channel ?? 'Xendit'} berhasil. Pesanan sedang disiapkan.`,
             reference_id: externalId,
-            href: '/riwayatPesanan',
-          },
-          {
+            href: deepHref,
+          });
+        }
+        if (!existingTypes.has('order_created')) {
+          toInsert.push({
             user_id: buyerId,
             role: 'buyer',
             type: 'order_created',
-            title: 'Pesanan Diproses',
-            message: `Pesanan #${externalId} dari ${vendorName} sedang diproses.`,
+            title: 'Pesanan Sedang Disiapkan',
+            message: `Pesanan #${externalId} dari ${vendorName} sedang disiapkan penjual.`,
             reference_id: externalId,
-            href: '/riwayatPesanan',
-          },
-        ]);
+            href: deepHref,
+          });
+        }
+        if (toInsert.length > 0) {
+          await service.from('notifications').insert(toInsert);
+        }
 
         // Notifikasi seller
         const vendorSlug = (row as Record<string, unknown>).vendor_slug as string | undefined;

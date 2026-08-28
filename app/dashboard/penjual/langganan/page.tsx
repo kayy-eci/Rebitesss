@@ -114,10 +114,9 @@ export default function LanggananPenjualPage() {
           </dl>
 
           {!subscription && (
-            <p className="mt-3 inline-flex items-start gap-1.5 rounded-lg bg-gold-100 px-3 py-2 text-[11px] font-medium text-charcoal-900">
-              <BadgeCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-600" />
-              Kamu sedang memakai paket gratis ReBites Basic. Pilih paket di bawah untuk membuka
-              lebih banyak fitur.
+            <p className="mt-3 inline-flex items-start gap-1.5 rounded-lg bg-amber-100 px-3 py-2 text-[11px] font-medium text-charcoal-900">
+              <BadgeCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-600" />
+              Kamu belum berlangganan aktif. Pilih paket di bawah — Basic 24.999/bulan wajib untuk mulai berjualan.
             </p>
           )}
         </Card>
@@ -155,7 +154,7 @@ export default function LanggananPenjualPage() {
         {SUBSCRIPTION_PLANS.map((plan, index) => {
           const isActive = plan.slug === activeSlug;
           const price = getPlanPrice(plan, billing);
-          const priceLabel = price === 0 ? 'Gratis' : formatRupiah(price);
+          const priceLabel = formatRupiah(price);
 
           return (
             <motion.div
@@ -189,11 +188,9 @@ export default function LanggananPenjualPage() {
                   <span className="font-display text-2xl font-semibold leading-none text-charcoal-900">
                     {priceLabel}
                   </span>
-                  {price !== 0 && (
-                    <span className="text-xs text-sage-500">
-                      /{billing === 'yearly' ? 'tahun' : 'bulan'}
-                    </span>
-                  )}
+                  <span className="text-xs text-sage-500">
+                    /{billing === 'yearly' ? 'tahun' : 'bulan'}
+                  </span>
                 </p>
 
                 <ul className="mt-4 space-y-2">
@@ -222,7 +219,7 @@ export default function LanggananPenjualPage() {
                       )}
                     >
                       <Wallet className="h-3.5 w-3.5" />
-                      {price === 0 ? 'Gunakan Paket Ini' : plan.cta}
+                      {plan.cta}
                     </Link>
                   )}
                 </div>

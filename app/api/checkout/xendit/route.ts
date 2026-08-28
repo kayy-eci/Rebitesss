@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createAnonServerClient, createServiceClient, getSiteUrl, getUserFromBearer } from '@/lib/server/supabase';
 import { createXenditInvoice } from '@/lib/server/xendit';
 import { calculatePricing } from '@/lib/server/pricing';
+import { estimateOrderMinutes } from '@/lib/delivery-estimate';
 
 export const runtime = 'nodejs';
 
@@ -25,6 +26,7 @@ export async function POST(req: NextRequest) {
       addressSnapshot?: Record<string, unknown> | null;
       promoCode?: string | null;
       useCoins?: boolean;
+      distanceKm?: number | null;
     } | null;
 
     if (!body?.productSlug || !body.quantity || !body.fulfillment) {
@@ -48,7 +50,7 @@ export async function POST(req: NextRequest) {
     const anon = createAnonServerClient();
     const { data: product, error: prodErr } = await anon
       .from('products')
-      .select('id, umkm_id, slug, name, surplus_price, original_price, stock, status, flash_sale_price, flash_sale_start, flash_sale_end, image_url')
+      .select('id, umkm_id, slug, name, surplus_price, original_price, stock, status, flash_sale_price, flash_sale_start, flash_sale_end, image_url, distance_km')
       .eq('slug', body.productSlug)
       .maybeSingle();
 
@@ -166,11 +168,28 @@ export async function POST(req: NextRequest) {
     const productName = (product as Record<string, unknown>).name as string ?? 'Produk';
     const imageUrl = (product as Record<string, unknown>).image_url as string ?? '';
 
-    // Buat orderId dan estimasi
+    // Buat orderId dan estimasi (berdasar jarak toko-rumah)
     const stamp = Date.now().toString(36).toUpperCase();
     const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
     const orderCode = `RB-${stamp}${rand}`;
     const nowIso = new Date().toISOString();
+
+    // Hitung estimasi berdasar jarak: preparation + travel
+    const rawDistanceKm =
+      (typeof body.distanceKm === 'number' && Number.isFinite(body.distanceKm) ? body.distanceKm : null) ??
+      Number((product as Record<string, unknown>).distance_km ?? 1);
+    const distanceKm = Math.max(0, Number.isFinite(rawDistanceKm) ? rawDistanceKm : 1);
+    // vendorSlug untuk preparation time; fallback ke product slug
+    const estimateVendorSlug =
+      ((product as Record<string, unknown>).vendor_slug as string | undefined) ??
+      (vendorSlug || body.productSlug);
+    const estimate = estimateOrderMinutes({
+      fulfillment: body.fulfillment as 'delivery' | 'pickup',
+      distanceKm,
+      vendorSlug: estimateVendorSlug,
+    });
+    const estimatedMinutes = estimate.estimatedMinutes;
+    const estimatedCompletionAt = new Date(Date.now() + estimatedMinutes * 60_000).toISOString();
 
     // Reserve stok atomik (service role agar bypass RLS milik stok)
     const serviceClient = createServiceClient();
@@ -214,9 +233,12 @@ export async function POST(req: NextRequest) {
         coin_earned: pricing.coinEarned,
         promo_code: body.promoCode?.toUpperCase() ?? null,
         lifecycle_status: 'ongoing',
-        // Estimasi default 25 menit
-        estimated_minutes: 25,
-        estimated_completion_at: new Date(Date.now() + 25 * 60_000).toISOString(),
+        estimated_minutes: estimatedMinutes,
+        estimated_completion_at: estimatedCompletionAt,
+        distance_km: distanceKm,
+        preparation_minutes: estimate.preparationMinutes,
+        vendor_address: vendorAddress,
+        vendor_open_hours: vendorOpenHours,
         payment_status: 'paid',
         order_status: 'paid',
         co2e_saved_kg: null,
@@ -241,17 +263,27 @@ export async function POST(req: NextRequest) {
         if (coinErr) console.error('[checkout/xendit] coin settle error', coinErr.message, { orderCode });
       }
 
-      // Notifikasi (best-effort)
+      // Notifikasi (best-effort) — deep-link ke riwayat
       const siteUrl = getSiteUrl();
+      const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(orderCode)}`;
       const { error: notifErr } = await serviceClient.from('notifications').insert([
         {
           user_id: user.id,
           role: 'buyer',
           type: 'payment_success',
           title: 'Pembayaran Berhasil',
-          message: `Pesanan ${productName} lunas sepenuhnya dengan ReBites Coin.`,
+          message: `Pesanan ${productName} lunas sepenuhnya dengan ReBites Coin. Estimasi selesai ${estimatedMinutes} menit.`,
           reference_id: orderCode,
-          href: '/riwayatPesanan',
+          href: deepHref,
+        },
+        {
+          user_id: user.id,
+          role: 'buyer',
+          type: 'order_created',
+          title: 'Pesanan Sedang Disiapkan',
+          message: `Pesanan #${orderCode} dari ${vendorName} sedang disiapkan. Estimasi ${estimatedMinutes} menit (${estimate.preparationMinutes} menit persiapan${estimate.travelMinutes > 0 ? ` + ${estimate.travelMinutes} menit pengantaran` : ''}).`,
+          reference_id: orderCode,
+          href: deepHref,
         },
       ]);
       if (notifErr) console.error('[checkout/xendit] notif free error', notifErr.message);
@@ -283,9 +315,11 @@ export async function POST(req: NextRequest) {
         unitPrice,
         promoCode: body.promoCode?.toUpperCase() ?? null,
         status: 'ongoing' as const,
-        estimatedMinutes: 25,
-        estimatedCompletionAt: new Date(Date.now() + 25 * 60_000).toISOString(),
+        estimatedMinutes,
+        estimatedCompletionAt,
         completedAt: undefined,
+        distanceKm,
+        preparationMinutes: estimate.preparationMinutes,
         vendorAddress,
         vendorOpenHours,
         co2eSavedKg: undefined,
@@ -329,8 +363,12 @@ export async function POST(req: NextRequest) {
       coin_earned: pricing.coinEarned,
       promo_code: body.promoCode?.toUpperCase() ?? null,
       lifecycle_status: 'ongoing',
-      estimated_minutes: 25,
-      estimated_completion_at: new Date(Date.now() + 25 * 60_000).toISOString(),
+      estimated_minutes: estimatedMinutes,
+      estimated_completion_at: estimatedCompletionAt,
+      distance_km: distanceKm,
+      preparation_minutes: estimate.preparationMinutes,
+      vendor_address: vendorAddress,
+      vendor_open_hours: vendorOpenHours,
       payment_status: 'unpaid',
       order_status: 'pending',
       created_at: nowIso,

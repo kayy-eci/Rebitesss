@@ -7,26 +7,33 @@ import { SmartImage } from '@/app/components/SmartImage';
 import { formatRupiah } from '@/lib/data';
 import { fetchProductDetail } from '@/app/detail/product/detail-data';
 import type { StoredOrder } from '@/lib/types';
-import { formatOrderDate } from '@/lib/order-utils';
+import { formatOrderDate, getOrderSubStatus, SUB_STATUS_LABEL } from '@/lib/order-utils';
 import { toast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 export function OrderCard({
   order,
   reviewed,
   onViewDetail,
+  highlighted = false,
 }: {
   order: StoredOrder;
   reviewed: boolean;
   onViewDetail: (order: StoredOrder) => void;
+  highlighted?: boolean;
 }) {
   const router = useRouter();
   const [reordering] = useState(false);
   const isOngoing = order.status === 'ongoing';
+  const subStatus = getOrderSubStatus(order);
+  const isDelivered = order.status === 'completed';
 
-  // For photo-style: show dot + In progress / Delivered
-  const badge = isOngoing
-    ? { label: 'In progress', dot: 'bg-[#EA580C]', bg: 'bg-[#FFF7ED] text-[#EA580C]', ring: 'ring-[#FDBA74]/30' }
-    : { label: 'Delivered', dot: 'bg-[#16A34A]', bg: 'bg-[#F0FDF4] text-[#16A34A]', ring: 'ring-[#86EFAC]/30' };
+  // Badge dinamis berdasar sub-status (diproses/diantar/disiapkan/siap-diambil/selesai)
+  const badge = isDelivered
+    ? { label: SUB_STATUS_LABEL[subStatus], dot: 'bg-[#16A34A]', bg: 'bg-[#F0FDF4] text-[#16A34A]', ring: 'ring-[#86EFAC]/30' }
+    : subStatus === 'diantar' || subStatus === 'siap-diambil'
+      ? { label: SUB_STATUS_LABEL[subStatus], dot: 'bg-[#2563EB]', bg: 'bg-[#EFF6FF] text-[#2563EB]', ring: 'ring-[#93C5FD]/30' }
+      : { label: SUB_STATUS_LABEL[subStatus], dot: 'bg-[#EA580C]', bg: 'bg-[#FFF7ED] text-[#EA580C]', ring: 'ring-[#FDBA74]/30' };
 
   const dateStr = formatOrderDate(order.createdAt);
 
@@ -46,7 +53,10 @@ export function OrderCard({
           onViewDetail(order);
         }
       }}
-      className="group flex cursor-pointer flex-col rounded-xl border border-zinc-200 bg-white p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-50/50 sm:p-5"
+      className={cn(
+        'group flex cursor-pointer flex-col rounded-xl border bg-white p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-50/50 sm:p-5',
+        highlighted ? 'border-green-700 ring-2 ring-green-700/20 shadow-md' : 'border-zinc-200'
+      )}
     >
       {/* Top line: badge + date */}
       <div className="flex items-center gap-2">

@@ -209,7 +209,25 @@ export async function saveSellerProduct(
     console.error('[product-storage] tidak ada profil UMKM untuk user ini.');
     return null;
   }
-
+  // Enforce tier quota 3/5/15 — blokir client sebelum insert
+  try {
+    const { readSellerPlan } = await import('@/lib/seller-plan');
+    const plan = await readSellerPlan();
+    if (plan.maxProducts !== null) {
+      const count = await getSellerProductCount();
+      if (count >= plan.maxProducts) {
+        console.warn(`[product-storage] kuota ${plan.label} penuh ${count}/${plan.maxProducts}`);
+        return null;
+      }
+    }
+    // Wajib langganan aktif — Basic berbayar
+    const { getActiveSubscription } = await import('@/lib/subscription-storage');
+    const sub = await getActiveSubscription();
+    if (!sub) {
+      console.warn('[product-storage] belum berlangganan aktif — tolak tambah produk');
+      return null;
+    }
+  } catch {}
   const payload = {
     umkm_id: umkm.id,
     slug: generateProductSlug(),

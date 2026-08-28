@@ -5,6 +5,7 @@ import type { StoredOrder } from './types';
 import { createNotification } from './notification-storage';
 
 const NOTIFIED_ORDERS_KEY = 'rebites-notified-orders';
+const NOTIFIED_DELIVERING_KEY = 'rebites-notified-delivering';
 
 function getNotifiedOrderIds(): Set<string> {
   if (typeof window === 'undefined') return new Set();
@@ -28,6 +29,52 @@ function markOrderNotified(orderId: string): void {
   );
 }
 
+function getDeliveringNotified(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = window.localStorage.getItem(NOTIFIED_DELIVERING_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? new Set(parsed) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function markDeliveringNotified(orderId: string): void {
+  if (typeof window === 'undefined') return;
+  const ids = getDeliveringNotified();
+  ids.add(orderId);
+  window.localStorage.setItem(
+    NOTIFIED_DELIVERING_KEY,
+    JSON.stringify(Array.from(ids))
+  );
+}
+
+export async function notifyOrderDelivering(order: StoredOrder): Promise<void> {
+  if (!order.userId) return;
+  const notified = getDeliveringNotified();
+  if (notified.has(order.orderId)) return;
+
+  const isPickup = order.fulfillment === 'pickup';
+  const title = isPickup ? 'Pesanan Siap Diambil!' : 'Pesanan Sedang Diantar!';
+  const message = isPickup
+    ? `Pesanan #${order.orderId} (${order.productName}) dari ${order.vendorName} sudah siap diambil di toko.`
+    : `Pesanan #${order.orderId} (${order.productName}) dari ${order.vendorName} sedang diantar kurir ke alamatmu.`;
+
+  await createNotification({
+    userId: order.userId,
+    role: 'buyer',
+    type: 'order_delivering',
+    title,
+    message,
+    referenceId: order.orderId,
+    href: `/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`,
+  });
+
+  markDeliveringNotified(order.orderId);
+}
+
 export async function notifyOrderCompleted(order: StoredOrder): Promise<void> {
   if (!order.userId) return;
 
@@ -41,7 +88,7 @@ export async function notifyOrderCompleted(order: StoredOrder): Promise<void> {
     title: 'Pesanan Selesai!',
     message: `Pesanan #${order.orderId} (${order.productName}) dari ${order.vendorName} telah selesai. Selamat menikmati!`,
     referenceId: order.orderId,
-    href: '/riwayatPesanan',
+    href: `/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`,
   });
 
   markOrderNotified(order.orderId);

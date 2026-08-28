@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Navbar } from "@/app/components/navbar";
+import { ProfileNavbar } from "@/app/components/navbar";
 import { Hero } from "@/app/components/Hero";
 import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
 import { FlashSaleSection } from "@/app/components/FlashSaleSection";
@@ -35,7 +35,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <Navbar showLocationDropdown={false} />
+      <ProfileNavbar showLocationDropdown={false} />
 
       <main className="bg-cream-50">
         <Hero />

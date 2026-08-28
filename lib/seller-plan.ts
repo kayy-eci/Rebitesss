@@ -30,7 +30,7 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
   basic: {
     tier: 'basic',
     label: 'ReBites Basic',
-    maxProducts: 5,
+    maxProducts: 3,
     historyDays: 30,
     maxFlashSaleProducts: 0,
     detailedReport: false,
@@ -46,7 +46,7 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
   standar: {
     tier: 'standar',
     label: 'ReBites Standar',
-    maxProducts: 25,
+    maxProducts: 5,
     historyDays: null,
     maxFlashSaleProducts: 1,
     detailedReport: true,
@@ -62,7 +62,7 @@ const ENTITLEMENTS: Record<SellerTier, SellerEntitlements> = {
   max: {
     tier: 'max',
     label: 'ReBites Max',
-    maxProducts: null,
+    maxProducts: 15,
     historyDays: null,
     maxFlashSaleProducts: null,
     detailedReport: true,

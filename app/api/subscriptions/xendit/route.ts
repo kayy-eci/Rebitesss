@@ -7,10 +7,10 @@ export const runtime = 'nodejs';
 
 /**
  * POST /api/subscriptions/xendit
- * Body: { planSlug: 'standar'|'premium', billing: 'monthly'|'yearly' }
+ * Body: { planSlug: 'basic'|'standar'|'premium', billing: 'monthly'|'yearly' }
  * Auth: Bearer token
  *
- * Free plan (basic) tidak perlu lewat sini — langsung save via client.
+ * Semua paket berbayar via Xendit (Basic 24.999 wajib).
  */
 export async function POST(req: NextRequest) {
   try {
@@ -30,9 +30,6 @@ export async function POST(req: NextRequest) {
     const plan = SUBSCRIPTION_PLANS.find((p) => p.slug === planSlug);
     if (!plan) {
       return NextResponse.json({ error: 'Paket tidak ditemukan.' }, { status: 400 });
-    }
-    if (plan.monthly === 0 && plan.yearly === 0) {
-      return NextResponse.json({ error: 'Paket Basic gratis — tidak perlu pembayaran.' }, { status: 400 });
     }
 
     const service = createServiceClient();

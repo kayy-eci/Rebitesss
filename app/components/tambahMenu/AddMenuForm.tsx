@@ -168,7 +168,7 @@ export function AddMenuForm() {
               {productCount}/{plan.maxProducts} produk
             </span>
             . Hapus salah satu menu di Menu Saya, atau upgrade ke{' '}
-            {plan.tier === 'basic' ? 'ReBites Standar (25 produk)' : 'ReBites Max (tanpa batas)'}{' '}
+            {plan.tier === 'basic' ? 'ReBites Standar (5 produk)' : 'ReBites Max (15 produk)'}{' '}
             untuk menambah menu lagi.
           </p>
           <div className="mt-6 grid gap-3">

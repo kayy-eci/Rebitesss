@@ -33,6 +33,15 @@ export function useRequireSeller(): {
           router.replace(session ? "/auth/register/penjual" : "/auth/login");
           return;
         }
+        // Wajib langganan aktif (Basic 24.999 wajib bayar) — pending belum boleh ke dashboard
+        const { getActiveSubscription } = await import("@/lib/subscription-storage");
+        const activeSub = await getActiveSubscription();
+        if (!mounted) return;
+        if (!activeSub) {
+          // Sudah punya toko tapi belum paid → paksa Step 3 pilih paket
+          router.replace("/auth/register/penjual");
+          return;
+        }
         setUmkm(profile);
         setLoading(false);
       } catch {

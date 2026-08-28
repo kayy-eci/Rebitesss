@@ -1,40 +1,32 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Bell,
-  ChevronDown,
-  Leaf,
-  MapPin,
-  Menu,
-  User,
-  X,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { supabase } from '@/lib/supabase';
-import { useCurrentUser } from '@/lib/current-user';
-import { useNotifications } from '@/hooks/use-notifications';
-import { AccountSidebar, type SidebarUser } from './account-sidebar';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { Bell, ChevronDown, Leaf, MapPin, Menu, User, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import { useCurrentUser } from "@/lib/current-user";
+import { useNotifications } from "@/hooks/use-notifications";
+import { AccountSidebar, type SidebarUser } from "./account-sidebar";
 
-const LOCATIONS = ['Depok', 'Jakarta Selatan', 'Bekasi', 'Bogor', 'Tangerang'];
+const LOCATIONS = ["Depok", "Jakarta Selatan", "Bekasi", "Bogor", "Tangerang"];
 
 const NAV_LINKS = [
-  { id: 'home', label: 'Beranda' },
-  { id: 'rekomendasi', label: 'Makanan' },
-  { id: 'flashSale', label: 'Flash Sale' },
-  { id: 'umkm', label: 'UMKM' },
-  { id: 'langganan', label: 'Langganan' },
+  { id: "home", label: "Beranda" },
+  { id: "rekomendasi", label: "Makanan" },
+  { id: "flashSale", label: "Flash Sale" },
+  { id: "umkm", label: "UMKM" },
+  { id: "langganan", label: "Langganan" },
 ];
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 function scrollToId(id: string) {
   const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 interface AuthSessionUser {
@@ -46,9 +38,11 @@ interface ProfileNavbarProps {
   showLocationDropdown?: boolean;
 }
 
-export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProps) {
+export function ProfileNavbar({
+  showLocationDropdown = true,
+}: ProfileNavbarProps) {
   const router = useRouter();
-  const [active, setActive] = useState('profil');
+  const [active, setActive] = useState("profil");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const [location, setLocation] = useState(LOCATIONS[0]);
@@ -56,12 +50,16 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
   const [profileOpen, setProfileOpen] = useState(false);
   const [sessionUser, setSessionUser] = useState<SidebarUser | null>(null);
   const { userId } = useCurrentUser();
-  const { unreadCount: unreadNotifCount } = useNotifications(userId, 'buyer');
+  const { unreadCount: unreadNotifCount } = useNotifications(userId, "buyer");
 
   useEffect(() => {
     let cancelled = false;
 
-    const readUser = ({ data }: { data: { session: { user: AuthSessionUser | null } | null } }) => {
+    const readUser = ({
+      data,
+    }: {
+      data: { session: { user: AuthSessionUser | null } | null };
+    }) => {
       if (cancelled) return;
       const user = data.session?.user;
       if (!user) {
@@ -69,8 +67,8 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
         return;
       }
       setSessionUser({
-        fullName: user.user_metadata?.full_name ?? '',
-        email: user.email ?? '',
+        fullName: user.user_metadata?.full_name ?? "",
+        email: user.email ?? "",
       });
     };
 
@@ -80,7 +78,11 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      readUser({ data: { session } as { session: { user: AuthSessionUser | null } | null } });
+      readUser({
+        data: { session } as {
+          session: { user: AuthSessionUser | null } | null;
+        },
+      });
     });
 
     return () => {
@@ -93,7 +95,7 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
     await supabase.auth.signOut();
     setSessionUser(null);
     setProfileOpen(false);
-    router.push('/auth/login');
+    router.push("/auth/login");
   };
 
   useEffect(() => {
@@ -108,7 +110,7 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
           if (entry.isIntersecting) setActive(entry.target.id);
         }
       },
-      { rootMargin: '-35% 0px -55% 0px' }
+      { rootMargin: "-35% 0px -55% 0px" },
     );
 
     sections.forEach((el) => observer.observe(el));
@@ -117,7 +119,7 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
 
   useEffect(() => {
     const sections = Array.from(
-      document.querySelectorAll<HTMLElement>('[data-nav]')
+      document.querySelectorAll<HTMLElement>("[data-nav]"),
     );
     if (sections.length === 0) return;
 
@@ -128,15 +130,15 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
         const r = s.getBoundingClientRect();
         return r.top <= probeY && r.bottom > probeY;
       });
-      setOverDark(current?.dataset.nav === 'green');
+      setOverDark(current?.dataset.nav === "green");
     };
 
     update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
     return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
   }, []);
 
@@ -162,19 +164,21 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
       aria-label={label}
       onClick={onClick}
       className={cn(
-        'relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200',
+        "relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200",
         overDark
-          ? 'text-white/80 hover:bg-white/10 hover:text-white'
-          : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
-        FOCUS_RING
+          ? "text-white/80 hover:bg-white/10 hover:text-white"
+          : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+        FOCUS_RING,
       )}
     >
       {children}
       {badge !== undefined && badge > 0 && (
         <span
           className={cn(
-            'absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-colors duration-500',
-            overDark ? 'bg-gold-500 text-charcoal-900' : 'bg-green-700 text-white'
+            "absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-colors duration-500",
+            overDark
+              ? "bg-gold-500 text-charcoal-900"
+              : "bg-green-700 text-white",
           )}
         >
           {badge}
@@ -189,35 +193,38 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
         <div className="mx-auto w-full max-w-[1200px]">
           <nav
             className={cn(
-              'flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8',
+              "flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
               overDark
-                ? 'border-white/15 bg-forest-dark/75 text-white'
-                : 'border-hairline/70 bg-cream/80 text-forest-dark'
+                ? "border-white/15 bg-forest-dark/75 text-white"
+                : "border-hairline/70 bg-cream/80 text-forest-dark",
             )}
           >
-
             <Link
               href="/home"
-              className={cn('flex shrink-0 items-center gap-2 rounded-full', FOCUS_RING)}
+              className={cn(
+                "flex shrink-0 items-center gap-2 rounded-full",
+                FOCUS_RING,
+              )}
             >
               <span
                 className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500',
-                  overDark ? 'bg-white text-forest-dark' : 'bg-green-700 text-white'
+                  "flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-500",
+                  overDark
+                    ? "bg-white text-forest-dark"
+                    : "bg-green-700 text-white",
                 )}
               >
                 <Leaf className="h-4 w-4" />
               </span>
               <span
                 className={cn(
-                  'font-sans text-xl font-bold tracking-tight transition-colors duration-500',
-                  overDark ? 'text-white' : 'text-green-700'
+                  "font-sans text-xl font-bold tracking-tight transition-colors duration-500",
+                  overDark ? "text-white" : "text-green-700",
                 )}
               >
                 ReBites
               </span>
             </Link>
-
 
             <ul className="hidden items-center gap-1 lg:flex">
               {NAV_LINKS.map((link) => (
@@ -228,17 +235,17 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
                       e.preventDefault();
                       handleNav(link.id);
                     }}
-                    aria-current={active === link.id ? 'page' : undefined}
+                    aria-current={active === link.id ? "page" : undefined}
                     className={cn(
-                      'rounded-full px-3 py-2 font-inter text-sm transition-colors duration-200 xl:px-4',
+                      "rounded-full px-3 py-2 font-inter text-sm transition-colors duration-200 xl:px-4",
                       active === link.id
                         ? overDark
-                          ? 'bg-white/15 font-semibold text-white'
-                          : 'bg-cream-100 font-semibold text-green-700'
+                          ? "bg-white/15 font-semibold text-white"
+                          : "bg-cream-100 font-semibold text-green-700"
                         : overDark
-                          ? 'text-white/75 hover:text-white'
-                          : 'text-charcoal-500 hover:text-green-700',
-                      FOCUS_RING
+                          ? "text-white/75 hover:text-white"
+                          : "text-charcoal-500 hover:text-green-700",
+                      FOCUS_RING,
                     )}
                   >
                     {link.label}
@@ -247,9 +254,7 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
               ))}
             </ul>
 
-
             <div className="flex items-center gap-1 sm:gap-0.5">
-
               {showLocationDropdown && (
                 <div className="relative hidden lg:block">
                   <button
@@ -258,24 +263,24 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
                     aria-expanded={locationOpen}
                     onClick={() => setLocationOpen((v) => !v)}
                     className={cn(
-                      'flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200',
+                      "flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200",
                       overDark
-                        ? 'text-white/80 hover:bg-white/10 hover:text-white'
-                        : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700',
-                      FOCUS_RING
+                        ? "text-white/80 hover:bg-white/10 hover:text-white"
+                        : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
+                      FOCUS_RING,
                     )}
                   >
                     <MapPin
                       className={cn(
-                        'h-4 w-4 transition-colors duration-500',
-                        overDark ? 'text-gold-500' : 'text-green-700'
+                        "h-4 w-4 transition-colors duration-500",
+                        overDark ? "text-gold-500" : "text-green-700",
                       )}
                     />
                     <span className="max-w-[100px] truncate">{location}</span>
                     <ChevronDown
                       className={cn(
-                        'h-4 w-4 transition-transform duration-200',
-                        locationOpen && 'rotate-180'
+                        "h-4 w-4 transition-transform duration-200",
+                        locationOpen && "rotate-180",
                       )}
                     />
                   </button>
@@ -306,10 +311,10 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
                                   setLocationOpen(false);
                                 }}
                                 className={cn(
-                                  'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150',
+                                  "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                                   loc === location
-                                    ? 'bg-cream-100 font-semibold text-green-700'
-                                    : 'text-charcoal-500 hover:bg-cream-50 hover:text-green-700'
+                                    ? "bg-cream-100 font-semibold text-green-700"
+                                    : "text-charcoal-500 hover:bg-cream-50 hover:text-green-700",
                                 )}
                               >
                                 <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -324,12 +329,11 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
                 </div>
               )}
 
-
               <div className="hidden items-center gap-2 sm:flex">
                 <IconButton
                   label="Notifikasi"
                   onClick={() => {
-                    window.location.href = '/notifikasi/pembeli';
+                    window.location.href = "/notifikasi/pembeli";
                   }}
                   badge={unreadNotifCount}
                 >
@@ -349,18 +353,21 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
                 aria-expanded={drawerOpen}
                 onClick={() => setDrawerOpen((v) => !v)}
                 className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden',
-                  overDark ? 'text-white' : 'text-forest-dark',
-                  FOCUS_RING
+                  "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
+                  overDark ? "text-white" : "text-forest-dark",
+                  FOCUS_RING,
                 )}
               >
-                {drawerOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {drawerOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </button>
             </div>
           </nav>
         </div>
       </header>
-
 
       <AnimatePresence>
         {drawerOpen && (
@@ -373,9 +380,9 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
               className="fixed inset-0 z-[55] bg-forest-900/40 backdrop-blur-sm lg:hidden"
             />
             <motion.aside
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              exit={{ x: "100%" }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="fixed right-0 top-0 z-[60] flex h-full w-72 flex-col bg-cream-50 p-5 shadow-2xl lg:hidden"
             >
@@ -408,10 +415,10 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
                         handleNav(link.id);
                       }}
                       className={cn(
-                        'block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150',
+                        "block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150",
                         active === link.id
-                          ? 'bg-cream-100 font-semibold text-green-700'
-                          : 'text-charcoal-500 hover:bg-cream-100 hover:text-green-700'
+                          ? "bg-cream-100 font-semibold text-green-700"
+                          : "text-charcoal-500 hover:bg-cream-100 hover:text-green-700",
                       )}
                     >
                       {link.label}
@@ -448,7 +455,7 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
                     setLocation(
                       LOCATIONS[
                         (LOCATIONS.indexOf(location) + 1) % LOCATIONS.length
-                      ]
+                      ],
                     );
                   }}
                   className="mt-2 flex items-center gap-2 text-sm font-medium text-green-700"
@@ -472,5 +479,3 @@ export function ProfileNavbar({ showLocationDropdown = true }: ProfileNavbarProp
     </>
   );
 }
-
-export { ProfileNavbar as Navbar };

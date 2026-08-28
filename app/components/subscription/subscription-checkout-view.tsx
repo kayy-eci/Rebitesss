@@ -33,25 +33,22 @@ export function SubscriptionCheckoutView() {
   const billing: BillingCycle =
     params.get('billing') === 'yearly' ? 'yearly' : 'monthly';
 
-  // 2 chooser: Standar (standar) & Max (premium) - user bisa ganti
-  const chooserPlans = useMemo(
-    () => SUBSCRIPTION_PLANS.filter((p) => p.slug === 'standar' || p.slug === 'premium'),
-    [],
-  );
+  // 3 chooser: Basic, Standar, Max — sinkron dengan SUBSCRIPTION_PLANS 3/5/15
+  const chooserPlans = useMemo(() => SUBSCRIPTION_PLANS, []);
 
-  const [selectedSlug, setSelectedSlug] = useState<'standar' | 'premium'>(() => {
-    if (initialPlan && (initialPlan.slug === 'standar' || initialPlan.slug === 'premium')) return initialPlan.slug;
-    return 'standar';
+  const [selectedSlug, setSelectedSlug] = useState<'basic' | 'standar' | 'premium'>(() => {
+    if (initialPlan && (initialPlan.slug === 'basic' || initialPlan.slug === 'standar' || initialPlan.slug === 'premium')) return initialPlan.slug as 'basic' | 'standar' | 'premium';
+    return 'basic';
   });
 
   // Jika query berubah dari luar (navigate), sync
   useEffect(() => {
-    if (initialPlan && (initialPlan.slug === 'standar' || initialPlan.slug === 'premium')) {
-      setSelectedSlug(initialPlan.slug);
+    if (initialPlan && (initialPlan.slug === 'basic' || initialPlan.slug === 'standar' || initialPlan.slug === 'premium')) {
+      setSelectedSlug(initialPlan.slug as 'basic' | 'standar' | 'premium');
     }
   }, [initialPlan]);
 
-  const plan = getSubscriptionPlan(selectedSlug) ?? getSubscriptionPlan('standar')!;
+  const plan = getSubscriptionPlan(selectedSlug) ?? getSubscriptionPlan('basic')!;
 
   const [processing, setProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -80,10 +77,11 @@ export function SubscriptionCheckoutView() {
     );
   }
 
-  const isFree = plan.monthly === 0 && plan.yearly === 0;
+  // Semua tier berbayar — Basic 24.999 wajib bayar
+  const isFree = false;
   const price = getPlanPrice(plan, billing);
   const subtotal = price;
-  const tax = isFree ? 0 : Math.round(subtotal * 0.02);
+  const tax = Math.round(subtotal * 0.02);
   const total = subtotal + tax;
   const periodEndLabel = computePeriodEnd(billing).toLocaleDateString('id-ID', {
     day: 'numeric',
@@ -95,21 +93,6 @@ export function SubscriptionCheckoutView() {
     if (processing) return;
     setProcessing(true);
     setErrorMessage(null);
-
-    if (isFree) {
-      const result = await saveSubscription({
-        planSlug: plan.slug,
-        billing,
-        paymentMethodId: null,
-      });
-      if (!result.ok) {
-        setProcessing(false);
-        setErrorMessage(result.error);
-        return;
-      }
-      router.push(`/langganan/sukses?plan=${plan.slug}&billing=${billing}`);
-      return;
-    }
 
     try {
       const {
@@ -169,12 +152,12 @@ export function SubscriptionCheckoutView() {
           Pilih Paket Langganan
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-[#6B6A63]">
-          Pilih antara Standar dan Max. Klik card untuk mengganti — detail di bawah akan mengikuti pilihanmu. Pembayaran via Xendit.
+          Pilih Basic, Standar atau Max. Klik card untuk mengganti — detail di bawah akan mengikuti pilihanmu. Semua paket berbayar via Xendit (Basic 24.999).
         </p>
       </section>
 
-      {/* 2 card chooser - menggantikan 4 card foto */}
-      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+      {/* 3 card chooser — Basic 3, Standar 5, Max 15 */}
+      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         {chooserPlans.map((p) => {
           const isSelected = p.slug === selectedSlug;
           const pPrice = getPlanPrice(p, billing);
@@ -183,7 +166,7 @@ export function SubscriptionCheckoutView() {
             <button
               key={p.slug}
               type="button"
-              onClick={() => setSelectedSlug(p.slug as 'standar' | 'premium')}
+              onClick={() => setSelectedSlug(p.slug as 'basic' | 'standar' | 'premium')}
               className={`relative flex flex-col rounded-2xl border bg-white p-5 text-left transition-all ${
                 isSelected
                   ? 'border-[#225138] bg-[#F7F5EF] shadow-sm ring-1 ring-[#225138]/20'
@@ -261,11 +244,11 @@ export function SubscriptionCheckoutView() {
             </div>
             <div className="flex items-center justify-between text-[14px]">
               <dt className="text-[#6B6A63]">Pajak 2%</dt>
-              <dd className="font-medium tabular-nums text-[#225138]">{isFree ? '—' : formatRupiah(tax)}</dd>
+              <dd className="font-medium tabular-nums text-[#225138]">{formatRupiah(tax)}</dd>
             </div>
             <div className="flex items-center justify-between border-t border-[#DEDACF] pt-3">
               <dt className="text-[14px] font-semibold text-[#225138]">Total</dt>
-              <dd className="font-display text-[18px] font-semibold tabular-nums text-[#225138]">{isFree ? 'Gratis' : formatRupiah(total)}</dd>
+              <dd className="font-display text-[18px] font-semibold tabular-nums text-[#225138]">{formatRupiah(total)}</dd>
             </div>
           </dl>
 
@@ -297,8 +280,6 @@ export function SubscriptionCheckoutView() {
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Memproses…
               </>
-            ) : isFree ? (
-              'Aktifkan Gratis'
             ) : (
               `Bayar ${formatRupiah(total)} via Xendit`
             )}
@@ -353,7 +334,7 @@ export function SubscriptionCheckoutView() {
 
       <p className="mx-auto mt-6 flex items-center justify-center gap-1.5 text-center text-[11px] text-[#6B6A63]">
         <ShieldCheck className="h-3.5 w-3.5 text-[#225138]" />
-        1 halaman penuh, tanpa form. Klik card Standar/Max di atas untuk ganti pilihan.
+        1 halaman penuh, tanpa form. Klik card Basic/Standar/Max di atas untuk ganti pilihan.
       </p>
     </>
   );

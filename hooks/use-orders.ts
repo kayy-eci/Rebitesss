@@ -5,11 +5,12 @@ import type { StoredOrder } from '@/lib/types';
 import {
   ORDERS_UPDATED_EVENT,
   completeExpiredOrders,
+  syncDeliveringNotifications,
   getUserOrders,
 } from '@/lib/order-storage';
 import { useCurrentUser } from '@/lib/current-user';
 
-const SWEEP_INTERVAL_MS = 30_000;
+const SWEEP_INTERVAL_MS = 15_000;
 
 export function useOrders() {
   const { userId, loading: userLoading } = useCurrentUser();
@@ -23,6 +24,7 @@ export function useOrders() {
       return;
     }
     await completeExpiredOrders(userId);
+    await syncDeliveringNotifications(userId);
     const list = await getUserOrders(userId);
     setOrders(list);
     setHydrated(true);

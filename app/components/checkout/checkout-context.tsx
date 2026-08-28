@@ -209,6 +209,7 @@ export function CheckoutProvider({
           fulfillment,
           promoCode: promo?.code ?? null,
           useCoins,
+          distanceKm: draft.distanceKm ?? null,
         };
         if (fulfillment === 'delivery' && selectedAddress) {
           payload.addressSnapshot = {
