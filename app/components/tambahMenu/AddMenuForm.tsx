@@ -20,7 +20,7 @@ import { DEFAULT_MENU_FORM, MENU_CATEGORIES } from './types';
 import type { MenuFormState } from './types';
 
 const inputCls =
-  'w-full rounded-xl border border-sage-100 bg-white px-4 py-3 text-sm text-charcoal-900 placeholder:text-sage-500 transition-colors focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-600/20';
+  'w-full rounded-xl border border-sage-100 bg-white px-4 py-3 text-sm text-charcoal-900 placeholder:text-sage-500 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20';
 const labelCls =
   'mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-charcoal-900';
 
@@ -159,7 +159,7 @@ export function AddMenuForm() {
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold-100 text-gold-600">
             <Lock className="h-8 w-8" />
           </div>
-          <h2 className="mt-5 font-display text-2xl font-medium tracking-tight text-forest-900">
+          <h2 className="mt-5 font-display text-2xl font-medium tracking-tight text-primary">
             Kuota Produk Penuh
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-sage-500">
@@ -175,7 +175,7 @@ export function AddMenuForm() {
             {plan.upgradeSlug && (
               <Link
                 href={`/langganan/pembayaran?plan=${plan.upgradeSlug}&billing=monthly`}
-                className="inline-flex w-full items-center justify-center rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+                className="inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
               >
                 Lihat Paket Upgrade
               </Link>
@@ -205,11 +205,11 @@ export function AddMenuForm() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 260, damping: 18, delay: 0.1 }}
-            className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-700 text-cream-50 shadow-lg shadow-green-700/30"
+            className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary text-cream-50 shadow-lg shadow-primary/30"
           >
             <CheckCircle2 className="h-8 w-8" />
           </motion.div>
-          <h2 className="mt-5 font-display text-2xl font-medium tracking-tight text-forest-900">
+          <h2 className="mt-5 font-display text-2xl font-medium tracking-tight text-primary">
             Menu Berhasil Ditambahkan
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-sage-500">
@@ -218,7 +218,7 @@ export function AddMenuForm() {
           <div className="mt-6 grid gap-3">
             <Link
               href="/dashboard/penjual/menu"
-              className="inline-flex w-full items-center justify-center rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+              className="inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
             >
               Lihat Menu Saya
             </Link>
@@ -358,7 +358,7 @@ export function AddMenuForm() {
                       Harga Surplus
                     </label>
                     {form.normalPrice > form.surplusPrice && form.normalPrice > 0 && (
-                      <span className="mb-1.5 rounded-full bg-green-700 px-2 py-0.5 text-[10px] font-bold text-white">
+                      <span className="mb-1.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-white">
                         Hemat{' '}
                         {Math.round((1 - form.surplusPrice / form.normalPrice) * 100)}%
                       </span>
@@ -396,7 +396,7 @@ export function AddMenuForm() {
                   >
                     <Minus className="h-4 w-4" />
                   </button>
-                  <span className="w-12 text-center font-display text-2xl font-medium leading-none text-forest-900">
+                  <span className="w-12 text-center font-display text-2xl font-medium leading-none text-primary">
                     {form.stock}
                   </span>
                   <button
@@ -457,7 +457,7 @@ export function AddMenuForm() {
                   onClick={() => set('isSurplusToday', !form.isSurplusToday)}
                   className={cn(
                     'relative h-6 w-11 shrink-0 rounded-full transition-colors',
-                    form.isSurplusToday ? 'bg-green-700' : 'bg-sage-100'
+                    form.isSurplusToday ? 'bg-primary' : 'bg-sage-100'
                   )}
                 >
                   <motion.span
@@ -488,7 +488,7 @@ export function AddMenuForm() {
               <div className="flex flex-1 flex-col gap-2">
                 <button
                   type="submit"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-green-700 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
                 >
                   <Save className="h-4 w-4" />
                   Simpan Menu

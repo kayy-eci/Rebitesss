@@ -43,13 +43,13 @@ export function OrderSidebar({ open, onClose }: SidebarProps) {
         <button
           aria-label="Tutup menu"
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-forest-deep/40 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-primary/40 backdrop-blur-sm lg:hidden"
         />
       )}
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-[264px] flex-col bg-green-700 text-cream transition-transform duration-300 lg:static lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-50 flex w-[264px] flex-col bg-primary text-cream transition-transform duration-300 lg:static lg:translate-x-0',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -169,7 +169,7 @@ function NavItemIcon({
       className={cn(
         'flex h-8 w-8 items-center justify-center rounded-lg transition-colors',
         isActive
-          ? 'bg-sage-500 text-green-700'
+          ? 'bg-sage-500 text-primary'
           : 'bg-white/5 text-cream/60 group-hover:text-white'
       )}
     >

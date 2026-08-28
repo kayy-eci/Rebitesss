@@ -24,7 +24,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
         <button
           aria-label="Buka menu"
           onClick={onOpenMenu}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-white text-green-700 transition-colors hover:bg-green-50 lg:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-white text-primary transition-colors hover:bg-primary/10 lg:hidden"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -34,7 +34,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <input
             type="search"
             placeholder="Cari makanan surplus atau toko…"
-            className="h-11 w-full rounded-full border border-hairline bg-white pl-11 pr-4 text-sm text-charcoal-900 placeholder:text-charcoal-500/60 outline-none transition-all focus:border-sage-500 focus:ring-4 focus:ring-green-50"
+            className="h-11 w-full rounded-full border border-hairline bg-white pl-11 pr-4 text-sm text-charcoal-900 placeholder:text-charcoal-500/60 outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary"
           />
         </label>
 
@@ -42,7 +42,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <button
             type="button"
             aria-label="Notifikasi"
-            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-green-700 transition-colors hover:bg-green-50"
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-primary/10"
           >
             <Bell className="h-[18px] w-[18px]" strokeWidth={2} />
             <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-gold-500 ring-2 ring-white" />
@@ -51,15 +51,15 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <button
             type="button"
             aria-label="Bantuan"
-            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-green-700 transition-colors hover:bg-green-50 sm:flex"
+            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-primary/10 sm:flex"
           >
             <CircleHelp className="h-[18px] w-[18px]" strokeWidth={2} />
           </button>
 
           <div className="flex items-center gap-2.5">
-            <Avatar className="h-11 w-11 border-2 border-sage-500/40 ring-2 ring-green-50">
+            <Avatar className="h-11 w-11 border-2 border-sage-500/40 ring-2 ring-primary">
               <AvatarImage src="" alt={displayName} />
-              <AvatarFallback className="bg-green-700 font-display text-sm text-white">
+              <AvatarFallback className="bg-primary font-display text-sm text-white">
                 {initials}
               </AvatarFallback>
             </Avatar>

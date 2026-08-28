@@ -8,7 +8,7 @@ import { SmartImage } from '@/app/components/SmartImage';
 import type { Vendor } from '@/lib/types';
 
 const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
 function isOpenNow(openHours: string): boolean {
   const match = openHours.match(/(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/);
@@ -40,7 +40,7 @@ export function VendorCard({
   return (
     <div
       className={cn(
-        'group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-forest-900/10',
+        'group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10',
         FOCUS_RING
       )}
     >
@@ -60,10 +60,10 @@ export function VendorCard({
           <div
             className={cn(
               'absolute left-3 top-3 flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold leading-none shadow-md',
-              isOpen ? 'bg-white text-green-700' : 'bg-zinc-100 text-zinc-500'
+              isOpen ? 'bg-white text-primary' : 'bg-zinc-100 text-zinc-500'
             )}
           >
-            <span className={cn("h-1.5 w-1.5 rounded-full", isOpen ? "bg-green-600" : "bg-zinc-400")} />
+            <span className={cn("h-1.5 w-1.5 rounded-full", isOpen ? "bg-primary" : "bg-zinc-400")} />
             {isOpen ? 'Buka' : 'Tutup'}
           </div>
 

@@ -113,7 +113,7 @@ export function DeliveryAddressSection() {
                   <button
                     type="button"
                     onClick={() => openPopup('form', null, false)}
-                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-green-700 transition-colors hover:bg-cream-100"
+                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-cream-100"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     Tambah Alamat Baru
@@ -122,15 +122,15 @@ export function DeliveryAddressSection() {
               </div>
 
               {selectedAddress ? (
-                <div className="mt-4 rounded-2xl border-2 border-green-700 bg-green-700/[0.04] p-4">
+                <div className="mt-4 rounded-2xl border-2 border-primary bg-primary/[0.04] p-4">
                   <div className="flex items-start justify-between gap-3">
-                    <span className="inline-flex items-center rounded-full bg-green-700 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
+                    <span className="inline-flex items-center rounded-full bg-primary px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
                       {selectedAddress.label}
                     </span>
                     <button
                       type="button"
                       onClick={() => openPopup('form', selectedAddress, false)}
-                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700/10"
+                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-caramel/10"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                       Ubah
@@ -158,11 +158,11 @@ export function DeliveryAddressSection() {
                   <button
                     type="button"
                     onClick={() => openPopup('list', null, false)}
-                    className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-green-700 px-4 py-2 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-primary px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
                   >
                     Pilih Alamat Lain
                     {addresses.length > 1 && (
-                      <span className="rounded-full bg-green-700/10 px-1.5 text-[10px] font-bold tabular-nums">
+                      <span className="rounded-full bg-primary/10 px-1.5 text-[10px] font-bold tabular-nums">
                         {addresses.length}
                       </span>
                     )}
@@ -172,9 +172,9 @@ export function DeliveryAddressSection() {
                 <button
                   type="button"
                   onClick={() => openPopup('form', null, false)}
-                  className="mt-4 flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-6 py-8 text-center transition-colors hover:border-green-700 hover:bg-green-700/[0.03]"
+                  className="mt-4 flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-6 py-8 text-center transition-colors hover:border-primary hover:bg-caramel/[0.03]"
                 >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-green-700">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-primary">
                     <Plus className="h-5 w-5" />
                   </span>
                   <span className="text-sm font-semibold text-charcoal-900">
@@ -214,7 +214,7 @@ export function DeliveryAddressSection() {
                       className={cn(
                         'flex items-start gap-3 rounded-2xl border-2 p-4 transition-all duration-200',
                         active
-                          ? 'border-green-700 bg-green-700/[0.05]'
+                          ? 'border-primary bg-primary/[0.05]'
                           : 'border-sage-100 bg-white',
                       )}
                     >
@@ -229,12 +229,12 @@ export function DeliveryAddressSection() {
                           aria-hidden
                           className={cn(
                             'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200',
-                            active ? 'border-green-700' : 'border-sage-500/70',
+                            active ? 'border-primary' : 'border-sage-500/70',
                           )}
                         >
                           {active && (
                             <Check
-                              className="h-3 w-3 text-green-700"
+                              className="h-3 w-3 text-primary"
                               strokeWidth={3}
                             />
                           )}
@@ -258,7 +258,7 @@ export function DeliveryAddressSection() {
                         type="button"
                         onClick={() => openPopup('form', address, true)}
                         aria-label={`Ubah alamat ${address.label}`}
-                        className="shrink-0 rounded-full p-2 text-sage-500 transition-colors hover:bg-cream-100 hover:text-green-700"
+                        className="shrink-0 rounded-full p-2 text-sage-500 transition-colors hover:bg-cream-100 hover:text-primary"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
@@ -269,7 +269,7 @@ export function DeliveryAddressSection() {
                 <button
                   type="button"
                   onClick={() => openPopup('form', null, true)}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-4 py-3.5 text-sm font-semibold text-green-700 transition-colors hover:border-green-700 hover:bg-green-700/[0.03]"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-4 py-3.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-caramel/[0.03]"
                 >
                   <Plus className="h-4 w-4" />
                   Tambah Alamat Baru

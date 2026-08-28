@@ -124,7 +124,7 @@ function DetailPageContent({
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
             transition={{ duration: 0.25, ease: EASE }}
             role="status"
-            className="fixed bottom-24 right-4 z-[70] rounded-full bg-forest-900 px-4 py-2.5 text-sm font-medium text-cream-50 shadow-xl lg:bottom-6 lg:right-6"
+            className="fixed bottom-24 right-4 z-[70] rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-cream-50 shadow-xl lg:bottom-6 lg:right-6"
           >
             {toast.message}
           </motion.div>

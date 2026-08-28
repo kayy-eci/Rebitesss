@@ -48,7 +48,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
         { }
         <Link href="/dashboard/penjual" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-700 text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
             <Store className="h-4 w-4" />
           </div>
           <span className="text-sm font-bold text-charcoal-900">
@@ -60,7 +60,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
           <Link
             href="/dashboard/penjual/notifikasi"
             aria-label={`Notifikasi${unreadCount > 0 ? ` (${unreadCount} belum dibaca)` : ''}`}
-            className="relative flex h-9 w-9 items-center justify-center rounded-full border border-sage-100 bg-white text-green-700 shadow-sm transition-colors duration-200 hover:border-caramel hover:bg-caramel hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full border border-sage-100 bg-white text-primary shadow-sm transition-colors duration-200 hover:border-caramel hover:bg-caramel hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             <Bell className="h-[18px] w-[18px]" />
             {unreadCount > 0 && (

@@ -91,13 +91,13 @@ function StatusChip({ order }: { order: StoredOrder }) {
         'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em]',
         isDone
           ? 'bg-sage-100 text-charcoal-500'
-          : 'bg-green-700/10 text-green-700'
+          : 'bg-primary/10 text-primary'
       )}
     >
       <span
         className={cn(
           'h-1.5 w-1.5 rounded-full',
-          isDone ? 'bg-charcoal-500' : 'bg-green-700'
+          isDone ? 'bg-charcoal-500' : 'bg-primary'
         )}
       />
       {SUB_STATUS_LABEL[subStatus]}
@@ -138,14 +138,14 @@ function OrderRow({
       </div>
 
       <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end sm:justify-center">
-        <p className="text-sm font-bold text-green-700">
+        <p className="text-sm font-bold text-primary">
           {formatRupiah(order.total)}
         </p>
         {isOngoing ? (
           <button
             type="button"
             onClick={() => onComplete(order.orderId)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
           >
             <CheckCheck className="h-3.5 w-3.5" />
             Tandai Selesai
@@ -164,7 +164,7 @@ function OrderRow({
 function EmptyState({ hasAnyOrders }: { hasAnyOrders: boolean }) {
   return (
     <Card className="flex flex-col items-center justify-center gap-4 py-14 text-center">
-      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-green-700">
+      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-primary">
         {hasAnyOrders ? (
           <PackageOpen className="h-6 w-6" />
         ) : (
@@ -240,7 +240,7 @@ export default function PesananMasukPage() {
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
           Dashboard Penjual
         </p>
-        <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
+        <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
           Pesanan Masuk
         </h1>
         <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-sage-500">
@@ -260,7 +260,7 @@ export default function PesananMasukPage() {
             className={cn(
               'rounded-full px-4 py-2 text-xs font-semibold transition-colors',
               tab === item.value
-                ? 'bg-green-700 text-white shadow-sm shadow-green-700/25'
+                ? 'bg-primary text-white shadow-sm shadow-primary/25'
                 : 'border border-sage-100 bg-white text-charcoal-500 hover:text-charcoal-900'
             )}
           >

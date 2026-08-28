@@ -88,7 +88,7 @@ export function StoreRatingCard() {
         ) : (
           <>
       <div className="flex items-center gap-4">
-        <p className="font-display text-[38px] font-medium leading-none tracking-tight text-forest-900">
+        <p className="font-display text-[38px] font-medium leading-none tracking-tight text-primary">
           <span ref={ref}>{value.toFixed(1)}</span>
           <span className="ml-1 align-middle text-xs font-medium text-sage-500">/ 5.0</span>
         </p>

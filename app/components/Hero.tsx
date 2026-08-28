@@ -43,9 +43,9 @@ export function Hero() {
     >
 
       <SoftBlob className="-left-28 -top-28 h-80 w-80 bg-sage-100/70" />
-      <SoftBlob className="-right-24 top-36 h-96 w-96 bg-green-700/10" />
+      <SoftBlob className="-right-24 top-36 h-96 w-96 bg-primary/10" />
       <ArcLines className="right-0 top-6 hidden h-[420px] w-[720px] text-sage-500/25 md:block" />
-      <DotPattern className="bottom-12 left-6 hidden h-28 w-28 text-green-700/15 lg:block" />
+      <DotPattern className="bottom-12 left-6 hidden h-28 w-28 text-primary/15 lg:block" />
       <FloatingLeaf className="left-10 top-40 hidden h-6 w-6 text-sage-500/50 lg:block" />
       <FloatingLeaf
         className="right-16 top-72 hidden h-5 w-5 text-gold-500/50 lg:block"
@@ -62,7 +62,7 @@ export function Hero() {
 
         <motion.div
           variants={item}
-          className="relative min-h-[420px] overflow-hidden rounded-3xl shadow-2xl shadow-forest-900/30 lg:min-h-[560px]"
+          className="relative min-h-[420px] overflow-hidden rounded-3xl shadow-2xl shadow-primary/30 lg:min-h-[560px]"
         >
           <div className="absolute inset-0">
             <SmartImage
@@ -72,7 +72,7 @@ export function Hero() {
               priority
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-900/95 via-forest-900/65 to-forest-900/25" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary to-primary/25" />
 
           <div className="relative flex h-full flex-col justify-end p-6 sm:p-10 lg:p-12">
             <h1 className="max-w-xl font-sans text-4xl font-bold leading-[1.05] tracking-tight text-cream-50 sm:text-5xl lg:text-[3.4rem]">
@@ -112,7 +112,7 @@ export function Hero() {
 
           <motion.div
             variants={item}
-            className="group relative overflow-hidden rounded-3xl shadow-lg shadow-green-700/25 transition-transform duration-300 hover:scale-[1.02]"
+            className="group relative overflow-hidden rounded-3xl shadow-lg shadow-primary/25 transition-transform duration-300 hover:scale-[1.02]"
           >
             <div className="absolute inset-0">
               <SmartImage
@@ -121,7 +121,7 @@ export function Hero() {
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />
             </div>
-            <div className="absolute inset-0 bg-forest-900/80 transition-colors duration-300 group-hover:bg-forest-900/70" />
+            <div className="absolute inset-0 bg-primary/80 transition-colors duration-300 group-hover:bg-caramel-900/70" />
 
             <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
               <h2 className="mt-4 font-sans text-2xl font-bold leading-snug text-cream-50 sm:text-[1.7rem]">
@@ -148,7 +148,7 @@ export function Hero() {
 
           <motion.div
             variants={item}
-            className="group relative overflow-hidden rounded-3xl shadow-lg shadow-forest-900/20 transition-transform duration-300 hover:scale-[1.02]"
+            className="group relative overflow-hidden rounded-3xl shadow-lg shadow-primary/20 transition-transform duration-300 hover:scale-[1.02]"
           >
             <div className="absolute inset-0">
               <SmartImage
@@ -157,7 +157,7 @@ export function Hero() {
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />
             </div>
-            <div className="absolute inset-0 bg-forest-900/80 transition-colors duration-300 group-hover:bg-forest-900/70" />
+            <div className="absolute inset-0 bg-primary/80 transition-colors duration-300 group-hover:bg-caramel-900/70" />
 
             <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
               <h2 className="mt-3 font-sans text-xl font-bold text-cream-50 sm:text-2xl">

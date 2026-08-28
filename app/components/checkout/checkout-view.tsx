@@ -95,7 +95,7 @@ export function CheckoutView() {
         </p>
         <Link
           href="/home"
-          className="mt-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-800"
+          className="mt-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-caramel"
         >
           Kembali ke Beranda
         </Link>
@@ -114,7 +114,7 @@ export function CheckoutView() {
             <Link
               href="/home"
               aria-label="Kembali"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-sage-100 bg-white text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-sage-100 bg-white text-primary transition-colors hover:bg-caramel hover:text-white"
             >
               <ArrowLeft className="h-4 w-4" />
             </Link>
@@ -147,7 +147,7 @@ export function CheckoutView() {
 
               <div className="rounded-2xl border border-sage-100 bg-white p-5 shadow-sm sm:p-6">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-green-700" />
+                  <ShieldCheck className="h-4 w-4 text-primary" />
                   <h3 className="font-display text-base font-medium text-charcoal-900">
                     Pembayaran aman via Xendit
                   </h3>

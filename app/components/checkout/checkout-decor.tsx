@@ -41,7 +41,7 @@ export function CheckoutDecor() {
         style={reduced ? {} : { y: y1 }}
         className="absolute -right-32 -top-20"
       >
-        <SoftBlob className="static h-72 w-72 bg-green-700/[0.07] sm:h-96 sm:w-96" />
+        <SoftBlob className="static h-72 w-72 bg-primary/[0.07] sm:h-96 sm:w-96" />
       </motion.div>
 
       <motion.div
@@ -55,36 +55,36 @@ export function CheckoutDecor() {
         style={reduced ? {} : { y: y3 }}
         className="absolute -bottom-24 right-10"
       >
-        <SoftBlob className="static h-72 w-72 bg-green-700/[0.06]" />
+        <SoftBlob className="static h-72 w-72 bg-primary/[0.06]" />
       </motion.div>
 
-      <LeafSprig className="-right-10 top-40 hidden h-44 w-44 rotate-[150deg] text-green-700/10 lg:block" />
-      <LeafSprig className="-left-12 bottom-16 hidden h-40 w-40 -rotate-12 text-green-700/10 md:block" />
+      <LeafSprig className="-right-10 top-40 hidden h-44 w-44 rotate-[150deg] text-primary/10 lg:block" />
+      <LeafSprig className="-left-12 bottom-16 hidden h-40 w-40 -rotate-12 text-primary/10 md:block" />
 
-      <DotPattern className="right-14 top-1/2 hidden h-20 w-20 text-green-700/10 lg:block" />
-      <DotPattern className="left-16 top-24 hidden h-16 w-16 text-green-700/10 md:block" />
+      <DotPattern className="right-14 top-1/2 hidden h-20 w-20 text-primary/10 lg:block" />
+      <DotPattern className="left-16 top-24 hidden h-16 w-16 text-primary/10 md:block" />
 
-      <ArcLines className="-bottom-6 left-1/2 hidden h-[220px] w-[760px] -translate-x-1/2 text-green-700/[0.06] lg:block" />
+      <ArcLines className="-bottom-6 left-1/2 hidden h-[220px] w-[760px] -translate-x-1/2 text-primary/[0.06] lg:block" />
 
       {reduced ? (
         <>
           <Leaf
-            className="absolute left-[12%] top-32 h-5 w-5 rotate-12 text-green-700/30"
+            className="absolute left-[12%] top-32 h-5 w-5 rotate-12 text-primary/30"
             strokeWidth={1.5}
           />
           <Leaf
-            className="absolute right-[16%] bottom-40 hidden h-5 w-5 -rotate-45 text-green-700/25 md:block"
+            className="absolute right-[16%] bottom-40 hidden h-5 w-5 -rotate-45 text-primary/25 md:block"
             strokeWidth={1.5}
           />
         </>
       ) : (
         <>
           <FloatingLeaf
-            className="left-[12%] top-32 h-5 w-5 text-green-700/35"
+            className="left-[12%] top-32 h-5 w-5 text-primary/35"
             delay={0.8}
           />
           <FloatingLeaf
-            className="right-[16%] bottom-40 hidden h-5 w-5 text-green-700/30 md:block"
+            className="right-[16%] bottom-40 hidden h-5 w-5 text-primary/30 md:block"
             delay={2.4}
           />
         </>

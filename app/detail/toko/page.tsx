@@ -162,7 +162,7 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
           Review Pelanggan
         </p>
-        <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-forest-900 sm:text-3xl">
+        <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-primary sm:text-3xl">
           Kata Pelanggan tentang Pelayanan {vendor.name}
         </h2>
       </div>
@@ -265,7 +265,7 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
             onClick={() => carouselApi?.scrollTo(i)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               activeIndex === i
-                ? "w-8 bg-green-700"
+                ? "w-8 bg-primary"
                 : "w-1.5 bg-charcoal-900/15 hover:bg-charcoal-900/30"
             }`}
           />
@@ -279,12 +279,12 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
 function StoreNotFound() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-cream-50 px-5 font-sans text-charcoal-900">
-      <div className="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl border border-sage-100 bg-white p-10 text-center shadow-md shadow-forest-900/5">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-green-700">
+      <div className="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl border border-sage-100 bg-white p-10 text-center shadow-md shadow-primary/5">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-primary">
           <Utensils className="h-6 w-6" />
         </span>
         <div>
-          <h1 className="font-display text-xl font-medium tracking-tight text-forest-900">
+          <h1 className="font-display text-xl font-medium tracking-tight text-primary">
             Toko tidak ditemukan
           </h1>
           <p className="mt-1.5 text-sm leading-relaxed text-charcoal-500">
@@ -294,7 +294,7 @@ function StoreNotFound() {
         </div>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-colors hover:bg-green-600"
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/20 transition-colors hover:bg-caramel"
         >
           <ArrowLeft className="h-4 w-4" />
           Kembali ke Beranda
@@ -460,7 +460,7 @@ function StoreDetailContent() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
             Menu Surplus Hari Ini
           </p>
-          <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-forest-900 sm:text-3xl">
+          <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-primary sm:text-3xl">
             Menu Surplus dari {vendor.name}
           </h2>
 
@@ -473,7 +473,7 @@ function StoreDetailContent() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={`Cari menu di ${vendor.name}...`}
                 aria-label="Cari menu di toko ini"
-                className="w-full rounded-full border border-sage-100 bg-cream-50 py-2.5 pl-11 pr-10 text-sm text-charcoal-900 outline-none transition-colors placeholder:text-charcoal-500/70 focus:border-green-700 focus:bg-white"
+                className="w-full rounded-full border border-sage-100 bg-cream-50 py-2.5 pl-11 pr-10 text-sm text-charcoal-900 outline-none transition-colors placeholder:text-charcoal-500/70 focus:border-primary focus:bg-white"
               />
               {query && (
                 <button
@@ -496,8 +496,8 @@ function StoreDetailContent() {
                 className={cn(
                   "flex h-[38px] items-center gap-1.5 rounded-full border px-4 text-sm font-semibold transition-colors duration-200",
                   activeCategory !== "Semua" || isCategoryOpen
-                    ? "border-green-700 bg-white text-green-700"
-                    : "border-sage-100 bg-white text-charcoal-900 hover:border-green-700 hover:text-green-700",
+                    ? "border-primary bg-white text-primary"
+                    : "border-sage-100 bg-white text-charcoal-900 hover:border-primary hover:text-primary",
                 )}
               >
                 {activeCategory === "Semua" ? "Kategori" : activeCategory}
@@ -516,7 +516,7 @@ function StoreDetailContent() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.18, ease: "easeOut" }}
-                    className="absolute right-0 top-full z-50 mt-2 w-48 rounded-xl border border-sage-100 bg-white p-2 shadow-lg shadow-forest-900/10"
+                    className="absolute right-0 top-full z-50 mt-2 w-48 rounded-xl border border-sage-100 bg-white p-2 shadow-lg shadow-primary/10"
                   >
                     {displayCategories.map((cat) => {
                       const isActive = activeCategory === cat;
@@ -532,7 +532,7 @@ function StoreDetailContent() {
                           className={cn(
                             "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm transition-colors duration-200",
                             isActive
-                              ? "bg-green-700 font-semibold text-white"
+                              ? "bg-primary font-semibold text-white"
                               : "text-charcoal-500 hover:bg-sage-100",
                           )}
                         >
@@ -552,13 +552,13 @@ function StoreDetailContent() {
                 <div
                   key={i}
                   aria-hidden
-                  className="h-64 animate-pulse rounded-2xl bg-white shadow-md shadow-forest-900/5"
+                  className="h-64 animate-pulse rounded-2xl bg-white shadow-md shadow-primary/5"
                 />
               ))}
             </div>
           ) : loadsOwnProducts && storeError ? (
             <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-sage-100 bg-white p-10 text-center">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-primary shadow-sm">
                 <SearchX className="h-6 w-6" />
               </span>
               <div>
@@ -572,14 +572,14 @@ function StoreDetailContent() {
               <button
                 type="button"
                 onClick={() => setReloadKey((k) => k + 1)}
-                className="rounded-full bg-green-700 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-colors hover:bg-green-600"
+                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow-md shadow-primary/20 transition-colors hover:bg-caramel"
               >
                 Coba Lagi
               </button>
             </div>
           ) : loadsOwnProducts && storeProducts.length === 0 ? (
             <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-sage-100 bg-white p-10 text-center">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-primary shadow-sm">
                 <Utensils className="h-6 w-6" />
               </span>
               <div>
@@ -616,7 +616,7 @@ function StoreDetailContent() {
 
               {!hasResults && (
                 <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-sage-100 bg-white p-10 text-center">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-green-700 shadow-sm">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-primary shadow-sm">
                     <SearchX className="h-6 w-6" />
                   </span>
                   <div>
@@ -634,7 +634,7 @@ function StoreDetailContent() {
                       setQuery("");
                       setActiveCategory("Semua");
                     }}
-                    className="rounded-full border border-green-700 px-5 py-2 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+                    className="rounded-full border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
                   >
                     Lihat Semua Menu
                   </button>

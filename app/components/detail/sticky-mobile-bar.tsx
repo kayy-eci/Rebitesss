@@ -47,7 +47,7 @@ export function StickyMobileBar({
                 Hemat {product.discountPercent}%
               </p>
               <p className="flex items-baseline gap-2">
-                <span className="font-display text-xl font-semibold text-green-700">
+                <span className="font-display text-xl font-semibold text-primary">
                   Rp{formatIDR(product.discountedPrice)}
                 </span>
                 <span className="font-inter text-sm text-charcoal-500 line-through">
@@ -58,7 +58,7 @@ export function StickyMobileBar({
             <button
               type="button"
               onClick={onOrder}
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-green-700 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-600 active:scale-[0.98]"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-caramel active:scale-[0.98]"
             >
               <ShoppingBag className="h-4 w-4" />
               Pesan Sekarang

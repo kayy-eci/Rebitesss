@@ -20,14 +20,14 @@ export function StepIndicator({ active = 1 }: { active?: number }) {
                 transition={{ duration: 0.6, delay: 0.15 * (i + 1), ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
                   'h-full w-full origin-left rounded-full',
-                  done ? 'bg-green-700' : current ? 'bg-green-600' : 'bg-sage-100'
+                  done ? 'bg-primary' : current ? 'bg-primary' : 'bg-sage-100'
                 )}
               />
             </div>
             <p
               className={cn(
                 'mt-2 text-[11px] font-medium tracking-wide',
-                done || current ? 'text-green-700' : 'text-sage-500'
+                done || current ? 'text-primary' : 'text-sage-500'
               )}
             >
               {step}

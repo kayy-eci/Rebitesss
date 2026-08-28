@@ -26,8 +26,8 @@ function CoinSwitch({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
-        'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full px-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700/50',
-        checked ? 'bg-green-700' : 'bg-sage-500/40',
+        'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full px-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+        checked ? 'bg-primary' : 'bg-sage-500/40',
         disabled && 'cursor-not-allowed opacity-40',
       )}
     >
@@ -105,7 +105,7 @@ export function UseCoinsCard() {
                   (sisa {summary.remainingCoin.toLocaleString('id-ID')} Coin)
                 </span>
               </p>
-              <p className="text-xs font-semibold text-green-700">
+              <p className="text-xs font-semibold text-primary">
                 Hemat{' '}
                 <AnimatedNumber
                   value={summary.coinDiscount}

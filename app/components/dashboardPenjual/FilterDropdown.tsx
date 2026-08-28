@@ -73,7 +73,7 @@ export function FilterDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={ariaLabel}
-        className="inline-flex items-center gap-1.5 rounded-full border border-sage-100 bg-cream-50 px-3 py-1.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-sage-100/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+        className="inline-flex items-center gap-1.5 rounded-full border border-sage-100 bg-cream-50 px-3 py-1.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-sage-100/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         {current?.label}
         <ChevronDown
@@ -111,7 +111,7 @@ export function FilterDropdown({
                 >
                   {option.label}
                   {option.value === value && (
-                    <Check className="h-3.5 w-3.5 text-green-700" />
+                    <Check className="h-3.5 w-3.5 text-primary" />
                   )}
                 </button>
               </li>

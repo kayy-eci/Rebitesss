@@ -20,7 +20,7 @@ import {
 } from "@/lib/flash-sale";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
 const WIB_OFFSET_MS = 7 * 3600 * 1000;
 
@@ -211,7 +211,7 @@ function UrgentCard({
       className={cn(
         "group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300",
         isActive
-          ? "cursor-pointer hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-forest-900/10 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          ? "cursor-pointer hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           : "cursor-default opacity-95",
       )}
     >
@@ -317,7 +317,7 @@ function UrgentCard({
           <span className="text-xs text-charcoal-500 line-through">
             {formatRupiah(item.originalPrice)}
           </span>
-          <span className="text-[16px] font-bold leading-none text-green-700">
+          <span className="text-[16px] font-bold leading-none text-primary">
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>
@@ -398,7 +398,7 @@ export function FlashSaleSection({
       data-nav="green"
       className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] to-[#F7F5EF]"
     >
-      <div className="relative border-b border-white/15 bg-forest-900/40 py-3">
+      <div className="relative border-b border-white/15 bg-primary/40 py-3">
         <Marquee pauseOnHover>
           {[
             "SURPLUS",
@@ -545,8 +545,8 @@ export function FlashSaleSection({
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 md:px-6 md:py-3.5 font-sans transition-all duration-300",
                   isActive
-                    ? "border-transparent bg-caramel text-white shadow-lg shadow-forest-900/40 hover:bg-white hover:text-caramel"
-                    : "border-white/60 bg-white text-primary shadow-lg shadow-forest-900/25 hover:bg-caramel hover:text-white",
+                    ? "border-transparent bg-caramel text-white shadow-lg shadow-primary/40 hover:bg-white hover:text-caramel"
+                    : "border-white/60 bg-white text-primary shadow-lg shadow-primary/25 hover:bg-caramel hover:text-white",
                   FOCUS_RING,
                 )}
               >

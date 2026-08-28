@@ -8,7 +8,7 @@ export default function CategoryNotFound() {
     <div className="flex min-h-screen flex-col bg-cream-50">
       <ProfileNavbar />
       <main className="flex flex-1 items-center justify-center px-4 pb-16 pt-28">
-        <div className="w-full max-w-md rounded-2xl border border-hairline bg-white px-6 py-14 text-center shadow-md shadow-forest-900/5">
+        <div className="w-full max-w-md rounded-2xl border border-hairline bg-white px-6 py-14 text-center shadow-md shadow-primary/5">
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cream-100">
             <Compass className="h-7 w-7 text-charcoal-500" aria-hidden />
           </span>
@@ -20,7 +20,7 @@ export default function CategoryNotFound() {
           </p>
           <Link
             href="/homePage"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary-700/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Kembali ke Beranda

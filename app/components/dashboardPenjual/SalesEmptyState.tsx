@@ -39,7 +39,7 @@ export function DashboardCtaLink() {
   return (
     <Link
       href="/dashboard/penjual/tambahMenu"
-      className="inline-flex items-center gap-1.5 rounded-full bg-green-700 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-green-700/25 transition-colors hover:bg-green-600"
+      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
     >
       Kelola Menu
     </Link>

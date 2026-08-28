@@ -23,7 +23,7 @@ export function StoreAbout() {
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
           Tentang Toko
         </p>
-        <h2 className="mt-2 font-display text-2xl font-medium tracking-tight text-forest-900">
+        <h2 className="mt-2 font-display text-2xl font-medium tracking-tight text-primary">
           Mengenal {STORE.name}
         </h2>
         <p className="mt-4 text-sm leading-relaxed text-charcoal-500">
@@ -46,7 +46,7 @@ export function StoreAbout() {
                 key={chip.label}
                 className="flex items-center gap-3 rounded-xl bg-cream-50 px-4 py-3"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage-100 text-green-700">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage-100 text-primary">
                   <Icon className="h-4 w-4" />
                 </span>
                 <div className="min-w-0">
@@ -63,7 +63,7 @@ export function StoreAbout() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-2xl bg-forest-900 p-6 text-cream-50 shadow-md shadow-forest-900/20 sm:p-8">
+      <div className="relative overflow-hidden rounded-2xl bg-primary p-6 text-cream-50 shadow-md shadow-primary/20 sm:p-8">
         <DotPattern className="right-0 top-0 h-40 w-40 text-cream-50/10" />
         <LeafSprig className="-right-8 -top-6 h-44 w-44 text-cream-50/15" />
 

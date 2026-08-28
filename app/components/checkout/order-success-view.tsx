@@ -122,7 +122,7 @@ export function OrderSuccessView() {
       <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
         <p className="font-sans text-lg font-bold text-charcoal-900">Order ID tidak ditemukan</p>
         <p className="max-w-sm text-sm leading-relaxed text-charcoal-500">Link pembayaran tidak valid.</p>
-        <Link href="/home" className="mt-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-800">
+        <Link href="/home" className="mt-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-caramel">
           Kembali ke Beranda
         </Link>
       </main>
@@ -138,7 +138,7 @@ export function OrderSuccessView() {
       <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
         <p className="font-sans text-lg font-bold text-charcoal-900">Pesanan tidak ditemukan</p>
         <p className="max-w-sm text-sm leading-relaxed text-charcoal-500">Pesanan #{orderId} tidak ada atau sudah dihapus.</p>
-        <Link href="/home" className="mt-2 rounded-full bg-green-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-800">
+        <Link href="/home" className="mt-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-caramel">
           Kembali ke Beranda
         </Link>
       </main>
@@ -180,7 +180,7 @@ export function OrderSuccessView() {
             <h1 className="mt-4 font-display text-2xl font-semibold tracking-tight text-charcoal-900">Detail Pesanan</h1>
             <p className="mt-1.5 text-sm text-charcoal-500">#{order.orderId} · {formatDateTime(order.createdAt)}</p>
             {order.estimatedMinutes && (
-              <p className="mt-2 inline-flex rounded-full bg-green-700 px-3 py-1 text-xs font-semibold text-white">
+              <p className="mt-2 inline-flex rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
                 Estimasi selesai {estimasiText} {jarakText ? `· ${jarakText}` : ''}
               </p>
             )}
@@ -215,7 +215,7 @@ export function OrderSuccessView() {
                 <p className="mt-0.5 text-xs text-charcoal-500">
                   {order.quantity} porsi · {formatDateTime(order.createdAt)}
                 </p>
-                <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-sage-100 px-2.5 py-0.5 text-[11px] font-semibold text-green-700">
+                <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-sage-100 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
                   {order.fulfillment === 'delivery' ? (
                     <>
                       <Truck className="h-3 w-3" /> Diantar {jarakText ? `· ${jarakText}` : ''}
@@ -237,7 +237,7 @@ export function OrderSuccessView() {
               {(order.coinUsed ?? 0) > 0 && <Row label="ReBites Coin" value={`−${formatRupiah(order.coinUsed ?? 0)}`} accent />}
               <div className="flex items-center justify-between border-t border-sage-100 pt-2.5">
                 <dt className="font-display font-medium text-charcoal-900">Total</dt>
-                <dd className="font-display text-lg font-semibold tabular-nums text-green-700">{formatRupiah(order.total)}</dd>
+                <dd className="font-display text-lg font-semibold tabular-nums text-primary">{formatRupiah(order.total)}</dd>
               </div>
               <Row label="Metode pembayaran" value={PAYMENT_NAMES[order.paymentMethodId] ?? '—'} />
               {order.estimatedMinutes && <Row label="Estimasi selesai" value={estimasiText} />}
@@ -281,12 +281,12 @@ export function OrderSuccessView() {
               </p>
             </div>
           ) : (
-            <div className="relative overflow-hidden bg-green-700 px-8 pb-10 pt-9 text-center text-white">
+            <div className="relative overflow-hidden bg-primary px-8 pb-10 pt-9 text-center text-white">
               <motion.span
                 initial={{ scale: 0, rotate: -30 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.15 }}
-                className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-green-700 shadow-lg"
+                className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary shadow-lg"
               >
                 <Check className="h-8 w-8" strokeWidth={3} />
               </motion.span>
@@ -332,7 +332,7 @@ export function OrderSuccessView() {
                 <p className="truncate text-sm font-semibold text-charcoal-900">{order.productName}</p>
                 <p className="mt-0.5 text-xs text-charcoal-500">{order.quantity} porsi · {order.vendorName}</p>
               </div>
-              <p className="shrink-0 font-display text-sm font-semibold tabular-nums text-green-700">{formatRupiah(order.total)}</p>
+              <p className="shrink-0 font-display text-sm font-semibold tabular-nums text-primary">{formatRupiah(order.total)}</p>
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
@@ -340,14 +340,14 @@ export function OrderSuccessView() {
                 <>
                   <Link
                     href={`/detail/pesanan?product=${encodeURIComponent(order.productId)}&qty=${order.quantity}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-green-700 px-4 py-3 text-sm font-semibold text-green-700 hover:bg-green-700 hover:text-white"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-primary px-4 py-3 text-sm font-semibold text-primary hover:bg-caramel hover:text-white"
                     onClick={() => setShowPopup(false)}
                   >
                     <ArrowRight className="h-4 w-4 rotate-180" /> Coba Lagi
                   </Link>
                   <Link
                     href="/home"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:bg-caramel"
                     onClick={() => setShowPopup(false)}
                   >
                     Beranda
@@ -364,7 +364,7 @@ export function OrderSuccessView() {
                   </button>
                   <Link
                     href={`/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:bg-caramel"
                   >
                     <ReceiptText className="h-4 w-4" /> Riwayat
                   </Link>
@@ -373,14 +373,14 @@ export function OrderSuccessView() {
                 <>
                   <Link
                     href={`/riwayatPesanan?orderId=${encodeURIComponent(order.orderId)}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-green-700 bg-white px-4 py-3 text-sm font-semibold text-green-700 hover:bg-green-700 hover:text-white"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-primary bg-white px-4 py-3 text-sm font-semibold text-primary hover:bg-caramel hover:text-white"
                     onClick={() => setShowPopup(false)}
                   >
                     <ReceiptText className="h-4 w-4" /> Riwayat
                   </Link>
                   <Link
                     href="/home"
-                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-green-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 hover:bg-green-600"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:bg-caramel"
                     onClick={() => setShowPopup(false)}
                   >
                     Beranda <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -417,7 +417,7 @@ function Row({
   return (
     <div className="flex items-center justify-between gap-4">
       <dt className="text-charcoal-500">{label}</dt>
-      <dd className={accent ? 'font-medium tabular-nums text-green-700' : 'font-medium tabular-nums text-charcoal-900'}>
+      <dd className={accent ? 'font-medium tabular-nums text-primary' : 'font-medium tabular-nums text-charcoal-900'}>
         {value}
       </dd>
     </div>

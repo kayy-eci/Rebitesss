@@ -34,7 +34,7 @@ export function FeaturedPromoCard() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
             Promo Toko
           </p>
-          <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-forest-900">
+          <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-primary">
             <Star className="h-4 w-4 text-gold-500" />
             Menu Unggulan
           </h3>
@@ -55,7 +55,7 @@ export function FeaturedPromoCard() {
                 'flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors',
                 product.featured
                   ? 'border-gold-300 bg-gold-100/60'
-                  : 'border-sage-100 bg-white hover:border-green-700'
+                  : 'border-sage-100 bg-white hover:border-primary'
               )}
             >
               <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-cream-50">

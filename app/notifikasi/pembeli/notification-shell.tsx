@@ -28,7 +28,7 @@ export function NotificationSidebarShell({
           >
             <Menu className="h-5 w-5" />
           </button>
-          <span className="font-display text-base font-semibold text-forest-deep">
+          <span className="font-display text-base font-semibold text-primary">
             Notifikasi
           </span>
         </div>

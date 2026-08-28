@@ -12,7 +12,7 @@ function ActionContent({ action }: { action: Action }) {
   const Icon = action.icon;
   return (
     <>
-      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-green-700 transition-colors group-hover:bg-sage-100/70">
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-primary transition-colors group-hover:bg-sage-100/70">
         <Icon className="h-5 w-5" />
       </span>
       <span className="text-center text-[11px] font-medium text-charcoal-900">

@@ -65,7 +65,7 @@ export function DetailedReportCard({ period }: { period: StatsPeriod }) {
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
               Laporan Rinci · {period.replace('-', ' ')}
             </p>
-            <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-forest-900">
+            <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-primary">
               <FileText className="h-4 w-4" />
               Penjualan Harian
             </h3>
@@ -91,7 +91,7 @@ export function DetailedReportCard({ period }: { period: StatsPeriod }) {
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
             Laporan Rinci · {period.replace('-', ' ')}
           </p>
-          <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-forest-900">
+          <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-primary">
             <FileText className="h-4 w-4" />
             Penjualan Harian
           </h3>

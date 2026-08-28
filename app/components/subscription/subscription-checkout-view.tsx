@@ -63,7 +63,7 @@ export function SubscriptionCheckoutView() {
   if (!plan) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border border-hairline bg-white px-6 py-14 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-100 text-green-700">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-100 text-primary">
           <CreditCard className="h-6 w-6" />
         </span>
         <h1 className="mt-5 font-display text-xl font-medium tracking-tight text-charcoal-900">Paket tidak tersedia</h1>

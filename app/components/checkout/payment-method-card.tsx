@@ -19,7 +19,7 @@ export function PaymentMethodCard({
       className={cn(
         'group relative flex cursor-pointer items-center gap-4 rounded-2xl border-2 bg-white p-4 transition-all duration-200 sm:p-5',
         selected
-          ? 'border-green-700 bg-green-700/[0.05] shadow-lg shadow-green-700/10'
+          ? 'border-primary bg-primary/[0.05] shadow-lg shadow-primary/10'
           : 'border-sage-100 hover:border-sage-500/50 hover:shadow-md'
       )}
     >
@@ -35,7 +35,7 @@ export function PaymentMethodCard({
       <span
         className={cn(
           'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-200',
-          selected ? 'bg-green-700 text-white' : 'bg-sage-100 text-green-700'
+          selected ? 'bg-primary text-white' : 'bg-sage-100 text-primary'
         )}
       >
         <Icon className="h-5 w-5" />
@@ -53,7 +53,7 @@ export function PaymentMethodCard({
       <span
         className={cn(
           'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200',
-          selected ? 'border-green-700' : 'border-sage-500/70'
+          selected ? 'border-primary' : 'border-sage-500/70'
         )}
       >
         {selected && (
@@ -61,7 +61,7 @@ export function PaymentMethodCard({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 24 }}
-            className="h-2.5 w-2.5 rounded-full bg-green-700"
+            className="h-2.5 w-2.5 rounded-full bg-primary"
           />
         )}
       </span>

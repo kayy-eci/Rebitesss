@@ -21,7 +21,7 @@ export function PaymentMethodList() {
           Metode pembayaran
         </h3>
         <span className="inline-flex items-center gap-1.5 text-xs text-sage-500">
-          <ShieldCheck className="h-4 w-4 text-green-700" />
+          <ShieldCheck className="h-4 w-4 text-primary" />
           Diproses aman lewat Midtrans
         </span>
       </div>
@@ -32,11 +32,11 @@ export function PaymentMethodList() {
       >
         <SelectTrigger
           aria-label="Pilih metode pembayaran"
-          className="mt-4 h-auto w-full rounded-xl border-sage-100 bg-white px-4 py-3 data-[placeholder]:text-sage-500 focus:outline-none focus:ring-2 focus:ring-green-700/20"
+          className="mt-4 h-auto w-full rounded-xl border-sage-100 bg-white px-4 py-3 data-[placeholder]:text-sage-500 focus:outline-none focus:ring-2 focus:ring-primary/20"
         >
           <span className="flex items-center gap-2.5 text-sm font-semibold text-charcoal-900">
             {SelectedIcon && (
-              <SelectedIcon className="h-4 w-4 shrink-0 text-green-700" />
+              <SelectedIcon className="h-4 w-4 shrink-0 text-primary" />
             )}
             <SelectValue placeholder="Pilih metode pembayaran" />
           </span>
@@ -47,7 +47,7 @@ export function PaymentMethodList() {
             return (
               <SelectItem key={method.id} value={method.id}>
                 <span className="flex items-center gap-2.5">
-                  <Icon className="h-4 w-4 shrink-0 text-green-700" />
+                  <Icon className="h-4 w-4 shrink-0 text-primary" />
                   {method.name}
                 </span>
               </SelectItem>

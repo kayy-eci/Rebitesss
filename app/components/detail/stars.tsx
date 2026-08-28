@@ -26,9 +26,9 @@ export function Stars({
             aria-hidden
             className={cn(
               fill >= 0.75
-                ? 'fill-green-700 text-green-700'
+                ? 'fill-primary text-primary'
                 : fill >= 0.25
-                  ? 'fill-green-700/50 text-green-700/50'
+                  ? 'fill-primary/50 text-primary/50'
                   : 'fill-sage-100 text-sage-100'
             )}
           />

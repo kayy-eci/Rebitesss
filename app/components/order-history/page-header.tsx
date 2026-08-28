@@ -11,7 +11,7 @@ export function OrderPageHeader() {
       <button
         type="button"
         onClick={() => router.back()}
-        className="inline-flex h-9 items-center gap-1.5 rounded-full px-2 -ml-2 text-[13px] font-semibold text-charcoal-500 transition-colors hover:bg-white hover:text-green-700"
+        className="inline-flex h-9 items-center gap-1.5 rounded-full px-2 -ml-2 text-[13px] font-semibold text-charcoal-500 transition-colors hover:bg-white hover:text-primary"
       >
         <ArrowLeft className="h-4 w-4" />
         Kembali

@@ -13,7 +13,7 @@ export function StoreMenuCard({ menu }: { menu: StoreMenu }) {
   const percent = Math.round((1 - menu.surplusPrice / menu.normalPrice) * 100);
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/15">
+    <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-primary/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/15">
       <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
         <SmartImage
           src={menu.image}
@@ -46,7 +46,7 @@ export function StoreMenuCard({ menu }: { menu: StoreMenu }) {
         </div>
 
         <p className="flex items-center gap-1 text-xs text-charcoal-500">
-          <Clock className="h-3.5 w-3.5 text-green-700" />
+          <Clock className="h-3.5 w-3.5 text-primary" />
           Tersedia {menu.availableFrom}–{menu.availableTo}
         </p>
 
@@ -54,7 +54,7 @@ export function StoreMenuCard({ menu }: { menu: StoreMenu }) {
           <span className="text-sm text-charcoal-500 line-through">
             {formatRupiah(menu.normalPrice)}
           </span>
-          <span className="text-lg font-bold text-green-700">
+          <span className="text-lg font-bold text-primary">
             {formatRupiah(menu.surplusPrice)}
           </span>
         </div>
@@ -67,7 +67,7 @@ export function StoreMenuCard({ menu }: { menu: StoreMenu }) {
             'mt-1 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold transition-all duration-200 active:scale-[0.98]',
             added
               ? 'bg-sage-100 text-charcoal-900'
-              : 'bg-green-700 text-white shadow-md shadow-green-700/20 hover:bg-green-600'
+              : 'bg-primary text-white shadow-md shadow-primary/20 hover:bg-caramel'
           )}
         >
           {added ? (

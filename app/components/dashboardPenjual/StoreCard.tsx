@@ -83,7 +83,7 @@ export function StoreCard() {
         </span>
       </div>
 
-      <div className="relative mt-4 overflow-hidden rounded-3xl bg-gradient-to-br from-forest-900 via-forest-800 to-green-600 p-6 text-cream-50 shadow-md shadow-forest-900/20">
+      <div className="relative mt-4 overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary to-primary p-6 text-cream-50 shadow-md shadow-primary/20">
         <DotPattern className="right-0 top-0 h-40 w-40 text-cream-50/10" />
         <LeafSprig className="-right-8 -top-6 h-44 w-44 text-cream-50/15" />
 
@@ -95,7 +95,7 @@ export function StoreCard() {
             <p className="mt-2 inline-flex flex-wrap items-center gap-1.5 rounded-full bg-cream-50/15 px-2.5 py-1 text-[11px] font-semibold text-cream-50">
               {storeName || '—'}
               {plan.verifiedBadge && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-cream-50 text-forest-900">
+                <span className="inline-flex items-center gap-1 rounded-full bg-cream-50 text-primary">
                   <BadgeCheck className="h-3 w-3" />
                   Terverifikasi
                 </span>
@@ -121,7 +121,7 @@ export function StoreCard() {
           <span
             className={cn(
               'relative inline-flex h-4 w-7 items-center rounded-full transition-colors',
-              isOpen ? 'bg-green-500' : 'bg-sage-500'
+              isOpen ? 'bg-primary/100' : 'bg-sage-500'
             )}
           >
             <span
@@ -150,7 +150,7 @@ export function StoreCard() {
         href={`/detail/toko?id=${storeSlug ?? storeId ?? ''}`}
         className="mt-4 inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full border border-sage-100 bg-white px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
       >
-        <Store className="h-3.5 w-3.5 text-green-700" />
+        <Store className="h-3.5 w-3.5 text-primary" />
         Lihat Profil Toko
         <ArrowUpRight className="h-3.5 w-3.5 text-sage-500" />
       </Link>

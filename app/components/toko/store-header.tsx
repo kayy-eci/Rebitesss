@@ -6,10 +6,10 @@ export function StoreHeader() {
     <header className="sticky top-0 z-40 border-b border-sage-100 bg-cream-50/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <Link href="/" className="flex items-center gap-2" aria-label="ReBites beranda">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-700 text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white">
             <Leaf className="h-4 w-4" />
           </span>
-          <span className="font-sans text-xl font-bold tracking-tight text-green-700">
+          <span className="font-sans text-xl font-bold tracking-tight text-primary">
             ReBites
           </span>
         </Link>
@@ -23,7 +23,7 @@ export function StoreHeader() {
           </Link>
           <Link
             href="/login"
-            className="rounded-full bg-green-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-600"
+            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-caramel"
           >
             Masuk / Daftar
           </Link>

@@ -30,7 +30,7 @@ export function SmartImage({
           className
         )}
       >
-        <Leaf className="h-12 w-12 text-green-700/35" strokeWidth={1.25} />
+        <Leaf className="h-12 w-12 text-primary/35" strokeWidth={1.25} />
       </div>
     );
   }

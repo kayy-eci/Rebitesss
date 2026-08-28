@@ -52,7 +52,7 @@ export function OrderToolbar({
                   'inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors',
                   active
                     ? 'border-[#7A1C1C] bg-white text-[#7A1C1C] shadow-sm'
-                    : 'border-zinc-200 bg-white text-charcoal-500 hover:border-sage-200 hover:text-green-700'
+                    : 'border-zinc-200 bg-white text-charcoal-500 hover:border-sage-200 hover:text-primary'
                 )}
               >
                 {p.label}
@@ -104,8 +104,8 @@ export function OrderToolbar({
               className={cn(
                 'h-8 rounded-full px-3.5 text-xs font-semibold transition-all',
                 fulfillment === f.key
-                  ? 'bg-green-700 text-white shadow-sm'
-                  : 'bg-white text-charcoal-500 ring-1 ring-hairline hover:text-green-700'
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'bg-white text-charcoal-500 ring-1 ring-hairline hover:text-primary'
               )}
             >
               {f.label}
@@ -119,7 +119,7 @@ export function OrderToolbar({
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder="Cari Order ID / produk..."
-            className="h-9 w-full rounded-full border border-hairline bg-white pl-10 pr-4 text-sm text-charcoal-900 placeholder:text-charcoal-500/60 outline-none focus:border-sage-500 focus:ring-2 focus:ring-green-50"
+            className="h-9 w-full rounded-full border border-hairline bg-white pl-10 pr-4 text-sm text-charcoal-900 placeholder:text-charcoal-500/60 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary"
           />
         </label>
       </div>

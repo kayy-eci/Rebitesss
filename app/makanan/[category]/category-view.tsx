@@ -28,7 +28,7 @@ import { getCategoryBySlug } from "@/lib/categories";
 import { useProductDetail } from "@/app/detail/product/use-product-detail";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -115,7 +115,7 @@ function FilterOptionRow({
       onClick={onSelect}
       className={cn(
         "flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm transition-colors duration-150 hover:bg-cream-100",
-        active ? "font-semibold text-green-700" : "text-charcoal-900",
+        active ? "font-semibold text-primary" : "text-charcoal-900",
         FOCUS_RING,
       )}
     >
@@ -123,10 +123,10 @@ function FilterOptionRow({
         aria-hidden
         className={cn(
           "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border",
-          active ? "border-green-700" : "border-sage-200",
+          active ? "border-primary" : "border-sage-200",
         )}
       >
-        {active && <span className="h-2 w-2 rounded-full bg-green-700" />}
+        {active && <span className="h-2 w-2 rounded-full bg-primary" />}
       </span>
       {label}
     </button>
@@ -135,7 +135,7 @@ function FilterOptionRow({
 
 function FoodCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-md shadow-forest-900/5">
+    <div className="overflow-hidden rounded-2xl bg-white shadow-md shadow-primary/5">
       <Skeleton className="aspect-[4/3] w-full rounded-none bg-sage-100" />
       <div className="space-y-2 p-4">
         <Skeleton className="h-4 w-3/4" />
@@ -256,7 +256,7 @@ export default function CategoryView({
               </p>
               <p
                 aria-live="polite"
-                className="mt-3 inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700"
+                className="mt-3 inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
               >
                 {isLoading
                   ? "Memuat makanan…"
@@ -286,7 +286,7 @@ export default function CategoryView({
                     className={cn(
                       "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition-all duration-200 active:scale-[0.98]",
                       activeFilterCount > 0
-                        ? "border-green-700 bg-green-700 text-white hover:bg-green-600"
+                        ? "border-primary bg-primary text-white hover:bg-caramel"
                         : "border-hairline bg-white text-charcoal-900 hover:border-sage-500/60 hover:bg-cream-100",
                       FOCUS_RING,
                     )}
@@ -305,7 +305,7 @@ export default function CategoryView({
                   side="bottom"
                   sideOffset={8}
                   collisionPadding={16}
-                  className="max-h-[70vh] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-2xl border-hairline bg-white p-4 shadow-xl shadow-forest-900/10"
+                  className="max-h-[70vh] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-2xl border-hairline bg-white p-4 shadow-xl shadow-primary/10"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-bold text-charcoal-900">
@@ -318,7 +318,7 @@ export default function CategoryView({
                       className={cn(
                         "inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-semibold transition-colors disabled:pointer-events-none disabled:opacity-40",
                         hasFilters
-                          ? "text-green-700 hover:bg-cream-100"
+                          ? "text-primary hover:bg-cream-100"
                           : "text-charcoal-500",
                         FOCUS_RING,
                       )}
@@ -435,7 +435,7 @@ export default function CategoryView({
                 <Link
                   href="/cari"
                   className={cn(
-                    "mt-6 inline-flex items-center justify-center rounded-full bg-green-700 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98]",
+                    "mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98]",
                     FOCUS_RING,
                   )}
                 >
@@ -462,7 +462,7 @@ export default function CategoryView({
                   type="button"
                   onClick={resetAll}
                   className={cn(
-                    "mt-6 inline-flex items-center gap-2 justify-center rounded-full bg-green-700 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98]",
+                    "mt-6 inline-flex items-center gap-2 justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/20 transition-all duration-200 hover:bg-caramel active:scale-[0.98]",
                     FOCUS_RING,
                   )}
                 >

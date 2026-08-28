@@ -48,7 +48,7 @@ export function PhotoPicker({ value, onChange }: PhotoPickerProps) {
           htmlFor="menu-photo-input"
           className="flex h-44 cursor-pointer flex-col items-center justify-center gap-2.5 rounded-2xl border-2 border-dashed border-sage-100 bg-cream-50 text-center transition-colors hover:border-sage-500/60 hover:bg-sage-100/40"
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 text-green-700">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 text-primary">
             <Camera className="h-6 w-6" />
           </span>
           <span>
@@ -83,7 +83,7 @@ export function PhotoPicker({ value, onChange }: PhotoPickerProps) {
             className={cn(
               'relative h-14 w-14 overflow-hidden rounded-xl ring-2 transition-all',
               value === preset.src
-                ? 'ring-green-700 ring-offset-2 ring-offset-cream-50'
+                ? 'ring-primary ring-offset-2 ring-offset-cream-50'
                 : 'ring-sage-100 hover:ring-sage-500/50'
             )}
           >

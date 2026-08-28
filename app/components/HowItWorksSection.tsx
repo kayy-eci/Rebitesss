@@ -81,10 +81,10 @@ export function HowItWorksSection() {
                 className="flex flex-col items-center text-center"
               >
                 <div className="relative">
-                  <span className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full border border-sage-100 bg-white shadow-md shadow-forest-900/10">
-                    <step.icon className="h-8 w-8 text-green-700" strokeWidth={1.6} />
+                  <span className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full border border-sage-100 bg-white shadow-md shadow-primary/10">
+                    <step.icon className="h-8 w-8 text-primary" strokeWidth={1.6} />
                   </span>
-                  <span className="absolute -right-2 -top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-green-700 font-sans text-xs font-bold text-white shadow-md">
+                  <span className="absolute -right-2 -top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-primary font-sans text-xs font-bold text-white shadow-md">
                     0{index + 1}
                   </span>
                 </div>

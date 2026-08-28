@@ -57,7 +57,7 @@ export default function LanggananPenjualPage() {
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
           Dashboard Penjual
         </p>
-        <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-forest-900">
+        <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
           Paket Langganan
         </h1>
         <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-sage-500">
@@ -74,14 +74,14 @@ export default function LanggananPenjualPage() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sage-500">
                 Paket Saat Ini
               </p>
-              <h2 className="mt-1 flex items-center gap-1.5 font-display text-xl font-medium tracking-tight text-forest-900">
+              <h2 className="mt-1 flex items-center gap-1.5 font-display text-xl font-medium tracking-tight text-primary">
                 <Crown className="h-5 w-5 text-gold-500" />
                 ReBites{' '}
                 {SUBSCRIPTION_PLANS.find((plan) => plan.slug === activeSlug)?.name}
               </h2>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-green-700">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-primary">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               Aktif
             </span>
           </div>
@@ -139,8 +139,8 @@ export default function LanggananPenjualPage() {
               className={cn(
                 'rounded-full px-5 py-2 text-xs font-medium transition-colors',
                 billing === mode.key
-                  ? 'bg-green-700 text-white shadow-sm shadow-green-700/20'
-                  : 'text-charcoal-500 hover:text-green-700'
+                  ? 'bg-primary text-white shadow-sm shadow-primary/20'
+                  : 'text-charcoal-500 hover:text-primary'
               )}
             >
               {mode.label}
@@ -167,17 +167,17 @@ export default function LanggananPenjualPage() {
               <Card
                 className={cn(
                   'relative flex h-full flex-col',
-                  isActive && 'border-green-700 ring-1 ring-green-700/25'
+                  isActive && 'border-primary ring-1 ring-primary/25'
                 )}
               >
                 {isActive && (
-                  <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-green-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                  <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
                     <BadgeCheck className="h-3 w-3" />
                     Paket Aktif
                   </span>
                 )}
 
-                <h3 className="font-display text-lg font-medium tracking-tight text-forest-900">
+                <h3 className="font-display text-lg font-medium tracking-tight text-primary">
                   ReBites {plan.name}
                 </h3>
                 <p className="mt-1 min-h-[2.5rem] text-xs leading-relaxed text-sage-500">
@@ -196,7 +196,7 @@ export default function LanggananPenjualPage() {
                 <ul className="mt-4 space-y-2">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-xs">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-700" />
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                       <span className="font-medium text-charcoal-900">{feature}</span>
                     </li>
                   ))}
@@ -214,8 +214,8 @@ export default function LanggananPenjualPage() {
                       className={cn(
                         'inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold transition-colors',
                         plan.popular
-                          ? 'bg-green-700 text-white shadow-sm shadow-green-700/25 hover:bg-green-600'
-                          : 'border border-green-700 text-green-700 hover:bg-green-700/10'
+                          ? 'bg-primary text-white shadow-sm shadow-primary/25 hover:bg-caramel'
+                          : 'border border-primary text-primary hover:bg-caramel/10'
                       )}
                     >
                       <Wallet className="h-3.5 w-3.5" />

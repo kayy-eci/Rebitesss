@@ -34,7 +34,7 @@ export function NotificationCard({
         'flex w-full items-start gap-3.5 rounded-2xl border p-4 text-left transition-all duration-200',
         notification.read
           ? 'border-sage-100 bg-white hover:bg-cream-50'
-          : 'border-green-700/20 bg-green-50/50 hover:bg-green-50'
+          : 'border-primary/20 bg-primary/10/50 hover:bg-primary/10'
       )}
     >
       <NotificationIcon type={notification.type} />
@@ -52,7 +52,7 @@ export function NotificationCard({
             {notification.title}
           </p>
           {!notification.read && (
-            <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-green-700" />
+            <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-primary" />
           )}
         </div>
         <p className="mt-1 text-xs leading-relaxed text-charcoal-500/80">
@@ -63,7 +63,7 @@ export function NotificationCard({
             {formatNotificationTime(notification.createdAt)}
           </time>
           {notification.href && (
-            <span className="text-[11px] font-medium text-green-700">
+            <span className="text-[11px] font-medium text-primary">
               Lihat detail →
             </span>
           )}

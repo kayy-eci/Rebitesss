@@ -40,7 +40,7 @@ export function CTAButtons({
         onClick={handleOrder}
         whileHover={reduce ? undefined : { scale: 1.02 }}
         whileTap={reduce ? undefined : { scale: 0.98 }}
-        className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-green-700 px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-600 hover:shadow-[0_20px_45px_-20px_rgba(27,77,50,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+        className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-caramel hover:shadow-[0_20px_45px_-20px_rgba(27,77,50,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
       >
         {added ? (
           <>
@@ -62,10 +62,10 @@ export function CTAButtons({
         onClick={handleSave}
         whileTap={reduce ? undefined : { scale: 0.94 }}
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50",
+          "inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50",
           saved
-            ? "border-green-700 bg-sage-100 text-green-700"
-            : "border-sage-500/60 text-green-700 hover:bg-cream-100",
+            ? "border-primary bg-sage-100 text-primary"
+            : "border-sage-500/60 text-primary hover:bg-cream-100",
         )}
       >
         <motion.span
@@ -76,7 +76,7 @@ export function CTAButtons({
           transition={{ type: "spring", stiffness: 600, damping: 14 }}
         >
           <Heart
-            className={cn("h-4 w-4", saved && "fill-green-700 text-green-700")}
+            className={cn("h-4 w-4", saved && "fill-primary text-primary")}
           />
         </motion.span>
         {saved ? "Tersimpan" : "Simpan"}

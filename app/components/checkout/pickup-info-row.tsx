@@ -40,7 +40,7 @@ export function PickupInfoCard() {
             </p>
 
             <div className="mt-4 flex items-start gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sage-100 text-green-700">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sage-100 text-primary">
                 <Store className="h-5 w-5" />
               </span>
               <div className="min-w-0">
@@ -63,7 +63,7 @@ export function PickupInfoCard() {
               </div>
             </div>
 
-            <div className="mt-4 rounded-xl bg-green-700/[0.05] px-4 py-3">
+            <div className="mt-4 rounded-xl bg-primary/[0.05] px-4 py-3">
               <p className="text-xs font-medium text-charcoal-500">
                 Pesanan siap diambil
               </p>
@@ -86,7 +86,7 @@ export function PickupInfoCard() {
               )}`}
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-700 px-4 py-2 text-xs font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
             >
               <Navigation className="h-3.5 w-3.5" />
               Lihat Lokasi

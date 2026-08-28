@@ -33,7 +33,7 @@ const DEPOK_DISTRICTS = [
 ];
 
 const INPUT_CLASS =
-  'w-full rounded-xl border border-sage-100 bg-white px-3.5 py-2.5 text-sm text-charcoal-900 placeholder:text-sage-500 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-700/20';
+  'w-full rounded-xl border border-sage-100 bg-white px-3.5 py-2.5 text-sm text-charcoal-900 placeholder:text-sage-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20';
 
 function toFormValues(editing: DeliveryAddress | null): AddressFormValues {
   if (!editing) {
@@ -131,8 +131,8 @@ export function AddressFormView({
                 className={cn(
                   'rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200',
                   form.label === label
-                    ? 'bg-green-700 text-white shadow-md shadow-green-700/20'
-                    : 'border border-sage-100 bg-white text-charcoal-500 hover:border-sage-500/60 hover:text-green-700',
+                    ? 'bg-primary text-white shadow-md shadow-primary/20'
+                    : 'border border-sage-100 bg-white text-charcoal-500 hover:border-sage-500/60 hover:text-primary',
                 )}
               >
                 {label}
@@ -251,7 +251,7 @@ export function AddressFormView({
           <button
             type="button"
             onClick={handleSave}
-            className="flex-1 rounded-full bg-green-700 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-700/25 transition-colors hover:bg-green-600"
+            className="flex-1 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-caramel"
           >
             {editing ? 'Simpan Perubahan' : 'Simpan Alamat'}
           </button>

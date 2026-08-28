@@ -71,7 +71,7 @@ export function DemandAnalyticsCard() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
             Analisis Pasar
           </p>
-          <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-forest-900">
+          <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-primary">
             <UtensilsCrossed className="h-4 w-4" />
             Permintaan Menu
           </h3>
@@ -96,14 +96,14 @@ export function DemandAnalyticsCard() {
             <div className="mt-1.5 flex items-center gap-2">
               <div className="h-2 flex-1 overflow-hidden rounded-full bg-cream-100">
                 <div
-                  className="h-full rounded-full bg-green-700"
+                  className="h-full rounded-full bg-primary"
                   style={{ width: `${Math.min(100, (insight.demand / insights[0].demand) * 100)}%` }}
                 />
               </div>
               <span
                 className={cn(
                   'inline-flex w-14 items-center justify-end gap-1 text-[11px] font-semibold',
-                  insight.trend >= 0 ? 'text-green-700' : 'text-caramel-500'
+                  insight.trend >= 0 ? 'text-primary' : 'text-caramel-500'
                 )}
               >
                 {insight.trend >= 0 ? (
