@@ -129,8 +129,19 @@ export default function AuthForm({
   const isSignup = mode === "signup";
 
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("rebites_remembered_email") || "";
+    }
+    return "";
+  });
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("rebites_remembered_email") !== null;
+    }
+    return false;
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [confirmEmailOpen, setConfirmEmailOpen] = useState(false);
@@ -151,10 +162,14 @@ export default function AuthForm({
     if (isSignup && password.length < 6) {
       setError("Kata sandi minimal 6 karakter.");
       return;
-    }
-
-    setLoading(true);
+    }      setLoading(true);
     try {
+      if (rememberMe) {
+        localStorage.setItem("rebites_remembered_email", email.trim());
+      } else {
+        localStorage.removeItem("rebites_remembered_email");
+      }
+
       const { supabase } = await import("@/lib/supabase");
 
       if (isSignup) {
@@ -295,14 +310,25 @@ export default function AuthForm({
         />
 
         {!isSignup && (
-          <div className="flex justify-end -mt-1">
-            <Link
-              href="/auth/forgotPassword"
-              className="font-sans text-[11px] text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
-            >
-              Lupa password?
-            </Link>
-          </div>
+          <>
+            <div className="flex items-center justify-between -mt-1">
+              <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-3.5 w-3.5 rounded border-[#D1D5DB] text-[#225138] accent-[#225138] focus:ring-[#225138]/30"
+                />
+                <span className="font-sans text-[11px] text-[#6B6A63]">Ingat saya</span>
+              </label>
+              <Link
+                href="/auth/forgotPassword"
+                className="font-sans text-[11px] text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
+              >
+                Lupa password?
+              </Link>
+            </div>
+          </>
         )}
 
         {error && (

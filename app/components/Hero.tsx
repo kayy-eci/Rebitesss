@@ -65,11 +65,11 @@ export function Hero() {
         variants={container}
         initial="hidden"
         animate="visible"
-        className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.55fr_1fr]"
+        className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.85fr_1fr] lg:gap-7"
       >
         <motion.div
           variants={item}
-          className="relative min-h-[420px] overflow-hidden rounded-3xl shadow-2xl shadow-primary/30 lg:min-h-[560px]"
+          className="relative min-h-[480px] overflow-hidden rounded-[2rem] shadow-2xl shadow-primary/30 lg:min-h-[640px]"
         >
           <div className="absolute inset-0">
             <SmartImage
@@ -81,8 +81,8 @@ export function Hero() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary to-primary/25" />
 
-          <div className="relative flex h-full flex-col justify-end p-6 sm:p-10 lg:p-12">
-            <h1 className="max-w-xl font-sans text-4xl font-bold leading-[1.05] tracking-tight text-cream-50 sm:text-5xl lg:text-[3.4rem]">
+          <div className="relative flex h-full flex-col justify-end p-6 sm:p-10 lg:p-14">
+            <h1 className="max-w-2xl font-sans text-4xl font-bold leading-[1.05] tracking-tight text-cream-50 sm:text-5xl lg:text-[3.85rem]">
               Temukan Makanan Surplus,
               <br />
               <span className="relative inline-block">
@@ -90,20 +90,20 @@ export function Hero() {
                 <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-gold-500 sm:-bottom-2" />
               </span>
             </h1>
-            <p className="mt-5 max-w-md font-inter text-sm leading-relaxed text-cream-50/85 sm:text-base text-white">
+            <p className="mt-5 max-w-lg font-inter text-sm leading-relaxed text-cream-50/85 sm:text-[15px] lg:text-[16px] text-white">
               Temukan makanan surplus berkualitas dari UMKM di sekitarmu dengan
               harga lebih bersahabat.
             </p>
 
-            <div className="mt-7">
+            <div className="mt-8">
               <Button
-                variant="cream"
-                size="lg"
+                variant="outlineCream"
+                size="sm"
                 onClick={() => scrollToId("rekomendasi")}
-                className="group"
+                className="group scale-105 px-7 py-3.5 text-[13px] lg:scale-110 lg:px-8"
               >
                 Jelajahi Makanan
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
 
@@ -170,7 +170,7 @@ export function Hero() {
                 Jual sekarang dengan harga diskon dan ubah sisa jadi pemasukan.
               </p>
               <Button
-                variant="cream"
+                variant="outlineCream"
                 size="sm"
                 className="mt-5"
                 onClick={handleMulaiJual}
