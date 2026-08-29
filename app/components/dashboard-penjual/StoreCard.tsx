@@ -1,11 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight, BadgeCheck, Store } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BadgeCheck,
+  MapPin,
+  Store,
+  User,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { QuickActionsRow } from './QuickActionsRow';
-import { DotPattern, LeafSprig } from './decor';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { getSellerUmkm } from '@/lib/product-storage';
 import { supabase } from '@/lib/supabase';
@@ -74,8 +79,9 @@ export function StoreCard() {
   const displayedOwner = ownerName ?? '';
 
   return (
-    <Card>
-      <div className="flex items-center justify-between gap-2">
+    <Card className="overflow-hidden p-0">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 pb-0 pt-5 sm:px-6">
         <h2 className="text-sm font-bold text-charcoal-900">Profil Toko</h2>
         <span className="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-charcoal-900">
           <span className="h-3 w-3 rounded-full bg-gold-400" />
@@ -83,79 +89,108 @@ export function StoreCard() {
         </span>
       </div>
 
-      <div className="relative mt-4 overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary to-primary p-6 text-cream-50 shadow-md shadow-primary/20">
-        <DotPattern className="right-0 top-0 h-40 w-40 text-cream-50/10" />
-        <LeafSprig className="-right-8 -top-6 h-44 w-44 text-cream-50/15" />
+      {/* ReBites Partner Card */}
+      <div className="relative mx-4 mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/90 sm:mx-5">
+        {/* Decorative dots */}
+        <div className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rounded-full bg-cream-50/[0.08]" />
+        <div className="pointer-events-none absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-cream-50/[0.05]" />
 
-        <div className="relative flex items-start justify-between gap-2">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cream-50/70">
-              ReBites Partner
-            </p>
-            <p className="mt-2 inline-flex flex-wrap items-center gap-1.5 rounded-full bg-cream-50/15 px-2.5 py-1 text-[11px] font-semibold text-cream-50">
-              {storeName || '—'}
-              {plan.verifiedBadge && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-cream-50 text-primary">
-                  <BadgeCheck className="h-3 w-3" />
-                  Terverifikasi
-                </span>
-              )}
-            </p>
-          </div>
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cream-50/15">
-            <Store className="h-4 w-4 text-cream-50" />
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleToggleOpen}
-          aria-pressed={isOpen}
-          className={cn(
-            'relative mt-5 inline-flex items-center gap-2.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors',
-            isOpen
-              ? 'border-cream-50/30 bg-cream-50/15 text-cream-50 hover:bg-cream-50/25'
-              : 'border-gold-300/60 bg-gold-100/90 text-charcoal-900 hover:bg-gold-100'
-          )}
-        >
-          <span
-            className={cn(
-              'relative inline-flex h-4 w-7 items-center rounded-full transition-colors',
-              isOpen ? 'bg-primary/100' : 'bg-sage-500'
-            )}
-          >
-            <span
+        <div className="relative p-5 sm:p-6">
+          {/* Top row: label + avatar + toggle */}
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cream-50/15 backdrop-blur-sm">
+                <Store className="h-5 w-5 text-cream-50" />
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cream-50/60">
+                  ReBites Partner
+                </p>
+                <p className="mt-0.5 font-display text-[15px] font-medium leading-tight text-cream-50">
+                  {storeName || 'Nama Toko'}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleToggleOpen}
+              aria-pressed={isOpen}
               className={cn(
-                'absolute h-3 w-3 rounded-full bg-white transition-all',
-                isOpen ? 'left-3.5' : 'left-0.5'
+                'inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-all',
+                isOpen
+                  ? 'bg-cream-50/20 text-cream-50 hover:bg-cream-50/30'
+                  : 'bg-caramel text-white hover:bg-caramel-dark'
               )}
-            />
-          </span>
-          {isOpen ? 'Toko Buka' : 'Toko Tutup'}
-        </button>
+            >
+              <span
+                className={cn(
+                  'relative inline-flex h-4 w-7 items-center rounded-full transition-colors',
+                  isOpen ? 'bg-cream-50/30' : 'bg-charcoal-900/20'
+                )}
+              >
+                <span
+                  className={cn(
+                    'absolute h-2.5 w-2.5 rounded-full transition-all',
+                    isOpen ? 'left-3.5 bg-white' : 'left-0.5 bg-charcoal-900'
+                  )}
+                />
+              </span>
+              {isOpen ? 'Buka' : 'Tutup'}
+            </button>
+          </div>
 
-        <div className="relative mt-6">
-          <p className="font-display text-lg font-medium leading-tight text-cream-50">
-            {displayedOwner || '—'}
-          </p>
-          <p className="mt-1 text-[11px] text-cream-50/60">
-            {storeSlug
-              ? `Partner ReBites · /${storeSlug}`
-              : 'Partner ReBites'}
-          </p>
+          {/* Verified badge */}
+          {plan.verifiedBadge && (
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-cream-50/10 px-2.5 py-1">
+              <BadgeCheck className="h-3.5 w-3.5 text-gold-400" />
+              <span className="text-[10px] font-semibold text-cream-50/80">Terverifikasi</span>
+            </div>
+          )}
+
+          {/* Divider */}
+          <div className="my-4 h-px bg-cream-50/10" />
+
+          {/* Info rows */}
+          <div className="space-y-2.5">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-cream-50/10">
+                <User className="h-3.5 w-3.5 text-cream-50/70" />
+              </span>
+              <div>
+                <p className="text-[10px] font-medium uppercase tracking-wider text-cream-50/50">Pemilik</p>
+                <p className="text-xs font-semibold text-cream-50">{displayedOwner || '—'}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-cream-50/10">
+                <MapPin className="h-3.5 w-3.5 text-cream-50/70" />
+              </span>
+              <div>
+                <p className="text-[10px] font-medium uppercase tracking-wider text-cream-50/50">Toko</p>
+                <p className="text-xs font-semibold text-cream-50">
+                  {storeSlug ? `/${storeSlug}` : 'Belum diatur'}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <Link
-        href={`/detail/toko?id=${storeSlug ?? storeId ?? ''}`}
-        className="mt-4 inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full border border-sage-100 bg-white px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-colors hover:bg-cream-50"
-      >
-        <Store className="h-3.5 w-3.5 text-primary" />
-        Lihat Profil Toko
-        <ArrowUpRight className="h-3.5 w-3.5 text-sage-500" />
-      </Link>
+      {/* Actions */}
+      <div className="px-5 pt-4 sm:px-6">
+        <Link
+          href={`/detail/toko?id=${storeSlug ?? storeId ?? ''}`}
+          className="group inline-flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-sage-100 bg-cream-50/60 px-4 py-2.5 text-xs font-semibold text-charcoal-900 transition-all hover:border-sage-100 hover:bg-cream-100"
+        >
+          <Store className="h-3.5 w-3.5 text-primary transition-transform group-hover:scale-110" />
+          Lihat Profil Toko
+          <ArrowUpRight className="h-3.5 w-3.5 text-sage-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </Link>
+      </div>
 
-      <QuickActionsRow />
+      <div className="px-5 pb-5 pt-3 sm:px-6">
+        <QuickActionsRow />
+      </div>
     </Card>
   );
 }

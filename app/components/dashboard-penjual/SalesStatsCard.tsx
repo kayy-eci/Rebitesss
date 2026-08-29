@@ -12,7 +12,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { BarChart2, LineChart as LineChartIcon } from 'lucide-react';
+import { BarChart2, Download, LineChart as LineChartIcon, MoreVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { FilterDropdown } from './FilterDropdown';
@@ -20,6 +20,12 @@ import { useCountUp } from './useCountUp';
 import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
 import { formatRupiah } from '@/lib/data';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/app/components/ui/dropdown-menu';
 
 type Period = '7-hari' | '14-hari' | '30-hari';
 type ChartKind = 'bar' | 'line';
@@ -163,6 +169,38 @@ export function SalesStatsCard({
                 <LineChartIcon className="h-4 w-4" />
               </button>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Opsi lainnya"
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-sage-500 transition-colors hover:bg-sage-100 hover:text-charcoal-900"
+                >
+                  <MoreVertical className="h-4 w-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem
+                  onClick={() => {
+                    const csvContent = [
+                      ['Hari', 'Terjual', 'Pendapatan'],
+                      ...data.map((point) => [point.day, point.terjual.toString(), point.revenue.toString()]),
+                    ]
+                      .map((row) => row.join(','))
+                      .join('\n');
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `statistik-penjualan-${period}.csv`;
+                    link.click();
+                  }}
+                  className="text-xs"
+                >
+                  <Download className="mr-2 h-3.5 w-3.5" />
+                  Export ke CSV
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         )}
       </div>

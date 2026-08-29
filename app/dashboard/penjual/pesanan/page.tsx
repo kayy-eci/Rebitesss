@@ -333,16 +333,9 @@ export default function PesananMasukPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-          Dashboard Penjual
-        </p>
         <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
           Pesanan Masuk
         </h1>
-        <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-sage-500">
-          <Store className="h-3.5 w-3.5" />
-          Pesanan pembeli untuk {storeName || 'tokomu'}
-        </p>
       </motion.div>
 
       <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label="Filter status pesanan">

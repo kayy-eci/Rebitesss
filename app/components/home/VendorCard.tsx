@@ -34,8 +34,8 @@ export function VendorCard({
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    setIsOpen(isOpenNow(vendor.openHours));
-  }, [vendor.openHours]);
+    setIsOpen(vendor.isOpen && isOpenNow(vendor.openHours));
+  }, [vendor.isOpen, vendor.openHours]);
 
   return (
     <div

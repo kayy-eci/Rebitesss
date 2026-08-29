@@ -7,7 +7,6 @@ import { Crown, TrendingUp } from 'lucide-react';
 import { SellerShell } from '@/app/components/dashboard-penjual/SellerShell';
 import { TopCategoryCard } from '@/app/components/dashboard-penjual/TopCategoryCard';
 import { BestSellingMenuRow } from '@/app/components/dashboard-penjual/BestSellingMenuRow';
-import { AchievementBadgesCard } from '@/app/components/dashboard-penjual/AchievementBadgesCard';
 import { StoreRatingCard } from '@/app/components/dashboard-penjual/StoreRatingCard';
 
 const SalesActivityChartCard = dynamic(
@@ -33,16 +32,9 @@ export default function PerformaTokoPage() {
       >
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-              Dashboard Penjual
-            </p>
             <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
               Performa Toko
             </h1>
-            <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-sage-500">
-              <TrendingUp className="h-3.5 w-3.5" />
-              Pantau tren penjualan dan capaian tokomu secara lengkap.
-            </p>
           </div>
 
           <Link
@@ -64,7 +56,6 @@ export default function PerformaTokoPage() {
         <div className="space-y-5 lg:col-span-4 lg:space-y-6">
           <StoreRatingCard />
           <BestSellingMenuRow />
-          <AchievementBadgesCard />
         </div>
       </div>
     </SellerShell>

@@ -924,16 +924,9 @@ export default function MenuSayaPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-          Dashboard Penjual
-        </p>
         <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
           Menu Saya
         </h1>
-        <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-sage-500">
-          <Utensils className="h-3.5 w-3.5" />
-          Kelola menu surplus, stok, dan jam penjualan.
-        </p>
       </motion.div>
 
       <Card className="mt-6">

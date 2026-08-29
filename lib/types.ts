@@ -53,6 +53,7 @@ export interface Vendor {
   itemCount: number;
   address: string;
   openHours: string;
+  isOpen: boolean;
   description: string;
   
   tagline?: string;

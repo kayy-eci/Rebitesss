@@ -7,6 +7,16 @@ import { formatRupiah } from '@/lib/data';
 import { SmartImage } from '@/app/components/shared/SmartImage';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { useSellerBestSellingMenus } from '@/hooks/use-seller-best-selling';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/app/components/ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
+import { RefreshCw, List, Download } from 'lucide-react';
+import { useState } from 'react';
 
 const MAX_ITEMS = 5;
 
@@ -15,6 +25,29 @@ export function BestSellingMenuRow() {
   const hasAccess = hydrated && plan.bestSellingMenus;
   const { menus } = useSellerBestSellingMenus(hasAccess);
   const topMenus = menus.slice(0, MAX_ITEMS);
+  const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    router.refresh();
+    setTimeout(() => setRefreshing(false), 1000);
+  };
+
+  const handleExport = () => {
+    const csvContent = [
+      ['Nama Menu', 'Harga', 'Terjual'],
+      ...topMenus.map((menu) => [menu.name, menu.surplusPrice.toString(), menu.terjual.toString()]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'menu-terlaris.csv';
+    link.click();
+  };
 
   return (
     <Card>
@@ -26,13 +59,34 @@ export function BestSellingMenuRow() {
             Premium
           </span>
         ) : (
-          <button
-            type="button"
-            aria-label="Menu lainnya"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-sage-500 transition-colors hover:bg-sage-100 hover:text-charcoal-900"
-          >
-            <MoreVertical className="h-4 w-4" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label="Menu lainnya"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-sage-500 transition-colors hover:bg-sage-100 hover:text-charcoal-900"
+              >
+                <MoreVertical className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={handleRefresh} className="text-xs">
+                <RefreshCw className={`mr-2 h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh Data
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="text-xs">
+                <Link href="/dashboard/penjual/menu">
+                  <List className="mr-2 h-3.5 w-3.5" />
+                  Lihat Semua Menu
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleExport} className="text-xs">
+                <Download className="mr-2 h-3.5 w-3.5" />
+                Export ke CSV
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
 

@@ -32,7 +32,7 @@ export function VendorSection() {
   const { plan } = useSellerPlan();
   const { vendors, loading } = useCatalog();
 
-  const openVendors = vendors.filter((v) => isOpenNow(v.openHours));
+  const openVendors = vendors.filter((v) => v.isOpen && isOpenNow(v.openHours));
 
   const sortedVendors = plan.priorityListing
     ? [...openVendors].sort(
