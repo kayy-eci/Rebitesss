@@ -445,7 +445,7 @@ function FlashSalePanel({
             }
             className={cn(
               'relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors',
-              occupiesSlot ? 'bg-primary' : 'bg-sage-200',
+              occupiesSlot ? 'bg-gold-500' : 'bg-stone',
               switchDisabled && 'cursor-not-allowed opacity-40'
             )}
           >
