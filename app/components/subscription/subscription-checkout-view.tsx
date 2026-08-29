@@ -23,60 +23,37 @@ import {
 } from '@/lib/subscription-plans';
 import { saveSubscription } from '@/lib/subscription-storage';
 import { supabase } from '@/lib/supabase';
+import { useCurrentUser } from '@/lib/current-user';
+import { toast } from '@/hooks/use-toast';
 
-export function SubscriptionCheckoutView() {
-  const router = useRouter();
-  const params = useSearchParams();
-
-  const planParam = params.get('plan');
-  const initialPlan = getSubscriptionPlan(planParam);
-  const billing: BillingCycle =
-    params.get('billing') === 'yearly' ? 'yearly' : 'monthly';
-
-  const chooserPlans = useMemo(() => SUBSCRIPTION_PLANS, []);
-
+function SubscriptionContent({
+  plan,
+  billing,
+  userEmail,
+  router,
+}: {
+  plan: ReturnType<typeof getSubscriptionPlan> & { slug: string };
+  billing: BillingCycle;
+  userEmail: string | null;
+  router: ReturnType<typeof useRouter>;
+}) {
   const [selectedSlug, setSelectedSlug] = useState<'basic' | 'standar' | 'premium'>(() => {
-    if (initialPlan && (initialPlan.slug === 'basic' || initialPlan.slug === 'standar' || initialPlan.slug === 'premium')) return initialPlan.slug as 'basic' | 'standar' | 'premium';
+    if (plan && (plan.slug === 'basic' || plan.slug === 'standar' || plan.slug === 'premium')) return plan.slug as 'basic' | 'standar' | 'premium';
     return 'basic';
   });
 
   useEffect(() => {
-    if (initialPlan && (initialPlan.slug === 'basic' || initialPlan.slug === 'standar' || initialPlan.slug === 'premium')) {
-      setSelectedSlug(initialPlan.slug as 'basic' | 'standar' | 'premium');
+    if (plan && (plan.slug === 'basic' || plan.slug === 'standar' || plan.slug === 'premium')) {
+      setSelectedSlug(plan.slug as 'basic' | 'standar' | 'premium');
     }
-  }, [initialPlan]);
+  }, [plan]);
 
-  const plan = getSubscriptionPlan(selectedSlug) ?? getSubscriptionPlan('basic')!;
+  const currentPlan = getSubscriptionPlan(selectedSlug) ?? getSubscriptionPlan('basic')!;
 
   const [processing, setProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUserEmail(session?.user?.email ?? null);
-    });
-  }, []);
-
-  if (!plan) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border border-hairline bg-white px-6 py-14 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-100 text-primary">
-          <CreditCard className="h-6 w-6" />
-        </span>
-        <h1 className="mt-5 font-display text-xl font-medium tracking-tight text-charcoal-900">Paket tidak tersedia</h1>
-        <Link
-          href="/dashboard/penjual/langganan"
-          className="mt-6 inline-flex h-11 items-center gap-2 rounded-full bg-[#225138] px-6 text-sm font-semibold text-white hover:bg-[#143B2D]"
-        >
-          Pilih Paket
-        </Link>
-      </div>
-    );
-  }
-
-  const isFree = false;
-  const price = getPlanPrice(plan, billing);
+  const price = getPlanPrice(currentPlan, billing);
   const subtotal = price;
   const tax = Math.round(subtotal * 0.12);
   const total = subtotal + tax;
@@ -108,7 +85,7 @@ export function SubscriptionCheckoutView() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ planSlug: plan.slug, billing }),
+        body: JSON.stringify({ planSlug: currentPlan.slug, billing }),
       });
       const json = (await res.json().catch(() => null)) as
         | { error?: string; invoiceUrl?: string }
@@ -155,7 +132,7 @@ export function SubscriptionCheckoutView() {
 
       {}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {chooserPlans.map((p) => {
+        {SUBSCRIPTION_PLANS.map((p) => {
           const isSelected = p.slug === selectedSlug;
           const pPrice = getPlanPrice(p, billing);
           const pTotal = pPrice + Math.round(pPrice * 0.12);
@@ -210,7 +187,7 @@ export function SubscriptionCheckoutView() {
         <div className="rounded-2xl border border-[#DEDACF] bg-white p-6 shadow-sm sm:p-7 lg:col-span-3">
           <h2 className="font-display text-[18px] font-semibold tracking-tight text-[#225138]">Rincian Pembayaran</h2>
           <p className="mt-1 text-[13px] leading-relaxed text-[#6B6A63]">
-            ReBites {plan.name} {billing === 'yearly' ? 'Tahunan' : 'Bulanan'} • berlaku s.d. {periodEndLabel}
+            ReBites {currentPlan.name} {billing === 'yearly' ? 'Tahunan' : 'Bulanan'} • berlaku s.d. {periodEndLabel}
           </p>
 
           {userEmail && (
@@ -222,7 +199,7 @@ export function SubscriptionCheckoutView() {
           <div className="mt-6 rounded-xl border border-[#DEDACF] bg-[#FCFCF9] p-4">
             <div className="flex items-center justify-between gap-3 text-[13px]">
               <span className="text-[#6B6A63]">Paket terpilih</span>
-              <span className="font-semibold text-[#225138]">ReBites {plan.name}</span>
+              <span className="font-semibold text-[#225138]">ReBites {currentPlan.name}</span>
             </div>
             <div className="mt-2 flex items-center justify-between gap-3 text-[13px]">
               <span className="text-[#6B6A63]">Periode</span>
@@ -230,7 +207,7 @@ export function SubscriptionCheckoutView() {
             </div>
             <div className="mt-2 flex items-center justify-between gap-3 text-[13px]">
               <span className="text-[#6B6A63]">Fitur utama</span>
-              <span className="max-w-[60%] truncate text-right text-[#225138]">{plan.features[0]}</span>
+              <span className="max-w-[60%] truncate text-right text-[#225138]">{currentPlan.features[0]}</span>
             </div>
           </div>
 
@@ -287,12 +264,12 @@ export function SubscriptionCheckoutView() {
         {}
         <div className="flex flex-col overflow-hidden rounded-2xl border border-[#DEDACF] bg-white shadow-sm lg:col-span-2">
           <div className="bg-[#F7F5EF] px-6 py-5">
-            <h3 className="font-display text-[15px] font-semibold text-[#225138]">ReBites {plan.name}</h3>
+            <h3 className="font-display text-[15px] font-semibold text-[#225138]">ReBites {currentPlan.name}</h3>
             <p className="mt-1 text-xs text-[#6B6A63]">Paket termasuk:</p>
           </div>
           <div className="flex-1 bg-white px-6 py-5">
             <ul className="space-y-2.5">
-              {plan.features.map((feature) => (
+              {currentPlan.features.map((feature) => (
                 <li key={feature} className="flex gap-2.5 text-[13px] leading-snug">
                   <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#225138]" />
                   <span className="text-[#225138]">{feature}</span>
@@ -335,4 +312,74 @@ export function SubscriptionCheckoutView() {
       </p>
     </>
   );
+}
+
+export function SubscriptionCheckoutView() {
+  const router = useRouter();
+  const params = useSearchParams();
+  const { user, loading: authLoading } = useCurrentUser();
+
+  const planParam = params.get('plan');
+  const initialPlan = getSubscriptionPlan(planParam);
+  const billing: BillingCycle =
+    params.get('billing') === 'yearly' ? 'yearly' : 'monthly';
+
+  const [authChecked, setAuthChecked] = useState(false);
+
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserEmail(session?.user?.email ?? null);
+    });
+  }, []);
+
+  // Auth check effect - must be at top level
+  useEffect(() => {
+    if (!authLoading) {
+      setAuthChecked(true);
+      if (!user) {
+        toast({
+          title: "Silakan login terlebih dahulu",
+          description: "Anda harus login untuk berlangganan paket penjual.",
+          variant: "default",
+        });
+        const currentUrl = window.location.pathname + window.location.search;
+        router.push(`/auth/login?redirect=${encodeURIComponent(currentUrl)}`);
+      }
+    }
+  }, [user, authLoading, router]);
+
+  // Early returns after all hooks
+  if (authLoading || !authChecked) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border border-hairline bg-white px-6 py-14 text-center">
+        <div className="h-14 w-14 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <p className="mt-4 text-sm text-charcoal-500">Memeriksa autentikasi...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Will redirect via useEffect
+  }
+
+  if (!initialPlan) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border border-hairline bg-white px-6 py-14 text-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-100 text-primary">
+          <CreditCard className="h-6 w-6" />
+        </span>
+        <h1 className="mt-5 font-display text-xl font-medium tracking-tight text-charcoal-900">Paket tidak tersedia</h1>
+        <Link
+          href="/dashboard/penjual/langganan"
+          className="mt-6 inline-flex h-11 items-center gap-2 rounded-full bg-[#225138] px-6 text-sm font-semibold text-white hover:bg-[#143B2D]"
+        >
+          Pilih Paket
+        </Link>
+      </div>
+    );
+  }
+
+  return <SubscriptionContent plan={initialPlan} billing={billing} userEmail={userEmail} router={router} />;
 }

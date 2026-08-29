@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatIDR, type ProductDetail } from "@/app/components/detail-product/data";
+import { useCurrentUser } from "@/lib/current-user";
+import { toast } from "@/hooks/use-toast";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -78,14 +80,26 @@ export function ProductDetailModal({
     [onClose],
   );
 
+  const { user, loading: authLoading } = useCurrentUser();
+
   const handleBuy = useCallback(() => {
+    if (authLoading) return;
+    if (!user) {
+      toast({
+        title: "Silakan login terlebih dahulu",
+        description: "Anda harus login untuk melakukan pembelian.",
+        variant: "default",
+      });
+      router.push(`/auth/login?redirect=/detail/pesanan?product=${encodeURIComponent(product.id)}&qty=${qty}`);
+      return;
+    }
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
     onClose();
     router.push(
       `/detail/pesanan?product=${encodeURIComponent(product.id)}&qty=${qty}`,
     );
-  }, [onClose, qty, product.id, router]);
+  }, [onClose, qty, product.id, router, user, authLoading]);
 
   const savings = product.originalPrice - product.discountedPrice;
   const savingsPercent = Math.round((savings / product.originalPrice) * 100);
