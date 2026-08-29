@@ -7,8 +7,8 @@ import { SellerShell } from "@/app/components/dashboardPenjual/SellerShell";
 import { Card } from "@/app/components/dashboardPenjual/Card";
 import {
   getSellerStoreSettings,
-  setStoreOpenHours,
   updateStoreSettings,
+  STORE_SETTINGS_UPDATED_EVENT,
 } from "@/lib/store-settings-storage";
 import { SELLER_STATUS_UPDATED_EVENT } from "@/hooks/use-seller-status";
 import { supabase } from "@/lib/supabase";
@@ -39,17 +39,25 @@ export default function PengaturanTokoPage() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    const load = async () => {
       const settings = await getSellerStoreSettings();
       if (cancelled) return;
       setStoreName(settings?.storeName ?? "");
       setDescription(settings?.description ?? "");
       setAddress(settings?.address ?? "");
       setImageUrl(settings?.image ?? "");
+      setOpenHours(settings?.openHours ?? "");
       setLoading(false);
-    })();
+    };
+    load();
+    // Sync jika ada update dari Topbar / tab lain (instant)
+    const onStoreUpdated = () => {
+      void load();
+    };
+    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, onStoreUpdated);
     return () => {
       cancelled = true;
+      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, onStoreUpdated);
     };
   }, []);
 
@@ -77,6 +85,14 @@ export default function PengaturanTokoPage() {
 
     if (!storeName.trim()) {
       setError("Nama toko wajib diisi.");
+      return;
+    }
+    if (!openHours.trim()) {
+      setError("Jam operasional wajib diisi. Contoh: 09.00–21.00");
+      return;
+    }
+    if (!/^\d{1,2}\.\d{2}\s*[–-]\s*\d{1,2}\.\d{2}$/.test(openHours.trim())) {
+      setError("Format jam operasional tidak valid. Contoh: 09.00–21.00");
       return;
     }
 
@@ -110,21 +126,25 @@ export default function PengaturanTokoPage() {
         finalImage = publicUrl;
       }
 
+      const trimmedOpenHours = openHours.trim();
       const ok = await updateStoreSettings({
         storeName: storeName.trim(),
         description: description.trim(),
         address: address.trim(),
         image: finalImage || undefined,
+        openHours: trimmedOpenHours,
       });
       if (!ok) throw new Error("Gagal menyimpan pengaturan toko.");
 
-      if (openHours.trim()) {
-        await setStoreOpenHours(openHours.trim());
-      }
-
+      // UI sync: jangan hilangkan data setelah save, tetap tampil di form
+      setImageUrl(finalImage);
+      setOpenHours(trimmedOpenHours);
+      setStoreName(storeName.trim());
+      setDescription(description.trim());
+      setAddress(address.trim());
       setLogoFile(null);
       setLogoPreview(null);
-      setMessage("Pengaturan toko tersimpan. Perubahan langsung tampil di halaman Detail Toko.");
+      setMessage("Pengaturan toko tersimpan. Perubahan langsung tampil di beranda & Detail Toko.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan.");
     } finally {
@@ -242,7 +262,7 @@ export default function PengaturanTokoPage() {
                   htmlFor="settings-open-hours"
                   className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-sage-500"
                 >
-                  Jam Operasional
+                  Jam Operasional <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="settings-open-hours"
@@ -250,8 +270,13 @@ export default function PengaturanTokoPage() {
                   value={openHours}
                   onChange={(e) => setOpenHours(e.target.value)}
                   placeholder="09.00–21.00"
+                  aria-required="true"
+                  required
                   className={inputClass()}
                 />
+                <p className="mt-1 text-[10px] text-charcoal-500/60">
+                  Wajib diisi. Contoh: 09.00–21.00
+                </p>
               </div>
 
               <div>

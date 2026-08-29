@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from './supabase';
 import type { FoodItem, PromoCode, UrgentItem, UrgentSlot, Vendor } from './types';
+import { STORE_SETTINGS_UPDATED_EVENT } from './store-settings-storage';
 
 export interface CatalogData {
   foodItems: FoodItem[];
@@ -206,6 +207,14 @@ export function useCatalog() {
 
   useEffect(() => {
     refresh();
+    // Instant: saat pengaturan toko disimpan (logo/nama/openHours), refresh vendor di home tanpa reload
+    const onStoreUpdated = () => {
+      void refresh();
+    };
+    window.addEventListener(STORE_SETTINGS_UPDATED_EVENT, onStoreUpdated);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_UPDATED_EVENT, onStoreUpdated);
+    };
   }, [refresh]);
 
   return { ...data, loading, refresh };

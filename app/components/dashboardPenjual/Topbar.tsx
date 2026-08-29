@@ -16,6 +16,8 @@ interface TopbarProps {
 
 export function Topbar({ onMenuClick }: TopbarProps) {
   const [storeName, setStoreName] = useState('');
+  const [storeImage, setStoreImage] = useState('');
+  const [imageLoadFailed, setImageLoadFailed] = useState(false);
   const { userId } = useCurrentUser();
   
   const { unreadCount } = useNotifications(userId, 'seller');
@@ -24,6 +26,8 @@ export function Topbar({ onMenuClick }: TopbarProps) {
     const refresh = () => {
       getSellerStoreSettings().then((settings) => {
         setStoreName(settings?.storeName ?? '');
+        setStoreImage(settings?.image ?? '');
+        setImageLoadFailed(false);
       });
     };
     refresh();
@@ -48,9 +52,18 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
         { }
         <Link href="/dashboard/penjual" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
-            <Store className="h-4 w-4" />
-          </div>
+          {storeImage && !imageLoadFailed ? (
+            <img
+              src={storeImage}
+              alt={storeName ? `Logo ${storeName}` : 'Logo toko'}
+              className="h-8 w-8 shrink-0 rounded-lg object-cover ring-1 ring-black/5"
+              onError={() => setImageLoadFailed(true)}
+            />
+          ) : (
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
+              <Store className="h-4 w-4" />
+            </div>
+          )}
           <span className="text-sm font-bold text-charcoal-900">
             {storeName || '—'}
           </span>

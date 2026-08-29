@@ -11,6 +11,7 @@ export interface SellerStoreSettings {
   description: string;
   image: string;
   address: string;
+  openHours: string;
 }
 
 export const DEFAULT_STORE_SETTINGS: SellerStoreSettings = {
@@ -19,6 +20,7 @@ export const DEFAULT_STORE_SETTINGS: SellerStoreSettings = {
   description: '',
   image: '',
   address: '',
+  openHours: '',
 };
 
 function dispatchUpdated(): void {
@@ -35,7 +37,7 @@ export async function getSellerStoreSettings(): Promise<SellerStoreSettings | nu
 
   const { data, error } = await supabase
     .from('umkm_profiles')
-    .select('business_name, description, logo_url, address, is_open')
+    .select('business_name, description, logo_url, address, is_open, open_hours')
     .eq('user_id', uid)
     .maybeSingle();
   if (error || !data) return null;
@@ -46,6 +48,7 @@ export async function getSellerStoreSettings(): Promise<SellerStoreSettings | nu
     description: data.description ?? '',
     image: data.logo_url ?? '',
     address: data.address ?? '',
+    openHours: data.open_hours ?? '',
   };
 }
 
@@ -54,6 +57,7 @@ export interface StorePublicSettings {
   description: string;
   address: string;
   image: string;
+  openHours: string;
 }
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -65,7 +69,7 @@ export async function getStoreSettingsByStoreId(
   const column = UUID_RE.test(storeId) ? 'id' : 'slug';
   const { data, error } = await supabase
     .from('umkm_profiles')
-    .select('business_name, description, logo_url, address')
+    .select('business_name, description, logo_url, address, open_hours')
     .eq(column, storeId)
     .maybeSingle();
   if (error || !data) return null;
@@ -74,6 +78,7 @@ export async function getStoreSettingsByStoreId(
     description: data.description ?? '',
     address: data.address ?? '',
     image: data.logo_url ?? '',
+    openHours: data.open_hours ?? '',
   };
 }
 
@@ -112,6 +117,7 @@ export function updateStoreSettings(
   if (patch.description !== undefined) payload.description = patch.description;
   if (patch.image !== undefined) payload.logo_url = patch.image;
   if (patch.address !== undefined) payload.address = patch.address;
+  if (patch.openHours !== undefined) payload.open_hours = patch.openHours;
   if (Object.keys(payload).length === 0) return Promise.resolve(true);
   return patchOwnUmkm(payload);
 }
