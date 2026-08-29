@@ -1,25 +1,22 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import type { ProductDetail } from '@/app/detail/product/data';
-import { fetchProductDetail } from '@/app/detail/product/detail-data';
-import type { OrderDraft } from '@/lib/types';
-import { CheckoutProvider } from './checkout-context';
-import { CheckoutDecor } from './checkout-decor';
-import { StepIndicator } from './step-indicator';
-import { OrderItemCard } from './order-item-card';
-import { QuantityStepperCard } from './quantity-stepper-card';
-import { FulfillmentToggle } from './fulfillment-toggle';
-import { PickupInfoCard } from './pickup-info-row';
-import { DeliveryAddressSection } from './delivery-address-section';
-import { ShieldCheck } from 'lucide-react';
-import { PaymentSummaryCard } from './payment-summary-card';
-import { PickupCodeNote } from './pickup-code-note';
-import { StickyMobileBar } from './sticky-mobile-bar';
-import { CheckoutSuccessDialog } from './checkout-success-dialog';
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import type { ProductDetail } from "@/app/detail/product/data";
+import { fetchProductDetail } from "@/app/detail/product/detail-data";
+import type { OrderDraft } from "@/lib/types";
+import { CheckoutProvider } from "./checkout-context";
+import { CheckoutDecor } from "./checkout-decor";
+import { OrderItemCard } from "./order-item-card";
+import { QuantityStepperCard } from "./quantity-stepper-card";
+import { FulfillmentToggle } from "./fulfillment-toggle";
+import { PickupInfoCard } from "./pickup-info-row";
+import { DeliveryAddressSection } from "./delivery-address-section";
+import { PaymentSummaryCard } from "./payment-summary-card";
+import { StickyMobileBar } from "./sticky-mobile-bar";
+import { CheckoutSuccessDialog } from "./checkout-success-dialog";
 
 const RESERVATION_MINUTES = 35;
 
@@ -38,7 +35,7 @@ function buildOrderDraft(product: ProductDetail): OrderDraft {
     pickupTime: product.pickupTime,
     pickupLocation: product.pickupLocation,
     reservedUntil: new Date(
-      Date.now() + RESERVATION_MINUTES * 60 * 1000
+      Date.now() + RESERVATION_MINUTES * 60 * 1000,
     ).toISOString(),
     co2ePerUnitKg: product.co2eSavedKg,
   };
@@ -46,27 +43,27 @@ function buildOrderDraft(product: ProductDetail): OrderDraft {
 
 export function CheckoutView() {
   const searchParams = useSearchParams();
-  const productId = searchParams.get('product');
+  const productId = searchParams.get("product");
 
   const [draft, setDraft] = useState<OrderDraft | null>(null);
-  const [status, setStatus] = useState<'loading' | 'ready' | 'not-found'>(
-    'loading'
+  const [status, setStatus] = useState<"loading" | "ready" | "not-found">(
+    "loading",
   );
 
   useEffect(() => {
     let active = true;
     if (!productId) {
-      setStatus('not-found');
+      setStatus("not-found");
       return;
     }
-    setStatus('loading');
+    setStatus("loading");
     fetchProductDetail(productId).then((product) => {
       if (!active) return;
       if (product) {
         setDraft(buildOrderDraft(product));
-        setStatus('ready');
+        setStatus("ready");
       } else {
-        setStatus('not-found');
+        setStatus("not-found");
       }
     });
     return () => {
@@ -75,16 +72,16 @@ export function CheckoutView() {
   }, [productId]);
 
   const initialQuantity = useMemo(() => {
-    const raw = Number.parseInt(searchParams.get('qty') ?? '', 10);
+    const raw = Number.parseInt(searchParams.get("qty") ?? "", 10);
     if (!Number.isFinite(raw)) return 1;
     return Math.min(Math.max(raw, 1), Math.max(1, draft?.stockRemaining ?? 1));
   }, [searchParams, draft?.stockRemaining]);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div className="min-h-screen bg-cream-50" />;
   }
 
-  if (status === 'not-found' || !draft) {
+  if (status === "not-found" || !draft) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
         <p className="font-sans text-lg font-bold text-charcoal-900">
@@ -109,7 +106,7 @@ export function CheckoutView() {
         <CheckoutDecor />
 
         <div className="relative mx-auto max-w-[1400px] px-5 pt-6 sm:px-8 lg:px-12 lg:pt-10">
-          { }
+          {}
           <div className="flex items-center gap-3">
             <Link
               href="/home"
@@ -118,13 +115,6 @@ export function CheckoutView() {
             >
               <ArrowLeft className="h-4 w-4" />
             </Link>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-              Langkah 2 dari 3 · Pembayaran
-            </p>
-          </div>
-
-          <div className="mt-6 max-w-2xl lg:mt-8">
-            <StepIndicator active={1} />
           </div>
 
           <h1 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] font-light leading-[1.05] tracking-[-0.02em] text-charcoal-900">
@@ -132,7 +122,7 @@ export function CheckoutView() {
           </h1>
 
           <div className="mt-8 grid items-start gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:gap-10">
-            { }
+            {}
             <div className="space-y-4 sm:space-y-6">
               <OrderItemCard />
 
@@ -144,28 +134,11 @@ export function CheckoutView() {
 
               <PickupInfoCard />
               <DeliveryAddressSection />
-
-              <div className="rounded-2xl border border-sage-100 bg-white p-5 shadow-sm sm:p-6">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-primary" />
-                  <h3 className="font-display text-base font-medium text-charcoal-900">
-                    Pembayaran aman via Xendit
-                  </h3>
-                </div>
-                <p className="mt-2 text-sm leading-relaxed text-charcoal-500">
-                  Setelah klik Bayar, kamu akan diarahkan ke halaman Xendit untuk memilih metode:
-                  QRIS, GoPay, OVO, DANA, ShopeePay, Virtual Account, atau Kartu. Pembayaran diverifikasi otomatis.
-                </p>
-                <p className="mt-2 text-xs text-sage-500">
-                  Pesanan gratis yang tertutup koin akan langsung berhasil tanpa redirect.
-                </p>
-              </div>
             </div>
 
-            { }
+            {}
             <div className="space-y-4 lg:sticky lg:top-28 lg:self-start">
               <PaymentSummaryCard />
-              <PickupCodeNote />
             </div>
           </div>
         </div>

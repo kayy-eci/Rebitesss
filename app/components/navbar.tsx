@@ -18,7 +18,7 @@ const LOCATIONS = ["Depok", "Jakarta Selatan", "Bekasi", "Bogor", "Tangerang"];
 const NAV_LINKS = [
   { id: "home", label: "Beranda" },
   { id: "rekomendasi", label: "Makanan" },
-  { id: "flashSale", label: "Flash Sale" },
+  { id: "flashSale", label: "Diskon Kilat" },
   { id: "umkm", label: "UMKM" },
   { id: "langganan", label: "Langganan" },
 ];

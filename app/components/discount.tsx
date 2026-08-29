@@ -6,10 +6,10 @@ export default function DiscountCoupoun() {
     return (
         <div className="absolute bottom-[18px] right-[32px] z-30 w-[min(430px,46%)] rounded-[18px] border border-white/15 bg-white/10 p-3.5 text-[#f5f0e7] shadow-[0_20px_30px_rgba(34,81,56,0.18)] backdrop-blur-sm">
                       <div className="flex items-center justify-between gap-3 border-b border-white/15 pb-2.5 text-[0.75rem] tracking-[0.02em] text-[#f5f0e7]/80">
-                        <span>Discount coupon</span>
+                        <span>Kupon Diskon</span>
                         <div className="flex items-center gap-3.5 text-[0.7rem]">
-                          <button type="button" className="bg-transparent p-0 text-[#f5f0e7]/80">‹ Prev</button>
-                          <button type="button" className="bg-transparent p-0 text-[#f5f0e7]/80">Next ›</button>
+                          <button type="button" className="bg-transparent p-0 text-[#f5f0e7]/80">‹ Sebelumnya</button>
+                          <button type="button" className="bg-transparent p-0 text-[#f5f0e7]/80">Berikutnya ›</button>
                         </div>
                       </div>
 
@@ -26,7 +26,7 @@ export default function DiscountCoupoun() {
                         <div className="flex min-w-0 flex-col gap-1">
                           <strong className="text-[1.2rem] font-bold tracking-[-0.04em]">Truffle Pasta</strong>
                           <span className="inline-flex items-center gap-1.5 text-[0.82rem] text-[#f5f0e7]/75">
-                            <i className="inline-block h-2 w-2 rounded-full bg-[#d4b25e]" /> 78 Calories
+                            <i className="inline-block h-2 w-2 rounded-full bg-[#d4b25e]" /> 78 Kalori
                           </span>
                         </div>
 

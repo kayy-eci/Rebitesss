@@ -130,7 +130,7 @@ export function Hero() {
 
             <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
               <h2 className="mt-4 font-sans text-2xl font-bold leading-snug text-cream-50 sm:text-[1.7rem]">
-                Flash Sale,
+                Diskon Kilat,
                 <br />
                 Hemat Besar.
               </h2>

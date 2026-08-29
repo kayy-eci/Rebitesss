@@ -19,7 +19,7 @@ const OPTIONS: {
     value: 'pickup',
     icon: MapPin,
     title: 'Ambil Sendiri',
-    subtitle: 'Ambil langsung di toko · tanpa biaya antar',
+    subtitle: 'Ambil langsung di toko',
   },
   {
     value: 'delivery',

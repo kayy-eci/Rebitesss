@@ -1,14 +1,12 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Clock, MapPin, Navigation, Store } from 'lucide-react';
-import {
-  PICKUP_READY_ESTIMATE,
-} from '@/lib/useOrderCalculation';
-import { fetchVendors } from '@/lib/catalog';
-import type { Vendor } from '@/lib/types';
-import { useCheckout } from './checkout-context';
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Clock, MapPin, Navigation, Store } from "lucide-react";
+import { PICKUP_READY_ESTIMATE } from "@/lib/useOrderCalculation";
+import { fetchVendors } from "@/lib/catalog";
+import type { Vendor } from "@/lib/types";
+import { useCheckout } from "./checkout-context";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -24,11 +22,11 @@ export function PickupInfoCard() {
 
   return (
     <AnimatePresence initial={false}>
-      {fulfillment === 'pickup' && (
+      {fulfillment === "pickup" && (
         <motion.section
           key="pickup-info"
           initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
+          animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3, ease: EASE }}
           className="overflow-hidden"
@@ -76,13 +74,14 @@ export function PickupInfoCard() {
             </div>
 
             <p className="mt-3 text-xs leading-relaxed text-charcoal-500">
-              Kamu perlu mengambil pesanan langsung ke toko di jendela waktu
-              di atas. Tunjukkan kode pengambilan ke mitra saat sampai.
+              Kamu dapat mengambil pesanan langsung di toko pada waktu yang
+              tertera di atas. Tunjukkan detail pembayaran kepada
+              mitra untuk menerima pesananmu.
             </p>
 
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                draft.pickupLocation
+                draft.pickupLocation,
               )}`}
               target="_blank"
               rel="noreferrer"

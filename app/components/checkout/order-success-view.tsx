@@ -328,7 +328,7 @@ export function OrderSuccessView() {
             </div>
 
             <dl className="mt-4 space-y-2 text-sm">
-              <Row label="Subtotal" value={formatRupiah(order.subtotal)} />
+              <Row label="Total sementara" value={formatRupiah(order.subtotal)} />
               {order.discount > 0 && <Row label="Diskon promo" value={`−${formatRupiah(order.discount)}`} accent />}
               <Row label="Biaya admin" value={formatRupiah(order.serviceFee)} />
               {order.deliveryFee > 0 && <Row label="Biaya pengantaran" value={formatRupiah(order.deliveryFee)} />}

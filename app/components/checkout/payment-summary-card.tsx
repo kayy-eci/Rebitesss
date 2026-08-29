@@ -77,7 +77,7 @@ export function PaymentSummaryCard() {
         { }
         <dl className="mt-5 space-y-3 border-t border-sage-500/20 pt-4 text-sm">
           <div className="flex items-center justify-between gap-4">
-            <dt className="text-charcoal-500">Subtotal ({quantity} porsi)</dt>
+            <dt className="text-charcoal-500">Total sementara ({quantity} porsi)</dt>
             <dd className="font-medium tabular-nums text-charcoal-900">
               <AnimatedNumber value={summary.subtotal} format={formatRupiah} />
             </dd>
@@ -166,14 +166,6 @@ export function PaymentSummaryCard() {
               <AnimatedNumber value={summary.total} format={formatRupiah} />
             </span>
           </div>
-
-          <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-primary">
-            <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-            <span>
-              Kamu hemat {formatRupiah(summary.totalSavings)} dan mencegah ≈
-              {summary.co2eSaved.toFixed(1)} kg CO2e
-            </span>
-          </p>
         </div>
 
         <motion.button

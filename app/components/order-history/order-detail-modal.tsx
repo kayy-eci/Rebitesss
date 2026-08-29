@@ -193,7 +193,7 @@ export function OrderDetailModal({
                       ? ` · ${formatRupiah(order.unitPrice)} / porsi`
                       : ''}
                     {' · '}
-                    Subtotal {formatRupiah(order.subtotal)}
+                    Total sementara {formatRupiah(order.subtotal)}
                   </p>
                 </div>
               </div>
@@ -207,7 +207,7 @@ export function OrderDetailModal({
               {/* Payment */}
               <SectionTitle>Pembayaran</SectionTitle>
               <dl className="mt-2 space-y-2 rounded-xl ring-1 ring-hairline p-3.5 text-sm">
-                <Row label="Subtotal" value={formatRupiah(order.subtotal)} />
+                <Row label="Total sementara" value={formatRupiah(order.subtotal)} />
                 {order.discount > 0 && (
                   <Row
                     label={`Diskon promo${order.promoCode ? ` (${order.promoCode})` : ''}`}

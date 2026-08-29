@@ -239,7 +239,7 @@ export function SubscriptionCheckoutView() {
 
           <dl className="mt-6 space-y-3 border-t border-[#DEDACF] pt-5">
             <div className="flex items-center justify-between text-[14px]">
-              <dt className="text-[#6B6A63]">Subtotal</dt>
+              <dt className="text-[#6B6A63]">Total sementara</dt>
               <dd className="font-medium tabular-nums text-[#225138]">{formatRupiah(subtotal)}</dd>
             </div>
             <div className="flex items-center justify-between text-[14px]">
@@ -290,8 +290,8 @@ export function SubscriptionCheckoutView() {
         {/* RIGHT - Plan include pure detail */}
         <div className="flex flex-col overflow-hidden rounded-2xl border border-[#DEDACF] bg-white shadow-sm lg:col-span-2">
           <div className="bg-[#F7F5EF] px-6 py-5">
-            <h3 className="font-display text-[15px] font-semibold text-[#225138]">ReBites {plan.name} Plan</h3>
-            <p className="mt-1 text-xs text-[#6B6A63]">Plan include:</p>
+            <h3 className="font-display text-[15px] font-semibold text-[#225138]">ReBites {plan.name}</h3>
+            <p className="mt-1 text-xs text-[#6B6A63]">Paket termasuk:</p>
           </div>
           <div className="flex-1 bg-white px-6 py-5">
             <ul className="space-y-2.5">
@@ -309,7 +309,7 @@ export function SubscriptionCheckoutView() {
 
             <div className="mt-6 rounded-xl border border-[#DEDACF] bg-[#F7F5EF] p-4">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#6B6A63]">Subtotal</span>
+                <span className="text-[#6B6A63]">Total sementara</span>
                 <span className="font-medium text-[#225138]">{formatRupiah(subtotal)}</span>
               </div>
               <div className="flex items-center justify-between text-sm mt-2">

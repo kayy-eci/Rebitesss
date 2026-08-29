@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
         externalId,
         amount: totalAmount,
         payerEmail: user.email,
-        description: `ReBites ${plan.name} (${billing}) - Subtotal ${planPrice} + Pajak 2% ${tax} - ${shortId}`,
+        description: `ReBites ${plan.name} (${billing}) - Total sementara ${planPrice} + Pajak 2% ${tax} - ${shortId}`,
         successRedirectUrl: successUrl,
         failureRedirectUrl: failureUrl,
       });
