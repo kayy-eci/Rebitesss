@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import {
   NOTIFICATIONS_UPDATED_EVENT,
@@ -18,6 +18,9 @@ export function useNotifications(
 ) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const channelSuffixRef = useRef<string>(
+    Math.random().toString(36).slice(2, 8)
+  );
 
   const refresh = useCallback(async () => {
     if (!userId) {
@@ -39,24 +42,35 @@ export function useNotifications(
 
     let channel: ReturnType<typeof supabase.channel> | null = null;
     if (userId) {
-      channel = supabase
-        .channel(`rebites-notifications-${role}-${userId}`)
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'notifications',
-            filter: `user_id=eq.${userId}`,
-          },
-          () => refresh()
-        )
-        .subscribe();
+      try {
+        const uniqueChannelName = `rebites-notifications-${role}-${userId}-${channelSuffixRef.current}`;
+        channel = supabase
+          .channel(uniqueChannelName)
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'notifications',
+              filter: `user_id=eq.${userId}`,
+            },
+            () => refresh()
+          )
+          .subscribe((status, err) => {
+            if (err) console.error('[useNotifications] realtime subscribe error:', err);
+          });
+      } catch (e) {
+        console.error('[useNotifications] gagal subscribe realtime:', e);
+      }
     }
 
     return () => {
       window.removeEventListener(NOTIFICATIONS_UPDATED_EVENT, refresh);
-      if (channel) supabase.removeChannel(channel);
+      if (channel) {
+        try {
+          supabase.removeChannel(channel);
+        } catch {}
+      }
     };
   }, [refresh, userId, role]);
 

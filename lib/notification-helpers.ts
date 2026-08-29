@@ -1,7 +1,10 @@
 export function formatNotificationTime(iso: string): string {
-  const now = Date.now();
+  if (!iso) return 'Baru saja';
   const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return 'Baru saja';
+  const now = Date.now();
   const diffMs = now - then;
+  if (!Number.isFinite(diffMs) || diffMs < 0) return 'Baru saja';
 
   const seconds = Math.floor(diffMs / 1000);
   const minutes = Math.floor(seconds / 60);
@@ -13,11 +16,15 @@ export function formatNotificationTime(iso: string): string {
   if (hours < 24) return `${hours} jam lalu`;
   if (days < 7) return `${days} hari lalu`;
 
-  return new Date(iso).toLocaleDateString('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  try {
+    return new Date(iso).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } catch {
+    return 'Baru saja';
+  }
 }
