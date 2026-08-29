@@ -1,4 +1,7 @@
 
+/** Pajak / biaya admin 12% dari (subtotal - diskon). DB service_fee tetap integer (dibulatkan). */
+export const ADMIN_FEE_RATE = 0.12;
+/** @deprecated tetap diekspor untuk kompatibilitas import lama — nilai tetap 2000 tapi tidak dipakai lagi untuk kalkulasi baru */
 export const ADMIN_FEE_AMOUNT = 2000;
 export const DELIVERY_FEE = 8000;
 export const REBITES_COIN_RATE = 0.005;
@@ -29,7 +32,9 @@ export function calculatePricing(input: PricingInput): PricingResult {
   const discount = input.promoPercentOff
     ? Math.round((subtotal * input.promoPercentOff) / 100)
     : 0;
-  const serviceFee = ADMIN_FEE_AMOUNT;
+  // 12% dari nilai kena pajak (subtotal setelah diskon). Dibulatkan ke integer agar aman untuk kolom service_fee INT.
+  const taxable = Math.max(0, subtotal - discount);
+  const serviceFee = Math.round(taxable * ADMIN_FEE_RATE);
   const deliveryFee = input.fulfillment === 'delivery' ? DELIVERY_FEE : 0;
   const totalBeforeCoin = Math.max(
     0,

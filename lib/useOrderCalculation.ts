@@ -8,6 +8,9 @@ import type {
   PromoCode,
 } from './types';
 
+/** Pajak / biaya admin 12% dari (subtotal - diskon) — selaras dengan lib/server/pricing.ts */
+export const ADMIN_FEE_RATE = 0.12;
+/** @deprecated */
 export const ADMIN_FEE_AMOUNT = 2000;
 
 export const DELIVERY_FEE = 8000;
@@ -42,7 +45,8 @@ export function useOrderCalculation({
     const discount = promo?.isValid
       ? Math.round((subtotal * promo.percentOff) / 100)
       : 0;
-    const serviceFee = ADMIN_FEE_AMOUNT;
+    const taxable = Math.max(0, subtotal - discount);
+    const serviceFee = Math.round(taxable * ADMIN_FEE_RATE);
     const deliveryFee = fulfillment === 'delivery' ? DELIVERY_FEE : 0;
     const totalBeforeCoin = Math.max(
       0,

@@ -11,13 +11,16 @@ export interface MenuFormState {
   photo: string;
 }
 
+/** 8 kategori website — selaras dengan lib/categories.ts CATEGORIES */
 export const MENU_CATEGORIES = [
-  'Masakan Rumah',
-  'Lauk & Protein',
-  'Sup & Hangat',
+  'Makanan Berat',
+  'Jajanan',
+  'Japanese',
+  'Roti & Kue',
+  'Makanan Cepat Saji',
+  'Dessert',
+  'Buah & Sayur',
   'Minuman',
-  'Snack & Jajanan',
-  'Lainnya',
 ] as const;
 
 export interface FoodPreset {
@@ -36,7 +39,7 @@ export const FOOD_PRESETS: FoodPreset[] = [
 
 export const DEFAULT_MENU_FORM: MenuFormState = {
   name: '',
-  category: 'Masakan Rumah',
+  category: 'Makanan Berat',
   description: '',
   normalPrice: 30000,
   surplusPrice: 21000,

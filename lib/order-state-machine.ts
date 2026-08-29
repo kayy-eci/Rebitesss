@@ -4,6 +4,11 @@ import { supabase } from './supabase';
 import { getSellerUmkm } from './product-storage';
 import { calculateTravelMinutes } from './delivery-estimate';
 
+/** Pajak/biaya admin 12% — selaras dengan pricing.ts & useOrderCalculation.ts. DB service_fee tetap INT (rounded). */
+export const ADMIN_FEE_RATE = 0.12;
+/** @deprecated nilai lama 2000, disimpan untuk kompatibilitas order lama */
+export const ADMIN_FEE_AMOUNT = 2000;
+
 export type OrderStatusValue =
   | 'pending'
   | 'paid'
@@ -292,7 +297,7 @@ async function releaseSellerFunds(orderCode: string): Promise<void> {
   try {
     const { data: order } = await supabase
       .from('orders')
-      .select('id, buyer_id, umkm_id, vendor_slug, total_price, product_name')
+      .select('id, buyer_id, umkm_id, vendor_slug, total_price, service_fee, product_name')
       .eq('order_code', orderCode)
       .maybeSingle();
 
@@ -324,8 +329,20 @@ async function releaseSellerFunds(orderCode: string): Promise<void> {
 
     if (existing) return;
 
-    const ADMIN_FEE = 2000;
-    const sellerAmount = Math.max(0, totalPrice - ADMIN_FEE);
+    // DB-aware: pakai service_fee yang tersimpan (sudah 12% saat checkout).
+    // Fallback untuk order lama (fee 2000) atau jika kolom null → pakai RATE 12%.
+    const storedFee = Number(orderRow.service_fee ?? 0);
+    let serviceFee: number;
+    if (Number.isFinite(storedFee) && storedFee > 0) {
+      serviceFee = storedFee;
+    } else if (Number.isFinite(storedFee) && storedFee === 0 && totalPrice === 0) {
+      serviceFee = 0;
+    } else {
+      // Order lama tanpa service_fee terisi: hitung 12% dari totalPrice proporsional
+      // totalPrice ≈ taxable*1.12 + delivery, jadi fee ≈ taxable*0.12. Estimasi sederhana:
+      serviceFee = Math.round((totalPrice * ADMIN_FEE_RATE) / (1 + ADMIN_FEE_RATE));
+    }
+    const sellerAmount = Math.max(0, totalPrice - serviceFee);
 
     await supabase.from('seller_transactions').insert({
       seller_id: sellerUserId,

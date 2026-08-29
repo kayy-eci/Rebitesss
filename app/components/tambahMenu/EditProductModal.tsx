@@ -280,6 +280,10 @@ export function EditProductModal({
                   {cat}
                 </option>
               ))}
+              {/* Fallback untuk produk lama yang kategorinya belum termasuk 8 kategori baru */}
+              {category && !(MENU_CATEGORIES as readonly string[]).includes(category) && (
+                <option value={category}>{category} (lama)</option>
+              )}
             </select>
           </div>
 
