@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 import { useLikedFoods } from "@/hooks/use-liked-foods";
 import { isStoreOpen } from "@/lib/store-hours";
 import { openStoreClosedModal } from "@/lib/store-closed-modal-store";
+import { useCurrentUser } from "@/lib/current-user";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
@@ -25,11 +28,23 @@ export function FoodCard({
   const { isLiked, toggle } = useLikedFoods();
   const liked = isLiked(item.id);
   const isUnavailable = forceUnavailable || item.stockLabel === "Habis";
+  const { user, loading: authLoading } = useCurrentUser();
+  const router = useRouter();
 
   const handleOpen = () => {
     if (isUnavailable) return;
     if (!isStoreOpen(item.availableFrom, item.availableTo)) {
       openStoreClosedModal(item.availableFrom, item.availableTo);
+      return;
+    }
+    if (authLoading) return;
+    if (!user) {
+      toast({
+        title: "Silakan login terlebih dahulu",
+        description: "Anda harus login untuk melihat detail produk dan memesan.",
+        variant: "default",
+      });
+      router.push(`/auth/login?redirect=/detail/produk/${item.id}`);
       return;
     }
     onViewDetail?.(item.id);

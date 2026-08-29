@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { ProductDetail } from "@/app/components/detail-product/data";
 import { fetchProductDetail } from "@/app/components/detail-product/detail-data";
 import type { OrderDraft } from "@/lib/types";
@@ -17,6 +17,8 @@ import { DeliveryAddressSection } from "./delivery-address-section";
 import { PaymentSummaryCard } from "./payment-summary-card";
 import { StickyMobileBar } from "./sticky-mobile-bar";
 import { CheckoutSuccessDialog } from "./checkout-success-dialog";
+import { useCurrentUser } from "@/lib/current-user";
+import { toast } from "@/hooks/use-toast";
 
 const RESERVATION_MINUTES = 35;
 
@@ -41,65 +43,13 @@ function buildOrderDraft(product: ProductDetail): OrderDraft {
   };
 }
 
-export function CheckoutView() {
-  const searchParams = useSearchParams();
-  const productId = searchParams.get("product");
-
-  const [draft, setDraft] = useState<OrderDraft | null>(null);
-  const [status, setStatus] = useState<"loading" | "ready" | "not-found">(
-    "loading",
-  );
-
-  useEffect(() => {
-    let active = true;
-    if (!productId) {
-      setStatus("not-found");
-      return;
-    }
-    setStatus("loading");
-    fetchProductDetail(productId).then((product) => {
-      if (!active) return;
-      if (product) {
-        setDraft(buildOrderDraft(product));
-        setStatus("ready");
-      } else {
-        setStatus("not-found");
-      }
-    });
-    return () => {
-      active = false;
-    };
-  }, [productId]);
-
-  const initialQuantity = useMemo(() => {
-    const raw = Number.parseInt(searchParams.get("qty") ?? "", 10);
-    if (!Number.isFinite(raw)) return 1;
-    return Math.min(Math.max(raw, 1), Math.max(1, draft?.stockRemaining ?? 1));
-  }, [searchParams, draft?.stockRemaining]);
-
-  if (status === "loading") {
-    return <div className="min-h-screen bg-cream-50" />;
-  }
-
-  if (status === "not-found" || !draft) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
-        <p className="font-sans text-lg font-bold text-charcoal-900">
-          Produk tidak ditemukan
-        </p>
-        <p className="max-w-sm text-sm leading-relaxed text-charcoal-500">
-          Menu yang akan kamu pesan sudah tidak tersedia.
-        </p>
-        <Link
-          href="/home"
-          className="mt-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-caramel"
-        >
-          Kembali ke Beranda
-        </Link>
-      </main>
-    );
-  }
-
+function CheckoutContent({
+  draft,
+  initialQuantity,
+}: {
+  draft: OrderDraft;
+  initialQuantity: number;
+}) {
   return (
     <CheckoutProvider draft={draft} initialQuantity={initialQuantity}>
       <main className="relative min-h-screen bg-cream-50 pb-28 lg:pb-16">
@@ -149,4 +99,100 @@ export function CheckoutView() {
       <CheckoutSuccessDialog />
     </CheckoutProvider>
   );
+}
+
+export function CheckoutView() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { user, loading: authLoading } = useCurrentUser();
+  const [authChecked, setAuthChecked] = useState(false);
+
+  const productId = searchParams.get("product");
+
+  const [draft, setDraft] = useState<OrderDraft | null>(null);
+  const [status, setStatus] = useState<"loading" | "ready" | "not-found">(
+    "loading",
+  );
+
+  // Auth check effect - must be at top level
+  useEffect(() => {
+    if (!authLoading) {
+      setAuthChecked(true);
+      if (!user) {
+        toast({
+          title: "Silakan login terlebih dahulu",
+          description: "Anda harus login untuk melakukan pemesanan.",
+          variant: "default",
+        });
+        const currentUrl = window.location.pathname + window.location.search;
+        router.push(`/auth/login?redirect=${encodeURIComponent(currentUrl)}`);
+      }
+    }
+  }, [user, authLoading, router]);
+
+  // Product fetch effect - must be at top level
+  useEffect(() => {
+    let active = true;
+    if (!productId) {
+      setStatus("not-found");
+      return;
+    }
+    setStatus("loading");
+    fetchProductDetail(productId).then((product) => {
+      if (!active) return;
+      if (product) {
+        setDraft(buildOrderDraft(product));
+        setStatus("ready");
+      } else {
+        setStatus("not-found");
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [productId]);
+
+  const initialQuantity = useMemo(() => {
+    const raw = Number.parseInt(searchParams.get("qty") ?? "", 10);
+    if (!Number.isFinite(raw)) return 1;
+    return Math.min(Math.max(raw, 1), Math.max(1, draft?.stockRemaining ?? 1));
+  }, [searchParams, draft?.stockRemaining]);
+
+  // Early returns after all hooks
+  if (authLoading || !authChecked) {
+    return (
+      <div className="min-h-screen bg-cream-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Will redirect via useEffect
+  }
+
+  if (status === "loading") {
+    return <div className="min-h-screen bg-cream-50" />;
+  }
+
+  if (status === "not-found" || !draft) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream-50 px-6 text-center">
+        <p className="font-sans text-lg font-bold text-charcoal-900">
+          Produk tidak ditemukan
+        </p>
+        <p className="max-w-sm text-sm leading-relaxed text-charcoal-500">
+          Menu yang akan kamu pesan sudah tidak tersedia.
+        </p>
+        <Link
+          href="/home"
+          className="mt-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-caramel"
+        >
+          Kembali ke Beranda
+        </Link>
+      </main>
+    );
+  }
+
+  return <CheckoutContent draft={draft} initialQuantity={initialQuantity} />;
 }
