@@ -246,7 +246,7 @@ export default function PenjualLoginForm() {
         onSubmit={handleSubmit}
         noValidate
       >
-        <FieldBox id="email" label="Email Address" icon={Mail}>
+        <FieldBox id="email" label="Alamat Email" icon={Mail}>
           <input
             id="email"
             type="email"
@@ -272,7 +272,7 @@ export default function PenjualLoginForm() {
 
         <FieldBox
           id="password"
-          label="Password"
+          label="Kata Sandi"
           icon={Lock}
           trailing={
             <PasswordVisibilityButton

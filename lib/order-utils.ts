@@ -58,6 +58,24 @@ export function getOrderSubStatus(
 ): OrderSubStatus {
   if (order.status === 'completed') return 'selesai';
 
+  // Use granular order_status if available (state machine)
+  const orderStatus = order.orderStatus;
+  if (orderStatus) {
+    switch (orderStatus) {
+      case 'ready_for_pickup':
+        return 'siap-diambil';
+      case 'out_for_delivery':
+        return 'diantar';
+      case 'processing':
+        return order.fulfillment === 'delivery' ? 'diproses' : 'disiapkan';
+      case 'paid':
+        return order.fulfillment === 'delivery' ? 'diproses' : 'disiapkan';
+      case 'completed':
+        return 'selesai';
+    }
+  }
+
+  // Fallback: estimate based on progress
   return progress >= 0.6
     ? order.fulfillment === 'delivery'
       ? 'diantar'

@@ -5,27 +5,36 @@ import { motion } from 'framer-motion';
 import {
   CheckCheck,
   ClipboardList,
+  Clock,
+  MapPin,
+  Package,
   PackageOpen,
   ShoppingBag,
   Store,
+  Truck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatRupiah } from '@/lib/data';
 import type { StoredOrder } from '@/lib/types';
 import {
   ORDERS_UPDATED_EVENT,
-  completeExpiredOrders,
   getSellerOrders,
-  getOrderById,
   patchOrder,
 } from '@/lib/order-storage';
-import { notifyOrderCompleted } from '@/lib/order-notifications';
-import { getSellerUmkm } from '@/lib/product-storage';
+import {
+  getSellerUmkm,
+} from '@/lib/product-storage';
 import {
   SUB_STATUS_LABEL,
   formatOrderDateTime,
   getOrderSubStatus,
 } from '@/lib/order-utils';
+import {
+  transitionOrderStatus,
+  getStatusLabel,
+  getStatusColor,
+  getValidActions,
+} from '@/lib/order-state-machine';
 import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
 import { Card } from '@/app/components/dashboardPenjual/Card';
 import { SmartImage } from '@/app/components/SmartImage';
@@ -84,6 +93,7 @@ function useVendorOrders() {
 function StatusChip({ order }: { order: StoredOrder }) {
   const subStatus = getOrderSubStatus(order);
   const isDone = subStatus === 'selesai';
+  const orderStatus = order.orderStatus ?? 'processing';
 
   return (
     <span
@@ -100,19 +110,39 @@ function StatusChip({ order }: { order: StoredOrder }) {
           isDone ? 'bg-charcoal-500' : 'bg-primary'
         )}
       />
-      {SUB_STATUS_LABEL[subStatus]}
+      {getStatusLabel(orderStatus)}
     </span>
   );
 }
 
 function OrderRow({
   order,
-  onComplete,
+  onStatusChange,
 }: {
   order: StoredOrder;
-  onComplete: (orderId: string) => void;
+  onStatusChange: (orderId: string) => void;
 }) {
-  const isOngoing = order.status === 'ongoing';
+  const [processing, setProcessing] = useState(false);
+  const orderStatus = order.orderStatus ?? 'processing';
+  const actions = getValidActions(orderStatus, order.fulfillment);
+
+  const handleAction = async (targetStatus: string) => {
+    if (processing) return;
+    setProcessing(true);
+    try {
+      const result = await transitionOrderStatus(order.orderId, targetStatus);
+      if (result.success) {
+        onStatusChange(order.orderId);
+      } else {
+        console.error('[pesanan] transition failed:', result.error);
+        alert(result.error ?? 'Gagal mengubah status');
+      }
+    } catch (err) {
+      console.error('[pesanan] transition error:', err);
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   return (
     <li className="flex flex-col gap-3 rounded-2xl border border-sage-100 bg-white p-4 sm:flex-row sm:items-center sm:gap-4">
@@ -135,25 +165,48 @@ function OrderRow({
           {order.fulfillment === 'delivery' ? 'Diantar' : 'Ambil sendiri'} ·{' '}
           {formatOrderDateTime(order.createdAt)}
         </p>
+        {order.fulfillment === 'delivery' && order.addressSnapshot && (
+          <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-sage-500">
+            <MapPin className="h-3 w-3 shrink-0" />
+            {order.addressSnapshot.fullAddress}
+          </p>
+        )}
       </div>
 
       <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end sm:justify-center">
         <p className="text-sm font-bold text-primary">
           {formatRupiah(order.total)}
         </p>
-        {isOngoing ? (
-          <button
-            type="button"
-            onClick={() => onComplete(order.orderId)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
-          >
-            <CheckCheck className="h-3.5 w-3.5" />
-            Tandai Selesai
-          </button>
+        {actions.length > 0 && order.status === 'ongoing' ? (
+          <div className="flex flex-col gap-2">
+            {actions.map((action) => (
+              <button
+                key={action.action}
+                type="button"
+                disabled={processing}
+                onClick={() => handleAction(action.targetStatus)}
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+                  action.targetStatus === 'processing'
+                    ? 'bg-primary shadow-primary/25 hover:bg-caramel'
+                    : action.targetStatus === 'ready_for_pickup'
+                      ? 'bg-emerald-600 shadow-emerald-600/25 hover:bg-emerald-700'
+                      : action.targetStatus === 'out_for_delivery'
+                        ? 'bg-purple-600 shadow-purple-600/25 hover:bg-purple-700'
+                        : 'bg-primary shadow-primary/25 hover:bg-caramel'
+                )}
+              >
+                {action.targetStatus === 'processing' && <Package className="h-3.5 w-3.5" />}
+                {action.targetStatus === 'ready_for_pickup' && <CheckCheck className="h-3.5 w-3.5" />}
+                {action.targetStatus === 'out_for_delivery' && <Truck className="h-3.5 w-3.5" />}
+                {processing ? 'Memproses...' : action.label}
+              </button>
+            ))}
+          </div>
         ) : (
           <span className="inline-flex items-center gap-1 text-[11px] font-medium text-sage-500">
             <ClipboardList className="h-3.5 w-3.5" />
-            Selesai diproses
+            {order.status === 'completed' ? 'Selesai diproses' : 'Menunggu aksi'}
           </span>
         )}
       </div>
@@ -198,23 +251,6 @@ export default function PesananMasukPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
-
-  const handleComplete = useCallback((orderId: string) => {
-    getOrderById(orderId).then((order) => {
-      patchOrder(orderId, {
-        status: 'completed',
-        completedAt: new Date().toISOString(),
-      });
-
-      if (order) {
-        notifyOrderCompleted({
-          ...order,
-          status: 'completed',
-          completedAt: new Date().toISOString(),
-        });
-      }
-    });
   }, []);
 
   const tabs = [
@@ -275,7 +311,7 @@ export default function PesananMasukPage() {
         ) : (
           <ul className="space-y-3">
             {visibleOrders.map((order) => (
-              <OrderRow key={order.orderId} order={order} onComplete={handleComplete} />
+              <OrderRow key={order.orderId} order={order} onStatusChange={() => {}} />
             ))}
           </ul>
         )}

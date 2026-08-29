@@ -641,7 +641,7 @@ export default function PenjualRegisterForm() {
                       <FormItem>
                         <FieldBox
                           id="email"
-                          label="Email Address"
+                          label="Alamat Email"
                           icon={Mail}
                         >
                           <input
@@ -664,7 +664,7 @@ export default function PenjualRegisterForm() {
                       <FormItem>
                         <FieldBox
                           id="password"
-                          label="Password"
+                          label="Kata Sandi"
                           icon={Lock}
                           trailing={
                             <PasswordVisibilityButton
@@ -694,7 +694,7 @@ export default function PenjualRegisterForm() {
                       <FormItem>
                         <FieldBox
                           id="confirmPassword"
-                          label="Konfirmasi Password"
+                          label="Konfirmasi Kata Sandi"
                           icon={Lock}
                           trailing={
                             <PasswordVisibilityButton

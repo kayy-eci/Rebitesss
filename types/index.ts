@@ -3,6 +3,9 @@ export type UserRole = 'admin' | 'umkm' | 'buyer';
 export type OrderStatus =
   | 'pending'
   | 'paid'
+  | 'processing'
+  | 'ready_for_pickup'
+  | 'out_for_delivery'
   | 'preparing'
   | 'ready'
   | 'completed'

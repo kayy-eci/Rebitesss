@@ -129,6 +129,9 @@ export interface StoredOrder {
   promoCode?: string | null;
   status?: OrderLifecycleStatus;
 
+  /** Granular order status for state machine (paid, processing, ready_for_pickup, out_for_delivery, completed, cancelled) */
+  orderStatus?: string;
+
   estimatedMinutes?: number;
 
   estimatedCompletionAt?: string;
@@ -141,6 +144,12 @@ export interface StoredOrder {
   preparationMinutes?: number;
 
   co2eSavedKg?: number;
+
+  /** Delivery-specific fields */
+  deliveryDistanceKm?: number;
+  estimatedDeliveryMinutes?: number;
+  deliveryStartedAt?: string;
+  estimatedArrivalAt?: string;
 }
 
 

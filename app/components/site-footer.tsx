@@ -147,15 +147,15 @@ export function SiteFooter() {
 
           <div className="flex flex-wrap items-center gap-6 font-sans text-xs text-primary-foreground/50">
             <span className="cursor-pointer transition-colors hover:text-primary-foreground">
-              Privacy Policy
+              Kebijakan Privasi
             </span>
 
             <span className="cursor-pointer transition-colors hover:text-primary-foreground">
-              Terms of Use
+              Syarat Penggunaan
             </span>
 
             <span className="cursor-pointer transition-colors hover:text-primary-foreground">
-              Disclaimer
+              Penyangkalan
             </span>
           </div>
         </div>

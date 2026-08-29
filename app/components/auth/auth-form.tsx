@@ -273,7 +273,7 @@ export default function AuthForm({
 
         <Field
           id="email"
-          label="Email Address"
+          label="Alamat Email"
           icon={Mail}
           name="email"
           type="email"
@@ -285,7 +285,7 @@ export default function AuthForm({
 
         <Field
           id="password"
-          label="Password"
+          label="Kata Sandi"
           icon={Lock}
           name="password"
           type="password"

@@ -29,10 +29,10 @@ export function OrderToolbar({
   onDateRangeChange: (v: string) => void;
 }) {
   const pills: { key: StatusFilter; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'ongoing', label: 'In Progress' },
-    { key: 'delivered', label: 'Delivered' },
-    { key: 'cancelled', label: 'Cancelled' },
+    { key: 'all', label: 'Semua' },
+    { key: 'ongoing', label: 'Dalam Proses' },
+    { key: 'delivered', label: 'Diantar' },
+    { key: 'cancelled', label: 'Dibatalkan' },
   ];
 
   return (
@@ -77,7 +77,7 @@ export function OrderToolbar({
               onChange={(e) => onDateRangeChange(e.target.value)}
               className="h-8 appearance-none rounded-full bg-zinc-100 px-4 pr-7 text-xs font-medium text-charcoal-900 outline-none"
             >
-              <option value="all">Select date range</option>
+              <option value="all">Pilih rentang tanggal</option>
               <option value="7d">7 hari terakhir</option>
               <option value="30d">30 hari terakhir</option>
               <option value="90d">90 hari terakhir</option>
@@ -93,8 +93,8 @@ export function OrderToolbar({
           {(
             [
               { key: 'all', label: 'Semua' },
-              { key: 'delivery', label: 'Delivery' },
-              { key: 'pickup', label: 'Pickup' },
+              { key: 'delivery', label: 'Diantar' },
+              { key: 'pickup', label: 'Ambil Sendiri' },
             ] as const
           ).map((f) => (
             <button

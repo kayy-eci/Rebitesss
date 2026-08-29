@@ -15,12 +15,12 @@ export default function RegisterPenjualPage() {
       variant="seller"
       title={
         <>
-          Taste good,
+          Rasa enak,
           <br />
-          do good.
+          dampak baik.
         </>
       }
-      description="Join our curated marketplace connecting premium palates with sustainable culinary surplus. Reducing waste, beautifully."
+      description="Bergabunglah dengan marketplace kami yang menghubungkan pencinta kuliner dengan makanan surplus berkualitas. Kurangi limbah makanan dengan indah."
     >
       <PenjualRegisterForm />
     </AuthCenteredShell>

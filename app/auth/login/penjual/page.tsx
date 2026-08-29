@@ -15,9 +15,9 @@ export default function PenjualLoginPage() {
       variant="seller"
       title={
         <>
-          Taste good,
+          Rasa enak,
           <br />
-          do good.
+          dampak baik.
         </>
       }
       description="Kelola toko surplus Anda. Masuk untuk memantau pesanan, stok, dan laporan penjualan."

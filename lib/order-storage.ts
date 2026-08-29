@@ -49,6 +49,7 @@ export function rowToStoredOrder(row: OrderRow): StoredOrder {
       row.lifecycle_status === 'completed' || row.lifecycle_status === 'ongoing'
         ? (row.lifecycle_status as StoredOrder['status'])
         : 'ongoing',
+    orderStatus: row.order_status ?? row.lifecycle_status ?? 'ongoing',
     estimatedMinutes: row.estimated_minutes ?? undefined,
     estimatedCompletionAt: row.estimated_completion_at ?? undefined,
     completedAt: row.completed_at ?? undefined,
@@ -57,6 +58,10 @@ export function rowToStoredOrder(row: OrderRow): StoredOrder {
     vendorOpenHours: row.vendor_open_hours ?? undefined,
     preparationMinutes: row.preparation_minutes ?? undefined,
     co2eSavedKg: row.co2e_saved_kg ?? undefined,
+    deliveryDistanceKm: row.delivery_distance_km ?? undefined,
+    estimatedDeliveryMinutes: row.estimated_delivery_minutes ?? undefined,
+    deliveryStartedAt: row.delivery_started_at ?? undefined,
+    estimatedArrivalAt: row.estimated_arrival_at ?? undefined,
   };
 }
 
@@ -170,9 +175,14 @@ export async function getOrderById(orderId: string): Promise<StoredOrder | undef
 
 const PATCH_COLUMN_MAP: Record<string, string> = {
   status: 'lifecycle_status',
+  orderStatus: 'order_status',
   completedAt: 'completed_at',
   paymentMethodId: 'payment_method_id',
   note: 'note',
+  deliveryDistanceKm: 'delivery_distance_km',
+  estimatedDeliveryMinutes: 'estimated_delivery_minutes',
+  deliveryStartedAt: 'delivery_started_at',
+  estimatedArrivalAt: 'estimated_arrival_at',
 };
 
 export async function patchOrder(
@@ -224,10 +234,13 @@ export async function completeExpiredOrders(userId: string | null | undefined): 
 
   const orders = await getUserOrders(userId);
   const now = Date.now();
-  let changed = false;
-  for (const order of orders) {
+  let changed = false;    for (const order of orders) {
     if (order.status !== 'ongoing') continue;
     if (!paidSet.has(order.orderId)) continue;
+    // Skip orders with granular status that require buyer/seller action
+    const os = order.orderStatus;
+    if (os === 'completed' || os === 'cancelled' || os === 'refunded') continue;
+    if (os === 'ready_for_pickup' || os === 'out_for_delivery') continue;
     const deadline = order.estimatedCompletionAt
       ? new Date(order.estimatedCompletionAt).getTime()
       : new Date(order.createdAt).getTime() + (order.estimatedMinutes ?? 20) * 60_000;

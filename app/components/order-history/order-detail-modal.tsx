@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   Check,
+  CheckCheck,
   Coins,
   Copy,
   MapPin,
@@ -29,6 +30,7 @@ import {
 import { useCountdown, formatCountdown } from '@/lib/useCountdown';
 import { getReviewFor, saveReview } from '@/lib/review-storage';
 import { notifyNewReview } from '@/lib/order-notifications';
+import { transitionOrderStatus, getStatusLabel } from '@/lib/order-state-machine';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -55,6 +57,7 @@ export function OrderDetailModal({
   const [existingReview, setExistingReview] = useState<
     { rating: number; comment: string; createdAt: string } | undefined
   >(undefined);
+  const [confirmingReceipt, setConfirmingReceipt] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -97,6 +100,32 @@ export function OrderDetailModal({
     );
   };
 
+  const handleConfirmReceipt = async () => {
+    if (!order || confirmingReceipt) return;
+    setConfirmingReceipt(true);
+    try {
+      const result = await transitionOrderStatus(order.orderId, 'completed', 'Pesanan dikonfirmasi diterima oleh pembeli');
+      if (result.success) {
+        toast({ title: 'Pesanan dikonfirmasi diterima!', description: 'Terima kasih telah menggunakan ReBites.' });
+        onReviewed();
+        onClose();
+        // Refresh page to show updated status
+        window.location.reload();
+      } else {
+        toast({ title: 'Gagal', description: result.error ?? 'Terjadi kesalahan' });
+      }
+    } catch (err) {
+      toast({ title: 'Gagal mengkonfirmasi', description: 'Terjadi kesalahan' });
+    } finally {
+      setConfirmingReceipt(false);
+    }
+  };
+
+  const orderStatus = order?.orderStatus ?? 'processing';
+  const canConfirmReceipt = order?.status === 'ongoing' && (
+    orderStatus === 'ready_for_pickup' || orderStatus === 'out_for_delivery'
+  );
+
   return (
     <Dialog open={!!order} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="flex max-h-[92dvh] w-[min(560px,100vw-1rem)] flex-col sm:max-h-[85vh]">
@@ -110,7 +139,7 @@ export function OrderDetailModal({
             </DialogHeader>
 
             <div className="-mx-1 mt-1 min-h-0 flex-1 overflow-y-auto px-1">
-              { }
+              {/* Order ID */}
               <div className="flex items-center justify-between gap-2 rounded-xl bg-cream-100 px-3 py-2">
                 <p className="truncate font-display text-sm font-semibold tabular-nums text-charcoal-900">
                   #{order.orderId}
@@ -129,9 +158,25 @@ export function OrderDetailModal({
                 </button>
               </div>
 
-              <StatusStrip order={order} />
+              {/* Status strip with action buttons */}
+              <StatusStrip
+                order={order}
+                canConfirmReceipt={!!canConfirmReceipt}
+                confirmingReceipt={confirmingReceipt}
+                onConfirmReceipt={handleConfirmReceipt}
+              />
 
-              { }
+              {/* Delivery tracking info */}
+              {order.fulfillment === 'delivery' && orderStatus === 'out_for_delivery' && (
+                <DeliveryTrackingInfo order={order} />
+              )}
+
+              {/* Pickup ready info */}
+              {order.fulfillment === 'pickup' && orderStatus === 'ready_for_pickup' && (
+                <PickupReadyInfo order={order} />
+              )}
+
+              {/* Product */}
               <SectionTitle>Produk</SectionTitle>
               <div className="mt-2 flex items-center gap-3 rounded-xl ring-1 ring-hairline p-3">
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-sage-100">
@@ -153,13 +198,13 @@ export function OrderDetailModal({
                 </div>
               </div>
 
-              { }
+              {/* Fulfillment */}
               <SectionTitle>
                 {order.fulfillment === 'delivery' ? 'Pengiriman' : 'Pengambilan'}
               </SectionTitle>
               <FulfillmentSection order={order} />
 
-              { }
+              {/* Payment */}
               <SectionTitle>Pembayaran</SectionTitle>
               <dl className="mt-2 space-y-2 rounded-xl ring-1 ring-hairline p-3.5 text-sm">
                 <Row label="Subtotal" value={formatRupiah(order.subtotal)} />
@@ -189,7 +234,7 @@ export function OrderDetailModal({
                 </div>
               </dl>
 
-              { }
+              {/* Coin earned */}
               {(order.coinEarned ?? 0) > 0 && (
                 <div className="mt-3 flex items-center gap-3 rounded-xl bg-gold-100 px-4 py-3">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white">
@@ -206,7 +251,7 @@ export function OrderDetailModal({
                 </div>
               )}
 
-              { }
+              {/* Status History */}
               <SectionTitle>Riwayat Status</SectionTitle>
               <ol className="mt-2 space-y-2.5 rounded-xl ring-1 ring-hairline p-3.5">
                 {getOrderTimeline(order).map((entry) => (
@@ -232,10 +277,10 @@ export function OrderDetailModal({
                 ))}
               </ol>
 
-              { }
+              {/* Order Info */}
               <SectionTitle>Informasi Pesanan</SectionTitle>
               <dl className="mt-2 space-y-2 rounded-xl ring-1 ring-hairline p-3.5 text-sm">
-                <Row label="Order ID" value={`#${order.orderId}`} mono />
+                <Row label="ID Pesanan" value={`#${order.orderId}`} mono />
                 <Row label="Tanggal" value={formatOrderDate(order.createdAt)} />
                 <Row label="Waktu" value={formatOrderTime(order.createdAt)} />
                 <Row label="Metode pembayaran" value={paymentMethodName(order.paymentMethodId)} />
@@ -244,7 +289,7 @@ export function OrderDetailModal({
                   value={
                     order.status === 'completed'
                       ? 'Selesai'
-                      : SUB_STATUS_LABEL[getOrderSubStatus(order)]
+                      : getStatusLabel(orderStatus)
                   }
                 />
                 {typeof order.co2eSavedKg === 'number' && (
@@ -257,7 +302,7 @@ export function OrderDetailModal({
                 )}
               </dl>
 
-              { }
+              {/* Review */}
               {order.status === 'completed' && (
                 <ReviewBlock
                   orderId={order.orderId}
@@ -273,8 +318,19 @@ export function OrderDetailModal({
               )}
             </div>
 
-            { }
+            {/* Footer buttons */}
             <div className="mt-3 flex items-center gap-2 border-t border-hairline pt-3">
+              {canConfirmReceipt && (
+                <button
+                  type="button"
+                  disabled={confirmingReceipt}
+                  onClick={handleConfirmReceipt}
+                  className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm shadow-emerald-600/25 transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <CheckCheck className="h-4 w-4" />
+                  {confirmingReceipt ? 'Memproses...' : 'Pesanan Sudah Saya Terima'}
+                </button>
+              )}
               {order.status === 'completed' && (
                 <button
                   type="button"
@@ -300,8 +356,20 @@ export function OrderDetailModal({
   );
 }
 
-function StatusStrip({ order }: { order: StoredOrder }) {
+function StatusStrip({
+  order,
+  canConfirmReceipt,
+  confirmingReceipt,
+  onConfirmReceipt,
+}: {
+  order: StoredOrder;
+  canConfirmReceipt: boolean;
+  confirmingReceipt: boolean;
+  onConfirmReceipt: () => void;
+}) {
   const remaining = useCountdown(order.estimatedCompletionAt ?? order.createdAt);
+  const orderStatus = order.orderStatus ?? 'processing';
+
   if (order.status === 'completed') {
     const at = order.completedAt ?? order.estimatedCompletionAt;
     return (
@@ -312,26 +380,116 @@ function StatusStrip({ order }: { order: StoredOrder }) {
     );
   }
 
+  const statusLabel = getStatusLabel(orderStatus);
+  const isPickupReady = orderStatus === 'ready_for_pickup';
+  const isOutForDelivery = orderStatus === 'out_for_delivery';
+
   return (
-    <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-primary/10 px-3 py-2.5 ring-1 ring-primary/15">
-      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
-        <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-          <span className="relative h-1.5 w-1.5 rounded-full bg-primary" />
-        </span>
-        {SUB_STATUS_LABEL[getOrderSubStatus(order)]}
-        {remaining !== null && remaining > 0 && (
-          <span className="text-charcoal-500">
-            ·{' '}
-            {order.fulfillment === 'delivery'
-              ? `Perkiraan tiba dalam ${Math.max(1, Math.ceil(remaining / 60))} menit`
-              : `Siap diambil dalam ${Math.max(1, Math.ceil(remaining / 60))} menit`}
+    <div className="mt-3 space-y-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-primary/10 px-3 py-2.5 ring-1 ring-primary/15">
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+            <span className="relative h-1.5 w-1.5 rounded-full bg-primary" />
           </span>
-        )}
-      </span>
-      <span className="font-display text-base font-semibold tabular-nums text-primary">
-        {remaining !== null && remaining > 0 ? formatCountdown(remaining) : '—'}
-      </span>
+          {statusLabel}
+          {remaining !== null && remaining > 0 && (
+            <span className="text-charcoal-500">
+              ·{' '}
+              {order.fulfillment === 'delivery'
+                ? `Perkiraan tiba dalam ${Math.max(1, Math.ceil(remaining / 60))} menit`
+                : `Siap diambil dalam ${Math.max(1, Math.ceil(remaining / 60))} menit`}
+            </span>
+          )}
+        </span>
+        <span className="font-display text-base font-semibold tabular-nums text-primary">
+          {remaining !== null && remaining > 0
+            ? formatCountdown(remaining)
+            : '—'}
+        </span>
+      </div>
+
+      {/* Action button for buyer to confirm receipt */}
+      {canConfirmReceipt && (
+        <button
+          type="button"
+          disabled={confirmingReceipt}
+          onClick={onConfirmReceipt}
+          className="w-full rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-emerald-600/25 transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span className="flex items-center justify-center gap-2">
+            <CheckCheck className="h-4 w-4" />
+            {confirmingReceipt ? 'Memproses...' : 'Pesanan Sudah Saya Terima'}
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function DeliveryTrackingInfo({ order }: { order: StoredOrder }) {
+  const arrivalAt = order.estimatedArrivalAt;
+  const distance = order.distanceKm ?? order.deliveryDistanceKm;
+
+  if (!arrivalAt && !distance) return null;
+
+  // Calculate arrival time range (±5 min)
+  const arrivalDate = new Date(arrivalAt!);
+  const rangeStart = new Date(arrivalDate.getTime() - 5 * 60_000);
+  const rangeEnd = new Date(arrivalDate.getTime() + 5 * 60_000);
+
+  const formatTime = (d: Date) =>
+    d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+  return (
+    <div className="mt-3 rounded-xl bg-purple-50 px-4 py-3 ring-1 ring-purple-100">
+      <div className="flex items-center gap-2">
+        <Truck className="h-4 w-4 text-purple-600" />
+        <p className="text-sm font-semibold text-purple-700">Pesanan Sedang Diantar</p>
+      </div>
+      <p className="mt-1 text-xs text-purple-600">Pesananmu sedang menuju alamatmu.</p>
+      {arrivalAt && (
+        <div className="mt-2 flex items-center gap-4">
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-purple-500">Estimasi tiba</p>
+            <p className="text-sm font-bold tabular-nums text-purple-700">
+              {formatTime(rangeStart)} – {formatTime(rangeEnd)}
+            </p>
+          </div>
+          {typeof distance === 'number' && (
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-purple-500">Jarak</p>
+              <p className="text-sm font-bold tabular-nums text-purple-700">
+                {distance.toLocaleString('id-ID', { maximumFractionDigits: 1 })} km
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PickupReadyInfo({ order }: { order: StoredOrder }) {
+  return (
+    <div className="mt-3 rounded-xl bg-emerald-50 px-4 py-3 ring-1 ring-emerald-100">
+      <div className="flex items-center gap-2">
+        <Store className="h-4 w-4 text-emerald-600" />
+        <p className="text-sm font-semibold text-emerald-700">Pesanan Siap Diambil</p>
+      </div>
+      <p className="mt-1 text-xs text-emerald-600">
+        Silakan ambil pesananmu di toko <strong>{order.vendorName}</strong>.
+      </p>
+      {order.vendorAddress && (
+        <a
+          href={mapsUrl(order.vendorAddress)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 hover:underline"
+        >
+          <MapPin className="h-3 w-3" /> Lihat Lokasi Toko
+        </a>
+      )}
     </div>
   );
 }
@@ -341,7 +499,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
 
   return (
     <div className="mt-2 space-y-3 rounded-xl ring-1 ring-hairline p-3.5">
-      { }
+      {/* Store */}
       <div className="flex items-start gap-3">
         <span
           className={
@@ -374,6 +532,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
         </div>
       </div>
 
+      {/* Delivery address */}
       {isDelivery && order.addressSnapshot && (
         <>
           <div className="ml-4 h-px bg-hairline" style={{ width: 24 }} />
@@ -461,7 +620,7 @@ function ReviewBlock({
           </div>
           {existing.comment && (
             <p className="mt-2 break-words text-[13px] text-charcoal-900">
-              “{existing.comment}”
+              &ldquo;{existing.comment}&rdquo;
             </p>
           )}
         </div>
@@ -480,7 +639,7 @@ function ReviewBlock({
       createdAt: new Date().toISOString(),
     })
       .then(() => {
-        // Notifikasi ke penjual (best-effort, jangan block UI)
+        // Notify seller (best-effort)
         notifyNewReview({
           orderCode: orderId,
           productName,

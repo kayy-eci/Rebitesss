@@ -24,7 +24,7 @@ const FOODS = [
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
   { href: "/#rekomendasi", label: "Rekomendasi" },
-  { href: "/#about", label: "About Us" },
+  { href: "/#about", label: "Tentang Kami" },
   { href: "/#cara-kerja", label: "Cara Kerja" },
   { href: "/#langganan", label: "Langganan" },
   { href: "/#testimoni", label: "Testimoni" },

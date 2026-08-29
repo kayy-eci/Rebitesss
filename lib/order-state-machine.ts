@@ -1,0 +1,380 @@
+'use client';
+
+/**
+ * Order Status State Machine
+ *
+ * Defines valid transitions and business logic for order statuses.
+ * This is the source of truth for what transitions are allowed.
+ *
+ * Flow:
+ *   paid → processing → ready_for_pickup (pickup) or out_for_delivery (delivery) → completed
+ *   paid → cancelled
+ *   processing → cancelled
+ */
+
+import { supabase } from './supabase';
+import { getSellerUmkm } from './product-storage';
+import { calculateTravelMinutes } from './delivery-estimate';
+
+/** All possible order statuses */
+export type OrderStatusValue =
+  | 'pending'
+  | 'paid'
+  | 'processing'
+  | 'ready_for_pickup'
+  | 'out_for_delivery'
+  | 'completed'
+  | 'cancelled'
+  | 'refunded'
+  | 'preparing'
+  | 'ready'
+  | 'failed';
+
+/** Valid transitions: from -> to[] */
+const VALID_TRANSITIONS: Record<string, string[]> = {
+  pending: ['paid', 'cancelled', 'failed'],
+  paid: ['processing', 'cancelled'],
+  processing: ['ready_for_pickup', 'out_for_delivery', 'cancelled'],
+  ready_for_pickup: ['completed'],
+  out_for_delivery: ['completed'],
+  preparing: ['completed', 'cancelled', 'ready'],
+  ready: ['completed', 'cancelled'],
+  completed: [],
+  cancelled: [],
+  refunded: [],
+  failed: [],
+};
+
+/** Check if a transition is valid */
+export function isValidTransition(from: string, to: string): boolean {
+  return VALID_TRANSITIONS[from]?.includes(to) ?? false;
+}
+
+/** Get the next valid actions for a given status + fulfillment method */
+export function getValidActions(
+  orderStatus: string,
+  fulfillmentMethod: string
+): { action: string; label: string; targetStatus: string; description: string }[] {
+  const actions: { action: string; label: string; targetStatus: string; description: string }[] = [];
+
+  switch (orderStatus) {
+    case 'paid':
+      actions.push({
+        action: 'start_processing',
+        label: 'Mulai Siapkan Pesanan',
+        targetStatus: 'processing',
+        description: 'Pesanan akan masuk status sedang disiapkan',
+      });
+      break;
+
+    case 'processing':
+      if (fulfillmentMethod === 'pickup') {
+        actions.push({
+          action: 'mark_ready',
+          label: 'Makanan Sudah Siap',
+          targetStatus: 'ready_for_pickup',
+          description: 'Pembeli akan diberi tahu bahwa pesanan siap diambil',
+        });
+      } else {
+        actions.push({
+          action: 'start_delivery',
+          label: 'Antarkan Pesanan',
+          targetStatus: 'out_for_delivery',
+          description: 'Pesanan akan masuk status sedang diantar',
+        });
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  return actions;
+}
+
+/** Get human-readable status label */
+export function getStatusLabel(status: string): string {
+  const labels: Record<string, string> = {
+    pending: 'Menunggu Pembayaran',
+    paid: 'Pembayaran Berhasil',
+    processing: 'Sedang Disiapkan',
+    ready_for_pickup: 'Siap Diambil',
+    out_for_delivery: 'Sedang Diantar',
+    completed: 'Selesai',
+    cancelled: 'Dibatalkan',
+    refunded: 'Dikembalikan',
+    preparing: 'Sedang Disiapkan',
+    ready: 'Siap Diambil',
+    failed: 'Pembayaran Gagal',
+  };
+  return labels[status] ?? status;
+}
+
+/** Get status color for UI */
+export function getStatusColor(status: string): { bg: string; text: string; dot: string } {
+  const colors: Record<string, { bg: string; text: string; dot: string }> = {
+    pending: { bg: 'bg-yellow-50', text: 'text-yellow-700', dot: 'bg-yellow-500' },
+    paid: { bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
+    processing: { bg: 'bg-orange-50', text: 'text-orange-700', dot: 'bg-orange-500' },
+    ready_for_pickup: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
+    out_for_delivery: { bg: 'bg-purple-50', text: 'text-purple-700', dot: 'bg-purple-500' },
+    completed: { bg: 'bg-sage-100', text: 'text-charcoal-500', dot: 'bg-charcoal-500' },
+    cancelled: { bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500' },
+    refunded: { bg: 'bg-gray-50', text: 'text-gray-700', dot: 'bg-gray-500' },
+    preparing: { bg: 'bg-orange-50', text: 'text-orange-700', dot: 'bg-orange-500' },
+    ready: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
+    failed: { bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500' },
+  };
+  return colors[status] ?? { bg: 'bg-gray-50', text: 'text-gray-700', dot: 'bg-gray-500' };
+}
+
+/**
+ * Transition order status with server-side validation.
+ * Creates a status history entry and fires notifications.
+ */
+export async function transitionOrderStatus(
+  orderId: string,
+  newStatus: string,
+  note?: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    // First, get the current order
+    const { data: order, error: fetchError } = await supabase
+      .from('orders')
+      .select('order_status, order_code, buyer_id, umkm_id, product_name, vendor_name, vendor_slug, delivery_option')
+      .eq('order_code', orderId)
+      .maybeSingle();
+
+    if (fetchError || !order) {
+      return { success: false, error: 'Pesanan tidak ditemukan' };
+    }
+
+    const currentStatus = (order as Record<string, any>).order_status;
+
+    // Validate transition
+    if (!isValidTransition(currentStatus, newStatus)) {
+      return { success: false, error: `Transisi dari ${currentStatus} ke ${newStatus} tidak valid` };
+    }
+
+    // Update order status
+    const updatePayload: Record<string, unknown> = { order_status: newStatus };
+
+    // If completing, also set lifecycle_status and completed_at
+    if (newStatus === 'completed') {
+      updatePayload.lifecycle_status = 'completed';
+      updatePayload.completed_at = new Date().toISOString();
+    }
+
+    // If starting delivery, calculate delivery estimates
+    if (newStatus === 'out_for_delivery') {
+      const distanceKm = Number((order as Record<string, any>).distance_km ?? 1);
+      const travelMinutes = calculateTravelMinutes(distanceKm);
+      const deliveryStartedAt = new Date();
+      const estimatedArrivalAt = new Date(deliveryStartedAt.getTime() + travelMinutes * 60_000);
+      updatePayload.delivery_started_at = deliveryStartedAt.toISOString();
+      updatePayload.estimated_arrival_at = estimatedArrivalAt.toISOString();
+      updatePayload.delivery_distance_km = distanceKm;
+      updatePayload.estimated_delivery_minutes = travelMinutes;
+    }
+
+    const { error: updateError } = await supabase
+      .from('orders')
+      .update(updatePayload)
+      .eq('order_code', orderId);
+
+    if (updateError) {
+      return { success: false, error: `Gagal update status: ${updateError.message}` };
+    }
+
+    // Create status history entry
+    await supabase.from('order_status_history').insert({
+      order_id: (order as Record<string, any>).id,
+      status: newStatus,
+      note: note ?? null,
+    });
+
+    // Fire notifications based on transition
+    await fireNotificationsForTransition(orderId, currentStatus, newStatus, order as Record<string, any>);
+
+    return { success: true };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Terjadi kesalahan';
+    return { success: false, error: msg };
+  }
+}
+
+/**
+ * Fire notifications when order status changes
+ */
+async function fireNotificationsForTransition(
+  orderCode: string,
+  fromStatus: string,
+  toStatus: string,
+  order: Record<string, any>
+): Promise<void> {
+  const buyerId = order.buyer_id as string;
+  const productName = (order.product_name as string) ?? 'Pesanan';
+  const vendorName = (order.vendor_name as string) ?? 'Toko';
+  const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(orderCode)}`;
+
+  // Get seller user ID
+  let sellerUserId: string | null = null;
+  if (order.vendor_slug) {
+    const { data: umkm } = await supabase
+      .from('umkm_profiles')
+      .select('user_id')
+      .eq('slug', order.vendor_slug)
+      .maybeSingle();
+    sellerUserId = (umkm as Record<string, any>)?.user_id ?? null;
+  }
+
+  switch (toStatus) {
+    case 'processing':
+      // Notify buyer: pesanan sedang disiapkan
+      if (buyerId) {
+        await supabase.from('notifications').insert({
+          user_id: buyerId,
+          role: 'buyer',
+          type: 'order_created',
+          title: 'Pesanan Sedang Disiapkan',
+          message: `Pesanan #${orderCode} (${productName}) dari ${vendorName} sedang disiapkan.`,
+          reference_id: orderCode,
+          href: deepHref,
+        });
+      }
+      break;
+
+    case 'ready_for_pickup':
+      // Notify buyer: pesanan siap diambil
+      if (buyerId) {
+        await supabase.from('notifications').insert({
+          user_id: buyerId,
+          role: 'buyer',
+          type: 'order_delivering',
+          title: 'Pesanan Siap Diambil!',
+          message: `Pesanan #${orderCode} (${productName}) dari ${vendorName} sudah siap diambil di toko.`,
+          reference_id: orderCode,
+          href: deepHref,
+        });
+      }
+      break;
+
+    case 'out_for_delivery':
+      // Notify buyer: pesanan sedang diantar
+      if (buyerId) {
+        await supabase.from('notifications').insert({
+          user_id: buyerId,
+          role: 'buyer',
+          type: 'order_delivering',
+          title: 'Pesanan Sedang Diantar!',
+          message: `Pesanan #${orderCode} (${productName}) dari ${vendorName} sedang menuju alamatmu.`,
+          reference_id: orderCode,
+          href: deepHref,
+        });
+      }
+      break;
+
+    case 'completed':
+      // Notify buyer: pesanan selesai
+      if (buyerId) {
+        await supabase.from('notifications').insert({
+          user_id: buyerId,
+          role: 'buyer',
+          type: 'order_completed',
+          title: 'Pesanan Selesai!',
+          message: `Pesanan #${orderCode} (${productName}) dari ${vendorName} telah selesai. Selamat menikmati!`,
+          reference_id: orderCode,
+          href: deepHref,
+        });
+      }
+      // Notify seller: pesanan selesai
+      if (sellerUserId) {
+        await supabase.from('notifications').insert({
+          user_id: sellerUserId,
+          role: 'seller',
+          type: 'order_completed',
+          title: 'Pesanan Selesai!',
+          message: `Pesanan #${orderCode} (${productName}) telah selesai. Dana akan dilepas ke saldo.`,
+          reference_id: orderCode,
+          href: '/dashboard/penjual/pesanan',
+        });
+      }
+      // Release seller funds
+      await releaseSellerFunds(orderCode);
+      break;
+
+    case 'cancelled':
+      // Notify buyer
+      if (buyerId) {
+        await supabase.from('notifications').insert({
+          user_id: buyerId,
+          role: 'buyer',
+          type: 'order_completed',
+          title: 'Pesanan Dibatalkan',
+          message: `Pesanan #${orderCode} (${productName}) telah dibatalkan.`,
+          reference_id: orderCode,
+          href: deepHref,
+        });
+      }
+      break;
+  }
+}
+
+/**
+ * Release funds to seller when order is completed.
+ * Creates a seller_transaction record and updates status.
+ */
+async function releaseSellerFunds(orderCode: string): Promise<void> {
+  try {
+    const { data: order } = await supabase
+      .from('orders')
+      .select('id, buyer_id, umkm_id, vendor_slug, total_price, product_name')
+      .eq('order_code', orderCode)
+      .maybeSingle();
+
+    if (!order) return;
+
+    const orderRow = order as Record<string, any>;
+    const orderId = orderRow.id as string;
+    const totalPrice = Number(orderRow.total_price ?? 0);
+    const productName = (orderRow.product_name as string) ?? 'Produk';
+
+    // Find seller user_id
+    let sellerUserId: string | null = null;
+    if (orderRow.vendor_slug) {
+      const { data: umkm } = await supabase
+        .from('umkm_profiles')
+        .select('user_id')
+        .eq('slug', orderRow.vendor_slug)
+        .maybeSingle();
+      sellerUserId = (umkm as Record<string, any>)?.user_id ?? null;
+    }
+
+    if (!sellerUserId || totalPrice <= 0) return;
+
+    // Check if transaction already exists (idempotent)
+    const { data: existing } = await supabase
+      .from('seller_transactions')
+      .select('id')
+      .eq('order_id', orderId)
+      .eq('type', 'sale')
+      .maybeSingle();
+
+    if (existing) return;
+
+    // Deduct admin fee (2000 from pricing.ts)
+    const ADMIN_FEE = 2000;
+    const sellerAmount = Math.max(0, totalPrice - ADMIN_FEE);
+
+    await supabase.from('seller_transactions').insert({
+      seller_id: sellerUserId,
+      order_id: orderId,
+      order_code: orderCode,
+      type: 'sale',
+      amount: sellerAmount,
+      status: 'completed',
+    });
+  } catch (err) {
+    console.error('[order-state-machine] releaseSellerFunds error:', err);
+  }
+}

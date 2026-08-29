@@ -26,7 +26,7 @@ export function OrderCard({
   const [reordering] = useState(false);
   const isOngoing = order.status === 'ongoing';
   const subStatus = getOrderSubStatus(order);
-  const isDelivered = order.status === 'completed';
+  const isDelivered = order.status === 'completed' || order.orderStatus === 'completed';
 
   // Badge dinamis berdasar sub-status (diproses/diantar/disiapkan/siap-diambil/selesai)
   const badge = isDelivered

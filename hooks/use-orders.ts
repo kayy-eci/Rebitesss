@@ -46,7 +46,13 @@ export function useOrders() {
   const activeOrders = useMemo(
     () =>
       orders
-        .filter((order) => order.status === 'ongoing')
+        .filter((order) => {
+          // Ongoing lifecycle OR new granular statuses that are not terminal
+          if (order.status === 'completed') return false;
+          const os = order.orderStatus;
+          if (os === 'completed' || os === 'cancelled' || os === 'refunded') return false;
+          return true;
+        })
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
     [orders]
   );
@@ -54,7 +60,7 @@ export function useOrders() {
   const completedOrders = useMemo(
     () =>
       orders
-        .filter((order) => order.status === 'completed')
+        .filter((order) => order.status === 'completed' || order.orderStatus === 'completed')
         .sort(
           (a, b) =>
             (b.completedAt ?? b.createdAt).localeCompare(a.completedAt ?? a.createdAt)

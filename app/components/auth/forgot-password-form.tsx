@@ -176,7 +176,7 @@ export default function ForgotPasswordForm() {
             noValidate
           >
             <div className="grid gap-4 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#E5E7EB] [&::-webkit-scrollbar-track]:bg-transparent min-h-0">
-              <FieldBox id="email" label="Email Address" icon={Mail}>
+              <FieldBox id="email" label="Alamat Email" icon={Mail}>
                 <input
                   id="email"
                   name="email"
