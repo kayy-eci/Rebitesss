@@ -67,7 +67,7 @@ export async function activateSubscriptionPaid(
   const umkmId = subRow.umkm_id as string;
   const { data: umkm } = await service
     .from('umkm_profiles')
-    .select('user_id, name')
+    .select('user_id, business_name')
     .eq('id', umkmId)
     .maybeSingle();
   if (umkm) {
@@ -75,7 +75,7 @@ export async function activateSubscriptionPaid(
     const { error: notifErr } = await service.from('notifications').insert({
       user_id: sellerId,
       role: 'seller',
-      type: 'payment_success',
+      type: 'subscription_active',
       title: 'Langganan Aktif!',
       message: `Pembayaran langganan ReBites berhasil. Paket aktif hingga ${periodEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}.`,
       reference_id: invoiceId,

@@ -42,13 +42,13 @@ type NotificationRow = Record<string, any>;
 
 function rowToNotification(row: NotificationRow): Notification {
   return {
-    id: row.id,
-    userId: row.user_id,
-    role: row.role,
-    type: row.type,
-    title: row.title,
+    id: row.id ?? `tmp-${Math.random().toString(36).slice(2)}`,
+    userId: row.user_id ?? '',
+    role: (row.role ?? 'buyer') as NotificationRole,
+    type: (row.type ?? 'promo') as NotificationType,
+    title: row.title ?? 'Notifikasi',
     message: row.message ?? '',
-    createdAt: row.created_at,
+    createdAt: row.created_at ?? new Date().toISOString(),
     read: row.read ?? false,
     referenceId: row.reference_id ?? undefined,
     href: row.href ?? undefined,
@@ -74,6 +74,27 @@ export async function createNotification(
     .maybeSingle();
   if (error) {
     console.error('[notification-storage] gagal membuat notifikasi:', error.message);
+    // Fallback untuk DB yang belum include 'new_review' (sebelum migrasi 0004)
+    if (error.message.includes('violates check constraint') && input.type === 'new_review') {
+      const { data: retryData, error: retryErr } = await supabase
+        .from('notifications')
+        .insert({
+          user_id: input.userId,
+          role: input.role,
+          type: 'incoming_order',
+          title: input.title,
+          message: input.message,
+          reference_id: input.referenceId ?? null,
+          href: input.href ?? null,
+          read: false,
+        })
+        .select()
+        .maybeSingle();
+      if (!retryErr && retryData) {
+        dispatchUpdated();
+        return rowToNotification(retryData);
+      }
+    }
     return null;
   }
   dispatchUpdated();

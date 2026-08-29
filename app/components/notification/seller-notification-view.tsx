@@ -18,13 +18,15 @@ const FILTER_TABS: { value: NotificationFilter; label: string }[] = [
   { value: 'subscription', label: 'Langganan' },
 ];
 
-const ORDER_TYPES: NotificationType[] = ['incoming_order', 'new_review'];
+const ORDER_TYPES: NotificationType[] = ['incoming_order', 'new_review', 'order_completed'];
 const SUBSCRIPTION_TYPES: NotificationType[] = [
   'subscription_active',
   'subscription_renewed',
   'subscription_expiring',
   'subscription_changed',
   'subscription_expired',
+  // fallback untuk data legacy yang sempat pakai payment_success untuk seller
+  'payment_success' as NotificationType,
 ];
 
 export function SellerNotificationView() {
