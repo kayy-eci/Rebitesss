@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { DetailProductContent } from './detail-product-content';
+import { DetailProductContent } from '@/app/components/detail-product/detail-product-content';
 
 export const metadata: Metadata = {
   title: 'Detail Produk - ReBites',

@@ -2,19 +2,19 @@
 
 import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ProfileNavbar } from "@/app/components/navbar";
-import { Hero } from "@/app/components/Hero";
-import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
-import { FlashSaleSection } from "@/app/components/FlashSaleSection";
-import { CategorySection } from "@/app/components/CategorySection";
-import { VendorSection } from "@/app/components/VendorSection";
-import { SiteFooter } from "@/app/components/Footer";
-import { Reveal } from "@/app/components/reveal";
-import { MagneticButton } from "@/app/components/magnetic-button";
-import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
-import { StoreClosedModal } from "@/app/components/StoreClosedModal";
+import { ProfileNavbar } from "@/app/components/shared/navbar";
+import { Hero } from "@/app/components/home/Hero";
+import { UrgentDealsSection } from "@/app/components/home/UrgentDealsSection";
+import { FlashSaleSection } from "@/app/components/home/FlashSaleSection";
+import { CategorySection } from "@/app/components/home/CategorySection";
+import { VendorSection } from "@/app/components/home/VendorSection";
+import { SiteFooter } from "@/app/components/shared/Footer";
+import { Reveal } from "@/app/components/shared/reveal";
+import { MagneticButton } from "@/app/components/shared/magnetic-button";
+import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
+import { StoreClosedModal } from "@/app/components/shared/StoreClosedModal";
 import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
-import { useProductDetail } from "@/app/detail/product/use-product-detail";
+import { useProductDetail } from "@/app/components/detail-product/use-product-detail";
 import { SUBSCRIPTION_PLANS } from "@/lib/subscription-plans";
 
 import { ArrowRight } from "lucide-react";

@@ -18,10 +18,10 @@ import {
 import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
-import { SiteFooter } from "@/app/components/site-footer";
-import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
-import { CategoryRow } from "./category-row";
-import { useProductDetail } from "@/app/detail/product/use-product-detail";
+import { SiteFooter } from "@/app/components/shared/site-footer";
+import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
+import { CategoryRow } from "@/app/components/detail-toko/category-row";
+import { useProductDetail } from "@/app/components/detail-product/use-product-detail";
 import {
   Avatar,
   AvatarImage,
@@ -33,7 +33,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/app/components/ui/carousel";
-import { StoreHeroCard } from "./store-hero-card";
+import { StoreHeroCard } from "@/app/components/detail-toko/store-hero-card";
 import { getServiceReviews } from "@/lib/review-storage";
 import {
   getStoreProductsBySlug,

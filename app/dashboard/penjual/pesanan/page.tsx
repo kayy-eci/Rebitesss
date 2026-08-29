@@ -36,9 +36,9 @@ import {
   getStatusColor,
   getValidActions,
 } from '@/lib/order-state-machine';
-import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
-import { Card } from '@/app/components/dashboardPenjual/Card';
-import { SmartImage } from '@/app/components/SmartImage';
+import { SellerShell } from '@/app/components/dashboard-penjual/SellerShell';
+import { Card } from '@/app/components/dashboard-penjual/Card';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 
 type OrderTab = 'berlangsung' | 'selesai' | 'semua';
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
-import { ProfileSidebarNav } from '@/app/components/profile-sidebar-nav';
+import { ProfileSidebarNav } from '@/app/components/shared/profile-sidebar-nav';
 
 export function RiwayatSidebarShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

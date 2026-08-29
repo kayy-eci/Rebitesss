@@ -7,14 +7,14 @@ import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Search, SearchX, Sparkles } from "lucide-react";
 import { useCatalog } from "@/lib/catalog";
 import type { FilterKey, FoodItem } from "@/lib/types";
-import { ProfileNavbar } from "@/app/components/navbar";
-import { SiteFooter } from "@/app/components/Footer";
-import { SearchFilterBar } from "@/app/components/SearchFilterBar";
-import { FoodCard } from "@/app/components/FoodCard";
-import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
-import { StoreClosedModal } from "@/app/components/StoreClosedModal";
+import { ProfileNavbar } from "@/app/components/shared/navbar";
+import { SiteFooter } from "@/app/components/shared/Footer";
+import { SearchFilterBar } from "@/app/components/shared/SearchFilterBar";
+import { FoodCard } from "@/app/components/shared/FoodCard";
+import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
+import { StoreClosedModal } from "@/app/components/shared/StoreClosedModal";
 import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
-import { useProductDetail } from "@/app/detail/product/use-product-detail";
+import { useProductDetail } from "@/app/components/detail-product/use-product-detail";
 
 const VALID_FILTERS: FilterKey[] = [
   "terdekat",

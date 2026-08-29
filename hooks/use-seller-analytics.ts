@@ -21,7 +21,7 @@ import type {
   FavoriteCategory,
   MonthCategoryData,
   PartnerScorePeriod,
-} from '@/app/components/dashboardPenjual/types';
+} from '@/app/components/dashboard-penjual/types';
 
 export interface AnalyticsDayPoint {
   key: string;

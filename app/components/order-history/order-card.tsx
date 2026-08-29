@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Check, ChevronRight, Coins, Star } from 'lucide-react';
-import { SmartImage } from '@/app/components/SmartImage';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 import { formatRupiah } from '@/lib/data';
-import { fetchProductDetail } from '@/app/detail/product/detail-data';
+import { fetchProductDetail } from '@/app/components/detail-product/detail-data';
 import type { StoredOrder } from '@/lib/types';
 import { formatOrderDate, getOrderSubStatus, SUB_STATUS_LABEL } from '@/lib/order-utils';
 import { toast } from '@/hooks/use-toast';

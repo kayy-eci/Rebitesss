@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
-import { ProfileNavbar } from "@/app/components/navbar";
-import { SiteFooter } from "@/app/components/Footer";
+import { ProfileNavbar } from "@/app/components/shared/navbar";
+import { SiteFooter } from "@/app/components/shared/Footer";
 
 export default function CategoryNotFound() {
   return (

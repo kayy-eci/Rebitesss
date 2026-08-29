@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Sparkles } from 'lucide-react';
-import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
+import { SellerShell } from '@/app/components/dashboard-penjual/SellerShell';
 import { AddMenuForm } from '@/app/components/tambahMenu/AddMenuForm';
 
 export default function TambahMenuPage() {

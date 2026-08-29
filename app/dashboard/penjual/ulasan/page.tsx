@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Star, Store } from 'lucide-react';
-import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
-import { Card } from '@/app/components/dashboardPenjual/Card';
-import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
+import { SellerShell } from '@/app/components/dashboard-penjual/SellerShell';
+import { Card } from '@/app/components/dashboard-penjual/Card';
+import { StoreRatingCard } from '@/app/components/dashboard-penjual/StoreRatingCard';
 import { getSellerUmkm } from '@/lib/product-storage';
 import { getSellerReviews, REVIEWS_UPDATED_EVENT, type SellerReview } from '@/lib/review-storage';
 import { cn } from '@/lib/utils';

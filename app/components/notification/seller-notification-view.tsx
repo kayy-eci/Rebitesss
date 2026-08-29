@@ -7,7 +7,7 @@ import { useCurrentUser } from '@/lib/current-user';
 import { useNotifications } from '@/hooks/use-notifications';
 import type { NotificationType } from '@/lib/notification-storage';
 import { NotificationCard } from './notification-card';
-import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
+import { SellerShell } from '@/app/components/dashboard-penjual/SellerShell';
 import { cn } from '@/lib/utils';
 
 type NotificationFilter = 'all' | 'order' | 'subscription';

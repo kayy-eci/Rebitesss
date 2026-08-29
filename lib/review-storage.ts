@@ -2,7 +2,7 @@
 
 import { supabase } from './supabase';
 import type { OrderReview } from './types';
-import type { Review } from '@/app/detail/product/data';
+import type { Review } from '@/app/components/detail-product/data';
 
 type ReviewRow = Record<string, any>;
 

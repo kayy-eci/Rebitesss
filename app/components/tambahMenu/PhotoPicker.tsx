@@ -2,7 +2,7 @@
 
 import { Camera, ImagePlus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SmartImage } from '@/app/components/SmartImage';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 
 interface PhotoPickerProps {
   value: string;

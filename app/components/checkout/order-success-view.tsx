@@ -14,7 +14,7 @@ import {
   Truck,
   XCircle,
 } from 'lucide-react';
-import { SmartImage } from '@/app/components/SmartImage';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 import { formatRupiah } from '@/lib/data';
 import { getOrderById, rowToStoredOrder } from '@/lib/order-storage';
 import { supabase } from '@/lib/supabase';

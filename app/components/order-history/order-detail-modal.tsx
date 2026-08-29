@@ -12,9 +12,9 @@ import {
   Store,
   Truck,
 } from 'lucide-react';
-import { SmartImage } from '@/app/components/SmartImage';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 import { formatRupiah } from '@/lib/data';
-import { fetchProductDetail } from '@/app/detail/product/detail-data';
+import { fetchProductDetail } from '@/app/components/detail-product/detail-data';
 import type { StoredOrder } from '@/lib/types';
 import {
   getOrderSubStatus,

@@ -42,9 +42,9 @@ import {
 } from '@/lib/flash-sale';
 import type { UrgentSlot } from '@/lib/types';
 import type { SellerProduct } from '@/lib/product-storage';
-import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
-import { Card } from '@/app/components/dashboardPenjual/Card';
-import { SmartImage } from '@/app/components/SmartImage';
+import { SellerShell } from '@/app/components/dashboard-penjual/SellerShell';
+import { Card } from '@/app/components/dashboard-penjual/Card';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 import {
   Dialog,
   DialogContent,

@@ -3,21 +3,21 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Scale, Store, Users, Wallet, Star, Quote } from "lucide-react";
-import { SmoothScroll } from "@/app/components/smooth-scroll";
-import { Preloader } from "@/app/components/preloader";
-import { SiteFooter } from "@/app/components/site-footer";
-import { Reveal, RevealWords } from "@/app/components/reveal";
-import { Counter } from "@/app/components/counter";
-import { Marquee } from "@/app/components/marquee";
-import { MagneticButton } from "@/app/components/magnetic-button";
-import HowItWorks from "@/app/components/HowItWorks";
-import { UrgentDealsSection } from "@/app/components/UrgentDealsSection";
-import { ProductDetailModal } from "@/app/components/ProductDetailModalLazy";
-import { StoreClosedModal } from "@/app/components/StoreClosedModal";
+import { SmoothScroll } from "@/app/components/shared/smooth-scroll";
+import { Preloader } from "@/app/components/shared/preloader";
+import { SiteFooter } from "@/app/components/shared/site-footer";
+import { Reveal, RevealWords } from "@/app/components/shared/reveal";
+import { Counter } from "@/app/components/shared/counter";
+import { Marquee } from "@/app/components/shared/marquee";
+import { MagneticButton } from "@/app/components/shared/magnetic-button";
+import HowItWorks from "@/app/components/landing/HowItWorks";
+import { UrgentDealsSection } from "@/app/components/home/UrgentDealsSection";
+import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
+import { StoreClosedModal } from "@/app/components/shared/StoreClosedModal";
 import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
-import { useProductDetail } from "@/app/detail/product/use-product-detail";
-import { HeroSection } from "@/app/components/hero-section";
-import { FaqSection } from "@/app/components/faq-section";
+import { useProductDetail } from "@/app/components/detail-product/use-product-detail";
+import { HeroSection } from "@/app/components/landing/hero-section";
+import { FaqSection } from "@/app/components/landing/faq-section";
 import {
   Carousel,
   CarouselContent,

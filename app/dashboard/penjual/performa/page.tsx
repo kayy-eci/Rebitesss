@@ -4,15 +4,15 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { Crown, TrendingUp } from 'lucide-react';
-import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
-import { TopCategoryCard } from '@/app/components/dashboardPenjual/TopCategoryCard';
-import { BestSellingMenuRow } from '@/app/components/dashboardPenjual/BestSellingMenuRow';
-import { AchievementBadgesCard } from '@/app/components/dashboardPenjual/AchievementBadgesCard';
-import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
+import { SellerShell } from '@/app/components/dashboard-penjual/SellerShell';
+import { TopCategoryCard } from '@/app/components/dashboard-penjual/TopCategoryCard';
+import { BestSellingMenuRow } from '@/app/components/dashboard-penjual/BestSellingMenuRow';
+import { AchievementBadgesCard } from '@/app/components/dashboard-penjual/AchievementBadgesCard';
+import { StoreRatingCard } from '@/app/components/dashboard-penjual/StoreRatingCard';
 
 const SalesActivityChartCard = dynamic(
   () =>
-    import('@/app/components/dashboardPenjual/SalesActivityChartCard').then(
+    import('@/app/components/dashboard-penjual/SalesActivityChartCard').then(
       (m) => m.SalesActivityChartCard
     ),
   {

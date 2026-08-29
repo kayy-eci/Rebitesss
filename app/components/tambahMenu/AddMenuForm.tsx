@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, Info, Lock, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Card } from '@/app/components/dashboardPenjual/Card';
-import { Reveal } from '@/app/components/reveal';
+import { Card } from '@/app/components/dashboard-penjual/Card';
+import { Reveal } from '@/app/components/shared/reveal';
 import {
   PRODUCTS_UPDATED_EVENT,
   getSellerProductCount,

@@ -1,8 +1,8 @@
 'use client';
 
 import { Clock, Leaf, Star } from 'lucide-react';
-import { Card } from '@/app/components/dashboardPenjual/Card';
-import { SmartImage } from '@/app/components/SmartImage';
+import { Card } from '@/app/components/dashboard-penjual/Card';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 import type { MenuFormState } from './types';
 
 const formatPrice = (value: number) => value.toLocaleString('id-ID');

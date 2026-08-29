@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
-import { SmartImage } from '@/app/components/SmartImage';
+import { SmartImage } from '@/app/components/shared/SmartImage';
 import { formatRupiah } from '@/lib/data';
 import { useCheckout } from './checkout-context';
 import { ReservationCountdown } from './reservation-countdown';

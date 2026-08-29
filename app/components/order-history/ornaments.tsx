@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { LeafSprig } from "@/app/components/ornaments";
+import { LeafSprig } from "@/app/components/shared/ornaments";
 
 export { LeafSprig };
 

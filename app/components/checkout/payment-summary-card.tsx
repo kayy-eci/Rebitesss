@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Coins, Lock, Sparkles } from "lucide-react";
 import { formatRupiah } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { DotPattern } from "@/app/components/ornaments";
+import { DotPattern } from "@/app/components/shared/ornaments";
 import { AnimatedNumber } from "./animated-number";
 import { PromoCodeInput } from "./promo-code-input";
 import { UseCoinsCard } from "./use-coins-card";

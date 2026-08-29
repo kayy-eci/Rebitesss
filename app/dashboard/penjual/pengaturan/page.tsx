@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, ImageIcon, Store, Trash2 } from "lucide-react";
-import { SellerShell } from "@/app/components/dashboardPenjual/SellerShell";
-import { Card } from "@/app/components/dashboardPenjual/Card";
+import { SellerShell } from "@/app/components/dashboard-penjual/SellerShell";
+import { Card } from "@/app/components/dashboard-penjual/Card";
 import {
   getSellerStoreSettings,
   updateStoreSettings,

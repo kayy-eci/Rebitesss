@@ -5,21 +5,21 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion, MotionConfig } from 'framer-motion';
 import { Crown } from 'lucide-react';
-import { Reveal } from '@/app/components/reveal';
-import { DashboardDecor } from '@/app/components/dashboardPenjual/decor';
-import { Sidebar } from '@/app/components/dashboardPenjual/Sidebar';
-import { Topbar } from '@/app/components/dashboardPenjual/Topbar';
-import { DetailedReportCard, type StatsPeriod } from '@/app/components/dashboardPenjual/DetailedReportCard';
-import { DemandAnalyticsCard } from '@/app/components/dashboardPenjual/DemandAnalyticsCard';
-import { FeaturedPromoCard } from '@/app/components/dashboardPenjual/FeaturedPromoCard';
-import { StoreCard } from '@/app/components/dashboardPenjual/StoreCard';
-import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
+import { Reveal } from '@/app/components/shared/reveal';
+import { DashboardDecor } from '@/app/components/dashboard-penjual/decor';
+import { Sidebar } from '@/app/components/dashboard-penjual/Sidebar';
+import { Topbar } from '@/app/components/dashboard-penjual/Topbar';
+import { DetailedReportCard, type StatsPeriod } from '@/app/components/dashboard-penjual/DetailedReportCard';
+import { DemandAnalyticsCard } from '@/app/components/dashboard-penjual/DemandAnalyticsCard';
+import { FeaturedPromoCard } from '@/app/components/dashboard-penjual/FeaturedPromoCard';
+import { StoreCard } from '@/app/components/dashboard-penjual/StoreCard';
+import { StoreRatingCard } from '@/app/components/dashboard-penjual/StoreRatingCard';
 import { useSellerPlan } from '@/lib/seller-plan';
 import { useRequireSeller } from '@/hooks/use-require-seller';
 
 const SalesStatsCard = dynamic(
   () =>
-    import('@/app/components/dashboardPenjual/SalesStatsCard').then(
+    import('@/app/components/dashboard-penjual/SalesStatsCard').then(
       (m) => m.SalesStatsCard
     ),
   {
