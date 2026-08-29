@@ -34,7 +34,6 @@ import {
   type CarouselApi,
 } from "@/app/components/ui/carousel";
 import { StoreHeroCard } from "./store-hero-card";
-import { StoreAboutImpact } from "./store-about-impact";
 import { getServiceReviews } from "@/lib/review-storage";
 import {
   getStoreProductsBySlug,
@@ -457,9 +456,6 @@ function StoreDetailContent() {
       { }
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <section id="menu-surplus" className="pt-9">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-            Menu Surplus Hari Ini
-          </p>
           <h2 className="mt-1.5 font-display text-2xl font-medium tracking-tight text-primary sm:text-3xl">
             Menu Surplus dari {vendor.name}
           </h2>
@@ -645,10 +641,6 @@ function StoreDetailContent() {
         </section>
       </div>
 
-      { }
-      <StoreAboutImpact vendor={vendor} />
-
-      { }
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <section id="tentang-toko" className="mt-14 pb-4">
           <StoreServiceReviews vendor={vendor} />

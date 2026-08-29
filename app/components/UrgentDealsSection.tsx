@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
 import { FoodCard } from "@/app/components/FoodCard";
@@ -154,7 +154,7 @@ export function UrgentDealsSection({
               Menu <span className="text-caramel">unggulan</span> hari ini
             </h2>
             <p className="mt-2 max-w-xl font-sans text-sm text-white/70">
-              Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat, diperbarui setiap hari.
+              Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat.
             </p>
           </div>
         </div>

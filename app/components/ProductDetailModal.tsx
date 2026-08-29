@@ -119,7 +119,7 @@ export function ProductDetailModal({
             type="button"
             aria-label="Tutup detail produk"
             onClick={onClose}
-            className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-black/5 text-charcoal-900 backdrop-blur-sm transition-all hover:bg-black/10 hover:scale-110 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white backdrop-blur-sm transition-all hover:bg-caramel hover:scale-110 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             <X className="h-[18px] w-[18px]" strokeWidth={2.5} />
           </button>
@@ -138,7 +138,7 @@ export function ProductDetailModal({
             </div>
             {/* Savings badge */}
             {savings > 0 && (
-              <div className="absolute left-5 top-5 z-10 rounded-full bg-charcoal-900 px-3 py-1.5 text-[11px] font-bold text-white shadow-lg">
+              <div className="absolute left-5 top-5 z-10 rounded-full bg-primary px-3 py-1.5 text-[11px] font-bold text-white shadow-lg">
                 Hemat {savingsPercent}%
               </div>
             )}
@@ -158,7 +158,7 @@ export function ProductDetailModal({
             </Link>
 
             {/* Title */}
-            <h2 className="mt-4 font-display text-[clamp(1.3rem,2.5vw,1.75rem)] font-bold leading-tight tracking-[-0.02em] text-charcoal-900">
+            <h2 className="mt-4 font-display text-[clamp(1.3rem,2.5vw,1.75rem)] font-bold leading-tight tracking-[-0.02em] text-primary">
               {product.title}
             </h2>
 
@@ -177,7 +177,7 @@ export function ProductDetailModal({
                   />
                 ))}
               </div>
-              <span className="text-sm font-semibold text-charcoal-900">
+              <span className="text-sm font-semibold text-primary">
                 {product.rating.toFixed(1)}
               </span>
               <span className="text-sm text-charcoal-500">
@@ -187,7 +187,7 @@ export function ProductDetailModal({
 
             {/* Description */}
             <div className="mt-5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-charcoal-400">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-primary">
                 Deskripsi
               </h3>
               <p className="mt-2 text-[13px] leading-relaxed text-charcoal-600">
@@ -196,7 +196,7 @@ export function ProductDetailModal({
             </div>
 
             {/* Stock */}
-            <p className="mt-5 text-xs font-medium text-charcoal-500">
+            <p className="mt-5 text-xs font-medium text-primary">
               <span className={cn(
                 "inline-block h-1.5 w-1.5 rounded-full mr-1.5",
                 lowStock ? "bg-[#E53935]" : "bg-primary/100",
@@ -206,10 +206,10 @@ export function ProductDetailModal({
 
             {/* Price + Quantity + CTA */}
             <div className="mt-auto pt-6">
-              <div className="border-t border-charcoal-900/5 pt-5">
+              <div className="border-t pt-5">
                 {/* Price */}
                 <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl font-bold text-charcoal-900">
+                  <span className="font-display text-2xl font-bold text-primary">
                     Rp{formatIDR(product.discountedPrice)}
                   </span>
                   {savings > 0 && (
@@ -258,8 +258,8 @@ export function ProductDetailModal({
                       product.stockRemaining === 0
                         ? "bg-charcoal-900/10 text-charcoal-400 cursor-not-allowed"
                         : added
-                          ? "bg-charcoal-900 text-white"
-                          : "bg-charcoal-900 text-white hover:bg-charcoal-900/90",
+                          ? "bg-primary text-white"
+                          : "bg-primary text-white hover:bg-caramel",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                     )}
                   >

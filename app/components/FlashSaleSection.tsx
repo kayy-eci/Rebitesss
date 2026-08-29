@@ -223,7 +223,8 @@ function UrgentCard({
           className={cn(
             "transition-transform duration-500",
             isActive && "group-hover:scale-105",
-            !isActive && "scale-105 blur-[1.5px] brightness-[0.85] saturate-[0.7]",
+            !isActive &&
+              "scale-105 blur-[1.5px] brightness-[0.85] saturate-[0.7]",
           )}
         />
 
@@ -269,7 +270,12 @@ function UrgentCard({
             !isActive && "opacity-60",
           )}
         >
-          <Heart className={cn("h-4 w-4", liked && isActive && "fill-[#E53935] text-[#E53935]")} />
+          <Heart
+            className={cn(
+              "h-4 w-4",
+              liked && isActive && "fill-[#E53935] text-[#E53935]",
+            )}
+          />
         </button>
       </div>
 
@@ -277,7 +283,9 @@ function UrgentCard({
         <h3 className="line-clamp-1 font-sans text-[15px] font-bold leading-snug text-charcoal-900">
           {item.name}
         </h3>
-        <p className="mt-0.5 line-clamp-1 font-sans text-[13px] text-charcoal-500">{item.vendorName}</p>
+        <p className="mt-0.5 line-clamp-1 font-sans text-[13px] text-charcoal-500">
+          {item.vendorName}
+        </p>
 
         <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1 font-medium text-charcoal-900">
@@ -298,7 +306,9 @@ function UrgentCard({
           ) : (
             <div className="mt-2.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#DC2626]">Sisa {stockCount}</span>
+                <span className="font-bold text-[#DC2626]">
+                  Sisa {stockCount}
+                </span>
                 <span className="text-[#DC2626]">Buru!</span>
               </div>
               <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream-100">
@@ -361,10 +371,9 @@ export function FlashSaleSection({
     : null;
   const nextStartIso = new Date(nextStartEpoch()).toISOString();
 
-
-  const [sellerFlashItems, setSellerFlashItems] = useState<
-    FlashSaleCardItem[]
-  >([]);
+  const [sellerFlashItems, setSellerFlashItems] = useState<FlashSaleCardItem[]>(
+    [],
+  );
   const { urgentItems, loading: catalogLoading } = useCatalog();
 
   useEffect(() => {
@@ -381,34 +390,34 @@ export function FlashSaleSection({
     ? urgentItems.filter((i) => i.slot === activeSlot)
     : [];
   const dynamicSlotItems = sellerFlashItems.filter(
-    (item) => item.slot === activeSlot
+    (item) => item.slot === activeSlot,
   );
   const staticIds = new Set(staticSlotItems.map((item) => item.id));
   const visibleItems: FlashSaleCardItem[] = [
     ...staticSlotItems,
     ...dynamicSlotItems.filter((item) => !staticIds.has(item.id)),
   ];
-  const dynamicIds = new Set(
-    dynamicSlotItems.map((item) => item.id)
-  );
+  const dynamicIds = new Set(dynamicSlotItems.map((item) => item.id));
 
   return (
     <section
       id="flash-sale"
       data-nav="green"
-      className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] to-[#F7F5EF]"
+      className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] "
     >
-      <div className="relative border-b border-white/15 bg-primary/40 py-3">
+      <div className="relative bg-primary py-3">
         <Marquee pauseOnHover>
           {[
-            "SURPLUS",
+            "SELAMATKAN MAKANAN",
+            "HARGA LEBIH HEMAT",
+            "SURPLUS, BUKAN SISA",
+            "LAYAK KONSUMSI",
             "DISKON HINGGA 50%",
-            "SELAMATKAN SEBELUM HABIS",
-            "MAKANAN BERSIH & LAYAK KONSUMSI",
+            "LEBIH HEMAT, LEBIH BERMAKNA",
           ].map((t, i) => (
             <span
               key={i}
-              className="mx-6 flex items-center gap-3 font-sans text-lg font-medium text-white tracking-tight lg:text-xl"
+              className="mx-6 flex items-center gap-3 font-sans text-lg font-medium tracking-tight text-white lg:text-xl"
             >
               {t}
             </span>
@@ -515,15 +524,22 @@ export function FlashSaleSection({
             </h2>
 
             <p className="mt-2 max-w-md font-sans text-sm text-white/80">
-              Makanan surplus pilihan dengan harga lebih hemat. Jangan sampai kelewatan sebelum stoknya habis!
+              Nikmati makanan surplus pilihan dengan harga lebih hemat. Jangan
+              lewatkan sebelum stoknya habis!
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-3 sm:flex-row sm:items-center">
             {slotEndIso ? (
-              <SectionCountdown deadlineIso={slotEndIso} label="Berakhir dalam" />
+              <SectionCountdown
+                deadlineIso={slotEndIso}
+                label="Berakhir dalam"
+              />
             ) : (
-              <SectionCountdown deadlineIso={nextStartIso} label="Flash sale dimulai dalam" />
+              <SectionCountdown
+                deadlineIso={nextStartIso}
+                label="Flash sale dimulai dalam"
+              />
             )}
           </div>
         </div>
