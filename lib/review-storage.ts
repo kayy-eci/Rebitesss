@@ -223,22 +223,36 @@ export async function saveReview(review: OrderReview): Promise<void> {
     authorAvatar = (user?.user_metadata as Record<string, any>)?.avatar_url || null;
   }
 
-  const { error } = await supabase.from('reviews').upsert(
-    {
-      order_id: (orderRow as Record<string, any>).id,
-      product_id: (orderRow as Record<string, any>).product_id,
-      umkm_id: (orderRow as Record<string, any>).umkm_id,
-      order_code: review.orderId,
-      user_id: review.userId,
-      kind: 'product',
-      rating: review.rating,
-      comment: review.comment?.trim() ?? '',
-      author_name: authorName,
-      author_avatar: authorAvatar,
-      menu_name: (orderRow as Record<string, any>).product_name ?? '',
-    },
-    { onConflict: 'user_id,order_code' }
-  );
+  const payload = {
+    order_id: (orderRow as Record<string, any>).id,
+    product_id: (orderRow as Record<string, any>).product_id,
+    umkm_id: (orderRow as Record<string, any>).umkm_id,
+    order_code: review.orderId,
+    user_id: review.userId,
+    kind: 'product',
+    rating: review.rating,
+    comment: review.comment?.trim() ?? '',
+    author_name: authorName,
+    author_avatar: authorAvatar,
+    menu_name: (orderRow as Record<string, any>).product_name ?? '',
+  };
+
+  // Upsert manual: index unik (user_id, order_code) sebelumnya partial, jadi
+  // ON CONFLICT supabase-js selalu gagal (42P10) dan rating tidak tersimpan.
+  // Cek dulu review existing, lalu update / insert.
+  const { data: existingReview } = await supabase
+    .from('reviews')
+    .select('id')
+    .eq('user_id', review.userId)
+    .eq('order_code', review.orderId)
+    .maybeSingle();
+
+  const { error } = existingReview
+    ? await supabase
+        .from('reviews')
+        .update(payload)
+        .eq('id', (existingReview as Record<string, any>).id)
+    : await supabase.from('reviews').insert(payload);
   if (error) {
     console.error('[review-storage] gagal menyimpan review:', error.message);
     throw error;

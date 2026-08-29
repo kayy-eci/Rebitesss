@@ -10,6 +10,8 @@ import { useCountUp } from './useCountUp';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
 import { REVIEWS_UPDATED_EVENT } from '@/lib/review-storage';
 
+const POLL_INTERVAL_MS = 20_000; // 20 detik
+
 export function StoreRatingCard() {
   const { hasOrders, hydrated } = useSellerOrders();
   const [reviewsLoaded, setReviewsLoaded] = useState(false);
@@ -38,9 +40,12 @@ export function StoreRatingCard() {
     load();
     const onReview = () => load();
     window.addEventListener(REVIEWS_UPDATED_EVENT, onReview);
+    // Polling → ulasan dari pembeli lain juga terlihat tanpa reload
+    const intervalId = setInterval(load, POLL_INTERVAL_MS);
     return () => {
       cancelled = true;
       window.removeEventListener(REVIEWS_UPDATED_EVENT, onReview);
+      clearInterval(intervalId);
     };
   }, []);
 

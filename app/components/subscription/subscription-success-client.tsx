@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Check, Clock, LayoutDashboard, Store, XCircle } from 'lucide-react';
 import { getSubscriptionPlan, computePeriodEnd, type BillingCycle } from '@/lib/subscription-plans';
 import { supabase } from '@/lib/supabase';
@@ -25,10 +26,23 @@ interface Props {
 export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }: Props) {
   const plan = getSubscriptionPlan(planSlug);
   const billing: BillingCycle = billingParam === 'yearly' ? 'yearly' : 'monthly';
+  const router = useRouter();
 
   const [status, setStatus] = useState<'loading' | 'pending' | 'active' | 'failed'>(
     externalId ? 'pending' : 'active'
   );
+  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Saat langganan aktif → redirect otomatis ke dashboard toko
+  useEffect(() => {
+    if (status !== 'active') return;
+    redirectTimer.current = setTimeout(() => {
+      router.replace('/dashboard/penjual');
+    }, 2500);
+    return () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
+  }, [status, router]);
 
   useEffect(() => {
     if (!externalId) return;
@@ -36,20 +50,18 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
     let elapsed = 0;
     let interval: ReturnType<typeof setInterval>;
 
-    const check = async () => {
+    /** Fallback: baca status langsung dari DB (jalur lama via RLS) */
+    const checkDb = async (): Promise<'active' | 'pending' | 'failed' | null> => {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user.id;
-      if (!userId) return;
+      if (!userId) return null;
 
-      const { data: umkm, error: umkmError } = await supabase
+      const { data: umkm } = await supabase
         .from('umkm_profiles')
         .select('id')
         .eq('user_id', userId)
         .maybeSingle();
-      if (umkmError) {
-        console.error('[subscription-success] gagal memuat UMKM:', umkmError.message);
-      }
-      if (!umkm || cancelled) return;
+      if (!umkm || cancelled) return null;
       const umkmId = (umkm as Record<string, string>).id;
 
       const { data: subs, error: subsError } = await supabase
@@ -58,29 +70,59 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
         .eq('umkm_id', umkmId)
         .order('created_at', { ascending: false })
         .limit(5);
-      if (subsError) {
-        console.error('[subscription-success] gagal memuat status langganan:', subsError.message);
-        return;
-      }
+      if (subsError || cancelled || !subs) return null;
 
-      if (cancelled || !subs) return;
       const rows = subs as Array<Record<string, string>>;
-      
       const target =
         rows.find((r) => r.xendit_invoice_id && externalId.includes(r.xendit_invoice_id.slice(0, 8))) ??
         rows[0];
+      if (!target) return null;
 
-      if (!target) return;
+      if (target.status === 'active') return 'active';
+      if (target.status === 'expired' || target.status === 'cancelled') return 'failed';
+      return 'pending';
+    };
 
-      if (target.status === 'active') {
-        setStatus('active');
-        if (interval) clearInterval(interval);
-      } else if (target.status === 'expired' || target.status === 'cancelled') {
-        setStatus('failed');
-        if (interval) clearInterval(interval);
-      } else {
-        setStatus('pending');
+    const check = async () => {
+      // Jalur utama: server verify — cek invoice ke Xendit & aktivasi instan
+      // (fallback saat webhook Xendit tidak terjangkau, mis. dev lokal)
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData.session?.access_token;
+        if (token) {
+          const res = await fetch('/api/subscriptions/xendit/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ externalId }),
+          });
+          if (res.ok && !cancelled) {
+            const json = (await res.json()) as { status?: string };
+            if (json.status === 'active') {
+              setStatus('active');
+              if (interval) clearInterval(interval);
+              return;
+            }
+            if (json.status === 'expired') {
+              setStatus('failed');
+              if (interval) clearInterval(interval);
+              return;
+            }
+            setStatus('pending');
+            return;
+          }
+        }
+      } catch {
+        // Gagal jaringan — lanjut ke fallback DB
       }
+
+      // Fallback DB (webhook mungkin sudah mengaktifkan)
+      const dbStatus = await checkDb();
+      if (cancelled || !dbStatus) return;
+      setStatus(dbStatus);
+      if (dbStatus !== 'pending' && interval) clearInterval(interval);
     };
 
     check();
@@ -96,6 +138,7 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
     return () => {
       cancelled = true;
       clearInterval(interval);
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
     };
   }, [externalId]);
 

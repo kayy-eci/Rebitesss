@@ -13,6 +13,9 @@ import { getSellerOrders } from '@/lib/order-storage';
 import { getSellerProducts } from '@/lib/product-storage';
 import type { SellerProduct } from '@/lib/product-storage';
 import { getSellerProductReviewCount } from '@/lib/review-storage';
+import { ORDERS_UPDATED_EVENT } from '@/lib/order-storage';
+import { REVIEWS_UPDATED_EVENT } from '@/lib/review-storage';
+import { PRODUCTS_UPDATED_EVENT } from '@/lib/product-storage';
 import type {
   AchievementBadge,
   FavoriteCategory,
@@ -66,10 +69,18 @@ function startOfDay(date: Date): Date {
 }
 
 let cache: AnalyticsPayload | null = null;
+let cacheTimestamp = 0;
+const CACHE_TTL_MS = 20_000; // 20 detik
 let inflight: Promise<AnalyticsPayload> | null = null;
 
+function invalidateCache() {
+  cache = null;
+  cacheTimestamp = 0;
+}
+
 async function loadAnalytics(): Promise<AnalyticsPayload> {
-  if (cache) return cache;
+  const now = Date.now();
+  if (cache && now - cacheTimestamp < CACHE_TTL_MS) return cache;
   if (!inflight) {
     inflight = (async () => {
       const [orders, products, reviewCount] = await Promise.all([
@@ -307,6 +318,8 @@ async function loadAnalytics(): Promise<AnalyticsPayload> {
         achievements,
         avgPricePerPorsi,
       };
+      cache = payload;
+      cacheTimestamp = Date.now();
       return payload;
     })();
   }
@@ -318,6 +331,7 @@ async function loadAnalytics(): Promise<AnalyticsPayload> {
   }
 }
 
+/** Analitik penjual dari data pesanan & produk Supabase (dengan cache modul + TTL + event invalidation). */
 export function useSellerAnalytics(): AnalyticsPayload {
   const [payload, setPayload] = useState<AnalyticsPayload>(cache ?? EMPTY);
 
@@ -328,6 +342,22 @@ export function useSellerAnalytics(): AnalyticsPayload {
     });
     return () => {
       active = false;
+    };
+  }, []);
+
+  // Invalidate cache & re-fetch saat ada event order/review/product update
+  useEffect(() => {
+    const onUpdate = () => {
+      invalidateCache();
+      loadAnalytics().then((result) => setPayload(result));
+    };
+    window.addEventListener(ORDERS_UPDATED_EVENT, onUpdate);
+    window.addEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, onUpdate);
+    return () => {
+      window.removeEventListener(ORDERS_UPDATED_EVENT, onUpdate);
+      window.removeEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, onUpdate);
     };
   }, []);
 

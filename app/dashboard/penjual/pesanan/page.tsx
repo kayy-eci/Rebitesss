@@ -8,6 +8,7 @@ import {
   Clock,
   MapPin,
   Package,
+  PackageCheck,
   PackageOpen,
   ShoppingBag,
   Store,
@@ -20,10 +21,10 @@ import {
   ORDERS_UPDATED_EVENT,
   getSellerOrders,
   patchOrder,
+  getOrderById,
 } from '@/lib/order-storage';
-import {
-  getSellerUmkm,
-} from '@/lib/product-storage';
+import { notifyOrderCompleted, notifyOrderDelivering } from '@/lib/order-notifications';
+import { getSellerUmkm } from '@/lib/product-storage';
 import {
   SUB_STATUS_LABEL,
   formatOrderDateTime,
@@ -117,14 +118,27 @@ function StatusChip({ order }: { order: StoredOrder }) {
 
 function OrderRow({
   order,
+  onAdvance,
+  onComplete,
   onStatusChange,
 }: {
   order: StoredOrder;
-  onStatusChange: (orderId: string) => void;
+  onAdvance: (order: StoredOrder) => void;
+  onComplete: (orderId: string) => void;
+  onStatusChange?: (orderId: string) => void;
 }) {
   const [processing, setProcessing] = useState(false);
+  const isOngoing = order.status === 'ongoing';
+  const subStatus = getOrderSubStatus(order);
+  // Tahap awal (disiapkan) -> penjual bisa lanjut ke siap-diambil / diantar.
+  const isPreparing = isOngoing && (subStatus === 'diproses' || subStatus === 'disiapkan');
+  const advanceLabel = order.fulfillment === 'delivery' ? 'Sedang Diantar' : 'Siap Diambil';
+  const AdvanceIcon = order.fulfillment === 'delivery' ? Truck : PackageCheck;
+
+  // Legacy state-machine flow (orderStatus) — dipakai bila progressStatus belum ada
   const orderStatus = order.orderStatus ?? 'processing';
   const actions = getValidActions(orderStatus, order.fulfillment);
+  const hasStateMachineActions = actions.length > 0 && !order.progressStatus && isOngoing;
 
   const handleAction = async (targetStatus: string) => {
     if (processing) return;
@@ -132,7 +146,8 @@ function OrderRow({
     try {
       const result = await transitionOrderStatus(order.orderId, targetStatus);
       if (result.success) {
-        onStatusChange(order.orderId);
+        onStatusChange?.(order.orderId);
+        window.dispatchEvent(new Event(ORDERS_UPDATED_EVENT));
       } else {
         console.error('[pesanan] transition failed:', result.error);
         alert(result.error ?? 'Gagal mengubah status');
@@ -177,7 +192,7 @@ function OrderRow({
         <p className="text-sm font-bold text-primary">
           {formatRupiah(order.total)}
         </p>
-        {actions.length > 0 && order.status === 'ongoing' ? (
+        {hasStateMachineActions ? (
           <div className="flex flex-col gap-2">
             {actions.map((action) => (
               <button
@@ -203,6 +218,26 @@ function OrderRow({
               </button>
             ))}
           </div>
+        ) : isOngoing ? (
+          isPreparing ? (
+            <button
+              type="button"
+              onClick={() => onAdvance(order)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
+            >
+              <AdvanceIcon className="h-3.5 w-3.5" />
+              {advanceLabel}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => onComplete(order.orderId)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
+            >
+              <CheckCheck className="h-3.5 w-3.5" />
+              Tandai Selesai
+            </button>
+          )
         ) : (
           <span className="inline-flex items-center gap-1 text-[11px] font-medium text-sage-500">
             <ClipboardList className="h-3.5 w-3.5" />
@@ -251,6 +286,31 @@ export default function PesananMasukPage() {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  const handleAdvance = useCallback((order: StoredOrder) => {
+    const next = order.fulfillment === 'delivery' ? 'diantar' : 'siap-diambil';
+    patchOrder(order.orderId, { progressStatus: next }).then((updated) => {
+      // Notifikasi pembeli: "Siap Diambil" / "Sedang Diantar" (best-effort).
+      if (updated) notifyOrderDelivering(updated).catch(() => {});
+    });
+  }, []);
+
+  const handleComplete = useCallback((orderId: string) => {
+    getOrderById(orderId).then((order) => {
+      patchOrder(orderId, {
+        status: 'completed',
+        completedAt: new Date().toISOString(),
+      });
+
+      if (order) {
+        notifyOrderCompleted({
+          ...order,
+          status: 'completed',
+          completedAt: new Date().toISOString(),
+        });
+      }
+    });
   }, []);
 
   const tabs = [
@@ -311,7 +371,13 @@ export default function PesananMasukPage() {
         ) : (
           <ul className="space-y-3">
             {visibleOrders.map((order) => (
-              <OrderRow key={order.orderId} order={order} onStatusChange={() => {}} />
+              <OrderRow
+                key={order.orderId}
+                order={order}
+                onAdvance={handleAdvance}
+                onComplete={handleComplete}
+                onStatusChange={() => {}}
+              />
             ))}
           </ul>
         )}

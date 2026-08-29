@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, Info, Lock, Minus, Plus, Save } from 'lucide-react';
+import { CheckCircle2, Info, Lock, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/app/components/dashboardPenjual/Card';
 import { Reveal } from '@/app/components/reveal';
@@ -16,6 +16,7 @@ import {
 import { useSellerPlan } from '@/lib/seller-plan';
 import { PhotoPicker } from './PhotoPicker';
 import { MenuPreviewCard } from './MenuPreviewCard';
+import { NumberField } from './NumberField';
 import { DEFAULT_MENU_FORM, MENU_CATEGORIES } from './types';
 import type { MenuFormState } from './types';
 
@@ -333,83 +334,32 @@ export function AddMenuForm() {
             <section>
               <SectionTitle number="3" title="Harga & Stok" />
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="menu-normal-price" className={labelCls}>
-                    Harga Normal
-                  </label>
-                  <div className="relative">
-                    <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-sage-500">
-                      Rp
-                    </span>
-                    <input
-                      id="menu-normal-price"
-                      type="number"
-                      min={0}
-                      value={form.normalPrice}
-                      onChange={(event) => set('normalPrice', Number(event.target.value) || 0)}
-                      className={cn(inputCls, 'pl-11')}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <label htmlFor="menu-surplus-price" className={labelCls}>
-                      Harga Surplus
-                    </label>
-                    {form.normalPrice > form.surplusPrice && form.normalPrice > 0 && (
-                      <span className="mb-1.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-white">
-                        Hemat{' '}
-                        {Math.round((1 - form.surplusPrice / form.normalPrice) * 100)}%
-                      </span>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-sage-500">
-                      Rp
-                    </span>
-                    <input
-                      id="menu-surplus-price"
-                      type="number"
-                      min={0}
-                      value={form.surplusPrice}
-                      onChange={(event) => set('surplusPrice', Number(event.target.value) || 0)}
-                      className={cn(inputCls, 'pl-11')}
-                    />
-                  </div>
-                  <p className="mt-1.5 text-[11px] text-sage-500">
-                    Harga diskon untuk porsi surplus hari ini.
-                  </p>
-                </div>
+                <NumberField
+                  id="menu-normal-price"
+                  label="Harga Normal"
+                  value={form.normalPrice}
+                  onChange={(v) => set('normalPrice', v)}
+                  step={1000}
+                />
+                <NumberField
+                  id="menu-surplus-price"
+                  label="Harga Surplus"
+                  value={form.surplusPrice}
+                  onChange={(v) => set('surplusPrice', v)}
+                  step={1000}
+                />
               </div>
+              <p className="mt-1.5 text-[11px] text-sage-500">
+                Harga diskon untuk porsi surplus hari ini.
+              </p>
 
-              <div className="mt-4">
-                <label htmlFor="menu-stock" className={labelCls}>
-                  Porsi Tersedia
-                </label>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    aria-label="Kurangi porsi"
-                    onClick={() => set('stock', Math.max(0, form.stock - 1))}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-sage-100 bg-cream-50 text-charcoal-900 transition-colors hover:bg-sage-100"
-                  >
-                    <Minus className="h-4 w-4" />
-                  </button>
-                  <span className="w-12 text-center font-display text-2xl font-medium leading-none text-primary">
-                    {form.stock}
-                  </span>
-                  <button
-                    type="button"
-                    aria-label="Tambah porsi"
-                    onClick={() => set('stock', form.stock + 1)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-sage-100 bg-cream-50 text-charcoal-900 transition-colors hover:bg-sage-100"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </button>
-                  <span className="text-xs text-sage-500">porsi</span>
-                </div>
-              </div>
+              <NumberField
+                id="menu-stock"
+                label="Porsi Tersedia"
+                value={form.stock}
+                onChange={(v) => set('stock', v)}
+                unitLabel="porsi"
+              />
             </section>
 
             <section>

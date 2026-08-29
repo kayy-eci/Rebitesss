@@ -10,6 +10,8 @@ import { getSellerUmkm } from '@/lib/product-storage';
 import { getSellerReviews, REVIEWS_UPDATED_EVENT, type SellerReview } from '@/lib/review-storage';
 import { cn } from '@/lib/utils';
 
+const POLL_INTERVAL_MS = 20_000; // 20 detik
+
 function formatReviewDate(iso: string): string {
   try {
     return new Date(iso).toLocaleDateString('id-ID', {
@@ -87,7 +89,12 @@ export default function UlasanPage() {
     load();
     const onUpdate = () => load();
     window.addEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
-    return () => window.removeEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
+    // Polling → ulasan dari pembeli lain juga terlihat tanpa reload
+    const intervalId = setInterval(load, POLL_INTERVAL_MS);
+    return () => {
+      window.removeEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
+      clearInterval(intervalId);
+    };
   }, [load]);
 
   const filtered = useMemo(() => {

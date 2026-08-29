@@ -58,6 +58,11 @@ export function getOrderSubStatus(
 ): OrderSubStatus {
   if (order.status === 'completed') return 'selesai';
 
+  // Status progres yang dikendalikan penjual di dashboard (disiapkan ->
+  // siap-diambil / diantar). Prioritas utama.
+  if (order.progressStatus) return order.progressStatus;
+
+  // Fallback: status lama berbasis orderStatus (paid/processing/etc) untuk kompatibilitas pesanan lama
   const orderStatus = order.orderStatus;
   if (orderStatus) {
     switch (orderStatus) {

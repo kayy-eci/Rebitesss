@@ -31,7 +31,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useSellerStatus } from "@/hooks/use-seller-status";
 import { useCurrentUser } from "@/lib/current-user";
-import { useProfile, uploadAvatar } from "@/hooks/use-profile";
+import { useProfile, uploadAvatar, updateProfileName } from "@/hooks/use-profile";
 import { getUserOrders } from "@/lib/order-storage";
 import { useAddresses } from "@/hooks/use-addresses";
 import { useRebitesCoins } from "@/hooks/use-rebites-coins";
@@ -1471,10 +1471,9 @@ export function UserProfile() {
                         editName.trim() &&
                         editName.trim() !== fullName.trim()
                       ) {
-                        const { error } = await supabase.auth.updateUser({
-                          data: { full_name: editName.trim() },
-                        });
-                        if (error) throw error;
+                        // Persist ke profiles via backend API + sinkron metadata sesi
+                        const { error: nameError } = await updateProfileName(editName.trim());
+                        if (nameError) throw new Error(nameError);
                         setFullName(editName.trim());
                       }
                       const newPhone = editPhone.trim();
