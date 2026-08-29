@@ -103,9 +103,9 @@ export default function CategoryView({
   return (
     <div className="flex min-h-screen flex-col bg-cream-50">
       <main className="flex-1">
-        {/* ── Hero Banner ─────────────────────────────── */}
+        {}
         <section className="relative overflow-hidden">
-          {/* Background Image */}
+          {}
           {categoryImage && (
             <div className="absolute inset-0">
               <SmartImage
@@ -120,7 +120,7 @@ export default function CategoryView({
           )}
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {/* Back Button */}
+            {}
             <div className="pt-6">
               <Link
                 href="/home"
@@ -134,7 +134,7 @@ export default function CategoryView({
               </Link>
             </div>
 
-            {/* Header */}
+            {}
             <header className="mt-6 max-w-2xl pb-12 sm:pb-16 lg:pb-20">
               <h1 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>
                 {name}
@@ -143,7 +143,7 @@ export default function CategoryView({
                 {description}
               </p>
 
-              {/* Stats Badges */}
+              {}
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <span
                   aria-live="polite"
@@ -159,7 +159,7 @@ export default function CategoryView({
           </div>
         </section>
 
-        {/* ── Search Bar ────────────────────────────── */}
+        {}
         <section className="border-b border-sage-100 bg-cream-50">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="py-4">
@@ -176,7 +176,7 @@ export default function CategoryView({
           </div>
         </section>
 
-        {/* ── Product Grid ────────────────────────────── */}
+        {}
         <section className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">
           {isLoading ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 sm:gap-5 xl:grid-cols-4">

@@ -7,7 +7,6 @@ import {
 } from '@/lib/order-storage';
 import type { StoredOrder } from '@/lib/types';
 
-/** Pesanan nyata yang masuk ke toko seller yang sedang login. */
 export function useSellerOrders() {
   const [orders, setOrders] = useState<StoredOrder[]>([]);
   const [hydrated, setHydrated] = useState(false);

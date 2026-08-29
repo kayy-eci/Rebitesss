@@ -58,10 +58,6 @@ export interface StorePublicSettings {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/**
- * Identitas publik toko berdasarkan id/slug routing (bukan sesi viewer).
- * Dipakai Detail Toko agar semua pengunjung melihat data DB terbaru.
- */
 export async function getStoreSettingsByStoreId(
   storeId: string
 ): Promise<StorePublicSettings | null> {

@@ -4,7 +4,7 @@ import { Search, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type StatusFilter = 'all' | 'ongoing' | 'delivered' | 'cancelled';
-export type OrderTab = 'active' | 'completed'; // kept for compatibility
+export type OrderTab = 'active' | 'completed'; 
 export type FulfillmentFilter = 'all' | 'delivery' | 'pickup';
 
 export function OrderToolbar({
@@ -37,7 +37,7 @@ export function OrderToolbar({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Top row: pills left, date range right - like photo */}
+      {}
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           {pills.map((p) => {
@@ -69,7 +69,7 @@ export function OrderToolbar({
           })}
         </div>
 
-        {/* Date range like photo right top */}
+        {}
         <div className="flex items-center gap-2">
           <div className="relative">
             <select
@@ -87,7 +87,7 @@ export function OrderToolbar({
         </div>
       </div>
 
-      {/* Second row: fulfillment + search - keep functionality */}
+      {}
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         <div className="flex flex-wrap items-center gap-1.5">
           {(

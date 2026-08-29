@@ -3,11 +3,6 @@ import { createServiceClient, getUserFromBearer } from '@/lib/server/supabase';
 
 export const runtime = 'nodejs';
 
-/**
- * GET /api/orders/[code]?code=RB-xxx
- * Auth: Bearer <supabase access_token>
- * Return order row via service_role (bypass RLS) setelah verifikasi participant.
- */
 export async function GET(req: NextRequest, { params }: { params: { code: string } }) {
   try {
     const code = params.code?.trim();
@@ -36,7 +31,6 @@ export async function GET(req: NextRequest, { params }: { params: { code: string
       return NextResponse.json({ error: 'Pesanan tidak ditemukan' }, { status: 404 });
     }
 
-    // Verifikasi participant: buyer atau seller pemilik umkm
     const isBuyer = (order as Record<string, unknown>).buyer_id === user.id;
     let isSeller = false;
     if (!isBuyer) {
@@ -49,7 +43,7 @@ export async function GET(req: NextRequest, { params }: { params: { code: string
           .maybeSingle();
         isSeller = (umkm as Record<string, unknown>)?.user_id === user.id;
       }
-      // Fallback via vendor_slug
+      
       if (!isSeller && (order as Record<string, unknown>).vendor_slug) {
         const slug = (order as Record<string, unknown>).vendor_slug as string;
         const { data: umkm2 } = await service
@@ -61,9 +55,8 @@ export async function GET(req: NextRequest, { params }: { params: { code: string
       }
     }
 
-    // Izinkan jika buyer atau seller, atau jika order belum punya umkm_id (retry case) dan buyer cocok
     if (!isBuyer && !isSeller) {
-      // Cek admin role
+      
       const { data: profile } = await service
         .from('profiles')
         .select('role')

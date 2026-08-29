@@ -6,7 +6,6 @@ import { supabase } from '@/lib/supabase';
 
 export const SELLER_STATUS_UPDATED_EVENT = 'rebites-seller-updated';
 
-/** Status penjual user yang sedang login — dari row umkm_profiles di database. */
 export function useSellerStatus() {
   const [isSeller, setIsSeller] = useState(false);
   const [storeId, setStoreId] = useState<string | null>(null);

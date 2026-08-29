@@ -31,7 +31,7 @@ export interface AnalyticsDayPoint {
 export interface AnalyticsPayload {
   hydrated: boolean;
   hasOrders: boolean;
-  /** 30 hari terakhir, urut lama -> baru. */
+  
   days30: AnalyticsDayPoint[];
   months: Record<string, MonthCategoryData>;
   monthOptions: { value: string; label: string }[];
@@ -83,7 +83,6 @@ async function loadAnalytics(): Promise<AnalyticsPayload> {
         0
       );
 
-      // ---- Rangkuman harian 30 hari ----
       const today = startOfDay(new Date());
       const buckets = new Map<string, AnalyticsDayPoint>();
       for (let i = 29; i >= 0; i -= 1) {
@@ -128,7 +127,6 @@ async function loadAnalytics(): Promise<AnalyticsPayload> {
       const avgPricePerPorsi =
         porsiTotal > 0 ? Math.round(pendapatanTotal / porsiTotal) : 21000;
 
-      // ---- Kategori terlaris per bulan (3 bulan terakhir) ----
       const categoryBySlug = new Map(
         products.map((product) => [product.id, product.category])
       );
@@ -191,7 +189,6 @@ async function loadAnalytics(): Promise<AnalyticsPayload> {
         monthOptions.push({ value: key, label: entry.label });
       });
 
-      // ---- Skor mitra per periode ----
       const partnerScores: Record<string, PartnerScorePeriod> = {};
       for (const period of PERIODS) {
         const compute = (offsetDays: number) => {
@@ -221,7 +218,6 @@ async function loadAnalytics(): Promise<AnalyticsPayload> {
       }
       const periodOptions = PERIODS.map(({ value, label }) => ({ value, label }));
 
-      // ---- Pencapaian & badge ----
       const activeDays14 = Array.from(activeDays).filter((key) => {
         const ts = new Date(`${key}T00:00:00`).getTime();
         return ts >= today.getTime() - 13 * 24 * 60 * 60 * 1000;
@@ -322,7 +318,6 @@ async function loadAnalytics(): Promise<AnalyticsPayload> {
   }
 }
 
-/** Analitik penjual dari data pesanan & produk Supabase (dengan cache modul). */
 export function useSellerAnalytics(): AnalyticsPayload {
   const [payload, setPayload] = useState<AnalyticsPayload>(cache ?? EMPTY);
 

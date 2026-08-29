@@ -22,8 +22,7 @@ export function Preloader({ onDone }: { onDone?: () => void }) {
         } catch {}
         setDone(true);
       } else {
-        // Sudah pernah diputar di sesi ini atau prefers-reduced-motion:
-        // lewati tanpa animasi exit supaya halaman langsung tampil.
+        
         setSkipped(true);
       }
       onDone?.();

@@ -33,7 +33,6 @@ export function SubscriptionCheckoutView() {
   const billing: BillingCycle =
     params.get('billing') === 'yearly' ? 'yearly' : 'monthly';
 
-  // 3 chooser: Basic, Standar, Max — sinkron dengan SUBSCRIPTION_PLANS 3/5/15
   const chooserPlans = useMemo(() => SUBSCRIPTION_PLANS, []);
 
   const [selectedSlug, setSelectedSlug] = useState<'basic' | 'standar' | 'premium'>(() => {
@@ -41,7 +40,6 @@ export function SubscriptionCheckoutView() {
     return 'basic';
   });
 
-  // Jika query berubah dari luar (navigate), sync
   useEffect(() => {
     if (initialPlan && (initialPlan.slug === 'basic' || initialPlan.slug === 'standar' || initialPlan.slug === 'premium')) {
       setSelectedSlug(initialPlan.slug as 'basic' | 'standar' | 'premium');
@@ -77,7 +75,6 @@ export function SubscriptionCheckoutView() {
     );
   }
 
-  // Semua tier berbayar — Basic 24.999 wajib bayar
   const isFree = false;
   const price = getPlanPrice(plan, billing);
   const subtotal = price;
@@ -146,7 +143,7 @@ export function SubscriptionCheckoutView() {
         Kembali
       </button>
 
-      {/* Header 1 halaman penuh - bukan popup */}
+      {}
       <section className="mt-4">
         <h1 className="font-display text-2xl font-semibold tracking-tight text-[#225138] sm:text-3xl">
           Pilih Paket Langganan
@@ -156,7 +153,7 @@ export function SubscriptionCheckoutView() {
         </p>
       </section>
 
-      {/* 3 card chooser — Basic 3, Standar 5, Max 15 */}
+      {}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         {chooserPlans.map((p) => {
           const isSelected = p.slug === selectedSlug;
@@ -173,7 +170,7 @@ export function SubscriptionCheckoutView() {
                   : 'border-[#DEDACF] hover:border-[#AEB89B] hover:bg-white'
               }`}
             >
-              {/* Radio dot like foto */}
+              {}
               <span
                 className={`absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-full border-2 ${
                   isSelected ? 'border-[#225138] bg-[#225138]' : 'border-[#DEDACF] bg-white'
@@ -207,9 +204,9 @@ export function SubscriptionCheckoutView() {
         })}
       </div>
 
-      {/* Full page detail - bukan popup, 1 halaman */}
+      {}
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-5">
-        {/* LEFT - Rincian pure detail tanpa input */}
+        {}
         <div className="rounded-2xl border border-[#DEDACF] bg-white p-6 shadow-sm sm:p-7 lg:col-span-3">
           <h2 className="font-display text-[18px] font-semibold tracking-tight text-[#225138]">Rincian Pembayaran</h2>
           <p className="mt-1 text-[13px] leading-relaxed text-[#6B6A63]">
@@ -287,7 +284,7 @@ export function SubscriptionCheckoutView() {
           <p className="mt-2.5 text-center text-[11px] text-[#9A9994]">Aman & terverifikasi otomatis oleh Xendit. Pajak 2% sudah termasuk.</p>
         </div>
 
-        {/* RIGHT - Plan include pure detail */}
+        {}
         <div className="flex flex-col overflow-hidden rounded-2xl border border-[#DEDACF] bg-white shadow-sm lg:col-span-2">
           <div className="bg-[#F7F5EF] px-6 py-5">
             <h3 className="font-display text-[15px] font-semibold text-[#225138]">ReBites {plan.name}</h3>

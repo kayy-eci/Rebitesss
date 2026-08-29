@@ -58,11 +58,8 @@ export async function POST(req: NextRequest) {
   const service = createServiceClient();
   const normalizedStatus = String(status).toUpperCase();
 
-  // ------------------------------------------------------------
-  // ORDER flow: external_id = RB-xxx
-  // ------------------------------------------------------------
   if (externalId.startsWith('RB-')) {
-    // Idempotency: cek apakah sudah paid
+    
     const { data: order } = await service
       .from('orders')
       .select('order_code, payment_status, product_slug, quantity, coin_used, coin_earned, buyer_id, vendor_name, product_name, total_price')
@@ -129,32 +126,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   }
 
-  // ------------------------------------------------------------
-  // SUBSCRIPTION flow: external_id = SUB-xxx
-  // ------------------------------------------------------------
   if (externalId.startsWith('SUB-')) {
     if (normalizedStatus === 'PAID' || normalizedStatus === 'SETTLED') {
-      // Cari subscription pending dengan invoice id ini
+      
       const { data: sub } = await service
         .from('subscriptions')
         .select('id, umkm_id, plan_id, billing, price_paid, status, xendit_invoice_id')
         .eq('xendit_invoice_id', invoiceId)
         .maybeSingle();
 
-      // Fallback: coba cari via external_id di log (kalau insert belum sempat)
       let subRow = sub as Record<string, unknown> | null;
       if (!subRow) {
-        // externalId berisi short umkm; coba cari pending terbaru untuk fallback
+        
         console.warn('[webhook/xendit] sub not found by invoice, trying by status pending');
-        // Biarkan tetap warn — invoice sudah paid tapi pending row tidak ada = bikin baru
+        
       }
 
       if (subRow && subRow.status === 'active') {
         return NextResponse.json({ received: true, already: 'active' });
       }
 
-      // Ambil plan & billing dari subRow atau dari payload description (parse)
-      // Jika pending row ada, kita aktivasi. Jika tidak ada (edge), coba buat dari externalId parsing — skip, balikin ok.
       if (subRow) {
         const billing = (subRow.billing as string) ?? 'monthly';
         const now = new Date();
@@ -173,7 +164,6 @@ export async function POST(req: NextRequest) {
           } as Record<string, unknown>)
           .eq('id', subRow.id as string);
 
-        // Notif seller
         const umkmId = subRow.umkm_id as string;
         const { data: umkm2 } = await service
           .from('umkm_profiles')
@@ -203,7 +193,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   }
 
-  // Unknown prefix
   console.warn('[webhook/xendit] unknown external_id', externalId);
   return NextResponse.json({ received: true, note: 'unknown prefix' });
 }

@@ -33,7 +33,6 @@ export default function PengaturanTokoPage() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
-  // Hapus toko
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
@@ -92,9 +91,7 @@ export default function PengaturanTokoPage() {
         if (!uid) throw new Error("Sesi berakhir. Silakan masuk kembali.");
 
         const ext = (logoFile.name.split(".").pop() ?? "png").toLowerCase();
-        // Path unik per upload: hindari kebutuhan policy UPDATE storage
-        // (upsert file dengan path sama bisa diblokir RLS) dan menghindari
-        // cache browser terhadap URL public yang lama.
+        
         const path = `logos/${uid}-${Date.now()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("umkm-logos")
@@ -102,7 +99,7 @@ export default function PengaturanTokoPage() {
             contentType: logoFile.type || "image/png",
           });
         if (uploadError) {
-          // JANGAN ditelan diam-diam — user harus tahu logo gagal diganti.
+          
           throw new Error(
             `Gagal mengunggah logo: ${uploadError.message}`
           );
@@ -146,9 +143,6 @@ export default function PengaturanTokoPage() {
       const uid = session?.user.id;
       if (!uid) throw new Error("Sesi berakhir. Silakan masuk kembali.");
 
-      // Hapus profil toko milik sesi aktif (RLS: umkm_delete_own).
-      // Produk, langganan, ulasan, follow, dan pesanan terkait ikut
-      // terhapus otomatis via ON DELETE CASCADE di database.
       const { error: delError } = await supabase
         .from("umkm_profiles")
         .delete()
@@ -267,7 +261,7 @@ export default function PengaturanTokoPage() {
                 <div className="flex items-center gap-2">
                   <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-md border border-sage-100 bg-cream-50">
                     {logoPreview || imageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
+                      
                       <img
                         src={logoPreview ?? imageUrl}
                         alt="Logo toko"
@@ -322,7 +316,7 @@ export default function PengaturanTokoPage() {
           )}
         </Card>
 
-        {/* Zona bahaya — hapus toko */}
+        {}
         <Card className="mt-4 border-red-200">
           <div className="flex items-start gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500">

@@ -1,7 +1,4 @@
-/**
- * Check if a store is currently open based on availableFrom and availableTo times.
- * Time format is expected to be "HH:MM" (24-hour format).
- */
+
 export function isStoreOpen(availableFrom: string, availableTo: string): boolean {
   const now = new Date();
   const currentHours = now.getHours();
@@ -17,9 +14,6 @@ export function isStoreOpen(availableFrom: string, availableTo: string): boolean
   return currentTimeInMinutes >= fromTimeInMinutes && currentTimeInMinutes <= toTimeInMinutes;
 }
 
-/**
- * Get a formatted message about when the store will be open.
- */
 export function getStoreClosedMessage(availableFrom: string, availableTo: string): string {
   return `Toko ini sedang tutup. Kembali lagi besok di jam ${availableFrom}–${availableTo} untuk menikmati makanan ini.`;
 }

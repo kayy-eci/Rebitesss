@@ -48,18 +48,18 @@ export function useLikedFoods() {
   const toggle = useCallback(
     async (productId: string) => {
       const next = !isLiked(productId);
-      // optimistic
+      
       setFoods((prev) =>
         next ? [...prev, { id: productId, productId }] : prev.filter((f) => f.productId !== productId && f.id !== productId)
       );
       const ok = await setFavorite(productId, next);
       if (!ok) {
-        // rollback
+        
         setFoods((prev) =>
           next ? prev.filter((f) => f.productId !== productId && f.id !== productId) : [...prev, { id: productId, productId }]
         );
       } else {
-        // ensure sync with server
+        
         refresh();
       }
       return ok;

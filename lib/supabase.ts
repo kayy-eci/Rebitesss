@@ -8,7 +8,6 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const hasSupabaseConfig = Boolean(supabaseUrl && supabaseAnonKey);
 
 if (!hasSupabaseConfig) {
-  // Tandai di window agar UI bisa menampilkan banner, bukan gagal diam-diam.
   if (typeof window !== 'undefined') {
     (window as unknown as { __REBITES_SUPABASE_MISCONFIG__?: boolean }).__REBITES_SUPABASE_MISCONFIG__ = true;
   }

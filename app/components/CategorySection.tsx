@@ -33,8 +33,7 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 };
 
 export function CategorySection() {
-  // Kategori hanya tampil kalau benar-benar ada produknya di database.
-  // null = belum termuat -> tampilkan semua agar layout tidak melompat.
+  
   const [counts, setCounts] = useState<Record<string, number> | null>(null);
 
   useEffect(() => {

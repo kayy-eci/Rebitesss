@@ -1,12 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-/**
- * Supabase client untuk API routes (server-side).
- *
- * - Anon client: verifikasi Bearer token dari request header.
- * - Service client: bypass RLS untuk webhook (pakai SERVICE_ROLE_KEY).
- */
-
 function requireEnv(name: string): string {
   const raw = process.env[name];
   const value = raw?.trim();
@@ -30,9 +23,7 @@ export function createServiceClient(): SupabaseClient {
   });
 }
 
-/**
- * Ambil user dari Bearer token. Return null kalau tidak valid.
- */
+
 export async function getUserFromBearer(
   authHeader: string | null
 ): Promise<{ id: string; email: string | null } | null> {

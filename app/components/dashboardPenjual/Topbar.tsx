@@ -17,7 +17,7 @@ interface TopbarProps {
 export function Topbar({ onMenuClick }: TopbarProps) {
   const [storeName, setStoreName] = useState('');
   const { userId } = useCurrentUser();
-  // Notifikasi penjual kini hanya diakses lewat ikon bell di topbar.
+  
   const { unreadCount } = useNotifications(userId, 'seller');
 
   useEffect(() => {

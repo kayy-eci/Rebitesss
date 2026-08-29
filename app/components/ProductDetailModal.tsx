@@ -114,7 +114,7 @@ export function ProductDetailModal({
           transition={{ duration: 0.35, ease: EASE }}
           className="relative flex w-full max-w-[900px] flex-col overflow-hidden rounded-[32px] bg-white shadow-[0_60px_120px_-30px_rgba(0,0,0,0.35)] lg:max-h-[640px] lg:flex-row"
         >
-          {/* Close */}
+          {}
           <button
             type="button"
             aria-label="Tutup detail produk"
@@ -124,7 +124,7 @@ export function ProductDetailModal({
             <X className="h-[18px] w-[18px]" strokeWidth={2.5} />
           </button>
 
-          {/* LEFT — Product Image — ukuran seragam + ujung rounded */}
+          {}
           <div className="relative flex w-full items-center justify-center bg-white px-8 py-10 sm:px-10 sm:py-12 lg:w-[55%] lg:py-8">
             <div className="relative z-10 aspect-square w-full max-w-[380px] overflow-hidden rounded-[28px] bg-neutral-100 shadow-sm">
               <Image
@@ -136,7 +136,7 @@ export function ProductDetailModal({
                 className="object-cover"
               />
             </div>
-            {/* Savings badge */}
+            {}
             {savings > 0 && (
               <div className="absolute left-5 top-5 z-10 rounded-full bg-primary px-3 py-1.5 text-[11px] font-bold text-white shadow-lg">
                 Hemat {savingsPercent}%
@@ -144,9 +144,9 @@ export function ProductDetailModal({
             )}
           </div>
 
-          {/* RIGHT — Info + Purchase */}
+          {}
           <div className="flex w-full flex-col p-6 sm:p-8 lg:w-[45%] lg:overflow-y-auto lg:p-8">
-            {/* Vendor */}
+            {}
             <Link
               href={`/detail/toko?id=${encodeURIComponent(product.vendor.id)}`}
               onClick={onClose}
@@ -157,12 +157,12 @@ export function ProductDetailModal({
               <ArrowUpRight className="h-3 w-3 opacity-50" />
             </Link>
 
-            {/* Title */}
+            {}
             <h2 className="mt-4 font-display text-[clamp(1.3rem,2.5vw,1.75rem)] font-bold leading-tight tracking-[-0.02em] text-primary">
               {product.title}
             </h2>
 
-            {/* Rating */}
+            {}
             <div className="mt-2.5 flex items-center gap-2">
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -185,7 +185,7 @@ export function ProductDetailModal({
               </span>
             </div>
 
-            {/* Description */}
+            {}
             <div className="mt-5">
               <h3 className="text-xs font-bold uppercase tracking-wider text-primary">
                 Deskripsi
@@ -195,7 +195,7 @@ export function ProductDetailModal({
               </p>
             </div>
 
-            {/* Stock */}
+            {}
             <p className="mt-5 text-xs font-medium text-primary">
               <span className={cn(
                 "inline-block h-1.5 w-1.5 rounded-full mr-1.5",
@@ -204,10 +204,10 @@ export function ProductDetailModal({
               {lowStock ? `Stok terbatas, ${product.stockRemaining} tersisa` : `${product.stockRemaining} tersedia`}
             </p>
 
-            {/* Price + Quantity + CTA */}
+            {}
             <div className="mt-auto pt-6">
               <div className="border-t pt-5">
-                {/* Price */}
+                {}
                 <div className="flex items-baseline gap-2">
                   <span className="font-display text-2xl font-bold text-primary">
                     Rp{formatIDR(product.discountedPrice)}
@@ -219,9 +219,9 @@ export function ProductDetailModal({
                   )}
                 </div>
 
-                {/* Quantity + CTA */}
+                {}
                 <div className="mt-5 flex items-center gap-3">
-                  {/* Quantity */}
+                  {}
                   <div className="flex h-11 items-center overflow-hidden rounded-2xl border border-charcoal-900/10 bg-white">
                     <button
                       type="button"
@@ -248,7 +248,7 @@ export function ProductDetailModal({
                     </button>
                   </div>
 
-                  {/* CTA */}
+                  {}
                   <button
                     type="button"
                     onClick={handleBuy}

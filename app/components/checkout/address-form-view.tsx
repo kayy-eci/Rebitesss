@@ -14,8 +14,6 @@ import { useCheckout } from './checkout-context';
 
 const LABELS: AddressLabel[] = ['Rumah', 'Kos', 'Sekolah', 'Lainnya'];
 
-// ReBites hanya melayani Kota Depok -> provinsi & kota otomatis,
-// kecamatan dipilih dari daftar resmi kecamatan di Kota Depok.
 const DEFAULT_PROVINCE = 'Jawa Barat';
 const DEFAULT_CITY = 'Kota Depok';
 const DEPOK_DISTRICTS = [
@@ -48,8 +46,7 @@ function toFormValues(editing: DeliveryAddress | null): AddressFormValues {
       note: '',
     };
   }
-  // Data lama tetap dipertahankan apa adanya; provinsi/kota tidak diedit
-  // lewat form ini lagi.
+  
   return {
     label: editing.label,
     receiverName: editing.receiverName,

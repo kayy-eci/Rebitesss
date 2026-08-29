@@ -169,7 +169,6 @@ export default function AuthForm({
           });
         if (signUpError) throw signUpError;
 
-        // Email confirmation aktif: belum ada session -> minta user cek email.
         if (!signUpData.session) {
           setConfirmEmailOpen(true);
           return;

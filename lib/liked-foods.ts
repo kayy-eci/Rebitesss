@@ -28,10 +28,10 @@ function dispatchUpdated() {
 async function resolveProductId(key: string): Promise<string | null> {
   const trimmed = key.trim();
   if (!trimmed) return null;
-  // Jika sudah UUID, langsung pakai
+  
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (uuidRegex.test(trimmed)) return trimmed;
-  // Coba cari di products via id atau slug (jika ada kolom slug)
+  
   try {
     const { data } = await supabase.from('products').select('id').eq('id', trimmed).maybeSingle();
     if (data?.id) return data.id;
@@ -40,7 +40,7 @@ async function resolveProductId(key: string): Promise<string | null> {
     const { data } = await supabase.from('products').select('id').eq('slug', trimmed).maybeSingle();
     if (data?.id) return data.id;
   } catch {}
-  // Fallback pakai key apa adanya (mungkin memang id string)
+  
   return trimmed;
 }
 
@@ -84,7 +84,7 @@ export async function setFavorite(productKey: string, favorite: boolean): Promis
     }
     const { error } = await supabase.from('product_favorites').insert({ user_id: userId, product_id: productId });
     if (error) {
-      // Fallback localStorage jika tabel belum ada / RLS gagal (dev tanpa migrasi)
+      
       if (typeof window !== 'undefined') {
         try {
           const raw = localStorage.getItem('rebites_favorites');
@@ -101,7 +101,7 @@ export async function setFavorite(productKey: string, favorite: boolean): Promis
       return false;
     }
     dispatchUpdated();
-    // Sync localStorage cache
+    
     if (typeof window !== 'undefined') {
       try {
         const raw = localStorage.getItem('rebites_favorites');
@@ -121,7 +121,7 @@ export async function setFavorite(productKey: string, favorite: boolean): Promis
     .eq('user_id', userId)
     .eq('product_id', productId);
   if (error) {
-    // fallback localStorage
+    
     if (typeof window !== 'undefined') {
       try {
         const raw = localStorage.getItem('rebites_favorites');
@@ -147,15 +147,11 @@ export async function setFavorite(productKey: string, favorite: boolean): Promis
   return true;
 }
 
-/**
- * Ambil daftar makanan yang disukai user.
- * Prioritas product_favorites join products untuk dapat detail.
- */
 export async function getLikedFoods(): Promise<LikedFood[]> {
   try {
     const userId = await getSessionUserId();
     if (!userId) {
-      // Guest fallback localStorage
+      
       if (typeof window !== 'undefined') {
         try {
           const raw = localStorage.getItem('rebites_favorites');
@@ -168,7 +164,6 @@ export async function getLikedFoods(): Promise<LikedFood[]> {
       return [];
     }
 
-    // Coba product_favorites dengan join products
     try {
       const { data, error } = await supabase
         .from('product_favorites')
@@ -190,7 +185,6 @@ export async function getLikedFoods(): Promise<LikedFood[]> {
       }
     } catch {}
 
-    // Fallback coba tabel lama
     const tables = ['favorites', 'liked_foods', 'food_likes'];
     for (const table of tables) {
       try {

@@ -1,7 +1,3 @@
-/**
- * Helper Xendit Invoice API — server only.
- * Docs: https://developers.xendit.co/api-reference#create-invoice
- */
 
 const XENDIT_API_BASE = 'https://api.xendit.co';
 
@@ -42,7 +38,7 @@ export async function createXenditInvoice(
   params: CreateInvoiceParams
 ): Promise<XenditInvoice> {
   const secret = getSecretKey();
-  // Xendit pakai Basic auth: base64(secret + ":")
+  
   const auth = Buffer.from(`${secret}:`).toString('base64');
 
   const body: Record<string, unknown> = {
@@ -50,8 +46,7 @@ export async function createXenditInvoice(
     amount: params.amount,
     description: params.description,
     currency: 'IDR',
-    // Xendit memerlukan minimal 1 jam? Default 1 hari. Kita samakan dengan
-    // reservation countdown (1 jam) agar stok tidak ditahan terlalu lama.
+    
     invoice_duration: 3600,
     success_redirect_url: params.successRedirectUrl,
     failure_redirect_url: params.failureRedirectUrl,
@@ -64,7 +59,6 @@ export async function createXenditInvoice(
     body.customer = { given_names: params.customerName };
   }
 
-  // Timeout 10 detik agar tidak hang saat Xendit lambat
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10_000);
   let res: Response;
@@ -112,7 +106,6 @@ export async function createXenditInvoice(
   return json as XenditInvoice;
 }
 
-/** Ambil status invoice terbaru dari Xendit (untuk verifikasi fallback). */
 export async function getXenditInvoice(
   invoiceId: string
 ): Promise<XenditInvoice & { payment_method?: string; payment_channel?: string }> {

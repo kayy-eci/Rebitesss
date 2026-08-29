@@ -57,9 +57,6 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
   const [storeAddress, setStoreAddress] = useState(vendor.address);
   const [storeImage, setStoreImage] = useState(vendor.image);
 
-  // Identitas toko dibaca dari DATABASE berdasarkan id/slug toko yang dilihat
-  // (bukan sesi viewer).
-
   useEffect(() => {
     setStoreName(vendor.name);
     setStoreDesc(vendor.description);

@@ -27,7 +27,6 @@ interface NavItem {
   exact?: boolean;
 }
 
-// Menu khusus Profil — visual sama dengan Seller Sidebar, opsi mengarah ke halaman lain
 const NAV_ITEMS: NavItem[] = [
   {
     id: 'profil',
@@ -53,7 +52,7 @@ const NAV_ITEMS: NavItem[] = [
 function useActiveHref(href: string, exact?: boolean) {
   const pathname = usePathname();
   if (!pathname) return false;
-  // untuk hash link, cek path saja
+  
   const base = href.split('#')[0];
   if (!base || base === '/profile') return pathname === '/profile' && exact ? true : pathname.startsWith('/profile');
   return exact ? pathname === href : pathname.startsWith(base);

@@ -69,7 +69,6 @@ interface CheckoutContextValue {
   submitting: boolean;
   submitOrder: () => void;
 
-  /** Terisi tepat setelah checkout sukses -> pemicu popup konfirmasi (hanya untuk pesanan gratis lunas coin). */
   successOrder: StoredOrder | null;
 }
 
@@ -169,8 +168,6 @@ export function CheckoutProvider({
     [coinBalance],
   );
 
-  // Xendit: pemilihan metode terjadi di halaman invoice Xendit, jadi
-  // checkout lokal hanya butuh alamat bila delivery.
   const missingRequirement = useMemo<string | null>(() => {
     if (fulfillment === 'delivery' && !selectedAddress)
       return 'Pilih alamat pengiriman terlebih dahulu.';
@@ -247,11 +244,10 @@ export function CheckoutProvider({
         }
 
         if (json?.free && json.orderCode) {
-          // Pesanan gratis (tertutup koin) — langsung tampilkan popup sukses
-          // Server sudah mengembalikan order via service role agar tidak kena RLS anon
+          
           let order: StoredOrder | null | undefined = (json as { order?: StoredOrder }).order as StoredOrder | undefined;
           if (!order) {
-            // Fallback: coba fetch via anon (bisa gagal RLS jika session tidak sinkron)
+            
             try {
               order = await getOrderById(json.orderCode);
             } catch (e) {
@@ -262,10 +258,9 @@ export function CheckoutProvider({
             setSuccessOrder(order as StoredOrder);
           } else {
             console.warn('[checkout] free orderCode tanpa order payload', json.orderCode);
-            // Tetap tampilkan sukses minimal dengan orderCode (biar user tidak stuck)
-            // Buat order minimal dari draft agar popup tidak kosong
+            
             setPromoError(null);
-            // Redirect ke sukses page sebagai fallback agar tidak stuck
+            
             window.location.href = `/detail/pesanan/sukses?orderId=${encodeURIComponent(json.orderCode)}`;
             return;
           }
@@ -275,13 +270,12 @@ export function CheckoutProvider({
         }
 
         if (json?.invoiceUrl) {
-          // Redirect ke halaman bayar Xendit (external) — harus dipicu user gesture, pakai href langsung
+          
           console.log('[checkout] redirect ke Xendit', { orderCode: json.orderCode, invoiceUrl: json.invoiceUrl });
           window.location.href = json.invoiceUrl;
           return;
         }
 
-        // Fallback: tidak ada invoiceUrl
         console.error('[checkout] respons tanpa invoiceUrl', json);
         setSubmitting(false);
         submittedRef.current = false;

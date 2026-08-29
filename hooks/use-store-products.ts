@@ -8,7 +8,6 @@ import {
 } from '@/lib/product-storage';
 import { STORE_SETTINGS_UPDATED_EVENT } from '@/lib/store-settings-storage';
 
-/** Daftar produk satu toko berdasarkan slug — sumber sama dengan Detail Toko. */
 export function useStoreProducts(slug: string) {
   const [products, setProducts] = useState<SellerProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +15,7 @@ export function useStoreProducts(slug: string) {
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // Key belum diketahui (status toko masih dimuat) -> tetap loading.
+    
     if (!slug) return;
 
     let mounted = true;

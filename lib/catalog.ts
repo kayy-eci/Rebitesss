@@ -8,7 +8,7 @@ export interface CatalogData {
   foodItems: FoodItem[];
   urgentItems: UrgentItem[];
   vendors: Vendor[];
-  /** Pesan error pertama saat memuat katalog (null = sukses). */
+  
   error: string | null;
 }
 
@@ -135,7 +135,6 @@ export async function fetchVendors(): Promise<Vendor[]> {
   return (await queryVendors()).items;
 }
 
-/** Jumlah produk tersedia per kategori — dipakai section kategori browse. */
 export async function fetchCategoryCounts(): Promise<Record<string, number>> {
   const { data, error } = await supabase
     .from('products')
@@ -211,8 +210,6 @@ export function useCatalog() {
 
   return { ...data, loading, refresh };
 }
-
-// ---- promo codes ----
 
 function rowToPromoCode(row: Record<string, any>): PromoCode {
   return {

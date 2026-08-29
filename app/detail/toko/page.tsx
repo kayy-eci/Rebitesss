@@ -47,7 +47,6 @@ import {
 } from "@/lib/flash-sale";
 import { STORE_SETTINGS_UPDATED_EVENT } from "@/lib/store-settings-storage";
 
-
 function sellerProductToFoodItem(
   sp: SellerProduct,
   vendor: Vendor
@@ -73,7 +72,6 @@ function sellerProductToFoodItem(
   };
 }
 
-
 function isOpenNow(openHours: string): boolean {
   const match = openHours.match(
     /(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/,
@@ -89,8 +87,6 @@ function isOpenNow(openHours: string): boolean {
     ? minutes >= open && minutes < close
     : minutes >= open || minutes < close;
 }
-
-
 
 function initialsOf(name: string) {
   return name
@@ -150,7 +146,6 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
     };
   }, [carouselApi]);
 
-  // Toko database tanpa review -> section disembunyikan.
   if (reviews.length === 0) {
     return null;
   }
@@ -274,7 +269,6 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
   );
 }
 
-
 function StoreNotFound() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-cream-50 px-5 font-sans text-charcoal-900">
@@ -303,7 +297,6 @@ function StoreNotFound() {
   );
 }
 
-
 function StoreDetailContent() {
   const searchParams = useSearchParams();
   const storeId = searchParams.get("id");
@@ -313,14 +306,11 @@ function StoreDetailContent() {
     (item) => item.id === storeId,
   );
 
-
   const [storeProducts, setStoreProducts] = useState<SellerProduct[]>([]);
   const [storeLoading, setStoreLoading] = useState(true);
   const [storeError, setStoreError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
-  // Mode Supabase: SEMUA vendor berasal dari database (umkm_profiles) ->
-  // produk SELALU dari toko itu sendiri. Kosong = tetap kosong, tanpa fallback.
   const loadsOwnProducts = Boolean(vendor);
 
   useEffect(() => {
@@ -394,7 +384,6 @@ function StoreDetailContent() {
     () => new Set(storeProducts.filter((sp) => sp.featured).map((sp) => sp.id)),
     [storeProducts]
   );
-
 
   const sellerAvailability = useMemo(() => {
     if (!loadsOwnProducts) return new Map<string, boolean>();
@@ -660,7 +649,6 @@ function StoreDetailContent() {
     </main>
   );
 }
-
 
 export default function DetailTokoPage() {
   return (

@@ -77,7 +77,6 @@ export function ProfileNavbar({
 
     supabase.auth.getSession().then(readUser);
 
-    // Session user harus reaktif: SIGNED_IN/SIGNED_OUT update UI tanpa refresh.
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {

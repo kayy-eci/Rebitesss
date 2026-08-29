@@ -58,7 +58,6 @@ export function getOrderSubStatus(
 ): OrderSubStatus {
   if (order.status === 'completed') return 'selesai';
 
-  // Use granular order_status if available (state machine)
   const orderStatus = order.orderStatus;
   if (orderStatus) {
     switch (orderStatus) {
@@ -75,7 +74,6 @@ export function getOrderSubStatus(
     }
   }
 
-  // Fallback: estimate based on progress
   return progress >= 0.6
     ? order.fulfillment === 'delivery'
       ? 'diantar'

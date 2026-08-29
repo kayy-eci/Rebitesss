@@ -40,7 +40,7 @@ function ReviewItem({ review }: { review: SellerReview }) {
     <li className="flex gap-3 rounded-2xl border border-sage-100 bg-white p-4">
       <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-sage-100 text-[11px] font-bold text-sage-600">
         {review.authorAvatar ? (
-          // eslint-disable-next-line @next/next/no-img-element
+          
           <img src={review.authorAvatar} alt={review.authorName} className="h-full w-full object-cover" />
         ) : (
           review.authorName.slice(0, 2).toUpperCase()

@@ -54,7 +54,7 @@ export interface Vendor {
   address: string;
   openHours: string;
   description: string;
-  /** Profil tambahan dari umkm_profiles */
+  
   tagline?: string;
   tier?: string;
   followers?: number;
@@ -92,12 +92,10 @@ export interface DeliveryAddress {
 
 export type OrderLifecycleStatus = "ongoing" | "completed";
 
-
 export interface GeoPoint {
   latitude: number;
   longitude: number;
 }
-
 
 export interface StoredOrder {
   orderId: string;
@@ -122,14 +120,11 @@ export interface StoredOrder {
   coinEarned: number;
   createdAt: string;
 
-
-
   unitPrice?: number;
 
   promoCode?: string | null;
   status?: OrderLifecycleStatus;
 
-  /** Granular order status for state machine (paid, processing, ready_for_pickup, out_for_delivery, completed, cancelled) */
   orderStatus?: string;
 
   estimatedMinutes?: number;
@@ -145,13 +140,11 @@ export interface StoredOrder {
 
   co2eSavedKg?: number;
 
-  /** Delivery-specific fields */
   deliveryDistanceKm?: number;
   estimatedDeliveryMinutes?: number;
   deliveryStartedAt?: string;
   estimatedArrivalAt?: string;
 }
-
 
 export interface OrderReview {
   orderId: string;
@@ -162,7 +155,6 @@ export interface OrderReview {
 }
 
 export type CoinTransactionType = "earned" | "spent";
-
 
 export interface CoinTransaction {
   id: string;

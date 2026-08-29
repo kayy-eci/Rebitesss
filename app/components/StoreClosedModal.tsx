@@ -67,7 +67,7 @@ export function StoreClosedModal({
             transition={{ duration: 0.3, ease: EASE }}
             className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white p-8 text-center shadow-2xl"
           >
-            {/* Close button */}
+            {}
             <button
               type="button"
               onClick={onClose}
@@ -77,17 +77,17 @@ export function StoreClosedModal({
               <X className="h-4 w-4" />
             </button>
 
-            {/* Icon */}
+            {}
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
               <Clock className="h-8 w-8 text-amber-600" />
             </div>
 
-            {/* Title */}
+            {}
             <h2 className="mt-5 font-display text-xl font-bold text-charcoal-900">
               Toko Sedang Tutup
             </h2>
 
-            {/* Description */}
+            {}
             <p className="mt-3 text-sm leading-relaxed text-charcoal-500">
               Makanan ini belum tersedia saat ini. Kembali lagi{" "}
               <span className="font-semibold text-charcoal-900">
@@ -96,7 +96,7 @@ export function StoreClosedModal({
               untuk menikmatinya.
             </p>
 
-            {/* CTA */}
+            {}
             <button
               type="button"
               onClick={onClose}

@@ -51,7 +51,6 @@ export function useProfile() {
         const email = user.email ?? '';
         const fallbackName = metaName?.trim() || email.split('@')[0] || 'Pengguna ReBites';
 
-        // Try fetch from profiles table
         let avatarUrl: string | null = null;
         let fullNameFromDb: string | null = null;
         try {
@@ -65,7 +64,7 @@ export function useProfile() {
             fullNameFromDb = (row as { full_name: string | null }).full_name ?? null;
           }
         } catch {
-          // ignore, fallback to meta
+          
         }
 
         const finalAvatar = avatarUrl || metaAvatar || null;
@@ -123,12 +122,11 @@ export async function uploadAvatar(file: File): Promise<{ publicUrl: string | nu
   const uid = session?.user.id;
   if (!uid) return { publicUrl: null, error: 'Sesi tidak ditemukan, silakan login ulang.' };
 
-  // Validate
   const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
   if (!allowed.includes(file.type)) {
     return { publicUrl: null, error: 'Format file harus JPG, JPEG, PNG, atau WebP.' };
   }
-  const maxBytes = 2 * 1024 * 1024; // 2MB
+  const maxBytes = 2 * 1024 * 1024; 
   if (file.size > maxBytes) {
     return { publicUrl: null, error: 'Ukuran file maksimal 2MB.' };
   }
@@ -151,16 +149,13 @@ export async function uploadAvatar(file: File): Promise<{ publicUrl: string | nu
     data: { publicUrl },
   } = supabase.storage.from('avatars').getPublicUrl(path);
 
-  // Bust cache by appending timestamp query (supabase public url ignores query but helps browser cache)
   const bustedUrl = publicUrl ? `${publicUrl}?t=${Date.now()}` : null;
 
-  // Update profiles table — single source of truth
-  // Try update first
   let dbError: { message: string } | null = null;
   const { error: updErr } = await supabase.from('profiles').update({ avatar_url: bustedUrl ?? publicUrl }).eq('id', uid);
   if (updErr) dbError = updErr;
   else {
-    // Verify row exists, if not, insert
+    
     const { data: check } = await supabase.from('profiles').select('id').eq('id', uid).maybeSingle();
     if (!check) {
       const { error: insErr } = await supabase.from('profiles').insert({
@@ -176,14 +171,12 @@ export async function uploadAvatar(file: File): Promise<{ publicUrl: string | nu
     return { publicUrl: null, error: dbError.message || 'Gagal menyimpan ke profil.' };
   }
 
-  // Also sync to auth metadata for fallback
   try {
     await supabase.auth.updateUser({ data: { avatar_url: bustedUrl ?? publicUrl } });
   } catch {
-    // ignore metadata failure, profiles is primary
+    
   }
 
-  // Broadcast
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new Event(PROFILE_UPDATED_EVENT));
   }

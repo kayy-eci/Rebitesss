@@ -45,13 +45,13 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
           className="transition-transform duration-500 group-hover:scale-105"
         />
-        {/* Badge - top left - reference style */}
+        {}
         {item.discountPercent > 0 && (
           <div className="absolute left-3 top-3 z-20 rounded-full bg-[#E53935] px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
             Hemat {item.discountPercent}%
           </div>
         )}
-        {/* Wishlist heart - top right */}
+        {}
         <button
           type="button"
           aria-label={liked ? "Hapus dari favorit" : "Tambah ke favorit"}

@@ -23,7 +23,6 @@ const FILTERS: { key: FoodFilter; label: string }[] = [
 
 const MAX_ITEMS = 8;
 
-// === Daily rotation helpers: stabil per hari, berubah tiap hari ===
 function hashStringToInt(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -34,7 +33,7 @@ function hashStringToInt(str: string): number {
 }
 
 function getDailySeed(): number {
-  // local date (client) agar ganti tepat tengah malam waktu user
+  
   const now = new Date();
   const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   return hashStringToInt(dateStr);
@@ -75,8 +74,8 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
   const scrollByStep = useCallback((dir: number) => {
     const el = scrollRef.current;
     if (!el) return;
-    // Geser 1 produk per klik dengan animasi slide
-    const gap = 20; // gap-5
+    
+    const gap = 20; 
     const vw = window.innerWidth;
     let step: number;
     if (vw >= 1024) {
@@ -88,7 +87,7 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
       const itemWidth = (el.clientWidth - gap) / visible;
       step = itemWidth + gap;
     } else {
-      // mobile: auto-cols-[85%]
+      
       const itemWidth = el.clientWidth * 0.85;
       step = itemWidth + gap;
     }
@@ -116,7 +115,6 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
         list.sort((a, b) => b.rating - a.rating);
     }
 
-    // Rotasi harian: window 8 produk berbeda tiap hari, stabil saat refresh
     const dailySeed = getDailySeed();
     const filterSeed = dailySeed ^ hashStringToInt(activeFilter);
     const offset = getDailyOffset(filterSeed, list.length, MAX_ITEMS);

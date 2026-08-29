@@ -109,7 +109,7 @@ export function OrderDetailModal({
         toast({ title: 'Pesanan dikonfirmasi diterima!', description: 'Terima kasih telah menggunakan ReBites.' });
         onReviewed();
         onClose();
-        // Refresh page to show updated status
+        
         window.location.reload();
       } else {
         toast({ title: 'Gagal', description: result.error ?? 'Terjadi kesalahan' });
@@ -139,7 +139,7 @@ export function OrderDetailModal({
             </DialogHeader>
 
             <div className="-mx-1 mt-1 min-h-0 flex-1 overflow-y-auto px-1">
-              {/* Order ID */}
+              {}
               <div className="flex items-center justify-between gap-2 rounded-xl bg-cream-100 px-3 py-2">
                 <p className="truncate font-display text-sm font-semibold tabular-nums text-charcoal-900">
                   #{order.orderId}
@@ -158,7 +158,7 @@ export function OrderDetailModal({
                 </button>
               </div>
 
-              {/* Status strip with action buttons */}
+              {}
               <StatusStrip
                 order={order}
                 canConfirmReceipt={!!canConfirmReceipt}
@@ -166,17 +166,17 @@ export function OrderDetailModal({
                 onConfirmReceipt={handleConfirmReceipt}
               />
 
-              {/* Delivery tracking info */}
+              {}
               {order.fulfillment === 'delivery' && orderStatus === 'out_for_delivery' && (
                 <DeliveryTrackingInfo order={order} />
               )}
 
-              {/* Pickup ready info */}
+              {}
               {order.fulfillment === 'pickup' && orderStatus === 'ready_for_pickup' && (
                 <PickupReadyInfo order={order} />
               )}
 
-              {/* Product */}
+              {}
               <SectionTitle>Produk</SectionTitle>
               <div className="mt-2 flex items-center gap-3 rounded-xl ring-1 ring-hairline p-3">
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-sage-100">
@@ -198,13 +198,13 @@ export function OrderDetailModal({
                 </div>
               </div>
 
-              {/* Fulfillment */}
+              {}
               <SectionTitle>
                 {order.fulfillment === 'delivery' ? 'Pengiriman' : 'Pengambilan'}
               </SectionTitle>
               <FulfillmentSection order={order} />
 
-              {/* Payment */}
+              {}
               <SectionTitle>Pembayaran</SectionTitle>
               <dl className="mt-2 space-y-2 rounded-xl ring-1 ring-hairline p-3.5 text-sm">
                 <Row label="Total sementara" value={formatRupiah(order.subtotal)} />
@@ -234,7 +234,7 @@ export function OrderDetailModal({
                 </div>
               </dl>
 
-              {/* Coin earned */}
+              {}
               {(order.coinEarned ?? 0) > 0 && (
                 <div className="mt-3 flex items-center gap-3 rounded-xl bg-gold-100 px-4 py-3">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white">
@@ -251,7 +251,7 @@ export function OrderDetailModal({
                 </div>
               )}
 
-              {/* Status History */}
+              {}
               <SectionTitle>Riwayat Status</SectionTitle>
               <ol className="mt-2 space-y-2.5 rounded-xl ring-1 ring-hairline p-3.5">
                 {getOrderTimeline(order).map((entry) => (
@@ -277,7 +277,7 @@ export function OrderDetailModal({
                 ))}
               </ol>
 
-              {/* Order Info */}
+              {}
               <SectionTitle>Informasi Pesanan</SectionTitle>
               <dl className="mt-2 space-y-2 rounded-xl ring-1 ring-hairline p-3.5 text-sm">
                 <Row label="ID Pesanan" value={`#${order.orderId}`} mono />
@@ -302,7 +302,7 @@ export function OrderDetailModal({
                 )}
               </dl>
 
-              {/* Review */}
+              {}
               {order.status === 'completed' && (
                 <ReviewBlock
                   orderId={order.orderId}
@@ -318,7 +318,7 @@ export function OrderDetailModal({
               )}
             </div>
 
-            {/* Footer buttons */}
+            {}
             <div className="mt-3 flex items-center gap-2 border-t border-hairline pt-3">
               {canConfirmReceipt && (
                 <button
@@ -409,7 +409,7 @@ function StatusStrip({
         </span>
       </div>
 
-      {/* Action button for buyer to confirm receipt */}
+      {}
       {canConfirmReceipt && (
         <button
           type="button"
@@ -433,7 +433,6 @@ function DeliveryTrackingInfo({ order }: { order: StoredOrder }) {
 
   if (!arrivalAt && !distance) return null;
 
-  // Calculate arrival time range (±5 min)
   const arrivalDate = new Date(arrivalAt!);
   const rangeStart = new Date(arrivalDate.getTime() - 5 * 60_000);
   const rangeEnd = new Date(arrivalDate.getTime() + 5 * 60_000);
@@ -499,7 +498,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
 
   return (
     <div className="mt-2 space-y-3 rounded-xl ring-1 ring-hairline p-3.5">
-      {/* Store */}
+      {}
       <div className="flex items-start gap-3">
         <span
           className={
@@ -532,7 +531,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
         </div>
       </div>
 
-      {/* Delivery address */}
+      {}
       {isDelivery && order.addressSnapshot && (
         <>
           <div className="ml-4 h-px bg-hairline" style={{ width: 24 }} />
@@ -639,7 +638,7 @@ function ReviewBlock({
       createdAt: new Date().toISOString(),
     })
       .then(() => {
-        // Notify seller (best-effort)
+        
         notifyNewReview({
           orderCode: orderId,
           productName,

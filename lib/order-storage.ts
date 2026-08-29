@@ -137,15 +137,11 @@ export async function getAllOrders(): Promise<StoredOrder[]> {
   return (data ?? []).map(rowToStoredOrder);
 }
 
-/** Pesanan yang masuk ke toko milik seller yang sedang login. */
 export async function getSellerOrders(): Promise<StoredOrder[]> {
   const umkm = await getSellerUmkm();
-  // Tanpa profil toko -> tidak ada pesanan masuk.
-  // (Jangan fallback ke toko demo agar data antar-penjual tidak tercampur.)
+  
   if (!umkm) return [];
 
-  // vendor_slug pada order bisa berupa slug maupun id UMKM
-  // (tergantung nilai yang dipakai saat checkout), jadi cocokkan keduanya.
   const identifiers = new Set(
     [umkm.slug, umkm.id].filter((value): value is string => Boolean(value))
   );
@@ -154,10 +150,7 @@ export async function getSellerOrders(): Promise<StoredOrder[]> {
 }
 
 export async function getOrderById(orderId: string): Promise<StoredOrder | undefined> {
-  // Pastikan session sudah di-restore SEBELUM query. Setelah redirect balik
-  // dari Xendit, query yang terlalu dini berjalan sebagai anon sehingga RLS
-  // "orders_select_participants" (khusus authenticated) memblokir baris —
-  // pesanan tampak "tidak ditemukan" padahal ada di database.
+  
   await supabase.auth.getSession();
 
   const { data, error } = await supabase
@@ -211,13 +204,9 @@ export async function patchOrder(
   return rowToStoredOrder(data);
 }
 
-/** Menandai pesanan ongoing yang lewat estimasi sebagai completed.
- *  Hanya untuk pesanan yang sudah lunas (payment_status = paid) — pesanan
- *  belum bayar (Xendit unpaid/expired) tidak akan di-auto-complete. */
 export async function completeExpiredOrders(userId: string | null | undefined): Promise<boolean> {
   if (!userId) return false;
 
-  // Ambil payment_status langsung dari DB agar tidak mengandalkan StoredOrder
   const { data: paymentRows } = await supabase
     .from('orders')
     .select('order_code, payment_status, total_price')
@@ -228,7 +217,7 @@ export async function completeExpiredOrders(userId: string | null | undefined): 
     const code = row.order_code as string;
     const status = row.payment_status as string | null;
     const total = Number(row.total_price ?? 0);
-    // Free orders (total 0) dianggap lunas walau payment_status masih unpaid sekilas
+    
     if (status === 'paid' || total === 0) paidSet.add(code);
   }
 
@@ -237,7 +226,7 @@ export async function completeExpiredOrders(userId: string | null | undefined): 
   let changed = false;    for (const order of orders) {
     if (order.status !== 'ongoing') continue;
     if (!paidSet.has(order.orderId)) continue;
-    // Skip orders with granular status that require buyer/seller action
+    
     const os = order.orderStatus;
     if (os === 'completed' || os === 'cancelled' || os === 'refunded') continue;
     if (os === 'ready_for_pickup' || os === 'out_for_delivery') continue;
@@ -251,7 +240,7 @@ export async function completeExpiredOrders(userId: string | null | undefined): 
       });
       if (updated) {
         changed = true;
-        // Kirim notifikasi selesai (best-effort, jangan block)
+        
         try {
           const { notifyOrderCompleted } = await import('./order-notifications');
           await notifyOrderCompleted({ ...order, status: 'completed', completedAt: new Date().toISOString() });
@@ -262,8 +251,6 @@ export async function completeExpiredOrders(userId: string | null | undefined): 
   return changed;
 }
 
-/** Cek progress pesanan dan kirim notifikasi delivering jika sudah 60% durasi.
- *  Dipanggil bareng completeExpiredOrders polling. */
 export async function syncDeliveringNotifications(userId: string | null | undefined): Promise<boolean> {
   if (!userId) return false;
   const { data: paymentRows } = await supabase
@@ -299,7 +286,6 @@ export async function syncDeliveringNotifications(userId: string | null | undefi
   return sent;
 }
 
-/** Kurangi stok produk secara atomik lewat RPC reserve_stock. */
 export async function reserveStock(productSlug: string, quantity: number): Promise<boolean> {
   const { data, error } = await supabase.rpc('reserve_stock', {
     p_slug: productSlug,

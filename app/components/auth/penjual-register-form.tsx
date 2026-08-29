@@ -127,7 +127,6 @@ const stepSlide: Variants = {
   }),
 };
 
-// Boxed field like reference image: rounded border, light bg, focus ring
 function FieldBox({
   id,
   label,
@@ -213,12 +212,12 @@ export default function PenjualRegisterForm() {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  // Step 3 — paket langganan wajib bayar (Basic 24.999)
+  
   const [selectedPlan, setSelectedPlan] = useState<'basic' | 'standar' | 'premium'>('basic');
   const [billing, setBilling] = useState<BillingCycle>('monthly');
   const [payProcessing, setPayProcessing] = useState(false);
   const [payError, setPayError] = useState<string | null>(null);
-  // Info untuk user yang sudah punya toko tapi belum berlangganan aktif.
+  
   const [existingStoreNotice, setExistingStoreNotice] = useState<string | null>(null);
 
   const step1Form = useForm<Step1Values>({
@@ -267,7 +266,6 @@ export default function PenjualRegisterForm() {
         step1Form.setValue("fullName", fullName);
         step1Form.setValue("email", email);
 
-        // User yang SUDAH punya toko tidak boleh diminta register ulang.
         const { getSellerUmkm } = await import("@/lib/product-storage");
         const existingUmkm = await getSellerUmkm();
         if (cancelled) return;
@@ -279,12 +277,12 @@ export default function PenjualRegisterForm() {
           const activeSub = await getActiveSubscription();
           if (cancelled) return;
           if (activeSub) {
-            // Toko + langganan aktif → langsung dashboard.
+            
             window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
             router.replace("/dashboard/penjual");
             return;
           }
-          // Toko ada tapi belum/tidak berlangganan aktif → langsung Step 3.
+          
           setExistingStoreNotice(
             `Tokomu "${existingUmkm.businessName}" sudah terdaftar. Silakan pilih paket langganan untuk melanjutkan berjualan.`
           );
@@ -294,8 +292,6 @@ export default function PenjualRegisterForm() {
           return;
         }
 
-        // Belum punya toko — dukung deep link ?step=3 dari guard dashboard
-        // (sudah punya toko tapi belum bayar; berjaga bila deteksi di atas meleset).
         if (typeof window !== "undefined") {
           const params = new URLSearchParams(window.location.search);
           const stepParam = Number(params.get("step"));
@@ -372,14 +368,13 @@ export default function PenjualRegisterForm() {
       const s2 = step2Form.getValues();
       const userId = session.user.id;
 
-      // Cegah toko duplikat: kalau user sudah punya UMKM, cek langganan aktif
       const { data: existingUmkm } = await supabase
         .from("umkm_profiles")
         .select("id")
         .eq("user_id", userId)
         .limit(1);
       if (existingUmkm && existingUmkm.length > 0) {
-        // Jika sudah punya toko tapi belum berlangganan aktif → paksa ke Step 3
+        
         const { getActiveSubscription } = await import("@/lib/subscription-storage");
         const activeSub = await getActiveSubscription();
         if (!activeSub) {
@@ -393,8 +388,6 @@ export default function PenjualRegisterForm() {
         return;
       }
 
-      // Verifikasi identitas: konfirmasi ulang password sesi yang aktif.
-      // TIDAK membuat akun baru dan TIDAK mengganti user yang sedang login.
       const { error: verifyError } = await supabase.auth.signInWithPassword({
         email: session.user.email ?? "",
         password: step1Form.getValues("password"),
@@ -407,8 +400,7 @@ export default function PenjualRegisterForm() {
       let logoUrl: string | null = null;
       if (logoFile) {
         const ext = (logoFile.name.split(".").pop() ?? "png").toLowerCase();
-        // Path unik per upload: hindari kebutuhan policy UPDATE storage
-        // (upsert path sama bisa diblokir RLS) dan cache URL lama.
+        
         const path = `logos/${userId}-${Date.now()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("umkm-logos")
@@ -453,7 +445,7 @@ export default function PenjualRegisterForm() {
       }
 
       window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
-      // Jangan langsung ke dashboard — wajib pilih paket & bayar (Basic 24.999 wajib)
+      
       setDirection(1);
       setStep(3);
       setPayError(null);
@@ -541,7 +533,7 @@ export default function PenjualRegisterForm() {
         </span>
       </motion.div>
 
-      {/* Stepper 3 langkah — Akun → Usaha → Paket */}
+      {}
       <motion.div variants={itemVariants} className="mb-5 flex-shrink-0">
         <div className="flex items-center gap-1.5">
           <div
@@ -1041,7 +1033,7 @@ export default function PenjualRegisterForm() {
                 </p>
               )}
 
-              {/* Billing toggle */}
+              {}
               <div className="flex justify-center">
                 <div className="inline-flex items-center rounded-full border border-[#DEDACF] bg-white p-1">
                   {(['monthly','yearly'] as BillingCycle[]).map((mode) => (
@@ -1058,7 +1050,7 @@ export default function PenjualRegisterForm() {
                 </div>
               </div>
 
-              {/* 3 cards paket — Basic wajib bayar */}
+              {}
               <div className="grid grid-cols-1 gap-3">
                 {SUBSCRIPTION_PLANS.map((plan) => {
                   const isSelected = selectedPlan===plan.slug;
@@ -1094,7 +1086,7 @@ export default function PenjualRegisterForm() {
                 })}
               </div>
 
-              {/* Rincian */}
+              {}
               {(() => {
                 const plan = SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)!;
                 const price = getPlanPrice(plan as any, billing);

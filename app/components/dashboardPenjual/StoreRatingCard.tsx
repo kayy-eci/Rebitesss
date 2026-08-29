@@ -15,7 +15,6 @@ export function StoreRatingCard() {
   const [reviewsLoaded, setReviewsLoaded] = useState(false);
   const [ratings, setRatings] = useState<number[]>([]);
 
-  // Rating di-scope ke toko milik user aktif (tabel reviews, bukan data demo).
   useEffect(() => {
     let cancelled = false;
     const load = async () => {

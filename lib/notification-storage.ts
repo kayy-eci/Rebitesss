@@ -149,7 +149,6 @@ export async function clearNotifications(
   dispatchUpdated();
 }
 
-/** Cari user_id pemilik UMKM berdasarkan slug toko (untuk notifikasi penjual). */
 export async function getUmkmOwnerUserId(slug: string): Promise<string | null> {
   const { data, error } = await supabase
     .from('umkm_profiles')

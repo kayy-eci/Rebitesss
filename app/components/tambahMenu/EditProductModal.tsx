@@ -142,7 +142,7 @@ export function EditProductModal({
 
     setSaving(true);
     try {
-      // Foto baru di-upload ke storage, bukan menyimpan data URL mentah.
+      
       let finalImage = image;
       if (image.startsWith('data:image')) {
         try {
@@ -179,7 +179,6 @@ export function EditProductModal({
         discountPercent,
       });
 
-      // Gagal simpan -> modal tetap terbuka dengan pesan error yang jelas.
       if (!updated) {
         setError(
           'Perubahan gagal disimpan. Pastikan menu ini milik tokomu lalu coba lagi.'

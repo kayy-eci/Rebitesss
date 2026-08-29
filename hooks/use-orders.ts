@@ -47,7 +47,7 @@ export function useOrders() {
     () =>
       orders
         .filter((order) => {
-          // Ongoing lifecycle OR new granular statuses that are not terminal
+          
           if (order.status === 'completed') return false;
           const os = order.orderStatus;
           if (os === 'completed' || os === 'cancelled' || os === 'refunded') return false;

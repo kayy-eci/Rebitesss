@@ -1,11 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-/**
- * Setel pesanan menjadi "paid" + efek sampingnya (koin, notifikasi buyer &
- * seller). Dipakai bersama oleh webhook Xendit dan endpoint verifikasi
- * (fallback saat callback webhook tidak terjangkau, mis. dev lokal).
- * Idempoten: aman dipanggil berulang untuk order yang sama.
- */
 export type SettleResult = {
   settled: boolean;
   reason?: 'not_found' | 'already_paid' | 'update_failed';
@@ -32,7 +26,6 @@ export async function settleOrderPaid(
     return { settled: false, reason: 'already_paid' };
   }
 
-  // Mark paid — bypass guard karena pakai service_role
   const { error: updErr } = await service
     .from('orders')
     .update({
@@ -48,7 +41,6 @@ export async function settleOrderPaid(
     return { settled: false, reason: 'update_failed' };
   }
 
-  // Settle coins (idempoten: cek existing)
   const coinUsed = Number(row.coin_used ?? 0);
   const coinEarned = Number(row.coin_earned ?? 0);
   const buyerId = row.buyer_id as string;
@@ -71,13 +63,12 @@ export async function settleOrderPaid(
     }
   }
 
-  // Notifikasi buyer — deep-link ke riwayat + detail
   if (buyerId) {
     const productName = (row.product_name as string) ?? 'Pesanan';
     const vendorName = (row.vendor_name as string) ?? 'Toko';
     const totalPrice = Number(row.total_price ?? 0);
     const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(externalId)}`;
-    // cegah duplikat jika webhook retry / verify ganda
+    
     const { data: existingNotifs } = await service
       .from('notifications')
       .select('type')
@@ -112,7 +103,6 @@ export async function settleOrderPaid(
       await service.from('notifications').insert(toInsert);
     }
 
-    // Notifikasi seller
     const vendorSlug = (row as Record<string, unknown>).vendor_slug as string | undefined;
     if (vendorSlug) {
       const { data: umkm } = await service
@@ -122,7 +112,7 @@ export async function settleOrderPaid(
         .maybeSingle();
       const sellerId = umkm ? (umkm as Record<string, string>).user_id : null;
       if (sellerId) {
-        // Dedupe: verifikasi & webhook bisa sama-sama memicu
+        
         const { data: existingSeller } = await service
           .from('notifications')
           .select('id')

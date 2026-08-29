@@ -66,8 +66,6 @@ export function OrderSuccessView() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const retryRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Turunan status pembayaran — didefinisikan sejak awal karena dipakai
-  // oleh effect countdown popup sebelum early-return guard.
   const isPending = paymentStatus === 'unpaid' || paymentStatus === null;
   const isFailed = paymentStatus === 'failed';
   const isPaid = !isPending && !isFailed;
@@ -77,8 +75,6 @@ export function OrderSuccessView() {
     let mounted = true;
     let attempts = 0;
 
-    // Coba muat pesanan: (1) langsung via client (RLS participants),
-    // (2) fallback ke API service-role yang bypass RLS.
     const loadOrder = async (): Promise<boolean> => {
       const direct = await getOrderById(orderId);
       if (direct) {
@@ -104,7 +100,7 @@ export function OrderSuccessView() {
             }
           }
         } catch {
-          // fallback gagal — coba lagi di iterasi berikutnya
+          
         }
       }
       return false;
@@ -113,8 +109,7 @@ export function OrderSuccessView() {
     const run = async () => {
       const found = await loadOrder();
       if (found || !mounted) return;
-      // Session bisa saja masih dalam proses restore setelah redirect
-      // balik dari Xendit — retry beberapa kali sebelum menyatakan gagal.
+      
       const maxAttempts = 5;
       retryRef.current = setInterval(async () => {
         if (!mounted && retryRef.current) {
@@ -125,7 +120,7 @@ export function OrderSuccessView() {
         attempts += 1;
         if (ok || attempts >= maxAttempts) {
           if (retryRef.current) clearInterval(retryRef.current);
-          if (!ok && mounted) setOrder(null); // benar-benar tidak ditemukan
+          if (!ok && mounted) setOrder(null); 
         }
       }, 2000);
     };
@@ -137,16 +132,13 @@ export function OrderSuccessView() {
     };
   }, [orderId]);
 
-  // Poll payment_status sampai webhook Xendit masuk (max 90 detik)
   useEffect(() => {
     if (!orderId || order === undefined) return;
     let cancelled = false;
     let elapsed = 0;
 
     const fetchStatus = async () => {
-      // Fallback verifikasi: kalau webhook Xendit tidak terjangkau (mis. dev
-      // lokal tanpa tunnel), cek status invoice langsung ke Xendit API supaya
-      // pesanan tetap lunas + notifikasi tetap dibuat. Best-effort saja.
+      
       try {
         const {
           data: { session },
@@ -163,7 +155,7 @@ export function OrderSuccessView() {
           });
         }
       } catch {
-        // verifikasi gagal — lanjut baca status dari DB
+        
       }
 
       const { data } = await supabase
@@ -181,7 +173,7 @@ export function OrderSuccessView() {
       ) {
         if (pollRef.current) clearInterval(pollRef.current);
       }
-      // saat sudah paid, pastikan popup terbuka
+      
       if (row.payment_status === 'paid') setShowPopup(true);
     };
 
@@ -201,12 +193,10 @@ export function OrderSuccessView() {
     };
   }, [orderId, order]);
 
-  // Reset countdown saat popup berhasil muncul
   useEffect(() => {
     if (isPaid && showPopup) setCountdown(5);
   }, [isPaid, showPopup]);
 
-  // Countdown 5 detik → redirect ke home otomatis (hanya untuk pembayaran berhasil)
   useEffect(() => {
     if (!isPaid || !showPopup) return;
     if (countdown <= 0) {
@@ -245,9 +235,6 @@ export function OrderSuccessView() {
     );
   }
 
-  // isPending / isFailed / isPaid sudah didefinisikan di atas
-
-  // estimasi text untuk popup
   const estimasiText = order.estimatedMinutes
     ? `${order.estimatedMinutes} menit`
     : '—';
@@ -256,7 +243,7 @@ export function OrderSuccessView() {
 
   return (
     <main className="relative min-h-screen bg-cream-50">
-      {/* Blurred background — detail pesanan */}
+      {}
       <div
         className={cn(
           'flex min-h-screen items-center justify-center px-5 py-16 transition-all duration-300',
@@ -270,7 +257,7 @@ export function OrderSuccessView() {
           transition={{ duration: 0.45, ease: EASE }}
           className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
         >
-          {/* Placeholder header untuk background (akan tertutup popup, jadi tampilkan versi muted) */}
+          {}
           <div className="bg-sage-50 px-8 pb-10 pt-9 text-center">
             <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-sage-400 shadow">
               <ReceiptText className="h-8 w-8" />
@@ -345,7 +332,7 @@ export function OrderSuccessView() {
         </motion.div>
       </div>
 
-      {/* Popup pembayaran — hanya tampil di atas blur */}
+      {}
       <Dialog open={showPopup} onOpenChange={(open) => setShowPopup(open)}>
         <DialogContent
           className="max-h-[90dvh] gap-0 overflow-hidden border-0 bg-white p-0 sm:max-w-md sm:rounded-[28px] [&>button]:hidden"
@@ -403,7 +390,7 @@ export function OrderSuccessView() {
             </div>
           )}
 
-          {/* Coin card — hanya untuk success/pending */}
+          {}
           {!isFailed && (
             <div className="px-6 -mt-5">
               <div className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10">
@@ -421,7 +408,7 @@ export function OrderSuccessView() {
           )}
 
           <div className="px-6 pb-7 pt-5">
-            {/* Mini order summary di popup juga */}
+            {}
             <div className="flex items-start gap-4 rounded-2xl border border-sage-100 bg-cream-50 p-4">
               <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-sage-100">
                 <SmartImage src={order.image} alt={order.productName} sizes="48px" />

@@ -41,7 +41,6 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
       const userId = sessionData.session?.user.id;
       if (!userId) return;
 
-      // Cari umkm milik user
       const { data: umkm, error: umkmError } = await supabase
         .from('umkm_profiles')
         .select('id')
@@ -66,7 +65,7 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
 
       if (cancelled || !subs) return;
       const rows = subs as Array<Record<string, string>>;
-      // Cari yang match external_id ATAU paling terbaru yang pending/active
+      
       const target =
         rows.find((r) => r.xendit_invoice_id && externalId.includes(r.xendit_invoice_id.slice(0, 8))) ??
         rows[0];
@@ -166,7 +165,6 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
     );
   }
 
-  // active
   return (
     <main className="min-h-screen bg-cream">
       <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col items-center justify-center px-4 py-10">

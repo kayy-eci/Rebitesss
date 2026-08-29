@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { STORE_FOLLOW_UPDATED_EVENT, getFollowedStores, type FollowedStore } from '@/lib/store-follows';
 
-/** Daftar toko yang diikuti user yang sedang login. */
 export function useFollowedStores() {
   const [stores, setStores] = useState<FollowedStore[]>([]);
   const [hydrated, setHydrated] = useState(false);

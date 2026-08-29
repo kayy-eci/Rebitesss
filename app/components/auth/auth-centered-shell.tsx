@@ -21,7 +21,7 @@ export default function AuthCenteredShell({
 
   return (
     <main className="relative flex h-screen h-[100dvh] h-[100svh] w-screen items-center justify-center overflow-hidden overscroll-none bg-[#060E0D] p-3 sm:p-4 lg:p-6 touch-none">
-      {/* Outer background - full bleed with overlay */}
+      {}
       <div className="absolute inset-0 overflow-hidden">
         <Image
           src={imageSrc}
@@ -30,7 +30,7 @@ export default function AuthCenteredShell({
           className="object-cover"
           priority
         />
-        {/* seller darker, buyer slightly lighter */}
+        {}
         {isSeller ? (
           <>
             <div className="absolute inset-0 bg-[#07140F]/85" />
@@ -45,10 +45,10 @@ export default function AuthCenteredShell({
         <div className="absolute inset-0 opacity-[0.025] [background-image:radial-gradient(#FFFFFF_1px,transparent_1px)] [background-size:22px_22px]" />
       </div>
 
-      {/* Centered card - locked height, no scroll */}
+      {}
       <div className="relative flex max-h-[calc(100dvh-24px)] max-h-[calc(100svh-24px)] w-full max-w-[1080px] flex-col overflow-hidden rounded-[20px] border border-white/10 bg-white shadow-[0_28px_80px_rgba(0,0,0,0.55),0_4px_24px_rgba(0,0,0,0.35)] sm:max-h-[calc(100dvh-32px)] lg:max-h-[calc(100dvh-48px)] lg:rounded-[24px]">
         <div className="grid max-h-full gap-0 overflow-hidden lg:grid-cols-[1.05fr_1fr]">
-          {/* Left visual panel - hidden on mobile */}
+          {}
           <div className="relative hidden min-h-[560px] max-h-[calc(100dvh-64px)] flex-col justify-between overflow-hidden rounded-[16px] bg-[#0F2E24] lg:m-2 lg:flex lg:max-h-[calc(100dvh-64px)]">
             <div className="absolute inset-0">
               <Image
@@ -99,7 +99,7 @@ export default function AuthCenteredShell({
             </div>
           </div>
 
-          {/* Right form panel - no scroll */}
+          {}
           <div className="flex max-h-[calc(100dvh-24px)] flex-col overflow-hidden bg-white px-6 py-6 sm:px-8 sm:py-7 lg:max-h-[calc(100dvh-48px)] lg:px-8 lg:py-7 xl:px-10 xl:py-8">
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
               {children}

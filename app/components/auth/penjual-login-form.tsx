@@ -121,7 +121,6 @@ export default function PenjualLoginForm() {
     try {
       const { supabase } = await import("@/lib/supabase");
 
-      // 1. Login dengan email + password (Supabase Auth)
       const { data: signInData, error: signInError } =
         await supabase.auth.signInWithPassword({
           email: emailTrim,
@@ -129,7 +128,7 @@ export default function PenjualLoginForm() {
         });
 
       if (signInError) {
-        // Mapping error umum
+        
         const msg = signInError.message;
         if (msg.includes("Invalid login credentials")) {
           throw new Error("Email atau kata sandi salah.");
@@ -140,7 +139,6 @@ export default function PenjualLoginForm() {
         throw new Error(msg);
       }
 
-      // Ambil user dari hasil signIn atau session
       const user =
         signInData.session?.user ??
         (await supabase.auth.getSession()).data.session?.user;
@@ -149,7 +147,6 @@ export default function PenjualLoginForm() {
         throw new Error("Gagal mendapatkan sesi. Silakan coba lagi.");
       }
 
-      // 2. Cek apakah user ini punya toko dan nama toko cocok
       const { data: umkm, error: umkmError } = await supabase
         .from("umkm_profiles")
         .select("id, business_name, slug")
@@ -161,7 +158,7 @@ export default function PenjualLoginForm() {
       }
 
       if (!umkm) {
-        // Bukan penjual -> logout biar tidak nyangkut di session pembeli
+        
         await supabase.auth.signOut();
         setError(
           "Akun ini belum memiliki toko. Silakan daftar sebagai penjual terlebih dahulu."
@@ -180,7 +177,6 @@ export default function PenjualLoginForm() {
         return;
       }
 
-      // 3. Berhasil -> update status & redirect
       if (typeof window !== "undefined") {
         window.dispatchEvent(new Event(SELLER_STATUS_UPDATED_EVENT));
       }

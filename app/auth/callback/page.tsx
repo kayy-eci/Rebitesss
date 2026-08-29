@@ -3,7 +3,6 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-/** Path dalam aplikasi yang boleh jadi tujuan setelah verifikasi. */
 function safeNextPath(raw: string | null): string {
   if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/home";
   return raw;
@@ -40,7 +39,7 @@ function AuthCallbackContent() {
         const { supabase } = await import("@/lib/supabase");
         let session: { user: unknown } | null = null;
         for (let attempt = 0; attempt < 10 && !session; attempt += 1) {
-          // detectSessionInUrl memproses token pada URL saat client dibuat.
+          
           const {
             data: { session: current },
           } = await supabase.auth.getSession();

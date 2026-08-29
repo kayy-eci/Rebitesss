@@ -5,15 +5,6 @@ import { settleOrderPaid } from '@/lib/server/order-settlement';
 
 export const runtime = 'nodejs';
 
-/**
- * POST /api/checkout/xendit/verify
- * Body: { orderCode }
- * Auth: Authorization: Bearer <supabase access_token>
- *
- * Fallback saat webhook Xendit tidak terjangkau (mis. dev lokal): cek status
- * invoice langsung ke Xendit API dan setel pesanan jadi paid bila sudah
- * PAID/SETTLED. Idempoten — aman dipanggil berulang dari polling client.
- */
 export async function POST(req: NextRequest) {
   const user = await getUserFromBearer(req.headers.get('authorization'));
   if (!user) {
@@ -37,7 +28,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Pesanan tidak ditemukan.' }, { status: 404 });
   }
   const row = order as Record<string, unknown>;
-  // Pembeli hanya boleh verifikasi pesanannya sendiri
+  
   if (row.buyer_id !== user.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
@@ -45,7 +36,6 @@ export async function POST(req: NextRequest) {
   const currentStatus = (row.payment_status as string) ?? 'unpaid';
   const invoiceId = row.xendit_invoice_id as string | null;
 
-  // Pesanan gratis / sudah terselesaikan tidak perlu verifikasi
   if (currentStatus !== 'unpaid' || !invoiceId) {
     return NextResponse.json({ orderCode, paymentStatus: currentStatus });
   }
@@ -73,7 +63,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ orderCode, paymentStatus: currentStatus, invoiceStatus });
   } catch (e: unknown) {
-    // Jangan gagalkan polling client — webhook tetap jadi jalur utama
+    
     const msg = e instanceof Error ? e.message : 'Gagal verifikasi invoice.';
     console.error('[checkout/xendit/verify] error', msg, { orderCode });
     return NextResponse.json({ orderCode, paymentStatus: currentStatus, verifyError: msg });

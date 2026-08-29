@@ -16,7 +16,6 @@ export async function getSellerBestSellingMenus(): Promise<BestSellingMenu[]> {
   const products = await getSellerProducts();
   const orders = await getSellerOrders();
 
-  // Tanpa pesanan nyata -> tidak ada peringkat (tanpa data dummy).
   if (orders.length === 0) return [];
 
   const soldByMenuId = new Map<string, number>();

@@ -10,7 +10,6 @@ import { BestSellingMenuRow } from '@/app/components/dashboardPenjual/BestSellin
 import { AchievementBadgesCard } from '@/app/components/dashboardPenjual/AchievementBadgesCard';
 import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCard';
 
-// Recharts berat (~ratusan KB) — dimuat hanya saat komponen ini tampil.
 const SalesActivityChartCard = dynamic(
   () =>
     import('@/app/components/dashboardPenjual/SalesActivityChartCard').then(

@@ -97,7 +97,6 @@ function sellerProductToRow(product: Partial<SellerProduct>): Record<string, unk
   return payload;
 }
 
-/** UMKM milik user yang sedang login. */
 export async function getSellerUmkm(): Promise<SellerUmkm | null> {
   const {
     data: { session },
@@ -105,10 +104,6 @@ export async function getSellerUmkm(): Promise<SellerUmkm | null> {
   const uid = session?.user?.id;
   if (!uid) return null;
 
-  // Pakai limit(1) + order alih-alih maybeSingle(): bila user (salah)
-  // memiliki lebih dari satu row umkm_profiles, maybeSingle() melempar
-  // error dan fungsi ini return null — akibatnya user yang jelas sudah
-  // punya toko terus-menerus dialihkan ke halaman registrasi ulang.
   const { data, error } = await supabase
     .from('umkm_profiles')
     .select('id, slug, business_name')
@@ -144,7 +139,6 @@ export async function getSellerProducts(): Promise<SellerProduct[]> {
   return (data ?? []).map(rowToSellerProduct);
 }
 
-/** Produk milik satu toko (UMKM) berdasarkan slug/id routing, bukan sesi viewer. */
 export async function getStoreProductsBySlug(
   slug: string
 ): Promise<{ products: SellerProduct[]; error: string | null }> {
@@ -152,7 +146,6 @@ export async function getStoreProductsBySlug(
 
   const STORE_LOAD_ERROR = 'Gagal memuat produk toko.';
 
-  // Resolusi slug → id UMKM (relasi resmi products.umkm_id).
   const bySlug = await supabase
     .from('umkm_profiles')
     .select('id')
@@ -165,7 +158,7 @@ export async function getStoreProductsBySlug(
   let umkmId: string | null = bySlug.data?.id ?? null;
 
   if (!umkmId) {
-    // Vendor tanpa slug memakai id sebagai identitas routing.
+    
     const byId = await supabase
       .from('umkm_profiles')
       .select('id')
@@ -203,9 +196,8 @@ function generateProductSlug(): string {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** Filter ownership: produk HARUS milik UMKM user aktif. id klien tidak dipercaya mentah. */
 function ownProductMatch(umkmId: string, productId: string): Record<string, unknown> {
-  // Identifier bisa berupa slug (row baru) atau uuid (row legacy tanpa slug).
+  
   return UUID_RE.test(productId)
     ? { umkm_id: umkmId, id: productId }
     : { umkm_id: umkmId, slug: productId };
@@ -219,7 +211,7 @@ export async function saveSellerProduct(
     console.error('[product-storage] tidak ada profil UMKM untuk user ini.');
     return null;
   }
-  // Enforce tier quota 3/5/15 — blokir client sebelum insert
+  
   try {
     const { readSellerPlan } = await import('@/lib/seller-plan');
     const plan = await readSellerPlan();
@@ -230,7 +222,7 @@ export async function saveSellerProduct(
         return null;
       }
     }
-    // Wajib langganan aktif — Basic berbayar
+    
     const { getActiveSubscription } = await import('@/lib/subscription-storage');
     const sub = await getActiveSubscription();
     if (!sub) {
@@ -307,7 +299,6 @@ export async function getSellerProductById(id: string): Promise<SellerProduct | 
   return products.find((p) => p.id === id);
 }
 
-/** Upload foto produk ke Supabase Storage, kembalikan URL publik. */
 export async function uploadProductImage(
   file: File | Blob,
   fileName?: string
@@ -328,8 +319,6 @@ export async function uploadProductImage(
   const { data } = supabase.storage.from('product-images').getPublicUrl(path);
   return data.publicUrl ?? null;
 }
-
-// ---- util murni (tetap sinkron) ----
 
 export function isProductAvailable(product: SellerProduct): boolean {
   if (product.stock <= 0) return false;

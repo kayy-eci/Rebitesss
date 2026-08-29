@@ -17,7 +17,6 @@ import { StoreRatingCard } from '@/app/components/dashboardPenjual/StoreRatingCa
 import { useSellerPlan } from '@/lib/seller-plan';
 import { useRequireSeller } from '@/hooks/use-require-seller';
 
-// Recharts berat (~ratusan KB) — dimuat hanya saat komponen ini tampil.
 const SalesStatsCard = dynamic(
   () =>
     import('@/app/components/dashboardPenjual/SalesStatsCard').then(
@@ -41,7 +40,7 @@ export default function VendorDashboardPage() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      // Sapaan memakai NAMA USER (metadata auth), bukan nama toko.
+      
       const { supabase } = await import('@/lib/supabase');
       const {
         data: { session },

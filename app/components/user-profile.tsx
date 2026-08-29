@@ -904,7 +904,6 @@ export function UserProfile() {
   const [isSukaiMakananDialogOpen, setIsSukaiMakananDialogOpen] =
     useState(false);
 
-  // Data untuk header & info pribadi (reuse logic ProfileSidebar)
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [joinedAt, setJoinedAt] = useState("");
@@ -925,7 +924,7 @@ export function UserProfile() {
   const [editCity, setEditCity] = useState("");
   const [editFullAddress, setEditFullAddress] = useState("");
   const [savingPersonal, setSavingPersonal] = useState(false);
-  // Avatar edit state
+  
   const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -993,14 +992,14 @@ export function UserProfile() {
 
   return (
     <div className="relative min-h-screen bg-[#F8F9FA] lg:bg-cream-50">
-      {/* Sidebar kiri — reuse desain Seller Sidebar */}
+      {}
       <ProfileSidebarNav
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
 
       <div className="lg:pl-[280px]">
-        {/* Mobile top bar tanpa header horizontal desktop */}
+        {}
         <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-sage-100 bg-white px-4 py-3 lg:hidden">
           <button
             type="button"
@@ -1016,7 +1015,7 @@ export function UserProfile() {
         </div>
 
         <main className="relative mx-auto max-w-[1100px] px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
-          {/* Judul halaman — mirip referensi My Profile */}
+          {}
           <div className="hidden lg:block">
             <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">
               Profil
@@ -1026,7 +1025,7 @@ export function UserProfile() {
             </p>
           </div>
 
-          {/* PROFILE HEADER CARD — Avatar + Info + Ikuti Toko + Sukai Makanan dalam 1 card */}
+          {}
           <motion.section
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1111,7 +1110,7 @@ export function UserProfile() {
               </div>
             </div>
 
-            {/* Stats kanan — 3 kotak: Ikuti Toko, Sukai Makanan, ReBites Coins */}
+            {}
             <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 lg:w-auto lg:min-w-[520px] lg:max-w-[600px]">
               <button
                 type="button"
@@ -1168,7 +1167,7 @@ export function UserProfile() {
             </div>
             </motion.section>
 
-            {/* Dialog: Edit Foto Profil */}
+            {}
             <Dialog
               open={isAvatarDialogOpen}
               onOpenChange={(open) => {
@@ -1249,7 +1248,7 @@ export function UserProfile() {
                         const { publicUrl, error } = await uploadAvatar(avatarFile);
                         if (error) throw new Error(error);
                         if (publicUrl) {
-                          // globalProfile will refresh via PROFILE_UPDATED_EVENT, but also force refresh here
+                          
                           refreshProfile();
                         }
                         setIsAvatarDialogOpen(false);
@@ -1277,7 +1276,7 @@ export function UserProfile() {
               </DialogContent>
             </Dialog>
 
-            {/* Dialog: Ikuti Toko */}
+            {}
           <Dialog
             open={isIkutiTokoDialogOpen}
             onOpenChange={setIsIkutiTokoDialogOpen}
@@ -1305,7 +1304,7 @@ export function UserProfile() {
             </DialogContent>
           </Dialog>
 
-          {/* Dialog: Sukai Makanan */}
+          {}
           <Dialog
             open={isSukaiMakananDialogOpen}
             onOpenChange={setIsSukaiMakananDialogOpen}
@@ -1332,7 +1331,7 @@ export function UserProfile() {
             </DialogContent>
           </Dialog>
 
-          {/* PERSONAL INFORMATION — gaya referensi 3 kolom */}
+          {}
           <motion.section
             variants={fadeUp}
             initial="hidden"
@@ -1523,8 +1522,6 @@ export function UserProfile() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
-
 
           <div className="mt-6 space-y-6"></div>
         </main>

@@ -28,7 +28,6 @@ export function OrderCard({
   const subStatus = getOrderSubStatus(order);
   const isDelivered = order.status === 'completed' || order.orderStatus === 'completed';
 
-  // Badge dinamis berdasar sub-status (diproses/diantar/disiapkan/siap-diambil/selesai)
   const badge = isDelivered
     ? { label: SUB_STATUS_LABEL[subStatus], dot: 'bg-[#16A34A]', bg: 'bg-[#F0FDF4] text-[#16A34A]', ring: 'ring-[#86EFAC]/30' }
     : subStatus === 'diantar' || subStatus === 'siap-diambil'
@@ -37,9 +36,8 @@ export function OrderCard({
 
   const dateStr = formatOrderDate(order.createdAt);
 
-  // Build description like photo: productName | vendorName | & 2 more items (if quantity >1)
   const moreText = order.quantity > 1 ? ` & ${order.quantity} items` : '';
-  // Combine to look like "Blue & pink ... | Linen ... & 2 more items"
+  
   const description = `${order.productName} | ${order.vendorName}${moreText}`;
 
   return (
@@ -58,7 +56,7 @@ export function OrderCard({
         highlighted ? 'border-primary ring-2 ring-primary/20 shadow-md' : 'border-zinc-200'
       )}
     >
-      {/* Top line: badge + date */}
+      {}
       <div className="flex items-center gap-2">
         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${badge.bg} ${badge.ring}`}>
           <span className={`h-1.5 w-1.5 rounded-full ${badge.dot}`} />
@@ -68,11 +66,11 @@ export function OrderCard({
         <span className="text-[11px] text-zinc-500">{dateStr}</span>
       </div>
 
-      {/* Middle: image + order id + desc + price + chevron */}
+      {}
       <div className="mt-3 flex items-start gap-3">
         <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
           <SmartImage src={order.image} alt={order.productName} sizes="56px" />
-          {/* small badge +4 like foto if needed - hidden */}
+          {}
         </div>
 
         <div className="min-w-0 flex-1">
@@ -81,7 +79,7 @@ export function OrderCard({
           </p>
           <p className="mt-0.5 line-clamp-2 text-[13px] leading-snug text-zinc-700">
             {description}
-            {/* 2 more items in maroon like foto if quantity >1 */}
+            {}
             {order.quantity > 1 && (
               <span className="font-medium text-[#7A1C1C]"> & {order.quantity} items</span>
             )}

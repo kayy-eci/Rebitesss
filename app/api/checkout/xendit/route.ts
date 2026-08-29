@@ -6,11 +6,6 @@ import { estimateOrderMinutes } from '@/lib/delivery-estimate';
 
 export const runtime = 'nodejs';
 
-/**
- * POST /api/checkout/xendit
- * Body: { productSlug, quantity, fulfillment, addressSnapshot?, promoCode?, useCoins? }
- * Auth: Authorization: Bearer <supabase access_token>
- */
 export async function POST(req: NextRequest) {
   try {
     const authHeader = req.headers.get('authorization');
@@ -46,7 +41,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Alamat pengiriman wajib untuk delivery.' }, { status: 400 });
     }
 
-    // Ambil produk dari DB — server adalah sumber kebenaran harga.
     const anon = createAnonServerClient();
     const { data: product, error: prodErr } = await anon
       .from('products')
@@ -69,7 +63,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Produk sedang tidak tersedia.' }, { status: 400 });
     }
 
-    // Tentukan harga efektif (flash sale jika aktif)
     let unitPrice = product.surplus_price ?? product.original_price ?? 0;
     if (
       product.flash_sale_price != null &&
@@ -87,7 +80,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Harga produk tidak valid.' }, { status: 500 });
     }
 
-    // Validasi promo code server-side
     let promoPercentOff: number | undefined;
     if (body.promoCode) {
       const code = String(body.promoCode).trim().toUpperCase();
@@ -97,7 +89,7 @@ export async function POST(req: NextRequest) {
           .select('code, discount_percent, is_active, expires_at')
           .eq('code', code)
           .maybeSingle();
-        // Fallback: tabel promo_codes mungkin memakai kolom berbeda — coba variasi
+        
         const promoAny = promoRow as Record<string, unknown> | null;
         if (promoAny) {
           const isActive = promoAny.is_active !== false;
@@ -114,7 +106,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Saldo koin server-side
     let coinBalance = 0;
     if (body.useCoins) {
       const service = createServiceClient();
@@ -143,11 +134,10 @@ export async function POST(req: NextRequest) {
       coinBalance,
     });
 
-    // Vendor info untuk snapshot
     const vendorSlug = (product as Record<string, unknown>).vendor_slug as string | undefined
       ?? (product as Record<string, unknown>).slug as string | undefined
       ?? '';
-    // Coba ambil vendor dari umkm_profiles
+    
     let vendorName = 'Toko';
     let vendorAddress: string | null = null;
     let vendorOpenHours: string | null = null;
@@ -164,22 +154,19 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Ambil info produk untuk snapshot lengkap (fallback name/image)
     const productName = (product as Record<string, unknown>).name as string ?? 'Produk';
     const imageUrl = (product as Record<string, unknown>).image_url as string ?? '';
 
-    // Buat orderId dan estimasi (berdasar jarak toko-rumah)
     const stamp = Date.now().toString(36).toUpperCase();
     const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
     const orderCode = `RB-${stamp}${rand}`;
     const nowIso = new Date().toISOString();
 
-    // Hitung estimasi berdasar jarak: preparation + travel
     const rawDistanceKm =
       (typeof body.distanceKm === 'number' && Number.isFinite(body.distanceKm) ? body.distanceKm : null) ??
       Number((product as Record<string, unknown>).distance_km ?? 1);
     const distanceKm = Math.max(0, Number.isFinite(rawDistanceKm) ? rawDistanceKm : 1);
-    // vendorSlug untuk preparation time; fallback ke product slug
+    
     const estimateVendorSlug =
       ((product as Record<string, unknown>).vendor_slug as string | undefined) ??
       (vendorSlug || body.productSlug);
@@ -191,7 +178,6 @@ export async function POST(req: NextRequest) {
     const estimatedMinutes = estimate.estimatedMinutes;
     const estimatedCompletionAt = new Date(Date.now() + estimatedMinutes * 60_000).toISOString();
 
-    // Reserve stok atomik (service role agar bypass RLS milik stok)
     const serviceClient = createServiceClient();
     const { data: reserved, error: reserveErr } = await serviceClient.rpc('reserve_stock', {
       p_slug: body.productSlug,
@@ -205,12 +191,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Stok tidak mencukupi, pesanan dibatalkan.' }, { status: 400 });
     }
 
-    // Jika total 0 (koin menutup semua) -> langsung paid tanpa Xendit
     if (pricing.total === 0) {
       const { error: insertErr } = await serviceClient.from('orders').insert({
         order_code: orderCode,
         buyer_id: user.id,
-        // FK: isi umkm_id & product_id bila NOT NULL (kompatibel kedua skema)
+        
         umkm_id: product.umkm_id ?? null,
         product_id: product.id ?? null,
         product_slug: body.productSlug,
@@ -244,13 +229,12 @@ export async function POST(req: NextRequest) {
         co2e_saved_kg: null,
       });
       if (insertErr) {
-        // Rollback stok
+        
         await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
         console.error('[checkout/xendit] insert free order error', insertErr.message, { orderCode, productSlug: body.productSlug });
         return NextResponse.json({ error: 'Gagal membuat pesanan.' }, { status: 500 });
       }
 
-      // Settle coin langsung
       if (pricing.coinUsed > 0 || pricing.coinEarned > 0) {
         const pending: Record<string, unknown>[] = [];
         if (pricing.coinUsed > 0) {
@@ -263,7 +247,6 @@ export async function POST(req: NextRequest) {
         if (coinErr) console.error('[checkout/xendit] coin settle error', coinErr.message, { orderCode });
       }
 
-      // Notifikasi (best-effort) — deep-link ke riwayat
       const siteUrl = getSiteUrl();
       const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(orderCode)}`;
       const { error: notifErr } = await serviceClient.from('notifications').insert([
@@ -290,7 +273,6 @@ export async function POST(req: NextRequest) {
 
       console.log('[checkout/xendit] free order created', { orderCode, total: 0, coinUsed: pricing.coinUsed });
 
-      // Kirim StoredOrder langsung agar client tidak perlu fetch via anon RLS (bisa gagal)
       const freeStoredOrder = {
         orderId: orderCode,
         userId: user.id,
@@ -333,7 +315,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Insert order unpaid + pending xendit
     const siteUrl = getSiteUrl();
     const successUrl = `${siteUrl}/detail/pesanan/sukses?orderId=${encodeURIComponent(orderCode)}`;
     const failureUrl = `${siteUrl}/riwayatPesanan?orderId=${encodeURIComponent(orderCode)}&payment=failed`;
@@ -378,7 +359,7 @@ export async function POST(req: NextRequest) {
     if (insertErr) {
       await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
       console.error('[checkout/xendit] insert order error', insertErr.message);
-      // Coba tanpa FK jika error karena NOT NULL/FK
+      
       if (insertErr.message.includes('umkm_id') || insertErr.message.includes('product_id')) {
         const retry = { ...insertPayload };
         delete (retry as Record<string, unknown>).umkm_id;
@@ -393,7 +374,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Buat invoice Xendit
     let invoice;
     try {
       invoice = await createXenditInvoice({
@@ -405,7 +385,7 @@ export async function POST(req: NextRequest) {
         failureRedirectUrl: failureUrl,
       });
     } catch (e: unknown) {
-      // Rollback: hapus order & release stok
+      
       await serviceClient.from('orders').delete().eq('order_code', orderCode);
       await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
       const msg = e instanceof Error ? e.message : 'Gagal membuat invoice Xendit.';
@@ -413,16 +393,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Gagal membuat invoice: ${msg}` }, { status: 502 });
     }
 
-    // Simpan invoice id
     await serviceClient
       .from('orders')
       .update({ xendit_invoice_id: invoice.id })
       .eq('order_code', orderCode);
 
-    // Notifikasi awal "pesanan dibuat" (best-effort). Webhook Xendit tidak
-    // selalu terjangkau (dev lokal / callback belum terpasang), jadi tanpa ini
-    // pembeli tidak pernah dapat notifikasi walau pesanan tampil di riwayat.
-    // Webhook sudah dedupe type 'order_created' per order_code, jadi aman.
     const deepHref = `/riwayatPesanan?orderId=${encodeURIComponent(orderCode)}`;
     const { error: notifErr } = await serviceClient.from('notifications').insert({
       user_id: user.id,

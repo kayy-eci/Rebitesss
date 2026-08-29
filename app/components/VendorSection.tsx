@@ -32,7 +32,6 @@ export function VendorSection() {
   const { plan } = useSellerPlan();
   const { vendors, loading } = useCatalog();
 
-  // Hanya tampilkan toko yang masih buka
   const openVendors = vendors.filter((v) => isOpenNow(v.openHours));
 
   const sortedVendors = plan.priorityListing

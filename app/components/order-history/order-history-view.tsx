@@ -25,7 +25,6 @@ export function OrderHistoryView() {
   const [detailOrder, setDetailOrder] = useState<StoredOrder | null>(null);
   const [highlightOrderId, setHighlightOrderId] = useState<string | null>(null);
 
-  // Deep-link ?orderId=RB-xxx → auto buka popup detail
   useEffect(() => {
     const param = searchParams.get('orderId');
     if (param) setHighlightOrderId(param);
@@ -113,7 +112,7 @@ export function OrderHistoryView() {
   return (
     <>
       <div className="w-full space-y-4">
-        {/* Filter card like foto: pills top, no breadcrumb */}
+        {}
         <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
           <OrderToolbar
             statusFilter={statusFilter}
@@ -154,14 +153,14 @@ export function OrderHistoryView() {
         )}
       </div>
 
-      {/* Popup detail - existing feature, click card / deep-link */}
+      {}
       <OrderDetailModal
         order={detailOrder}
         userId={userId}
         onClose={() => {
           setDetailOrder(null);
           setHighlightOrderId(null);
-          // bersihkan query param tanpa reload
+          
           if (typeof window !== 'undefined') {
             const url = new URL(window.location.href);
             url.searchParams.delete('orderId');

@@ -5,13 +5,6 @@ import { SUBSCRIPTION_PLANS, getPlanPrice, computePeriodEnd, type BillingCycle }
 
 export const runtime = 'nodejs';
 
-/**
- * POST /api/subscriptions/xendit
- * Body: { planSlug: 'basic'|'standar'|'premium', billing: 'monthly'|'yearly' }
- * Auth: Bearer token
- *
- * Semua paket berbayar via Xendit (Basic 24.999 wajib).
- */
 export async function POST(req: NextRequest) {
   try {
     const user = await getUserFromBearer(req.headers.get('authorization'));
@@ -34,7 +27,6 @@ export async function POST(req: NextRequest) {
 
     const service = createServiceClient();
 
-    // Cari UMKM milik user
     const { data: umkm } = await service
       .from('umkm_profiles')
       .select('id, slug, business_name')
@@ -47,11 +39,10 @@ export async function POST(req: NextRequest) {
 
     const umkmId = (umkm as Record<string, string>).id;
     const planPrice = getPlanPrice(plan, billing);
-    // Pajak 2% menggantikan Platform Fee $4 di desain referensi
+    
     const tax = Math.round(planPrice * 0.02);
     const totalAmount = planPrice + tax;
 
-    // Cari plan_id dari DB berdasarkan slug
     const { data: planRow } = await service
       .from('plans')
       .select('id')
@@ -71,7 +62,6 @@ export async function POST(req: NextRequest) {
     const successUrl = `${siteUrl}/langganan/sukses?plan=${plan.slug}&billing=${billing}&external_id=${encodeURIComponent(externalId)}`;
     const failureUrl = `${siteUrl}/dashboard/penjual/langganan?payment=failed`;
 
-    // Buat invoice Xendit (total sudah termasuk pajak 2%)
     let invoice;
     try {
       invoice = await createXenditInvoice({
@@ -88,8 +78,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Gagal membuat invoice: ${msg}` }, { status: 502 });
     }
 
-    // Simpan pending subscription — status pending, tunggu webhook untuk active
-    // Gunakan upsert: hapus pending lama untuk plan yang sama bila ada (opsional)
     const { error: insertErr } = await service.from('subscriptions').insert({
       umkm_id: umkmId,
       plan_id: planId,
@@ -98,13 +86,12 @@ export async function POST(req: NextRequest) {
       price_paid: totalAmount,
       xendit_invoice_id: invoice.id,
       xendit_status: 'PENDING',
-      // current_period akan diisi webhook saat paid
+      
     } as Record<string, unknown>);
 
     if (insertErr) {
       console.error('[subscriptions/xendit] insert pending error', insertErr.message);
-      // Jangan batalkan invoice Xendit yang sudah jadi — tetap balikin URL agar user bisa bayar,
-      // webhook nanti tetap bisa upsert berdasarkan external_id/invoice id.
+      
     }
 
     return NextResponse.json({

@@ -82,7 +82,6 @@ export async function fetchProductDetail(
   }
 }
 
-/** Produk lain se-kategori dari database (untuk section terkait). */
 export async function fetchRelatedProducts(
   category: string,
   excludeSlug: string

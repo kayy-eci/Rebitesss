@@ -12,7 +12,7 @@ export function RiwayatSidebarShell({ children }: { children: React.ReactNode })
       <ProfileSidebarNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="lg:pl-[280px]">
-        {/* Mobile top bar - like profile */}
+        {}
         <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-sage-100 bg-white px-4 py-3 lg:hidden">
           <button
             type="button"
@@ -26,7 +26,7 @@ export function RiwayatSidebarShell({ children }: { children: React.ReactNode })
         </div>
 
         <main className="mx-auto max-w-[1100px] px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
-          {/* Desktop title - plain, no breadcrumb like photo's Home > My Account > My Orders excluded */}
+          {}
           <div className="hidden lg:block">
             <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">Riwayat Transaksi</h1>
             <p className="mt-1 text-sm text-stone">Kelola dan lacak transaksi makanan surplus kamu.</p>

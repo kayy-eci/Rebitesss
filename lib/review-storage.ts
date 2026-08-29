@@ -44,7 +44,6 @@ async function resolveUmkmId(slug: string): Promise<string | null> {
   return data?.id ?? null;
 }
 
-/** Ulasan produk (kind='product') untuk halaman detail produk. */
 export async function getProductReviews(
   productSlug: string
 ): Promise<Review[]> {
@@ -60,7 +59,6 @@ export async function getProductReviews(
   return data.map(rowToDisplayReview);
 }
 
-/** Ulasan layanan toko (kind='service') untuk halaman detail toko. */
 export async function getServiceReviews(storeSlug: string): Promise<Review[]> {
   const umkmId = await resolveUmkmId(storeSlug);
   if (!umkmId) return [];
@@ -75,7 +73,6 @@ export async function getServiceReviews(storeSlug: string): Promise<Review[]> {
   return data.map(rowToDisplayReview);
 }
 
-/** Jumlah ulasan atas toko milik user yang sedang login (semua kind). */
 export async function getSellerProductReviewCount(): Promise<number> {
   const {
     data: { session },
@@ -186,7 +183,7 @@ export async function saveReview(review: OrderReview): Promise<void> {
   if (review.rating < 1 || review.rating > 5) {
     throw new Error('Rating harus 1-5');
   }
-  // Ambil data pesanan untuk validasi & enrichment (hanya pesanan selesai milik pembeli yang boleh direview)
+  
   const { data: orderRow, error: orderError } = await supabase
     .from('orders')
     .select('id, product_id, umkm_id, product_name, lifecycle_status, buyer_id')
@@ -202,7 +199,7 @@ export async function saveReview(review: OrderReview): Promise<void> {
   if ((orderRow as Record<string, any>).buyer_id !== review.userId) {
     throw new Error('Hanya pembeli pesanan yang dapat memberi ulasan');
   }
-  // Ambil profil pembeli untuk author_name/avatar
+  
   let authorName: string | null = null;
   let authorAvatar: string | null = null;
   const { data: profile } = await supabase

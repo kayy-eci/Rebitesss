@@ -140,7 +140,7 @@ export default function Home() {
     null,
   );
   const storeClosedModal = useStoreClosedModal();
-  // Nama mitra diambil langsung dari daftar toko di database.
+  
   const [partners, setPartners] = useState<string[]>([]);
 
   useEffect(() => {

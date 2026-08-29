@@ -27,7 +27,7 @@ export function CheckoutSuccessDialog() {
   const { successOrder } = useCheckout();
 
   const handleDismiss = () => {
-    // Tutup tanpa memilih -> anggap selesai, kembali ke beranda.
+    
     router.push('/home');
   };
 

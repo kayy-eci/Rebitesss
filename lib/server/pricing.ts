@@ -1,7 +1,3 @@
-/**
- * Pricing constants — MIRROR dari lib/useOrderCalculation.ts
- * Wajib sinkron dengan client agar hasil hitung server sama dengan UI.
- */
 
 export const ADMIN_FEE_AMOUNT = 2000;
 export const DELIVERY_FEE = 8000;
@@ -12,7 +8,7 @@ export interface PricingInput {
   unitPrice: number;
   quantity: number;
   fulfillment: 'delivery' | 'pickup';
-  promoPercentOff?: number; // 0-100
+  promoPercentOff?: number; 
   useCoins: boolean;
   coinBalance: number;
 }

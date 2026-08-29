@@ -26,7 +26,6 @@ async function getSessionUserId(): Promise<string | null> {
   return session?.user?.id ?? null;
 }
 
-/** Resolusi identifier toko (slug atau uuid) -> uuid umkm_profiles. */
 async function resolveUmkmId(key: string): Promise<string | null> {
   const trimmed = key.trim();
   if (!trimmed) return null;
@@ -41,7 +40,7 @@ async function resolveUmkmId(key: string): Promise<string | null> {
 export async function isFollowingStore(key: string): Promise<boolean> {
   try {
     const userId = await getSessionUserId();
-    // Guest fallback localStorage
+    
     if (!userId) {
       if (typeof window !== 'undefined') {
         try {
@@ -54,7 +53,7 @@ export async function isFollowingStore(key: string): Promise<boolean> {
     }
     const umkmId = await resolveUmkmId(key);
     if (!umkmId) {
-      // fallback to key itself
+      
       if (typeof window !== 'undefined') {
         try {
           const raw = localStorage.getItem('rebites_followed_stores');
@@ -71,7 +70,7 @@ export async function isFollowingStore(key: string): Promise<boolean> {
       .eq('umkm_id', umkmId)
       .maybeSingle();
     if (error && error.code !== 'PGRST116') {
-      // Fallback to localStorage if table missing / RLS error
+      
       if (typeof window !== 'undefined') {
         try {
           const raw = localStorage.getItem('rebites_followed_stores');
@@ -125,14 +124,13 @@ function removeLocalFollow(key: string) {
   setLocalFollowedKeys(next);
 }
 
-/** Set/unset status follow. Return true bila operasi berhasil disimpan. */
 export async function setFollowingStore(
   key: string,
   follow: boolean
 ): Promise<boolean> {
   const userId = await getSessionUserId();
   if (!userId) {
-    // Guest: simpan lokal juga agar UI tidak terasa bug, lalu redirect
+    
     if (follow) addLocalFollow(key);
     else removeLocalFollow(key);
     dispatchFollowUpdated();
@@ -140,7 +138,7 @@ export async function setFollowingStore(
     return false;
   }
   const umkmId = await resolveUmkmId(key);
-  // Jika umkmId tidak ketemu, fallback pakai key sebagai slug untuk local cache
+  
   const effectiveKey = umkmId || key;
 
   if (follow) {
@@ -167,14 +165,13 @@ export async function setFollowingStore(
       return true;
     } catch (e: any) {
       console.error('[store-follows] gagal mengikuti toko, fallback lokal:', e?.message || e);
-      // Fallback lokal agar profil tetap muncul
+      
       addLocalFollow(key);
       dispatchFollowUpdated();
       return true;
     }
   }
 
-  // Unfollow
   try {
     const { error } = await supabase
       .from('store_follows')
@@ -201,7 +198,7 @@ async function fetchLocalFollowedStores(): Promise<FollowedStore[]> {
   const results: FollowedStore[] = [];
   for (const key of keys) {
     try {
-      // Coba resolve ke umkm_profiles untuk dapat detail
+      
       const umkmId = await resolveUmkmId(key);
       if (umkmId) {
         const { data } = await supabase.from('umkm_profiles').select('id, slug, business_name, logo_url, category, rating').eq('id', umkmId).maybeSingle();
@@ -217,7 +214,7 @@ async function fetchLocalFollowedStores(): Promise<FollowedStore[]> {
           continue;
         }
       }
-      // Fallback minimal jika tidak ketemu
+      
       results.push({
         umkmId: key,
         slug: key,
@@ -252,7 +249,7 @@ export async function getFollowedStores(): Promise<FollowedStore[]> {
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
     if (error || !data) {
-      // Fallback lokal jika tabel belum ada / RLS error
+      
       const local = await fetchLocalFollowedStores();
       if (local.length > 0) return local;
       return [];
@@ -270,7 +267,7 @@ export async function getFollowedStores(): Promise<FollowedStore[]> {
         rating: Number(umkm?.rating ?? 5),
       };
     });
-    // Merge dengan lokal yang belum sinkron (jika ada)
+    
     const localKeys = getLocalFollowedKeys();
     const remoteIds = new Set(remote.map((r) => r.umkmId).concat(remote.map((r) => r.slug).filter(Boolean) as string[]));
     const missingLocal = localKeys.filter((k) => !remoteIds.has(k));

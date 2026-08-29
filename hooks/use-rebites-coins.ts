@@ -116,8 +116,6 @@ export async function settleOrderCoins(
 export function useRebitesCoins(): CoinsSnapshot {
   const [snapshot, setSnapshot] = useState<CoinsSnapshot>(EMPTY_SNAPSHOT);
 
-  // Nama channel harus unik per instance: channel dengan nama sama akan
-  // di-reuse supabase-js, dan .on() pada channel yang sudah subscribe error.
   const channelIdRef = useRef(
     `rebites-coin-transactions-${Math.random().toString(36).slice(2)}`
   );
