@@ -360,19 +360,24 @@ export async function POST(req: NextRequest) {
 
     const { error: insertErr } = await serviceClient.from('orders').insert(insertPayload);
     if (insertErr) {
-      await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
       console.error('[checkout/xendit] insert order error', insertErr.message);
-      
+
       if (insertErr.message.includes('umkm_id') || insertErr.message.includes('product_id')) {
+        // Skema DB lama tanpa kolom umkm_id/product_id — coba ulang tanpa snapshot relasi.
+        // PENTING: stok TIDAK dilepas dulu di sini. Jika retry berhasil, stok yang
+        // sudah dikunci reserve_stock tetap terpakai (mencegah oversell).
         const retry = { ...insertPayload };
         delete (retry as Record<string, unknown>).umkm_id;
         delete (retry as Record<string, unknown>).product_id;
         const { error: retryErr } = await serviceClient.from('orders').insert(retry);
         if (retryErr) {
+          await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
           console.error('[checkout/xendit] retry insert error', retryErr.message);
           return NextResponse.json({ error: 'Gagal membuat pesanan (DB).' }, { status: 500 });
         }
       } else {
+        // Insert gagal total — kembalikan stok yang sudah dikunci agar tidak bocor.
+        await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
         return NextResponse.json({ error: 'Gagal membuat pesanan.' }, { status: 500 });
       }
     }
