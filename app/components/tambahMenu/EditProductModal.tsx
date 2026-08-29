@@ -10,6 +10,7 @@ import {
   type SellerProduct,
 } from '@/lib/product-storage';
 import { MENU_CATEGORIES } from './types';
+import { NumberField } from './NumberField';
 import {
   Dialog,
   DialogContent,
@@ -69,7 +70,7 @@ export function EditProductModal({
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [category, setCategory] = useState<string>('');
-  const [price, setPrice] = useState(0);
+  const [surplusPrice, setSurplusPrice] = useState(0);
   const [stock, setStock] = useState(0);
   const [description, setDescription] = useState('');
   const [normalPrice, setNormalPrice] = useState(0);
@@ -87,7 +88,7 @@ export function EditProductModal({
     setName(product.name);
     setImage(product.image);
     setCategory(product.category);
-    setPrice(product.surplusPrice);
+    setSurplusPrice(product.surplusPrice);
     setStock(product.stock);
     setDescription(product.description ?? '');
     setNormalPrice(product.originalPrice);
@@ -131,8 +132,8 @@ export function EditProductModal({
       setError('Kategori tidak boleh kosong.');
       return;
     }
-    if (typeof price !== 'number' || Number.isNaN(price) || price < 0) {
-      setError('Harga harus berupa angka dan tidak boleh negatif.');
+    if (typeof surplusPrice !== 'number' || Number.isNaN(surplusPrice) || surplusPrice < 0) {
+      setError('Harga jual harus berupa angka dan tidak boleh negatif.');
       return;
     }
     if (!Number.isFinite(normalPrice) || normalPrice < 0) {
@@ -161,14 +162,14 @@ export function EditProductModal({
         normalPrice > 0
           ? Math.max(
               0,
-              Math.round((1 - Math.max(0, price) / normalPrice) * 100)
+              Math.round((1 - Math.max(0, surplusPrice) / normalPrice) * 100)
             )
           : 0;
       const updated = await patchSellerProduct(product.id, {
         name: trimmedName,
         image: finalImage || '/foods/ikansayur.jpg',
         category,
-        surplusPrice: Math.max(0, price),
+        surplusPrice: Math.max(0, surplusPrice),
         stock: nextStock,
         description,
         originalPrice: normalPrice,
@@ -284,34 +285,20 @@ export function EditProductModal({
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="edit-product-price" className={labelClass}>
-                Harga Jual (Rp)
-              </label>
-              <input
-                id="edit-product-price"
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-                className={inputClass}
-                min={0}
-              />
-            </div>
-            <div>
-              <label htmlFor="edit-product-stock" className={labelClass}>
-                Stok (porsi)
-              </label>
-              <input
-                id="edit-product-stock"
-                type="number"
-                value={stock}
-                onChange={(e) =>
-                  setStock(Math.max(0, Number(e.target.value)))
-                }
-                className={inputClass}
-                min={0}
-              />
-            </div>
+            <NumberField
+              id="edit-product-price"
+              label="Harga Jual"
+              value={surplusPrice}
+              onChange={setSurplusPrice}
+              step={1000}
+            />
+            <NumberField
+              id="edit-product-stock"
+              label="Stok"
+              value={stock}
+              onChange={setStock}
+              unitLabel="porsi"
+            />
           </div>
 
           <div className="rounded-xl bg-cream-50 p-3">
@@ -331,22 +318,13 @@ export function EditProductModal({
 
             {showAdvanced && (
               <div className="mt-3 space-y-4 rounded-lg border border-sage-100 bg-white p-3">
-                <div>
-                  <label htmlFor="edit-product-normalprice" className={labelClass}>
-                    Harga Normal (Rp)
-                  </label>
-                  <input
-                    id="edit-product-normalprice"
-                    type="number"
-                    value={normalPrice}
-                    onChange={(e) => setNormalPrice(Number(e.target.value))}
-                    className={inputClass}
-                    min={0}
-                  />
-                  <p className="mt-1 text-[11px] text-sage-500">
-                    Diskon otomatis dihitung dari harga normal vs harga jual.
-                  </p>
-                </div>
+                <NumberField
+                  id="edit-product-normalprice"
+                  label="Harga Normal"
+                  value={normalPrice}
+                  onChange={setNormalPrice}
+                  step={1000}
+                />
 
                 <div>
                   <label htmlFor="edit-product-description" className={labelClass}>

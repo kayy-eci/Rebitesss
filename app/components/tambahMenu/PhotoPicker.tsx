@@ -3,7 +3,6 @@
 import { Camera, ImagePlus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/SmartImage';
-import { FOOD_PRESETS } from './types';
 
 interface PhotoPickerProps {
   value: string;
@@ -69,28 +68,6 @@ export function PhotoPicker({ value, onChange }: PhotoPickerProps) {
         className="sr-only"
         onChange={handleFile}
       />
-
-      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500">
-        atau pilih contoh foto
-      </p>
-      <div className="mt-2 flex flex-wrap gap-2">
-        {FOOD_PRESETS.map((preset) => (
-          <button
-            key={preset.id}
-            type="button"
-            onClick={() => onChange(preset.src)}
-            aria-label={`Gunakan contoh foto ${preset.label}`}
-            className={cn(
-              'relative h-14 w-14 overflow-hidden rounded-xl ring-2 transition-all',
-              value === preset.src
-                ? 'ring-primary ring-offset-2 ring-offset-cream-50'
-                : 'ring-sage-100 hover:ring-sage-500/50'
-            )}
-          >
-            <SmartImage src={preset.src} alt={`Contoh foto ${preset.label}`} />
-          </button>
-        ))}
-      </div>
     </div>
   );
 }
