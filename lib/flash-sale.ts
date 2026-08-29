@@ -1,5 +1,6 @@
 'use client';
 
+import { supabase } from './supabase';
 import { readSellerPlan, type SellerEntitlements } from './seller-plan';
 import {
   SELLER_VENDOR_NAME,
@@ -147,7 +148,7 @@ function wibHourOf(iso: string): number {
   return (Number(parts.find((p) => p.type === 'hour')?.value ?? 0) % 24);
 }
 
-function slotFromStartIso(iso: string): UrgentSlot {
+export function slotFromStartIso(iso: string): UrgentSlot {
   const hour = wibHourOf(iso);
   if (hour >= 18) return '18-21';
   if (hour >= 15) return '15-18';
@@ -155,41 +156,152 @@ function slotFromStartIso(iso: string): UrgentSlot {
   return '09-12';
 }
 
+/** 4 slot waktu Flash Sale — selaras dengan FlashSaleSection SLOTS */
+export const FLASH_SLOTS: { key: UrgentSlot; label: string; range: string; start: number; end: number }[] = [
+  { key: '09-12', label: 'Pagi', range: '09.00–12.00', start: 9, end: 12 },
+  { key: '12-15', label: 'Siang', range: '12.00–15.00', start: 12, end: 15 },
+  { key: '15-18', label: 'Sore', range: '15.00–18.00', start: 15, end: 18 },
+  { key: '18-21', label: 'Malam', range: '18.00–21.00', start: 18, end: 21 },
+];
+
+const WIB_OFFSET_MS = 7 * 3600 * 1000;
+
+function getWibParts(date = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
+  return {
+    year: Number(get('year')),
+    month: Number(get('month')),
+    day: Number(get('day')),
+    hour: Number(get('hour')) % 24,
+    minute: Number(get('minute')),
+    second: Number(get('second')),
+  };
+}
+
+function wibEpochOfToday(h: number, min = 0, sec = 0, baseDate = new Date()) {
+  const p = getWibParts(baseDate);
+  return Date.UTC(p.year, p.month - 1, p.day, h, min, sec) - WIB_OFFSET_MS;
+}
+
+/** Hitung ISO start/end untuk slot yang dipilih. Jika slot hari ini sudah lewat, otomatis pakai besok. Tidak perlu kolom baru di DB. */
+export function slotToWibIso(slot: UrgentSlot, now = Date.now()): { startIso: string; endIso: string } {
+  const def = FLASH_SLOTS.find((s) => s.key === slot);
+  if (!def) throw new Error('Slot tidak valid');
+  const todayStart = wibEpochOfToday(def.start, 0, 0, new Date(now));
+  const todayEnd = wibEpochOfToday(def.end, 0, 0, new Date(now));
+  // Jika slot hari ini sudah berakhir (end <= now WIB), pakai besok
+  if (todayEnd <= now) {
+    const tomorrow = new Date(now + 24 * 3600 * 1000);
+    const start = wibEpochOfToday(def.start, 0, 0, tomorrow);
+    const end = wibEpochOfToday(def.end, 0, 0, tomorrow);
+    return { startIso: new Date(start).toISOString(), endIso: new Date(end).toISOString() };
+  }
+  return { startIso: new Date(todayStart).toISOString(), endIso: new Date(todayEnd).toISOString() };
+}
+
+/** Ambil produk Flash Sale aktif — query global (semua UMKM), bukan hanya penjual yang login. Tidak merusak DB: hanya baca kolom flash_sale_* yang sudah ada. */
 export async function getActiveFlashSaleProducts(
   now: number = Date.now()
 ): Promise<FlashSaleCardItem[]> {
-  const products = await getSellerProducts();
+  // Fallback ke data seller lokal jika supabase belum siap / error network → tetap tampil untuk seller yang sedang login
+  const fetchGlobal = async (): Promise<SellerProduct[]> => {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*, umkm:umkm_profiles(business_name)')
+      .not('flash_sale_price', 'is', null)
+      .eq('status', 'available')
+      .gt('stock', 0)
+      .order('created_at', { ascending: false });
+    if (error) {
+      console.error('[flash-sale] gagal memuat flash sale global:', error.message);
+      return [];
+    }
+    return ((data ?? []) as Record<string, unknown>[]).map((row) => {
+      const r = row as Record<string, unknown>;
+      const umkm = r.umkm as Record<string, unknown> | null;
+      return {
+        id: (r.slug as string) ?? (r.id as string),
+        name: (r.name as string) ?? '',
+        category: (r.category as string) ?? 'Lainnya',
+        description: (r.description as string) ?? '',
+        image: (r.image_url as string) ?? '/foods/ikansayur.jpg',
+        originalPrice: Number(r.original_price ?? 0),
+        surplusPrice: Number(r.surplus_price ?? 0),
+        discountPercent: Number(r.discount_percent ?? 0),
+        stock: Number(r.stock ?? 0),
+        startTime: ((r.sell_window_start as string) ?? '09:00').slice(0, 5),
+        endTime: ((r.sell_window_end as string) ?? '21:00').slice(0, 5),
+        allDay: (r.all_day as boolean) ?? false,
+        isSurplusToday: (r.is_surplus_today as boolean) ?? true,
+        featured: (r.featured as boolean) ?? false,
+        // map vendor name dari join
+        vendorName: (umkm?.business_name as string) ?? (r.vendor_name as string) ?? SELLER_VENDOR_NAME,
+        flashSale:
+          r.flash_sale_price != null
+            ? {
+                price: Number(r.flash_sale_price),
+                startIso: r.flash_sale_start as string,
+                endIso: r.flash_sale_end as string,
+              }
+            : null,
+        createdAt: (r.created_at as string) ?? new Date().toISOString(),
+      } as SellerProduct & { vendorName: string };
+    });
+  };
+
+  let products: (SellerProduct & { vendorName?: string })[] = [];
+  try {
+    products = await fetchGlobal();
+  } catch {
+    products = [];
+  }
+  // Jika global kosong (mis. RLS membatasi atau offline), fallback ke produk seller lokal agar penjual tetap melihat hasilnya
+  if (products.length === 0) {
+    try {
+      const local = await getSellerProducts();
+      products = local.filter((p) => p.flashSale != null) as typeof products;
+    } catch {}
+  }
+
   return products
-    .filter((product) => product.flashSale != null)
+    .filter((product) => (product as SellerProduct).flashSale != null)
     .filter(
       (product) =>
-        resolveFlashSaleStatus(product, now) === 'active' ||
-        resolveFlashSaleStatus(product, now) === 'scheduled'
+        resolveFlashSaleStatus(product as SellerProduct, now) === 'active' ||
+        resolveFlashSaleStatus(product as SellerProduct, now) === 'scheduled'
     )
     .map((product) => {
-      const flash = product.flashSale!;
-      const isActive = resolveFlashSaleStatus(product, now) === 'active';
-      const price = isActive ? flash.price : product.surplusPrice;
+      const p = product as SellerProduct & { vendorName?: string };
+      const flash = p.flashSale!;
+      const isActive = resolveFlashSaleStatus(p, now) === 'active';
+      const price = isActive ? flash.price : p.surplusPrice;
       const discountPercent =
-        isActive && product.originalPrice > 0
-          ? Math.max(
-              0,
-              Math.round((1 - flash.price / product.originalPrice) * 100)
-            )
-          : product.discountPercent;
+        isActive && p.originalPrice > 0
+          ? Math.max(0, Math.round((1 - flash.price / p.originalPrice) * 100))
+          : p.discountPercent;
 
       return {
-        id: product.id,
-        name: product.name,
-        vendorName: SELLER_VENDOR_NAME,
-        image: product.image,
-        category: product.category as UrgentItem['category'],
+        id: p.id,
+        name: p.name,
+        vendorName: p.vendorName ?? SELLER_VENDOR_NAME,
+        image: p.image,
+        category: p.category as UrgentItem['category'],
         rating: 4.7,
         distanceKm: 1.8,
-        availableFrom: product.startTime,
-        availableTo: product.endTime,
-        stockLabel: `${product.stock} porsi tersisa`,
-        originalPrice: product.originalPrice,
+        availableFrom: p.startTime,
+        availableTo: p.endTime,
+        stockLabel: `${p.stock} porsi tersisa`,
+        originalPrice: p.originalPrice,
         discountedPrice: price,
         discountPercent,
         expiresAt: flash.endIso,

@@ -31,12 +31,16 @@ import { useStoreProducts } from '@/hooks/use-store-products';
 import { useSellerStatus } from '@/hooks/use-seller-status';
 import {
   countFlashSaleProducts,
+  FLASH_SLOTS,
   getFlashQuota,
   removeFlashSale,
   resolveFlashSaleStatus,
   setFlashSale,
+  slotFromStartIso,
+  slotToWibIso,
   type FlashSaleStatus,
 } from '@/lib/flash-sale';
+import type { UrgentSlot } from '@/lib/types';
 import type { SellerProduct } from '@/lib/product-storage';
 import { SellerShell } from '@/app/components/dashboardPenjual/SellerShell';
 import { Card } from '@/app/components/dashboardPenjual/Card';
@@ -319,8 +323,7 @@ function FlashSalePanel({
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
   const [price, setPrice] = useState('');
-  const [startPart, setStartPart] = useState({ date: '', time: '' });
-  const [endPart, setEndPart] = useState({ date: '', time: '' });
+  const [selectedSlot, setSelectedSlot] = useState<UrgentSlot>('09-12');
 
   const isBasic = quota === 0;
   const occupiesSlot = cfg != null;
@@ -328,13 +331,24 @@ function FlashSalePanel({
   const switchDisabled = isBasic || (!canEnable && !occupiesSlot);
 
   const startEditing = () => {
-    const baseStart = cfg
-      ? new Date(cfg.startIso)
-      : new Date(Date.now() + 5 * 60_000);
-    const baseEnd = cfg ? new Date(cfg.endIso) : new Date(Date.now() + 6 * 3_600_000);
     setPrice(cfg ? String(cfg.price) : String(Math.max(1000, Math.round(product.surplusPrice * 0.8))));
-    setStartPart(toInputParts(baseStart));
-    setEndPart(toInputParts(baseEnd));
+    if (cfg) {
+      try {
+        const hour = Number(
+          new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jakarta', hour: '2-digit', hour12: false }).formatToParts(
+            new Date(cfg.startIso)
+          ).find((p) => p.type === 'hour')?.value ?? '9'
+        );
+        if (hour >= 18) setSelectedSlot('18-21');
+        else if (hour >= 15) setSelectedSlot('15-18');
+        else if (hour >= 12) setSelectedSlot('12-15');
+        else setSelectedSlot('09-12');
+      } catch {
+        setSelectedSlot('09-12');
+      }
+    } else {
+      setSelectedSlot('09-12');
+    }
     setError('');
     setEditing(true);
   };
@@ -362,16 +376,25 @@ function FlashSalePanel({
       setError('Harga Flash Sale tidak valid.');
       return;
     }
-    const startDate = new Date(`${startPart.date}T${startPart.time}`);
-    const endDate = new Date(`${endPart.date}T${endPart.time}`);
-    if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
-      setError('Periode Flash Sale tidak valid.');
+    if (priceNum >= product.surplusPrice) {
+      setError('Harga Flash Sale harus lebih rendah dari harga normal.');
+      return;
+    }
+    // Hitung start/end dari slot yang dipilih (hari ini/besok WIB). Tidak perlu input tanggal manual.
+    let startIso: string;
+    let endIso: string;
+    try {
+      const iso = slotToWibIso(selectedSlot);
+      startIso = iso.startIso;
+      endIso = iso.endIso;
+    } catch {
+      setError('Slot Flash Sale tidak valid.');
       return;
     }
     setFlashSale(product.id, {
       price: priceNum,
-      startIso: startDate.toISOString(),
-      endIso: endDate.toISOString(),
+      startIso,
+      endIso,
     }).then((result) => {
       if (!result.ok) {
         setError(result.error ?? 'Gagal menyimpan Flash Sale.');
@@ -476,50 +499,58 @@ function FlashSalePanel({
             </div>
           </div>
 
-          { }
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {(
-              [
-                { label: 'Mulai', part: startPart, setPart: setStartPart },
-                { label: 'Berakhir', part: endPart, setPart: setEndPart },
-              ] as const
-            ).map(({ label, part, setPart }) => (
-              <div key={label} className="rounded-xl bg-white p-2.5">
-                <label className="block text-[10px] font-semibold uppercase tracking-wider text-charcoal-900">
-                  {label}
-                </label>
-                <div className="mt-1 flex gap-1.5">
-                  <input
-                    type="date"
-                    value={part.date}
-                    onChange={(event) => {
-                      setPart({ ...part, date: event.target.value });
+          {/* Pilih Waktu Flash Sale: Pagi/Siang/Sore/Malam — produk akan tampil di slot ini di home */}
+          <div className="rounded-xl bg-white p-2.5">
+            <label className="block text-[10px] font-semibold uppercase tracking-wider text-charcoal-900">
+              Waktu Flash Sale
+            </label>
+            <p className="mt-1 text-[11px] leading-relaxed text-sage-500">
+              Pilih jam tampil di section Flash Sale home. Produk akan tampil di slot yang dipilih.
+            </p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {FLASH_SLOTS.map((slot) => {
+                const active = selectedSlot === slot.key;
+                return (
+                  <button
+                    key={slot.key}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSlot(slot.key);
                       setError('');
                     }}
-                    className="h-8 w-full rounded-lg border border-sage-200 bg-white px-2 text-[11px] text-charcoal-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  />
-                  <input
-                    type="time"
-                    value={part.time}
-                    onChange={(event) => {
-                      setPart({ ...part, time: event.target.value });
-                      setError('');
-                    }}
-                    className="h-8 w-full rounded-lg border border-sage-200 bg-white px-2 text-[11px] text-charcoal-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-              </div>
-            ))}
+                    className={cn(
+                      'rounded-xl border px-3 py-2.5 text-left transition-colors',
+                      active
+                        ? 'border-primary bg-primary text-white shadow-sm'
+                        : 'border-sage-200 bg-white text-charcoal-900 hover:border-primary hover:bg-primary/5'
+                    )}
+                  >
+                    <span className="text-xs font-bold">{slot.label}</span>
+                    <span className={cn('block text-[11px]', active ? 'text-white/80' : 'text-sage-500')}>
+                      {slot.range}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {startPart.date && startPart.time && endPart.date && endPart.time && (
-            <p className="text-[11px] leading-relaxed text-sage-500">
-              Mulai: {formatPeriodLabel(new Date(`${startPart.date}T${startPart.time}`).toISOString())}
-              <br />
-              Berakhir:{' '}
-              {formatPeriodLabel(new Date(`${endPart.date}T${endPart.time}`).toISOString())}
-            </p>
-          )}
+          {(() => {
+            try {
+              const iso = slotToWibIso(selectedSlot);
+              return (
+                <p className="text-[11px] leading-relaxed text-sage-500">
+                  Mulai: {formatPeriodLabel(iso.startIso)}
+                  <br />
+                  Berakhir: {formatPeriodLabel(iso.endIso)}
+                  <br />
+                  <span className="text-[10px]">Jika slot hari ini sudah lewat, otomatis jadwal besok.</span>
+                </p>
+              );
+            } catch {
+              return null;
+            }
+          })()}
 
           {error && (
             <p className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-2.5 py-1.5 text-[11px] font-medium text-red-600">
@@ -574,6 +605,24 @@ function FlashSalePanel({
                 <span className="text-[10px] font-bold text-primary">Diskon {draftDiscount}%</span>
               )}
               <span className="text-xs font-bold text-charcoal-900">{formatRupiah(cfg.price)}</span>
+            </span>
+          </div>
+          <div className="flex items-start justify-between gap-2 text-[11px] text-sage-500">
+            <span className="flex items-center gap-1">
+              <Clock className="h-3 w-3 shrink-0" />
+              Slot
+            </span>
+            <span className="text-right font-medium text-charcoal-900">
+              {(() => {
+                try {
+                  const slotKey = slotFromStartIso(cfg.startIso);
+                  const slotDef = FLASH_SLOTS.find((s) => s.key === slotKey);
+                  return slotDef ? `${slotDef.label} (${slotDef.range})` : slotKey;
+                } catch {
+                  return '-';
+                }
+              })()}{' '}
+              • {status === 'active' ? 'Tampil di Home' : status === 'scheduled' ? 'Akan tampil' : 'Berakhir'}
             </span>
           </div>
           <div className="flex items-start justify-between gap-2 text-[11px] text-sage-500">

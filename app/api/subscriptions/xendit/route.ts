@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     const umkmId = (umkm as Record<string, string>).id;
     const planPrice = getPlanPrice(plan, billing);
     
-    const tax = Math.round(planPrice * 0.02);
+    const tax = Math.round(planPrice * 0.12);
     const totalAmount = planPrice + tax;
 
     const { data: planRow } = await service
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
         externalId,
         amount: totalAmount,
         payerEmail: user.email,
-        description: `ReBites ${plan.name} (${billing}) - Total sementara ${planPrice} + Pajak 2% ${tax} - ${shortId}`,
+        description: `ReBites ${plan.name} (${billing}) - Total sementara ${planPrice} + Pajak 12% ${tax} - ${shortId}`,
         successRedirectUrl: successUrl,
         failureRedirectUrl: failureUrl,
       });

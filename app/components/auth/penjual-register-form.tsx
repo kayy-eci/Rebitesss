@@ -1055,7 +1055,7 @@ export default function PenjualRegisterForm() {
                 {SUBSCRIPTION_PLANS.map((plan) => {
                   const isSelected = selectedPlan===plan.slug;
                   const price = getPlanPrice(plan as any, billing);
-                  const total = price + Math.round(price*0.02);
+                  const total = price + Math.round(price*0.12);
                   return (
                     <button
                       key={plan.slug}
@@ -1072,7 +1072,7 @@ export default function PenjualRegisterForm() {
                         <span className="font-display text-xl font-bold text-[#225138]">{formatRupiah(price)}</span>
                         <span className="ml-1 text-xs text-[#6B6A63]">/ {billing==='yearly'?'tahun':'bulan'}</span>
                       </p>
-                      <p className="text-[11px] text-[#9A9994]">+ Pajak 2% → {formatRupiah(total)}</p>
+                      <p className="text-[11px] text-[#9A9994]">+ Pajak 12% → {formatRupiah(total)}</p>
                       <ul className="mt-2 space-y-1">
                         {plan.features.map((f) => (
                           <li key={f} className="flex gap-1.5 text-[11px] leading-snug text-[#225138]">
@@ -1090,7 +1090,7 @@ export default function PenjualRegisterForm() {
               {(() => {
                 const plan = SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)!;
                 const price = getPlanPrice(plan as any, billing);
-                const tax = Math.round(price*0.02);
+                const tax = Math.round(price*0.12);
                 const total = price + tax;
                 const periodEnd = new Date(); if(billing==='yearly') periodEnd.setFullYear(periodEnd.getFullYear()+1); else periodEnd.setMonth(periodEnd.getMonth()+1);
                 return (
@@ -1126,7 +1126,7 @@ export default function PenjualRegisterForm() {
                   disabled={payProcessing}
                   className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#143B2D] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white hover:bg-[#0F2E24] disabled:opacity-60"
                 >
-                  {payProcessing ? 'Memproses…' : `Bayar ${formatRupiah(getPlanPrice(SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)! as any, billing)+Math.round(getPlanPrice(SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)! as any, billing)*0.02))} via Xendit`}
+                  {payProcessing ? 'Memproses…' : `Bayar ${formatRupiah(getPlanPrice(SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)! as any, billing)+Math.round(getPlanPrice(SUBSCRIPTION_PLANS.find(p=>p.slug===selectedPlan)! as any, billing)*0.12))} via Xendit`}
                   {!payProcessing && <ArrowRight className="h-3.5 w-3.5" />}
                 </button>
               </div>

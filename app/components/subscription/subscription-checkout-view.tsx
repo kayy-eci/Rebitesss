@@ -78,7 +78,7 @@ export function SubscriptionCheckoutView() {
   const isFree = false;
   const price = getPlanPrice(plan, billing);
   const subtotal = price;
-  const tax = Math.round(subtotal * 0.02);
+  const tax = Math.round(subtotal * 0.12);
   const total = subtotal + tax;
   const periodEndLabel = computePeriodEnd(billing).toLocaleDateString('id-ID', {
     day: 'numeric',
@@ -158,7 +158,7 @@ export function SubscriptionCheckoutView() {
         {chooserPlans.map((p) => {
           const isSelected = p.slug === selectedSlug;
           const pPrice = getPlanPrice(p, billing);
-          const pTotal = pPrice + Math.round(pPrice * 0.02);
+          const pTotal = pPrice + Math.round(pPrice * 0.12);
           return (
             <button
               key={p.slug}
@@ -185,7 +185,7 @@ export function SubscriptionCheckoutView() {
                 <span className="font-display text-2xl font-bold text-[#225138]">{formatRupiah(pPrice)}</span>
                 <span className="ml-1 text-xs text-[#6B6A63]">/ {billing === 'yearly' ? 'tahun' : 'bulan'}</span>
               </p>
-              <p className="mt-1 text-[11px] text-[#9A9994]">+ Pajak 2% → {formatRupiah(pTotal)}</p>
+              <p className="mt-1 text-[11px] text-[#9A9994]">+ Pajak 12% → {formatRupiah(pTotal)}</p>
               <ul className="mt-3 space-y-1.5">
                 {p.features.slice(0, 3).map((f) => (
                   <li key={f} className="flex gap-1.5 text-[12px] leading-snug text-[#225138]">
@@ -240,7 +240,7 @@ export function SubscriptionCheckoutView() {
               <dd className="font-medium tabular-nums text-[#225138]">{formatRupiah(subtotal)}</dd>
             </div>
             <div className="flex items-center justify-between text-[14px]">
-              <dt className="text-[#6B6A63]">Pajak 2%</dt>
+              <dt className="text-[#6B6A63]">Pajak 12%</dt>
               <dd className="font-medium tabular-nums text-[#225138]">{formatRupiah(tax)}</dd>
             </div>
             <div className="flex items-center justify-between border-t border-[#DEDACF] pt-3">
@@ -281,7 +281,7 @@ export function SubscriptionCheckoutView() {
               `Bayar ${formatRupiah(total)} via Xendit`
             )}
           </button>
-          <p className="mt-2.5 text-center text-[11px] text-[#9A9994]">Aman & terverifikasi otomatis oleh Xendit. Pajak 2% sudah termasuk.</p>
+          <p className="mt-2.5 text-center text-[11px] text-[#9A9994]">Aman & terverifikasi otomatis oleh Xendit. Pajak 12% sudah termasuk.</p>
         </div>
 
         {}
@@ -310,7 +310,7 @@ export function SubscriptionCheckoutView() {
                 <span className="font-medium text-[#225138]">{formatRupiah(subtotal)}</span>
               </div>
               <div className="flex items-center justify-between text-sm mt-2">
-                <span className="text-[#6B6A63]">Pajak 2%</span>
+                <span className="text-[#6B6A63]">Pajak 12%</span>
                 <span className="font-medium text-[#225138]">{formatRupiah(tax)}</span>
               </div>
               <div className="mt-2 flex items-center justify-between border-t border-[#DEDACF] pt-2 font-semibold">

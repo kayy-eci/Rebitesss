@@ -18,6 +18,7 @@ import {
   getActiveFlashSaleProducts,
   type FlashSaleCardItem,
 } from "@/lib/flash-sale";
+import { PRODUCTS_UPDATED_EVENT } from "@/lib/product-storage";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white";
@@ -378,11 +379,16 @@ export function FlashSaleSection({
 
   useEffect(() => {
     let mounted = true;
-    getActiveFlashSaleProducts().then((items) => {
-      if (mounted) setSellerFlashItems(items);
-    });
+    const load = () => {
+      getActiveFlashSaleProducts().then((items) => {
+        if (mounted) setSellerFlashItems(items);
+      });
+    };
+    load();
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, load);
     return () => {
       mounted = false;
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, load);
     };
   }, [tick]);
 
