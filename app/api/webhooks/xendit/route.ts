@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/server/supabase';
 import { settleOrderPaid } from '@/lib/server/order-settlement';
-import { computePeriodEnd } from '@/lib/subscription-plans';
+import { activateSubscriptionPaid } from '@/lib/server/subscription-activation';
 
 export const runtime = 'nodejs';
 
@@ -134,65 +134,18 @@ export async function POST(req: NextRequest) {
   // ------------------------------------------------------------
   if (externalId.startsWith('SUB-')) {
     if (normalizedStatus === 'PAID' || normalizedStatus === 'SETTLED') {
-      // Cari subscription pending dengan invoice id ini
-      const { data: sub } = await service
-        .from('subscriptions')
-        .select('id, umkm_id, plan_id, billing, price_paid, status, xendit_invoice_id')
-        .eq('xendit_invoice_id', invoiceId)
-        .maybeSingle();
-
-      // Fallback: coba cari via external_id di log (kalau insert belum sempat)
-      let subRow = sub as Record<string, unknown> | null;
-      if (!subRow) {
-        // externalId berisi short umkm; coba cari pending terbaru untuk fallback
-        console.warn('[webhook/xendit] sub not found by invoice, trying by status pending');
-        // Biarkan tetap warn — invoice sudah paid tapi pending row tidak ada = bikin baru
-      }
-
-      if (subRow && subRow.status === 'active') {
+      const result = await activateSubscriptionPaid(
+        service,
+        invoiceId,
+        payload.payment_channel ?? payload.payment_method ?? null
+      );
+      if (result.reason === 'already_active') {
         return NextResponse.json({ received: true, already: 'active' });
       }
-
-      // Ambil plan & billing dari subRow atau dari payload description (parse)
-      // Jika pending row ada, kita aktivasi. Jika tidak ada (edge), coba buat dari externalId parsing — skip, balikin ok.
-      if (subRow) {
-        const billing = (subRow.billing as string) ?? 'monthly';
-        const now = new Date();
-        const periodEnd = computePeriodEnd(billing as 'monthly' | 'yearly', now.getTime());
-        const periodStart = now.toISOString();
-
-        await service
-          .from('subscriptions')
-          .update({
-            status: 'active',
-            xendit_status: 'PAID',
-            current_period_start: periodStart,
-            current_period_end: periodEnd.toISOString(),
-            updated_at: now.toISOString(),
-            payment_method_id: payload.payment_channel ?? 'xendit',
-          } as Record<string, unknown>)
-          .eq('id', subRow.id as string);
-
-        // Notif seller
-        const umkmId = subRow.umkm_id as string;
-        const { data: umkm2 } = await service
-          .from('umkm_profiles')
-          .select('user_id, name')
-          .eq('id', umkmId)
-          .maybeSingle();
-        if (umkm2) {
-          const sellerId = (umkm2 as Record<string, string>).user_id;
-          await service.from('notifications').insert({
-            user_id: sellerId,
-            role: 'seller',
-            type: 'payment_success',
-            title: 'Langganan Aktif!',
-            message: `Pembayaran langganan ReBites berhasil. Paket aktif hingga ${periodEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}.`,
-            reference_id: externalId,
-            href: '/dashboard/penjual/langganan',
-          });
-        }
+      if (result.reason === 'update_failed') {
+        return NextResponse.json({ error: 'DB update failed' }, { status: 500 });
       }
+      // not_found → biarkan jatuh ke received (fallback verify endpoint / retry webhook)
     } else if (normalizedStatus === 'EXPIRED' || normalizedStatus === 'FAILED' || normalizedStatus === 'VOIDED') {
       await service
         .from('subscriptions')

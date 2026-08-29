@@ -45,6 +45,15 @@ function valuesToRow(values: AddressFormValues): AddressRow {
   };
 }
 
+/** Header auth Bearer untuk memanggil API backend profile. */
+async function getAuthHeaders(): Promise<Record<string, string> | null> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.access_token) return null;
+  return { Authorization: `Bearer ${session.access_token}` };
+}
+
 export function useAddresses() {
   const { userId, loading: userLoading } = useCurrentUser();
   const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
@@ -64,13 +73,29 @@ export function useAddresses() {
 
     (async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('addresses')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: true });
+      let list: DeliveryAddress[] = [];
+      try {
+        const headers = await getAuthHeaders();
+        if (headers) {
+          const res = await fetch('/api/profile/addresses', { headers });
+          if (res.ok) {
+            const json = (await res.json()) as { addresses?: AddressRow[] };
+            list = (json.addresses ?? []).map(rowToAddress);
+          }
+        }
+      } catch {
+        // fallback di bawah
+      }
+      if (list.length === 0) {
+        // Fallback: baca langsung dari tabel via RLS
+        const { data, error } = await supabase
+          .from('addresses')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: true });
+        list = error ? [] : (data ?? []).map(rowToAddress);
+      }
       if (!mounted) return;
-      const list = error ? [] : (data ?? []).map(rowToAddress);
       setAddresses(list);
       const selected = list.find((item) => item.id) ?? null;
       setSelectedAddressId((prev) =>
@@ -89,12 +114,17 @@ export function useAddresses() {
       setSelectedAddressId(id);
       if (!userId) return;
       (async () => {
-        await supabase
-          .from('addresses')
-          .update({ is_selected: false })
-          .eq('user_id', userId)
-          .neq('id', id);
-        await supabase.from('addresses').update({ is_selected: true }).eq('id', id);
+        try {
+          const headers = await getAuthHeaders();
+          if (!headers) return;
+          await fetch('/api/profile/addresses', {
+            method: 'PUT',
+            headers: { ...headers, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, is_selected: true }),
+          });
+        } catch {
+          // Optimistic UI — biarkan state lokal yang dipakai
+        }
       })();
     },
     [userId]
@@ -103,19 +133,29 @@ export function useAddresses() {
   const addAddress = useCallback(
     async (values: AddressFormValues): Promise<DeliveryAddress | null> => {
       if (!userId) return null;
-      const { data, error } = await supabase
-        .from('addresses')
-        .insert({ user_id: userId, ...valuesToRow(values) })
-        .select()
-        .maybeSingle();
-      if (error || !data) {
-        console.error('[use-addresses] gagal menambah alamat:', error?.message);
+      try {
+        const headers = await getAuthHeaders();
+        if (!headers) return null;
+        const res = await fetch('/api/profile/addresses', {
+          method: 'POST',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify(valuesToRow(values)),
+        });
+        if (!res.ok) {
+          const json = (await res.json().catch(() => null)) as { error?: string } | null;
+          console.error('[use-addresses] gagal menambah alamat:', json?.error ?? res.status);
+          return null;
+        }
+        const json = (await res.json()) as { address?: AddressRow };
+        if (!json.address) return null;
+        const created = rowToAddress(json.address);
+        setAddresses((prev) => [...prev, created]);
+        selectAddress(created.id);
+        return created;
+      } catch (e) {
+        console.error('[use-addresses] gagal menambah alamat:', e);
         return null;
       }
-      const created = rowToAddress(data);
-      setAddresses((prev) => [...prev, created]);
-      selectAddress(created.id);
-      return created;
     },
     [userId, selectAddress]
   );
@@ -123,19 +163,26 @@ export function useAddresses() {
   const updateAddress = useCallback(
     async (id: string, values: AddressFormValues): Promise<void> => {
       if (!userId) return;
-      const { data, error } = await supabase
-        .from('addresses')
-        .update(valuesToRow(values))
-        .eq('id', id)
-        .eq('user_id', userId)
-        .select()
-        .maybeSingle();
-      if (error || !data) {
-        console.error('[use-addresses] gagal memperbarui alamat:', error?.message);
-        return;
+      try {
+        const headers = await getAuthHeaders();
+        if (!headers) return;
+        const res = await fetch('/api/profile/addresses', {
+          method: 'PUT',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, ...valuesToRow(values) }),
+        });
+        if (!res.ok) {
+          const json = (await res.json().catch(() => null)) as { error?: string } | null;
+          console.error('[use-addresses] gagal memperbarui alamat:', json?.error ?? res.status);
+          return;
+        }
+        const json = (await res.json()) as { address?: AddressRow };
+        if (!json.address) return;
+        const updated = rowToAddress(json.address);
+        setAddresses((prev) => prev.map((item) => (item.id === id ? updated : item)));
+      } catch (e) {
+        console.error('[use-addresses] gagal memperbarui alamat:', e);
       }
-      const updated = rowToAddress(data);
-      setAddresses((prev) => prev.map((item) => (item.id === id ? updated : item)));
     },
     [userId]
   );

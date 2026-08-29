@@ -51,18 +51,36 @@ export function useProfile() {
         const email = user.email ?? '';
         const fallbackName = metaName?.trim() || email.split('@')[0] || 'Pengguna ReBites';
 
-        // Try fetch from profiles table
+        // Try fetch via backend API (GET /api/profile) — fallback langsung ke tabel
         let avatarUrl: string | null = null;
         let fullNameFromDb: string | null = null;
         try {
-          const { data: row, error } = await supabase
-            .from('profiles')
-            .select('avatar_url, full_name')
-            .eq('id', user.id)
-            .maybeSingle();
-          if (!error && row) {
-            avatarUrl = (row as { avatar_url: string | null }).avatar_url ?? null;
-            fullNameFromDb = (row as { full_name: string | null }).full_name ?? null;
+          const token = session?.access_token;
+          let ok = false;
+          if (token) {
+            const res = await fetch('/api/profile', {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) {
+              const json = (await res.json()) as {
+                profile?: { full_name: string | null; avatar_url: string | null };
+              };
+              avatarUrl = json.profile?.avatar_url ?? null;
+              fullNameFromDb = json.profile?.full_name ?? null;
+              ok = true;
+            }
+          }
+          if (!ok) {
+            // Fallback: baca langsung dari tabel profiles via RLS
+            const { data: row, error } = await supabase
+              .from('profiles')
+              .select('avatar_url, full_name')
+              .eq('id', user.id)
+              .maybeSingle();
+            if (!error && row) {
+              avatarUrl = (row as { avatar_url: string | null }).avatar_url ?? null;
+              fullNameFromDb = (row as { full_name: string | null }).full_name ?? null;
+            }
           }
         } catch {
           // ignore, fallback to meta
@@ -120,8 +138,9 @@ export async function uploadAvatar(file: File): Promise<{ publicUrl: string | nu
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  const uid = session?.user.id;
-  if (!uid) return { publicUrl: null, error: 'Sesi tidak ditemukan, silakan login ulang.' };
+  if (!session?.user.id) {
+    return { publicUrl: null, error: 'Sesi tidak ditemukan, silakan login ulang.' };
+  }
 
   // Validate
   const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -133,60 +152,75 @@ export async function uploadAvatar(file: File): Promise<{ publicUrl: string | nu
     return { publicUrl: null, error: 'Ukuran file maksimal 2MB.' };
   }
 
-  const ext = file.name.split('.').pop()?.toLowerCase() || (file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg');
-  const safeExt = ['jpg', 'jpeg', 'png', 'webp'].includes(ext) ? ext : 'jpg';
-  const path = `${uid}/avatar.${safeExt}`;
-
-  const { error: uploadError } = await supabase.storage.from('avatars').upload(path, file, {
-    cacheControl: '3600',
-    upsert: true,
-    contentType: file.type,
-  });
-
-  if (uploadError) {
-    return { publicUrl: null, error: uploadError.message || 'Gagal upload foto.' };
-  }
-
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from('avatars').getPublicUrl(path);
-
-  // Bust cache by appending timestamp query (supabase public url ignores query but helps browser cache)
-  const bustedUrl = publicUrl ? `${publicUrl}?t=${Date.now()}` : null;
-
-  // Update profiles table — single source of truth
-  // Try update first
-  let dbError: { message: string } | null = null;
-  const { error: updErr } = await supabase.from('profiles').update({ avatar_url: bustedUrl ?? publicUrl }).eq('id', uid);
-  if (updErr) dbError = updErr;
-  else {
-    // Verify row exists, if not, insert
-    const { data: check } = await supabase.from('profiles').select('id').eq('id', uid).maybeSingle();
-    if (!check) {
-      const { error: insErr } = await supabase.from('profiles').insert({
-        id: uid,
-        email: session.user.email ?? '',
-        avatar_url: bustedUrl ?? publicUrl,
-      } as never);
-      if (insErr) dbError = insErr;
-      else dbError = null;
-    }
-  }
-  if (dbError) {
-    return { publicUrl: null, error: dbError.message || 'Gagal menyimpan ke profil.' };
-  }
-
-  // Also sync to auth metadata for fallback
+  // Upload via backend API (POST /api/profile/avatar) — server yang
+  // menyimpan ke bucket `avatars` dan update profiles.avatar_url.
   try {
-    await supabase.auth.updateUser({ data: { avatar_url: bustedUrl ?? publicUrl } });
-  } catch {
-    // ignore metadata failure, profiles is primary
+    const form = new FormData();
+    form.append('file', file);
+    const res = await fetch('/api/profile/avatar', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${session.access_token}` },
+      body: form,
+    });
+    const json = (await res.json().catch(() => null)) as {
+      publicUrl?: string | null;
+      error?: string;
+    } | null;
+    if (!res.ok || !json?.publicUrl) {
+      return { publicUrl: null, error: json?.error || 'Gagal upload foto.' };
+    }
+
+    // Broadcast
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event(PROFILE_UPDATED_EVENT));
+    }
+
+    return { publicUrl: json.publicUrl, error: null };
+  } catch (e) {
+    return {
+      publicUrl: null,
+      error: e instanceof Error ? e.message : 'Gagal upload foto.',
+    };
+  }
+}
+
+/** Simpan nama profil via backend API (PATCH /api/profile). */
+export async function updateProfileName(fullName: string): Promise<{ error: string | null }> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.access_token) {
+    return { error: 'Sesi tidak ditemukan, silakan login ulang.' };
   }
 
-  // Broadcast
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new Event(PROFILE_UPDATED_EVENT));
-  }
+  try {
+    const res = await fetch('/api/profile', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ fullName }),
+    });
+    if (!res.ok) {
+      const json = (await res.json().catch(() => null)) as { error?: string } | null;
+      return { error: json?.error || 'Gagal menyimpan nama.' };
+    }
 
-  return { publicUrl: bustedUrl ?? publicUrl, error: null };
+    // Sinkronkan juga metadata sesi client agar navbar langsung ikut ter-update
+    try {
+      await supabase.auth.updateUser({ data: { full_name: fullName.trim() } });
+    } catch {
+      // ignore — profiles (server) tetap sumber kebenaran
+    }
+
+    // Broadcast
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event(PROFILE_UPDATED_EVENT));
+    }
+
+    return { error: null };
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Gagal menyimpan nama.' };
+  }
 }
