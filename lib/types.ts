@@ -92,6 +92,10 @@ export interface DeliveryAddress {
 
 export type OrderLifecycleStatus = "ongoing" | "completed";
 
+/** Status progres pesanan yang dikendalikan penjual di dashboard. */
+export type OrderProgressStatus = "disiapkan" | "siap-diambil" | "diantar";
+
+
 
 export interface GeoPoint {
   latitude: number;
@@ -128,6 +132,9 @@ export interface StoredOrder {
 
   promoCode?: string | null;
   status?: OrderLifecycleStatus;
+
+  /** Di-set penjual dari dashboard; kosong = fallback estimasi timer (pesanan lama). */
+  progressStatus?: OrderProgressStatus;
 
   estimatedMinutes?: number;
 

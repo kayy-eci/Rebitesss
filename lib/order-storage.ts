@@ -57,6 +57,7 @@ export function rowToStoredOrder(row: OrderRow): StoredOrder {
     vendorOpenHours: row.vendor_open_hours ?? undefined,
     preparationMinutes: row.preparation_minutes ?? undefined,
     co2eSavedKg: row.co2e_saved_kg ?? undefined,
+    progressStatus: row.progress_status ?? undefined,
   };
 }
 
@@ -139,13 +140,24 @@ export async function getSellerOrders(): Promise<StoredOrder[]> {
   // (Jangan fallback ke toko demo agar data antar-penjual tidak tercampur.)
   if (!umkm) return [];
 
-  // vendor_slug pada order bisa berupa slug maupun id UMKM
-  // (tergantung nilai yang dipakai saat checkout), jadi cocokkan keduanya.
-  const identifiers = new Set(
-    [umkm.slug, umkm.id].filter((value): value is string => Boolean(value))
-  );
-  const all = await getAllOrders();
-  return all.filter((order) => identifiers.has(order.vendorSlug));
+  // vendor_slug pada order bisa berupa slug maupun id UMKM (tergantung nilai
+  // yang dipakai saat checkout), dan pesanan lama mungkin hanya mengisi
+  // umkm_id. Cocokkan keduanya supaya pesanan tetap muncul di dashboard.
+  const conditions = [umkm.slug, umkm.id]
+    .filter((value): value is string => Boolean(value))
+    .map((value) => `vendor_slug.eq.${value}`);
+  if (umkm.id) conditions.push(`umkm_id.eq.${umkm.id}`);
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .or(conditions.join(','))
+    .order('created_at', { ascending: false });
+  if (error) {
+    console.error('[order-storage] gagal memuat pesanan penjual:', error.message);
+    return [];
+  }
+  return (data ?? []).map(rowToStoredOrder);
 }
 
 export async function getOrderById(orderId: string): Promise<StoredOrder | undefined> {
@@ -172,6 +184,7 @@ const PATCH_COLUMN_MAP: Record<string, string> = {
   status: 'lifecycle_status',
   completedAt: 'completed_at',
   paymentMethodId: 'payment_method_id',
+  progressStatus: 'progress_status',
   note: 'note',
 };
 
@@ -270,6 +283,10 @@ export async function syncDeliveringNotifications(userId: string | null | undefi
   for (const order of orders) {
     if (order.status !== 'ongoing') continue;
     if (!paidSet.has(order.orderId)) continue;
+    // Status dikendalikan penjual (progress_status terisi) — notifikasi
+    // delivering dikirim dari dashboard penjual saat status diubah,
+    // bukan dari timer estimasi.
+    if (order.progressStatus) continue;
     if (!order.estimatedCompletionAt) continue;
     const start = new Date(order.createdAt).getTime();
     const end = new Date(order.estimatedCompletionAt).getTime();

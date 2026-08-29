@@ -144,13 +144,13 @@ export async function POST(req: NextRequest) {
     });
 
     // Vendor info untuk snapshot
-    const vendorSlug = (product as Record<string, unknown>).vendor_slug as string | undefined
-      ?? (product as Record<string, unknown>).slug as string | undefined
-      ?? '';
-    // Coba ambil vendor dari umkm_profiles
     let vendorName = 'Toko';
     let vendorAddress: string | null = null;
     let vendorOpenHours: string | null = null;
+    // products tidak punya kolom vendor_slug — slug toko wajib diambil dari
+    // umkm_profiles agar pesanan tercatat ke penjual yang tepat dan muncul
+    // di dashboard "Pesanan Masuk" miliknya.
+    let vendorSlug = (product as Record<string, unknown>).vendor_slug as string | undefined ?? '';
     if (product.umkm_id) {
       const { data: vendor } = await anon
         .from('umkm_profiles')
@@ -158,9 +158,11 @@ export async function POST(req: NextRequest) {
         .eq('id', product.umkm_id)
         .maybeSingle();
       if (vendor) {
-        vendorName = (vendor as Record<string, unknown>).business_name as string ?? vendorName;
-        vendorAddress = (vendor as Record<string, unknown>).address as string | null;
-        vendorOpenHours = (vendor as Record<string, unknown>).open_hours as string | null;
+        const vendorInfo = vendor as Record<string, unknown>;
+        vendorName = vendorInfo.business_name as string ?? vendorName;
+        vendorAddress = vendorInfo.address as string | null;
+        vendorOpenHours = vendorInfo.open_hours as string | null;
+        vendorSlug = (vendorInfo.slug as string | undefined) ?? vendorSlug;
       }
     }
 
@@ -180,9 +182,7 @@ export async function POST(req: NextRequest) {
       Number((product as Record<string, unknown>).distance_km ?? 1);
     const distanceKm = Math.max(0, Number.isFinite(rawDistanceKm) ? rawDistanceKm : 1);
     // vendorSlug untuk preparation time; fallback ke product slug
-    const estimateVendorSlug =
-      ((product as Record<string, unknown>).vendor_slug as string | undefined) ??
-      (vendorSlug || body.productSlug);
+    const estimateVendorSlug = vendorSlug || body.productSlug;
     const estimate = estimateOrderMinutes({
       fulfillment: body.fulfillment as 'delivery' | 'pickup',
       distanceKm,
@@ -233,6 +233,7 @@ export async function POST(req: NextRequest) {
         coin_earned: pricing.coinEarned,
         promo_code: body.promoCode?.toUpperCase() ?? null,
         lifecycle_status: 'ongoing',
+        progress_status: 'disiapkan',
         estimated_minutes: estimatedMinutes,
         estimated_completion_at: estimatedCompletionAt,
         distance_km: distanceKm,
@@ -363,6 +364,7 @@ export async function POST(req: NextRequest) {
       coin_earned: pricing.coinEarned,
       promo_code: body.promoCode?.toUpperCase() ?? null,
       lifecycle_status: 'ongoing',
+      progress_status: 'disiapkan',
       estimated_minutes: estimatedMinutes,
       estimated_completion_at: estimatedCompletionAt,
       distance_km: distanceKm,

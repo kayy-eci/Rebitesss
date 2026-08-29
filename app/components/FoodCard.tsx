@@ -12,11 +12,22 @@ import { openStoreClosedModal } from "@/lib/store-closed-modal-store";
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
-export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?: (id: string) => void }) {
+export function FoodCard({
+  item,
+  onViewDetail,
+  forceUnavailable = false,
+}: {
+  item: FoodItem;
+  onViewDetail?: (id: string) => void;
+  /** Dipakai Detail Toko: paksa kartu jadi tidak tersedia (stok habis / jam jual habis). */
+  forceUnavailable?: boolean;
+}) {
   const { isLiked, toggle } = useLikedFoods();
   const liked = isLiked(item.id);
+  const isUnavailable = forceUnavailable || item.stockLabel === "Habis";
 
   const handleOpen = () => {
+    if (isUnavailable) return;
     if (!isStoreOpen(item.availableFrom, item.availableTo)) {
       openStoreClosedModal(item.availableFrom, item.availableTo);
       return;
@@ -43,8 +54,19 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
           src={item.image}
           alt={`Foto ${item.name} dari ${item.vendorName}`}
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
-          className="transition-transform duration-500 group-hover:scale-105"
+          className={cn(
+            "transition-transform duration-500 group-hover:scale-105",
+            isUnavailable && "grayscale-[40%]",
+          )}
         />
+        {/* Overlay tidak tersedia (stok habis / di luar jam jual) */}
+        {isUnavailable && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/40">
+            <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-charcoal-900 shadow-lg">
+              {item.stockLabel === "Habis" ? "Stok Habis" : "Tidak Tersedia"}
+            </span>
+          </div>
+        )}
         {/* Badge - top left - reference style */}
         {item.discountPercent > 0 && (
           <div className="absolute left-3 top-3 z-20 rounded-full bg-[#E53935] px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
@@ -106,19 +128,25 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
           </span>
         </div>
 
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleOpen();
-          }}
-          className={cn(
-            "mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-caramel focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2",
-            FOCUS_RING,
-          )}
-        >
-          Lihat Detail
-        </button>
+        {isUnavailable ? (
+          <div className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-sm font-semibold text-zinc-400">
+            {item.stockLabel === "Habis" ? "Stok Habis" : "Di Luar Jam Jual"}
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpen();
+            }}
+            className={cn(
+              "mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-caramel focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2",
+              FOCUS_RING,
+            )}
+          >
+            Lihat Detail
+          </button>
+        )}
       </div>
     </article>
   );
