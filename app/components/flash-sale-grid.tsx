@@ -220,13 +220,11 @@ function CountdownBox({
 
 function FlashSaleCard({
   item,
-  live,
-  status,
+  mode,
   index,
 }: {
   item: GridItem;
-  live: boolean;
-  status: string | null;
+  mode: "live" | "past" | "future";
   index: number;
 }) {
   const stockCount = parseStockCount(item.stockLabel);
@@ -234,13 +232,17 @@ function FlashSaleCard({
     stockCount === null ? null : Math.max(8, Math.min(95, stockCount * 8));
   const savings = Math.max(0, item.originalPrice - item.price);
   const router = useRouter();
+  const isLive = mode === "live";
+  const status = mode === "past" ? "Tidak Tersedia" : "Akan Datang";
+  const stockText =
+    mode === "past" ? "Habis" : mode === "future" ? "Akan Datang" : `Sisa ${stockCount ?? "beberapa"} porsi`;
 
   return (
     <Reveal delay={0.08 * index} className="h-full">
       <article
         className={cn(
-          "group relative flex h-full flex-col rounded-[24px] border bg-white pt-20 px-6 pb-6 transition-all duration-300",
-          live
+          "group relative flex h-full flex-col rounded-[24px] border bg-white pt-20 px-5 pb-5 transition-all duration-300",
+          isLive
             ? "border-hairline/70 shadow-[0_12px_30px_-18px_rgba(46,42,34,0.3)] hover:-translate-y-1.5 hover:border-caramel/30 hover:shadow-[0_22px_44px_-20px_rgba(46,42,34,0.35)]"
             : "border-hairline/50 bg-white/80 shadow-[0_10px_24px_-18px_rgba(46,42,34,0.2)]",
         )}
@@ -248,7 +250,7 @@ function FlashSaleCard({
         <div
           className={cn(
             "absolute -top-10 left-6 h-[136px] w-[136px] overflow-hidden rounded-full border-[3px] border-white bg-cream shadow-[0_12px_24px_-12px_rgba(46,42,34,0.4)]",
-            !live && "grayscale-[0.4]",
+            !isLive && "grayscale-[0.4]",
           )}
         >
           <SmartImage
@@ -257,14 +259,14 @@ function FlashSaleCard({
             sizes="136px"
             className={cn(
               "h-full w-full object-cover transition-transform duration-500",
-              live && "group-hover:scale-105",
-              !live && "brightness-[0.92]",
+              isLive && "group-hover:scale-105",
+              !isLive && "brightness-[0.92]",
             )}
           />
         </div>
 
         <div className="flex justify-end">
-          <div className="flex flex-col items-end gap-1">
+          <div className="flex flex-col items-end gap-0.5">
             <span className="font-sans text-xs text-muted-foreground line-through">
               {formatRupiah(item.originalPrice)}
             </span>
@@ -277,64 +279,58 @@ function FlashSaleCard({
           </div>
         </div>
 
-        <h3 className="mt-6 font-sans text-[17px] font-bold leading-snug text-forest-dark">
+        <h3 className="mt-3 font-sans text-[17px] font-bold leading-snug text-forest-dark">
           {item.name}
         </h3>
-        <p className="mt-1 font-sans text-[13px] text-muted-foreground">
+        <p className="mt-0.5 font-sans text-[13px] text-muted-foreground">
           {item.category} · {item.vendorName}
         </p>
 
-        <div className="mt-4">
+        <div className="mt-3">
           <div className="flex items-center justify-between font-sans text-[11px]">
-            <span className="font-bold text-sale">
-              Sisa {stockCount ?? "beberapa"} porsi
+            <span className={cn("font-bold", isLive ? "text-sale" : "text-stone-400")}>
+              {stockText}
             </span>
-            {live && <span className="text-sale">Buru!</span>}
+            {isLive && <span className="text-sale">Buru!</span>}
           </div>
           {stockPct !== null && (
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream">
               <div
                 className={cn(
                   "h-full rounded-full",
-                  live ? "bg-sale" : "bg-stone-300",
+                  isLive ? "bg-sale" : "bg-stone-300",
                 )}
-                style={{ width: `${live ? stockPct : 0}%` }}
+                style={{ width: `${isLive ? stockPct : 0}%` }}
               />
             </div>
           )}
         </div>
 
-        <p className="mb-9 mt-3 pr-28 font-sans text-[11px] font-semibold text-sale">
+        <p className="mb-5 mt-3 pr-24 font-sans text-[11px] font-semibold text-sale">
           Hemat {formatRupiah(savings)}
         </p>
 
         <button
           type="button"
-          disabled={!live}
+          disabled={!isLive}
           aria-label={
-            live
+            isLive
               ? `Tambah ${item.name} ke keranjang`
-              : (status ?? "Flash sale belum berlangsung")
+              : status
           }
           onClick={() => {
-            if (live) router.push("/auth/login");
+            if (isLive) router.push("/auth/login");
           }}
           className={cn(
             "absolute bottom-5 right-5 inline-flex h-10 items-center gap-1.5 rounded-full px-4 font-sans text-[12px] font-bold uppercase tracking-wide shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-white",
-            live
+            isLive
               ? "bg-forest text-white hover:bg-caramel hover:scale-105"
               : "cursor-not-allowed bg-stone-200 text-stone-400",
           )}
         >
           <ShoppingBag className="h-4 w-4" />
-          Beli
+          {isLive ? "Beli" : status}
         </button>
-
-        {!live && status && (
-          <p className="mb-9 mt-3 pr-28 font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-stone-400">
-            {status}
-          </p>
-        )}
       </article>
     </Reveal>
   );
@@ -342,9 +338,10 @@ function FlashSaleCard({
 
 export function FlashSaleGrid() {
   const { urgentItems } = useCatalog();
-  const [selectedSlot, setSelectedSlot] = useState<UrgentSlot | null>(null);
+  const [previewSlot, setPreviewSlot] = useState<UrgentSlot | null>(null);
 
   const realSlot = getSlotFromHour(getWibParts().hour);
+  const currentHour = getWibParts().hour;
   const [, forceTick] = useState(0);
 
   useEffect(() => {
@@ -352,7 +349,7 @@ export function FlashSaleGrid() {
     return () => window.clearInterval(id);
   }, []);
 
-  const activeSlot = selectedSlot ?? realSlot;
+  const activeSlot = previewSlot ?? realSlot;
   const realSlotDef = SLOTS.find((s) => s.key === realSlot) ?? null;
   const slotEndIso = realSlotDef
     ? new Date(wibEpochOfToday(realSlotDef.end)).toISOString()
@@ -362,7 +359,6 @@ export function FlashSaleGrid() {
   const remaining = useCountdown(slotEndIso ?? nextStartIso);
   const ended = remaining === 0;
   const isWithinHours = realSlot !== null;
-  const isLive = isWithinHours && !ended && (selectedSlot ?? null) === realSlot;
 
   const slotSource =
     urgentItems.length > 0
@@ -373,15 +369,27 @@ export function FlashSaleGrid() {
       ? slotSource.map(urgentToGridItem).slice(0, 4)
       : FALLBACK_GRID;
 
+  const slotMode = (key: UrgentSlot): "live" | "past" | "future" => {
+    if (key === realSlot) return "live";
+    const idx = SLOTS.findIndex((s) => s.key === key);
+    if (!realSlot) return currentHour < 9 ? "future" : "past";
+    const ridx = SLOTS.findIndex((s) => s.key === realSlot);
+    return idx < ridx ? "past" : "future";
+  };
+
+  const cardMode: "live" | "past" | "future" =
+    activeSlot && slotMode(activeSlot) === "live" && !ended
+      ? "live"
+      : activeSlot
+        ? slotMode(activeSlot)
+        : currentHour < 9
+          ? "future"
+          : "past";
+
   const countdownLabel = isWithinHours ? "Berakhir dalam" : "Dimulai dalam";
   const countdownRange = realSlotDef
     ? `${realSlotDef.range} WIB`
     : "09.00 WIB";
-  const status = isLive
-    ? null
-    : ended
-      ? "Flash Sale Berakhir"
-      : "Akan Datang";
 
   return (
     <section
@@ -442,23 +450,25 @@ export function FlashSaleGrid() {
         <Reveal delay={0.05}>
           <div className="mb-10 flex flex-wrap items-center justify-center gap-3 lg:mb-12">
             {SLOTS.map((slot) => {
-              const active = activeSlot === slot.key;
-              const isReal = realSlot === slot.key;
+              const mode = slotMode(slot.key);
+              const isLiveBtn = mode === "live";
+              const isActive = activeSlot === slot.key;
+              const preview = () => {
+                setPreviewSlot((prev) => (prev === slot.key ? null : slot.key));
+              };
               return (
                 <button
                   key={slot.key}
                   type="button"
-                  aria-pressed={active}
-                  onClick={() =>
-                    setSelectedSlot((prev) =>
-                      prev === slot.key ? null : slot.key,
-                    )
-                  }
+                  aria-pressed={isActive}
+                  onMouseEnter={() => setPreviewSlot(slot.key)}
+                  onMouseLeave={() => setPreviewSlot(null)}
+                  onClick={preview}
                   className={cn(
                     "flex items-center gap-2.5 rounded-full border font-sans transition-all duration-300",
-                    active
-                      ? "border-transparent bg-forest text-white shadow-[0_14px_30px_-18px_rgba(27,77,50,0.7)]"
-                      : "border-hairline bg-white text-forest-dark hover:border-primary hover:bg-primary hover:text-white hover:shadow-[0_14px_30px_-18px_rgba(27,77,50,0.7)]",
+                    isLiveBtn
+                      ? "cursor-default border-transparent bg-forest text-white shadow-[0_14px_30px_-18px_rgba(27,77,50,0.7)]"
+                      : "cursor-pointer border-stone-200 bg-stone-100 text-stone-500 hover:border-stone-300 hover:bg-stone-200",
                     FOCUS_RING,
                   )}
                 >
@@ -468,12 +478,12 @@ export function FlashSaleGrid() {
                   <span
                     className={cn(
                       "pr-4 text-[10px] font-semibold uppercase tracking-[0.16em]",
-                      active ? "text-white/85" : "text-muted-foreground",
+                      isLiveBtn ? "text-white/85" : "text-stone-400",
                     )}
                   >
                     {slot.name}
                   </span>
-                  {isReal && (
+                  {isLiveBtn && (
                     <span
                       className="relative mr-3 flex h-2 w-2"
                       title="Slot aktif sekarang"
@@ -493,8 +503,7 @@ export function FlashSaleGrid() {
             <FlashSaleCard
               key={item.id}
               item={item}
-              live={isLive}
-              status={status}
+              mode={cardMode}
               index={idx}
             />
           ))}

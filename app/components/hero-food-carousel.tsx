@@ -14,21 +14,6 @@ import {
   type FeaturedFood,
 } from "@/app/components/product-detail-panel";
 
-const BURST_CLIP = (() => {
-  const N = 22;
-  const outer = 0.5;
-  const inner = 0.44;
-  const pts: string[] = [];
-  for (let i = 0; i < N * 2; i++) {
-    const r = i % 2 === 0 ? outer : inner;
-    const a = (Math.PI * i) / N - Math.PI / 2;
-    pts.push(
-      `${(50 + r * 50 * Math.cos(a)).toFixed(3)}% ${(50 + r * 50 * Math.sin(a)).toFixed(3)}%`,
-    );
-  }
-  return `polygon(${pts.join(",")})`;
-})();
-
 const FOODS: FeaturedFood[] = [
   {
     name: "Ayam Geprek",
@@ -322,11 +307,11 @@ export function HeroFoodCarousel() {
               <div className="pointer-events-none absolute right-2 top-3 z-30 flex flex-col items-end gap-2 sm:right-4 sm:top-4">
                 <div
                   aria-label={`Diskon ${discountPct} persen`}
-                  className="flex h-14 w-14 items-center justify-center bg-sale text-center shadow-[0_12px_26px_-12px_rgba(229,57,53,0.75)] sm:h-16 sm:w-16"
-                  style={{ clipPath: BURST_CLIP, WebkitClipPath: BURST_CLIP }}
+                  className="flex h-24 w-24 items-center justify-center rounded-full bg-sale text-center shadow-[0_16px_32px_-12px_rgba(229,57,53,0.75)] ring-4 ring-white/40 sm:h-28 sm:w-28"
                 >
-                  <span className="pl-1 font-sans text-[12px] font-extrabold leading-none text-white sm:text-[15px]">
-                    −{discountPct}%
+                  <span className="flex items-center gap-1 font-sans text-2xl font-black leading-none text-white sm:text-3xl">
+                    <span className="text-lg sm:text-xl">−</span>
+                    {discountPct}%
                   </span>
                 </div>
 
@@ -336,7 +321,7 @@ export function HeroFoodCarousel() {
                 </div>
               </div>
 
-              <div className="absolute bottom-3 right-2 z-30 flex items-center gap-2 sm:bottom-4 sm:right-4">
+              <div className="absolute bottom-3 right-2 z-30 flex items-center gap-3 sm:bottom-4 sm:right-4">
                 <button
                   type="button"
                   aria-label="Makanan sebelumnya"
@@ -344,10 +329,16 @@ export function HeroFoodCarousel() {
                     setAutoRotate(false);
                     wheelApi.current?.prev();
                   }}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-10 sm:w-10"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-14 sm:w-14"
                 >
-                  <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7" />
                 </button>
+
+                <div className="flex items-center gap-1 rounded-full border border-primary/10 bg-white/90 px-3.5 py-2 font-sans text-sm font-bold tabular-nums text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.5)]">
+                  <span className="text-forest">{displayFoods.length > 0 ? safeIndex + 1 : 0}</span>
+                  <span className="text-forest/50">/</span>
+                  <span className="text-forest/60">{displayFoods.length}</span>
+                </div>
 
                 <button
                   type="button"
@@ -356,9 +347,9 @@ export function HeroFoodCarousel() {
                     setAutoRotate(false);
                     wheelApi.current?.next();
                   }}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-10 sm:w-10"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-14 sm:w-14"
                 >
-                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7" />
                 </button>
               </div>
 
