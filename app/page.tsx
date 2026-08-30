@@ -191,7 +191,7 @@ export default function Home() {
                   {stores.map((p, i) => (
                     <span
                       key={i}
-                      className="mx-6 flex items-center font-display text-lg font-light tracking-tight text-forest-dark/45 lg:text-xl"
+                      className="mx-6 flex items-center font-display text-lg font-light tracking-tight text-primary/45 lg:text-xl"
                     >
                       {p}
                       <span
@@ -277,7 +277,7 @@ export default function Home() {
                         {item.num}
                       </span>
 
-                      <h3 className="mt-4 font-sans text-xl font-semibold tracking-tight text-forest-dark">
+                      <h3 className="mt-4 font-sans text-xl font-semibold tracking-tight text-primary">
                         {item.title}
                       </h3>
 
@@ -316,7 +316,7 @@ export default function Home() {
           </div>
 
           <Reveal delay={0.1}>
-            <div className="relative mt-14 overflow-hidden rounded-3xl bg-forest-dark px-6 py-10 text-cream shadow-[0_30px_60px_-30px_rgba(27,77,50,0.5)] sm:px-10 lg:mt-16 lg:px-14">
+            <div className="relative mt-14 overflow-hidden rounded-3xl bg-primary px-6 py-10 text-cream shadow-[0_30px_60px_-30px_rgba(27,77,50,0.5)] sm:px-10 lg:mt-16 lg:px-14">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/[0.08] blur-3xl"

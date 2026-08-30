@@ -29,7 +29,7 @@ export function PromoCodeInput() {
             type="button"
             onClick={clearPromo}
             aria-label="Hapus kode promo"
-            className="rounded-full p-1 text-sage-500 transition-colors hover:bg-sage-100 hover:text-primary"
+            className="rounded-full p-1 text-sage-500 transition-colors hover:bg-sage-100 hover:text-caramel"
           >
             <X className="h-4 w-4" />
           </button>
@@ -40,7 +40,7 @@ export function PromoCodeInput() {
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary transition-colors hover:text-primary"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary transition-colors hover:text-caramel"
           >
             <BadgePercent className="h-4 w-4" />
             {open ? 'Tutup kode promo' : 'Punya Kode Promo?'}

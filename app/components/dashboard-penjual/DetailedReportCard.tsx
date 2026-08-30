@@ -101,8 +101,8 @@ export function DetailedReportCard({ period }: { period: StatsPeriod }) {
         </span>
       </div>
 
-      <div className="mt-4 overflow-hidden rounded-xl border border-sage-100">
-        <table className="w-full text-left text-xs">
+      <div className="mt-4 overflow-x-auto rounded-xl border border-sage-100">
+        <table className="w-full min-w-[420px] text-left text-xs">
           <thead className="bg-cream-50 text-[10px] font-bold uppercase tracking-[0.12em] text-sage-500">
             <tr>
               <th scope="col" className="px-4 py-2.5">Hari</th>

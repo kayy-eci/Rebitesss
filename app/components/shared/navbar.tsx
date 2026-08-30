@@ -169,7 +169,7 @@ export function ProfileNavbar({
         "relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200",
         overDark
           ? "text-white/80 hover:bg-white/10 hover:text-white"
-          : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
+          : "text-charcoal-500 hover:bg-cream-100 hover:text-caramel",
         FOCUS_RING,
       )}
     >
@@ -243,7 +243,7 @@ export function ProfileNavbar({
                           : "bg-cream-100 font-semibold text-primary"
                         : overDark
                           ? "text-white/75 hover:text-white"
-                          : "text-charcoal-500 hover:text-primary",
+                          : "text-charcoal-500 hover:text-caramel",
                       FOCUS_RING,
                     )}
                   >
@@ -265,7 +265,7 @@ export function ProfileNavbar({
                       "flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200",
                       overDark
                         ? "text-white/80 hover:bg-white/10 hover:text-white"
-                        : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
+                        : "text-charcoal-500 hover:bg-cream-100 hover:text-caramel",
                       FOCUS_RING,
                     )}
                   >
@@ -313,7 +313,7 @@ export function ProfileNavbar({
                                   "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                                   loc === location
                                     ? "bg-cream-100 font-semibold text-primary"
-                                    : "text-charcoal-500 hover:bg-cream-50 hover:text-primary",
+                                    : "text-charcoal-500 hover:bg-cream-50 hover:text-caramel",
                                 )}
                               >
                                 <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -433,7 +433,7 @@ export function ProfileNavbar({
                         "block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150",
                         active === link.id
                           ? "bg-cream-100 font-semibold text-primary"
-                          : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
+                          : "text-charcoal-500 hover:bg-cream-100 hover:text-caramel",
                       )}
                     >
                       {link.label}
@@ -446,7 +446,7 @@ export function ProfileNavbar({
                 <Link
                   href="/notifikasi/pembeli"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-500 hover:bg-cream-100 hover:text-primary"
+                  className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-500 hover:bg-cream-100 hover:text-caramel"
                 >
                   <span className="flex items-center gap-2">
                     <Bell className="h-4 w-4" />

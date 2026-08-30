@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
-import { SiteFooter } from "@/app/components/shared/site-footer";
+import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
 import { CategoryRow } from "@/app/components/detail-toko/category-row";
 import { useProductDetail } from "@/app/components/detail-product/use-product-detail";
@@ -484,7 +484,7 @@ function StoreDetailContent() {
                   "flex h-[38px] items-center gap-1.5 rounded-full border px-4 text-sm font-semibold transition-colors duration-200",
                   activeCategory !== "Semua" || isCategoryOpen
                     ? "border-primary bg-white text-primary"
-                    : "border-sage-100 bg-white text-charcoal-900 hover:border-primary hover:text-primary",
+                    : "border-sage-100 bg-white text-charcoal-900 hover:border-caramel hover:text-caramel",
                 )}
               >
                 {activeCategory === "Semua" ? "Kategori" : activeCategory}

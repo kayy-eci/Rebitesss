@@ -147,7 +147,7 @@ export function OrderDetailModal({
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-hairline bg-white px-3 text-xs font-semibold text-charcoal-900 transition-colors hover:border-sage-500/50 hover:text-primary"
+                  className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-hairline bg-white px-3 text-xs font-semibold text-charcoal-900 transition-colors hover:border-sage-500/50 hover:text-caramel"
                 >
                   {copied ? (
                     <Check className="h-3.5 w-3.5 text-primary" />
@@ -344,7 +344,7 @@ export function OrderDetailModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-11 flex-1 items-center justify-center rounded-full border border-primary px-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+                className="inline-flex h-11 flex-1 items-center justify-center rounded-full border border-primary px-4 text-sm font-semibold text-primary transition-colors hover:bg-caramel/20"
               >
                 Tutup
               </button>

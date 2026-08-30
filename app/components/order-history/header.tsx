@@ -24,7 +24,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
         <button
           aria-label="Buka menu"
           onClick={onOpenMenu}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-white text-primary transition-colors hover:bg-primary/10 lg:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-white text-primary transition-colors hover:bg-caramel/20 lg:hidden"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -42,7 +42,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <button
             type="button"
             aria-label="Notifikasi"
-            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-primary/10"
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-caramel/20"
           >
             <Bell className="h-[18px] w-[18px]" strokeWidth={2} />
             <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-gold-500 ring-2 ring-white" />
@@ -51,7 +51,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <button
             type="button"
             aria-label="Bantuan"
-            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-primary/10 sm:flex"
+            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-caramel/20 sm:flex"
           >
             <CircleHelp className="h-[18px] w-[18px]" strokeWidth={2} />
           </button>

@@ -63,7 +63,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#cara-kerja"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Cara Kerja
                 </Link>
@@ -71,7 +71,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#umkm"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Untuk UMKM
                 </Link>
@@ -79,7 +79,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#pembeli"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Untuk Pembeli
                 </Link>
@@ -87,7 +87,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#langganan"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Paket Langganan
                 </Link>
@@ -146,15 +146,15 @@ export function SiteFooter() {
           </p>
 
           <div className="flex flex-wrap items-center gap-6 font-sans text-xs text-primary-foreground/50">
-            <span className="cursor-pointer transition-colors hover:text-primary-foreground">
+            <span className="cursor-pointer transition-colors hover:text-caramel-foreground">
               Kebijakan Privasi
             </span>
 
-            <span className="cursor-pointer transition-colors hover:text-primary-foreground">
+            <span className="cursor-pointer transition-colors hover:text-caramel-foreground">
               Syarat Penggunaan
             </span>
 
-            <span className="cursor-pointer transition-colors hover:text-primary-foreground">
+            <span className="cursor-pointer transition-colors hover:text-caramel-foreground">
               Penyangkalan
             </span>
           </div>

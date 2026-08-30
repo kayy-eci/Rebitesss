@@ -8,7 +8,7 @@ import {
   PackageOpen,
   SearchX,
 } from "lucide-react";
-import { SiteFooter } from "@/app/components/shared/Footer";
+import { SiteFooter } from "@/app/components/site-footer";
 import { MobileNavbar } from "@/app/components/shared/MobileNavbar";
 import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { FoodCard } from "@/app/components/shared/FoodCard";
@@ -151,7 +151,7 @@ export default function CategoryView({
                   aria-live="polite"
                   className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm"
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   {isLoading
                     ? "Memuat…"
                     : `${filteredItems.length} makanan tersedia`}

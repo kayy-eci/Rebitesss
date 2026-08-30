@@ -15,7 +15,7 @@ export function SubscriptionSection() {
     <SectionShell id="langganan" dataNav="cream" tone="cream">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal delay={0.1}>
-          <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-forest-dark">
+          <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
             Kembangkan usaha bersama <span className="text-caramel">ReBites.</span>
           </h2>
         </Reveal>
@@ -103,7 +103,7 @@ export function SubscriptionSection() {
                   </span>
                 </div>
 
-                <h3 className="mt-4 font-sans text-2xl font-bold tracking-tight text-forest-dark">
+                <h3 className="mt-4 font-sans text-2xl font-bold tracking-tight text-primary">
                   ReBites {plan.name}
                 </h3>
 
@@ -111,7 +111,7 @@ export function SubscriptionSection() {
                   {plan.tagline}
                 </p>
 
-                <div className="mt-6 flex min-h-[3.5rem] items-end gap-2 text-forest-dark">
+                <div className="mt-6 flex min-h-[3.5rem] items-end gap-2 text-primary">
                   <div className="relative flex h-[3.5rem] shrink-0 flex-col items-start">
                     <div className="mt-auto overflow-hidden">
                       <AnimatePresence mode="wait" initial={false}>

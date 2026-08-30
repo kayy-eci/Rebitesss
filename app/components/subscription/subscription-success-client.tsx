@@ -233,7 +233,7 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
               <LayoutDashboard className="h-4 w-4" />
               Ke Dashboard Penjual
             </Link>
-            <Link href="/home" className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-primary px-5 text-sm font-semibold text-primary hover:bg-primary/10">
+            <Link href="/home" className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-primary px-5 text-sm font-semibold text-primary hover:bg-caramel/20">
               <Store className="h-4 w-4" />
               Ke Beranda
             </Link>

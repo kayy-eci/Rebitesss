@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ProfileNavbar } from "@/app/components/shared/navbar";
 import { MobileNavbar } from "@/app/components/shared/MobileNavbar";
-import { SiteFooter } from "@/app/components/shared/site-footer";
+import { SiteFooter } from "@/app/components/site-footer";
 import { CartProvider, useCart } from "./cart-context";
 import { PageOrnaments } from "./page-ornaments";
 import { ProductBreadcrumb } from "./product-breadcrumb";

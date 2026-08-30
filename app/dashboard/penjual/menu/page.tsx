@@ -522,7 +522,7 @@ function FlashSalePanel({
                       'rounded-xl border px-3 py-2.5 text-left transition-colors',
                       active
                         ? 'border-primary bg-primary text-white shadow-sm'
-                        : 'border-sage-200 bg-white text-charcoal-900 hover:border-primary hover:bg-primary/5'
+                        : 'border-sage-200 bg-white text-charcoal-900 hover:border-caramel hover:bg-caramel/20'
                     )}
                   >
                     <span className="text-xs font-bold">{slot.label}</span>
@@ -734,7 +734,7 @@ function MenuCard({
           type="button"
           onClick={onEdit}
           aria-label={`Edit ${product.name}`}
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sage-200 text-charcoal-500 transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sage-200 text-charcoal-500 transition-colors hover:border-caramel hover:bg-caramel/20 hover:text-caramel"
         >
           <Pencil className="h-3 w-3" />
         </button>

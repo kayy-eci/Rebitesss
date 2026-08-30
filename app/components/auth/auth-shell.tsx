@@ -11,8 +11,8 @@ interface AuthShellProps {
 
 export default function AuthShell({ brand, children }: AuthShellProps) {
   return (
-    <main className="relative h-screen bg-[#F7F5EF] lg:grid lg:grid-cols-2 overflow-hidden">
-      <section className="relative order-2 flex h-full flex-col overflow-hidden bg-[#F7F5EF] px-6 sm:px-10 lg:order-2">
+    <main className="relative flex min-h-screen flex-col bg-[#F7F5EF] supports-[height:100dvh]:min-h-[100dvh] lg:grid lg:h-screen lg:grid-cols-2 lg:overflow-hidden">
+      <section className="relative order-2 flex flex-1 flex-col bg-[#F7F5EF] px-6 pb-10 pt-6 sm:px-10 lg:order-2 lg:h-full lg:overflow-hidden lg:pb-0 lg:pt-0">
         <div className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-[#AEB89B]/30 blur-[110px]" />
         <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-[#D6A54A]/15 blur-[120px]" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#DEDACF_1.5px,transparent_1.5px)] [background-size:26px_26px]" />

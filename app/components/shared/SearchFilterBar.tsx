@@ -485,7 +485,7 @@ export function SearchFilterBar({
                           "rounded-full border px-4 py-2 text-xs font-semibold transition-colors",
                           active
                             ? "border-primary bg-primary text-white"
-                            : "border-sage-200 bg-white text-charcoal-700 hover:border-primary hover:bg-primary/5",
+                            : "border-sage-200 bg-white text-charcoal-700 hover:border-caramel hover:bg-caramel/20",
                         )}
                       >
                         {opt.label}

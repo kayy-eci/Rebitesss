@@ -61,7 +61,7 @@ export function PageHeader({
       <h2
         className={cn(
           'mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.02em]',
-          dark ? 'text-white' : 'text-forest-dark',
+          dark ? 'text-white' : 'text-primary',
           centered && 'mx-auto',
           titleClassName,
         )}

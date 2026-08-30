@@ -172,7 +172,7 @@ export function DeliveryAddressSection() {
                 <button
                   type="button"
                   onClick={() => openPopup('form', null, false)}
-                  className="mt-4 flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-6 py-8 text-center transition-colors hover:border-primary hover:bg-caramel/[0.03]"
+                  className="mt-4 flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-6 py-8 text-center transition-colors hover:border-caramel hover:bg-caramel/[0.03]"
                 >
                   <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-primary">
                     <Plus className="h-5 w-5" />
@@ -258,7 +258,7 @@ export function DeliveryAddressSection() {
                         type="button"
                         onClick={() => openPopup('form', address, true)}
                         aria-label={`Ubah alamat ${address.label}`}
-                        className="shrink-0 rounded-full p-2 text-sage-500 transition-colors hover:bg-cream-100 hover:text-primary"
+                        className="shrink-0 rounded-full p-2 text-sage-500 transition-colors hover:bg-cream-100 hover:text-caramel"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
@@ -269,7 +269,7 @@ export function DeliveryAddressSection() {
                 <button
                   type="button"
                   onClick={() => openPopup('form', null, true)}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-4 py-3.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-caramel/[0.03]"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-sage-500/50 px-4 py-3.5 text-sm font-semibold text-primary transition-colors hover:border-caramel hover:bg-caramel/[0.03]"
                 >
                   <Plus className="h-4 w-4" />
                   Tambah Alamat Baru

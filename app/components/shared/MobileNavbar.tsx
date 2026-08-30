@@ -233,7 +233,7 @@ export function MobileNavbar() {
                           e.preventDefault();
                           handleNav(link.id);
                         }}
-                        className="block rounded-xl px-4 py-3 font-inter text-sm font-medium text-charcoal-700 hover:bg-cream-100 hover:text-primary"
+                        className="block rounded-xl px-4 py-3 font-inter text-sm font-medium text-charcoal-700 hover:bg-cream-100 hover:text-caramel"
                       >
                         {link.label}
                       </a>
@@ -245,7 +245,7 @@ export function MobileNavbar() {
                   <Link
                     href="/notifikasi/pembeli"
                     onClick={() => setDrawerOpen(false)}
-                    className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-700 hover:bg-cream-100 hover:text-primary"
+                    className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-700 hover:bg-cream-100 hover:text-caramel"
                   >
                     <span className="flex items-center gap-2">
                       <Bell className="h-4 w-4" />
@@ -261,7 +261,7 @@ export function MobileNavbar() {
                   <Link
                     href="/profile"
                     onClick={() => setDrawerOpen(false)}
-                    className="flex items-center gap-2 rounded-xl px-4 py-3 font-inter text-sm text-charcoal-700 hover:bg-cream-100 hover:text-primary"
+                    className="flex items-center gap-2 rounded-xl px-4 py-3 font-inter text-sm text-charcoal-700 hover:bg-cream-100 hover:text-caramel"
                   >
                     <User className="h-4 w-4" />
                     Profil Saya
@@ -271,7 +271,7 @@ export function MobileNavbar() {
                     <Link
                       href="/dashboard/penjual"
                       onClick={() => setDrawerOpen(false)}
-                      className="flex items-center gap-2 rounded-xl px-4 py-3 font-inter text-sm text-charcoal-700 hover:bg-cream-100 hover:text-primary"
+                      className="flex items-center gap-2 rounded-xl px-4 py-3 font-inter text-sm text-charcoal-700 hover:bg-cream-100 hover:text-caramel"
                     >
                       <Store className="h-4 w-4" />
                       Dashboard Penjual

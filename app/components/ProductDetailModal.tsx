@@ -22,7 +22,7 @@ import { formatIDR, type ProductDetail } from "@/app/detail/product/data";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export function ProductDetailModal({
   product,
@@ -173,7 +173,7 @@ export function ProductDetailModal({
                   className={cn(
                     "relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl border-2 transition-all duration-200 sm:h-[80px] sm:w-[80px]",
                     i === imageIdx
-                      ? "border-green-700 shadow-md shadow-green-700/15"
+                      ? "border-primary shadow-md shadow-primary/15"
                       : "border-transparent opacity-60 hover:opacity-100",
                     FOCUS_RING,
                   )}
@@ -198,7 +198,7 @@ export function ProductDetailModal({
             </p>
 
             { }
-            <h2 className="mt-2 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-forest-dark">
+            <h2 className="mt-2 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-primary">
               {product.title}
             </h2>
 
@@ -209,12 +209,12 @@ export function ProductDetailModal({
                 href={`/detail/toko?id=${encodeURIComponent(product.vendor.id)}`}
                 onClick={onClose}
                 className={cn(
-                  "group inline-flex items-center gap-1 rounded-full font-medium text-charcoal-900 underline-offset-4 transition-colors hover:text-green-700 hover:underline",
+                  "group inline-flex items-center gap-1 rounded-full font-medium text-charcoal-900 underline-offset-4 transition-colors hover:text-caramel hover:underline",
                   FOCUS_RING,
                 )}
               >
                 {product.vendor.name}
-                <ArrowUpRight className="h-3.5 w-3.5 text-charcoal-500 transition-colors group-hover:text-green-700" />
+                <ArrowUpRight className="h-3.5 w-3.5 text-charcoal-500 transition-colors group-hover:text-caramel" />
               </Link>
             </p>
 
@@ -248,7 +248,7 @@ export function ProductDetailModal({
                   "font-medium",
                   product.stockRemaining <= 3
                     ? "text-sale"
-                    : "text-green-600",
+                    : "text-primary",
                 )}
               >
                 {product.stockLabel}
@@ -257,7 +257,7 @@ export function ProductDetailModal({
 
             { }
             <div className="mt-5 flex flex-wrap items-baseline gap-3">
-              <span className="font-display text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-tight text-forest-dark">
+              <span className="font-display text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-tight text-primary">
                 Rp{formatIDR(product.discountedPrice)}
               </span>
               <span className="text-base text-charcoal-500 line-through">
@@ -276,15 +276,15 @@ export function ProductDetailModal({
             { }
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-100 px-3 py-1.5 text-xs font-medium text-charcoal-500">
-                <Clock className="h-3.5 w-3.5 text-green-700" />
+                <Clock className="h-3.5 w-3.5 text-primary" />
                 {product.pickupTime.from}–{product.pickupTime.to}
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-100 px-3 py-1.5 text-xs font-medium text-charcoal-500">
-                <MapPin className="h-3.5 w-3.5 text-green-700" />
+                <MapPin className="h-3.5 w-3.5 text-primary" />
                 {product.distanceKm} km
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-100 px-3 py-1.5 text-xs font-medium text-charcoal-500">
-                <Truck className="h-3.5 w-3.5 text-green-700" />
+                <Truck className="h-3.5 w-3.5 text-primary" />
                 Ambil sendiri
               </span>
             </div>
@@ -333,8 +333,8 @@ export function ProductDetailModal({
                 onClick={handleAddToCart}
                 disabled={added}
                 className={cn(
-                  "flex h-[52px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-forest-dark px-6 text-sm font-semibold text-white shadow-lg shadow-forest-900/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest hover:shadow-xl active:scale-[0.98] sm:flex-none sm:min-w-[180px]",
-                  added && "bg-green-600",
+                  "flex h-[52px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary hover:shadow-xl active:scale-[0.98] sm:flex-none sm:min-w-[180px]",
+                  added && "bg-primary",
                   FOCUS_RING,
                 )}
               >
@@ -361,7 +361,7 @@ export function ProductDetailModal({
 
             { }
             <div className="mt-4 flex items-center gap-1.5 text-xs text-charcoal-500">
-              <Shield className="h-3.5 w-3.5 text-green-700" />
+              <Shield className="h-3.5 w-3.5 text-primary" />
               Pembayaran aman · Ambil sendiri di lokasi mitra
             </div>
           </div>

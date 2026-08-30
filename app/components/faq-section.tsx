@@ -77,10 +77,10 @@ export function FaqSection() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <h2 className="mt-6 font-sans font-bold leading-[1.05] tracking-[-0.02em] text-forest-dark [font-size:clamp(1.9rem,3.8vw,2.9rem)]">
+            <h2 className="mt-6 font-sans font-bold leading-[1.05] tracking-[-0.02em] text-primary [font-size:clamp(1.9rem,3.8vw,2.9rem)]">
               Pertanyaan yang Sering
             </h2>
-            <p className="mt-1 font-display italic leading-[1.05] text-forest-dark [font-size:clamp(2.4rem,5vw,4rem)]">
+            <p className="mt-1 font-display italic leading-[1.05] text-primary [font-size:clamp(2.4rem,5vw,4rem)]">
               Diajukan
             </p>
           </Reveal>
@@ -94,7 +94,7 @@ export function FaqSection() {
                 <p className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
                   Hubungi Kami
                 </p>
-                <h3 className="mt-2 font-display text-2xl font-medium tracking-tight text-forest-dark sm:text-3xl">
+                <h3 className="mt-2 font-display text-2xl font-medium tracking-tight text-primary sm:text-3xl">
                   Punya pertanyaan lain?
                 </h3>
                 <p className="mt-2 font-sans text-sm leading-relaxed text-muted-foreground">
@@ -106,7 +106,7 @@ export function FaqSection() {
               <form onSubmit={handleSubmit} className="mt-7 flex flex-1 flex-col gap-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="flex flex-col gap-1.5">
-                    <span className="font-sans text-xs font-semibold text-forest-dark">
+                    <span className="font-sans text-xs font-semibold text-primary">
                       Nama
                     </span>
                     <input
@@ -114,12 +114,12 @@ export function FaqSection() {
                       name="nama"
                       required
                       placeholder="Nama Anda"
-                      className="rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-forest-dark placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
+                      className="rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-primary placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="font-sans text-xs font-semibold text-forest-dark">
+                    <span className="font-sans text-xs font-semibold text-primary">
                       Email
                     </span>
                     <input
@@ -127,13 +127,13 @@ export function FaqSection() {
                       name="email"
                       required
                       placeholder="nama@email.com"
-                      className="rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-forest-dark placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
+                      className="rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-primary placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
                     />
                   </label>
                 </div>
 
                 <label className="flex flex-1 flex-col gap-1.5">
-                  <span className="font-sans text-xs font-semibold text-forest-dark">
+                  <span className="font-sans text-xs font-semibold text-primary">
                     Pesan
                   </span>
                   <textarea
@@ -141,14 +141,14 @@ export function FaqSection() {
                     required
                     rows={5}
                     placeholder="Tulis pertanyaan atau pesan Anda di sini…"
-                    className="flex-1 resize-none rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-forest-dark placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
+                    className="flex-1 resize-none rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-primary placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
                   />
                 </label>
 
                 <button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-forest-dark px-7 py-3.5 font-sans text-sm font-semibold text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel hover:text-white disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:bg-forest-dark"
+                  className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-primary px-7 py-3.5 font-sans text-sm font-semibold text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel hover:text-white disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:bg-primary"
                 >
                   <Mail className="h-4 w-4" />
                   {status === 'sending' ? 'Mengirim…' : 'Kirim Pesan'}
@@ -205,11 +205,11 @@ export function FaqSection() {
                         aria-expanded={isOpen}
                         className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                       >
-                        <span className="font-sans text-sm font-semibold leading-snug tracking-tight text-forest-dark sm:text-[15px]">
+                        <span className="font-sans text-sm font-semibold leading-snug tracking-tight text-primary sm:text-[15px]">
                           {faq.q}
                         </span>
 
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest-dark text-cream transition-transform duration-300">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-cream transition-transform duration-300">
                           <Plus
                             className={cn(
                               'h-4 w-4 transition-transform duration-300',
@@ -248,7 +248,7 @@ export function FaqSection() {
         {/* Signature */}
         <Reveal delay={0.15}>
           <div className="mt-16 text-center lg:mt-20">
-            <p className="font-script text-forest-dark [font-size:clamp(2.2rem,4vw,3.2rem)]">
+            <p className="font-script text-primary [font-size:clamp(2.2rem,4vw,3.2rem)]">
               dibuat dengan rasa
             </p>
             <p className="mt-3 font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">

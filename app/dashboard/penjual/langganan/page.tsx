@@ -140,7 +140,7 @@ export default function LanggananPenjualPage() {
                 'rounded-full px-5 py-2 text-xs font-medium transition-colors',
                 billing === mode.key
                   ? 'bg-primary text-white shadow-sm shadow-primary/20'
-                  : 'text-charcoal-500 hover:text-primary'
+                  : 'text-charcoal-500 hover:text-caramel'
               )}
             >
               {mode.label}

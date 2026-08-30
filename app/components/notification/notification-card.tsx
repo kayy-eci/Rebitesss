@@ -34,7 +34,7 @@ export function NotificationCard({
         'flex w-full items-start gap-3.5 rounded-2xl border p-4 text-left transition-all duration-200',
         notification.read
           ? 'border-sage-100 bg-white hover:bg-cream-50'
-          : 'border-primary/20 bg-primary/5 hover:bg-primary/10'
+          : 'border-primary/20 bg-primary/5 hover:bg-caramel/20'
       )}
     >
       <NotificationIcon type={notification.type} />

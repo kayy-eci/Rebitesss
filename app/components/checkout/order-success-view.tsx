@@ -258,7 +258,7 @@ export function OrderSuccessView() {
           className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
         >
           {}
-          <div className="bg-sage-50 px-8 pb-10 pt-9 text-center">
+          <div className="bg-sage-50 px-5 pb-10 pt-9 text-center sm:px-8">
             <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-sage-400 shadow">
               <ReceiptText className="h-8 w-8" />
             </span>
@@ -345,7 +345,7 @@ export function OrderSuccessView() {
           </DialogHeader>
 
           {isFailed ? (
-            <div className="bg-red-600 px-8 pb-10 pt-9 text-center text-white">
+            <div className="bg-red-600 px-5 pb-10 pt-9 text-center text-white sm:px-8">
               <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-red-600 shadow-lg">
                 <XCircle className="h-8 w-8" strokeWidth={2.5} />
               </span>
@@ -354,7 +354,7 @@ export function OrderSuccessView() {
               <p className="mt-2 text-xs text-white/70">Stok telah dikembalikan.</p>
             </div>
           ) : isPending ? (
-            <div className="bg-amber-500 px-8 pb-10 pt-9 text-center text-white">
+            <div className="bg-amber-500 px-5 pb-10 pt-9 text-center text-white sm:px-8">
               <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-amber-600 shadow-lg">
                 <Clock className="h-8 w-8" strokeWidth={2.2} />
               </span>
@@ -366,7 +366,7 @@ export function OrderSuccessView() {
               </p>
             </div>
           ) : (
-            <div className="relative overflow-hidden bg-primary px-8 pb-10 pt-9 text-center text-white">
+            <div className="relative overflow-hidden bg-primary px-5 pb-10 pt-9 text-center text-white sm:px-8">
               <motion.span
                 initial={{ scale: 0, rotate: -30 }}
                 animate={{ scale: 1, rotate: 0 }}

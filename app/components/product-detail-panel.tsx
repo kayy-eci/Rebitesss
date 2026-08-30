@@ -13,7 +13,7 @@ import {
 import { formatRupiah } from "@/lib/data";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 export type FeaturedFood = {
   name: string;
@@ -83,7 +83,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
       {/* E - Badge kategori & jam buka (di bawah nama) */}
       <div className="flex flex-wrap items-center gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-sage-500/30 bg-white px-3 py-1.5 font-sans text-xs font-semibold text-charcoal-600">
-          <Utensils className="h-3.5 w-3.5 text-green-700" />
+          <Utensils className="h-3.5 w-3.5 text-primary" />
           {food.category}
         </span>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-caramel/40 bg-white px-3 py-1.5 font-sans text-xs font-semibold text-charcoal-600">
@@ -95,7 +95,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
       {/* C - Stok, rating & ulasan */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2" aria-label={`Rating ${food.rating} dari 5`}>
         {food.stockLabel && (
-          <span className="inline-flex items-center rounded-full bg-sage-100 px-3 py-1 font-sans text-[11px] font-semibold text-green-700">
+          <span className="inline-flex items-center rounded-full bg-sage-100 px-3 py-1 font-sans text-[11px] font-semibold text-primary">
             {food.stockLabel}
           </span>
         )}
@@ -131,7 +131,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
           <span className="font-sans text-sm text-charcoal-500 line-through">
             {formatRupiah(food.originalPrice)}
           </span>
-          <span className="mt-0.5 font-display text-[2.15rem] font-bold leading-none tracking-tight text-green-700 sm:text-[2.5rem]">
+          <span className="mt-0.5 font-display text-[2.15rem] font-bold leading-none tracking-tight text-primary sm:text-[2.5rem]">
             {formatRupiah(food.price)}
           </span>
         </div>
@@ -150,7 +150,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
           aria-label="Beli sekarang"
           className={
             FOCUS_RING +
-            " group inline-flex h-[52px] w-full items-center justify-center gap-3 rounded-full bg-green-700 px-8 sm:w-auto sm:min-w-[220px] sm:flex-1 font-sans text-[15px] font-bold text-white shadow-[0_18px_32px_-18px_rgba(27,77,50,0.85)] transition-colors duration-300 hover:bg-green-600"
+            " group inline-flex h-[52px] w-full items-center justify-center gap-3 rounded-full bg-primary px-8 sm:w-auto sm:min-w-[220px] sm:flex-1 font-sans text-[15px] font-bold text-white shadow-[0_18px_32px_-18px_rgba(27,77,50,0.85)] transition-colors duration-300 hover:bg-primary"
           }
         >
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber text-white transition-transform duration-300 group-hover:scale-110">

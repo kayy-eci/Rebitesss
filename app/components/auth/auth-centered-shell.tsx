@@ -20,7 +20,7 @@ export default function AuthCenteredShell({
   const isSeller = variant === "seller";
 
   return (
-    <main className="relative flex h-screen h-[100dvh] h-[100svh] w-screen items-center justify-center overflow-hidden overscroll-none bg-[#060E0D] p-3 sm:p-4 lg:p-6 touch-none">
+    <main className="relative flex h-screen w-full items-center justify-center overflow-hidden overscroll-none bg-[#060E0D] p-3 sm:p-4 lg:p-6 supports-[height:100dvh]:h-[100dvh] touch-none">
       {}
       <div className="absolute inset-0 overflow-hidden">
         <Image
@@ -46,7 +46,7 @@ export default function AuthCenteredShell({
       </div>
 
       {}
-      <div className="relative flex max-h-[calc(100dvh-24px)] max-h-[calc(100svh-24px)] w-full max-w-[1080px] flex-col overflow-hidden rounded-[20px] border border-white/10 bg-white shadow-[0_28px_80px_rgba(0,0,0,0.55),0_4px_24px_rgba(0,0,0,0.35)] sm:max-h-[calc(100dvh-32px)] lg:max-h-[calc(100dvh-48px)] lg:rounded-[24px]">
+      <div className="relative flex max-h-[calc(100svh-24px)] w-full max-w-[1080px] flex-col overflow-hidden rounded-[20px] border border-white/10 bg-white shadow-[0_28px_80px_rgba(0,0,0,0.55),0_4px_24px_rgba(0,0,0,0.35)] supports-[height:100dvh]:max-h-[calc(100dvh-24px)] sm:max-h-[calc(100svh-32px)] sm:supports-[height:100dvh]:max-h-[calc(100dvh-32px)] lg:max-h-[calc(100svh-48px)] lg:supports-[height:100dvh]:max-h-[calc(100dvh-48px)] lg:rounded-[24px]">
         <div className="grid max-h-full gap-0 overflow-hidden lg:grid-cols-[1.05fr_1fr]">
           {}
           <div className="relative hidden min-h-[560px] max-h-[calc(100dvh-64px)] flex-col justify-between overflow-hidden rounded-[16px] bg-[#0F2E24] lg:m-2 lg:flex lg:max-h-[calc(100dvh-64px)]">

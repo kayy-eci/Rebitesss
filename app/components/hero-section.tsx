@@ -126,8 +126,8 @@ export function HeroSection() {
                   ? cn(
                       "mx-auto w-full max-w-4xl rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(27,77,50,0.45)] backdrop-blur-xl sm:px-6 xl:max-w-5xl",
                       navIsDark
-                        ? "border-white/15 bg-forest-dark/70 text-white"
-                        : "border-hairline/70 bg-white/85 text-forest-dark",
+                        ? "border-white/15 bg-primary/70 text-white"
+                        : "border-hairline/70 bg-white/85 text-primary",
                     )
                   : cn(
                       "mx-auto w-full max-w-7xl rounded-none border-b border-transparent bg-transparent",
@@ -150,7 +150,7 @@ export function HeroSection() {
                 <span
                   className={cn(
                     "font-display text-2xl font-medium tracking-tight transition-colors duration-500",
-                    navIsDark ? "text-white" : "text-forest-dark",
+                    navIsDark ? "text-white" : "text-primary",
                   )}
                 >
                   <span className="font-display text-2xl font-medium">
@@ -180,10 +180,10 @@ export function HeroSection() {
                         activeNav === link.label
                           ? navIsDark
                             ? "font-semibold text-white"
-                            : "font-semibold text-forest-dark"
+                            : "font-semibold text-primary"
                           : navIsDark
                             ? "text-white/80 hover:text-white"
-                            : "text-forest-dark/80 hover:text-caramel",
+                            : "text-primary/80 hover:text-caramel",
                       )}
                     >
                       {link.label}
@@ -202,8 +202,8 @@ export function HeroSection() {
                   className={cn(
                     "hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(27,77,50,0.65)] transition-colors duration-300 sm:flex",
                     navIsDark
-                      ? "bg-white text-forest-dark hover:bg-caramel hover:text-white"
-                      : "bg-forest text-white hover:bg-caramel hover:text-white",
+                      ? "bg-white text-primary hover:bg-caramel hover:text-white"
+                      : "bg-primary text-white hover:bg-caramel hover:text-white",
                     FOCUS_RING,
                   )}
                 >
@@ -251,8 +251,8 @@ export function HeroSection() {
                           className={cn(
                             "flex items-center justify-between rounded-2xl px-4 py-3 font-inter text-sm transition-colors duration-300",
                             activeNav === link.label
-                              ? "bg-caramel/10 font-semibold text-forest-dark"
-                              : "text-forest-dark hover:bg-cream",
+                              ? "bg-caramel/10 font-semibold text-primary"
+                              : "text-primary hover:bg-cream",
                           )}
                         >
                           {link.label}
@@ -265,7 +265,7 @@ export function HeroSection() {
                     <Link
                       href="/auth/login"
                       onClick={() => setOpen(false)}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-full bg-forest py-3 font-inter text-sm font-semibold text-white transition-colors duration-300 hover:bg-caramel"
+                      className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-3 font-inter text-sm font-semibold text-white transition-colors duration-300 hover:bg-caramel"
                     >
                       <User className="h-3.5 w-3.5" />
                       {t("Masuk", "Log In")}
@@ -311,7 +311,7 @@ export function HeroSection() {
                 fontWeight={600}
                 lineHeight={1.05}
                 letterSpacing="-0.02em"
-                className="text-forest-dark"
+                className="text-primary"
                 style={{ fontStyle: "italic" }}
               />
               <div className="flex w-full items-baseline justify-center">
@@ -341,7 +341,7 @@ export function HeroSection() {
               <Link
                 href="/auth/register"
                 className={cn(
-                  "group inline-flex items-center gap-2 rounded-full bg-forest-dark px-9 py-4 font-inter text-base font-semibold text-white shadow-[0_16px_32px_-16px_rgba(27,77,50,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel",
+                  "group inline-flex items-center gap-2 rounded-full bg-primary px-9 py-4 font-inter text-base font-semibold text-white shadow-[0_16px_32px_-16px_rgba(27,77,50,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel",
                   FOCUS_RING,
                 )}
               >
@@ -356,13 +356,13 @@ export function HeroSection() {
                       <Star key={i} className="h-4 w-4 fill-amber text-amber" />
                     ))}
                   </div>
-                  <span className="font-sans text-base font-bold text-forest-dark">
+                  <span className="font-sans text-base font-bold text-primary">
                     5.0
                   </span>
                 </div>
                 <p className="font-sans text-xs leading-tight text-muted-foreground">
                   dari{" "}
-                  <span className="font-semibold text-forest-dark">500+</span>
+                  <span className="font-semibold text-primary">500+</span>
                   <br />
                   ulasan pengguna
                 </p>

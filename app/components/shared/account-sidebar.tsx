@@ -192,11 +192,11 @@ export function AccountSidebar({
                   href={href}
                   onClick={onClose}
                   className={cn(
-                    'group flex w-full items-center gap-3.5 rounded-xl px-4 py-3 font-inter text-base font-medium text-charcoal-900 transition-colors duration-200 hover:bg-caramel/5 hover:text-primary',
+                    'group flex w-full items-center gap-3.5 rounded-xl px-4 py-3 font-inter text-base font-medium text-charcoal-900 transition-colors duration-200 hover:bg-caramel/5 hover:text-caramel',
                     FOCUS_RING,
                   )}
                 >
-                  <Icon className="h-5 w-5 shrink-0 text-charcoal-500 transition-colors duration-200 group-hover:text-primary" />
+                  <Icon className="h-5 w-5 shrink-0 text-charcoal-500 transition-colors duration-200 group-hover:text-caramel" />
                   {label}
                 </Link>
               ))}

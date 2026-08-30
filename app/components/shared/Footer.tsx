@@ -64,7 +64,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#cara-kerja"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Cara Kerja
                 </Link>
@@ -72,7 +72,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#umkm"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Untuk UMKM
                 </Link>
@@ -80,7 +80,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#pembeli"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Untuk Pembeli
                 </Link>
@@ -88,7 +88,7 @@ export function SiteFooter() {
               <li>
                 <Link
                   href="/#langganan"
-                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                  className="font-sans text-sm text-primary-foreground/80 transition-colors hover:text-caramel-foreground"
                 >
                   Paket Langganan
                 </Link>

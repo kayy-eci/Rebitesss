@@ -92,7 +92,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
         <div className="mx-auto max-w-[1200px] px-5 sm:px-8 pt-4">
           <Link
             href="/home"
-            className="inline-flex items-center gap-1.5 rounded-full border border-sage-100/50 bg-white/10 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cream-50 transition-colors hover:border-primary hover:text-white hover:bg-white/20"
+            className="inline-flex items-center gap-1.5 rounded-full border border-sage-100/50 bg-white/10 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cream-50 transition-colors hover:border-caramel hover:text-white hover:bg-white/20"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Kembali ke Beranda

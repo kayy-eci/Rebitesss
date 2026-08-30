@@ -129,7 +129,7 @@ export function AddressFormView({
                   'rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200',
                   form.label === label
                     ? 'bg-primary text-white shadow-md shadow-primary/20'
-                    : 'border border-sage-100 bg-white text-charcoal-500 hover:border-sage-500/60 hover:text-primary',
+                    : 'border border-sage-100 bg-white text-charcoal-500 hover:border-sage-500/60 hover:text-caramel',
                 )}
               >
                 {label}

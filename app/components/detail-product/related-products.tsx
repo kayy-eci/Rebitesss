@@ -22,7 +22,7 @@ export function RelatedProducts({ products }: { products: RelatedProduct[] }) {
         </div>
         <Link
           href="/homePage"
-          className="hidden items-center gap-1.5 font-inter text-sm font-semibold text-primary transition-colors hover:text-primary sm:inline-flex"
+          className="hidden items-center gap-1.5 font-inter text-sm font-semibold text-primary transition-colors hover:text-caramel sm:inline-flex"
         >
           Lihat Semua
           <ArrowRight className="h-4 w-4" />

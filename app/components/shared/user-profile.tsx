@@ -577,7 +577,7 @@ function OrderHistory({
           {!loading && orders && orders.length > 0 && (
             <Link
               href="/riwayatPesanan"
-              className="inline-flex items-center gap-1.5 font-inter text-sm font-semibold text-primary hover:text-primary"
+              className="inline-flex items-center gap-1.5 font-inter text-sm font-semibold text-primary hover:text-caramel"
             >
               Lihat Semua
               <ArrowRight className="h-4 w-4" />

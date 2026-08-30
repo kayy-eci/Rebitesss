@@ -52,7 +52,7 @@ export function OrderToolbar({
                   'inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors',
                   active
                     ? 'border-[#7A1C1C] bg-white text-[#7A1C1C] shadow-sm'
-                    : 'border-zinc-200 bg-white text-charcoal-500 hover:border-sage-200 hover:text-primary'
+                    : 'border-zinc-200 bg-white text-charcoal-500 hover:border-sage-200 hover:text-caramel'
                 )}
               >
                 {p.label}
@@ -105,7 +105,7 @@ export function OrderToolbar({
                 'h-8 rounded-full px-3.5 text-xs font-semibold transition-all',
                 fulfillment === f.key
                   ? 'bg-primary text-white shadow-sm'
-                  : 'bg-white text-charcoal-500 ring-1 ring-hairline hover:text-primary'
+                  : 'bg-white text-charcoal-500 ring-1 ring-hairline hover:text-caramel'
               )}
             >
               {f.label}
