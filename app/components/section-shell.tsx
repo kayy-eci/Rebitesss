@@ -38,7 +38,7 @@ export function SectionShell({
       id={id}
       data-nav={dataNav}
       className={cn(
-        'relative scroll-mt-28 overflow-hidden pt-24 pb-16 lg:scroll-mt-32 lg:pt-28 lg:pb-20',
+        'relative overflow-hidden pt-28 pb-16 lg:pt-36 lg:pb-20',
         toneClasses[tone],
         className,
       )}

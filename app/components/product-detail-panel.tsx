@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
@@ -52,14 +53,14 @@ function RichText({ text }: { text: string }) {
 
 export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
   const [buyState, setBuyState] = useState<BuyState>("idle");
+  const router = useRouter();
 
   const discount = Math.round((1 - food.price / food.originalPrice) * 100);
 
   const handleBuy = () => {
     if (buyState !== "idle") return;
     setBuyState("loading");
-    window.setTimeout(() => setBuyState("done"), 900);
-    window.setTimeout(() => setBuyState("idle"), 2600);
+    window.setTimeout(() => router.push("/auth/login"), 450);
   };
 
   return (
