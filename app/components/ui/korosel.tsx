@@ -3,6 +3,13 @@
 import { useRef, useState, useCallback, useEffect, CSSProperties, type ReactNode } from 'react';
 
 type Side = 'left' | 'right';
+type Orientation = 'vertical' | 'horizontal';
+
+export interface OptionWheelApi {
+  next: () => void;
+  prev: () => void;
+  to: (index: number) => void;
+}
 
 export interface OptionWheelProps {
   items?: string[];
@@ -27,6 +34,8 @@ export interface OptionWheelProps {
   plateSize?: number;
   autoRotate?: boolean;
   autoRotateInterval?: number;
+  orientation?: Orientation;
+  apiRef?: React.MutableRefObject<OptionWheelApi | null>;
 }
 
 interface WheelConfig {
@@ -44,6 +53,7 @@ interface WheelConfig {
   draggable: boolean;
   plateSize: number;
   plateMode: boolean;
+  orientation: Orientation;
 }
 
 const DEFAULT_ITEMS: string[] = [];
@@ -70,7 +80,9 @@ const OptionWheel = ({
   renderItem,
   plateSize = 440,
   autoRotate = false,
-  autoRotateInterval = 1000
+  autoRotateInterval = 1000,
+  orientation = 'vertical',
+  apiRef,
 }: OptionWheelProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -82,7 +94,7 @@ const OptionWheel = ({
   const onChangeRef = useRef(onChange);
   const selectedRef = useRef(defaultSelected);
   const wheelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const dragRef = useRef<{ y: number; start: number; id: number } | null>(null);
+  const dragRef = useRef<{ coord: number; start: number; id: number } | null>(null);
   const dragMovedRef = useRef(false);
   const autoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected);
@@ -106,7 +118,8 @@ const OptionWheel = ({
     smoothing,
     draggable,
     plateSize,
-    plateMode: isPlateMode
+    plateMode: isPlateMode,
+    orientation,
   };
 
   const runFrame = useCallback((now: number) => {
@@ -126,6 +139,7 @@ const OptionWheel = ({
     const els = itemRefs.current;
     const n = cfg.count;
     const mirror = cfg.side === 'right' ? -1 : 1;
+    const horizontal = cfg.orientation === 'horizontal';
 
     const tiltRad = (cfg.tilt * Math.PI) / 180;
     const R = tiltRad > 0.0005 ? cfg.rowH / tiltRad : 0;
@@ -138,17 +152,29 @@ const OptionWheel = ({
         if (d > n / 2) d -= n;
       }
       const dist = Math.abs(d);
-      let x = 0;
-      let y = d * cfg.rowH;
+      let along = d * cfg.rowH;
+      let perp = 0;
       let rot = 0;
       if (R > 0) {
         const ang = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, d * tiltRad));
-        y = R * Math.sin(ang);
-        x = -mirror * R * (1 - Math.cos(ang)) * cfg.curve;
+        along = R * Math.sin(ang);
+        perp = -mirror * R * (1 - Math.cos(ang)) * cfg.curve;
         rot = (mirror * ang * 180) / Math.PI;
       }
       const p = Math.max(0, 1 - Math.min(dist, 1));
-      let transform = `translate(${x.toFixed(2)}px, calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`;
+
+      const x = horizontal ? along : perp;
+      const y = horizontal ? perp : along;
+
+      let transform: string;
+      if (horizontal) {
+        transform = isPlateMode
+          ? `translate(${x.toFixed(2)}px, calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`
+          : `translate(calc(${x.toFixed(2)}px - 50%), calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`;
+      } else {
+        transform = `translate(${x.toFixed(2)}px, calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`;
+      }
+
       if (cfg.plateMode) {
         const scale = 0.82 + 0.18 * p;
         transform += ` scale(${scale.toFixed(4)})`;
@@ -161,7 +187,7 @@ const OptionWheel = ({
     }
 
     rafRef.current = settled ? null : requestAnimationFrame(runFrame);
-  }, []);
+  }, [isPlateMode]);
 
   const startLoop = useCallback(() => {
     if (rafRef.current != null) {
@@ -225,7 +251,8 @@ const OptionWheel = ({
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       const cfg = cfgRef.current;
-      const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
+      const raw = cfg.orientation === 'horizontal' ? (e.deltaX || e.deltaY) : e.deltaY;
+      const delta = e.deltaMode === 1 ? raw * 24 : raw;
       const step = Math.max(-1, Math.min(1, delta / cfg.rowH));
       applyTarget(targetRef.current + step, false);
       resetAutoTimer();
@@ -239,9 +266,26 @@ const OptionWheel = ({
     };
   }, [applyTarget, resetAutoTimer]);
 
+  useEffect(() => {
+    if (!apiRef) return;
+    apiRef.current = {
+      next: () => applyTarget(Math.round(targetRef.current) + 1, true),
+      prev: () => applyTarget(Math.round(targetRef.current) - 1, true),
+      to: (index: number) => applyTarget(index, true),
+    };
+    return () => {
+      apiRef.current = null;
+    };
+  }, [apiRef, applyTarget]);
+
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!cfgRef.current.draggable) return;
-    dragRef.current = { y: e.clientY, start: targetRef.current, id: e.pointerId };
+    const horizontal = cfgRef.current.orientation === 'horizontal';
+    dragRef.current = {
+      coord: horizontal ? e.clientX : e.clientY,
+      start: targetRef.current,
+      id: e.pointerId,
+    };
     dragMovedRef.current = false;
     setIsDragging(true);
     resetAutoTimer();
@@ -251,12 +295,14 @@ const OptionWheel = ({
     (e: React.PointerEvent<HTMLDivElement>) => {
       const drag = dragRef.current;
       if (!drag) return;
-      const dy = e.clientY - drag.y;
-      if (!dragMovedRef.current && Math.abs(dy) > 4) {
+      const horizontal = cfgRef.current.orientation === 'horizontal';
+      const coord = horizontal ? e.clientX : e.clientY;
+      const d = coord - drag.coord;
+      if (!dragMovedRef.current && Math.abs(d) > 4) {
         dragMovedRef.current = true;
         rootRef.current?.setPointerCapture(drag.id);
       }
-      if (dragMovedRef.current) applyTarget(drag.start - dy / cfgRef.current.rowH, false);
+      if (dragMovedRef.current) applyTarget(drag.start - d / cfgRef.current.rowH, false);
     },
     [applyTarget]
   );
@@ -299,7 +345,7 @@ const OptionWheel = ({
 
   useEffect(() => {
     applyTarget(targetRef.current, false);
-  }, [items, fontSize, spacing, curve, tilt, blur, fade, minOpacity, side, loop, smoothing, applyTarget]);
+  }, [items, fontSize, spacing, curve, tilt, blur, fade, minOpacity, side, loop, smoothing, orientation, applyTarget]);
 
   useEffect(
     () => () => {
@@ -345,7 +391,9 @@ const OptionWheel = ({
             cfgRef.current.plateMode
               ? 'absolute left-1/2 top-1/2 cursor-pointer will-change-[transform,opacity,filter]'
               : `absolute top-1/2 cursor-pointer whitespace-nowrap leading-none will-change-[transform,opacity,filter] [font-size:var(--ow-font-size)] [color:color-mix(in_srgb,var(--ow-active-color)_calc(var(--ow-p,0)*100%),var(--ow-text-color))] ${
-                  side === 'right' ? 'right-[var(--ow-inset)] origin-right' : 'left-[var(--ow-inset)] origin-left'
+                  cfgRef.current.orientation === 'horizontal'
+                    ? 'left-0 w-max'
+                    : side === 'right' ? 'right-[var(--ow-inset)] origin-right' : 'left-[var(--ow-inset)] origin-left'
                 } ${selectedIndex === index ? 'font-medium' : 'font-extralight'}`
           }
           style={
