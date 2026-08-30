@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -13,18 +13,6 @@ import { useSellerPlan } from '@/lib/seller-plan';
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
-function isOpenNow(openHours: string): boolean {
-  const match = openHours.match(/(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/);
-  if (!match) return true;
-  const open = Number(match[1]) * 60 + Number(match[2]);
-  const close = Number(match[3]) * 60 + Number(match[4]);
-  const now = new Date();
-  const minutes = now.getHours() * 60 + now.getMinutes();
-  return open <= close
-    ? minutes >= open && minutes < close
-    : minutes >= open || minutes < close;
-}
-
 export function VendorSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -32,15 +20,15 @@ export function VendorSection() {
   const { plan } = useSellerPlan();
   const { vendors, loading } = useCatalog();
 
-  const openVendors = vendors.filter((v) => v.isOpen && isOpenNow(v.openHours));
-
-  const sortedVendors = plan.priorityListing
-    ? [...openVendors].sort(
-        (a, b) =>
-          Number(b.id === SELLER_VENDOR_SLUG) -
-          Number(a.id === SELLER_VENDOR_SLUG)
-      )
-    : openVendors;
+  // Rekomendasi hanya tampilkan toko dengan badge Buka (isOpen). Badge hanya ikut setting isOpen penjual, bukan jam operasional.
+  const sortedVendors = useMemo(() => {
+    const openOnly = vendors.filter((v) => v.isOpen);
+    if (!plan.priorityListing) return openOnly;
+    return [...openOnly].sort(
+      (a, b) =>
+        Number(b.id === SELLER_VENDOR_SLUG) - Number(a.id === SELLER_VENDOR_SLUG)
+    );
+  }, [vendors, plan.priorityListing]);
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
@@ -59,7 +47,7 @@ export function VendorSection() {
       el.removeEventListener('scroll', updateArrows);
       window.removeEventListener('resize', updateArrows);
     };
-  }, [updateArrows, openVendors.length]);
+  }, [updateArrows, sortedVendors.length]);
 
   const scrollByStep = useCallback((dir: number) => {
     const el = scrollRef.current;
@@ -82,20 +70,19 @@ export function VendorSection() {
     el.scrollBy({ left: dir * step, behavior: 'smooth' });
   }, []);
 
-  return (
-    <section
+  return (      <section
       id="umkm"
       data-nav="cream"
-      className="relative overflow-hidden scroll-mt-24 bg-cream-50 pb-16 pt-16 lg:pb-20 lg:pt-20"
+      className="relative overflow-hidden scroll-mt-20 bg-cream-50 pb-10 pt-10 sm:pb-16 sm:pt-16 lg:pb-20 lg:pt-20"
     >
       <SoftBlob className="-right-24 top-1/4 h-80 w-80 bg-sage-100/60" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
+            <h2 className="font-sans text-lg font-bold tracking-tight text-charcoal-900 sm:text-[22px] lg:text-[28px]">
               Rekomendasi toko buat kamu
             </h2>
-            <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
+            <p className="mt-1 max-w-md font-sans text-xs text-charcoal-500 sm:text-sm">
               Toko lokal yang rutin menyelamatkan makanan surplusnya setiap hari. Dukung mereka.
             </p>
           </div>

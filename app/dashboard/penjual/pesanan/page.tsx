@@ -160,7 +160,7 @@ function OrderRow({
   };
 
   return (
-    <li className="flex flex-col gap-3 rounded-2xl border border-sage-100 bg-white p-4 sm:flex-row sm:items-center sm:gap-4">
+    <li className="flex flex-col gap-3 rounded-2xl border border-sage-100 bg-white p-3 sm:p-4 sm:flex-row sm:items-center sm:gap-4">
       <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-sage-100">
         <SmartImage src={order.image} alt={`Foto ${order.productName}`} />
       </div>

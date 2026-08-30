@@ -87,10 +87,10 @@ function DetailPageContent({
       <PageOrnaments />
       <ProfileNavbar />
 
-      <main className="relative mx-auto max-w-[1200px] px-5 pb-10 pt-24 sm:px-8 lg:pt-28">
+      <main className="relative mx-auto max-w-[1200px] px-4 pb-20 pt-20 sm:px-8 sm:pb-10 sm:pt-24 lg:pt-28">
         <ProductBreadcrumb product={product} onShare={handleShare} />
 
-        <div className="mt-8 grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-5 grid items-start gap-6 sm:mt-8 sm:gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="lg:sticky lg:top-28">
             <ProductGallery product={product} scrollTargetRef={rightColRef} />
           </div>

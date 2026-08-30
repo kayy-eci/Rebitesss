@@ -9,6 +9,7 @@ import {
   SearchX,
 } from "lucide-react";
 import { SiteFooter } from "@/app/components/shared/Footer";
+import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { FoodCard } from "@/app/components/shared/FoodCard";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
 import { StoreClosedModal } from "@/app/components/shared/StoreClosedModal";
@@ -162,7 +163,7 @@ export default function CategoryView({
         {}
         <section className="border-b border-sage-100 bg-cream-50">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="py-4">
+            <div className="py-3 sm:py-4">
               <SearchFilterBar
                 query={searchQuery}
                 onQueryChange={setSearchQuery}
@@ -177,7 +178,7 @@ export default function CategoryView({
         </section>
 
         {}
-        <section className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-7xl px-4 pb-24 pt-6 sm:px-6 sm:pt-8 lg:px-8">
           {isLoading ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 sm:gap-5 xl:grid-cols-4">
               {Array.from({ length: 8 }).map((_, index) => (
@@ -274,6 +275,7 @@ export default function CategoryView({
         </section>
       </main>
 
+      <MobileBottomNav />
       <SiteFooter />
 
       <AnimatePresence>

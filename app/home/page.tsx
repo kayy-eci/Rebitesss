@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ProfileNavbar } from "@/app/components/shared/navbar";
+import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { Hero } from "@/app/components/home/Hero";
 import { UrgentDealsSection } from "@/app/components/home/UrgentDealsSection";
 import { FlashSaleSection } from "@/app/components/home/FlashSaleSection";
@@ -40,7 +41,7 @@ export default function HomePage() {
     <div>
       <ProfileNavbar showLocationDropdown={false} />
 
-      <main className="bg-cream-50">
+      <main className="bg-cream-50 pb-20 lg:pb-0">
         <Hero />
         <UrgentDealsSection from="home" onViewDetail={handleViewDetail} />
         <CategorySection />
@@ -266,6 +267,7 @@ export default function HomePage() {
         </section>
       </main>
 
+      <MobileBottomNav />
       <SiteFooter />
 
       <AnimatePresence>

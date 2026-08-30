@@ -282,7 +282,7 @@ export function HeroSection() {
 
       <section
         id="top"
-        className="relative flex min-h-[640px] flex-col items-center justify-center bg-cream px-4 pb-20 pt-28 sm:px-6 lg:min-h-[620px] lg:px-8 lg:pb-24 lg:pt-32"
+        className="relative flex min-h-[500px] flex-col items-center justify-center bg-cream px-4 pb-14 pt-24 sm:px-6 sm:min-h-[640px] lg:min-h-[620px] lg:px-8 lg:pb-24 lg:pt-32"
       >
         <svg
           aria-hidden="true"
@@ -329,11 +329,11 @@ export function HeroSection() {
           <HeroOrganicArt />
 
           <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+7rem)]">
-            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-primary">
+            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.3em] text-primary sm:text-[11px]">
               Coba Sekarang
             </p>
 
-            <h1 className="mt-4 font-display text-[clamp(2.7rem,5vw,4.6rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-primary">
+            <h1 className="mt-3 font-display text-[clamp(2rem,5vw,4.6rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-primary sm:mt-4">
               Ubah cara kamu
               <span className="block">menyelamatkan</span>
               <span className="block font-light italic text-caramel">
@@ -341,13 +341,13 @@ export function HeroSection() {
               </span>
             </h1>
 
-            <p className="mt-7 max-w-md font-sans text-sm leading-[1.85] text-muted-foreground">
+            <p className="mt-4 max-w-md font-sans text-xs leading-[1.85] text-muted-foreground sm:mt-7 sm:text-sm">
               Dari makan siang hingga usaha kuliner, ReBites membantu kamu
               menemukan makanan surplus berkualitas dari dapur UMKM Depok
               dengan harga lebih hemat, tanpa food waste.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-5">
+            <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-9 sm:gap-5">
               <Link
                 href="/auth/register"
                 className={cn(
@@ -387,8 +387,8 @@ export function HeroSection() {
           </div>
 
           { }
-          <div className="relative z-10 mx-auto mt-12 w-full max-w-[360px] lg:hidden">
-            <div className="relative h-[480px] w-full sm:h-[540px]">
+          <div className="relative z-10 mx-auto mt-8 w-full max-w-[300px] sm:mt-12 sm:max-w-[360px] lg:hidden">
+            <div className="relative h-[380px] w-full sm:h-[480px]">
               <OptionWheel
                 items={FOODS.map((f) => f.name)}
                 defaultSelected={0}

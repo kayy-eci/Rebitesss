@@ -34,7 +34,7 @@ export function SellerShell({ children }: SellerShellProps) {
         <div className="relative z-10 lg:pl-[280px]">
           <Topbar onMenuClick={() => setSidebarOpen(true)} />
 
-          <main className="mx-auto max-w-[1400px] px-4 pb-20 pt-6 sm:px-6 lg:px-10">
+          <main className="mx-auto max-w-[1400px] px-4 pb-24 pt-4 sm:px-6 sm:pt-6 lg:px-10">
             {children}
           </main>
         </div>

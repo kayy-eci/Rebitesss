@@ -550,7 +550,7 @@ export function FlashSaleSection({
           </div>
         </div>
 
-        <div className="relative mt-9 flex flex-wrap items-center justify-center gap-3 md:flex-nowrap md:gap-8">
+        <div className="relative mt-6 flex flex-wrap items-center justify-center gap-2 sm:mt-9 md:flex-nowrap md:gap-8">
           {SLOTS.map((slot) => {
             const isReal = realSlot === slot.key;
             const isActive = activeSlot === slot.key;
@@ -565,7 +565,7 @@ export function FlashSaleSection({
                   )
                 }
                 className={cn(
-                  "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 md:px-6 md:py-3.5 font-sans transition-all duration-300",
+                  "group relative flex items-center gap-1.5 rounded-full border px-3 py-2 sm:gap-2.5 sm:px-4 sm:py-2.5 md:px-6 md:py-3.5 font-sans transition-all duration-300",
                   isActive
                     ? "border-transparent bg-caramel text-white shadow-lg shadow-primary/40 hover:bg-white hover:text-caramel"
                     : "border-white/60 bg-white text-primary shadow-lg shadow-primary/25 hover:bg-caramel hover:text-white",
@@ -610,8 +610,7 @@ export function FlashSaleSection({
               variants={{
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.07 } },
-              }}
-              className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              }}                  className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
             >
               {visibleItems.map((item) => (
                 <motion.div

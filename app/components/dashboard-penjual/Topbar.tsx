@@ -39,7 +39,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-sage-100 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-2.5 sm:px-6 lg:px-10">
+      <div className="mx-auto flex max-w-[1400px] items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5 lg:px-10">
         { }
         <button
           type="button"

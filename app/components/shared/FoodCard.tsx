@@ -62,13 +62,14 @@ export function FoodCard({
           handleOpen();
         }
       }}
-      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+      className="group flex cursor-pointer overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50 sm:h-full sm:flex-col sm:hover:-translate-y-1"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-sage-100">
+      {/* Mobile: horizontal layout | Desktop: vertical layout */}
+      <div className="relative h-24 w-24 shrink-0 overflow-hidden bg-sage-100 sm:h-auto sm:w-auto sm:block sm:aspect-[4/3]">
         <SmartImage
           src={item.image}
           alt={`Foto ${item.name} dari ${item.vendorName}`}
-          sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
+          sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 96px"
           className={cn(
             "transition-transform duration-500 group-hover:scale-105",
             isUnavailable && "grayscale-[40%]",
@@ -77,18 +78,17 @@ export function FoodCard({
         {/* Overlay tidak tersedia (stok habis / di luar jam jual) */}
         {isUnavailable && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/40">
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-charcoal-900 shadow-lg">
+            <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-charcoal-900 shadow-lg sm:text-xs">
               {item.stockLabel === "Habis" ? "Stok Habis" : "Tidak Tersedia"}
             </span>
           </div>
         )}
         {/* Badge - top left - reference style */}
         {item.discountPercent > 0 && (
-          <div className="absolute left-3 top-3 z-20 rounded-full bg-[#E53935] px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
+          <div className="absolute left-2 top-2 z-20 rounded-full bg-[#E53935] px-2 py-0.5 text-[10px] font-bold leading-none text-white shadow-md sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[11px]">
             Hemat {item.discountPercent}%
           </div>
         )}
-        {}
         <button
           type="button"
           aria-label={liked ? "Hapus dari favorit" : "Tambah ke favorit"}
@@ -98,70 +98,73 @@ export function FoodCard({
             toggle(item.id);
           }}
           className={cn(
-            "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935]",
+            "absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935] sm:right-3 sm:top-3 sm:h-8 sm:w-8",
             liked && "bg-white text-[#E53935]",
             FOCUS_RING,
           )}
         >
-          <Heart className={cn("h-4 w-4", liked && "fill-[#E53935] text-[#E53935]")} />
+          <Heart className={cn("h-3.5 w-3.5 sm:h-4 sm:w-4", liked && "fill-[#E53935] text-[#E53935]")} />
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="line-clamp-1 font-sans text-[15px] font-bold leading-snug text-charcoal-900">
+      <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
+        <h3 className="line-clamp-1 font-sans text-[13px] font-bold leading-snug text-charcoal-900 sm:text-[15px]">
           {item.name}
         </h3>
-        <p className="mt-0.5 line-clamp-1 font-sans text-[13px] text-charcoal-500">{item.vendorName}</p>
+        <p className="mt-0.5 line-clamp-1 font-sans text-[11px] text-charcoal-500 sm:text-[13px]">{item.vendorName}</p>
 
-        <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
+        <div className="mt-1.5 flex items-center gap-2 text-[11px] text-charcoal-500 sm:mt-2 sm:gap-3 sm:text-xs">
           <span className="flex items-center gap-1 font-medium text-charcoal-900">
-            <Star className="h-3.5 w-3.5 fill-amber text-amber" />
+            <Star className="h-3 w-3 fill-amber text-amber sm:h-3.5 sm:w-3.5" />
             {item.rating.toFixed(1)}
           </span>
           <span className="flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5 text-sage-500" />
+            <MapPin className="h-3 w-3 text-sage-500 sm:h-3.5 sm:w-3.5" />
             {item.distanceKm} km
           </span>
-          <span className="flex items-center gap-1">
+          <span className="hidden items-center gap-1 sm:flex">
             <Clock className="h-3.5 w-3.5 text-sage-500" />
             {item.availableFrom}–{item.availableTo}
           </span>
         </div>
 
-        <span className="mt-2.5 w-fit rounded-full bg-cream-100 px-3 py-1 text-[11px] font-medium text-charcoal-600">
-          {item.stockLabel}
-        </span>
-
-        <div className="mt-3 flex items-baseline gap-2">
-          {item.originalPrice > item.discountedPrice && (
-            <span className="text-xs text-charcoal-500 line-through">
-              {formatRupiah(item.originalPrice)}
+        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
+          <div>
+            <span className="hidden w-fit rounded-full bg-cream-100 px-3 py-1 text-[11px] font-medium text-charcoal-600 sm:inline-block">
+              {item.stockLabel}
             </span>
-          )}
-          <span className="text-[16px] font-bold leading-none text-primary">
-            {formatRupiah(item.discountedPrice)}
-          </span>
-        </div>
-
-        {isUnavailable ? (
-          <div className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-sm font-semibold text-zinc-400">
-            {item.stockLabel === "Habis" ? "Stok Habis" : "Di Luar Jam Jual"}
+            <div className="flex items-baseline gap-1.5 sm:mt-1 sm:gap-2">
+              {item.originalPrice > item.discountedPrice && (
+                <span className="text-[11px] text-charcoal-500 line-through sm:text-xs">
+                  {formatRupiah(item.originalPrice)}
+                </span>
+              )}
+              <span className="text-sm font-bold leading-none text-primary sm:text-[16px]">
+                {formatRupiah(item.discountedPrice)}
+              </span>
+            </div>
           </div>
-        ) : (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOpen();
-            }}
-            className={cn(
-              "mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-caramel focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2",
-              FOCUS_RING,
-            )}
-          >
-            Lihat Detail
-          </button>
-        )}
+
+          {isUnavailable ? (
+            <div className="hidden items-center justify-center rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-400 sm:inline-flex sm:w-full sm:px-4 sm:py-2.5 sm:text-sm">
+              {item.stockLabel === "Habis" ? "Stok Habis" : "Di Luar Jam Jual"}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleOpen();
+              }}
+              className={cn(
+                "inline-flex shrink-0 items-center justify-center rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold text-white shadow-sm transition-colors hover:bg-caramel focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 sm:mt-3 sm:w-full sm:px-4 sm:py-2.5 sm:text-sm",
+                FOCUS_RING,
+              )}
+            >
+              Lihat Detail
+            </button>
+          )}
+        </div>
       </div>
     </article>
   );

@@ -11,8 +11,8 @@ export function SiteFooter() {
       data-nav="green"
       className="grain-overlay relative overflow-hidden bg-primary text-primary-foreground"
     >
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <Reveal className="grid gap-12 lg:grid-cols-[1.1fr_0.8fr_1fr_1.3fr]">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+        <Reveal className="grid gap-8 sm:gap-12 lg:grid-cols-[1.1fr_0.8fr_1fr_1.3fr]">
           <div>
             <Link href="/" className="flex items-center gap-3">
               <Image
@@ -20,7 +20,7 @@ export function SiteFooter() {
                 alt="ReBites"
                 width={48}
                 height={48}
-                className="h-12 w-12 rounded-full object-cover shadow-[0_10px_24px_-12px_rgba(0,0,0,0.5)] ring-1 ring-primary-foreground/20"
+                className="h-10 w-10 rounded-full object-cover shadow-[0_10px_24px_-12px_rgba(0,0,0,0.5)] ring-1 ring-primary-foreground/20 sm:h-12 sm:w-12"
               />
               <span className="flex items-baseline gap-0.5">
                 <span className="font-display text-3xl font-medium text-primary-foreground-strong">
@@ -138,7 +138,7 @@ export function SiteFooter() {
           </div>
         </Reveal>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-primary-foreground/15 pt-8 sm:flex-row sm:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-primary-foreground/15 pt-6 sm:mt-16 sm:flex-row sm:items-center sm:pt-8">
           <p className="font-sans text-xs text-primary-foreground/50">
             © {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
             <span className="text-primary-foreground/80">Tim Sixquit</span> -

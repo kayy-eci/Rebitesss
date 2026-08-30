@@ -377,8 +377,8 @@ function StoreDetailContent() {
   }, [storeId]);
 
   useEffect(() => {
-    if (vendor) setOpenNow(isOpenNow(vendor.openHours));
-  }, [vendor]);
+    if (vendor) setOpenNow(vendor.isOpen);
+  }, [vendor?.isOpen]);
 
   const featuredIds = useMemo(
     () => new Set(storeProducts.filter((sp) => sp.featured).map((sp) => sp.id)),

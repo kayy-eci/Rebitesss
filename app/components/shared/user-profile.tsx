@@ -43,6 +43,7 @@ import { formatRupiah } from "@/lib/data";
 import type { StoredOrder } from "@/lib/types";
 import { SmartImage } from "./SmartImage";
 import { ProfileSidebarNav } from "./profile-sidebar-nav";
+import { MobileBottomNav } from "./MobileBottomNav";
 import {
   Dialog,
   DialogContent,
@@ -999,6 +1000,7 @@ export function UserProfile() {
       />
 
       <div className="lg:pl-[280px]">
+        <MobileBottomNav />
         {}
         <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-sage-100 bg-white px-4 py-3 lg:hidden">
           <button
@@ -1014,7 +1016,7 @@ export function UserProfile() {
           </span>
         </div>
 
-        <main className="relative mx-auto max-w-[1100px] px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
+        <main className="relative mx-auto max-w-[1100px] px-4 pb-24 pt-4 sm:pb-20 sm:pt-6 lg:px-8 lg:pt-8">
           {}
           <div className="hidden lg:block">
             <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">
@@ -1030,7 +1032,7 @@ export function UserProfile() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE }}
-            className="mt-6 flex flex-col gap-6 rounded-[20px] border border-zinc-100 bg-white p-6 shadow-sm sm:p-7 lg:flex-row lg:items-center lg:justify-between"
+            className="mt-4 flex flex-col gap-4 rounded-[20px] border border-zinc-100 bg-white p-4 shadow-sm sm:mt-6 sm:gap-6 sm:p-6 lg:flex-row lg:items-center lg:justify-between"
           >
             <div className="flex items-center gap-5">
               <div className="relative h-20 w-20 shrink-0 sm:h-24 sm:w-24 group/avatar">

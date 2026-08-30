@@ -58,14 +58,14 @@ export function CategorySection() {
     <section
       id="kategori"
       data-nav="cream"
-      className="relative scroll-mt-24 bg-cream-50 py-16 lg:py-20"
+      className="relative scroll-mt-20 bg-cream-50 py-10 lg:py-20"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div>
-          <h2 className="font-sans text-[22px] font-bold tracking-tight text-charcoal-900 sm:text-[28px]">
+          <h2 className="font-sans text-lg font-bold tracking-tight text-charcoal-900 sm:text-[22px] lg:text-[28px]">
             Jelajahi Kategori
           </h2>
-          <p className="mt-1.5 max-w-md font-sans text-sm text-charcoal-500">
+          <p className="mt-1 max-w-md font-sans text-xs text-charcoal-500 sm:text-sm">
             Temukan berbagai makanan sesuai seleramu yang masih layak dinikmati
           </p>
         </div>
@@ -77,7 +77,7 @@ export function CategorySection() {
             hidden: {},
             visible: { transition: { staggerChildren: 0.04 } },
           }}
-          className="mt-8 flex gap-3 overflow-x-auto pb-3 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] lg:grid lg:grid-cols-8 lg:gap-4 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+          className="mt-5 flex gap-2 overflow-x-auto pb-3 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-3 lg:mt-8 lg:grid lg:grid-cols-8 lg:gap-4 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
         >
           {visibleCategories.map((category) => {
             const Icon = CATEGORY_ICONS[category.id] ?? UtensilsCrossed;
@@ -92,20 +92,20 @@ export function CategorySection() {
                     transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
                   },
                 }}
-                className="min-w-[148px] snap-start lg:min-w-0"
+                className="min-w-[100px] snap-start sm:min-w-[148px] lg:min-w-0"
               >
                 <Link
                   href={`/makanan/${category.id}`}
                   aria-label={`Lihat makanan kategori ${category.name}`}
                   className={cn(
-                    "group flex h-[132px] w-full flex-col items-center justify-center gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-6 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md",
+                    "group flex h-[90px] w-full flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md sm:h-[110px] sm:gap-3 sm:rounded-2xl sm:px-4 sm:py-6 lg:h-[132px]",
                     FOCUS_RING,
                   )}
                 >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-cream-100 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
-                    <Icon className="h-5 w-5" />
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-cream-100 text-primary transition-colors group-hover:bg-primary group-hover:text-white sm:h-10 sm:w-10">
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </span>
-                  <span className="font-sans text-[13px] font-semibold leading-tight text-charcoal-900">
+                  <span className="font-sans text-[11px] font-semibold leading-tight text-charcoal-900 sm:text-[13px]">
                     {category.name}
                   </span>
                 </Link>

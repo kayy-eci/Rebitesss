@@ -10,20 +10,6 @@ import type { Vendor } from '@/lib/types';
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
-function isOpenNow(openHours: string): boolean {
-  const match = openHours.match(/(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/);
-  if (!match) return true;
-
-  const open = Number(match[1]) * 60 + Number(match[2]);
-  const close = Number(match[3]) * 60 + Number(match[4]);
-  const now = new Date();
-  const minutes = now.getHours() * 60 + now.getMinutes();
-
-  return open <= close
-    ? minutes >= open && minutes < close
-    : minutes >= open || minutes < close;
-}
-
 export function VendorCard({
   vendor,
   badgeLabel,
@@ -34,8 +20,9 @@ export function VendorCard({
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    setIsOpen(vendor.isOpen && isOpenNow(vendor.openHours));
-  }, [vendor.isOpen, vendor.openHours]);
+    // Badge Buka/Tutup hanya ikut setting isOpen penjual, bukan jam operasional
+    setIsOpen(vendor.isOpen);
+  }, [vendor.isOpen]);
 
   return (
     <div

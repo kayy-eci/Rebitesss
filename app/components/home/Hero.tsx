@@ -59,17 +59,17 @@ export function Hero() {
     <section
       id="home"
       data-nav="cream"
-      className="relative overflow-hidden scroll-mt-24 bg-cream-50 px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pb-24 lg:pt-28"
+      className="relative overflow-hidden scroll-mt-20 bg-cream-50 px-4 pb-10 pt-16 sm:px-6 lg:px-8 lg:pb-24 lg:pt-28"
     >
       <motion.div
         variants={container}
         initial="hidden"
         animate="visible"
-        className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.85fr_1fr] lg:gap-7"
+        className="relative mx-auto grid max-w-7xl gap-4 sm:gap-6 lg:grid-cols-[1.85fr_1fr] lg:gap-7"
       >
         <motion.div
           variants={item}
-          className="relative min-h-[480px] overflow-hidden rounded-[2rem] shadow-2xl shadow-primary/30 lg:min-h-[640px]"
+          className="relative min-h-[320px] overflow-hidden rounded-2xl shadow-2xl shadow-primary/30 sm:min-h-[400px] sm:rounded-[2rem] lg:min-h-[640px]"
         >
           <div className="absolute inset-0">
             <SmartImage
@@ -82,42 +82,42 @@ export function Hero() {
           <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary to-primary/25" />
 
           <div className="relative flex h-full flex-col justify-end p-6 sm:p-10 lg:p-14">
-            <h1 className="max-w-2xl font-sans text-4xl font-bold leading-[1.05] tracking-tight text-cream-50 sm:text-5xl lg:text-[3.85rem]">
+            <h1 className="max-w-2xl font-sans text-2xl font-bold leading-[1.05] tracking-tight text-cream-50 sm:text-4xl lg:text-[3.85rem]">
               Temukan Makanan Surplus,
-              <br />
+              <br className="hidden sm:block" />
               <span className="relative inline-block">
                 Hemat dan Nikmat
                 <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-gold-500 sm:-bottom-2" />
               </span>
             </h1>
-            <p className="mt-5 max-w-lg font-inter text-sm leading-relaxed text-cream-50/85 sm:text-[15px] lg:text-[16px] text-white">
+            <p className="mt-3 max-w-lg font-inter text-xs leading-relaxed text-cream-50/85 sm:mt-5 sm:text-[15px] lg:text-[16px] text-white">
               Temukan makanan surplus berkualitas dari UMKM di sekitarmu dengan
               harga lebih bersahabat.
             </p>
 
-            <div className="mt-8">
+            <div className="mt-5 sm:mt-8">
               <Button
                 variant="outlineCream"
                 size="sm"
                 onClick={() => scrollToId("rekomendasi")}
-                className="group scale-105 px-7 py-3.5 text-[13px] lg:scale-110 lg:px-8"
+                className="group px-5 py-2.5 text-[12px] sm:scale-105 sm:px-7 sm:py-3.5 sm:text-[13px] lg:scale-110 lg:px-8"
               >
                 Jelajahi Makanan
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
 
-            <p className="mt-5 flex items-center gap-2 font-inter text-xs text-cream-50/75 sm:text-sm">
-              <Recycle className="h-4 w-4 text-gold-500" />
+            <p className="mt-3 flex items-center gap-2 font-inter text-[11px] text-cream-50/75 sm:mt-5 sm:text-sm">
+              <Recycle className="h-3.5 w-3.5 text-gold-500 sm:h-4 sm:w-4" />
               1000+ porsi makanan berhasil diselamatkan
             </p>
           </div>
         </motion.div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-3 sm:gap-4 lg:gap-6">
           <motion.div
             variants={item}
-            className="group relative overflow-hidden rounded-3xl shadow-lg shadow-primary/25 transition-transform duration-300 hover:scale-[1.02]"
+            className="group relative overflow-hidden rounded-2xl shadow-lg shadow-primary/25 transition-transform duration-300 hover:scale-[1.02] sm:rounded-3xl"
           >
             <div className="absolute inset-0">
               <SmartImage
@@ -128,19 +128,19 @@ export function Hero() {
             </div>
             <div className="absolute inset-0 bg-primary/80 transition-colors duration-300 group-hover:bg-caramel-900/70" />
 
-            <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
-              <h2 className="mt-4 font-sans text-2xl font-bold leading-snug text-cream-50 sm:text-[1.7rem]">
+            <div className="relative flex h-full flex-col justify-end p-4 sm:p-6 lg:p-8">
+              <h2 className="mt-3 font-sans text-lg font-bold leading-snug text-cream-50 sm:mt-4 sm:text-2xl lg:text-[1.7rem]">
                 Diskon Kilat,
                 <br />
                 Hemat Besar.
               </h2>
-              <p className="mt-2 max-w-[260px] font-inter text-sm leading-relaxed text-cream-50/80">
+              <p className="mt-1.5 max-w-[260px] font-inter text-xs leading-relaxed text-cream-50/80 sm:mt-2 sm:text-sm">
                 Dapatkan diskon spesial untuk makanan favoritmu sekarang.
               </p>
               <Button
                 variant="outlineCream"
                 size="sm"
-                className="mt-5"
+                className="mt-3 sm:mt-5"
                 onClick={() => scrollToId("flashSale")}
               >
                 Lihat Promo
@@ -151,7 +151,7 @@ export function Hero() {
 
           <motion.div
             variants={item}
-            className="group relative overflow-hidden rounded-3xl shadow-lg shadow-primary/20 transition-transform duration-300 hover:scale-[1.02]"
+            className="group relative overflow-hidden rounded-2xl shadow-lg shadow-primary/20 transition-transform duration-300 hover:scale-[1.02] sm:rounded-3xl"
           >
             <div className="absolute inset-0">
               <SmartImage
@@ -162,17 +162,17 @@ export function Hero() {
             </div>
             <div className="absolute inset-0 bg-primary/80 transition-colors duration-300 group-hover:bg-caramel-900/70" />
 
-            <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
-              <h2 className="mt-3 font-sans text-xl font-bold text-cream-50 sm:text-2xl">
+            <div className="relative flex h-full flex-col justify-end p-4 sm:p-6 lg:p-8">
+              <h2 className="mt-2 font-sans text-base font-bold text-cream-50 sm:mt-3 sm:text-xl lg:text-2xl">
                 Punya Makanan Surplus?
               </h2>
-              <p className="mt-1.5 max-w-[260px] font-inter text-sm leading-relaxed text-cream-50/80">
+              <p className="mt-1 max-w-[260px] font-inter text-xs leading-relaxed text-cream-50/80 sm:mt-1.5 sm:text-sm">
                 Jual sekarang dengan harga diskon dan ubah sisa jadi pemasukan.
               </p>
               <Button
                 variant="outlineCream"
                 size="sm"
-                className="mt-5"
+                className="mt-3 sm:mt-5"
                 onClick={handleMulaiJual}
               >
                 Mulai Jual

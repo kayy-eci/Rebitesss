@@ -8,6 +8,7 @@ import { ArrowLeft, Search, SearchX, Sparkles } from "lucide-react";
 import { useCatalog } from "@/lib/catalog";
 import type { FilterKey, FoodItem } from "@/lib/types";
 import { ProfileNavbar } from "@/app/components/shared/navbar";
+import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { SiteFooter } from "@/app/components/shared/Footer";
 import { SearchFilterBar } from "@/app/components/shared/SearchFilterBar";
 import { FoodCard } from "@/app/components/shared/FoodCard";
@@ -117,7 +118,7 @@ function CariContent() {
     <div className="flex min-h-screen flex-col bg-cream-50">
       <ProfileNavbar />
 
-      <main className="flex-1 pt-28">
+      <main className="flex-1 pb-20 pt-24 sm:pt-28 lg:pb-0">
         <section className="relative overflow-hidden bg-cream-50 pb-16 pt-6 lg:pb-24">
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center">
@@ -147,7 +148,7 @@ function CariContent() {
             {hasQuery ? (
               <>
                 <div className="mt-8 flex items-center justify-between">
-                  <p className="font-sans text-sm text-charcoal-500">
+                  <p className="font-sans text-xs text-charcoal-500 sm:text-sm">
                     {loading ? (
                       "Memuat..."
                     ) : (
@@ -181,7 +182,7 @@ function CariContent() {
                       hidden: {},
                       visible: { transition: { staggerChildren: 0.05 } },
                     }}
-                    className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
                   >
                     {filteredItems.map((item) => (
                       <motion.div
@@ -249,6 +250,7 @@ function CariContent() {
         </section>
       </main>
 
+      <MobileBottomNav />
       <SiteFooter />
 
       <AnimatePresence>

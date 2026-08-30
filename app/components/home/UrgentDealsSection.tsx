@@ -109,7 +109,7 @@ export function UrgentDealsSection({
     <section
       id="rekomendasi"
       data-nav="green"
-      className="grain-overlay relative flex min-h-screen scroll-mt-24 flex-col justify-center overflow-hidden bg-primary py-16 lg:py-20"
+      className="grain-overlay relative flex min-h-screen scroll-mt-20 flex-col justify-center overflow-hidden bg-primary py-10 sm:py-16 lg:py-20"
     >
       <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/10" />
       <SoftBlob className="-right-24 bottom-0 h-96 w-96 bg-gold-500/15" />
@@ -159,7 +159,7 @@ export function UrgentDealsSection({
           </div>
         </div>
 
-        <div className="mb-10 mt-8 lg:mt-10">
+        <div className="mb-6 mt-5 sm:mb-10 sm:mt-8 lg:mt-10">
           <SearchFilterBar
             query={searchQuery}
             onQueryChange={setSearchQuery}
@@ -191,7 +191,7 @@ export function UrgentDealsSection({
 
           <div
             ref={scrollRef}
-            className="mt-2 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="mt-2 grid snap-x snap-mandatory auto-cols-[80%] grid-flow-col gap-4 overflow-x-auto scroll-smooth pb-4 sm:auto-cols-[calc((100%-1.25rem)/2)] sm:gap-5 sm:pb-6 lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {loading && (
               <div className="flex h-56 items-center justify-center text-sm text-white/70 col-span-full">
