@@ -285,7 +285,7 @@ export async function syncDeliveringNotifications(userId: string | null | undefi
   for (const order of orders) {
     if (order.status !== 'ongoing') continue;
     if (!paidSet.has(order.orderId)) continue;
-    // Status dikendalikan penjual (progress_status terisi) — notifikasi
+    // Status dikendalikan penjual (progress_status terisi) - notifikasi
     // delivering dikirim dari dashboard penjual saat status diubah,
     // bukan dari timer estimasi.
     if (order.progressStatus) continue;

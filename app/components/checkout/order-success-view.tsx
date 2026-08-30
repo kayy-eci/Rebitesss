@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -237,7 +237,7 @@ export function OrderSuccessView() {
 
   const estimasiText = order.estimatedMinutes
     ? `${order.estimatedMinutes} menit`
-    : '—';
+    : '-';
   const jarakText = typeof order.distanceKm === 'number' ? `${order.distanceKm} km` : null;
   const prepText = typeof order.preparationMinutes === 'number' ? `${order.preparationMinutes} menit persiapan` : null;
 
@@ -258,7 +258,7 @@ export function OrderSuccessView() {
           className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
         >
           {}
-          <div className="bg-sage-50 px-8 pb-10 pt-9 text-center">
+          <div className="bg-sage-50 px-5 pb-10 pt-9 text-center sm:px-8">
             <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-sage-400 shadow">
               <ReceiptText className="h-8 w-8" />
             </span>
@@ -276,13 +276,13 @@ export function OrderSuccessView() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.35, ease: EASE }}
-              className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10"
+              className="flex items-center gap-3 rounded-2xl border border-caramel/40 bg-caramel/15 px-4 py-3.5 shadow-md shadow-caramel/10"
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow">
                 <Coins className="h-5 w-5" />
               </span>
               <div>
-                <p className="font-display text-xl font-bold tabular-nums text-gold-600">
+                <p className="font-display text-xl font-bold tabular-nums text-caramel-dark">
                   +<AnimatedNumber value={order.coinEarned} format={(v) => v.toLocaleString('id-ID')} /> ReBites Coin
                 </p>
                 <p className="text-xs text-charcoal-500">Coin akan ditambahkan ke saldo kamu</p>
@@ -324,7 +324,7 @@ export function OrderSuccessView() {
                 <dt className="font-display font-medium text-charcoal-900">Total</dt>
                 <dd className="font-display text-lg font-semibold tabular-nums text-primary">{formatRupiah(order.total)}</dd>
               </div>
-              <Row label="Metode pembayaran" value={PAYMENT_NAMES[order.paymentMethodId] ?? '—'} />
+              <Row label="Metode pembayaran" value={PAYMENT_NAMES[order.paymentMethodId] ?? '-'} />
               {order.estimatedMinutes && <Row label="Estimasi selesai" value={estimasiText} />}
               {jarakText && order.fulfillment === 'delivery' && <Row label="Jarak toko" value={jarakText} />}
             </dl>
@@ -345,7 +345,7 @@ export function OrderSuccessView() {
           </DialogHeader>
 
           {isFailed ? (
-            <div className="bg-red-600 px-8 pb-10 pt-9 text-center text-white">
+            <div className="bg-red-600 px-5 pb-10 pt-9 text-center text-white sm:px-8">
               <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-red-600 shadow-lg">
                 <XCircle className="h-8 w-8" strokeWidth={2.5} />
               </span>
@@ -354,8 +354,8 @@ export function OrderSuccessView() {
               <p className="mt-2 text-xs text-white/70">Stok telah dikembalikan.</p>
             </div>
           ) : isPending ? (
-            <div className="bg-amber-500 px-8 pb-10 pt-9 text-center text-white">
-              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-amber-600 shadow-lg">
+            <div className="bg-caramel px-5 pb-10 pt-9 text-center text-white sm:px-8">
+              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-caramel-dark shadow-lg">
                 <Clock className="h-8 w-8" strokeWidth={2.2} />
               </span>
               <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight">Menunggu Pembayaran</h2>
@@ -366,7 +366,7 @@ export function OrderSuccessView() {
               </p>
             </div>
           ) : (
-            <div className="relative overflow-hidden bg-primary px-8 pb-10 pt-9 text-center text-white">
+            <div className="relative overflow-hidden bg-primary px-5 pb-10 pt-9 text-center text-white sm:px-8">
               <motion.span
                 initial={{ scale: 0, rotate: -30 }}
                 animate={{ scale: 1, rotate: 0 }}
@@ -393,12 +393,12 @@ export function OrderSuccessView() {
           {}
           {!isFailed && (
             <div className="px-6 -mt-5">
-              <div className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow">
+              <div className="flex items-center gap-3 rounded-2xl border border-caramel/40 bg-caramel/15 px-4 py-3.5 shadow-md shadow-caramel/10">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow">
                   <Coins className="h-5 w-5" />
                 </span>
                 <div>
-                  <p className="font-display text-xl font-bold tabular-nums text-gold-600">
+                  <p className="font-display text-xl font-bold tabular-nums text-caramel-dark">
                     +<AnimatedNumber value={order.coinEarned} format={(v) => v.toLocaleString('id-ID')} /> ReBites Coin
                   </p>
                   <p className="text-xs text-charcoal-500">Coin akan ditambahkan ke saldo kamu</p>

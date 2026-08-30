@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient, getUserFromBearer } from '@/lib/server/supabase';
 
 export const runtime = 'nodejs';
 
 /**
- * POST /api/profile/avatar — upload foto profil ke bucket `avatars`
+ * POST /api/profile/avatar - upload foto profil ke bucket `avatars`
  * Auth: Authorization: Bearer <supabase access_token>
  * Body: multipart/form-data, field `file` (JPG/PNG/WebP, maks 2MB)
  *
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
   // Bust cache dengan timestamp (membantu browser cache invalidation)
   const finalUrl = `${publicUrl}?t=${Date.now()}`;
 
-  // Update profiles.avatar_url — buat row bila belum ada
+  // Update profiles.avatar_url - buat row bila belum ada
   const { data: updated, error: updErr } = await service
     .from('profiles')
     .update({ avatar_url: finalUrl })
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Gagal menyimpan ke profil.' }, { status: 500 });
   }
 
-  // Sinkron ke auth metadata (fallback — profiles tetap sumber utama)
+  // Sinkron ke auth metadata (fallback - profiles tetap sumber utama)
   try {
     await service.auth.admin.updateUserById(user.id, {
       user_metadata: { avatar_url: finalUrl },

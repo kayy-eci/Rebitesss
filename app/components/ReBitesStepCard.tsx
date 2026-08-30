@@ -24,7 +24,7 @@ export default function ReBitesStepCard({ step }: ReBitesStepCardProps) {
       </div>
 
       <div className="flex flex-col items-center px-5 pb-5 pt-5 text-center">
-        <h3 className="font-display text-lg font-bold leading-snug text-forest-800">
+        <h3 className="font-display text-lg font-bold leading-snug text-primary-800">
           {step.title}
         </h3>
         <p className="mt-2.5 font-sans text-sm leading-[1.6] text-stone">

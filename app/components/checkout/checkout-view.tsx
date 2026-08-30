@@ -52,10 +52,10 @@ function CheckoutContent({
 }) {
   return (
     <CheckoutProvider draft={draft} initialQuantity={initialQuantity}>
-      <main className="relative min-h-screen bg-cream-50 pb-28 lg:pb-16">
+      <main className="relative min-h-screen bg-cream-50 pb-32 sm:pb-28 lg:pb-16">
         <CheckoutDecor />
 
-        <div className="relative mx-auto max-w-[1400px] px-5 pt-6 sm:px-8 lg:px-12 lg:pt-10">
+        <div className="relative mx-auto max-w-[1400px] px-4 pt-4 sm:px-8 sm:pt-6 lg:px-12 lg:pt-10">
           {}
           <div className="flex items-center gap-3">
             <Link
@@ -67,13 +67,13 @@ function CheckoutContent({
             </Link>
           </div>
 
-          <h1 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] font-light leading-[1.05] tracking-[-0.02em] text-charcoal-900">
+          <h1 className="mt-3 font-display text-[clamp(1.5rem,5vw,3.4rem)] font-light leading-[1.05] tracking-[-0.02em] text-charcoal-900 sm:mt-5">
             Detail pesanan
           </h1>
 
-          <div className="mt-8 grid items-start gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:gap-10">
+          <div className="mt-5 grid items-start gap-4 sm:mt-8 sm:gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:gap-10">
             {}
-            <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
               <OrderItemCard />
 
               <div id="checkout-qty-card" className="scroll-mt-28">

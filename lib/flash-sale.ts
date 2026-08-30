@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { supabase } from './supabase';
 import { readSellerPlan, type SellerEntitlements } from './seller-plan';
@@ -156,7 +156,7 @@ export function slotFromStartIso(iso: string): UrgentSlot {
   return '09-12';
 }
 
-/** 4 slot waktu Flash Sale — selaras dengan FlashSaleSection SLOTS */
+/** 4 slot waktu Flash Sale - selaras dengan FlashSaleSection SLOTS */
 export const FLASH_SLOTS: { key: UrgentSlot; label: string; range: string; start: number; end: number }[] = [
   { key: '09-12', label: 'Pagi', range: '09.00–12.00', start: 9, end: 12 },
   { key: '12-15', label: 'Siang', range: '12.00–15.00', start: 12, end: 15 },
@@ -193,13 +193,11 @@ function wibEpochOfToday(h: number, min = 0, sec = 0, baseDate = new Date()) {
   return Date.UTC(p.year, p.month - 1, p.day, h, min, sec) - WIB_OFFSET_MS;
 }
 
-/** Hitung ISO start/end untuk slot yang dipilih. Jika slot hari ini sudah lewat, otomatis pakai besok. Tidak perlu kolom baru di DB. */
 export function slotToWibIso(slot: UrgentSlot, now = Date.now()): { startIso: string; endIso: string } {
   const def = FLASH_SLOTS.find((s) => s.key === slot);
   if (!def) throw new Error('Slot tidak valid');
   const todayStart = wibEpochOfToday(def.start, 0, 0, new Date(now));
   const todayEnd = wibEpochOfToday(def.end, 0, 0, new Date(now));
-  // Jika slot hari ini sudah berakhir (end <= now WIB), pakai besok
   if (todayEnd <= now) {
     const tomorrow = new Date(now + 24 * 3600 * 1000);
     const start = wibEpochOfToday(def.start, 0, 0, tomorrow);
@@ -209,11 +207,9 @@ export function slotToWibIso(slot: UrgentSlot, now = Date.now()): { startIso: st
   return { startIso: new Date(todayStart).toISOString(), endIso: new Date(todayEnd).toISOString() };
 }
 
-/** Ambil produk Flash Sale aktif — query global (semua UMKM), bukan hanya penjual yang login. Tidak merusak DB: hanya baca kolom flash_sale_* yang sudah ada. */
 export async function getActiveFlashSaleProducts(
   now: number = Date.now()
 ): Promise<FlashSaleCardItem[]> {
-  // Fallback ke data seller lokal jika supabase belum siap / error network → tetap tampil untuk seller yang sedang login
   const fetchGlobal = async (): Promise<SellerProduct[]> => {
     const { data, error } = await supabase
       .from('products')
@@ -244,7 +240,6 @@ export async function getActiveFlashSaleProducts(
         allDay: (r.all_day as boolean) ?? false,
         isSurplusToday: (r.is_surplus_today as boolean) ?? true,
         featured: (r.featured as boolean) ?? false,
-        // map vendor name dari join
         vendorName: (umkm?.business_name as string) ?? (r.vendor_name as string) ?? SELLER_VENDOR_NAME,
         flashSale:
           r.flash_sale_price != null
@@ -265,7 +260,6 @@ export async function getActiveFlashSaleProducts(
   } catch {
     products = [];
   }
-  // Jika global kosong (mis. RLS membatasi atau offline), fallback ke produk seller lokal agar penjual tetap melihat hasilnya
   if (products.length === 0) {
     try {
       const local = await getSellerProducts();

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -83,7 +83,7 @@ function ProductLimitMeter({ products }: { products: SellerProduct[] }) {
           <div
             className={cn(
               'h-full rounded-full transition-all duration-500',
-              isFull ? 'bg-gold-500' : 'bg-primary'
+              isFull ? 'bg-caramel' : 'bg-primary'
             )}
             style={{ width: `${percent}%` }}
           />
@@ -276,7 +276,7 @@ const FLASH_STATUS_META: Record<
   Exclude<FlashSaleStatus, 'inactive'>,
   { label: string; className: string }
 > = {
-  scheduled: { label: 'Terjadwal', className: 'bg-gold-100 text-charcoal-900' },
+  scheduled: { label: 'Terjadwal', className: 'bg-caramel/15 text-charcoal-900' },
   active: { label: 'Sedang berlangsung', className: 'bg-primary/10 text-primary' },
   ended: {
     label: 'Berakhir',
@@ -423,7 +423,7 @@ function FlashSalePanel({
         <Zap
           className={cn(
             'h-3.5 w-3.5 shrink-0',
-            occupiesSlot || editing ? 'text-gold-500' : 'text-sage-500'
+            occupiesSlot || editing ? 'text-caramel' : 'text-sage-500'
           )}
         />
         <span className="text-xs font-semibold text-charcoal-900">Flash Sale</span>
@@ -445,7 +445,7 @@ function FlashSalePanel({
             }
             className={cn(
               'relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors',
-              occupiesSlot ? 'bg-gold-500' : 'bg-stone',
+              occupiesSlot ? 'bg-caramel' : 'bg-stone',
               switchDisabled && 'cursor-not-allowed opacity-40'
             )}
           >
@@ -499,7 +499,7 @@ function FlashSalePanel({
             </div>
           </div>
 
-          {/* Pilih Waktu Flash Sale: Pagi/Siang/Sore/Malam — produk akan tampil di slot ini di home */}
+          {/* Pilih Waktu Flash Sale: Pagi/Siang/Sore/Malam - produk akan tampil di slot ini di home */}
           <div className="rounded-xl bg-white p-2.5">
             <label className="block text-[10px] font-semibold uppercase tracking-wider text-charcoal-900">
               Waktu Flash Sale
@@ -522,7 +522,7 @@ function FlashSalePanel({
                       'rounded-xl border px-3 py-2.5 text-left transition-colors',
                       active
                         ? 'border-primary bg-primary text-white shadow-sm'
-                        : 'border-sage-200 bg-white text-charcoal-900 hover:border-primary hover:bg-primary/5'
+                        : 'border-sage-200 bg-white text-charcoal-900 hover:border-caramel hover:bg-caramel/20'
                     )}
                   >
                     <span className="text-xs font-bold">{slot.label}</span>
@@ -706,7 +706,7 @@ function MenuCard({
       <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-sage-100">
         <SmartImage src={product.image} alt={`Foto ${product.name}`} />
         {product.featured && (
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-gold-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white shadow-md">
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-caramel px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white shadow-md">
             <Crown className="h-3 w-3" />
             Unggulan
           </span>
@@ -734,7 +734,7 @@ function MenuCard({
           type="button"
           onClick={onEdit}
           aria-label={`Edit ${product.name}`}
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sage-200 text-charcoal-500 transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sage-200 text-charcoal-500 transition-colors hover:border-caramel hover:bg-caramel/20 hover:text-caramel"
         >
           <Pencil className="h-3 w-3" />
         </button>
@@ -785,8 +785,8 @@ function MenuCard({
             className={cn(
               'rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors',
               product.featured
-                ? 'bg-gold-500 text-white hover:bg-gold-600'
-                : 'border border-gold-500 text-gold-600 hover:bg-gold-100'
+                ? 'bg-caramel text-white hover:bg-caramel-600'
+                : 'border border-caramel-500 text-caramel-dark hover:bg-caramel/15'
             )}
           >
             {product.featured ? 'Lepas Unggulan' : 'Jadikan Unggulan'}
@@ -837,7 +837,7 @@ function FlashSaleSectionHeader({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="flex items-center gap-1.5 text-sm font-bold text-charcoal-900">
-            <Zap className="h-4 w-4 text-gold-500" />
+            <Zap className="h-4 w-4 text-caramel" />
             Flash Sale
           </h2>
           <p className="mt-1 text-xs text-sage-500">
@@ -848,7 +848,7 @@ function FlashSaleSectionHeader({
         <span
           className={cn(
             'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold',
-            isBasic ? 'bg-gold-100 text-charcoal-900' : 'bg-sage-100 text-charcoal-900'
+            isBasic ? 'bg-caramel/15 text-charcoal-900' : 'bg-sage-100 text-charcoal-900'
           )}
         >
           {isBasic && <Lock className="h-3 w-3" />}
@@ -862,7 +862,7 @@ function FlashSaleSectionHeader({
             <Lock className="h-4 w-4" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="inline-flex items-center rounded-full bg-gold-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+            <p className="inline-flex items-center rounded-full bg-caramel/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
               Fitur Premium
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-sage-500">
@@ -958,8 +958,8 @@ export default function MenuSayaPage() {
         <ProductLimitMeter products={products} />
 
         {isLimitReached && (
-          <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gold-100 px-3 py-2 text-[11px] font-medium text-charcoal-900">
-            <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-gold-600" />
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-caramel/15 px-3 py-2 text-[11px] font-medium text-charcoal-900">
+            <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-caramel-dark" />
             Batas produk tercapai ({products.length}/{plan.maxProducts}). Hapus salah satu
             menu atau upgrade paket untuk menambah lagi.
           </p>
@@ -969,7 +969,7 @@ export default function MenuSayaPage() {
       <FlashSaleSectionHeader plan={plan} quota={flashQuota} used={flashUsed} />
 
       {quotaBlocked && (
-        <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gold-100 px-3 py-2 text-[11px] font-medium text-charcoal-900">
+        <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-caramel/15 px-3 py-2 text-[11px] font-medium text-charcoal-900">
           <XCircle className="h-3.5 w-3.5 shrink-0" />
           {flashQuota === 0
             ? 'Fitur Flash Sale tersedia mulai dari paket Standar. Upgrade paket untuk menambahkan produk ke Flash Sale.'

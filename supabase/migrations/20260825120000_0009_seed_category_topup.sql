@@ -1,5 +1,5 @@
--- ============================================================================
--- 0009: Seed category top-up — lengkapi tiap kategori browse jadi 5 produk
+﻿-- ============================================================================
+-- 0009: Seed category top-up - lengkapi tiap kategori browse jadi 5 produk
 --   Target per kategori (produk tanpa slot, tampil di /makanan/[category]):
 --     Makanan Berat       8  (tidak ditambah, sudah melebihi target)
 --     Jajanan             2 -> 5  (+3)

@@ -8,7 +8,8 @@ import {
   PackageOpen,
   SearchX,
 } from "lucide-react";
-import { SiteFooter } from "@/app/components/shared/Footer";
+import { SiteFooter } from "@/app/components/site-footer";
+import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { FoodCard } from "@/app/components/shared/FoodCard";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
 import { StoreClosedModal } from "@/app/components/shared/StoreClosedModal";
@@ -149,7 +150,7 @@ export default function CategoryView({
                   aria-live="polite"
                   className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm"
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   {isLoading
                     ? "Memuat…"
                     : `${filteredItems.length} makanan tersedia`}
@@ -162,7 +163,7 @@ export default function CategoryView({
         {}
         <section className="border-b border-sage-100 bg-cream-50">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="py-4">
+            <div className="py-3 sm:py-4">
               <SearchFilterBar
                 query={searchQuery}
                 onQueryChange={setSearchQuery}
@@ -177,7 +178,7 @@ export default function CategoryView({
         </section>
 
         {}
-        <section className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-7xl px-4 pb-24 pt-4 sm:px-6 sm:pt-8 lg:px-8">
           {isLoading ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 sm:gap-5 xl:grid-cols-4">
               {Array.from({ length: 8 }).map((_, index) => (
@@ -204,7 +205,7 @@ export default function CategoryView({
                 Coba pilih kategori lain atau cek kembali beberapa saat lagi.
               </p>
               <Link
-                href="/cari"
+                href="/toko"
                 className={cn(
                   "mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98]",
                   FOCUS_RING,
@@ -274,6 +275,7 @@ export default function CategoryView({
         </section>
       </main>
 
+      <MobileBottomNav />
       <SiteFooter />
 
       <AnimatePresence>

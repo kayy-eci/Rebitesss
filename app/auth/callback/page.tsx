@@ -10,12 +10,12 @@ function safeNextPath(raw: string | null): string {
 
 function CallbackStatus({ failed }: { failed: boolean }) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F7F5EF] px-6">
+    <div className="flex min-h-screen items-center justify-center bg-secondary px-6">
       <div className="flex flex-col items-center gap-4 text-center">
         {!failed && (
-          <span className="h-8 w-8 animate-spin rounded-full border-2 border-[#225138] border-t-transparent" />
+          <span className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         )}
-        <p className="font-sans text-sm text-[#6B6A63]">
+        <p className="font-sans text-sm text-muted-foreground">
           {failed
             ? "Verifikasi gagal. Silakan masuk kembali."
             : "Memverifikasi email kamu…"}

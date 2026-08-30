@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -41,7 +41,7 @@ export default function PerformaTokoPage() {
             href="/dashboard/penjual/langganan"
             className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-primary px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-caramel/10"
           >
-            <Crown className="h-3.5 w-3.5 text-gold-500" />
+            <Crown className="h-3.5 w-3.5 text-caramel" />
             Kelola Paket Langganan
           </Link>
         </div>

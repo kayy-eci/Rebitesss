@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, MapPin, Search, SearchX, X } from "lucide-react";
+import { ChevronDown, Filter, MapPin, Search, SearchX, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { LOCATIONS, formatRupiah } from "@/lib/data";
@@ -23,10 +23,20 @@ interface SearchFilterBarProps {
 }
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C8A882] focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 const GLASS_FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+const FILTER_OPTIONS: { key: FilterKey; label: string }[] = [
+  { key: "terdekat", label: "Terdekat" },
+  { key: "diskon-terbesar", label: "Diskon Terbesar" },
+  { key: "segera-habis", label: "Segera Habis" },
+  { key: "umkm", label: "UMKM" },
+  { key: "bakery", label: "Bakery" },
+  { key: "restoran", label: "Restoran" },
+  { key: "minuman", label: "Minuman" },
+];
 
 function applySort(key: FilterKey) {
   return (a: FoodItem, b: FoodItem) => {
@@ -97,7 +107,8 @@ export function SearchFilterBar({
     let items = foodItems.filter(
       (item) =>
         item.name.toLowerCase().includes(q) ||
-        item.vendorName.toLowerCase().includes(q),
+        item.vendorName.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q),
     );
 
     const categoryFilters: FilterKey[] = [
@@ -154,6 +165,14 @@ export function SearchFilterBar({
   const handleSelectResult = (id: string) => {
     setIsDropdownOpen(false);
     onSelectResult?.(id);
+  };
+
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false);
+  const [draftFilter, setDraftFilter] = useState<FilterKey>(activeFilter);
+
+  const handleApplyFilter = () => {
+    onFilterChange?.(draftFilter);
+    setFilterSheetOpen(false);
   };
 
   return (
@@ -329,11 +348,11 @@ export function SearchFilterBar({
                 "flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-200",
                 isGlass
                   ? "border-white/30 bg-white/10 text-white hover:border-white/60 hover:text-white"
-                  : "border-sage-100 bg-white text-charcoal-500 hover:border-[#C8A882]/40 hover:text-[#C8A882]",
+                  : "border-sage-100 bg-white text-charcoal-500 hover:border-caramel/40 hover:text-caramel",
                 isGlass ? GLASS_FOCUS_RING : FOCUS_RING,
               )}
             >
-              <MapPin className="h-4 w-4 text-[#C8A882]" />
+              <MapPin className="h-4 w-4 text-caramel" />
               <span className="max-w-[130px] truncate">{location}</span>
               <ChevronDown
                 className={cn(
@@ -371,8 +390,8 @@ export function SearchFilterBar({
                           className={cn(
                             "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                             loc === location
-                              ? "bg-cream-100 font-semibold text-[#C8A882]"
-                              : "text-charcoal-500 hover:bg-cream-50 hover:text-[#C8A882]",
+                              ? "bg-cream-100 font-semibold text-caramel"
+                              : "text-charcoal-500 hover:bg-cream-50 hover:text-caramel",
                           )}
                         >
                           <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -388,20 +407,117 @@ export function SearchFilterBar({
           )}
 
           {!isGlass && !isLight && (
-            <button
-              type="submit"
-              className={cn(
-                "flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-7 font-sans text-sm font-semibold text-white shadow-md transition-colors duration-200 active:scale-[0.98]",
-                "bg-[#C8A882] hover:bg-[#A06B45]",
-                FOCUS_RING,
-              )}
-            >
-              <Search className="h-4 w-4" />
-              Cari
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Mobile filter button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setDraftFilter(activeFilter);
+                  setFilterSheetOpen(true);
+                }}
+                aria-label="Buka filter"
+                className={cn(
+                  "flex h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-sage-100 bg-white px-3 font-sans text-sm font-semibold text-charcoal-700 shadow-sm transition-colors duration-200 active:scale-[0.98] lg:hidden",
+                  FOCUS_RING,
+                )}
+              >
+                <Filter className="h-4 w-4" />
+                <span className="hidden sm:inline">Filter</span>
+              </button>
+
+              <button
+                type="submit"
+                className={cn(
+                  "flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-5 font-sans text-sm font-semibold text-white shadow-md transition-colors duration-200 active:scale-[0.98] sm:px-7",
+                  "bg-caramel hover:bg-caramel",
+                  FOCUS_RING,
+                )}
+              >
+                <Search className="h-4 w-4" />
+                Cari
+              </button>
+            </div>
           )}
         </form>
       </div>
+
+      {/* Mobile filter bottom sheet */}
+      <AnimatePresence>
+        {filterSheetOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[55] bg-primary/40 backdrop-blur-sm"
+              onClick={() => setFilterSheetOpen(false)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-x-0 bottom-0 z-[60] max-h-[80vh] overflow-y-auto rounded-t-3xl bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl"
+            >
+              <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-sage-200" />
+              <div className="flex items-center justify-between">
+                <h3 className="font-sans text-lg font-bold text-charcoal-900">Filter</h3>
+                <button
+                  type="button"
+                  onClick={() => setFilterSheetOpen(false)}
+                  aria-label="Tutup filter"
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-charcoal-500 hover:bg-cream-100"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="mt-4">
+                <p className="font-sans text-xs font-semibold uppercase tracking-wider text-charcoal-500">Urutkan</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {FILTER_OPTIONS.map((opt) => {
+                    const active = draftFilter === opt.key;
+                    return (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => setDraftFilter(opt.key)}
+                        className={cn(
+                          "rounded-full border px-4 py-2 text-xs font-semibold transition-colors",
+                          active
+                            ? "border-primary bg-primary text-white"
+                            : "border-sage-200 bg-white text-charcoal-700 hover:border-caramel hover:bg-caramel/20",
+                        )}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDraftFilter("terdekat");
+                  }}
+                  className="flex-1 rounded-full border border-sage-200 bg-white px-4 py-3 text-sm font-semibold text-charcoal-700 transition-colors hover:bg-cream-50"
+                >
+                  Reset
+                </button>
+                <button
+                  type="button"
+                  onClick={handleApplyFilter}
+                  className="flex-1 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-caramel"
+                >
+                  Terapkan
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

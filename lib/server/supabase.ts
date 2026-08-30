@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+﻿import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 function requireEnv(name: string): string {
   const raw = process.env[name];
@@ -42,7 +42,7 @@ export function getSiteUrl(): string {
   if (!raw) {
     if (process.env.NODE_ENV === 'production') {
       console.warn(
-        '[supabase] NEXT_PUBLIC_SITE_URL tidak di-set di production — fallback ke http://localhost:3000. Set di Vercel Env (mis. https://rebites.vercel.app) agar redirect Xendit benar.'
+        '[supabase] NEXT_PUBLIC_SITE_URL tidak di-set di production - fallback ke http://localhost:3000. Set di Vercel Env (mis. https://rebites.vercel.app) agar redirect Xendit benar.'
       );
     }
     return 'http://localhost:3000';

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { motion } from 'framer-motion';
 import {
@@ -47,9 +47,9 @@ export function BenefitsSection() {
   return (
     <section className="relative overflow-hidden bg-cream-50 pb-16 pt-2 lg:pb-20">
       <SoftBlob className="-left-28 bottom-10 h-80 w-80 bg-primary/5" />
-      <SoftBlob className="-right-20 top-8 h-64 w-64 bg-gold-100/60" />
+      <SoftBlob className="-right-20 top-8 h-64 w-64 bg-caramel/10" />
       <FloatingLeaf
-        className="right-10 top-16 hidden h-5 w-5 text-gold-500/45 lg:block"
+        className="right-10 top-16 hidden h-5 w-5 text-caramel/45 lg:block"
         delay={0.8}
       />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

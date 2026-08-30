@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useMemo } from 'react';
 import { TrendingDown, TrendingUp, UtensilsCrossed } from 'lucide-react';
@@ -76,7 +76,7 @@ export function DemandAnalyticsCard() {
             Permintaan Menu
           </h3>
         </div>
-        <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+        <span className="rounded-full bg-caramel/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
           Paket Max
         </span>
       </div>

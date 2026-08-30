@@ -1,4 +1,4 @@
--- ============================================================================
+﻿-- ============================================================================
 -- 0016: Unique constraint umkm_profiles.user_id
 --
 --   Masalah: tabel umkm_profiles tidak punya unique constraint pada
@@ -7,7 +7,7 @@
 --   semula memakai .maybeSingle() selalu error bila ada 2 row, dan user
 --   yang sudah punya toko terus dialihkan ke halaman registrasi ulang.
 --
---   1. Hapus row duplikat — untuk tiap user_id sisakan toko TERBARU
+--   1. Hapus row duplikat - untuk tiap user_id sisakan toko TERBARU
 --      (child rows: products, subscriptions, orders, reviews, follows,
 --      dst. ikut terhapus via ON DELETE CASCADE).
 --   2. Tambahkan UNIQUE (user_id) agar duplikat tidak bisa terbentuk lagi.

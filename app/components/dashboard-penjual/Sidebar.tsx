@@ -98,7 +98,7 @@ function NavItemLink({ item, onClose }: { item: NavItem; onClose?: () => void })
           'h-[18px] w-[18px] shrink-0',
           isActive
             ? 'text-primary'
-            : 'text-sage-500 group-hover:text-primary'
+            : 'text-sage-500 group-hover:text-caramel'
         )}
       />
       <span className="flex-1">{item.label}</span>

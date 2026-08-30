@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useCatalog } from "@/lib/catalog";
 import type { FoodItem, Vendor } from "@/lib/types";
-import { SiteFooter } from "@/app/components/shared/site-footer";
+import { SiteFooter } from "@/app/components/site-footer";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
 import { CategoryRow } from "@/app/components/detail-toko/category-row";
 import { useProductDetail } from "@/app/components/detail-product/use-product-detail";
@@ -46,6 +46,7 @@ import {
   getFlashDiscountPercent,
 } from "@/lib/flash-sale";
 import { STORE_SETTINGS_UPDATED_EVENT } from "@/lib/store-settings-storage";
+import { isVendorReallyOpen } from "@/lib/store-status";
 
 function sellerProductToFoodItem(
   sp: SellerProduct,
@@ -73,8 +74,9 @@ function sellerProductToFoodItem(
 }
 
 function isOpenNow(openHours: string): boolean {
+  // Deprecated: gunakan isOpenNow dari lib/store-status untuk konsistensi
   const match = openHours.match(
-    /(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/,
+    /(\d{1,2})\.(\d{2})\s*[-]\s*(\d{1,2})\.(\d{2})/,
   );
   if (!match) return true;
 
@@ -199,7 +201,7 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
                     {Array.from({ length: review.rating }).map((_, s) => (
                       <Star
                         key={s}
-                        className="h-4 w-4 fill-amber text-amber"
+                        className="h-4 w-4 fill-caramel text-caramel"
                       />
                     ))}
                   </div>
@@ -377,8 +379,8 @@ function StoreDetailContent() {
   }, [storeId]);
 
   useEffect(() => {
-    if (vendor) setOpenNow(isOpenNow(vendor.openHours));
-  }, [vendor]);
+    if (vendor) setOpenNow(isVendorReallyOpen({ isOpen: vendor.isOpen, openHours: vendor.openHours }));
+  }, [vendor?.isOpen, vendor?.openHours]);
 
   const featuredIds = useMemo(
     () => new Set(storeProducts.filter((sp) => sp.featured).map((sp) => sp.id)),
@@ -482,7 +484,7 @@ function StoreDetailContent() {
                   "flex h-[38px] items-center gap-1.5 rounded-full border px-4 text-sm font-semibold transition-colors duration-200",
                   activeCategory !== "Semua" || isCategoryOpen
                     ? "border-primary bg-white text-primary"
-                    : "border-sage-100 bg-white text-charcoal-900 hover:border-primary hover:text-primary",
+                    : "border-sage-100 bg-white text-charcoal-900 hover:border-caramel hover:text-caramel",
                 )}
               >
                 {activeCategory === "Semua" ? "Kategori" : activeCategory}

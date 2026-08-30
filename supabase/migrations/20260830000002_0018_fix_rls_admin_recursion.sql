@@ -1,4 +1,4 @@
--- ============================================================================
+﻿-- ============================================================================
 -- 0018: Perbaiki infinite recursion di policy RLS (penyebab HTTP 500)
 --
 --   Masalah: banyak policy memakai pola cek admin yang mereferensikan
@@ -11,7 +11,7 @@
 --
 --   Dampak: SEMUA SELECT dari browser ke profiles, subscriptions, orders,
 --   plans, products (policy admin), umkm_profiles (update), promo_codes
---   selalu gagal 500 — termasuk halaman "Menunggu Pembayaran" yang tak
+--   selalu gagal 500 - termasuk halaman "Menunggu Pembayaran" yang tak
 --   pernah bisa membaca status langganan setelah bayar via Xendit.
 --   (Webhook tetap jalan karena service_role bypass RLS.)
 --
@@ -23,7 +23,7 @@
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- 1. Fungsi helper is_admin() — SECURITY DEFINER (owner bypass RLS)
+-- 1. Fungsi helper is_admin() - SECURITY DEFINER (owner bypass RLS)
 -- ----------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS boolean
@@ -39,13 +39,13 @@ AS $$
   );
 $$;
 
--- Fungsi ini hanya membaca flag role — aman untuk semua role.
+-- Fungsi ini hanya membaca flag role - aman untuk semua role.
 REVOKE EXECUTE ON FUNCTION public.is_admin() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.is_admin()
   TO anon, authenticated, service_role;
 
 -- ----------------------------------------------------------------------------
--- 2. profiles — select own atau admin
+-- 2. profiles - select own atau admin
 -- ----------------------------------------------------------------------------
 DROP POLICY IF EXISTS "profiles_select_own_or_admin" ON public.profiles;
 CREATE POLICY "profiles_select_own_or_admin"
@@ -54,7 +54,7 @@ TO authenticated
 USING (auth.uid() = id OR public.is_admin());
 
 -- ----------------------------------------------------------------------------
--- 3. plans — tulis hanya admin (baca tetap publik)
+-- 3. plans - tulis hanya admin (baca tetap publik)
 -- ----------------------------------------------------------------------------
 DROP POLICY IF EXISTS "plans_insert_admin" ON public.plans;
 CREATE POLICY "plans_insert_admin"
@@ -76,7 +76,7 @@ TO authenticated
 USING (public.is_admin());
 
 -- ----------------------------------------------------------------------------
--- 4. umkm_profiles — update own atau admin
+-- 4. umkm_profiles - update own atau admin
 -- ----------------------------------------------------------------------------
 DROP POLICY IF EXISTS "umkm_update_own_or_admin" ON public.umkm_profiles;
 CREATE POLICY "umkm_update_own_or_admin"
@@ -86,7 +86,7 @@ USING (auth.uid() = user_id OR public.is_admin())
 WITH CHECK (auth.uid() = user_id OR public.is_admin());
 
 -- ----------------------------------------------------------------------------
--- 5. subscriptions — select / update own atau admin
+-- 5. subscriptions - select / update own atau admin
 -- ----------------------------------------------------------------------------
 DROP POLICY IF EXISTS "subs_select_own_or_admin" ON public.subscriptions;
 CREATE POLICY "subs_select_own_or_admin"
@@ -123,7 +123,7 @@ WITH CHECK (
 );
 
 -- ----------------------------------------------------------------------------
--- 6. products — update own atau admin
+-- 6. products - update own atau admin
 -- ----------------------------------------------------------------------------
 DROP POLICY IF EXISTS "products_update_own_or_admin" ON public.products;
 CREATE POLICY "products_update_own_or_admin"
@@ -147,7 +147,7 @@ WITH CHECK (
 );
 
 -- ----------------------------------------------------------------------------
--- 7. orders — select / update participants (buyer / seller / admin)
+-- 7. orders - select / update participants (buyer / seller / admin)
 -- ----------------------------------------------------------------------------
 DROP POLICY IF EXISTS "orders_select_participants" ON public.orders;
 CREATE POLICY "orders_select_participants"
@@ -187,7 +187,7 @@ WITH CHECK (
 );
 
 -- ----------------------------------------------------------------------------
--- 8. promo_codes — tulis hanya admin
+-- 8. promo_codes - tulis hanya admin
 -- ----------------------------------------------------------------------------
 DROP POLICY IF EXISTS "promo_codes_admin_write" ON public.promo_codes;
 CREATE POLICY "promo_codes_admin_write"

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -169,7 +169,7 @@ export function ProfileNavbar({
         "relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200",
         overDark
           ? "text-white/80 hover:bg-white/10 hover:text-white"
-          : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
+          : "text-charcoal-500 hover:bg-cream-100 hover:text-caramel",
         FOCUS_RING,
       )}
     >
@@ -179,7 +179,7 @@ export function ProfileNavbar({
           className={cn(
             "absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-colors duration-500",
             overDark
-              ? "bg-gold-500 text-charcoal-900"
+              ? "bg-caramel text-charcoal-900"
               : "bg-primary text-white",
           )}
         >
@@ -191,11 +191,11 @@ export function ProfileNavbar({
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4">
+      <header className="hidden fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4 lg:block lg:px-5 lg:pt-4">
         <div className="mx-auto w-full max-w-[1400px]">
           <nav
             className={cn(
-              "flex h-16 min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:px-6 lg:px-8",
+              "flex min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 lg:h-16 lg:px-6",
               overDark
                 ? "border-white/15 bg-primary/75 text-white"
                 : "border-hairline/70 bg-cream/80 text-primary",
@@ -204,7 +204,7 @@ export function ProfileNavbar({
             <Link
               href="/home"
               className={cn(
-                "flex shrink-0 items-center gap-2 rounded-full",
+                "flex shrink-0 items-center gap-1.5 rounded-full sm:gap-2",
                 FOCUS_RING,
               )}
             >
@@ -243,7 +243,7 @@ export function ProfileNavbar({
                           : "bg-cream-100 font-semibold text-primary"
                         : overDark
                           ? "text-white/75 hover:text-white"
-                          : "text-charcoal-500 hover:text-primary",
+                          : "text-charcoal-500 hover:text-caramel",
                       FOCUS_RING,
                     )}
                   >
@@ -253,9 +253,9 @@ export function ProfileNavbar({
               ))}
             </ul>
 
-            <div className="flex items-center gap-1 sm:gap-0.5">
+            <div className="flex items-center gap-0.5 sm:gap-1 lg:gap-0.5">
               {showLocationDropdown && (
-                <div className="relative hidden lg:block">
+                <div className="relative">
                   <button
                     type="button"
                     aria-label="Pilih lokasi"
@@ -265,14 +265,14 @@ export function ProfileNavbar({
                       "flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200",
                       overDark
                         ? "text-white/80 hover:bg-white/10 hover:text-white"
-                        : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
+                        : "text-charcoal-500 hover:bg-cream-100 hover:text-caramel",
                       FOCUS_RING,
                     )}
                   >
                     <MapPin
                       className={cn(
                         "h-4 w-4 transition-colors duration-500",
-                        overDark ? "text-gold-500" : "text-primary",
+                        overDark ? "text-caramel" : "text-primary",
                       )}
                     />
                     <span className="max-w-[100px] truncate">{location}</span>
@@ -313,7 +313,7 @@ export function ProfileNavbar({
                                   "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                                   loc === location
                                     ? "bg-cream-100 font-semibold text-primary"
-                                    : "text-charcoal-500 hover:bg-cream-50 hover:text-primary",
+                                    : "text-charcoal-500 hover:bg-cream-50 hover:text-caramel",
                                 )}
                               >
                                 <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -328,7 +328,7 @@ export function ProfileNavbar({
                 </div>
               )}
 
-              <div className="hidden items-center gap-2 sm:flex">
+              <div className="flex items-center gap-2">
                 <IconButton
                   label="Notifikasi"
                   onClick={() => {
@@ -364,7 +364,7 @@ export function ProfileNavbar({
                 aria-expanded={drawerOpen}
                 onClick={() => setDrawerOpen((v) => !v)}
                 className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
+                  "hidden h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
                   overDark ? "text-white" : "text-primary",
                   FOCUS_RING,
                 )}
@@ -433,7 +433,7 @@ export function ProfileNavbar({
                         "block rounded-xl px-4 py-3 font-inter text-sm transition-colors duration-150",
                         active === link.id
                           ? "bg-cream-100 font-semibold text-primary"
-                          : "text-charcoal-500 hover:bg-cream-100 hover:text-primary",
+                          : "text-charcoal-500 hover:bg-cream-100 hover:text-caramel",
                       )}
                     >
                       {link.label}
@@ -442,11 +442,11 @@ export function ProfileNavbar({
                 ))}
               </ul>
 
-              <div className="mt-4 border-t border-sage-100 pt-4">
-                <a
+                <div className="mt-4 border-t border-sage-100 pt-4">
+                <Link
                   href="/notifikasi/pembeli"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-500 hover:bg-cream-100 hover:text-primary"
+                  className="flex items-center justify-between rounded-xl px-4 py-3 font-inter text-sm text-charcoal-500 hover:bg-cream-100 hover:text-caramel"
                 >
                   <span className="flex items-center gap-2">
                     <Bell className="h-4 w-4" />
@@ -457,7 +457,7 @@ export function ProfileNavbar({
                       {unreadNotifCount}
                     </span>
                   )}
-                </a>
+                </Link>
               </div>
 
               <div className="mt-4 border-t border-sage-100 pt-4">

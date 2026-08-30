@@ -20,7 +20,7 @@ export function OrderItemCard() {
         <div className="min-w-0 flex-1">
           <Link
             href={`/detail/toko?id=${encodeURIComponent(draft.vendorSlug)}`}
-            className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500 transition-colors hover:text-primary"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-500 transition-colors hover:text-caramel"
           >
             {draft.vendorName}
             <ChevronRight className="h-3 w-3" />

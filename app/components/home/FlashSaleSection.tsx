@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -124,25 +124,25 @@ function SectionCountdown({
       </div>
 
       <div className="mt-1 flex items-baseline gap-1">
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-sale sm:text-3xl">
           {h}
         </span>
         <span
           aria-hidden
-          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E53935] sm:text-3xl"
+          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-sale sm:text-3xl"
         >
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-sale sm:text-3xl">
           {m}
         </span>
         <span
           aria-hidden
-          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E53935] sm:text-3xl"
+          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-sale sm:text-3xl"
         >
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-sale sm:text-3xl">
           {s}
         </span>
       </div>
@@ -252,7 +252,7 @@ function UrgentCard({
           </div>
         )}
 
-        <div className="absolute left-3 top-3 z-20 rounded-full bg-[#E53935] px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
+        <div className="absolute left-3 top-3 z-20 rounded-full bg-sale px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
           Hemat {item.discountPercent}%
         </div>
 
@@ -266,15 +266,15 @@ function UrgentCard({
             if (isActive) toggle(item.id);
           }}
           className={cn(
-            "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935]",
-            liked && isActive && "bg-white text-[#E53935]",
+            "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-sale",
+            liked && isActive && "bg-white text-sale",
             !isActive && "opacity-60",
           )}
         >
           <Heart
             className={cn(
               "h-4 w-4",
-              liked && isActive && "fill-[#E53935] text-[#E53935]",
+              liked && isActive && "fill-sale text-sale",
             )}
           />
         </button>
@@ -290,7 +290,7 @@ function UrgentCard({
 
         <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1 font-medium text-charcoal-900">
-            <Star className="h-3.5 w-3.5 fill-amber text-amber" />
+            <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
             {item.rating.toFixed(1)}
           </span>
           <span className="flex items-center gap-1">
@@ -307,14 +307,14 @@ function UrgentCard({
           ) : (
             <div className="mt-2.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#DC2626]">
+                <span className="font-bold text-destructive">
                   Sisa {stockCount}
                 </span>
-                <span className="text-[#DC2626]">Buru!</span>
+                <span className="text-destructive">Buru!</span>
               </div>
               <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream-100">
                 <motion.div
-                  className="h-full rounded-full bg-[#E53935]"
+                  className="h-full rounded-full bg-sale"
                   initial={{ width: 0 }}
                   whileInView={{ width: `${stockPct}%` }}
                   viewport={{ once: true }}
@@ -409,7 +409,7 @@ export function FlashSaleSection({
     <section
       id="flash-sale"
       data-nav="green"
-      className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] "
+      className="relative overflow-hidden bg-gradient-to-tr from-primary via-primary "
     >
       <div className="relative bg-primary py-3">
         <Marquee pauseOnHover>
@@ -434,7 +434,7 @@ export function FlashSaleSection({
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/25" />
         <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-cream-50/50" />
-        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-gold-500/20" />
+        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-caramel/20" />
 
         {[
           { top: "10%", left: "8%" },
@@ -446,7 +446,7 @@ export function FlashSaleSection({
           <motion.span
             key={i}
             aria-hidden
-            className="pointer-events-none absolute text-white/60"
+            className="pointer-events-none absolute"
             style={pos}
             animate={{
               y: [0, -12, 0],
@@ -460,7 +460,7 @@ export function FlashSaleSection({
               delay: i * 0.5,
             }}
           >
-            ✦
+            <span className="block h-2.5 w-2.5 bg-white/60" style={{ clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)" }} />
           </motion.span>
         ))}
 
@@ -497,7 +497,7 @@ export function FlashSaleSection({
           <motion.span
             key={`caramel-dot-${i}`}
             aria-hidden
-            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-gold-500/50"
+            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-caramel/50"
             style={pos}
             animate={{
               y: [0, -14, 0],
@@ -517,8 +517,8 @@ export function FlashSaleSection({
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935]" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#E53935]" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sale" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sale" />
               </span>
               <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-white">
                 Flash Sale
@@ -550,7 +550,7 @@ export function FlashSaleSection({
           </div>
         </div>
 
-        <div className="relative mt-9 flex flex-wrap items-center justify-center gap-3 md:flex-nowrap md:gap-8">
+        <div className="relative mt-6 flex flex-wrap items-center justify-center gap-2 sm:mt-9 md:flex-nowrap md:gap-8">
           {SLOTS.map((slot) => {
             const isReal = realSlot === slot.key;
             const isActive = activeSlot === slot.key;
@@ -565,7 +565,7 @@ export function FlashSaleSection({
                   )
                 }
                 className={cn(
-                  "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 md:px-6 md:py-3.5 font-sans transition-all duration-300",
+                  "group relative flex items-center gap-1.5 rounded-full border px-3 py-2 sm:gap-2.5 sm:px-4 sm:py-2.5 md:px-6 md:py-3.5 font-sans transition-all duration-300",
                   isActive
                     ? "border-transparent bg-caramel text-white shadow-lg shadow-primary/40 hover:bg-white hover:text-caramel"
                     : "border-white/60 bg-white text-primary shadow-lg shadow-primary/25 hover:bg-caramel hover:text-white",
@@ -581,7 +581,7 @@ export function FlashSaleSection({
                       "text-[10px] font-semibold uppercase tracking-[0.18em]",
                       isActive
                         ? "text-white/70 group-hover:text-caramel"
-                        : "text-[#C8A882]/60 group-hover:text-white",
+                        : "text-caramel/60 group-hover:text-white",
                     )}
                   >
                     {slot.name}
@@ -592,8 +592,8 @@ export function FlashSaleSection({
                     className="relative flex h-2 w-2 shrink-0"
                     title="Slot aktif sekarang"
                   >
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935] opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E53935]" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sale opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-sale" />
                   </span>
                 )}
               </button>
@@ -610,8 +610,7 @@ export function FlashSaleSection({
               variants={{
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.07 } },
-              }}
-              className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              }}                  className="grid grid-flow-col auto-cols-[75%] snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4 sm:grid-flow-row sm:auto-cols-auto sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:pb-0 lg:grid-cols-3 xl:grid-cols-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {visibleItems.map((item) => (
                 <motion.div
@@ -624,6 +623,7 @@ export function FlashSaleSection({
                       transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
                     },
                   }}
+                  className="min-w-0 snap-start"
                 >
                   <UrgentCard
                     item={item}

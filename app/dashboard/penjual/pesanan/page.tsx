@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -135,7 +135,7 @@ function OrderRow({
   const advanceLabel = order.fulfillment === 'delivery' ? 'Sedang Diantar' : 'Siap Diambil';
   const AdvanceIcon = order.fulfillment === 'delivery' ? Truck : PackageCheck;
 
-  // Legacy state-machine flow (orderStatus) — dipakai bila progressStatus belum ada
+  // Legacy state-machine flow (orderStatus), dipakai bila progressStatus belum ada
   const orderStatus = order.orderStatus ?? 'processing';
   const actions = getValidActions(orderStatus, order.fulfillment);
   const hasStateMachineActions = actions.length > 0 && !order.progressStatus && isOngoing;
@@ -160,7 +160,7 @@ function OrderRow({
   };
 
   return (
-    <li className="flex flex-col gap-3 rounded-2xl border border-sage-100 bg-white p-4 sm:flex-row sm:items-center sm:gap-4">
+    <li className="flex flex-col gap-3 rounded-2xl border border-sage-100 bg-white p-3 sm:p-4 sm:flex-row sm:items-center sm:gap-4">
       <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-sage-100">
         <SmartImage src={order.image} alt={`Foto ${order.productName}`} sizes="56px" />
       </div>
@@ -170,7 +170,7 @@ function OrderRow({
           <p className="text-sm font-bold text-charcoal-900">
             {order.productName}
             {order.quantity > 1 && (
-              <span className="font-medium text-sage-500"> × {order.quantity}</span>
+              <span className="font-medium text-sage-500"> Ã- {order.quantity}</span>
             )}
           </p>
           <StatusChip order={order} />

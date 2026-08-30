@@ -1,16 +1,33 @@
-"use client";
+﻿"use client";
 
-import { useState, useRef, useId, useEffect } from "react";
+import { useMemo, useState, useRef, useId, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Leaf } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight, Leaf, Zap } from "lucide-react";
 import OptionWheel, { type OptionWheelApi } from "@/app/components/ui/korosel";
 import { Reveal } from "@/app/components/reveal";
 import { LeafSprig } from "@/app/components/ornaments";
+import { useCatalog } from "@/lib/catalog";
+import { SearchFilterBar } from "@/app/components/SearchFilterBar";
+import type { FoodItem, FilterKey } from "@/lib/types";
 import {
   ProductDetailPanel,
   type FeaturedFood,
 } from "@/app/components/product-detail-panel";
+
+const BURST_CLIP = (() => {
+  const N = 22;
+  const outer = 0.5;
+  const inner = 0.44;
+  const pts: string[] = [];
+  for (let i = 0; i < N * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = (Math.PI * i) / N - Math.PI / 2;
+    pts.push(
+      `${(50 + r * 50 * Math.cos(a)).toFixed(3)}% ${(50 + r * 50 * Math.sin(a)).toFixed(3)}%`,
+    );
+  }
+  return `polygon(${pts.join(",")})`;
+})();
 
 const FOODS: FeaturedFood[] = [
   {
@@ -21,11 +38,12 @@ const FOODS: FeaturedFood[] = [
     hours: "09.00–21.00",
     price: 12000,
     originalPrice: 15000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 214,
+    stockLabel: "12 porsi tersisa",
     description:
-      "Ayam geprek renyah dengan sambal bawang khas yang menggugah selera — dijamin nagih di setiap gigitan, dan hanya bisa kamu temukan di ReBites.",
+      "Ayam geprek renyah dengan sambal bawang khas yang menggugah selera, siap dinikmati dengan harga lebih hemat.",
   },
   {
     name: "Nasi Goreng Kampung",
@@ -35,11 +53,12 @@ const FOODS: FeaturedFood[] = [
     hours: "10.00–21.00",
     price: 15000,
     originalPrice: 18000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 168,
+    stockLabel: "8 porsi tersisa",
     description:
-      "Nasi goreng kampung dengan bumbu ulek segar dan telur mata sapi — kehangatan dapur rumahan yang hanya bisa kamu temukan di ReBites.",
+      "Nasi goreng kampung dengan bumbu ulek segar dan telur mata sapi, menghadirkan cita rasa dapur rumahan.",
   },
   {
     name: "Soto Mie Bogor",
@@ -49,11 +68,12 @@ const FOODS: FeaturedFood[] = [
     hours: "08.00–16.00",
     price: 18000,
     originalPrice: 22000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 176,
+    stockLabel: "10 porsi tersisa",
     description:
-      "Soto mie Bogor dengan kuah bening gurih, mie kuning, dan risoles — kehangatan khas kota hujan yang hanya bisa kamu temukan di ReBites.",
+      "Soto mie Bogor dengan kuah bening yang gurih, lengkap dengan mie kuning dan risoles khas kota hujan.",
   },
   {
     name: "Sate Ayam Pak Tigiset",
@@ -63,11 +83,12 @@ const FOODS: FeaturedFood[] = [
     hours: "15.00–22.00",
     price: 20000,
     originalPrice: 25000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 240,
+    stockLabel: "15 porsi tersisa",
     description:
-      "Sate ayam empuk dengan bumbu kacang legendaris yang meresap — legit di setiap tusuk, dan hanya bisa kamu temukan di ReBites.",
+      "Sate ayam empuk dengan bumbu kacang yang meresap sempurna, gurih di setiap tusuknya.",
   },
   {
     name: "Rendang Padang Karindang",
@@ -77,11 +98,12 @@ const FOODS: FeaturedFood[] = [
     hours: "10.00–21.00",
     price: 25000,
     originalPrice: 30000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 300,
+    stockLabel: "6 porsi tersisa",
     description:
-      "Rendang padang dengan daging empuk dan bumbu yang meresap sempurna — kekayaan rasa nusantara yang hanya bisa kamu temukan di ReBites.",
+      "Rendang padang dengan daging empuk dan bumbu yang meresap sempurna, menghadirkan kekayaan rasa nusantara.",
   },
   {
     name: "Pancong Boss Lumer",
@@ -91,11 +113,12 @@ const FOODS: FeaturedFood[] = [
     hours: "14.00–21.00",
     price: 10000,
     originalPrice: 13000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.7,
     reviewCount: 132,
+    stockLabel: "20 porsi tersisa",
     description:
-      "Pancong kelapa manis gurih dengan topping cokelat yang lumer — jajanan klasik yang hanya bisa kamu temukan di ReBites.",
+      "Pancong kelapa manis gurih dengan topping cokelat yang lumer, jajanan klasik yang tetap menggoda.",
   },
   {
     name: "Martabak Gombret",
@@ -105,11 +128,12 @@ const FOODS: FeaturedFood[] = [
     hours: "17.00–23.00",
     price: 22000,
     originalPrice: 28000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 190,
+    stockLabel: "9 porsi tersisa",
     description:
-      "Martabak gombret tebal dengan isian melimpah — manisnya pas di hati, dan hanya bisa kamu temukan di ReBites.",
+      "Martabak gombret tebal dengan isian melimpah dan rasa manis yang pas di lidah.",
   },
   {
     name: "Bakso Spesial Mas Jono",
@@ -119,11 +143,12 @@ const FOODS: FeaturedFood[] = [
     hours: "09.00–21.00",
     price: 18000,
     originalPrice: 23000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 256,
+    stockLabel: "11 porsi tersisa",
     description:
-      "Bakso sapi kenyal dengan kuah kaldu bening yang gurih — hangat, mengenyangkan, dan hanya bisa kamu temukan di ReBites.",
+      "Bakso sapi kenyal dengan kuah kaldu bening yang gurih, hangat dan mengenyangkan.",
   },
   {
     name: "Ketoprak Telor Sedap",
@@ -133,11 +158,12 @@ const FOODS: FeaturedFood[] = [
     hours: "08.00–17.00",
     price: 13000,
     originalPrice: 16000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.7,
     reviewCount: 148,
+    stockLabel: "14 porsi tersisa",
     description:
-      "Ketoprak lengkap dengan lontong, bihun, tahu, dan telur — disiram sambal kacang yang hanya bisa kamu temukan di ReBites.",
+      "Ketoprak lengkap dengan lontong, bihun, tahu, dan telur, disiram sambal kacang yang gurih.",
   },
   {
     name: "Mie Ayam Balap 12",
@@ -147,35 +173,71 @@ const FOODS: FeaturedFood[] = [
     hours: "10.00–22.00",
     price: 15000,
     originalPrice: 18000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 202,
+    stockLabel: "18 porsi tersisa",
     description:
-      "Mie ayam dengan topping ayam cincang melimpah dan kuah gurih yang hangat — lezatnya hanya bisa kamu temukan di ReBites.",
+      "Mie ayam dengan topping ayam cincang melimpah dan kuah gurih yang hangat.",
   },
 ];
 
-const BADGE_CLIP = (() => {
-  const teeth = 36;
-  const points: string[] = [];
-  for (let t = 0; t < teeth; t++) {
-    const a = (t / teeth) * Math.PI * 2;
-    const b = ((t + 0.5) / teeth) * Math.PI * 2;
-    points.push(
-      `${(50 + 50 * Math.cos(a)).toFixed(3)}% ${(50 + 50 * Math.sin(a)).toFixed(3)}%`,
-      `${(50 + 45 * Math.cos(b)).toFixed(3)}% ${(50 + 45 * Math.sin(b)).toFixed(3)}%`
-    );
-  }
-  return `polygon(${points.join(", ")})`;
-})();
+type PlateFood = FeaturedFood & { id?: string };
+
+function foodItemToPlate(food: FoodItem): PlateFood {
+  const reviewCount = Math.max(
+    40,
+    Math.round(food.rating * 42 + (food.distanceKm || 1) * 7),
+  );
+  return {
+    id: food.id,
+    name: food.name,
+    image: food.image,
+    merchant: food.vendorName,
+    category: food.category,
+    hours: `${food.availableFrom}–${food.availableTo}`,
+    price: food.discountedPrice,
+    originalPrice: food.originalPrice,
+    badge: "Best Seller",
+    rating: food.rating,
+    reviewCount,
+    stockLabel: food.stockLabel,
+    description: `${food.name} dari ${food.vendorName}, menu berkualitas dengan harga yang terjangkau.`,
+  };
+}
 
 export function HeroFoodCarousel() {
   const [foodIndex, setFoodIndex] = useState(0);
   const [autoRotate, setAutoRotate] = useState(true);
   const [plateSize, setPlateSize] = useState(320);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchFilter, setSearchFilter] = useState<FilterKey>("terdekat");
   const wheelApi = useRef<OptionWheelApi | null>(null);
+  const { foodItems } = useCatalog();
 
-  const selected = FOODS[foodIndex];
+  const displayFoods: PlateFood[] = useMemo(
+    () =>
+      foodItems.length > 0
+        ? foodItems.map(foodItemToPlate)
+        : (FOODS as PlateFood[]),
+    [foodItems],
+  );
+
+  const safeIndex = Math.min(
+    foodIndex,
+    Math.max(displayFoods.length - 1, 0),
+  );
+  const selected = displayFoods[safeIndex] ?? displayFoods[0];
+  const discountPct = Math.max(
+    0,
+    Math.round((1 - selected.price / selected.originalPrice) * 100) || 0,
+  );
+
+  useEffect(() => {
+    setFoodIndex((prev) =>
+      Math.min(prev, Math.max(displayFoods.length - 1, 0)),
+    );
+  }, [displayFoods.length]);
 
   useEffect(() => {
     const updatePlate = () => {
@@ -189,40 +251,61 @@ export function HeroFoodCarousel() {
     return () => window.removeEventListener("resize", updatePlate);
   }, []);
 
-  const steer = (action: () => void) => {
+  const handleSelectResult = (id: string) => {
+    const index = displayFoods.findIndex((food) => food.id === id);
+    if (index === -1) return;
     setAutoRotate(false);
-    action();
-    window.setTimeout(() => setAutoRotate(true), 8000);
+    wheelApi.current?.to(index);
+    setFoodIndex(index);
+  };
+
+  const handleQueryChange = (value: string) => {
+    setSearchQuery(value);
+    if (!value) setAutoRotate(true);
   };
 
   return (
     <section
       id="rekomendasi"
       data-nav="cream"
-      className="grain-overlay relative overflow-hidden bg-cream py-20 lg:py-28"
+      className="grain-overlay relative flex min-h-[100svh] flex-col overflow-hidden bg-secondary pt-20 pb-12 lg:pt-20 lg:pb-16"
     >
       <div className="relative z-10 mx-auto w-full max-w-[min(100vw,1600px)] px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-3xl text-center">
           <div className="flex items-center justify-center gap-2">
-            <Leaf className="h-4 w-4 text-caramel" />
             <span className="font-sans text-[11px] font-bold uppercase tracking-[0.22em] text-caramel">
               Rekomendasi Makanan
             </span>
           </div>
-          <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-forest-dark">
+          <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] font-light leading-[1.05] tracking-[-0.02em] text-forest-dark">
             Pilihan terbaik untukmu hari ini
           </h2>
           <p className="mx-auto mt-4 max-w-xl font-sans text-sm leading-[1.8] text-muted-foreground sm:text-base">
-            Putar piringnya, temukan menu surplus favoritmu dari UMKM terbaik
-            di Kota Depok.
+            Putar piring dan temukan makanan favorit dari UMKM terbaik di Kota
+            Depok.
           </p>
         </Reveal>
 
-        <div className="mt-14 grid items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
-          <div className="order-2 w-full lg:order-1 lg:pl-8 xl:pl-16">
+        <Reveal delay={0.1} className="mx-auto mt-8 w-full max-w-4xl">
+          <SearchFilterBar
+            query={searchQuery}
+            onQueryChange={handleQueryChange}
+            onSearchSubmit={() => undefined}
+            activeFilter={searchFilter}
+            onFilterChange={setSearchFilter}
+            showLocation={false}
+            showInlineResults
+            onSelectResult={handleSelectResult}
+            variant="light"
+            items={foodItems}
+          />
+        </Reveal>
+
+        <div className="mt-8 grid items-center gap-10 lg:mt-14 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+          <div className="order-2 w-full lg:order-1 lg:pl-16 xl:pl-28">
             <AnimatePresence mode="wait">
               <motion.div
-                key={foodIndex}
+                key={safeIndex}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
@@ -236,6 +319,49 @@ export function HeroFoodCarousel() {
 
           <div className="order-1 lg:order-2">
             <Reveal className="relative">
+              <div className="pointer-events-none absolute right-2 top-3 z-30 flex flex-col items-end gap-2 sm:right-4 sm:top-4">
+                <div
+                  aria-label={`Diskon ${discountPct} persen`}
+                  className="flex h-14 w-14 items-center justify-center bg-sale text-center shadow-[0_12px_26px_-12px_rgba(229,57,53,0.75)] sm:h-16 sm:w-16"
+                  style={{ clipPath: BURST_CLIP, WebkitClipPath: BURST_CLIP }}
+                >
+                  <span className="pl-1 font-sans text-[12px] font-extrabold leading-none text-white sm:text-[15px]">
+                    −{discountPct}%
+                  </span>
+                </div>
+
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-primary shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] sm:text-[11px]">
+                  <Zap className="h-3 w-3 fill-caramel text-caramel" />
+                  Pengantaran Cepat
+                </div>
+              </div>
+
+              <div className="absolute bottom-3 right-2 z-30 flex items-center gap-2 sm:bottom-4 sm:right-4">
+                <button
+                  type="button"
+                  aria-label="Makanan sebelumnya"
+                  onClick={() => {
+                    setAutoRotate(false);
+                    wheelApi.current?.prev();
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-10 sm:w-10"
+                >
+                  <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Makanan berikutnya"
+                  onClick={() => {
+                    setAutoRotate(false);
+                    wheelApi.current?.next();
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-10 sm:w-10"
+                >
+                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+              </div>
+
               <div className="relative mx-auto w-full max-w-[15rem] sm:max-w-[30rem] lg:mr-[-2rem] lg:max-w-[42rem]">
                 <div
                   aria-hidden
@@ -250,7 +376,7 @@ export function HeroFoodCarousel() {
 
                   <div className="absolute inset-0">
                     <OptionWheel
-                      items={FOODS.map((f) => f.name)}
+                      items={displayFoods.map((f) => f.name)}
                       defaultSelected={0}
                       side="right"
                       orientation="vertical"
@@ -269,7 +395,7 @@ export function HeroFoodCarousel() {
                       onChange={(index) => setFoodIndex(index)}
                       apiRef={wheelApi}
                       className="!py-0 -translate-x-[9%] sm:-translate-x-[18%] lg:-translate-x-[20%]"
-                      renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
+                      renderItem={(i) => <FoodPlate image={displayFoods[i].image} />}
                     />
                     <div
                       aria-hidden
@@ -287,19 +413,6 @@ export function HeroFoodCarousel() {
 
                   <div
                     aria-hidden
-                    className="absolute right-20 top-1/2 z-20 hidden h-16 w-16 -translate-y-1/2 flex-col items-center justify-center bg-amber text-white [filter:drop-shadow(0_16px_22px_rgba(192,138,62,0.55))] sm:h-24 sm:w-24 lg:flex lg:h-32 lg:w-32"
-                    style={{ clipPath: BADGE_CLIP }}
-                  >
-                    <span className="font-display text-base font-bold leading-none text-white sm:text-2xl lg:text-3xl">
-                      30%
-                    </span>
-                    <span className="mt-1 font-sans text-[8px] font-bold uppercase tracking-[0.18em] text-white sm:text-[10px] lg:text-xs">
-                      OFF
-                    </span>
-                  </div>
-
-                  <div
-                    aria-hidden
                     className="absolute right-7 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-3 lg:flex"
                   >
                     <span className="h-9 w-px bg-caramel/60" />
@@ -309,23 +422,6 @@ export function HeroFoodCarousel() {
                     <span className="h-9 w-px bg-caramel/60" />
                   </div>
                 </div>
-              </div>
-
-              <div className="relative z-20 mt-6 flex items-center justify-center gap-1.5">
-                {FOODS.map((food, index) => (
-                  <button
-                    key={food.name}
-                    type="button"
-                    aria-label={`Pilih ${food.name}`}
-                    onClick={() => steer(() => wheelApi.current?.to(index))}
-                    className={cn(
-                      "h-1.5 rounded-full transition-all duration-300",
-                      index === foodIndex
-                        ? "w-6 bg-green-700"
-                        : "w-1.5 bg-charcoal-900/15 hover:bg-amber",
-                    )}
-                  />
-                ))}
               </div>
             </Reveal>
           </div>

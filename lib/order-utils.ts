@@ -2,7 +2,7 @@ import type { StoredOrder } from './types';
 import { paymentMethods } from '@/app/components/checkout/payment-methods';
 
 export function paymentMethodName(id?: string): string {
-  if (!id) return '—';
+  if (!id) return '-';
   return paymentMethods.find((m) => m.id === id)?.name ?? id;
 }
 

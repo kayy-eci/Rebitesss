@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -92,7 +92,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
         <div className="mx-auto max-w-[1200px] px-5 sm:px-8 pt-4">
           <Link
             href="/home"
-            className="inline-flex items-center gap-1.5 rounded-full border border-sage-100/50 bg-white/10 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cream-50 transition-colors hover:border-primary hover:text-white hover:bg-white/20"
+            className="inline-flex items-center gap-1.5 rounded-full border border-sage-100/50 bg-white/10 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-cream-50 transition-colors hover:border-caramel hover:text-white hover:bg-white/20"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Kembali ke Beranda
@@ -123,7 +123,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                       {storeName}
                     </h1>
                     {vendor.isVerified && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-bold text-charcoal-900">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-caramel px-2.5 py-1 text-[10px] font-bold text-charcoal-900">
                         <BadgeCheck className="h-3 w-3" />
                         UMKM Terverifikasi
                       </span>
@@ -148,7 +148,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
 
                   <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-charcoal-500">
                     <span className="flex items-center gap-1 font-semibold text-charcoal-900">
-                      <Star className="h-3.5 w-3.5 fill-gold-500 text-gold-500" />
+                      <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
                       {vendor.rating.toFixed(1)}
                       <span className="font-normal text-charcoal-500">
                         · {vendor.distanceKm} km dari kamu

@@ -14,7 +14,7 @@ const buttonVariants = cva(
         cream:
           'bg-cream-50 text-primary shadow-lg shadow-primary/20 hover:bg-white',
         outlineCream:
-          'border-2 border-cream-50/60 text-cream-50 hover:bg-cream-50 hover:text-primary',
+          'border-2 border-cream-50/60 text-cream-50 hover:bg-cream-50 hover:text-caramel',
       },
       size: {
         sm: 'px-4 py-2 text-xs',

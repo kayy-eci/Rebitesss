@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   useLayoutEffect,
@@ -86,7 +86,7 @@ const tokenize = (text: string): Group[] => {
 };
 
 /**
- * FoldText — full-width headline that unfolds along a hinge axis,
+ * FoldText - full-width headline that unfolds along a hinge axis,
  * driven by scroll, hover or load. Port of the React Bits FoldText.
  */
 export function FoldText({

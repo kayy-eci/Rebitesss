@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -7,22 +7,10 @@ import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/shared/SmartImage';
 import type { Vendor } from '@/lib/types';
 
+import { isVendorReallyOpen, isOpenNow } from '@/lib/store-status';
+
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
-
-function isOpenNow(openHours: string): boolean {
-  const match = openHours.match(/(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/);
-  if (!match) return true;
-
-  const open = Number(match[1]) * 60 + Number(match[2]);
-  const close = Number(match[3]) * 60 + Number(match[4]);
-  const now = new Date();
-  const minutes = now.getHours() * 60 + now.getMinutes();
-
-  return open <= close
-    ? minutes >= open && minutes < close
-    : minutes >= open || minutes < close;
-}
 
 export function VendorCard({
   vendor,
@@ -34,7 +22,7 @@ export function VendorCard({
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    setIsOpen(vendor.isOpen && isOpenNow(vendor.openHours));
+    setIsOpen(isVendorReallyOpen({ isOpen: vendor.isOpen, openHours: vendor.openHours }));
   }, [vendor.isOpen, vendor.openHours]);
 
   return (
@@ -68,7 +56,7 @@ export function VendorCard({
           </div>
 
           {badgeLabel ? (
-            <div className="absolute left-3 top-10 flex items-center gap-1 rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-charcoal-900 shadow-md">
+            <div className="absolute left-3 top-10 flex items-center gap-1 rounded-full bg-caramel px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-charcoal-900 shadow-md">
               <Crown className="h-3 w-3" />
               {badgeLabel}
             </div>
@@ -86,7 +74,7 @@ export function VendorCard({
 
         <div className="mt-2 flex items-center gap-2 text-xs text-charcoal-500">
           <span className="flex items-center gap-1 font-medium text-charcoal-900">
-            <Star className="h-3.5 w-3.5 fill-amber text-amber" />
+            <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
             {vendor.rating.toFixed(1)}
           </span>
           <span className="hidden h-3 w-px bg-zinc-200 sm:block" />

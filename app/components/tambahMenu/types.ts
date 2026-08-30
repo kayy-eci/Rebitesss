@@ -1,4 +1,4 @@
-export interface MenuFormState {
+﻿export interface MenuFormState {
   name: string;
   category: string;
   description: string;
@@ -11,7 +11,7 @@ export interface MenuFormState {
   photo: string;
 }
 
-/** 8 kategori website — selaras dengan lib/categories.ts CATEGORIES */
+/** 8 kategori website - selaras dengan lib/categories.ts CATEGORIES */
 export const MENU_CATEGORIES = [
   'Makanan Berat',
   'Jajanan',

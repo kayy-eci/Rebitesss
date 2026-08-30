@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { Lock, MoreVertical, ShieldCheck } from 'lucide-react';
@@ -54,7 +54,7 @@ export function BestSellingMenuRow() {
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-charcoal-900">Menu Terlaris</h2>
         {!hydrated ? null : !hasAccess ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-gold-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+          <span className="inline-flex items-center gap-1 rounded-full bg-caramel/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
             <Lock className="h-3 w-3" />
             Premium
           </span>
@@ -105,7 +105,7 @@ export function BestSellingMenuRow() {
             <Lock className="h-4 w-4" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="inline-flex items-center rounded-full bg-gold-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+            <p className="inline-flex items-center rounded-full bg-caramel/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
               Fitur Premium
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-sage-500">

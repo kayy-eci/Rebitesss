@@ -37,6 +37,8 @@
     --input: 40 14% 86%;
     --ring: 148 41% 23%;
 
+    --caramel: 32 38% 65%;
+
     --chart-1: 148 41% 23%;
     --chart-2: 148 41% 35%;
     --chart-3: 40 30% 60%;
@@ -44,9 +46,6 @@
     --chart-5: 50 5% 30%;
 
     --radius: 0.25rem;
-
-    --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
-    --font-sans: 'Be Vietnam Pro', system-ui, sans-serif;
   }
 
   * {
@@ -60,7 +59,7 @@
   }
 
   [id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 6.5rem;
   }
 
   body {
@@ -77,10 +76,16 @@
 
 @layer components {
   .font-display {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
   }
   .font-sans {
     font-family: var(--font-sans);
+  }
+  .font-inter {
+    font-family: var(--font-secondary);
+  }
+  .font-secondary {
+    font-family: var(--font-secondary);
   }
   .font-script {
     font-family: var(--font-script);
@@ -124,11 +129,11 @@
     right: 28px;
     bottom: 28px;
     z-index: 50;
-    background: rgba(34, 81, 56, 0.96);
-    color: #f5f0e7;
+    background: hsl(var(--primary) / 0.96);
+    color: hsl(var(--primary-foreground));
     border-radius: 999px;
     padding: 12px 18px;
-    box-shadow: 0 18px 36px rgba(34, 81, 56, 0.2);
+    box-shadow: 0 18px 36px hsl(var(--primary) / 0.2);
     font-size: 0.9rem;
     font-weight: 500;
   }
@@ -138,9 +143,9 @@
     width: 58px;
     height: 58px;
     border-radius: 50%;
-    border: 4px solid rgba(34, 81, 56, 0.15);
+    border: 4px solid hsl(var(--primary) / 0.15);
     overflow: hidden;
-    background: #e5d4af;
+    background: hsl(var(--caramel) / 0.35);
   }
 
   .chef-avatar img {
@@ -157,7 +162,7 @@
   }
 
   .recommendation span {
-    color: rgba(34, 81, 56, 0.8);
+    color: hsl(var(--primary) / 0.8);
     font-size: 0.82rem;
     letter-spacing: 0.01em;
   }
@@ -166,14 +171,14 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #225138;
+    color: hsl(var(--primary));
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
   }
 
   .recommendation a svg {
-    color: #d0af4f;
+    color: hsl(var(--caramel));
   }
 
   .scroll-cue {
@@ -184,7 +189,7 @@
     width: fit-content;
     margin-left: 60px;
     margin-top: -32px;
-    color: rgba(34, 81, 56, 0.72);
+    color: hsl(var(--primary) / 0.72);
     text-transform: lowercase;
     font-size: 0.78rem;
     letter-spacing: 0.16em;
@@ -203,11 +208,11 @@
     right: 28px;
     bottom: 28px;
     z-index: 50;
-    background: rgba(34, 81, 56, 0.96);
-    color: #f5f0e7;
+    background: hsl(var(--primary) / 0.96);
+    color: hsl(var(--primary-foreground));
     border-radius: 999px;
     padding: 12px 18px;
-    box-shadow: 0 18px 36px rgba(34, 81, 56, 0.2);
+    box-shadow: 0 18px 36px hsl(var(--primary) / 0.2);
     font-size: 0.9rem;
     font-weight: 500;
   }
@@ -315,7 +320,7 @@ html.lenis body {
   height: 5px;
   flex-shrink: 0;
   border-radius: 9999px;
-  background: #dedacf;
+  background: hsl(var(--border));
   margin: 0 auto 0.875rem;
 }
 

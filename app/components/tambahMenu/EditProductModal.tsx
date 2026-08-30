@@ -239,7 +239,7 @@ export function EditProductModal({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full border border-sage-200 bg-white px-3 py-1.5 text-xs font-semibold text-charcoal-900 transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+                  className="inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full border border-sage-200 bg-white px-3 py-1.5 text-xs font-semibold text-charcoal-900 transition-colors hover:border-caramel hover:bg-caramel/20 hover:text-caramel"
                 >
                   <ImagePlus className="h-3.5 w-3.5" />
                   Ganti Foto
@@ -309,7 +309,7 @@ export function EditProductModal({
               type="button"
               onClick={() => setShowAdvanced((prev) => !prev)}
               aria-expanded={showAdvanced}
-              className="flex w-fit items-center gap-1.5 text-xs font-semibold text-primary transition-colors hover:text-primary"
+              className="flex w-fit items-center gap-1.5 text-xs font-semibold text-primary transition-colors hover:text-caramel"
             >
               {showAdvanced ? (
                 <ChevronUp className="h-3.5 w-3.5" />

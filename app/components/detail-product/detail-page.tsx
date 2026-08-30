@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ProfileNavbar } from "@/app/components/shared/navbar";
-import { SiteFooter } from "@/app/components/shared/site-footer";
+import { MobileNavbar } from "@/app/components/shared/MobileNavbar";
+import { SiteFooter } from "@/app/components/site-footer";
 import { CartProvider, useCart } from "./cart-context";
 import { PageOrnaments } from "./page-ornaments";
 import { ProductBreadcrumb } from "./product-breadcrumb";
@@ -85,12 +86,13 @@ function DetailPageContent({
   return (
     <div className="relative min-h-screen overflow-x-clip bg-cream-50 text-charcoal-900">
       <PageOrnaments />
-      <ProfileNavbar />
+      <div className="lg:hidden"><MobileNavbar /></div>
+      <div className="hidden lg:block"><ProfileNavbar /></div>
 
-      <main className="relative mx-auto max-w-[1200px] px-5 pb-10 pt-24 sm:px-8 lg:pt-28">
+      <main className="relative mx-auto max-w-[1200px] px-4 pb-20 pt-[120px] sm:px-8 sm:pb-10 sm:pt-24 lg:pt-28">
         <ProductBreadcrumb product={product} onShare={handleShare} />
 
-        <div className="mt-8 grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-3 grid items-start gap-5 sm:mt-8 sm:gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="lg:sticky lg:top-28">
             <ProductGallery product={product} scrollTargetRef={rightColRef} />
           </div>

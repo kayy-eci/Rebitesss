@@ -1,7 +1,7 @@
--- ============================================================================
+﻿-- ============================================================================
 -- 0017: Bersihkan sisa Midtrans + alamat toko demo ke Depok
 --
---   1. Hapus kolom legacy orders.midtrans_order_id — payment gateway kini
+--   1. Hapus kolom legacy orders.midtrans_order_id - payment gateway kini
 --      sepenuhnya Xendit (kolom orders.xendit_invoice_id dipakai sejak 0013).
 --      Semua referensi kode ke kolom ini sudah dihapus bersamaan.
 --   2. Ganti alamat 3 toko demo (seed 0004, sebelumnya daerah Bogor) ke

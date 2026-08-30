@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useMemo } from 'react';
 import type {
@@ -8,7 +8,7 @@ import type {
   PromoCode,
 } from './types';
 
-/** Pajak / biaya admin 12% dari (subtotal - diskon) — selaras dengan lib/server/pricing.ts */
+/** Pajak / biaya admin 12% dari (subtotal - diskon) - selaras dengan lib/server/pricing.ts */
 export const ADMIN_FEE_RATE = 0.12;
 /** @deprecated */
 export const ADMIN_FEE_AMOUNT = 2000;

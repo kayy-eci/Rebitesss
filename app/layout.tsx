@@ -1,21 +1,21 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Fraunces, Be_Vietnam_Pro, Dancing_Script } from 'next/font/google';
+import { Plus_Jakarta_Sans, Be_Vietnam_Pro, Dancing_Script } from 'next/font/google';
 
-const fraunces = Fraunces({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  variable: '--font-display',
+  variable: '--font-sans',
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
   style: ['normal', 'italic'],
   preload: false,
 });
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-secondary',
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   style: ['normal'],
   preload: false,
 });
@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${fraunces.variable} ${beVietnamPro.variable} ${dancingScript.variable}`}
+      className={`${plusJakartaSans.variable} ${beVietnamPro.variable} ${dancingScript.variable}`}
     >
       <body className="font-sans antialiased">{children}</body>
     </html>

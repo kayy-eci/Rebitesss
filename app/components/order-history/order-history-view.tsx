@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -195,7 +195,7 @@ function EmptyState({
         <button
           type="button"
           onClick={onClear}
-          className="mt-4 inline-flex h-9 items-center rounded-full border border-[#7A1C1C] px-5 text-xs font-semibold text-[#7A1C1C] hover:bg-[#7A1C1C] hover:text-white"
+          className="mt-4 inline-flex h-9 items-center rounded-full border border-primary px-5 text-xs font-semibold text-primary hover:bg-primary hover:text-white"
         >
           Hapus Filter
         </button>
@@ -226,7 +226,7 @@ function EmptyState({
       </span>
       <h3 className="mt-3 font-display text-base font-medium text-zinc-900">Belum Ada Pesanan</h3>
       <p className="mt-1 max-w-xs text-sm text-zinc-500">Pesanan yang kamu lakukan akan muncul di sini.</p>
-      <Link href="/home" className="mt-4 inline-flex h-9 items-center rounded-full bg-[#225138] px-5 text-xs font-semibold text-white hover:bg-[#143B2D]">
+      <Link href="/home" className="mt-4 inline-flex h-9 items-center rounded-full bg-primary px-5 text-xs font-semibold text-white hover:bg-primary">
         Mulai Belanja
       </Link>
     </div>

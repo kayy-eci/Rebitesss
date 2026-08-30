@@ -47,15 +47,9 @@ export function SellerNotificationView() {
       { }
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sage-500">
-            Dashboard Penjual
-          </p>
           <h1 className="mt-1 font-display text-[clamp(1.8rem,4vw,2.6rem)] font-medium leading-tight tracking-[-0.02em] text-primary">
             Notifikasi
           </h1>
-          <p className="mt-1 text-sm text-sage-500">
-            Pantau pesanan masuk dan status langganan toko.
-          </p>
         </div>
 
         {unreadCount > 0 && (

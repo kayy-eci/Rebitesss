@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useEffect, useState, useId } from "react";
@@ -192,8 +192,8 @@ export function HeroSection() {
                 className={cn(
                   "hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(34,81,56,0.65)] transition-colors duration-300 sm:flex",
                   navIsDark
-                    ? "bg-white text-primary hover:bg-[#C8A882] hover:text-white"
-                    : "bg-primary text-white hover:bg-[#C8A882] hover:text-white",
+                    ? "bg-white text-primary hover:bg-caramel hover:text-white"
+                    : "bg-primary text-white hover:bg-caramel hover:text-white",
                   FOCUS_RING,
                 )}
               >
@@ -282,7 +282,7 @@ export function HeroSection() {
 
       <section
         id="top"
-        className="relative flex min-h-[640px] flex-col items-center justify-center bg-cream px-4 pb-20 pt-28 sm:px-6 lg:min-h-[620px] lg:px-8 lg:pb-24 lg:pt-32"
+        className="relative flex min-h-[500px] flex-col items-center justify-center bg-cream px-4 pb-14 pt-24 sm:px-6 sm:min-h-[640px] lg:min-h-[620px] lg:px-8 lg:pb-24 lg:pt-32"
       >
         <svg
           aria-hidden="true"
@@ -292,11 +292,11 @@ export function HeroSection() {
         >
           <defs>
             <linearGradient id="hero-organic-line" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#225138" stopOpacity="0.18" />
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.18" />
 
-              <stop offset="55%" stopColor="#225138" stopOpacity="0.10" />
+              <stop offset="55%" stopColor="hsl(var(--primary))" stopOpacity="0.10" />
 
-              <stop offset="100%" stopColor="#225138" stopOpacity="0" />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -329,11 +329,11 @@ export function HeroSection() {
           <HeroOrganicArt />
 
           <div className="hero-text relative z-20 max-w-[560px] lg:ml-[calc(-50vw+50%+7rem)]">
-            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-primary">
+            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.3em] text-primary sm:text-[11px]">
               Coba Sekarang
             </p>
 
-            <h1 className="mt-4 font-display text-[clamp(2.7rem,5vw,4.6rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-primary">
+            <h1 className="mt-3 font-display text-[clamp(2rem,5vw,4.6rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-primary sm:mt-4">
               Ubah cara kamu
               <span className="block">menyelamatkan</span>
               <span className="block font-light italic text-caramel">
@@ -341,13 +341,13 @@ export function HeroSection() {
               </span>
             </h1>
 
-            <p className="mt-7 max-w-md font-sans text-sm leading-[1.85] text-muted-foreground">
+            <p className="mt-4 max-w-md font-sans text-xs leading-[1.85] text-muted-foreground sm:mt-7 sm:text-sm">
               Dari makan siang hingga usaha kuliner, ReBites membantu kamu
               menemukan makanan surplus berkualitas dari dapur UMKM Depok
               dengan harga lebih hemat, tanpa food waste.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-5">
+            <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-9 sm:gap-5">
               <Link
                 href="/auth/register"
                 className={cn(
@@ -366,7 +366,7 @@ export function HeroSection() {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className="h-3.5 w-3.5 fill-amber text-amber"
+                        className="h-3.5 w-3.5 fill-caramel text-caramel"
                       />
                     ))}
                   </div>
@@ -387,8 +387,8 @@ export function HeroSection() {
           </div>
 
           { }
-          <div className="relative z-10 mx-auto mt-12 w-full max-w-[360px] lg:hidden">
-            <div className="relative h-[480px] w-full sm:h-[540px]">
+          <div className="relative z-10 mx-auto mt-8 w-full max-w-[300px] sm:mt-12 sm:max-w-[360px] lg:hidden">
+            <div className="relative h-[380px] w-full sm:h-[480px]">
               <OptionWheel
                 items={FOODS.map((f) => f.name)}
                 defaultSelected={0}
@@ -490,7 +490,7 @@ function HeroOrganicArt() {
     >
       <g
         fill="none"
-        stroke="#225138"
+        stroke="hsl(var(--primary))"
         strokeOpacity="0.55"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -746,7 +746,7 @@ function HeroOrganicArt() {
           cx="255"
           cy="310"
           r="4"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.46"
         />
@@ -755,7 +755,7 @@ function HeroOrganicArt() {
           cx="355"
           cy="350"
           r="2.5"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.36"
         />
@@ -764,7 +764,7 @@ function HeroOrganicArt() {
           cx="665"
           cy="250"
           r="4"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.42"
         />
@@ -773,7 +773,7 @@ function HeroOrganicArt() {
           cx="830"
           cy="300"
           r="2.5"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.34"
         />
@@ -782,7 +782,7 @@ function HeroOrganicArt() {
           cx="1120"
           cy="340"
           r="4"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.40"
         />
@@ -813,9 +813,9 @@ function FoodPlate({ image }: { image: string }) {
     >
       <defs>
         <radialGradient id={gradId} cx="50%" cy="42%">
-          <stop offset="0%" stopColor="#F7F6EE" />
-          <stop offset="72%" stopColor="#E9E7D9" />
-          <stop offset="100%" stopColor="#D5D2C1" />
+          <stop offset="0%" stopColor="hsl(var(--secondary))" />
+          <stop offset="72%" stopColor="hsl(var(--muted))" />
+          <stop offset="100%" stopColor="hsl(var(--border))" />
         </radialGradient>
 
         <clipPath id={clipId}>
@@ -830,7 +830,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="92"
         fill="none"
-        stroke="#C8C5B5"
+        stroke="hsl(var(--border))"
         strokeWidth="2.5"
       />
 
@@ -839,11 +839,11 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="88"
         fill="none"
-        stroke="#D8D5C6"
+        stroke="hsl(var(--border))"
         strokeWidth="1.5"
       />
 
-      <circle cx="100" cy="100" r="86" fill="#F5F3E9" />
+      <circle cx="100" cy="100" r="86" fill="hsl(var(--secondary))" />
 
       <image
         href={image}
@@ -860,7 +860,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="84"
         fill="none"
-        stroke="#F5F3E9"
+        stroke="hsl(var(--secondary))"
         strokeWidth="4"
       />
 

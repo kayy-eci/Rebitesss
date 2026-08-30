@@ -1,5 +1,5 @@
--- ============================================================================
--- 0004: Seed data — mirror 1:1 dari data hardcoded frontend
+﻿-- ============================================================================
+-- 0004: Seed data - mirror 1:1 dari data hardcoded frontend
 --   vendors[]        -> umkm_profiles        (lib/data.ts)
 --   VENDOR_PROFILES  -> kolom profil toko    (app/detail/toko/vendor-profiles.ts)
 --   STORE.owner      -> owner_name           (app/components/toko/data.ts)

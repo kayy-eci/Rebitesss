@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -109,17 +109,17 @@ export function UrgentDealsSection({
     <section
       id="rekomendasi"
       data-nav="green"
-      className="grain-overlay relative flex min-h-screen scroll-mt-24 flex-col justify-center overflow-hidden bg-primary py-16 lg:py-20"
+      className="grain-overlay relative flex min-h-screen scroll-mt-20 flex-col justify-center overflow-hidden bg-primary py-10 sm:py-16 lg:py-20"
     >
       <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/10" />
-      <SoftBlob className="-right-24 bottom-0 h-96 w-96 bg-gold-500/15" />
+      <SoftBlob className="-right-24 bottom-0 h-96 w-96 bg-caramel/15" />
       <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-white/[0.06] blur-3xl" />
 
       {SPARKLES.map((pos, i) => (
         <motion.span
           key={i}
           aria-hidden
-          className="pointer-events-none absolute text-white/50"
+          className="pointer-events-none absolute"
           style={pos}
           animate={{
             y: [0, -12, 0],
@@ -133,8 +133,8 @@ export function UrgentDealsSection({
             delay: i * 0.5,
           }}
         >
-          ✦
-        </motion.span>
+            <span className="block h-2.5 w-2.5 bg-white/50" style={{ clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)" }} />
+          </motion.span>
       ))}
 
       <div className="relative mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -142,8 +142,8 @@ export function UrgentDealsSection({
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935]" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#E53935]" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sale" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sale" />
               </span>
               <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-white/90">
                 Rekomendasi Untukmu
@@ -159,7 +159,7 @@ export function UrgentDealsSection({
           </div>
         </div>
 
-        <div className="mb-10 mt-8 lg:mt-10">
+        <div className="mb-6 mt-5 sm:mb-10 sm:mt-8 lg:mt-10">
           <SearchFilterBar
             query={searchQuery}
             onQueryChange={setSearchQuery}
@@ -191,7 +191,7 @@ export function UrgentDealsSection({
 
           <div
             ref={scrollRef}
-            className="mt-2 grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col gap-5 overflow-x-auto scroll-smooth pb-6 sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="mt-2 grid snap-x snap-mandatory auto-cols-[80%] grid-flow-col gap-4 overflow-x-auto scroll-smooth pb-4 sm:auto-cols-[calc((100%-1.25rem)/2)] sm:gap-5 sm:pb-6 lg:auto-cols-[calc((100%-3.75rem)/4)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {loading && (
               <div className="flex h-56 items-center justify-center text-sm text-white/70 col-span-full">

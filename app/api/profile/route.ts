@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient, getUserFromBearer } from '@/lib/server/supabase';
 
 export const runtime = 'nodejs';
 
 /**
- * GET  /api/profile        — ambil profil user (tabel profiles + fallback auth metadata)
- * PATCH /api/profile       — update full_name / phone (profiles + auth user_metadata)
+ * GET  /api/profile        - ambil profil user (tabel profiles + fallback auth metadata)
+ * PATCH /api/profile       - update full_name / phone (profiles + auth user_metadata)
  * Auth: Authorization: Bearer <supabase access_token>
  */
 
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ profile: row as ProfileRow });
   }
 
-  // Row belum ada (mis. trigger DB gagal) — sintesis dari auth metadata
+  // Row belum ada (mis. trigger DB gagal) - sintesis dari auth metadata
   const { data: authUser } = await service.auth.admin.getUserById(user.id);
   const meta = (authUser?.user?.user_metadata ?? {}) as Record<string, unknown>;
   return NextResponse.json({
@@ -99,7 +99,7 @@ export async function PATCH(req: NextRequest) {
   let profile = updated as ProfileRow | null;
 
   if (!profile && !updErr) {
-    // Row belum ada — insert baru
+    // Row belum ada - insert baru
     const { data: authUser } = await service.auth.admin.getUserById(user.id);
     const meta = (authUser?.user?.user_metadata ?? {}) as Record<string, unknown>;
     const { data: inserted, error: insErr } = await service
@@ -131,7 +131,7 @@ export async function PATCH(req: NextRequest) {
       user_metadata: metaUpdate,
     });
     if (metaErr) {
-      // Best-effort — profiles tetap sumber kebenaran utama
+      // Best-effort - profiles tetap sumber kebenaran utama
       console.error('[profile] PATCH metadata sync error', metaErr.message);
     }
   }

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { Coins } from 'lucide-react';
@@ -49,9 +49,9 @@ export function UseCoinsCard() {
     hasCoins && summary.coinUsed > 0 && coinBalance > summary.totalBeforeCoin;
 
   return (
-    <div className="mt-4 rounded-xl border border-gold-500/30 bg-gold-100/60 px-3.5 py-3">
+    <div className="mt-4 rounded-xl border border-caramel/30 bg-caramel/10 px-3.5 py-3">
       <div className="flex items-center gap-3">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow-sm">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow-sm">
           <Coins className="h-4 w-4" />
         </span>
 
@@ -66,7 +66,7 @@ export function UseCoinsCard() {
                 <span className="font-semibold tabular-nums text-charcoal-900">
                   {coinBalance.toLocaleString('id-ID')} Coin
                 </span>{' '}
-                · 1 Coin = Rp1
+                Â· 1 Coin = Rp1
               </>
             ) : (
               'Kamu belum memiliki Coin.'
@@ -91,7 +91,7 @@ export function UseCoinsCard() {
             transition={{ duration: 0.25, ease: EASE }}
             className="overflow-hidden"
           >
-            <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-gold-500/30 pt-2.5">
+            <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-caramel/30 pt-2.5">
               <p className="text-[11px] leading-snug text-charcoal-500">
                 {cappedByTotal ? 'Menggunakan maksimal' : 'Menggunakan'}{' '}
                 <span className="font-semibold tabular-nums text-charcoal-900">

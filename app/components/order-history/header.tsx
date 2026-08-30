@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { Bell, CircleHelp, Menu, Search } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/app/components/ui/avatar';
@@ -24,7 +24,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
         <button
           aria-label="Buka menu"
           onClick={onOpenMenu}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-white text-primary transition-colors hover:bg-primary/10 lg:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-white text-primary transition-colors hover:bg-caramel/20 lg:hidden"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -33,7 +33,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <Search className="pointer-events-none absolute left-4 h-4 w-4 text-charcoal-500" />
           <input
             type="search"
-            placeholder="Cari makanan surplus atau toko…"
+            placeholder="Cari makanan surplus atau toko"
             className="h-11 w-full rounded-full border border-hairline bg-white pl-11 pr-4 text-sm text-charcoal-900 placeholder:text-charcoal-500/60 outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary"
           />
         </label>
@@ -42,16 +42,16 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <button
             type="button"
             aria-label="Notifikasi"
-            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-primary/10"
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-caramel/20"
           >
             <Bell className="h-[18px] w-[18px]" strokeWidth={2} />
-            <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-gold-500 ring-2 ring-white" />
+            <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-caramel ring-2 ring-white" />
           </button>
 
           <button
             type="button"
             aria-label="Bantuan"
-            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-primary/10 sm:flex"
+            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-primary transition-colors hover:bg-caramel/20 sm:flex"
           >
             <CircleHelp className="h-[18px] w-[18px]" strokeWidth={2} />
           </button>

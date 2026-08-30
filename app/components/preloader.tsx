@@ -55,7 +55,7 @@ export function Preloader({ onDone }: { onDone?: () => void }) {
         <motion.div className="fixed inset-0 z-[200] overflow-hidden">
           {/* Lingkaran raksasa di tengah; saat masuk ia terangkat ke atas. */}
           <motion.div
-            className="absolute left-1/2 top-1/2 flex flex-col items-center justify-center rounded-full bg-forest-dark"
+            className="absolute left-1/2 top-1/2 flex flex-col items-center justify-center rounded-full bg-primary"
             style={{ width: '200vmax', height: '200vmax', marginLeft: '-100vmax', marginTop: '-100vmax' }}
             initial={false}
             exit={{ y: '-160vh', scale: 0.5 }}

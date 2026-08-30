@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -74,14 +74,14 @@ export function OrderCard({
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[13px] font-semibold text-[#7A1C1C]">
+          <p className="truncate text-[13px] font-semibold text-primary">
             Order ID: {order.orderId}
           </p>
           <p className="mt-0.5 line-clamp-2 text-[13px] leading-snug text-zinc-700">
             {description}
             {}
             {order.quantity > 1 && (
-              <span className="font-medium text-[#7A1C1C]"> & {order.quantity} items</span>
+              <span className="font-medium text-primary"> & {order.quantity} items</span>
             )}
           </p>
           <p className="mt-1 text-[13px] font-semibold text-zinc-900">Rp{order.total.toLocaleString('id-ID')}</p>
@@ -89,10 +89,10 @@ export function OrderCard({
             <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold">
               {reviewed ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2 py-0.5 text-sage-600">
-                  <Star className="h-3 w-3 fill-gold-500 text-gold-500" /> Sudah dinilai
+                  <Star className="h-3 w-3 fill-caramel text-caramel" /> Sudah dinilai
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 rounded-full bg-gold-100 px-2 py-0.5 text-amber-700">
+                <span className="inline-flex items-center gap-1 rounded-full bg-caramel/15 px-2 py-0.5 text-caramel-700">
                   <Star className="h-3 w-3" /> Belum dinilai · Beri ulasan
                 </span>
               )}
@@ -100,7 +100,7 @@ export function OrderCard({
           )}
         </div>
 
-        <ChevronRight className="mt-2 h-5 w-5 shrink-0 text-[#7A1C1C] transition-transform group-hover:translate-x-0.5" />
+        <ChevronRight className="mt-2 h-5 w-5 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
       </div>
     </article>
   );

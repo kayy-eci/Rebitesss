@@ -3,12 +3,14 @@
 import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ProfileNavbar } from "@/app/components/shared/navbar";
+import { MobileNavbar } from "@/app/components/shared/MobileNavbar";
+import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { Hero } from "@/app/components/home/Hero";
 import { UrgentDealsSection } from "@/app/components/home/UrgentDealsSection";
 import { FlashSaleSection } from "@/app/components/home/FlashSaleSection";
 import { CategorySection } from "@/app/components/home/CategorySection";
 import { VendorSection } from "@/app/components/home/VendorSection";
-import { SiteFooter } from "@/app/components/shared/Footer";
+import { SiteFooter } from "@/app/components/site-footer";
 import { Reveal } from "@/app/components/shared/reveal";
 import { MagneticButton } from "@/app/components/shared/magnetic-button";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
@@ -38,9 +40,16 @@ export default function HomePage() {
 
   return (
     <div>
-      <ProfileNavbar showLocationDropdown={false} />
+      {/* Mobile header - only visible on mobile */}
+      <div className="lg:hidden">
+        <MobileNavbar />
+      </div>
+      {/* Desktop navbar - only visible on desktop */}
+      <div className="hidden lg:block">
+        <ProfileNavbar showLocationDropdown={false} />
+      </div>
 
-      <main className="bg-cream-50">
+      <main className="bg-cream-50 pb-20 pt-[120px] sm:pt-[140px] lg:pb-0 lg:pt-0">
         <Hero />
         <UrgentDealsSection from="home" onViewDetail={handleViewDetail} />
         <CategorySection />
@@ -50,14 +59,14 @@ export default function HomePage() {
         <section
           id="langganan"
           data-nav="cream"
-          className="grain-overlay relative overflow-hidden bg-cream py-16 lg:py-20"
+          className="grain-overlay relative overflow-hidden bg-cream py-10 sm:py-16 lg:py-20"
         >
           <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-3xl" />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <Reveal delay={0.1}>
-                <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
+                <h2 className="mt-4 font-sans text-[clamp(1.5rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary sm:mt-6">
                   Kembangkan usaha bersama{" "}
                   <span className="text-caramel">ReBites.</span>
                 </h2>
@@ -114,7 +123,7 @@ export default function HomePage() {
               </Reveal>
             </div>
 
-            <div className="mx-auto mt-14 grid max-w-[1080px] gap-5 lg:mt-16 lg:grid-cols-3">
+            <div className="mx-auto mt-8 flex max-w-[1080px] gap-4 overflow-x-auto snap-x snap-mandatory pb-4 sm:mt-14 sm:gap-5 sm:overflow-visible sm:pb-0 sm:grid sm:grid-cols-1 lg:mt-16 lg:grid-cols-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {SUBSCRIPTION_PLANS.map((plan, i) => {
                 const yearlyMode = billing === "yearly";
 
@@ -138,7 +147,7 @@ export default function HomePage() {
                       : `atau Rp${plan.yearly.toLocaleString("id-ID")} / tahun`;
 
                 return (
-                  <Reveal key={plan.name} delay={i * 0.1} className="h-full">
+                  <Reveal key={plan.name} delay={i * 0.1} className="h-full min-w-[280px] snap-start sm:min-w-0">
                     <div className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-background p-8 shadow-[0_10px_30px_-24px_rgba(34,81,56,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel lg:p-9">
                       {plan.popular && (
                         <div className="absolute right-5 top-5 rounded-full bg-caramel px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
@@ -266,6 +275,7 @@ export default function HomePage() {
         </section>
       </main>
 
+      <MobileBottomNav />
       <SiteFooter />
 
       <AnimatePresence>

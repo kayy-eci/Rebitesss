@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useState, type FormEvent } from "react";
@@ -38,12 +38,12 @@ function FieldBox({
     <div>
       <label
         htmlFor={id}
-        className="mb-1.5 block font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6B6A63]"
+        className="mb-1.5 block font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground"
       >
         {label}
       </label>
-      <div className="group flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 transition-colors duration-200 focus-within:border-[#225138] focus-within:ring-1 focus-within:ring-[#225138]/15">
-        <Icon className="h-3.5 w-3.5 shrink-0 text-[#6B6A63]/55 transition-colors duration-200 group-focus-within:text-[#225138]" />
+      <div className="group flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 transition-colors duration-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/15">
+        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground/55 transition-colors duration-200 group-focus-within:text-primary" />
         {children}
       </div>
     </div>
@@ -99,7 +99,7 @@ export default function ForgotPasswordForm() {
       <motion.div variants={itemVariants} className="mb-3 flex-shrink-0">
         <Link
           href="/auth/login"
-          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#225138]"
+          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
           Kembali
@@ -117,7 +117,7 @@ export default function ForgotPasswordForm() {
           height={28}
           className="h-7 w-7 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
         />
-        <span className="font-display text-lg font-semibold tracking-tight text-[#225138]">
+        <span className="font-display text-lg font-semibold tracking-tight text-primary">
           ReBites
         </span>
       </motion.div>
@@ -125,27 +125,27 @@ export default function ForgotPasswordForm() {
       {sent ? (
         <motion.div
           variants={itemVariants}
-          className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-[#E5E7EB] bg-[#FCFCF9] px-6 py-8 text-center"
+          className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-border bg-secondary px-6 py-8 text-center"
         >
           <motion.span
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-[#225138] text-white"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white"
           >
             <CheckCircle2 className="h-6 w-6" />
           </motion.span>
-          <h1 className="mt-4 font-display text-[22px] font-bold tracking-[-0.02em] text-[#14261E]">
+          <h1 className="mt-4 font-display text-[22px] font-bold tracking-[-0.02em] text-primary">
             Cek Email Kamu
           </h1>
-          <p className="mt-2 font-sans text-[13px] leading-relaxed text-[#6B6A63]">
+          <p className="mt-2 font-sans text-[13px] leading-relaxed text-muted-foreground">
             Kami sudah mengirimkan tautan reset kata sandi ke{" "}
-            <span className="font-semibold text-[#225138]">{email}</span>. Ikuti
+            <span className="font-semibold text-primary">{email}</span>. Ikuti
             tautan tersebut untuk membuat kata sandi baru.
           </p>
           <Link
             href="/auth/login"
-            className="mt-6 inline-flex items-center gap-2 font-sans text-[13px] font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
+            className="mt-6 inline-flex items-center gap-2 font-sans text-[13px] font-semibold text-primary underline underline-offset-4 transition-colors hover:text-primary"
           >
             Kembali ke halaman login
             <ArrowRight className="h-4 w-4" />
@@ -155,7 +155,7 @@ export default function ForgotPasswordForm() {
         <>
           <motion.h1
             variants={itemVariants}
-            className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-[#14261E] flex-shrink-0"
+            className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-primary flex-shrink-0"
           >
             Lupa Kata
             <br />
@@ -163,7 +163,7 @@ export default function ForgotPasswordForm() {
           </motion.h1>
           <motion.p
             variants={itemVariants}
-            className="mt-1.5 font-sans text-[13px] leading-relaxed text-[#6B6A63] flex-shrink-0"
+            className="mt-1.5 font-sans text-[13px] leading-relaxed text-muted-foreground flex-shrink-0"
           >
             Masukkan email yang terdaftar. Kami akan mengirimkan tautan untuk
             mengatur ulang kata sandimu.
@@ -175,7 +175,7 @@ export default function ForgotPasswordForm() {
             onSubmit={handleSubmit}
             noValidate
           >
-            <div className="grid gap-4 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#E5E7EB] [&::-webkit-scrollbar-track]:bg-transparent min-h-0">
+            <div className="grid gap-4 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent min-h-0">
               <FieldBox id="email" label="Alamat Email" icon={Mail}>
                 <input
                   id="email"
@@ -185,7 +185,7 @@ export default function ForgotPasswordForm() {
                   placeholder="nama@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-[#1B3F2C] outline-none placeholder:text-[#9A9994]"
+                  className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-primary outline-none placeholder:text-muted-foreground"
                 />
               </FieldBox>
 
@@ -199,7 +199,7 @@ export default function ForgotPasswordForm() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-[#143B2D] px-5 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-[#0F2E24] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70 flex-shrink-0"
+              className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70 flex-shrink-0"
             >
               {loading ? "Mengirim..." : "Kirim Tautan Reset"}
               <ArrowRight className="h-4 w-4" />
@@ -208,12 +208,12 @@ export default function ForgotPasswordForm() {
 
           <motion.p
             variants={itemVariants}
-            className="mt-5 text-center font-sans text-[13px] text-[#6B6A63] flex-shrink-0"
+            className="mt-5 text-center font-sans text-[13px] text-muted-foreground flex-shrink-0"
           >
             Ingat kata sandi?{" "}
             <Link
               href="/auth/login"
-              className="font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
+              className="font-semibold text-primary underline underline-offset-4 transition-colors hover:text-primary"
             >
               Masuk
             </Link>

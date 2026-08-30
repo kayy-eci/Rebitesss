@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Heart, MapPin, Star } from "lucide-react";
+import { ArrowRight, Heart, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRupiah } from "@/lib/data";
 import { useCatalog } from "@/lib/catalog";
@@ -20,7 +20,7 @@ import {
 } from "@/lib/flash-sale";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
 const WIB_OFFSET_MS = 7 * 3600 * 1000;
 
@@ -211,7 +211,7 @@ function UrgentCard({
       className={cn(
         "group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300",
         isActive
-          ? "cursor-pointer hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-forest-900/10 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          ? "cursor-pointer hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           : "cursor-default opacity-95",
       )}
     >
@@ -281,7 +281,7 @@ function UrgentCard({
 
         <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1 font-medium text-charcoal-900">
-            <Star className="h-3.5 w-3.5 fill-amber text-amber" />
+            <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
             {item.rating.toFixed(1)}
           </span>
           <span className="flex items-center gap-1">
@@ -317,7 +317,7 @@ function UrgentCard({
           <span className="text-xs text-charcoal-500 line-through">
             {formatRupiah(item.originalPrice)}
           </span>
-          <span className="text-[16px] font-bold leading-none text-green-700">
+          <span className="text-[16px] font-bold leading-none text-primary">
             {formatRupiah(item.discountedPrice)}
           </span>
         </div>
@@ -396,9 +396,9 @@ export function FlashSaleSection({
     <section
       id="flash-sale"
       data-nav="green"
-      className="relative overflow-hidden bg-gradient-to-tr from-forest-800 via-green-600 to-cream"
+      className="relative overflow-hidden bg-gradient-to-tr from-primary via-primary to-secondary"
     >
-      <div className="relative border-b border-white/15 bg-forest-900/40 py-3">
+      <div className="relative border-b border-white/15 bg-primary/40 py-3">
         <Marquee pauseOnHover>
           {[
             "SURPLUS",
@@ -419,7 +419,7 @@ export function FlashSaleSection({
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/25" />
         <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-cream-50/50" />
-        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-gold-500/20" />
+        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-caramel/20" />
 
         {[
           { top: "10%", left: "8%" },
@@ -431,7 +431,7 @@ export function FlashSaleSection({
           <motion.span
             key={i}
             aria-hidden
-            className="pointer-events-none absolute text-white/60"
+            className="pointer-events-none absolute"
             style={pos}
             animate={{
               y: [0, -12, 0],
@@ -445,7 +445,7 @@ export function FlashSaleSection({
               delay: i * 0.5,
             }}
           >
-            ✦
+            <span className="block h-2.5 w-2.5 bg-white/60" style={{ clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)" }} />
           </motion.span>
         ))}
 
@@ -482,7 +482,7 @@ export function FlashSaleSection({
           <motion.span
             key={`caramel-dot-${i}`}
             aria-hidden
-            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-gold-500/50"
+            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-caramel/50"
             style={pos}
             animate={{
               y: [0, -14, 0],
@@ -529,13 +529,13 @@ export function FlashSaleSection({
               href="/cari"
               className="hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex"
             >
-              Lihat Semua <span aria-hidden>→</span>
+              Lihat Semua <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </div>
         <div className="mt-3 flex justify-end sm:hidden">
           <a href="/cari" className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-white/90">
-            Lihat Semua <span aria-hidden>→</span>
+            Lihat Semua <ArrowRight className="h-4 w-4" />
           </a>
         </div>
 
@@ -556,8 +556,8 @@ export function FlashSaleSection({
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-full border px-4 py-2.5 md:px-6 md:py-3.5 font-sans transition-all duration-300",
                   isActive
-                    ? "border-transparent bg-caramel text-white shadow-lg shadow-forest-900/40 hover:bg-white hover:text-caramel"
-                    : "border-white/60 bg-white text-primary shadow-lg shadow-forest-900/25 hover:bg-caramel hover:text-white",
+                    ? "border-transparent bg-caramel text-white shadow-lg shadow-primary/40 hover:bg-white hover:text-caramel"
+                    : "border-white/60 bg-white text-primary shadow-lg shadow-primary/25 hover:bg-caramel hover:text-white",
                   FOCUS_RING,
                 )}
               >

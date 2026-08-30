@@ -45,7 +45,7 @@ export function ProductInfo({
         >
           <a
             href="#ulasan"
-            className="inline-flex items-center gap-1.5 text-charcoal-500 transition-colors hover:text-primary"
+            className="inline-flex items-center gap-1.5 text-charcoal-500 transition-colors hover:text-caramel"
           >
             <Stars rating={product.rating} />
             <span className="font-semibold text-charcoal-900">

@@ -1,10 +1,10 @@
--- ============================================================================
+﻿-- ============================================================================
 -- 0013: Integrasi Xendit (payment gateway)
 --
 -- - Tambah kolom xendit_invoice_id di orders & subscriptions (+ index unique)
 -- - Longgarkan CHECK status di subscriptions untuk nilai 'pending'
 -- - Fungsi release_stock (kebalikan reserve_stock) untuk refund stok
--- - Guard trigger: cegah client mengubah payment_status sendiri — hanya
+-- - Guard trigger: cegah client mengubah payment_status sendiri - hanya
 --   service_role/webhook yang boleh set paid/failed/refunded
 -- ============================================================================
 
@@ -53,7 +53,7 @@ BEGIN
   END IF;
 END $$;
 
--- Recreate dengan 'pending' ditambahkan — idempotent (drop recreated variant jika sudah ada)
+-- Recreate dengan 'pending' ditambahkan - idempotent (drop recreated variant jika sudah ada)
 DO $$
 DECLARE
   cname text;

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useMemo, useState } from 'react';
 import {
@@ -195,25 +195,25 @@ export function SalesActivityChartCard() {
               <ResponsiveContainer width="100%" height="100%">
                 {kind === 'bar' ? (
                   <BarChart data={data} margin={{ top: 6, right: 4, left: -14, bottom: 0 }}>
-                    <CartesianGrid vertical={false} stroke="#E4EBE4" strokeDasharray="3 3" />
+                    <CartesianGrid vertical={false} stroke="hsl(var(--border))" strokeDasharray="3 3" />
                     <XAxis
                       dataKey="day"
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fontSize: 11, fill: '#6B9080' }}
+                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
                       dy={6}
                     />
                     <YAxis
                       allowDecimals={false}
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fontSize: 11, fill: '#6B9080' }}
+                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
                     />
-                    <Tooltip cursor={{ fill: '#E4EBE4', opacity: 0.4 }} content={<SalesTooltip />} />
+                    <Tooltip cursor={{ fill: 'hsl(var(--border))', opacity: 0.4 }} content={<SalesTooltip />} />
                     <Bar
                       dataKey="terjual"
                       name="Terjual"
-                      fill="#1B4D32"
+                      fill="hsl(var(--primary))"
                       radius={[6, 6, 2, 2]}
                       maxBarSize={22}
                       animationDuration={700}
@@ -221,28 +221,28 @@ export function SalesActivityChartCard() {
                   </BarChart>
                 ) : (
                   <LineChart data={data} margin={{ top: 6, right: 4, left: -14, bottom: 0 }}>
-                    <CartesianGrid vertical={false} stroke="#E4EBE4" strokeDasharray="3 3" />
+                    <CartesianGrid vertical={false} stroke="hsl(var(--border))" strokeDasharray="3 3" />
                     <XAxis
                       dataKey="day"
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fontSize: 11, fill: '#6B9080' }}
+                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
                       dy={6}
                     />
                     <YAxis
                       allowDecimals={false}
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fontSize: 11, fill: '#6B9080' }}
+                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
                     />
-                    <Tooltip cursor={{ stroke: '#6B9080', strokeDasharray: '3 3' }} content={<SalesTooltip />} />
+                    <Tooltip cursor={{ stroke: 'hsl(var(--muted-foreground))', strokeDasharray: '3 3' }} content={<SalesTooltip />} />
                     <Line
                       type="monotone"
                       dataKey="terjual"
                       name="Terjual"
-                      stroke="#1B4D32"
+                      stroke="hsl(var(--primary))"
                       strokeWidth={2.5}
-                      dot={{ r: 3, fill: '#1B4D32', strokeWidth: 0 }}
+                      dot={{ r: 3, fill: 'hsl(var(--primary))', strokeWidth: 0 }}
                       activeDot={{ r: 5 }}
                       animationDuration={700}
                     />

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -51,7 +51,7 @@ export function useProfile() {
         const email = user.email ?? '';
         const fallbackName = metaName?.trim() || email.split('@')[0] || 'Pengguna ReBites';
 
-        // Try fetch via backend API (GET /api/profile) — fallback langsung ke tabel
+        // Try fetch via backend API (GET /api/profile) - fallback langsung ke tabel
         let avatarUrl: string | null = null;
         let fullNameFromDb: string | null = null;
         try {
@@ -151,7 +151,7 @@ export async function uploadAvatar(file: File): Promise<{ publicUrl: string | nu
     return { publicUrl: null, error: 'Ukuran file maksimal 2MB.' };
   }
 
-  // Upload via backend API (POST /api/profile/avatar) — server yang
+  // Upload via backend API (POST /api/profile/avatar) - server yang
   // menyimpan ke bucket `avatars` dan update profiles.avatar_url.
   try {
     const form = new FormData();
@@ -210,7 +210,7 @@ export async function updateProfileName(fullName: string): Promise<{ error: stri
     try {
       await supabase.auth.updateUser({ data: { full_name: fullName.trim() } });
     } catch {
-      // ignore — profiles (server) tetap sumber kebenaran
+      // ignore - profiles (server) tetap sumber kebenaran
     }
 
     // Broadcast

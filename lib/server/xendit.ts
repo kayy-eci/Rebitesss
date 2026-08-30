@@ -1,4 +1,4 @@
-
+﻿
 const XENDIT_API_BASE = 'https://api.xendit.co';
 
 export interface CreateInvoiceParams {
@@ -74,7 +74,7 @@ export async function createXenditInvoice(
     });
   } catch (e) {
     if ((e as Error).name === 'AbortError') {
-      throw new Error('Xendit timeout (10s) — coba lagi');
+      throw new Error('Xendit timeout (10s) - coba lagi');
     }
     throw e;
   } finally {
@@ -122,7 +122,7 @@ export async function getXenditInvoice(
     });
   } catch (e) {
     if ((e as Error).name === 'AbortError') {
-      throw new Error('Xendit timeout (10s) — coba lagi');
+      throw new Error('Xendit timeout (10s) - coba lagi');
     }
     throw e;
   } finally {

@@ -1,15 +1,15 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUp, Mail, MapPin } from 'lucide-react';
 
-const SAGE = '#8C9A8A';
-const CREAM = '#F8F3E7';
-const CREAM_BG = '#F7F5EF';
-const FOREST = '#235339';
-const GOLD = '#C9A24B';
+const SAGE = 'hsl(var(--primary-foreground) / 0.7)';
+const CREAM = 'hsl(var(--primary-foreground))';
+const CREAM_BG = 'hsl(var(--secondary))';
+const FOREST = 'hsl(var(--primary))';
+const GOLD = '#C8A882';
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -117,10 +117,9 @@ function BackToTop() {
       type="button"
       onClick={scrollTop}
       aria-label="Kembali ke atas"
-      className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full text-[#17301F] shadow-[0_18px_38px_-18px_rgba(0,0,0,0.55)] transition-all duration-300 hover:bg-[#C9A24B] hover:text-white ${
+      className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-primary shadow-[0_18px_38px_-18px_rgba(0,0,0,0.55)] transition-all duration-300 hover:bg-caramel hover:text-white ${
         visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
       }`}
-      style={{ backgroundColor: CREAM }}
     >
       <ArrowUp className="h-5 w-5" />
     </button>
@@ -131,14 +130,13 @@ export function SiteFooter() {
   return (
     <footer
       data-nav="green"
-      className="grain-overlay relative overflow-hidden"
-      style={{ backgroundColor: FOREST }}
+      className="grain-overlay relative overflow-hidden bg-primary"
     >
       <FooterWave />
 
       <div className="mx-auto max-w-7xl px-4 pb-10 pt-32 sm:px-6 lg:px-8 lg:pt-36">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr] lg:gap-8 lg:items-end">
-          {/* Brand — widest column */}
+          {/* Brand - widest column */}
           <div className="text-center sm:text-left">
             <Link href="/" className="inline-flex items-center gap-3">
               <Image
@@ -148,18 +146,18 @@ export function SiteFooter() {
                 height={48}
                 className="h-12 w-12 rounded-full object-cover ring-1 ring-white/20"
               />
-              <span className="flex items-baseline gap-0.5" style={{ color: CREAM }}>
+              <span className="flex items-baseline gap-0.5 text-primary-foreground">
                 <span className="font-display text-3xl font-bold tracking-tight">Re</span>
                 <span className="font-display text-3xl font-light italic">Bites</span>
               </span>
             </Link>
 
             <p
-              className="mx-auto mt-5 max-w-xs font-sans text-sm leading-relaxed sm:mx-0"
-              style={{ color: SAGE }}
+              className="mx-auto mt-5 max-w-xs font-sans text-sm leading-relaxed text-primary-foreground/70 sm:mx-0"
             >
-              Marketplace yang menyelamatkan makanan surplus dari dapur UMKM kuliner Indonesia
-              sebelum menjadi food waste.
+              Marketplace khusus penjualan makanan surplus yang masih layak
+              konsumsi dari pelaku UMKM Indonesia, untuk mengurangi food loss
+              dan food waste.
             </p>
 
             <div className="mt-7 flex items-center justify-center gap-3 sm:justify-start">
@@ -170,8 +168,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-[#17301F] transition-colors duration-300 hover:bg-[#C9A24B]"
-                  style={{ backgroundColor: CREAM }}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-primary transition-colors duration-300 hover:bg-caramel hover:text-white"
                 >
                   <Icon className="h-[18px] w-[18px]" />
                 </a>
@@ -186,8 +183,7 @@ export function SiteFooter() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="font-sans text-[15px] transition-colors duration-300 hover:text-[#C9A24B]"
-                    style={{ color: CREAM }}
+                    className="font-sans text-[15px] text-primary-foreground transition-colors duration-300 hover:text-caramel"
                   >
                     {link.label}
                   </Link>
@@ -202,8 +198,7 @@ export function SiteFooter() {
               <li>
                 <a
                   href="mailto:halo@rebites.id"
-                  className="inline-flex items-center justify-center gap-2 font-sans text-[15px] transition-colors duration-300 hover:text-[#C9A24B] sm:justify-start"
-                  style={{ color: CREAM }}
+                  className="inline-flex items-center justify-center gap-2 font-sans text-[15px] text-primary-foreground transition-colors duration-300 hover:text-caramel sm:justify-start"
                 >
                   <Mail className="h-4 w-4 shrink-0 opacity-70" />
                   halo@rebites.id
@@ -213,8 +208,7 @@ export function SiteFooter() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="font-sans text-[15px] transition-colors duration-300 hover:text-[#C9A24B]"
-                    style={{ color: CREAM }}
+                    className="font-sans text-[15px] text-primary-foreground transition-colors duration-300 hover:text-caramel"
                   >
                     {link.label}
                   </Link>
@@ -228,8 +222,7 @@ export function SiteFooter() {
             <ul className="space-y-3.5">
               <li>
                 <span
-                  className="inline-flex items-start gap-2 text-left font-sans text-[15px] leading-relaxed"
-                  style={{ color: SAGE }}
+                  className="inline-flex items-start gap-2 text-left font-sans text-[15px] leading-relaxed text-primary-foreground/70"
                 >
                   <MapPin className="mt-1 h-4 w-4 shrink-0 opacity-70" />
                   SMK Taruna Bhakti, Jl. Pekapuran, RT.02/RW.06, Curug, Kec. Cimanggis, Kota Depok,
@@ -242,8 +235,8 @@ export function SiteFooter() {
           {/* Giant wordmark */}
           <div className="col-span-full flex flex-col items-center gap-6 sm:col-span-2 lg:col-span-1 lg:items-end">
             <p
-              className="text-center font-display font-medium leading-none tracking-tight lg:text-right"
-              style={{ color: CREAM, fontSize: 'clamp(3.5rem, 6.5vw, 6.5rem)' }}
+              className="text-center font-display font-medium leading-none tracking-tight text-primary-foreground lg:text-right"
+              style={{ fontSize: 'clamp(3.5rem, 6.5vw, 6.5rem)' }}
             >
               Re
               <span className="font-light italic">Bites</span>
@@ -254,9 +247,9 @@ export function SiteFooter() {
                 aria-hidden
                 className="h-4 w-4 overflow-hidden rounded-full bg-white"
               >
-                <span className="block h-1/2 w-full rounded-t-full bg-[#CE1126]" />
+                <span className="block h-1/2 w-full rounded-t-full bg-destructive" />
               </span>
-              <span className="font-sans text-xs" style={{ color: CREAM }}>
+              <span className="font-sans text-xs text-primary-foreground">
                 Indonesia (ID)
               </span>
             </div>
@@ -264,12 +257,11 @@ export function SiteFooter() {
         </div>
 
         <div
-          className="mt-16 border-t pt-7"
-          style={{ borderColor: `rgba(248,243,231,0.14)` }}
+          className="mt-16 border-t border-white/10 pt-7"
         >
-          <p className="text-center font-sans text-xs" style={{ color: SAGE }}>
+          <p className="text-center font-sans text-xs text-primary-foreground/70">
             © {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
-            <span style={{ color: CREAM }}>Tim Sixquit</span> — SMK Taruna Bhakti.
+            <span className="text-primary-foreground">Tim Sixquit</span> - SMK Taruna Bhakti.
           </p>
         </div>
       </div>

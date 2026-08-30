@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import {
@@ -84,7 +84,7 @@ export function StoreCard() {
       <div className="flex items-center justify-between px-5 pb-0 pt-5 sm:px-6">
         <h2 className="text-sm font-bold text-charcoal-900">Profil Toko</h2>
         <span className="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-charcoal-900">
-          <span className="h-3 w-3 rounded-full bg-gold-400" />
+          <span className="h-3 w-3 rounded-full bg-caramel" />
           Paket {plan.label}
         </span>
       </div>
@@ -142,7 +142,7 @@ export function StoreCard() {
           {/* Verified badge */}
           {plan.verifiedBadge && (
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-cream-50/10 px-2.5 py-1">
-              <BadgeCheck className="h-3.5 w-3.5 text-gold-400" />
+              <BadgeCheck className="h-3.5 w-3.5 text-caramel" />
               <span className="text-[10px] font-semibold text-cream-50/80">Terverifikasi</span>
             </div>
           )}
@@ -158,7 +158,7 @@ export function StoreCard() {
               </span>
               <div>
                 <p className="text-[10px] font-medium uppercase tracking-wider text-cream-50/50">Pemilik</p>
-                <p className="text-xs font-semibold text-cream-50">{displayedOwner || '—'}</p>
+                <p className="text-xs font-semibold text-cream-50">{displayedOwner || '-'}</p>
               </div>
             </div>
             <div className="flex items-center gap-2.5">

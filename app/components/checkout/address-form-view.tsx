@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
@@ -80,7 +80,7 @@ export function AddressFormView({
   const handleSave = () => {
     if (!form.receiverName.trim()) return setError('Nama penerima wajib diisi.');
     if (!/^[0-9+\-\s]{9,16}$/.test(form.phone.trim()))
-      return setError('Nomor telepon tidak valid (9–16 digit).');
+      return setError('Nomor telepon tidak valid (9â€“16 digit).');
     if (!form.district.trim()) return setError('Kecamatan wajib dipilih.');
     if (form.fullAddress.trim().length < 8)
       return setError('Alamat lengkap minimal 8 karakter.');
@@ -129,7 +129,7 @@ export function AddressFormView({
                   'rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200',
                   form.label === label
                     ? 'bg-primary text-white shadow-md shadow-primary/20'
-                    : 'border border-sage-100 bg-white text-charcoal-500 hover:border-sage-500/60 hover:text-primary',
+                    : 'border border-sage-100 bg-white text-charcoal-500 hover:border-sage-500/60 hover:text-caramel',
                 )}
               >
                 {label}
@@ -233,7 +233,7 @@ export function AddressFormView({
       { }
       <div className="mt-3 shrink-0 border-t border-sage-100 pt-3">
         {error && (
-          <p role="alert" className="mb-2.5 text-xs font-medium text-[#DC2626]">
+          <p role="alert" className="mb-2.5 text-xs font-medium text-destructive">
             {error}
           </p>
         )}

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient, getUserFromBearer } from '@/lib/server/supabase';
 import { getXenditInvoice } from '@/lib/server/xendit';
 import { activateSubscriptionPaid } from '@/lib/server/subscription-activation';
@@ -12,7 +12,7 @@ export const runtime = 'nodejs';
  *
  * Fallback saat webhook Xendit tidak terjangkau (mis. dev lokal): cek status
  * invoice langsung ke Xendit API dan aktifkan langganan bila sudah PAID/SETTLED.
- * Idempoten — aman dipanggil berulang dari polling client halaman sukses.
+ * Idempoten - aman dipanggil berulang dari polling client halaman sukses.
  */
 export async function POST(req: NextRequest) {
   const user = await getUserFromBearer(req.headers.get('authorization'));
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
   const service = createServiceClient();
 
-  // Cari UMKM milik user — hanya pemilik yang boleh verifikasi langganannya
+  // Cari UMKM milik user - hanya pemilik yang boleh verifikasi langganannya
   const { data: umkm } = await service
     .from('umkm_profiles')
     .select('id')
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
   const invoiceId = target.xendit_invoice_id as string | null;
   const plan = target.plans as { slug?: string; name?: string } | null;
 
-  // Sudah aktif / sudah berakhir — tidak perlu cek Xendit lagi
+  // Sudah aktif / sudah berakhir - tidak perlu cek Xendit lagi
   if (currentStatus !== 'pending' || !invoiceId) {
     return NextResponse.json({
       externalId,
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ externalId, status: 'pending', invoiceStatus });
   } catch (e: unknown) {
-    // Jangan gagalkan polling client — webhook tetap jadi jalur utama
+    // Jangan gagalkan polling client - webhook tetap jadi jalur utama
     const msg = e instanceof Error ? e.message : 'Gagal verifikasi invoice.';
     console.error('[subscriptions/xendit/verify] error', msg, { externalId });
     return NextResponse.json({ externalId, status: currentStatus, verifyError: msg });
