@@ -22,9 +22,9 @@ export function SubscriptionSection() {
 
         <Reveal delay={0.15}>
           <p className="mx-auto mt-5 max-w-xl font-sans text-sm leading-relaxed text-muted-foreground">
-            Pilih paket penjual yang sesuai dengan kebutuhan usaha Anda. Kelola
-            produk, pantau penjualan, dan dapatkan lebih banyak kesempatan untuk
-            menjangkau pelanggan melalui ReBites.
+            Pilih paket penjual sesuai kebutuhan usaha Anda untuk mengelola
+            produk, memantau penjualan, dan menjangkau lebih banyak pelanggan
+            melalui ReBites.
           </p>
         </Reveal>
 

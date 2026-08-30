@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useRef, useId, useEffect } from "react";
+import { useMemo, useState, useRef, useId, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Leaf } from "lucide-react";
-import { cn } from "@/lib/utils";
 import OptionWheel, { type OptionWheelApi } from "@/app/components/ui/korosel";
 import { Reveal } from "@/app/components/reveal";
 import { LeafSprig } from "@/app/components/ornaments";
+import { useCatalog } from "@/lib/catalog";
+import { SearchFilterBar } from "@/app/components/SearchFilterBar";
+import type { FoodItem, FilterKey } from "@/lib/types";
 import {
   ProductDetailPanel,
   type FeaturedFood,
@@ -24,8 +26,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.9,
     reviewCount: 214,
+    stockLabel: "12 porsi tersisa",
     description:
-      "Ayam geprek renyah dengan sambal bawang khas yang menggugah selera — dijamin nagih di setiap gigitan, dan hanya bisa kamu temukan di ReBites.",
+      "Ayam geprek renyah dengan sambal bawang khas yang menggugah selera, siap dinikmati dengan harga lebih hemat.",
   },
   {
     name: "Nasi Goreng Kampung",
@@ -38,8 +41,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.8,
     reviewCount: 168,
+    stockLabel: "8 porsi tersisa",
     description:
-      "Nasi goreng kampung dengan bumbu ulek segar dan telur mata sapi — kehangatan dapur rumahan yang hanya bisa kamu temukan di ReBites.",
+      "Nasi goreng kampung dengan bumbu ulek segar dan telur mata sapi, menghadirkan cita rasa dapur rumahan.",
   },
   {
     name: "Soto Mie Bogor",
@@ -52,8 +56,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.8,
     reviewCount: 176,
+    stockLabel: "10 porsi tersisa",
     description:
-      "Soto mie Bogor dengan kuah bening gurih, mie kuning, dan risoles — kehangatan khas kota hujan yang hanya bisa kamu temukan di ReBites.",
+      "Soto mie Bogor dengan kuah bening yang gurih, lengkap dengan mie kuning dan risoles khas kota hujan.",
   },
   {
     name: "Sate Ayam Pak Tigiset",
@@ -66,8 +71,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.9,
     reviewCount: 240,
+    stockLabel: "15 porsi tersisa",
     description:
-      "Sate ayam empuk dengan bumbu kacang legendaris yang meresap — legit di setiap tusuk, dan hanya bisa kamu temukan di ReBites.",
+      "Sate ayam empuk dengan bumbu kacang yang meresap sempurna, gurih di setiap tusuknya.",
   },
   {
     name: "Rendang Padang Karindang",
@@ -80,8 +86,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.9,
     reviewCount: 300,
+    stockLabel: "6 porsi tersisa",
     description:
-      "Rendang padang dengan daging empuk dan bumbu yang meresap sempurna — kekayaan rasa nusantara yang hanya bisa kamu temukan di ReBites.",
+      "Rendang padang dengan daging empuk dan bumbu yang meresap sempurna, menghadirkan kekayaan rasa nusantara.",
   },
   {
     name: "Pancong Boss Lumer",
@@ -94,8 +101,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.7,
     reviewCount: 132,
+    stockLabel: "20 porsi tersisa",
     description:
-      "Pancong kelapa manis gurih dengan topping cokelat yang lumer — jajanan klasik yang hanya bisa kamu temukan di ReBites.",
+      "Pancong kelapa manis gurih dengan topping cokelat yang lumer, jajanan klasik yang tetap menggoda.",
   },
   {
     name: "Martabak Gombret",
@@ -108,8 +116,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.8,
     reviewCount: 190,
+    stockLabel: "9 porsi tersisa",
     description:
-      "Martabak gombret tebal dengan isian melimpah — manisnya pas di hati, dan hanya bisa kamu temukan di ReBites.",
+      "Martabak gombret tebal dengan isian melimpah dan rasa manis yang pas di lidah.",
   },
   {
     name: "Bakso Spesial Mas Jono",
@@ -122,8 +131,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.9,
     reviewCount: 256,
+    stockLabel: "11 porsi tersisa",
     description:
-      "Bakso sapi kenyal dengan kuah kaldu bening yang gurih — hangat, mengenyangkan, dan hanya bisa kamu temukan di ReBites.",
+      "Bakso sapi kenyal dengan kuah kaldu bening yang gurih, hangat dan mengenyangkan.",
   },
   {
     name: "Ketoprak Telor Sedap",
@@ -136,8 +146,9 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.7,
     reviewCount: 148,
+    stockLabel: "14 porsi tersisa",
     description:
-      "Ketoprak lengkap dengan lontong, bihun, tahu, dan telur — disiram sambal kacang yang hanya bisa kamu temukan di ReBites.",
+      "Ketoprak lengkap dengan lontong, bihun, tahu, dan telur, disiram sambal kacang yang gurih.",
   },
   {
     name: "Mie Ayam Balap 12",
@@ -150,10 +161,38 @@ const FOODS: FeaturedFood[] = [
     badge: "Menu Favorit",
     rating: 4.8,
     reviewCount: 202,
+    stockLabel: "18 porsi tersisa",
     description:
-      "Mie ayam dengan topping ayam cincang melimpah dan kuah gurih yang hangat — lezatnya hanya bisa kamu temukan di ReBites.",
+      "Mie ayam dengan topping ayam cincang melimpah dan kuah gurih yang hangat.",
   },
 ];
+
+type PlateFood = FeaturedFood & { id?: string };
+
+function foodItemToPlate(food: FoodItem): PlateFood {
+  const reviewCount = Math.max(
+    40,
+    Math.round(food.rating * 42 + (food.distanceKm || 1) * 7),
+  );
+  return {
+    id: food.id,
+    name: food.name,
+    image: food.image,
+    merchant: food.vendorName,
+    category: food.category,
+    hours: `${food.availableFrom}–${food.availableTo}`,
+    price: food.discountedPrice,
+    originalPrice: food.originalPrice,
+    badge:
+      food.discountPercent > 0
+        ? `Hemat ${food.discountPercent}%`
+        : "Menu Favorit",
+    rating: food.rating,
+    reviewCount,
+    stockLabel: food.stockLabel,
+    description: `${food.name} dari ${food.vendorName} — menu surplus berkualitas dengan harga yang lebih hemat.`,
+  };
+}
 
 const BADGE_CLIP = (() => {
   const teeth = 36;
@@ -173,9 +212,30 @@ export function HeroFoodCarousel() {
   const [foodIndex, setFoodIndex] = useState(0);
   const [autoRotate, setAutoRotate] = useState(true);
   const [plateSize, setPlateSize] = useState(320);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchFilter, setSearchFilter] = useState<FilterKey>("terdekat");
   const wheelApi = useRef<OptionWheelApi | null>(null);
+  const { urgentItems } = useCatalog();
 
-  const selected = FOODS[foodIndex];
+  const displayFoods: PlateFood[] = useMemo(
+    () =>
+      urgentItems.length > 0
+        ? urgentItems.map(foodItemToPlate)
+        : (FOODS as PlateFood[]),
+    [urgentItems],
+  );
+
+  const safeIndex = Math.min(
+    foodIndex,
+    Math.max(displayFoods.length - 1, 0),
+  );
+  const selected = displayFoods[safeIndex] ?? displayFoods[0];
+
+  useEffect(() => {
+    setFoodIndex((prev) =>
+      Math.min(prev, Math.max(displayFoods.length - 1, 0)),
+    );
+  }, [displayFoods.length]);
 
   useEffect(() => {
     const updatePlate = () => {
@@ -189,10 +249,17 @@ export function HeroFoodCarousel() {
     return () => window.removeEventListener("resize", updatePlate);
   }, []);
 
-  const steer = (action: () => void) => {
+  const handleSelectResult = (id: string) => {
+    const index = displayFoods.findIndex((food) => food.id === id);
+    if (index === -1) return;
     setAutoRotate(false);
-    action();
-    window.setTimeout(() => setAutoRotate(true), 8000);
+    wheelApi.current?.to(index);
+    setFoodIndex(index);
+  };
+
+  const handleQueryChange = (value: string) => {
+    setSearchQuery(value);
+    if (!value) setAutoRotate(true);
   };
 
   return (
@@ -213,16 +280,31 @@ export function HeroFoodCarousel() {
             Pilihan terbaik untukmu hari ini
           </h2>
           <p className="mx-auto mt-4 max-w-xl font-sans text-sm leading-[1.8] text-muted-foreground sm:text-base">
-            Putar piringnya, temukan menu surplus favoritmu dari UMKM terbaik
-            di Kota Depok.
+            Putar piring dan temukan menu surplus pilihan dari UMKM terbaik di
+            Kota Depok.
           </p>
         </Reveal>
 
+        <Reveal delay={0.1} className="mt-8">
+          <SearchFilterBar
+            query={searchQuery}
+            onQueryChange={handleQueryChange}
+            onSearchSubmit={() => undefined}
+            activeFilter={searchFilter}
+            onFilterChange={setSearchFilter}
+            showLocation={false}
+            showInlineResults
+            onSelectResult={handleSelectResult}
+            variant="light"
+            items={urgentItems}
+          />
+        </Reveal>
+
         <div className="mt-14 grid items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
-          <div className="order-2 w-full lg:order-1 lg:pl-8 xl:pl-16">
+          <div className="order-2 w-full lg:order-1 lg:pl-16 xl:pl-28">
             <AnimatePresence mode="wait">
               <motion.div
-                key={foodIndex}
+                key={safeIndex}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
@@ -250,7 +332,7 @@ export function HeroFoodCarousel() {
 
                   <div className="absolute inset-0">
                     <OptionWheel
-                      items={FOODS.map((f) => f.name)}
+                      items={displayFoods.map((f) => f.name)}
                       defaultSelected={0}
                       side="right"
                       orientation="vertical"
@@ -269,7 +351,7 @@ export function HeroFoodCarousel() {
                       onChange={(index) => setFoodIndex(index)}
                       apiRef={wheelApi}
                       className="!py-0 -translate-x-[9%] sm:-translate-x-[18%] lg:-translate-x-[20%]"
-                      renderItem={(i) => <FoodPlate image={FOODS[i].image} />}
+                      renderItem={(i) => <FoodPlate image={displayFoods[i].image} />}
                     />
                     <div
                       aria-hidden
@@ -300,6 +382,13 @@ export function HeroFoodCarousel() {
 
                   <div
                     aria-hidden
+                    className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[#E53935] px-4 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-[0_10px_20px_-10px_rgba(229,57,53,0.7)]"
+                  >
+                    Flash Sale
+                  </div>
+
+                  <div
+                    aria-hidden
                     className="absolute right-7 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-3 lg:flex"
                   >
                     <span className="h-9 w-px bg-caramel/60" />
@@ -309,23 +398,6 @@ export function HeroFoodCarousel() {
                     <span className="h-9 w-px bg-caramel/60" />
                   </div>
                 </div>
-              </div>
-
-              <div className="relative z-20 mt-6 flex items-center justify-center gap-1.5">
-                {FOODS.map((food, index) => (
-                  <button
-                    key={food.name}
-                    type="button"
-                    aria-label={`Pilih ${food.name}`}
-                    onClick={() => steer(() => wheelApi.current?.to(index))}
-                    className={cn(
-                      "h-1.5 rounded-full transition-all duration-300",
-                      index === foodIndex
-                        ? "w-6 bg-green-700"
-                        : "w-1.5 bg-charcoal-900/15 hover:bg-amber",
-                    )}
-                  />
-                ))}
               </div>
             </Reveal>
           </div>

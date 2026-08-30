@@ -6,8 +6,6 @@ import {
   Check,
   Clock,
   Loader2,
-  Minus,
-  Plus,
   ShoppingBag,
   Star,
   Utensils,
@@ -29,6 +27,7 @@ export type FeaturedFood = {
   rating: number;
   reviewCount: number;
   description: string;
+  stockLabel?: string;
 };
 
 type BuyState = "idle" | "loading" | "done";
@@ -52,7 +51,6 @@ function RichText({ text }: { text: string }) {
 }
 
 export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
-  const [qty, setQty] = useState(1);
   const [buyState, setBuyState] = useState<BuyState>("idle");
 
   const discount = Math.round((1 - food.price / food.originalPrice) * 100);
@@ -77,6 +75,11 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
         {food.name}
       </h3>
 
+      {/* Nama toko */}
+      <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.18em] text-charcoal-500">
+        {food.merchant}
+      </p>
+
       {/* E — Badge kategori & jam buka (di bawah nama) */}
       <div className="flex flex-wrap items-center gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-sage-500/30 bg-white px-3 py-1.5 font-sans text-xs font-semibold text-charcoal-600">
@@ -89,23 +92,27 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
         </span>
       </div>
 
-      <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.18em] text-charcoal-500">
-        {food.merchant}
-      </p>
+      {/* C — Stok, rating & ulasan */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2" aria-label={`Rating ${food.rating} dari 5`}>
+        {food.stockLabel && (
+          <span className="inline-flex items-center rounded-full bg-sage-100 px-3 py-1 font-sans text-[11px] font-semibold text-green-700">
+            {food.stockLabel}
+          </span>
+        )}
 
-      {/* C — Rating & ulasan */}
-      <div className="flex items-center gap-2" aria-label={`Rating ${food.rating} dari 5`}>
-        <div className="flex items-center gap-0.5">
-          {Array.from({ length: 5 }).map((_, s) => (
-            <Star key={s} className="h-4 w-4 fill-amber text-amber" />
-          ))}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, s) => (
+              <Star key={s} className="h-4 w-4 fill-amber text-amber" />
+            ))}
+          </div>
+          <span className="font-sans text-sm font-bold text-charcoal-900">
+            {food.rating.toFixed(1)}
+          </span>
+          <span className="font-sans text-sm text-charcoal-500">
+            ({food.reviewCount} ulasan)
+          </span>
         </div>
-        <span className="font-sans text-sm font-bold text-charcoal-900">
-          {food.rating.toFixed(1)}
-        </span>
-        <span className="font-sans text-sm text-charcoal-500">
-          ({food.reviewCount} ulasan)
-        </span>
       </div>
 
       {/* D — Deskripsi */}
@@ -135,34 +142,6 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
 
       {/* G + H — Quantity selector & CTA */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="flex w-fit items-center rounded-full border border-sage-500/40 bg-white p-1">
-          <button
-            type="button"
-            aria-label="Kurangi jumlah"
-            disabled={qty <= 1}
-            onClick={() => setQty((q) => Math.max(1, q - 1))}
-            className={FOCUS_RING + " flex h-9 w-9 items-center justify-center rounded-full text-charcoal-900 transition-colors duration-200 hover:bg-cream-100 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"}
-          >
-            <Minus className="h-4 w-4" />
-          </button>
-
-          <span
-            aria-live="polite"
-            className="w-10 text-center font-sans text-base font-bold tabular-nums text-charcoal-900"
-          >
-            {qty}
-          </span>
-
-          <button
-            type="button"
-            aria-label="Tambah jumlah"
-            onClick={() => setQty((q) => Math.min(99, q + 1))}
-            className={FOCUS_RING + " flex h-9 w-9 items-center justify-center rounded-full text-charcoal-900 transition-colors duration-200 hover:bg-cream-100"}
-          >
-            <Plus className="h-4 w-4" />
-          </button>
-        </div>
-
         <motion.button
           type="button"
           onClick={handleBuy}

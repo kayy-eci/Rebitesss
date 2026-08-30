@@ -9,23 +9,23 @@ import { Reveal } from './reveal';
 const FAQS = [
   {
     q: 'Apa itu ReBites?',
-    a: 'ReBites adalah marketplace makanan surplus yang mempertemukan dapur UMKM dengan pembeli di Kota Depok. Makanan yang masih layak konsumsi namun berpotensi terbuang dijual dengan harga lebih hemat — mengurangi food waste sekaligus menambah pendapatan UMKM.',
+    a: 'ReBites adalah marketplace khusus penjualan makanan surplus yang masih layak konsumsi, yang mempertemukan pelaku UMKM dengan pembeli di Kota Depok. Makanan yang berpotensi menjadi food waste dijual dengan harga yang lebih terjangkau — mengurangi pemborosan pangan sekaligus menambah pendapatan UMKM.',
   },
   {
     q: 'Bagaimana cara memesan makanan di ReBites?',
-    a: 'Buat akun, jelajahi katalog makanan di sekitarmu, lalu checkout. Kamu bisa memilih mengambil sendiri pesanan di toko atau menggunakan layanan pengiriman yang tersedia.',
+    a: 'Buat akun, cari dan lihat detail produk surplus di sekitarmu, tentukan jumlah pembelian, lalu pilih metode penerimaan pesanan (diantar atau diambil langsung) serta metode pembayaran sebelum melakukan pembayaran.',
   },
   {
     q: 'Apakah makanan surplus aman dikonsumsi?',
-    a: 'Aman. Makanan yang dijual adalah makanan yang masih layak konsumsi — biasanya kelebihan produksi atau mendekati jam penyajian berikutnya. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
+    a: 'Aman. Makanan yang dijual adalah makanan surplus yang masih memenuhi standar kelayakan konsumsi — biasanya kelebihan produksi atau belum habis pada akhir waktu operasional. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
   },
   {
     q: 'Bagaimana cara UMKM mulai berjualan?',
-    a: 'Daftar sebagai penjual melalui halaman registrasi, lengkapi profil toko, lalu unggah makanan surplus beserta harga diskonnya. Paket Trial tersedia gratis untuk mulai mencoba.',
+    a: 'Daftar sebagai pelaku UMKM melalui halaman registrasi, lengkapi profil usaha, lalu unggah makanan surplus beserta harga, stok, dan waktu penjualannya. Paket Trial tersedia gratis untuk mulai mencoba.',
   },
   {
     q: 'Berapa biaya untuk menggunakan ReBites?',
-    a: 'Untuk pembeli, tidak ada biaya tambahan selain harga makanan. Untuk penjual, tersedia paket langganan mulai dari Trial gratis, Standar, hingga Premium sesuai kebutuhan usaha.',
+    a: 'Untuk pembeli, tidak ada biaya tambahan selain harga makanan. Untuk pelaku UMKM, tersedia paket langganan mulai dari Trial gratis, Standar, hingga Premium sesuai kebutuhan usaha.',
   },
   {
     q: 'Area mana saja yang sudah dilayani?',
@@ -98,8 +98,8 @@ export function FaqSection() {
                   Punya pertanyaan lain?
                 </h3>
                 <p className="mt-2 font-sans text-sm leading-relaxed text-muted-foreground">
-                  Kirim pesan lewat form ini, tim kami akan segera membalas ke
-                  email kamu.
+                  Kirim pesan melalui formulir ini, tim kami akan segera
+                  membalas ke email Anda.
                 </p>
               </div>
 
@@ -113,7 +113,7 @@ export function FaqSection() {
                       type="text"
                       name="nama"
                       required
-                      placeholder="Nama kamu"
+                      placeholder="Nama Anda"
                       className="rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-forest-dark placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
                     />
                   </label>
@@ -140,7 +140,7 @@ export function FaqSection() {
                     name="pesan"
                     required
                     rows={5}
-                    placeholder="Tulis pertanyaan atau pesan kamu di sini…"
+                    placeholder="Tulis pertanyaan atau pesan Anda di sini…"
                     className="flex-1 resize-none rounded-xl border border-hairline bg-cream px-4 py-3 font-sans text-sm text-forest-dark placeholder:text-stone focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
                   />
                 </label>
@@ -162,8 +162,8 @@ export function FaqSection() {
                       exit={{ opacity: 0 }}
                       className="font-sans text-sm font-medium text-forest"
                     >
-                      Terima kasih! Pesan kamu sudah terkirim — tim kami akan
-                      segera menghubungi kamu.
+                      Terima kasih! Pesan Anda sudah terkirim — tim kami akan
+                      segera menghubungi Anda.
                     </motion.p>
                   )}
 

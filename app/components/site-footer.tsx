@@ -158,8 +158,9 @@ export function SiteFooter() {
               className="mx-auto mt-5 max-w-xs font-sans text-sm leading-relaxed sm:mx-0"
               style={{ color: SAGE }}
             >
-              Marketplace yang menyelamatkan makanan surplus dari dapur UMKM kuliner Indonesia
-              sebelum menjadi food waste.
+              Marketplace khusus penjualan makanan surplus yang masih layak
+              konsumsi dari pelaku UMKM Indonesia, untuk mengurangi food loss
+              dan food waste.
             </p>
 
             <div className="mt-7 flex items-center justify-center gap-3 sm:justify-start">

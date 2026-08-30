@@ -20,6 +20,7 @@ interface SearchFilterBarProps {
   onSelectResult?: (id: string) => void;
   placeholder?: string;
   variant?: "default" | "glass" | "light";
+  items?: FoodItem[];
 }
 
 const FOCUS_RING =
@@ -79,6 +80,7 @@ export function SearchFilterBar({
   onSelectResult,
   placeholder = "Cari makanan surplus di sekitarmu...",
   variant = "default",
+  items: itemsOverride,
 }: SearchFilterBarProps) {
   const isGlass = variant === "glass";
   const isLight = variant === "light";
@@ -87,6 +89,7 @@ export function SearchFilterBar({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { foodItems } = useCatalog();
+  const searchPool = itemsOverride ?? foodItems;
 
   const trimmedQuery = query.trim();
 
@@ -94,7 +97,7 @@ export function SearchFilterBar({
     if (!showInlineResults || !trimmedQuery) return [];
 
     const q = trimmedQuery.toLowerCase();
-    let items = foodItems.filter(
+    let items = searchPool.filter(
       (item) =>
         item.name.toLowerCase().includes(q) ||
         item.vendorName.toLowerCase().includes(q),
@@ -113,7 +116,7 @@ export function SearchFilterBar({
     }
 
     return [...items].sort(applySort(activeFilter));
-  }, [showInlineResults, trimmedQuery, activeFilter, foodItems]);
+  }, [showInlineResults, trimmedQuery, activeFilter, searchPool]);
 
   const dropdownVisible =
     showInlineResults && isDropdownOpen && trimmedQuery.length > 0;
@@ -168,7 +171,7 @@ export function SearchFilterBar({
           isGlass
             ? "rounded-[28px] border border-white/25 bg-white/15 p-2 shadow-lg shadow-black/10 backdrop-blur-md sm:rounded-full"
             : isLight
-              ? "rounded-[28px] border border-sage-100 bg-white p-2 shadow-md shadow-forest-900/5 sm:rounded-full"
+              ? "rounded-[28px] border border-primary bg-white p-2 shadow-md shadow-forest-900/10 sm:rounded-full"
               : "rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-forest-900/5 sm:p-3",
         )}
       >

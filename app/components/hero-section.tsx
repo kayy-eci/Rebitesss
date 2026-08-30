@@ -298,7 +298,7 @@ export function HeroSection() {
 
             <div className="mt-8 flex w-full flex-col items-center">
               <FoldText
-                text="Ubah cara kamu menyelamatkan"
+                text="Ubah cara Anda menyelamatkan"
                 hinge="top"
                 trigger="load"
                 duration={1.15}
@@ -332,9 +332,9 @@ export function HeroSection() {
             </div>
 
             <p className="mt-8 max-w-2xl font-sans text-base leading-[1.85] text-muted-foreground sm:text-lg">
-              ReBites menghubungkan kamu dengan makanan surplus berkualitas dari
-              dapur UMKM Kota Depok â€” harga lebih hemat, kualitas tetap juara,
-              dan tanpa food waste.
+              ReBites menghubungkan Anda dengan makanan surplus berkualitas
+              dari pelaku UMKM Kota Depok — lebih hemat, tetap layak konsumsi,
+              dan bebas food waste.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
