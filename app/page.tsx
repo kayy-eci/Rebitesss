@@ -246,7 +246,7 @@ export default function Home() {
               </Reveal>
 
               <Reveal delay={0.1}>
-                <div className="relative mt-6 h-[21rem] w-full max-w-[34rem] overflow-hidden rounded-3xl shadow-[0_20px_40px_-24px_rgba(0,0,0,0.55)]">
+                <div className="relative mt-5 h-[21rem] w-full max-w-[34rem] overflow-hidden rounded-3xl shadow-[0_20px_40px_-24px_rgba(0,0,0,0.55)]">
                   <SmartImage
                     src="https://images.pexels.com/photos/30684081/pexels-photo-30684081.jpeg?auto=compress&cs=tinysrgb&w=1200"
                     alt="Makanan terbuang yang seharusnya bisa diselamatkan dari food waste"
