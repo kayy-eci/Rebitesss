@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useRef, useId, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Leaf } from "lucide-react";
+import { ChevronLeft, ChevronRight, Leaf, Zap } from "lucide-react";
 import OptionWheel, { type OptionWheelApi } from "@/app/components/ui/korosel";
 import { Reveal } from "@/app/components/reveal";
 import { LeafSprig } from "@/app/components/ornaments";
@@ -14,6 +14,21 @@ import {
   type FeaturedFood,
 } from "@/app/components/product-detail-panel";
 
+const BURST_CLIP = (() => {
+  const N = 22;
+  const outer = 0.5;
+  const inner = 0.44;
+  const pts: string[] = [];
+  for (let i = 0; i < N * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = (Math.PI * i) / N - Math.PI / 2;
+    pts.push(
+      `${(50 + r * 50 * Math.cos(a)).toFixed(3)}% ${(50 + r * 50 * Math.sin(a)).toFixed(3)}%`,
+    );
+  }
+  return `polygon(${pts.join(",")})`;
+})();
+
 const FOODS: FeaturedFood[] = [
   {
     name: "Ayam Geprek",
@@ -23,7 +38,7 @@ const FOODS: FeaturedFood[] = [
     hours: "09.00–21.00",
     price: 12000,
     originalPrice: 15000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 214,
     stockLabel: "12 porsi tersisa",
@@ -38,7 +53,7 @@ const FOODS: FeaturedFood[] = [
     hours: "10.00–21.00",
     price: 15000,
     originalPrice: 18000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 168,
     stockLabel: "8 porsi tersisa",
@@ -53,7 +68,7 @@ const FOODS: FeaturedFood[] = [
     hours: "08.00–16.00",
     price: 18000,
     originalPrice: 22000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 176,
     stockLabel: "10 porsi tersisa",
@@ -68,7 +83,7 @@ const FOODS: FeaturedFood[] = [
     hours: "15.00–22.00",
     price: 20000,
     originalPrice: 25000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 240,
     stockLabel: "15 porsi tersisa",
@@ -83,7 +98,7 @@ const FOODS: FeaturedFood[] = [
     hours: "10.00–21.00",
     price: 25000,
     originalPrice: 30000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 300,
     stockLabel: "6 porsi tersisa",
@@ -98,7 +113,7 @@ const FOODS: FeaturedFood[] = [
     hours: "14.00–21.00",
     price: 10000,
     originalPrice: 13000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.7,
     reviewCount: 132,
     stockLabel: "20 porsi tersisa",
@@ -113,7 +128,7 @@ const FOODS: FeaturedFood[] = [
     hours: "17.00–23.00",
     price: 22000,
     originalPrice: 28000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 190,
     stockLabel: "9 porsi tersisa",
@@ -128,7 +143,7 @@ const FOODS: FeaturedFood[] = [
     hours: "09.00–21.00",
     price: 18000,
     originalPrice: 23000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.9,
     reviewCount: 256,
     stockLabel: "11 porsi tersisa",
@@ -143,7 +158,7 @@ const FOODS: FeaturedFood[] = [
     hours: "08.00–17.00",
     price: 13000,
     originalPrice: 16000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.7,
     reviewCount: 148,
     stockLabel: "14 porsi tersisa",
@@ -158,7 +173,7 @@ const FOODS: FeaturedFood[] = [
     hours: "10.00–22.00",
     price: 15000,
     originalPrice: 18000,
-    badge: "Menu Favorit",
+    badge: "Best Seller",
     rating: 4.8,
     reviewCount: 202,
     stockLabel: "18 porsi tersisa",
@@ -183,10 +198,7 @@ function foodItemToPlate(food: FoodItem): PlateFood {
     hours: `${food.availableFrom}–${food.availableTo}`,
     price: food.discountedPrice,
     originalPrice: food.originalPrice,
-    badge:
-      food.discountPercent > 0
-        ? `Hemat ${food.discountPercent}%`
-        : "Menu Favorit",
+    badge: "Best Seller",
     rating: food.rating,
     reviewCount,
     stockLabel: food.stockLabel,
@@ -216,6 +228,10 @@ export function HeroFoodCarousel() {
     Math.max(displayFoods.length - 1, 0),
   );
   const selected = displayFoods[safeIndex] ?? displayFoods[0];
+  const discountPct = Math.max(
+    0,
+    Math.round((1 - selected.price / selected.originalPrice) * 100) || 0,
+  );
 
   useEffect(() => {
     setFoodIndex((prev) =>
@@ -270,7 +286,7 @@ export function HeroFoodCarousel() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-8">
+        <Reveal delay={0.1} className="mx-auto mt-8 w-full max-w-4xl">
           <SearchFilterBar
             query={searchQuery}
             onQueryChange={handleQueryChange}
@@ -285,7 +301,7 @@ export function HeroFoodCarousel() {
           />
         </Reveal>
 
-        <div className="mt-14 grid items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+        <div className="mt-8 grid items-center gap-10 lg:mt-14 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
           <div className="order-2 w-full lg:order-1 lg:pl-16 xl:pl-28">
             <AnimatePresence mode="wait">
               <motion.div
@@ -303,6 +319,49 @@ export function HeroFoodCarousel() {
 
           <div className="order-1 lg:order-2">
             <Reveal className="relative">
+              <div className="pointer-events-none absolute right-2 top-3 z-30 flex flex-col items-end gap-2 sm:right-4 sm:top-4">
+                <div
+                  aria-label={`Diskon ${discountPct} persen`}
+                  className="flex h-14 w-14 items-center justify-center bg-sale text-center shadow-[0_12px_26px_-12px_rgba(229,57,53,0.75)] sm:h-16 sm:w-16"
+                  style={{ clipPath: BURST_CLIP, WebkitClipPath: BURST_CLIP }}
+                >
+                  <span className="pl-1 font-sans text-[12px] font-extrabold leading-none text-white sm:text-[15px]">
+                    −{discountPct}%
+                  </span>
+                </div>
+
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-primary shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] sm:text-[11px]">
+                  <Zap className="h-3 w-3 fill-caramel text-caramel" />
+                  Pengantaran Cepat
+                </div>
+              </div>
+
+              <div className="absolute bottom-3 right-2 z-30 flex items-center gap-2 sm:bottom-4 sm:right-4">
+                <button
+                  type="button"
+                  aria-label="Makanan sebelumnya"
+                  onClick={() => {
+                    setAutoRotate(false);
+                    wheelApi.current?.prev();
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-10 sm:w-10"
+                >
+                  <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Makanan berikutnya"
+                  onClick={() => {
+                    setAutoRotate(false);
+                    wheelApi.current?.next();
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/10 bg-white text-forest shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 sm:h-10 sm:w-10"
+                >
+                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+              </div>
+
               <div className="relative mx-auto w-full max-w-[15rem] sm:max-w-[30rem] lg:mr-[-2rem] lg:max-w-[42rem]">
                 <div
                   aria-hidden

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowRight, ShoppingCart } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 import { Reveal } from "@/app/components/reveal";
 import { SmartImage } from "@/app/components/SmartImage";
 import { formatRupiah } from "@/lib/data";
@@ -304,7 +304,7 @@ function FlashSaleCard({
           )}
         </div>
 
-        <p className="mt-3 font-sans text-[11px] font-semibold text-sale">
+        <p className="mb-9 mt-3 pr-28 font-sans text-[11px] font-semibold text-sale">
           Hemat {formatRupiah(savings)}
         </p>
 
@@ -320,17 +320,18 @@ function FlashSaleCard({
             if (live) router.push("/auth/login");
           }}
           className={cn(
-            "absolute bottom-5 right-5 flex h-10 w-10 items-center justify-center rounded-full shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+            "absolute bottom-5 right-5 inline-flex h-10 items-center gap-1.5 rounded-full px-4 font-sans text-[12px] font-bold uppercase tracking-wide shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-white",
             live
               ? "bg-forest text-white hover:bg-caramel hover:scale-105"
               : "cursor-not-allowed bg-stone-200 text-stone-400",
           )}
         >
-          <ShoppingCart className="h-4 w-4" />
+          <ShoppingBag className="h-4 w-4" />
+          Beli
         </button>
 
         {!live && status && (
-          <p className="mt-3 font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-stone-400">
+          <p className="mb-9 mt-3 pr-28 font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-stone-400">
             {status}
           </p>
         )}
@@ -457,16 +458,16 @@ export function FlashSaleGrid() {
                     "flex items-center gap-2.5 rounded-full border font-sans transition-all duration-300",
                     active
                       ? "border-transparent bg-forest text-white shadow-[0_14px_30px_-18px_rgba(27,77,50,0.7)]"
-                      : "border-hairline bg-white text-forest-dark hover:border-caramel/50 hover:text-caramel",
+                      : "border-hairline bg-white text-forest-dark hover:border-primary hover:bg-primary hover:text-white hover:shadow-[0_14px_30px_-18px_rgba(27,77,50,0.7)]",
                     FOCUS_RING,
                   )}
                 >
-                  <span className="py-2 pl-4 text-xs font-bold tabular-nums">
+                  <span className="py-2.5 pl-4 text-xs font-bold tabular-nums">
                     {slot.range}
                   </span>
                   <span
                     className={cn(
-                      "text-[10px] font-semibold uppercase tracking-[0.16em]",
+                      "pr-4 text-[10px] font-semibold uppercase tracking-[0.16em]",
                       active ? "text-white/85" : "text-muted-foreground",
                     )}
                   >

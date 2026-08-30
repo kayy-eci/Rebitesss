@@ -278,13 +278,13 @@ export default function Home() {
                       key={stat.label}
                       className="border-t border-primary-foreground/15 pt-4"
                     >
-                      <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-caramel">
+                      <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-primary-foreground">
                         {stat.value}
                       </p>
-                      <p className="mt-1 font-sans text-xs font-medium uppercase tracking-wide text-primary-foreground/60">
+                      <p className="mt-1 font-sans text-xs font-medium uppercase tracking-wide text-primary-foreground/80">
                         {stat.unit}
                       </p>
-                      <p className="mt-2 font-sans text-xs leading-[1.6] text-primary-foreground/70">
+                      <p className="mt-2 font-sans text-xs leading-[1.6] text-primary-foreground/90">
                         {stat.label}
                       </p>
                     </div>
@@ -339,7 +339,7 @@ export default function Home() {
               </div>
 
               <Reveal delay={0.2}>
-                <p className="mt-2 max-w-xl font-sans text-sm leading-[1.85] text-primary-foreground/70">
+                <p className="mt-2 max-w-xl font-sans text-sm leading-[1.85] text-primary-foreground">
                   <span className="font-semibold text-caramel">ReBites</span>{" "}
                   adalah marketplace khusus bagi pelaku UMKM untuk menjual
                   makanan surplus yang masih layak konsumsi. Pangan yang
@@ -350,7 +350,7 @@ export default function Home() {
               </Reveal>
 
               <Reveal delay={0.25}>
-                <p className="max-w-xl font-sans text-sm leading-[1.85] text-primary-foreground/70">
+                <p className="max-w-xl font-sans text-sm leading-[1.85] text-primary-foreground">
                   Saat ini{" "}
                   <span className="font-semibold text-caramel">ReBites</span>{" "}
                   beroperasi di{" "}

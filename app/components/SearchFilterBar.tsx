@@ -173,7 +173,7 @@ export function SearchFilterBar({
             ? "rounded-[28px] border border-white/25 bg-white/15 p-2 shadow-lg shadow-black/10 backdrop-blur-md sm:rounded-full"
             : isLight
               ? "rounded-[28px] border border-primary bg-white p-2 shadow-md shadow-primary/10 sm:rounded-full"
-              : "rounded-2xl border border-sage-100 bg-white p-2.5 shadow-md shadow-primary/5 sm:p-3",
+              : "rounded-2xl border border-sage-100 bg-white p-2 shadow-md shadow-primary/5 sm:p-2.5",
         )}
       >
         <form
@@ -187,13 +187,13 @@ export function SearchFilterBar({
           <div className="relative flex-1">
             <div
               className={cn(
-                "flex w-full items-center gap-3 rounded-full px-4 py-2.5",
+                "flex w-full items-center gap-2.5 rounded-full px-3.5 py-2",
                 !isGlass && !isLight && "bg-cream-50",
               )}
             >
               <Search
                 className={cn(
-                  "h-5 w-5 shrink-0",
+                  "h-4 w-4 shrink-0",
                   isGlass ? "text-white/80" : "text-sage-500",
                 )}
               />

@@ -13,7 +13,6 @@ import {
 import { cn } from "@/lib/utils";
 import FoldText from "@/app/components/FoldText";
 import RotatingText from "@/app/components/RotatingText";
-import SpecularButton from "@/app/components/SpecularButton";
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
@@ -280,31 +279,14 @@ export function HeroSection() {
 
         <div className="relative w-full max-w-7xl">
           <div className="mx-auto flex w-full max-w-6xl flex-col items-center text-center">
-            <SpecularButton
-              as="div"
-              size="sm"
-              radius={999}
-              tint="#ffffff"
-              tintOpacity={0.45}
-              blur={14}
-              textColor="#6F4529"
-              lineColor="hsl(var(--primary) / 0.6)"
-              baseColor="hsl(var(--primary))"
-              intensity={0.5}
-              shineSize={14}
-              shineFade={48}
-              thickness={1.1}
-              speed={0.42}
-              followMouse
-              proximity={320}
-              autoAnimate
-              className="specular-button--outer-green !cursor-default !px-8 !py-2.5 font-sans !text-sm font-semibold uppercase tracking-[0.18em]"
-              onClick={() => undefined}
-            >
-              {t("Khusus Wilayah Kota Depok", "Only in Depok City")}
-            </SpecularButton>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/60 bg-white px-5 py-2 shadow-[0_12px_26px_-14px_rgba(27,77,50,0.65)]">
+              <MapPin className="h-3.5 w-3.5 text-primary" />
+              <span className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                {t("Khusus Wilayah Kota Depok", "Only in Depok City")}
+              </span>
+            </div>
 
-            <div className="mt-6 flex w-full flex-col items-center">
+            <div className="flex w-full flex-col items-center">
               <FoldText
                 text="Ubah cara Anda menyelamatkan"
                 hinge="top"
@@ -360,6 +342,14 @@ export function HeroSection() {
               </Link>
 
               <div className="flex items-center gap-3">
+                <div className="flex flex-col text-left">
+                  <span className="font-sans text-sm font-bold leading-none text-forest-dark">
+                    5.0
+                  </span>
+                  <span className="font-sans text-[11px] leading-tight text-forest-dark/70">
+                    dari 500+ ulasan
+                  </span>
+                </div>
                 <div className="flex items-center gap-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <svg
@@ -371,14 +361,6 @@ export function HeroSection() {
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className="font-sans text-sm font-bold leading-none text-forest-dark">
-                    5.0
-                  </span>
-                  <span className="font-sans text-[11px] leading-tight text-forest-dark/70">
-                    dari 500+ ulasan
-                  </span>
                 </div>
               </div>
             </div>

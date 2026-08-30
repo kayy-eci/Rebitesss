@@ -7,7 +7,7 @@ import {
   Check,
   Clock,
   Loader2,
-  ShoppingBag,
+  ShoppingCart,
   Star,
   Utensils,
 } from "lucide-react";
@@ -55,7 +55,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
   const [buyState, setBuyState] = useState<BuyState>("idle");
   const router = useRouter();
 
-  const discount = Math.round((1 - food.price / food.originalPrice) * 100);
+  const savings = Math.max(0, food.originalPrice - food.price);
 
   const handleBuy = () => {
     if (buyState !== "idle") return;
@@ -64,7 +64,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
   };
 
   return (
-    <div className="flex flex-col gap-4 sm:gap-5">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {/* A ,  Label kategori */}
       <span className="inline-flex w-fit items-center gap-2 rounded-full border border-caramel/40 bg-white px-4 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-caramel shadow-[0_10px_22px_-16px_rgba(192,138,62,0.8)]">
         <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
@@ -137,7 +137,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
           </span>
         </div>
         <span className="mb-1 inline-flex items-center rounded-full bg-sale px-2.5 py-1 font-sans text-xs font-bold text-white shadow-[0_8px_18px_-8px_rgba(229,57,53,0.6)]">
-          -{discount}%
+          -{formatRupiah(savings)}
         </span>
       </div>
 
@@ -160,7 +160,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
             ) : buyState === "done" ? (
               <Check className="h-4 w-4" />
             ) : (
-              <ShoppingBag className="h-4 w-4" />
+              <ShoppingCart className="h-4 w-4" />
             )}
           </span>
 
