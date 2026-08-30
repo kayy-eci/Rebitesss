@@ -270,7 +270,8 @@ export function SiteFooter() {
         >
           <p className="text-center font-sans text-xs" style={{ color: SAGE }}>
             © {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
-            <span style={{ color: CREAM }}>Tim Sixquit</span> — SMK Taruna Bhakti.
+            <span style={{ color: CREAM }}>Tim Sixquit</span> ·
+            SMK Taruna Bhakti.
           </p>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { Reveal } from './reveal';
 const FAQS = [
   {
     q: 'Apa itu ReBites?',
-    a: 'ReBites adalah marketplace khusus penjualan makanan surplus yang masih layak konsumsi, yang mempertemukan pelaku UMKM dengan pembeli di Kota Depok. Makanan yang berpotensi menjadi food waste dijual dengan harga yang lebih terjangkau — mengurangi pemborosan pangan sekaligus menambah pendapatan UMKM.',
+    a: 'ReBites adalah marketplace khusus penjualan makanan surplus yang masih layak konsumsi, yang mempertemukan pelaku UMKM dengan pembeli di Kota Depok. Makanan yang berpotensi menjadi food waste dijual dengan harga yang lebih terjangkau, mengurangi pemborosan pangan sekaligus menambah pendapatan UMKM.',
   },
   {
     q: 'Bagaimana cara memesan makanan di ReBites?',
@@ -17,7 +17,7 @@ const FAQS = [
   },
   {
     q: 'Apakah makanan surplus aman dikonsumsi?',
-    a: 'Aman. Makanan yang dijual adalah makanan surplus yang masih memenuhi standar kelayakan konsumsi — biasanya kelebihan produksi atau belum habis pada akhir waktu operasional. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
+    a: 'Aman. Makanan yang dijual adalah makanan surplus yang masih memenuhi standar kelayakan konsumsi, biasanya kelebihan produksi atau belum habis pada akhir waktu operasional. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
   },
   {
     q: 'Bagaimana cara UMKM mulai berjualan?',
@@ -65,9 +65,9 @@ export function FaqSection() {
     <section
       id="faq"
       data-nav="cream"
-      className="grain-overlay relative scroll-mt-28 overflow-hidden bg-cream lg:scroll-mt-32"
+      className="grain-overlay relative flex min-h-[100svh] flex-col overflow-hidden bg-cream"
     >
-      <div className="relative mx-auto max-w-7xl px-5 pt-20 pb-12 sm:px-8 lg:px-12 lg:pb-12 lg:pt-28">
+      <div className="relative mx-auto w-full max-w-7xl px-5 pt-20 pb-12 sm:px-8 lg:px-12 lg:pt-20 lg:pb-16">
         {/* Section label & heading */}
         <div className="mx-auto max-w-2xl text-center">
           <Reveal delay={0.05}>
@@ -162,7 +162,7 @@ export function FaqSection() {
                       exit={{ opacity: 0 }}
                       className="font-sans text-sm font-medium text-forest"
                     >
-                      Terima kasih! Pesan Anda sudah terkirim — tim kami akan
+                      Terima kasih! Pesan Anda sudah terkirim, tim kami akan
                       segera menghubungi Anda.
                     </motion.p>
                   )}

@@ -13,6 +13,7 @@ import { HeroFoodCarousel } from "@/app/components/hero-food-carousel";
 import { SmartImage } from "@/app/components/SmartImage";
 import { SubscriptionSection } from "@/app/components/subscription/subscription-section";
 import { FaqSection } from "@/app/components/faq-section";
+import { FlashSaleGrid } from "@/app/components/flash-sale-grid";
 import {
   Carousel,
   CarouselContent,
@@ -80,7 +81,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Mang Teten",
     role: "Warung Mang Teten",
     quote:
-      "Dulu makanan yang tidak habis sering menjadi kebingungan. Kini saya dapat menawarkannya melalui ReBites — makanan tidak terbuang sia-sia sekaligus menambah pemasukan.",
+      "Dulu makanan yang tidak habis sering menjadi kebingungan. Kini saya dapat menawarkannya melalui ReBites, makanan tidak terbuang sia-sia sekaligus menambah pemasukan.",
     rating: 5,
     initials: "SW",
     photo:
@@ -210,7 +211,7 @@ export default function Home() {
       <section
         id="about"
         data-nav="green"
-        className="grain-overlay relative flex min-h-[100svh] scroll-mt-28 flex-col justify-center overflow-hidden bg-primary pt-24 pb-14 text-primary-foreground lg:scroll-mt-32 lg:pt-32 lg:pb-16"
+        className="grain-overlay relative flex min-h-[100svh] flex-col overflow-hidden bg-primary pt-20 pb-14 text-primary-foreground lg:pt-20 lg:pb-16"
       >
         <div
           aria-hidden
@@ -277,13 +278,13 @@ export default function Home() {
                       key={stat.label}
                       className="border-t border-primary-foreground/15 pt-4"
                     >
-                      <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-caramel">
+                      <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-primary-foreground">
                         {stat.value}
                       </p>
-                      <p className="mt-1 font-sans text-xs font-medium uppercase tracking-wide text-primary-foreground/60">
+                      <p className="mt-1 font-sans text-xs font-medium uppercase tracking-wide text-primary-foreground/80">
                         {stat.unit}
                       </p>
-                      <p className="mt-2 font-sans text-xs leading-[1.6] text-primary-foreground/70">
+                      <p className="mt-2 font-sans text-xs leading-[1.6] text-primary-foreground/80">
                         {stat.label}
                       </p>
                     </div>
@@ -338,26 +339,13 @@ export default function Home() {
               </div>
 
               <Reveal delay={0.2}>
-                <p className="mt-2 max-w-xl font-sans text-sm leading-[1.85] text-primary-foreground/70">
+                <p className="mt-2 max-w-xl font-sans text-sm leading-[1.85] text-primary-foreground">
                   <span className="font-semibold text-caramel">ReBites</span>{" "}
                   adalah marketplace khusus bagi pelaku UMKM untuk menjual
                   makanan surplus yang masih layak konsumsi. Pangan yang
-                  berpotensi terbuang kembali bernilai — pelaku usaha
+                  berpotensi terbuang kembali bernilai, pelaku usaha
                   memperoleh pendapatan tambahan, pembeli menikmati makanan
                   berkualitas dengan harga yang lebih terjangkau.
-                </p>
-              </Reveal>
-
-              <Reveal delay={0.25}>
-                <p className="max-w-xl font-sans text-sm leading-[1.85] text-primary-foreground/70">
-                  Saat ini{" "}
-                  <span className="font-semibold text-caramel">ReBites</span>{" "}
-                  beroperasi di{" "}
-                  <span className="font-semibold text-caramel">
-                    Kota Depok
-                  </span>{" "}
-                  sebagai langkah awal menghadirkan ekosistem penyelamatan
-                  pangan berbasis komunitas, sebelum meluas ke kota lain.
                 </p>
               </Reveal>
             </div>
@@ -367,6 +355,8 @@ export default function Home() {
 
       <HeroFoodCarousel />
 
+      <FlashSaleGrid />
+
       <HowItWorks />
 
       <SubscriptionSection />
@@ -374,7 +364,7 @@ export default function Home() {
 <section
         id="testimoni"
         data-nav="green"
-        className="grain-overlay relative scroll-mt-28 overflow-hidden bg-primary pt-24 pb-16 lg:scroll-mt-32 lg:pt-28 lg:pb-20"
+        className="grain-overlay relative flex min-h-[100svh] flex-col overflow-hidden bg-primary pt-20 pb-12 lg:pt-20 lg:pb-16"
       >
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary-foreground/[0.06] blur-3xl" />
 

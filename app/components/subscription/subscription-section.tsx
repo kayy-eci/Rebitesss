@@ -12,7 +12,12 @@ export function SubscriptionSection() {
   const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
 
   return (
-    <SectionShell id="langganan" dataNav="cream" tone="cream">
+    <SectionShell
+      id="langganan"
+      dataNav="cream"
+      tone="cream"
+      className="flex min-h-[100svh] flex-col pt-20 pb-16 lg:pt-20 lg:pb-20"
+    >
       <div className="mx-auto max-w-3xl text-center">
         <Reveal delay={0.1}>
           <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-forest-dark">

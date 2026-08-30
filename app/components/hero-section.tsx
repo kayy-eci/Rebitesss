@@ -108,7 +108,7 @@ export function HeroSection() {
 
     const lenis = window.__lenis;
     if (lenis) {
-      lenis.scrollTo(target, { offset: -112, duration: 1.1 });
+      lenis.scrollTo(target, { offset: 0, duration: 1.1 });
     } else {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -342,13 +342,13 @@ export function HeroSection() {
 
             <p className="mt-6 max-w-2xl font-sans text-base leading-[1.8] text-muted-foreground sm:text-lg">
               ReBites menghubungkan Anda dengan makanan surplus berkualitas
-              dari pelaku UMKM Kota Depok — lebih hemat, tetap layak konsumsi,
-              dan bebas food waste.
+              dari pelaku UMKM Kota Depok yang lebih hemat, tetap layak
+              konsumsi, dan bebas food waste.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
               <Link
-                href="/auth/register"
+                href="/auth/login"
                 className={cn(
                   "group inline-flex items-center gap-2 rounded-full bg-forest-dark px-9 py-4 font-inter text-base font-semibold text-white shadow-[0_16px_32px_-16px_rgba(27,77,50,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel",
                   FOCUS_RING,
