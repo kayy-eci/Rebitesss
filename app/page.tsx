@@ -210,7 +210,7 @@ export default function Home() {
       <section
         id="about"
         data-nav="green"
-        className="grain-overlay relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-primary py-14 text-primary-foreground lg:py-16"
+        className="grain-overlay relative flex min-h-[100svh] scroll-mt-28 flex-col justify-center overflow-hidden bg-primary pt-24 pb-14 text-primary-foreground lg:scroll-mt-32 lg:pt-32 lg:pb-16"
       >
         <div
           aria-hidden
@@ -374,7 +374,7 @@ export default function Home() {
 <section
         id="testimoni"
         data-nav="green"
-        className="grain-overlay relative overflow-hidden bg-primary py-16 lg:py-20"
+        className="grain-overlay relative scroll-mt-28 overflow-hidden bg-primary pt-24 pb-16 lg:scroll-mt-32 lg:pt-28 lg:pb-20"
       >
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary-foreground/[0.06] blur-3xl" />
 

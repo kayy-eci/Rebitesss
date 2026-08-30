@@ -35,7 +35,7 @@ export default function HowItWorks() {
     <section
       id="cara-kerja"
       data-nav="green"
-      className="flex min-h-[640px] flex-col justify-center overflow-hidden bg-primary py-16 lg:py-20"
+      className="flex min-h-[640px] scroll-mt-28 flex-col justify-center overflow-hidden bg-primary pt-24 pb-16 lg:scroll-mt-32 lg:pt-32 lg:pb-20"
     >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal delay={0.05}>

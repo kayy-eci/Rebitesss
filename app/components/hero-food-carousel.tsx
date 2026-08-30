@@ -266,7 +266,7 @@ export function HeroFoodCarousel() {
     <section
       id="rekomendasi"
       data-nav="cream"
-      className="grain-overlay relative overflow-hidden bg-cream pt-24 pb-20 lg:pt-36 lg:pb-28"
+      className="grain-overlay relative scroll-mt-28 overflow-hidden bg-cream pt-24 pb-20 lg:scroll-mt-32 lg:pt-36 lg:pb-28"
     >
       <div className="relative z-10 mx-auto w-full max-w-[min(100vw,1600px)] px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-3xl text-center">

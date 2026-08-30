@@ -62,7 +62,7 @@ function umkmToVendor(row: UmkmRow, itemCount: number): Vendor {
     category: row.category ?? 'Makanan Berat',
     itemCount,
     address: row.address ?? '',
-    openHours: row.open_hours ?? '09.00–21.00',
+    openHours: row.open_hours ?? '09.00-21.00',
     isOpen: row.is_open ?? true,
     description: row.description ?? '',
     tagline: row.tagline ?? undefined,

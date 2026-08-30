@@ -65,7 +65,7 @@ export function FaqSection() {
     <section
       id="faq"
       data-nav="cream"
-      className="grain-overlay relative overflow-hidden bg-cream"
+      className="grain-overlay relative scroll-mt-28 overflow-hidden bg-cream lg:scroll-mt-32"
     >
       <div className="relative mx-auto max-w-7xl px-5 pt-20 pb-12 sm:px-8 lg:px-12 lg:pb-12 lg:pt-28">
         {/* Section label & heading */}
