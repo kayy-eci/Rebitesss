@@ -304,7 +304,7 @@ export default function AuthForm({
           name="password"
           type="password"
           autoComplete={isSignup ? "new-password" : "current-password"}
-          placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+          placeholder="............"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
