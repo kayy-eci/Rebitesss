@@ -257,7 +257,7 @@ export function FaqSection() {
         {/* Signature */}
         <Reveal delay={0.15}>
           <div className="mt-16 text-center lg:mt-20">
-            <p className="font-script text-caramel [font-size:clamp(2.2rem,4vw,3.2rem)]">
+            <p className="font-script text-primary [font-size:clamp(2.2rem,4vw,3.2rem)]">
               dibuat dengan rasa
             </p>
             <p className="mt-3 font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">

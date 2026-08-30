@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { ArrowRight, Star, Quote } from "lucide-react";
 import { SmoothScroll } from "@/app/components/smooth-scroll";
 import { Preloader } from "@/app/components/preloader";
@@ -11,6 +12,7 @@ import HowItWorks from "@/app/components/HowItWorks";
 import { HeroSection } from "@/app/components/hero-section";
 import { HeroFoodCarousel } from "@/app/components/hero-food-carousel";
 import { SmartImage } from "@/app/components/SmartImage";
+import CircularText from "@/app/components/ui/circular-text/CircularText";
 import { SubscriptionSection } from "@/app/components/subscription/subscription-section";
 import { FaqSection } from "@/app/components/faq-section";
 import { FlashSaleGrid } from "@/app/components/flash-sale-grid";
@@ -218,10 +220,29 @@ export default function Home() {
           className="pointer-events-none absolute -right-32 -top-32 h-[32rem] w-[32rem] rounded-full bg-primary-foreground/[0.06] blur-3xl"
         />
 
-        <div
-          aria-hidden
-          className="pointer-events-none absolute right-20 top-32 h-32 w-32 rounded-full border border-caramel/40"
-        />
+        <div className="absolute right-10 top-24 hidden lg:block">
+          <div className="relative h-28 w-28">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-full border border-caramel/30"
+            />
+            <CircularText
+              text="REBITES*REBITES*REBITES*"
+              spinDuration={20}
+              onHover="slowDown"
+              className="!h-28 !w-28 cursor-pointer"
+            />
+            <span className="pointer-events-none absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border border-caramel/40 bg-primary shadow-[0_16px_32px_-16px_rgba(0,0,0,0.55)]">
+              <Image
+                src="/logo.png"
+                alt="Logo ReBites"
+                width={80}
+                height={80}
+                className="h-full w-full object-cover"
+              />
+            </span>
+          </div>
+        </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal delay={0.05}>
@@ -261,7 +282,7 @@ export default function Home() {
 
               <Reveal delay={0.15}>
                 <div className="mt-8 grid w-full max-w-[34rem] grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3">
-                  {[
+{[
                     {
                       value: "23–48",
                       unit: "juta ton",
@@ -271,30 +292,20 @@ export default function Home() {
                       value: "29–47%",
                       unit: "populasi",
                       label: "Bisa diberi makan dari pangan terbuang",
-                      cream: true,
                     },
                     {
                       value: "Rp213–551",
                       unit: "triliun per tahun",
-                      label:
-                        "Perkiraan kerugian ekonomi dari food waste",
-                      gold: true,
+                      label: "Perkiraan kerugian ekonomi dari food waste",
+                      compact: true,
                     },
                   ].map((stat) => (
                     <div
                       key={stat.label}
                       className="border-t border-primary-foreground/15 pt-4"
                     >
-                      <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-primary-foreground">
-                        <span
-                          className={
-                            stat.gold
-                              ? "text-gold"
-                              : stat.cream
-                                ? "text-cream"
-                                : undefined
-                          }
-                        >
+                      <p className="whitespace-nowrap font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-cream">
+                        <span className={stat.compact ? "text-[0.82em]" : undefined}>
                           {stat.value}
                         </span>
                       </p>

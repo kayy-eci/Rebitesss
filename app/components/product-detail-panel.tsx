@@ -72,7 +72,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
       </span>
 
       {/* B ,  Judul produk (satu baris) */}
-      <h3 className="font-display font-light leading-[1.08] tracking-[-0.02em] text-charcoal-900 [font-size:clamp(1.85rem,3.2vw,2.6rem)]">
+      <h3 className="truncate font-display font-light leading-[1.08] tracking-[-0.02em] text-charcoal-900 whitespace-nowrap [font-size:clamp(1.85rem,3.2vw,2.6rem)]">
         {food.name}
       </h3>
 

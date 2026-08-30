@@ -461,14 +461,14 @@ export function FlashSaleGrid() {
                   key={slot.key}
                   type="button"
                   aria-pressed={isActive}
-                  onMouseEnter={() => setPreviewSlot(slot.key)}
-                  onMouseLeave={() => setPreviewSlot(null)}
                   onClick={preview}
                   className={cn(
                     "flex items-center gap-2.5 rounded-full border font-sans transition-all duration-300",
                     isLiveBtn
                       ? "cursor-default border-transparent bg-forest text-white shadow-[0_14px_30px_-18px_rgba(27,77,50,0.7)]"
-                      : "cursor-pointer border-stone-200 bg-stone-100 text-stone-500 hover:border-stone-300 hover:bg-stone-200",
+                      : isActive
+                        ? "cursor-pointer border-primary/50 bg-primary text-white shadow-[0_14px_30px_-18px_rgba(27,77,50,0.75)] hover:bg-primary/90"
+                        : "cursor-pointer border-stone-200 bg-stone-100 text-stone-500 hover:border-stone-300 hover:bg-stone-200",
                     FOCUS_RING,
                   )}
                 >
@@ -478,7 +478,7 @@ export function FlashSaleGrid() {
                   <span
                     className={cn(
                       "pr-4 text-[10px] font-semibold uppercase tracking-[0.16em]",
-                      isLiveBtn ? "text-white/85" : "text-stone-400",
+                      isLiveBtn || isActive ? "text-white/85" : "text-stone-400",
                     )}
                   >
                     {slot.name}
