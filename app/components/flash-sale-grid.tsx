@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowRight, ShoppingBag } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/app/components/reveal";
 import { SmartImage } from "@/app/components/SmartImage";
 import { formatRupiah } from "@/lib/data";
@@ -322,13 +322,12 @@ function FlashSaleCard({
             if (isLive) router.push("/auth/login");
           }}
           className={cn(
-            "absolute bottom-5 right-5 inline-flex h-10 items-center gap-1.5 rounded-full px-4 font-sans text-[12px] font-bold uppercase tracking-wide shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+            "absolute bottom-5 right-5 inline-flex h-10 items-center rounded-full px-4 font-sans text-[12px] font-bold uppercase tracking-wide shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-white",
             isLive
               ? "bg-forest text-white hover:bg-caramel hover:scale-105"
               : "cursor-not-allowed bg-stone-200 text-stone-400",
           )}
         >
-          <ShoppingBag className="h-4 w-4" />
           {isLive ? "Beli" : status}
         </button>
       </article>
@@ -461,8 +460,6 @@ export function FlashSaleGrid() {
                   key={slot.key}
                   type="button"
                   aria-pressed={isActive}
-                  onMouseEnter={() => setPreviewSlot(slot.key)}
-                  onMouseLeave={() => setPreviewSlot(null)}
                   onClick={preview}
                   className={cn(
                     "flex items-center gap-2.5 rounded-full border font-sans transition-all duration-300",
