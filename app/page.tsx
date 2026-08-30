@@ -232,12 +232,12 @@ export default function Home() {
               onHover="slowDown"
               className="!h-28 !w-28 cursor-pointer"
             />
-            <span className="pointer-events-none absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border border-caramel/40 bg-primary shadow-[0_16px_32px_-16px_rgba(0,0,0,0.55)]">
+            <span className="pointer-events-none absolute left-1/2 top-1/2 flex h-[4.5rem] w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border border-caramel/40 bg-primary shadow-[0_16px_32px_-16px_rgba(0,0,0,0.55)]">
               <Image
                 src="/logo.png"
                 alt="Logo ReBites"
-                width={80}
-                height={80}
+                width={72}
+                height={72}
                 className="h-full w-full object-cover"
               />
             </span>

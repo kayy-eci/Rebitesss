@@ -102,15 +102,40 @@ export function HeroSection() {
     setActiveNav(label);
     setOpen(false);
     const hash = href.split("#")[1];
+
+    // Mulai dari paling atas adalah halaman teratas.
+    if (hash === "top") {
+      const lenis = window.__lenis;
+      if (lenis) lenis.scrollTo(0, { duration: 1.1 });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     const target = hash ? document.getElementById(hash) : null;
     if (!target) return;
 
-    const lenis = window.__lenis;
-    if (lenis) {
-      lenis.scrollTo(target, { offset: -112, duration: 1.1 });
-    } else {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Tinggi navbar aktual (mengikuti ukuran viewport) sebagai garis judul.
+    const headerEl = document.querySelector("header");
+    const navBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 80;
+
+    // Judul section = heading pertama (h2/h3) di dalam section.
+    const heading =
+      target.querySelector<HTMLElement>("h1, h2, h3") ??
+      (target as HTMLElement);
+
+    // Posisi layout heading (bebas transform Reveal) untuk mendarat presisi.
+    let layoutTop = 0;
+    let node: HTMLElement | null = heading;
+    while (node) {
+      layoutTop += node.offsetTop;
+      node = node.offsetParent as HTMLElement | null;
     }
+
+    const targetY = Math.max(0, layoutTop - navBottom);
+
+    const lenis = window.__lenis;
+    if (lenis) lenis.scrollTo(targetY, { duration: 1.1 });
+    else window.scrollTo({ top: targetY, behavior: "smooth" });
   };
 
   return (

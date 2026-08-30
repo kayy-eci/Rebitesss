@@ -4,10 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Check,
   Clock,
-  Loader2,
-  ShoppingCart,
   Star,
   Utensils,
 } from "lucide-react";
@@ -154,16 +151,6 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
             " group inline-flex h-[52px] w-full items-center justify-center gap-3 rounded-full bg-primary px-8 sm:w-auto sm:min-w-[220px] sm:flex-1 font-sans text-[15px] font-bold text-white shadow-[0_18px_32px_-18px_rgba(27,77,50,0.85)] transition-colors duration-300 hover:bg-primary"
           }
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-caramel text-white transition-transform duration-300 group-hover:scale-110">
-            {buyState === "loading" ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : buyState === "done" ? (
-              <Check className="h-4 w-4" />
-            ) : (
-              <ShoppingCart className="h-4 w-4" />
-            )}
-          </span>
-
           <AnimatePresence mode="wait" initial={false}>
             <motion.span
               key={buyState}
