@@ -82,6 +82,9 @@
   .font-sans {
     font-family: var(--font-sans);
   }
+  .font-script {
+    font-family: var(--font-script);
+  }
 }
 
 @layer utilities {
