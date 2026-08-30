@@ -56,7 +56,7 @@ export function HeroSection() {
       return;
     }
 
-    const probeY = 44;
+    const probeY = 112;
 
     const update = () => {
       setScrolled(window.scrollY > 32);
@@ -102,15 +102,40 @@ export function HeroSection() {
     setActiveNav(label);
     setOpen(false);
     const hash = href.split("#")[1];
+
+    // Mulai dari paling atas adalah halaman teratas.
+    if (hash === "top") {
+      const lenis = window.__lenis;
+      if (lenis) lenis.scrollTo(0, { duration: 1.1 });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     const target = hash ? document.getElementById(hash) : null;
     if (!target) return;
 
-    const lenis = window.__lenis;
-    if (lenis) {
-      lenis.scrollTo(target, { offset: -112, duration: 1.1 });
-    } else {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Tinggi navbar aktual (mengikuti ukuran viewport) sebagai garis judul.
+    const headerEl = document.querySelector("header");
+    const navBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 80;
+
+    // Judul section = heading pertama (h2/h3) di dalam section.
+    const heading =
+      target.querySelector<HTMLElement>("h1, h2, h3") ??
+      (target as HTMLElement);
+
+    // Posisi layout heading (bebas transform Reveal) untuk mendarat presisi.
+    let layoutTop = 0;
+    let node: HTMLElement | null = heading;
+    while (node) {
+      layoutTop += node.offsetTop;
+      node = node.offsetParent as HTMLElement | null;
     }
+
+    const targetY = Math.max(0, layoutTop - navBottom);
+
+    const lenis = window.__lenis;
+    if (lenis) lenis.scrollTo(targetY, { duration: 1.1 });
+    else window.scrollTo({ top: targetY, behavior: "smooth" });
   };
 
   return (
@@ -341,23 +366,25 @@ export function HeroSection() {
                 </span>
               </Link>
 
-              <div className="flex items-center gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <svg
-                    key={i}
-                    className="h-4 w-4 fill-caramel text-caramel"
-                    viewBox="0 0 20 20"
-                    aria-hidden
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="font-sans text-sm font-bold leading-none text-forest-dark">
-                  5.0
-                </span>
-                <span className="font-sans text-[11px] leading-tight text-forest-dark/70">
+              <div className="flex flex-col items-center leading-none">
+                <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <svg
+                        key={i}
+                        className="h-4 w-4 fill-caramel text-caramel"
+                        viewBox="0 0 20 20"
+                        aria-hidden
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <span className="font-sans text-sm font-bold leading-none text-forest-dark">
+                    5.0
+                  </span>
+                </div>
+                <span className="font-sans text-[11px] font-medium leading-none text-forest-dark/70">
                   dari 500+ ulasan
                 </span>
               </div>

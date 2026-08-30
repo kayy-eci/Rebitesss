@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useRef, useId, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Leaf, Zap } from "lucide-react";
+import { Car, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import OptionWheel, { type OptionWheelApi } from "@/app/components/ui/korosel";
 import { Reveal } from "@/app/components/reveal";
 import { LeafSprig } from "@/app/components/ornaments";
@@ -304,24 +304,37 @@ export function HeroFoodCarousel() {
 
           <div className="order-1 lg:order-2">
             <Reveal className="relative">
-              <div className="pointer-events-none absolute right-2 top-3 z-30 flex flex-col items-end gap-2 sm:right-4 sm:top-4">
-                <div
-                  aria-label={`Diskon ${discountPct} persen`}
-                  className="flex h-24 w-24 items-center justify-center rounded-full bg-sale text-center shadow-[0_16px_32px_-12px_rgba(229,57,53,0.75)] ring-4 ring-white/40 sm:h-28 sm:w-28"
-                >
-                  <span className="flex items-center gap-1 font-sans text-2xl font-black leading-none text-white sm:text-3xl">
-                    <span className="text-lg sm:text-xl">−</span>
-                    {discountPct}%
+              <div className="pointer-events-none absolute right-8 top-3 z-30 flex flex-col items-end gap-2.5 sm:right-16 sm:top-4">
+                <div className="drop-shadow-[0_16px_28px_rgba(47,66,53,0.55)]">
+                  <div
+                    aria-label={`Diskon ${discountPct} persen`}
+                    className="flex h-24 w-24 items-center justify-center bg-cream text-center sm:h-28 sm:w-28"
+                    style={{
+                      clipPath:
+                        "polygon(50.00% 0.00%, 53.62% 8.66%, 58.68% 0.76%, 60.74% 9.91%, 67.10% 3.02%, 67.54% 12.39%, 75.00% 6.70%, 73.80% 16.01%, 82.14% 11.70%, 79.34% 20.66%, 88.30% 17.86%, 83.99% 26.20%, 93.30% 25.00%, 87.61% 32.46%, 96.98% 32.90%, 90.09% 39.26%, 99.24% 41.32%, 91.34% 46.38%, 100.00% 50.00%, 91.34% 53.62%, 99.24% 58.68%, 90.09% 60.74%, 96.98% 67.10%, 87.61% 67.54%, 93.30% 75.00%, 83.99% 73.80%, 88.30% 82.14%, 79.34% 79.34%, 82.14% 88.30%, 73.80% 83.99%, 75.00% 93.30%, 67.54% 87.61%, 67.10% 96.98%, 60.74% 90.09%, 58.68% 99.24%, 53.62% 91.34%, 50.00% 100.00%, 46.38% 91.34%, 41.32% 99.24%, 39.26% 90.09%, 32.90% 96.98%, 32.46% 87.61%, 25.00% 93.30%, 26.20% 83.99%, 17.86% 88.30%, 20.66% 79.34%, 11.70% 82.14%, 16.01% 73.80%, 6.70% 75.00%, 12.39% 67.54%, 3.02% 67.10%, 9.91% 60.74%, 0.76% 58.68%, 8.66% 53.62%, 0.00% 50.00%, 8.66% 46.38%, 0.76% 41.32%, 9.91% 39.26%, 3.02% 32.90%, 12.39% 32.46%, 6.70% 25.00%, 16.01% 26.20%, 11.70% 17.86%, 20.66% 20.66%, 17.86% 11.70%, 26.20% 16.01%, 25.00% 6.70%, 32.46% 12.39%, 32.90% 3.02%, 39.26% 9.91%, 41.32% 0.76%, 46.38% 8.66%)",
+                    }}
+                  >
+                    <span className="flex items-center gap-1 font-sans text-2xl font-black leading-none text-forest-dark sm:text-3xl">
+                      <span className="text-lg sm:text-xl">−</span>
+                      {discountPct}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-full border border-caramel/30 bg-white/95 text-primary shadow-[0_14px_28px_-18px_rgba(27,77,50,0.6)] sm:h-28 sm:w-28">
+                  <Car className="h-6 w-6 fill-caramel/15 text-caramel sm:h-7 sm:w-7" strokeWidth={2.2} />
+                  <span className="px-1 text-center font-sans text-[9px] font-black uppercase leading-[1.15] tracking-[0.08em] text-primary sm:text-[10px]">
+                    Pengantaran Cepat
                   </span>
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-primary shadow-[0_8px_18px_-10px_rgba(27,77,50,0.6)] sm:text-[11px]">
-                  <Zap className="h-3 w-3 fill-caramel text-caramel" />
-                  Pengantaran Cepat
+                <div className="inline-flex translate-x-1.5 items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-primary shadow-[0_14px_28px_-18px_rgba(27,77,50,0.5)] sm:text-[11px]">
+                  <ShieldCheck className="h-3.5 w-3.5 text-caramel" strokeWidth={2.2} />
+                  Kualitas Terjamin
                 </div>
               </div>
 
-              <div className="absolute bottom-3 right-2 z-30 flex items-center gap-3 sm:bottom-4 sm:right-4">
+              <div className="absolute bottom-3 right-7 z-30 flex items-center gap-3 sm:bottom-4 sm:right-14">
                 <button
                   type="button"
                   aria-label="Makanan sebelumnya"
