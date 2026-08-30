@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Filter, MapPin, Search, SearchX, X } from "lucide-react";
@@ -23,7 +23,7 @@ interface SearchFilterBarProps {
 }
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C8A882] focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50";
 
 const GLASS_FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
@@ -303,7 +303,7 @@ export function SearchFilterBar({
                               />
                             </p>
                             <p className="mt-0.5 truncate font-inter text-[11px] text-charcoal-500">
-                              {item.stockLabel} · {item.distanceKm} km
+                              {item.stockLabel} Â· {item.distanceKm} km
                             </p>
                           </div>
 
@@ -348,11 +348,11 @@ export function SearchFilterBar({
                 "flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-200",
                 isGlass
                   ? "border-white/30 bg-white/10 text-white hover:border-white/60 hover:text-white"
-                  : "border-sage-100 bg-white text-charcoal-500 hover:border-[#C8A882]/40 hover:text-[#C8A882]",
+                  : "border-sage-100 bg-white text-charcoal-500 hover:border-caramel/40 hover:text-caramel",
                 isGlass ? GLASS_FOCUS_RING : FOCUS_RING,
               )}
             >
-              <MapPin className="h-4 w-4 text-[#C8A882]" />
+              <MapPin className="h-4 w-4 text-caramel" />
               <span className="max-w-[130px] truncate">{location}</span>
               <ChevronDown
                 className={cn(
@@ -390,8 +390,8 @@ export function SearchFilterBar({
                           className={cn(
                             "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150",
                             loc === location
-                              ? "bg-cream-100 font-semibold text-[#C8A882]"
-                              : "text-charcoal-500 hover:bg-cream-50 hover:text-[#C8A882]",
+                              ? "bg-cream-100 font-semibold text-caramel"
+                              : "text-charcoal-500 hover:bg-cream-50 hover:text-caramel",
                           )}
                         >
                           <MapPin className="h-3.5 w-3.5 shrink-0" />
@@ -429,7 +429,7 @@ export function SearchFilterBar({
                 type="submit"
                 className={cn(
                   "flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-5 font-sans text-sm font-semibold text-white shadow-md transition-colors duration-200 active:scale-[0.98] sm:px-7",
-                  "bg-[#C8A882] hover:bg-[#A06B45]",
+                  "bg-caramel hover:bg-caramel",
                   FOCUS_RING,
                 )}
               >

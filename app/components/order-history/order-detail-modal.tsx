@@ -236,12 +236,12 @@ export function OrderDetailModal({
 
               {}
               {(order.coinEarned ?? 0) > 0 && (
-                <div className="mt-3 flex items-center gap-3 rounded-xl bg-gold-100 px-4 py-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white">
+                <div className="mt-3 flex items-center gap-3 rounded-xl bg-caramel/15 px-4 py-3">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-caramel text-white">
                     <Coins className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="font-display text-sm font-bold tabular-nums text-gold-600">
+                    <p className="font-display text-sm font-bold tabular-nums text-caramel-dark">
                       +{order.coinEarned.toLocaleString('id-ID')} Coin diperoleh
                     </p>
                     <p className="text-xs text-charcoal-500">
@@ -504,7 +504,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
           className={
             isDelivery
               ? 'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary'
-              : 'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gold-100 text-gold-600'
+              : 'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-caramel/15 text-caramel-dark'
           }
         >
           <Store className="h-4 w-4" />
@@ -611,7 +611,7 @@ function ReviewBlock({
                 key={n}
                 className={
                   n <= existing.rating
-                    ? 'h-4 w-4 fill-gold-500 text-gold-500'
+                    ? 'h-4 w-4 fill-caramel text-caramel'
                     : 'h-4 w-4 text-hairline'
                 }
               />
@@ -676,7 +676,7 @@ function ReviewBlock({
               <Star
                 className={
                   n <= rating
-                    ? 'h-6 w-6 fill-gold-500 text-gold-500'
+                    ? 'h-6 w-6 fill-caramel text-caramel'
                     : 'h-6 w-6 text-hairline'
                 }
               />

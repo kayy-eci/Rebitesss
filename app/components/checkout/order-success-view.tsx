@@ -276,13 +276,13 @@ export function OrderSuccessView() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.35, ease: EASE }}
-              className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10"
+              className="flex items-center gap-3 rounded-2xl border border-caramel/40 bg-caramel/15 px-4 py-3.5 shadow-md shadow-caramel/10"
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow">
                 <Coins className="h-5 w-5" />
               </span>
               <div>
-                <p className="font-display text-xl font-bold tabular-nums text-gold-600">
+                <p className="font-display text-xl font-bold tabular-nums text-caramel-dark">
                   +<AnimatedNumber value={order.coinEarned} format={(v) => v.toLocaleString('id-ID')} /> ReBites Coin
                 </p>
                 <p className="text-xs text-charcoal-500">Coin akan ditambahkan ke saldo kamu</p>
@@ -354,8 +354,8 @@ export function OrderSuccessView() {
               <p className="mt-2 text-xs text-white/70">Stok telah dikembalikan.</p>
             </div>
           ) : isPending ? (
-            <div className="bg-amber-500 px-5 pb-10 pt-9 text-center text-white sm:px-8">
-              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-amber-600 shadow-lg">
+            <div className="bg-caramel px-5 pb-10 pt-9 text-center text-white sm:px-8">
+              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-caramel-dark shadow-lg">
                 <Clock className="h-8 w-8" strokeWidth={2.2} />
               </span>
               <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight">Menunggu Pembayaran</h2>
@@ -393,12 +393,12 @@ export function OrderSuccessView() {
           {}
           {!isFailed && (
             <div className="px-6 -mt-5">
-              <div className="flex items-center gap-3 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5 shadow-md shadow-gold-500/10">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow">
+              <div className="flex items-center gap-3 rounded-2xl border border-caramel/40 bg-caramel/15 px-4 py-3.5 shadow-md shadow-caramel/10">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow">
                   <Coins className="h-5 w-5" />
                 </span>
                 <div>
-                  <p className="font-display text-xl font-bold tabular-nums text-gold-600">
+                  <p className="font-display text-xl font-bold tabular-nums text-caramel-dark">
                     +<AnimatedNumber value={order.coinEarned} format={(v) => v.toLocaleString('id-ID')} /> ReBites Coin
                   </p>
                   <p className="text-xs text-charcoal-500">Coin akan ditambahkan ke saldo kamu</p>

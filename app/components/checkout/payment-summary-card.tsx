@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -66,7 +66,7 @@ export function PaymentSummaryCard() {
               {draft.productName}
             </p>
             <p className="mt-0.5 text-xs text-charcoal-500">
-              {draft.vendorName} · x{quantity}
+              {draft.vendorName} Â· x{quantity}
             </p>
           </div>
           <p className="shrink-0 text-right text-sm font-medium tabular-nums text-charcoal-900">
@@ -87,7 +87,7 @@ export function PaymentSummaryCard() {
             <div className="flex items-center justify-between gap-4">
               <dt className="text-primary">Diskon ({promo.code})</dt>
               <dd className="font-semibold tabular-nums text-primary">
-                −<AnimatedNumber value={summary.discount} format={formatRupiah} />
+                âˆ’<AnimatedNumber value={summary.discount} format={formatRupiah} />
               </dd>
             </div>
           )}
@@ -128,7 +128,7 @@ export function PaymentSummaryCard() {
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-primary">ReBites Coin</dt>
                   <dd className="font-semibold tabular-nums text-primary">
-                    −<AnimatedNumber value={summary.coinDiscount} format={formatRupiah} />
+                    âˆ’<AnimatedNumber value={summary.coinDiscount} format={formatRupiah} />
                   </dd>
                 </div>
               </motion.div>
@@ -137,8 +137,8 @@ export function PaymentSummaryCard() {
         </dl>
 
         { }
-        <div className="mt-5 flex items-center gap-3 rounded-xl border border-gold-500/30 bg-gold-100/60 px-3.5 py-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow-sm">
+        <div className="mt-5 flex items-center gap-3 rounded-xl border border-caramel/30 bg-caramel/10 px-3.5 py-2.5">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow-sm">
             <Coins className="h-4 w-4" />
           </span>
           <div className="min-w-0 flex-1">
@@ -183,8 +183,8 @@ export function PaymentSummaryCard() {
           )}
         >
           {submitting
-            ? "Memproses pesanan…"
-            : `Pesan Sekarang · ${formatRupiah(summary.total)}`}
+            ? "Memproses pesananâ€¦"
+            : `Pesan Sekarang Â· ${formatRupiah(summary.total)}`}
         </motion.button>
 
         {!canPay && !submitting && missingRequirement && (
@@ -195,7 +195,7 @@ export function PaymentSummaryCard() {
 
         <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-charcoal-500">
           <Lock className="h-3.5 w-3.5 text-primary" />
-          Transaksi terenkripsi · Dana ditahan sampai pesanan diterima
+          Transaksi terenkripsi Â· Dana ditahan sampai pesanan diterima
         </p>
       </div>
     </div>

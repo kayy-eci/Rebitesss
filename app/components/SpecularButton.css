@@ -1,4 +1,4 @@
-.specular-button {
+﻿.specular-button {
   --sb-radius: 18px;
   --sb-tint: #ffffff;
   --sb-tint-opacity: 0;
@@ -27,7 +27,7 @@
 }
 
 .specular-button--outer-green {
-  --sb-outer-color: #2f4235;
+  --sb-outer-color: hsl(var(--primary));
 }
 
 .specular-button:active {

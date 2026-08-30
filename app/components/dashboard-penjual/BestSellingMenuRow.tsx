@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { Lock, MoreVertical, ShieldCheck } from 'lucide-react';
@@ -54,7 +54,7 @@ export function BestSellingMenuRow() {
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-charcoal-900">Menu Terlaris</h2>
         {!hydrated ? null : !hasAccess ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-gold-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+          <span className="inline-flex items-center gap-1 rounded-full bg-caramel/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
             <Lock className="h-3 w-3" />
             Premium
           </span>
@@ -105,7 +105,7 @@ export function BestSellingMenuRow() {
             <Lock className="h-4 w-4" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="inline-flex items-center rounded-full bg-gold-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+            <p className="inline-flex items-center rounded-full bg-caramel/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
               Fitur Premium
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-sage-500">
@@ -131,10 +131,10 @@ export function BestSellingMenuRow() {
             <div
               key={menu.menuId}
               className="group relative flex flex-col items-center gap-1.5"
-              aria-label={`${menu.name} · ${menu.terjual} terjual`}
+              aria-label={`${menu.name} Â· ${menu.terjual} terjual`}
             >
               <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-charcoal-900 px-2 py-1 text-[11px] font-medium text-cream-50 opacity-0 shadow-sm transition-opacity group-hover:opacity-100">
-                {menu.name} · {menu.terjual} terjual
+                {menu.name} Â· {menu.terjual} terjual
               </span>
               <span className="relative block h-12 w-12 overflow-hidden rounded-2xl ring-2 ring-sage-100 transition-transform duration-150 group-hover:scale-105">
                 <SmartImage src={menu.image} alt={`Foto ${menu.name}`} />

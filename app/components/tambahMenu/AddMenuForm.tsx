@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -48,8 +48,8 @@ function SectionTitle({ number, title }: { number: string; title: string }) {
 
 function FieldError() {
   return (
-    <p className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-amber/15 px-2.5 py-1.5 text-[11px] font-medium text-charcoal-900">
-      <Info className="h-3.5 w-3.5 shrink-0 text-amber" />
+    <p className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-caramel/15 px-2.5 py-1.5 text-[11px] font-medium text-charcoal-900">
+      <Info className="h-3.5 w-3.5 shrink-0 text-caramel" />
       Nama menu wajib diisi sebelum disimpan
     </p>
   );
@@ -157,7 +157,7 @@ export function AddMenuForm() {
         className="mx-auto mt-10 max-w-md"
       >
         <Card className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold-100 text-gold-600">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-caramel/15 text-caramel-dark">
             <Lock className="h-8 w-8" />
           </div>
           <h2 className="mt-5 font-display text-2xl font-medium tracking-tight text-primary">
@@ -214,7 +214,7 @@ export function AddMenuForm() {
             Menu Berhasil Ditambahkan
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-sage-500">
-            “{savedName}” telah masuk ke daftar menu tokomu dan siap dipesan pembeli.
+            â€œ{savedName}â€ telah masuk ke daftar menu tokomu dan siap dipesan pembeli.
           </p>
           <div className="mt-6 grid gap-3">
             <Link
@@ -310,7 +310,7 @@ export function AddMenuForm() {
                       ))}
                     </select>
                     <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-sage-500">
-                      ▼
+                      â–¼
                     </span>
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export function AddMenuForm() {
                     rows={3}
                     value={form.description}
                     onChange={(event) => set('description', event.target.value)}
-                    placeholder="Contoh: Nasi uduk hangat dengan ayam suwir, telur balado, dan sambal khas…"
+                    placeholder="Contoh: Nasi uduk hangat dengan ayam suwir, telur balado, dan sambal khasâ€¦"
                     className={cn(inputCls, 'resize-none')}
                   />
                 </div>
@@ -445,8 +445,8 @@ export function AddMenuForm() {
                 </button>
                 <p className="text-center text-[11px] text-sage-500">
                   {plan.maxProducts !== null
-                    ? `Kuota terpakai ${productCount}/${plan.maxProducts} produk · paket ${plan.label}`
-                    : `Kuota produk tanpa batas · paket ${plan.label}`}
+                    ? `Kuota terpakai ${productCount}/${plan.maxProducts} produk Â· paket ${plan.label}`
+                    : `Kuota produk tanpa batas Â· paket ${plan.label}`}
                 </p>
               </div>
             </div>

@@ -139,12 +139,12 @@ export function AccountSidebar({
 
             { }
             <div className="px-8 pt-6">
-              <div className="flex items-center gap-3.5 rounded-2xl border border-gold-500/40 bg-gold-100 px-4 py-3.5">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white shadow-sm">
+              <div className="flex items-center gap-3.5 rounded-2xl border border-caramel/40 bg-caramel/15 px-4 py-3.5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow-sm">
                   <Coins className="h-5 w-5" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="font-inter text-base font-bold tabular-nums text-gold-600">
+                  <p className="font-inter text-base font-bold tabular-nums text-caramel-dark">
                     {balance.toLocaleString('id-ID')} Coin
                   </p>
                   <p className="font-inter text-xs text-stone">

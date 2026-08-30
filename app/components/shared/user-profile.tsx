@@ -71,7 +71,7 @@ const STATUS_STYLE: Record<
   { icon: LucideIcon; className: string }
 > = {
   Selesai: { icon: Check, className: "bg-primary/10 text-primary" },
-  Diproses: { icon: Clock, className: "bg-gold-100 text-gold-600" },
+  Diproses: { icon: Clock, className: "bg-caramel/15 text-caramel-dark" },
 };
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -269,7 +269,7 @@ function ProfileSidebar() {
             icon={Package}
             label="Tanggal Bergabung"
             value={joinedAt || "-"}
-            chip="bg-gold-100 text-gold-600"
+            chip="bg-caramel/15 text-caramel-dark"
           />
         </ul>
       </section>
@@ -296,9 +296,9 @@ function EcoImpactBanner({ savedPorsi }: { savedPorsi: number }) {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-primary-deep/95 via-primary to-primary-deep/25" />
 
-      <Sparkles className="pointer-events-none absolute right-10 top-8 h-5 w-5 text-gold-500/60" />
+      <Sparkles className="pointer-events-none absolute right-10 top-8 h-5 w-5 text-caramel/60" />
       <FloatingLeaf
-        className="bottom-10 right-16 hidden h-5 w-5 text-gold-500/50 lg:block"
+        className="bottom-10 right-16 hidden h-5 w-5 text-caramel/50 lg:block"
         delay={1.4}
       />
       <Leaf
@@ -308,7 +308,7 @@ function EcoImpactBanner({ savedPorsi }: { savedPorsi: number }) {
 
       <div className="relative px-7 py-12 sm:px-10 sm:py-16 lg:px-14">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 font-inter text-xs font-semibold tracking-wide text-cream-100 backdrop-blur-sm">
-          <Leaf className="h-3.5 w-3.5 text-gold-500" />
+          <Leaf className="h-3.5 w-3.5 text-caramel" />
           Dampak Pribadimu
         </span>
         <h2 className="mt-5 max-w-2xl font-display text-[clamp(1.6rem,3vw,2.4rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-cream-50 [text-shadow:0_2px_24px_rgba(15,26,20,0.5)]">
@@ -350,7 +350,7 @@ function ImpactStats({
       value: loading ? "…" : porsi.toLocaleString("id-ID"),
       unit: "porsi",
       label: "Porsi Diselamatkan",
-      chip: "bg-gold-500/15 text-gold-500",
+      chip: "bg-caramel/15 text-caramel",
     },
     {
       icon: Receipt,
@@ -382,10 +382,10 @@ function ImpactStats({
       <SoftBlob className="-left-20 -top-20 h-64 w-64 bg-white/5" />
       <SoftBlob className="-bottom-24 -right-20 h-72 w-72 bg-primary/25" />
       <DotPattern className="right-8 top-8 hidden h-20 w-20 text-white/10 lg:block" />
-      <FloatingLeaf className="left-6 top-6 hidden h-5 w-5 text-gold-500/60 lg:block" />
+      <FloatingLeaf className="left-6 top-6 hidden h-5 w-5 text-caramel/60 lg:block" />
 
       <motion.div variants={fadeUp} className="relative">
-        <p className="font-inter text-xs font-semibold uppercase tracking-widest text-gold-500">
+        <p className="font-inter text-xs font-semibold uppercase tracking-widest text-caramel">
           Dampak Lingkungan
         </p>
         <h3 className="mt-2 font-display text-xl font-semibold text-cream-50 sm:text-2xl">
@@ -459,7 +459,7 @@ function CoinsAndAddress() {
 
   return (
     <div className="relative">
-      <SoftBlob className="-bottom-16 -left-16 hidden h-56 w-56 bg-gold-100/50 lg:block" />
+      <SoftBlob className="-bottom-16 -left-16 hidden h-56 w-56 bg-caramel/15/50 lg:block" />
       <motion.section
         variants={stagger}
         initial="hidden"
@@ -473,14 +473,14 @@ function CoinsAndAddress() {
         >
           <Sparkles className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 text-white/10" />
           <FloatingLeaf
-            className="right-8 bottom-8 hidden h-5 w-5 text-gold-500/50 lg:block"
+            className="right-8 bottom-8 hidden h-5 w-5 text-caramel/50 lg:block"
             delay={1.1}
           />
           <div className="flex items-start justify-between gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-100/20 text-gold-500">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-caramel/15/20 text-caramel">
               <Coins className="h-5 w-5" />
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 font-inter text-xs font-semibold text-gold-500">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 font-inter text-xs font-semibold text-caramel">
               <Sparkles className="h-3 w-3" />
               ReBites Coins
             </span>
@@ -772,7 +772,7 @@ function FollowedStoresSection() {
                     </span>
                   )}
                   <span className="mt-1 flex items-center gap-1 font-inter text-[9px] font-semibold text-charcoal-900">
-                    <Star className="h-2 w-2 fill-gold-500 text-gold-500" />
+                    <Star className="h-2 w-2 fill-caramel text-caramel" />
                     {store.rating.toFixed(1)}
                   </span>
                 </span>
@@ -887,7 +887,7 @@ function LikedFoodsSection() {
                       </span>
                     )}
                   </span>
-                  <Heart className="h-3 w-3 shrink-0 fill-[#E53935] text-[#E53935]" />
+                  <Heart className="h-3 w-3 shrink-0 fill-sale text-sale" />
                 </Link>
               </li>
             );
@@ -993,7 +993,7 @@ export function UserProfile() {
   const phoneLabel = addressLoading ? "Memuat…" : selectedAddress?.phone || "-";
 
   return (
-    <div className="relative min-h-screen bg-[#F8F9FA] lg:bg-cream-50">
+    <div className="relative min-h-screen bg-secondary lg:bg-cream-50">
       {}
       <div className="lg:hidden"><MobileNavbar /></div>
       <div className="hidden lg:block">
@@ -1121,7 +1121,7 @@ export function UserProfile() {
               <button
                 type="button"
                 onClick={() => setIsIkutiTokoDialogOpen(true)}
-                className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
+                className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-secondary p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-primary shadow-sm ring-1 ring-zinc-100 group-hover:bg-caramel group-hover:text-white">
                   <Store className="h-4 w-4" />
@@ -1140,9 +1140,9 @@ export function UserProfile() {
               <button
                 type="button"
                 onClick={() => setIsSukaiMakananDialogOpen(true)}
-                className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-[#FAF8F5] p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
+                className="group flex flex-col items-start gap-2 rounded-2xl border border-zinc-100 bg-secondary p-4 text-left transition-colors hover:border-sage-200 hover:bg-white"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#E53935] shadow-sm ring-1 ring-zinc-100 group-hover:bg-[#E53935] group-hover:text-white">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sale shadow-sm ring-1 ring-zinc-100 group-hover:bg-sale group-hover:text-white">
                   <Heart className="h-4 w-4" />
                 </span>
                 <span className="font-inter text-sm font-semibold text-primary">
@@ -1156,14 +1156,14 @@ export function UserProfile() {
                 </span>
               </button>
 
-              <div className="col-span-2 flex flex-col items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:col-span-1">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-amber-600 shadow-sm ring-1 ring-amber-100">
+              <div className="col-span-2 flex flex-col items-start gap-2 rounded-2xl border border-amber-200 bg-caramel-50 p-4 sm:col-span-1">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-caramel-dark shadow-sm ring-1 ring-amber-100">
                   <Coins className="h-4 w-4" />
                 </span>
                 <span className="font-inter text-sm font-semibold text-primary">
                   ReBites Coins
                 </span>
-                <span className="font-inter text-xs font-bold text-amber-700">
+                <span className="font-inter text-xs font-bold text-caramel-700">
                   {balance.toLocaleString("id-ID")} Coin
                 </span>
                 <span className="font-inter text-[11px] text-stone">

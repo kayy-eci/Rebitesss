@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -31,10 +31,10 @@ const SLOTS: {
   range: string;
   name: string;
 }[] = [
-  { key: "09-12", start: 9, end: 12, range: "09.00–12.00", name: "Pagi" },
-  { key: "12-15", start: 12, end: 15, range: "12.00–15.00", name: "Siang" },
-  { key: "15-18", start: 15, end: 18, range: "15.00–18.00", name: "Sore" },
-  { key: "18-21", start: 18, end: 21, range: "18.00–21.00", name: "Malam" },
+  { key: "09-12", start: 9, end: 12, range: "09.00â€“12.00", name: "Pagi" },
+  { key: "12-15", start: 12, end: 15, range: "12.00â€“15.00", name: "Siang" },
+  { key: "15-18", start: 15, end: 18, range: "15.00â€“18.00", name: "Sore" },
+  { key: "18-21", start: 18, end: 21, range: "18.00â€“21.00", name: "Malam" },
 ];
 
 function getWibParts() {
@@ -281,7 +281,7 @@ function UrgentCard({
 
         <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1 font-medium text-charcoal-900">
-            <Star className="h-3.5 w-3.5 fill-amber text-amber" />
+            <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
             {item.rating.toFixed(1)}
           </span>
           <span className="flex items-center gap-1">
@@ -396,9 +396,9 @@ export function FlashSaleSection({
     <section
       id="flash-sale"
       data-nav="green"
-      className="relative overflow-hidden bg-gradient-to-tr from-forest-800 via-green-600 to-cream"
+      className="relative overflow-hidden bg-gradient-to-tr from-primary via-primary to-secondary"
     >
-      <div className="relative border-b border-white/15 bg-primary-900/40 py-3">
+      <div className="relative border-b border-white/15 bg-primary/40 py-3">
         <Marquee pauseOnHover>
           {[
             "SURPLUS",
@@ -419,7 +419,7 @@ export function FlashSaleSection({
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/25" />
         <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-cream-50/50" />
-        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-gold-500/20" />
+        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-caramel/20" />
 
         {[
           { top: "10%", left: "8%" },
@@ -445,7 +445,7 @@ export function FlashSaleSection({
               delay: i * 0.5,
             }}
           >
-            ✦
+            âœ¦
           </motion.span>
         ))}
 
@@ -482,7 +482,7 @@ export function FlashSaleSection({
           <motion.span
             key={`caramel-dot-${i}`}
             aria-hidden
-            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-gold-500/50"
+            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-caramel/50"
             style={pos}
             animate={{
               y: [0, -14, 0],
@@ -529,13 +529,13 @@ export function FlashSaleSection({
               href="/cari"
               className="hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex"
             >
-              Lihat Semua <span aria-hidden>→</span>
+              Lihat Semua <span aria-hidden>â†’</span>
             </a>
           </div>
         </div>
         <div className="mt-3 flex justify-end sm:hidden">
           <a href="/cari" className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-white/90">
-            Lihat Semua <span aria-hidden>→</span>
+            Lihat Semua <span aria-hidden>â†’</span>
           </a>
         </div>
 

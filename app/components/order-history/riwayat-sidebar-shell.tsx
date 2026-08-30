@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
@@ -10,7 +10,7 @@ export function RiwayatSidebarShell({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-[#F8F9FA] lg:bg-cream-50">
+    <div className="relative min-h-screen bg-secondary lg:bg-cream-50">
       <div className="lg:hidden"><MobileNavbar /></div>
       <div className="hidden lg:block">
         <ProfileSidebarNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />

@@ -1,63 +1,68 @@
-'use client';
+"use client";
 
-import { useState, type FormEvent } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Mail, Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Reveal } from './reveal';
+import { useState, type FormEvent } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Mail, Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Reveal } from "./reveal";
 
 const FAQS = [
   {
-    q: 'Apa itu ReBites?',
-    a: 'ReBites adalah marketplace khusus penjualan makanan surplus yang masih layak konsumsi, yang mempertemukan pelaku UMKM dengan pembeli di Kota Depok. Makanan yang berpotensi menjadi food waste dijual dengan harga yang lebih terjangkau, sehingga mengurangi pemborosan pangan sekaligus menambah pendapatan UMKM.',
+    q: "Apa itu ReBites?",
+    a: "ReBites adalah marketplace khusus makanan surplus yang masih layak konsumsi. ReBites mempertemukan pelaku UMKM dengan pembeli di Kota Depok untuk menjual makanan yang berpotensi menjadi food waste dengan harga lebih terjangkau. Dengan begitu, ReBites membantu mengurangi pemborosan pangan sekaligus membuka peluang tambahan pendapatan bagi UMKM.",
   },
+
   {
-    q: 'Bagaimana cara memesan makanan di ReBites?',
-    a: 'Buat akun, cari dan lihat detail produk surplus di sekitarmu, tentukan jumlah pembelian, lalu pilih metode penerimaan pesanan (diantar atau diambil langsung) serta metode pembayaran sebelum melakukan pembayaran.',
+    q: "Bagaimana cara memesan makanan di ReBites?",
+    a: "Buat akun, cari makanan surplus yang tersedia di sekitarmu, lalu lihat detail produk yang ingin dibeli. Tentukan jumlah pembelian, pilih metode penerimaan pesanan, yaitu diantar atau diambil langsung, kemudian pilih metode pembayaran dan selesaikan pembayaran.",
   },
+
   {
-    q: 'Apakah makanan surplus aman dikonsumsi?',
-    a: 'Aman. Makanan yang dijual adalah makanan surplus yang masih memenuhi standar kelayakan konsumsi, biasanya kelebihan produksi atau belum habis pada akhir waktu operasional. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
+    q: "Apakah makanan surplus di ReBites aman dikonsumsi?",
+    a: "Ya. Makanan yang dijual di ReBites merupakan makanan surplus yang masih layak konsumsi, seperti makanan yang memiliki kelebihan produksi atau belum habis terjual hingga akhir waktu operasional. Setiap penjual mencantumkan informasi produk dan waktu pengambilan agar makanan dapat diterima dan dikonsumsi dalam kondisi yang sesuai.",
   },
+
   {
-    q: 'Bagaimana cara UMKM mulai berjualan?',
-    a: 'Daftar sebagai pelaku UMKM melalui halaman registrasi, lengkapi profil usaha, lalu unggah makanan surplus beserta harga, stok, dan waktu penjualannya. Paket Trial tersedia gratis untuk mulai mencoba.',
+    q: "Bagaimana cara UMKM mulai berjualan di ReBites?",
+    a: "Daftarkan usahamu sebagai pelaku UMKM melalui halaman registrasi, lengkapi profil usaha, lalu tambahkan makanan surplus yang ingin dijual beserta harga, stok, dan waktu penjualannya. Kamu dapat memulai dengan paket Trial yang tersedia secara gratis.",
   },
+
   {
-    q: 'Berapa biaya untuk menggunakan ReBites?',
-    a: 'Untuk pembeli, tidak ada biaya tambahan selain harga makanan. Untuk pelaku UMKM, tersedia paket langganan mulai dari Trial gratis, Standar, hingga Premium sesuai kebutuhan usaha.',
+    q: "Berapa biaya untuk menggunakan ReBites?",
+    a: "Untuk pembeli, tidak ada biaya langganan untuk menggunakan ReBites. Pembeli cukup membayar sesuai harga makanan dan biaya lain yang ditampilkan pada halaman pembayaran, jika ada. Untuk pelaku UMKM, tersedia pilihan paket langganan Trial, Standar, dan Premium yang dapat disesuaikan dengan kebutuhan usaha.",
   },
+
   {
-    q: 'Area mana saja yang sudah dilayani?',
-    a: 'Saat ini ReBites beroperasi khusus di Kota Depok sebagai langkah awal membangun ekosistem penyelamatan makanan berbasis komunitas sebelum meluas ke kota lain.',
+    q: "Area mana saja yang sudah dilayani ReBites?",
+    a: "Saat ini, ReBites beroperasi khusus di Kota Depok. Depok menjadi langkah awal untuk membangun ekosistem penyelamatan makanan berbasis komunitas sebelum ReBites berkembang ke wilayah lainnya.",
   },
 ];
 
 export function FaqSection() {
   const [open, setOpen] = useState<number | null>(null);
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>(
-    'idle',
-  );
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
-    data.set('nama', (data.get('nama') as string) || 'Pengunjung');
-    data.set('pesan', (data.get('pesan') as string) || '');
+    data.set("nama", (data.get("nama") as string) || "Pengunjung");
+    data.set("pesan", (data.get("pesan") as string) || "");
 
-    setStatus('sending');
+    setStatus("sending");
     try {
-      const res = await fetch('https://formspree.io/f/xdeoorwd', {
-        method: 'POST',
+      const res = await fetch("https://formspree.io/f/xdeoorwd", {
+        method: "POST",
         body: data,
-        headers: { Accept: 'application/json' },
+        headers: { Accept: "application/json" },
       });
-      if (!res.ok) throw new Error('Gagal mengirim');
-      setStatus('success');
+      if (!res.ok) throw new Error("Gagal mengirim");
+      setStatus("success");
       form.reset();
     } catch {
-      setStatus('error');
+      setStatus("error");
     }
   };
 
@@ -103,7 +108,10 @@ export function FaqSection() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="mt-7 flex flex-1 flex-col gap-4">
+              <form
+                onSubmit={handleSubmit}
+                className="mt-7 flex flex-1 flex-col gap-4"
+              >
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="flex flex-col gap-1.5">
                     <span className="font-sans text-xs font-semibold text-primary">
@@ -147,15 +155,15 @@ export function FaqSection() {
 
                 <button
                   type="submit"
-                  disabled={status === 'sending'}
+                  disabled={status === "sending"}
                   className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-primary px-7 py-3.5 font-sans text-sm font-semibold text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel hover:text-white disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:bg-primary"
                 >
                   <Mail className="h-4 w-4" />
-                  {status === 'sending' ? 'Mengirim…' : 'Kirim Pesan'}
+                  {status === "sending" ? "Mengirim…" : "Kirim Pesan"}
                 </button>
 
                 <AnimatePresence>
-                  {status === 'success' && (
+                  {status === "success" && (
                     <motion.p
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -167,7 +175,7 @@ export function FaqSection() {
                     </motion.p>
                   )}
 
-                  {status === 'error' && (
+                  {status === "error" && (
                     <motion.p
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -193,10 +201,10 @@ export function FaqSection() {
                     <div
                       key={faq.q}
                       className={cn(
-                        'overflow-hidden rounded-2xl bg-white transition-all duration-300',
+                        "overflow-hidden rounded-2xl bg-white transition-all duration-300",
                         isOpen
-                          ? 'shadow-[0_18px_40px_-28px_rgba(30,43,32,0.35)] ring-1 ring-caramel/40'
-                          : 'hover:ring-1 hover:ring-caramel/30',
+                          ? "shadow-[0_18px_40px_-28px_rgba(30,43,32,0.35)] ring-1 ring-caramel/40"
+                          : "hover:ring-1 hover:ring-caramel/30",
                       )}
                     >
                       <button
@@ -212,8 +220,8 @@ export function FaqSection() {
                         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-cream transition-transform duration-300">
                           <Plus
                             className={cn(
-                              'h-4 w-4 transition-transform duration-300',
-                              isOpen && 'rotate-45',
+                              "h-4 w-4 transition-transform duration-300",
+                              isOpen && "rotate-45",
                             )}
                           />
                         </span>
@@ -223,7 +231,7 @@ export function FaqSection() {
                         {isOpen && (
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
+                            animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{
                               duration: 0.35,

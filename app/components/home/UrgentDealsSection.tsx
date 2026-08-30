@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -112,7 +112,7 @@ export function UrgentDealsSection({
       className="grain-overlay relative flex min-h-screen scroll-mt-20 flex-col justify-center overflow-hidden bg-primary py-10 sm:py-16 lg:py-20"
     >
       <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/10" />
-      <SoftBlob className="-right-24 bottom-0 h-96 w-96 bg-gold-500/15" />
+      <SoftBlob className="-right-24 bottom-0 h-96 w-96 bg-caramel/15" />
       <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-white/[0.06] blur-3xl" />
 
       {SPARKLES.map((pos, i) => (
@@ -133,7 +133,7 @@ export function UrgentDealsSection({
             delay: i * 0.5,
           }}
         >
-          ✦
+          âœ¦
         </motion.span>
       ))}
 
@@ -142,8 +142,8 @@ export function UrgentDealsSection({
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935]" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#E53935]" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sale" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sale" />
               </span>
               <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-white/90">
                 Rekomendasi Untukmu

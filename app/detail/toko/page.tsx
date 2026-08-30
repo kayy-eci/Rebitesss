@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -76,7 +76,7 @@ function sellerProductToFoodItem(
 function isOpenNow(openHours: string): boolean {
   // Deprecated: gunakan isOpenNow dari lib/store-status untuk konsistensi
   const match = openHours.match(
-    /(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/,
+    /(\d{1,2})\.(\d{2})\s*[â€“-]\s*(\d{1,2})\.(\d{2})/,
   );
   if (!match) return true;
 
@@ -201,7 +201,7 @@ function StoreServiceReviews({ vendor }: { vendor: Vendor }) {
                     {Array.from({ length: review.rating }).map((_, s) => (
                       <Star
                         key={s}
-                        className="h-4 w-4 fill-amber text-amber"
+                        className="h-4 w-4 fill-caramel text-caramel"
                       />
                     ))}
                   </div>

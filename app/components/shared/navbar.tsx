@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -179,7 +179,7 @@ export function ProfileNavbar({
           className={cn(
             "absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-colors duration-500",
             overDark
-              ? "bg-gold-500 text-charcoal-900"
+              ? "bg-caramel text-charcoal-900"
               : "bg-primary text-white",
           )}
         >
@@ -272,7 +272,7 @@ export function ProfileNavbar({
                     <MapPin
                       className={cn(
                         "h-4 w-4 transition-colors duration-500",
-                        overDark ? "text-gold-500" : "text-primary",
+                        overDark ? "text-caramel" : "text-primary",
                       )}
                     />
                     <span className="max-w-[100px] truncate">{location}</span>

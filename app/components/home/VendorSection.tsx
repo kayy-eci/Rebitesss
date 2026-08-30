@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -95,7 +95,7 @@ export function VendorSection() {
             disabled={!canLeft}
             aria-label="Geser rekomendasi ke kiri"
             className={cn(
-              'absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11',
+              'absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-caramel hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11',
               !canLeft && 'cursor-default opacity-35 hover:bg-white hover:text-charcoal-900',
               FOCUS_RING
             )}
@@ -157,7 +157,7 @@ export function VendorSection() {
             disabled={!canRight}
             aria-label="Geser rekomendasi ke kanan"
             className={cn(
-              'absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11',
+              'absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-caramel hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11',
               !canRight && 'cursor-default opacity-35 hover:bg-white hover:text-charcoal-900',
               FOCUS_RING
             )}

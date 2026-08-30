@@ -75,7 +75,7 @@ export default function LanggananPenjualPage() {
                 Paket Saat Ini
               </p>
               <h2 className="mt-1 flex items-center gap-1.5 font-display text-xl font-medium tracking-tight text-primary">
-                <Crown className="h-5 w-5 text-gold-500" />
+                <Crown className="h-5 w-5 text-caramel" />
                 ReBites{' '}
                 {SUBSCRIPTION_PLANS.find((plan) => plan.slug === activeSlug)?.name}
               </h2>
@@ -114,8 +114,8 @@ export default function LanggananPenjualPage() {
           </dl>
 
           {!subscription && (
-            <p className="mt-3 inline-flex items-start gap-1.5 rounded-lg bg-amber-100 px-3 py-2 text-[11px] font-medium text-charcoal-900">
-              <BadgeCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-600" />
+            <p className="mt-3 inline-flex items-start gap-1.5 rounded-lg bg-caramel-100 px-3 py-2 text-[11px] font-medium text-charcoal-900">
+              <BadgeCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-caramel-dark" />
               Kamu belum berlangganan aktif. Pilih paket di bawah, Basic 24.999/bulan wajib untuk mulai berjualan.
             </p>
           )}

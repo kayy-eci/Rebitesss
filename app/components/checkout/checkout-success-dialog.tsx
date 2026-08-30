@@ -78,14 +78,14 @@ export function CheckoutSuccessDialog() {
             </div>
 
             <div className="mt-3 flex items-center gap-3 rounded-2xl bg-primary p-4 text-cream-50">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-400/20 text-gold-400">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-caramel/20 text-caramel">
                 <Coins className="h-5 w-5" />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cream-50/70">
                   ReBites Coin didapat
                 </p>
-                <p className="font-display text-lg font-semibold tabular-nums text-gold-400">
+                <p className="font-display text-lg font-semibold tabular-nums text-caramel">
                   +{formatRupiah(successOrder.coinEarned ?? 0)}
                 </p>
               </div>

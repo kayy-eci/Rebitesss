@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,10 +32,10 @@ const SLOTS: {
   range: string;
   name: string;
 }[] = [
-  { key: "09-12", start: 9, end: 12, range: "09.00–12.00", name: "Pagi" },
-  { key: "12-15", start: 12, end: 15, range: "12.00–15.00", name: "Siang" },
-  { key: "15-18", start: 15, end: 18, range: "15.00–18.00", name: "Sore" },
-  { key: "18-21", start: 18, end: 21, range: "18.00–21.00", name: "Malam" },
+  { key: "09-12", start: 9, end: 12, range: "09.00â€“12.00", name: "Pagi" },
+  { key: "12-15", start: 12, end: 15, range: "12.00â€“15.00", name: "Siang" },
+  { key: "15-18", start: 15, end: 18, range: "15.00â€“18.00", name: "Sore" },
+  { key: "18-21", start: 18, end: 21, range: "18.00â€“21.00", name: "Malam" },
 ];
 
 function getWibParts() {
@@ -124,25 +124,25 @@ function SectionCountdown({
       </div>
 
       <div className="mt-1 flex items-baseline gap-1">
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-sale sm:text-3xl">
           {h}
         </span>
         <span
           aria-hidden
-          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E53935] sm:text-3xl"
+          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-sale sm:text-3xl"
         >
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-sale sm:text-3xl">
           {m}
         </span>
         <span
           aria-hidden
-          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-[#E53935] sm:text-3xl"
+          className="w-[1ch] text-center font-sans text-2xl font-bold leading-none text-sale sm:text-3xl"
         >
           :
         </span>
-        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-[#E53935] sm:text-3xl">
+        <span className="min-w-[2ch] text-center font-sans text-2xl font-bold tabular-nums leading-none text-sale sm:text-3xl">
           {s}
         </span>
       </div>
@@ -252,7 +252,7 @@ function UrgentCard({
           </div>
         )}
 
-        <div className="absolute left-3 top-3 z-20 rounded-full bg-[#E53935] px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
+        <div className="absolute left-3 top-3 z-20 rounded-full bg-sale px-2.5 py-1 text-[11px] font-bold leading-none text-white shadow-md">
           Hemat {item.discountPercent}%
         </div>
 
@@ -266,15 +266,15 @@ function UrgentCard({
             if (isActive) toggle(item.id);
           }}
           className={cn(
-            "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935]",
-            liked && isActive && "bg-white text-[#E53935]",
+            "absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-sale",
+            liked && isActive && "bg-white text-sale",
             !isActive && "opacity-60",
           )}
         >
           <Heart
             className={cn(
               "h-4 w-4",
-              liked && isActive && "fill-[#E53935] text-[#E53935]",
+              liked && isActive && "fill-sale text-sale",
             )}
           />
         </button>
@@ -290,7 +290,7 @@ function UrgentCard({
 
         <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1 font-medium text-charcoal-900">
-            <Star className="h-3.5 w-3.5 fill-amber text-amber" />
+            <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
             {item.rating.toFixed(1)}
           </span>
           <span className="flex items-center gap-1">
@@ -307,14 +307,14 @@ function UrgentCard({
           ) : (
             <div className="mt-2.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#DC2626]">
+                <span className="font-bold text-destructive">
                   Sisa {stockCount}
                 </span>
-                <span className="text-[#DC2626]">Buru!</span>
+                <span className="text-destructive">Buru!</span>
               </div>
               <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-cream-100">
                 <motion.div
-                  className="h-full rounded-full bg-[#E53935]"
+                  className="h-full rounded-full bg-sale"
                   initial={{ width: 0 }}
                   whileInView={{ width: `${stockPct}%` }}
                   viewport={{ once: true }}
@@ -409,7 +409,7 @@ export function FlashSaleSection({
     <section
       id="flash-sale"
       data-nav="green"
-      className="relative overflow-hidden bg-gradient-to-tr from-[#163D28] via-[#2D7050] "
+      className="relative overflow-hidden bg-gradient-to-tr from-primary via-primary "
     >
       <div className="relative bg-primary py-3">
         <Marquee pauseOnHover>
@@ -434,7 +434,7 @@ export function FlashSaleSection({
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <SoftBlob className="-left-24 top-1/4 h-80 w-80 bg-white/25" />
         <SoftBlob className="-right-20 bottom-0 h-96 w-96 bg-cream-50/50" />
-        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-gold-500/20" />
+        <SoftBlob className="-bottom-24 left-1/3 h-80 w-80 bg-caramel/20" />
 
         {[
           { top: "10%", left: "8%" },
@@ -460,7 +460,7 @@ export function FlashSaleSection({
               delay: i * 0.5,
             }}
           >
-            ✦
+            âœ¦
           </motion.span>
         ))}
 
@@ -497,7 +497,7 @@ export function FlashSaleSection({
           <motion.span
             key={`caramel-dot-${i}`}
             aria-hidden
-            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-gold-500/50"
+            className="pointer-events-none absolute h-2.5 w-2.5 rounded-full bg-caramel/50"
             style={pos}
             animate={{
               y: [0, -14, 0],
@@ -517,8 +517,8 @@ export function FlashSaleSection({
           <div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935]" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#E53935]" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sale" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sale" />
               </span>
               <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-white">
                 Flash Sale
@@ -581,7 +581,7 @@ export function FlashSaleSection({
                       "text-[10px] font-semibold uppercase tracking-[0.18em]",
                       isActive
                         ? "text-white/70 group-hover:text-caramel"
-                        : "text-[#C8A882]/60 group-hover:text-white",
+                        : "text-caramel/60 group-hover:text-white",
                     )}
                   >
                     {slot.name}
@@ -592,8 +592,8 @@ export function FlashSaleSection({
                     className="relative flex h-2 w-2 shrink-0"
                     title="Slot aktif sekarang"
                   >
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E53935] opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E53935]" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sale opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-sale" />
                   </span>
                 )}
               </button>

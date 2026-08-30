@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ import { useSellerPlan } from '@/lib/seller-plan';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
 import { useSellerAnalytics } from '@/hooks/use-seller-analytics';
 
-const SEGMENT_COLORS = ['#0F2E1F', '#1B4D32', '#2D6A4F', '#6B9080', '#E4EBE4', '#EAE0C8'];
+const SEGMENT_COLORS = ['hsl(var(--primary))', 'hsl(var(--primary))', 'hsl(var(--primary))', 'hsl(var(--muted-foreground))', 'hsl(var(--border))', 'hsl(var(--caramel) / 0.3)'];
 
 function useLockedMonths(monthOptions: { value: string; label: string }[]): string[] {
   const { plan } = useSellerPlan();

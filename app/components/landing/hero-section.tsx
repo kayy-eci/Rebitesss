@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useEffect, useState, useId } from "react";
@@ -192,8 +192,8 @@ export function HeroSection() {
                 className={cn(
                   "hidden items-center gap-1.5 rounded-full px-5 py-2.5 font-inter text-sm font-semibold shadow-[0_14px_30px_-18px_rgba(34,81,56,0.65)] transition-colors duration-300 sm:flex",
                   navIsDark
-                    ? "bg-white text-primary hover:bg-[#C8A882] hover:text-white"
-                    : "bg-primary text-white hover:bg-[#C8A882] hover:text-white",
+                    ? "bg-white text-primary hover:bg-caramel hover:text-white"
+                    : "bg-primary text-white hover:bg-caramel hover:text-white",
                   FOCUS_RING,
                 )}
               >
@@ -292,11 +292,11 @@ export function HeroSection() {
         >
           <defs>
             <linearGradient id="hero-organic-line" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#225138" stopOpacity="0.18" />
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.18" />
 
-              <stop offset="55%" stopColor="#225138" stopOpacity="0.10" />
+              <stop offset="55%" stopColor="hsl(var(--primary))" stopOpacity="0.10" />
 
-              <stop offset="100%" stopColor="#225138" stopOpacity="0" />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -366,7 +366,7 @@ export function HeroSection() {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className="h-3.5 w-3.5 fill-amber text-amber"
+                        className="h-3.5 w-3.5 fill-caramel text-caramel"
                       />
                     ))}
                   </div>
@@ -490,7 +490,7 @@ function HeroOrganicArt() {
     >
       <g
         fill="none"
-        stroke="#225138"
+        stroke="hsl(var(--primary))"
         strokeOpacity="0.55"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -746,7 +746,7 @@ function HeroOrganicArt() {
           cx="255"
           cy="310"
           r="4"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.46"
         />
@@ -755,7 +755,7 @@ function HeroOrganicArt() {
           cx="355"
           cy="350"
           r="2.5"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.36"
         />
@@ -764,7 +764,7 @@ function HeroOrganicArt() {
           cx="665"
           cy="250"
           r="4"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.42"
         />
@@ -773,7 +773,7 @@ function HeroOrganicArt() {
           cx="830"
           cy="300"
           r="2.5"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.34"
         />
@@ -782,7 +782,7 @@ function HeroOrganicArt() {
           cx="1120"
           cy="340"
           r="4"
-          fill="#225138"
+          fill="hsl(var(--primary))"
           stroke="none"
           opacity="0.40"
         />
@@ -813,9 +813,9 @@ function FoodPlate({ image }: { image: string }) {
     >
       <defs>
         <radialGradient id={gradId} cx="50%" cy="42%">
-          <stop offset="0%" stopColor="#F7F6EE" />
-          <stop offset="72%" stopColor="#E9E7D9" />
-          <stop offset="100%" stopColor="#D5D2C1" />
+          <stop offset="0%" stopColor="hsl(var(--secondary))" />
+          <stop offset="72%" stopColor="hsl(var(--muted))" />
+          <stop offset="100%" stopColor="hsl(var(--border))" />
         </radialGradient>
 
         <clipPath id={clipId}>
@@ -830,7 +830,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="92"
         fill="none"
-        stroke="#C8C5B5"
+        stroke="hsl(var(--border))"
         strokeWidth="2.5"
       />
 
@@ -839,11 +839,11 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="88"
         fill="none"
-        stroke="#D8D5C6"
+        stroke="hsl(var(--border))"
         strokeWidth="1.5"
       />
 
-      <circle cx="100" cy="100" r="86" fill="#F5F3E9" />
+      <circle cx="100" cy="100" r="86" fill="hsl(var(--secondary))" />
 
       <image
         href={image}
@@ -860,7 +860,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="84"
         fill="none"
-        stroke="#F5F3E9"
+        stroke="hsl(var(--secondary))"
         strokeWidth="4"
       />
 

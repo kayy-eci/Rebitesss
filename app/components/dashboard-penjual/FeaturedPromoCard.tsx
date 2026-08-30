@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { Star } from 'lucide-react';
 import Image from 'next/image';
@@ -35,11 +35,11 @@ export function FeaturedPromoCard() {
             Promo Toko
           </p>
           <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-medium tracking-tight text-primary">
-            <Star className="h-4 w-4 text-gold-500" />
+            <Star className="h-4 w-4 text-caramel" />
             Menu Unggulan
           </h3>
         </div>
-        <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+        <span className="rounded-full bg-caramel/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
           Paket Max
         </span>
       </div>
@@ -54,7 +54,7 @@ export function FeaturedPromoCard() {
               className={cn(
                 'flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors',
                 product.featured
-                  ? 'border-gold-300 bg-gold-100/60'
+                  ? 'border-caramel/40 bg-caramel/10'
                   : 'border-sage-100 bg-white hover:border-caramel'
               )}
             >
@@ -72,13 +72,13 @@ export function FeaturedPromoCard() {
                   {product.name}
                 </span>
                 <span className="block text-[11px] text-sage-500">
-                  {product.featured ? 'Unggulan · tampil paling atas' : 'Menu reguler'}
+                  {product.featured ? 'Unggulan Â· tampil paling atas' : 'Menu reguler'}
                 </span>
               </span>
               <Star
                 className={cn(
                   'h-4 w-4 shrink-0',
-                  product.featured ? 'fill-gold-500 text-gold-500' : 'text-sage-500'
+                  product.featured ? 'fill-caramel text-caramel' : 'text-sage-500'
                 )}
               />
             </button>

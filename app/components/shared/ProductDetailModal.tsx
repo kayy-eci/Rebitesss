@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -195,7 +195,7 @@ export function ProductDetailModal({
                 {product.rating.toFixed(1)}
               </span>
               <span className="text-sm text-charcoal-500">
-                · {product.reviewCount} ulasan
+                Â· {product.reviewCount} ulasan
               </span>
             </div>
 
@@ -213,7 +213,7 @@ export function ProductDetailModal({
             <p className="mt-5 text-xs font-medium text-primary">
               <span className={cn(
                 "inline-block h-1.5 w-1.5 rounded-full mr-1.5",
-                lowStock ? "bg-[#E53935]" : "bg-primary/100",
+                lowStock ? "bg-sale" : "bg-primary/100",
               )} />
               {lowStock ? `Stok terbatas, ${product.stockRemaining} tersisa` : `${product.stockRemaining} tersedia`}
             </p>

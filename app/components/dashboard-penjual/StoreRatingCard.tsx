@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { Star } from 'lucide-react';
@@ -40,7 +40,7 @@ export function StoreRatingCard() {
     load();
     const onReview = () => load();
     window.addEventListener(REVIEWS_UPDATED_EVENT, onReview);
-    // Polling → ulasan dari pembeli lain juga terlihat tanpa reload
+    // Polling â†’ ulasan dari pembeli lain juga terlihat tanpa reload
     const intervalId = setInterval(load, POLL_INTERVAL_MS);
     return () => {
       cancelled = true;
@@ -103,7 +103,7 @@ export function StoreRatingCard() {
                 key={star}
                 className={
                   star <= Math.round(average)
-                    ? 'h-3.5 w-3.5 fill-gold-500 text-gold-500'
+                    ? 'h-3.5 w-3.5 fill-caramel text-caramel'
                     : 'h-3.5 w-3.5 text-sage-100 fill-sage-100'
                 }
               />
@@ -123,11 +123,11 @@ export function StoreRatingCard() {
             <li key={star} className="flex items-center gap-2 text-[11px]">
               <span className="flex w-7 shrink-0 items-center gap-0.5 font-medium text-charcoal-900">
                 {star}
-                <Star className="h-3 w-3 fill-gold-500 text-gold-500" aria-hidden />
+                <Star className="h-3 w-3 fill-caramel text-caramel" aria-hidden />
               </span>
               <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-cream-100">
                 <span
-                  className="block h-full rounded-full bg-gold-400"
+                  className="block h-full rounded-full bg-caramel"
                   style={{ width: `${percent}%` }}
                 />
               </span>

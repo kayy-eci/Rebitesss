@@ -103,7 +103,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-0.5">
             {Array.from({ length: 5 }).map((_, s) => (
-              <Star key={s} className="h-4 w-4 fill-amber text-amber" />
+              <Star key={s} className="h-4 w-4 fill-caramel text-caramel" />
             ))}
           </div>
           <span className="font-sans text-sm font-bold text-charcoal-900">
@@ -153,7 +153,7 @@ export function ProductDetailPanel({ food }: { food: FeaturedFood }) {
             " group inline-flex h-[52px] w-full items-center justify-center gap-3 rounded-full bg-primary px-8 sm:w-auto sm:min-w-[220px] sm:flex-1 font-sans text-[15px] font-bold text-white shadow-[0_18px_32px_-18px_rgba(27,77,50,0.85)] transition-colors duration-300 hover:bg-primary"
           }
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber text-white transition-transform duration-300 group-hover:scale-110">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-caramel text-white transition-transform duration-300 group-hover:scale-110">
             {buyState === "loading" ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : buyState === "done" ? (

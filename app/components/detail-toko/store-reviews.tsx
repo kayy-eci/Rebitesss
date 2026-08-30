@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react';
+﻿import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/shared/SmartImage';
 import { STORE, STORE_REVIEWS } from './data';
@@ -13,7 +13,7 @@ function StarRow({ rating, className }: { rating: number; className?: string }) 
           className={cn(
             'h-3.5 w-3.5',
             index < Math.round(rating)
-              ? 'fill-gold-500 text-gold-500'
+              ? 'fill-caramel text-caramel'
               : 'fill-sage-100 text-sage-100'
           )}
         />
@@ -42,7 +42,7 @@ function ReviewCard({ review }: { review: StoreReview }) {
         {review.menu}
       </span>
       <p className="mt-2.5 text-sm leading-relaxed text-charcoal-500">
-        “{review.comment}”
+        â€œ{review.comment}â€
       </p>
     </article>
   );

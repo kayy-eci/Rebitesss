@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -123,7 +123,7 @@ export function SiteFooter() {
                   aria-hidden
                   className="h-4 w-4 overflow-hidden rounded-full bg-white"
                 >
-                  <span className="block h-1/2 w-full rounded-t-full bg-[#CE1126]" />
+                  <span className="block h-1/2 w-full rounded-t-full bg-destructive" />
                 </span>
                 <span className="font-sans text-xs text-primary-foreground/80">
                   Indonesia (ID)
@@ -140,7 +140,7 @@ export function SiteFooter() {
 
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-primary-foreground/15 pt-6 sm:mt-16 sm:flex-row sm:items-center sm:pt-8">
           <p className="font-sans text-xs text-primary-foreground/50">
-            © {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
+            Â© {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
             <span className="text-primary-foreground/80">Tim Sixquit</span> -
             SMK Taruna Bhakti.
           </p>

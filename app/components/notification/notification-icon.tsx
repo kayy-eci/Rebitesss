@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import {
   CreditCard,
@@ -51,8 +51,8 @@ const ICON_CONFIG: Record<
   },
   promo: {
     icon: Gift,
-    bg: 'bg-gold-100',
-    color: 'text-gold-600',
+    bg: 'bg-caramel/15',
+    color: 'text-caramel-dark',
   },
   incoming_order: {
     icon: ShoppingBag,
@@ -61,13 +61,13 @@ const ICON_CONFIG: Record<
   },
   new_review: {
     icon: Star,
-    bg: 'bg-gold-50',
-    color: 'text-gold-600',
+    bg: 'bg-caramel-50',
+    color: 'text-caramel-dark',
   },
   subscription_active: {
     icon: Crown,
-    bg: 'bg-gold-100',
-    color: 'text-gold-600',
+    bg: 'bg-caramel/15',
+    color: 'text-caramel-dark',
   },
   subscription_renewed: {
     icon: RefreshCw,

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -162,8 +162,8 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
                 className={cn(
                   "rounded-full border px-4 py-2 font-sans text-sm font-semibold transition-all duration-200",
                   isActive
-                    ? "border-transparent bg-[#C8A882] text-white shadow-md shadow-[#C8A882]/25 hover:bg-[#7A4E35]"
-                    : "border-sage-100 bg-white text-charcoal-500 hover:border-[#C8A882]/30 hover:text-[#C8A882]",
+                    ? "border-transparent bg-caramel text-white shadow-md shadow-caramel/25 hover:bg-caramel"
+                    : "border-sage-100 bg-white text-charcoal-500 hover:border-caramel/30 hover:text-caramel",
                   FOCUS_RING,
                 )}
               >
@@ -180,7 +180,7 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
             disabled={!canLeft}
             aria-label="Geser rekomendasi makanan ke kiri"
             className={cn(
-              "absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11",
+              "absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-caramel hover:text-white active:scale-[0.95] sm:-left-5 sm:h-11 sm:w-11",
               !canLeft &&
                 "cursor-default opacity-35 hover:bg-white hover:text-charcoal-900",
               FOCUS_RING,
@@ -245,7 +245,7 @@ export function FoodRecommendationSection({ onViewDetail }: { onViewDetail?: (id
             disabled={!canRight}
             aria-label="Geser rekomendasi makanan ke kanan"
             className={cn(
-              "absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-[#C8A882] hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11",
+              "absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-sage-100 bg-white text-charcoal-900 shadow-md shadow-primary/5 transition-all duration-200 hover:bg-caramel hover:text-white active:scale-[0.95] sm:-right-5 sm:h-11 sm:w-11",
               !canRight &&
                 "cursor-default opacity-35 hover:bg-white hover:text-charcoal-900",
               FOCUS_RING,

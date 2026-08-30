@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
@@ -37,7 +37,7 @@ function Stars({ rating }: { rating: number }) {
           className={cn(
             "h-3.5 w-3.5",
             n <= rating
-              ? "fill-gold-500 text-gold-500"
+              ? "fill-caramel text-caramel"
               : "fill-sage-100 text-sage-100",
           )}
         />
@@ -67,16 +67,16 @@ function ReviewItem({ review }: { review: SellerReview }) {
           </p>
           <Stars rating={review.rating} />
           <span className="text-xs text-sage-500">
-            · {formatReviewDate(review.createdAt)}
+            Â· {formatReviewDate(review.createdAt)}
           </span>
         </div>
         <p className="mt-1 text-xs font-medium text-sage-500">
-          {review.menuName || "Menu"} ·{" "}
+          {review.menuName || "Menu"} Â·{" "}
           <span className="font-mono">#{review.orderCode}</span>
         </p>
         {review.comment ? (
           <p className="mt-2 break-words rounded-xl bg-cream-50 px-3 py-2 text-[13px] leading-relaxed text-charcoal-900">
-            “{review.comment}”
+            â€œ{review.comment}â€
           </p>
         ) : (
           <p className="mt-2 text-xs italic text-sage-400">Tanpa komentar</p>
@@ -106,7 +106,7 @@ export default function UlasanPage() {
     load();
     const onUpdate = () => load();
     window.addEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
-    // Polling → ulasan dari pembeli lain juga terlihat tanpa reload
+    // Polling â†’ ulasan dari pembeli lain juga terlihat tanpa reload
     const intervalId = setInterval(load, POLL_INTERVAL_MS);
     return () => {
       window.removeEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
@@ -160,7 +160,7 @@ export default function UlasanPage() {
                       : "border border-sage-100 bg-white text-charcoal-500 hover:text-charcoal-900",
                   )}
                 >
-                  {f === "all" ? "Semua" : `${f}★`}
+                  {f === "all" ? "Semua" : `${f}â˜…`}
                 </button>
               ))}
             </div>

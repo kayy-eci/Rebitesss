@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   useState,
@@ -69,19 +69,19 @@ function Field({
       <div className="mb-1.5 flex items-baseline justify-between gap-4">
         <label
           htmlFor={id}
-          className="block font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6B6A63]"
+          className="block font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground"
         >
           {label}
         </label>
         {hint}
       </div>
-      <div className="group flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 transition-colors duration-200 focus-within:border-[#225138] focus-within:ring-1 focus-within:ring-[#225138]/15">
-        <Icon className="h-3.5 w-3.5 shrink-0 text-[#6B6A63]/55 transition-colors duration-200 group-focus-within:text-[#225138]" />
+      <div className="group flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 transition-colors duration-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/15">
+        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground/55 transition-colors duration-200 group-focus-within:text-primary" />
         <input
           id={id}
           type={isPassword && showPassword ? "text" : type}
           {...inputProps}
-          className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-[#1B3F2C] outline-none placeholder:text-[#9A9994]"
+          className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-primary outline-none placeholder:text-muted-foreground"
         />
         {isPassword && (
           <button
@@ -91,7 +91,7 @@ function Field({
               showPassword ? "Sembunyikan password" : "Tampilkan password"
             }
             aria-pressed={showPassword}
-            className="shrink-0 rounded-sm p-0.5 text-[#6B6A63]/55 transition-colors duration-200 hover:text-[#225138] focus-visible:text-[#225138] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#225138]/30"
+            className="shrink-0 rounded-sm p-0.5 text-muted-foreground/55 transition-colors duration-200 hover:text-primary focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4" />
@@ -228,7 +228,7 @@ export default function AuthForm({
       <motion.div variants={itemVariants} className="mb-3 flex-shrink-0">
         <Link
           href="/"
-          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-[#6B6A63] transition-colors duration-200 hover:text-[#225138]"
+          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
           Kembali
@@ -246,20 +246,20 @@ export default function AuthForm({
           height={28}
           className="h-7 w-7 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
         />
-        <span className="font-display text-lg font-semibold tracking-tight text-[#225138]">
+        <span className="font-display text-lg font-semibold tracking-tight text-primary">
           ReBites
         </span>
       </motion.div>
 
       <motion.h1
         variants={itemVariants}
-        className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-[#14261E] flex-shrink-0"
+        className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-primary flex-shrink-0"
       >
         {title}
       </motion.h1>
       <motion.p
         variants={itemVariants}
-        className="mt-1.5 font-sans text-[13px] leading-relaxed text-[#6B6A63] flex-shrink-0"
+        className="mt-1.5 font-sans text-[13px] leading-relaxed text-muted-foreground flex-shrink-0"
       >
         {subtitle}
       </motion.p>
@@ -270,7 +270,7 @@ export default function AuthForm({
         onSubmit={handleSubmit}
         noValidate
       >
-        <div className="grid gap-4 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#E5E7EB] [&::-webkit-scrollbar-track]:bg-transparent min-h-0">
+        <div className="grid gap-4 overflow-y-auto overscroll-contain pr-1.5 -mr-1.5 pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent min-h-0">
         {isSignup && (
           <Field
             id="fullName"
@@ -304,7 +304,7 @@ export default function AuthForm({
           name="password"
           type="password"
           autoComplete={isSignup ? "new-password" : "current-password"}
-          placeholder="••••••••"
+          placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -317,13 +317,13 @@ export default function AuthForm({
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-3.5 w-3.5 rounded border-[#D1D5DB] text-[#225138] accent-[#225138] focus:ring-[#225138]/30"
+                  className="h-3.5 w-3.5 rounded border-border text-primary accent-primary focus:ring-primary/30"
                 />
-                <span className="font-sans text-[11px] text-[#6B6A63]">Ingat saya</span>
+                <span className="font-sans text-[11px] text-muted-foreground">Ingat saya</span>
               </label>
               <Link
                 href="/auth/forgotPassword"
-                className="font-sans text-[11px] text-[#6B6A63] underline underline-offset-4 transition-colors hover:text-[#225138]"
+                className="font-sans text-[11px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-primary"
               >
                 Lupa password?
               </Link>
@@ -341,7 +341,7 @@ export default function AuthForm({
         <button
           type="submit"
           disabled={loading || confirmEmailOpen}
-          className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-[#143B2D] px-5 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-[#0F2E24] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#225138] disabled:cursor-not-allowed disabled:opacity-70 flex-shrink-0"
+          className="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70 flex-shrink-0"
         >
           {loading ? (isSignup ? "Mendaftar" : "Masuk") : submitLabel}
           <ArrowRight className="h-4 w-4" />
@@ -350,29 +350,29 @@ export default function AuthForm({
 
       <motion.p
         variants={itemVariants}
-        className="mt-5 text-center font-sans text-[13px] text-[#6B6A63] flex-shrink-0"
+        className="mt-5 text-center font-sans text-[13px] text-muted-foreground flex-shrink-0"
       >
         {bottomHint.text}{" "}
         <Link
           href={bottomHint.href}
-          className="font-semibold text-[#225138] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
+          className="font-semibold text-primary underline underline-offset-4 transition-colors hover:text-primary"
         >
           {bottomHint.linkText}
         </Link>
       </motion.p>
 
       <Dialog open={confirmEmailOpen} onOpenChange={setConfirmEmailOpen}>
-        <DialogContent className="max-w-sm rounded-2xl border-[#DEDACF] bg-white p-6">
+        <DialogContent className="max-w-sm rounded-2xl border-border bg-white p-6">
           <DialogHeader>
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#225138]/10 text-[#225138]">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
               <MailCheck className="h-6 w-6" />
             </span>
-            <DialogTitle className="text-center font-display text-lg font-medium tracking-tight text-[#225138]">
+            <DialogTitle className="text-center font-display text-lg font-medium tracking-tight text-primary">
               Cek Email Kamu
             </DialogTitle>
-            <DialogDescription className="text-center font-sans text-sm leading-relaxed text-[#6B6A63]">
+            <DialogDescription className="text-center font-sans text-sm leading-relaxed text-muted-foreground">
               Registrasi berhasil! Kami mengirim tautan konfirmasi ke{" "}
-              <span className="font-semibold text-[#1B3F2C]">
+              <span className="font-semibold text-primary">
                 {email.trim()}
               </span>
               . Langkah selanjutnya: buka email tersebut, klik tautan
@@ -382,7 +382,7 @@ export default function AuthForm({
           </DialogHeader>
           <Link
             href="/auth/login"
-            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-md bg-[#225138] px-5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-[#F7F5EF] transition-colors duration-200 hover:bg-[#1B3F2C]"
+            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-md bg-primary px-5 font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-colors duration-200 hover:bg-primary"
           >
             Ke Halaman Masuk
           </Link>

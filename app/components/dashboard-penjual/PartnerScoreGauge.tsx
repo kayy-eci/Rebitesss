@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
@@ -57,7 +57,7 @@ export function PartnerScoreGauge() {
             cy={SIZE / 2}
             r={RADIUS}
             fill="none"
-            stroke="#E4EBE4"
+            stroke="hsl(var(--border))"
             strokeWidth={STROKE}
           />
           {reduced ? (
@@ -66,7 +66,7 @@ export function PartnerScoreGauge() {
               cy={SIZE / 2}
               r={RADIUS}
               fill="none"
-              stroke="#1B4D32"
+              stroke="hsl(var(--primary))"
               strokeWidth={STROKE}
               strokeLinecap="round"
               strokeDasharray={CIRCUMFERENCE}
@@ -79,7 +79,7 @@ export function PartnerScoreGauge() {
               cy={SIZE / 2}
               r={RADIUS}
               fill="none"
-              stroke="#1B4D32"
+              stroke="hsl(var(--primary))"
               strokeWidth={STROKE}
               strokeLinecap="round"
               strokeDasharray={CIRCUMFERENCE}

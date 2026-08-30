@@ -227,7 +227,7 @@ export function ProductDetailModal({
                     className={cn(
                       "h-4 w-4",
                       i < Math.round(product.rating)
-                        ? "fill-gold-500 text-gold-500"
+                        ? "fill-caramel text-caramel"
                         : "text-sage-100",
                     )}
                   />

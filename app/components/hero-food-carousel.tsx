@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState, useRef, useId, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -20,7 +20,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan1.jpeg",
     merchant: "Warung Geprek Bu Ati",
     category: "Makanan Berat",
-    hours: "09.00–21.00",
+    hours: "09.00â€“21.00",
     price: 12000,
     originalPrice: 15000,
     badge: "Menu Favorit",
@@ -35,7 +35,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan2.jpeg",
     merchant: "Kampung Rasa",
     category: "Nasi Goreng",
-    hours: "10.00–21.00",
+    hours: "10.00â€“21.00",
     price: 15000,
     originalPrice: 18000,
     badge: "Menu Favorit",
@@ -50,7 +50,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan3.jpeg",
     merchant: "Soto Mie Mang Aji",
     category: "Soto Mie",
-    hours: "08.00–16.00",
+    hours: "08.00â€“16.00",
     price: 18000,
     originalPrice: 22000,
     badge: "Menu Favorit",
@@ -65,7 +65,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan4.jpeg",
     merchant: "Sate Pak Tigiset",
     category: "Sate Ayam",
-    hours: "15.00–22.00",
+    hours: "15.00â€“22.00",
     price: 20000,
     originalPrice: 25000,
     badge: "Menu Favorit",
@@ -80,7 +80,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan5.jpeg",
     merchant: "RM Padang Karindang",
     category: "Rendang",
-    hours: "10.00–21.00",
+    hours: "10.00â€“21.00",
     price: 25000,
     originalPrice: 30000,
     badge: "Menu Favorit",
@@ -95,7 +95,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan6.jpeg",
     merchant: "Pancong Lumer Depok",
     category: "Jajanan",
-    hours: "14.00–21.00",
+    hours: "14.00â€“21.00",
     price: 10000,
     originalPrice: 13000,
     badge: "Menu Favorit",
@@ -110,7 +110,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan7.jpg",
     merchant: "Martabak Gombret 45",
     category: "Martabak",
-    hours: "17.00–23.00",
+    hours: "17.00â€“23.00",
     price: 22000,
     originalPrice: 28000,
     badge: "Menu Favorit",
@@ -125,7 +125,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan8.webp",
     merchant: "Bakso Jono",
     category: "Bakso",
-    hours: "09.00–21.00",
+    hours: "09.00â€“21.00",
     price: 18000,
     originalPrice: 23000,
     badge: "Menu Favorit",
@@ -140,7 +140,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan9.webp",
     merchant: "Ketoprak Sedap",
     category: "Ketoprak",
-    hours: "08.00–17.00",
+    hours: "08.00â€“17.00",
     price: 13000,
     originalPrice: 16000,
     badge: "Menu Favorit",
@@ -155,7 +155,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan10.webp",
     merchant: "Mie Ayam Balap 12",
     category: "Mie Ayam",
-    hours: "10.00–22.00",
+    hours: "10.00â€“22.00",
     price: 15000,
     originalPrice: 18000,
     badge: "Menu Favorit",
@@ -180,7 +180,7 @@ function foodItemToPlate(food: FoodItem): PlateFood {
     image: food.image,
     merchant: food.vendorName,
     category: food.category,
-    hours: `${food.availableFrom}–${food.availableTo}`,
+    hours: `${food.availableFrom}â€“${food.availableTo}`,
     price: food.discountedPrice,
     originalPrice: food.originalPrice,
     badge:
@@ -355,21 +355,21 @@ export function HeroFoodCarousel() {
                     />
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-green-700 to-transparent"
+                      className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-primary to-transparent"
                     />
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-green-700 to-transparent"
+                      className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-primary to-transparent"
                     />
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-green-700 to-transparent"
+                      className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-primary to-transparent"
                     />
                   </div>
 
                   <div
                     aria-hidden
-                    className="absolute right-20 top-1/2 z-20 hidden h-16 w-16 -translate-y-1/2 flex-col items-center justify-center bg-amber text-white [filter:drop-shadow(0_16px_22px_rgba(192,138,62,0.55))] sm:h-24 sm:w-24 lg:flex lg:h-32 lg:w-32"
+                    className="absolute right-20 top-1/2 z-20 hidden h-16 w-16 -translate-y-1/2 flex-col items-center justify-center bg-caramel text-white [filter:drop-shadow(0_16px_22px_rgba(192,138,62,0.55))] sm:h-24 sm:w-24 lg:flex lg:h-32 lg:w-32"
                     style={{ clipPath: BADGE_CLIP }}
                   >
                     <span className="font-display text-base font-bold leading-none text-white sm:text-2xl lg:text-3xl">
@@ -382,7 +382,7 @@ export function HeroFoodCarousel() {
 
                   <div
                     aria-hidden
-                    className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[#E53935] px-4 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-[0_10px_20px_-10px_rgba(229,57,53,0.7)]"
+                    className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 rounded-full bg-sale px-4 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-[0_10px_20px_-10px_rgba(229,57,53,0.7)]"
                   >
                     Flash Sale
                   </div>
@@ -423,8 +423,8 @@ function FoodPlate({ image }: { image: string }) {
       <defs>
         <radialGradient id={gradId} cx="50%" cy="42%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="72%" stopColor="#F4F1E9" />
-          <stop offset="100%" stopColor="#DFDAC8" />
+          <stop offset="72%" stopColor="hsl(var(--secondary))" />
+          <stop offset="100%" stopColor="hsl(var(--border))" />
         </radialGradient>
 
         <clipPath id={clipId}>
@@ -439,7 +439,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="92"
         fill="none"
-        stroke="#DEDACF"
+        stroke="hsl(var(--border))"
         strokeWidth="2.5"
       />
 
@@ -448,11 +448,11 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="88"
         fill="none"
-        stroke="#E6E1D1"
+        stroke="hsl(var(--border))"
         strokeWidth="1.5"
       />
 
-      <circle cx="100" cy="100" r="86" fill="#F7F5EF" />
+      <circle cx="100" cy="100" r="86" fill="hsl(var(--secondary))" />
 
       <image
         href={image}
@@ -469,7 +469,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="84"
         fill="none"
-        stroke="#F7F5EF"
+        stroke="hsl(var(--secondary))"
         strokeWidth="4"
       />
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight, Recycle } from "lucide-react";
@@ -87,7 +87,7 @@ export function Hero() {
               <br className="hidden sm:block" />
               <span className="relative inline-block">
                 Hemat dan Nikmat
-                <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-gold-500 sm:-bottom-2" />
+                <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-caramel sm:-bottom-2" />
               </span>
             </h1>
             <p className="mt-3 max-w-lg font-inter text-xs leading-relaxed text-cream-50/85 sm:mt-5 sm:text-[15px] lg:text-[16px] text-white">
@@ -108,7 +108,7 @@ export function Hero() {
             </div>
 
             <p className="mt-3 flex items-center gap-2 font-inter text-[11px] text-cream-50/75 sm:mt-5 sm:text-sm">
-              <Recycle className="h-3.5 w-3.5 text-gold-500 sm:h-4 sm:w-4" />
+              <Recycle className="h-3.5 w-3.5 text-caramel sm:h-4 sm:w-4" />
               1000+ porsi makanan berhasil diselamatkan
             </p>
           </div>

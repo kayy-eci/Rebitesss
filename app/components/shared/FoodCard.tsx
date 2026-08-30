@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Clock, Heart, MapPin, Star } from "lucide-react";
 import { formatRupiah } from "@/lib/data";
@@ -83,7 +83,7 @@ export function FoodCard({
           </div>
         )}
         {item.discountPercent > 0 && (
-          <div className="absolute left-2 top-2 z-20 rounded-full bg-[#E53935] px-2 py-0.5 text-[10px] font-bold leading-none text-white shadow-md sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[11px]">
+          <div className="absolute left-2 top-2 z-20 rounded-full bg-sale px-2 py-0.5 text-[10px] font-bold leading-none text-white shadow-md sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[11px]">
             Hemat {item.discountPercent}%
           </div>
         )}
@@ -96,12 +96,12 @@ export function FoodCard({
             toggle(item.id);
           }}
           className={cn(
-            "absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[#E53935] sm:right-3 sm:top-3 sm:h-8 sm:w-8",
-            liked && "bg-white text-[#E53935]",
+            "absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-zinc-500 shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-sale sm:right-3 sm:top-3 sm:h-8 sm:w-8",
+            liked && "bg-white text-sale",
             FOCUS_RING,
           )}
         >
-          <Heart className={cn("h-3.5 w-3.5 sm:h-4 sm:w-4", liked && "fill-[#E53935] text-[#E53935]")} />
+          <Heart className={cn("h-3.5 w-3.5 sm:h-4 sm:w-4", liked && "fill-sale text-sale")} />
         </button>
       </div>
 
@@ -113,7 +113,7 @@ export function FoodCard({
 
         <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-charcoal-500 sm:mt-2 sm:gap-2 sm:text-xs">
           <span className="inline-flex items-center gap-1 font-medium text-charcoal-900">
-            <Star className="h-3 w-3 fill-amber text-amber sm:h-3.5 sm:w-3.5" />
+            <Star className="h-3 w-3 fill-caramel text-caramel sm:h-3.5 sm:w-3.5" />
             {item.rating.toFixed(1)}
           </span>
           <span className="inline-flex items-center gap-1">
@@ -122,7 +122,7 @@ export function FoodCard({
           </span>
           <span className="inline-flex items-center gap-1">
             <Clock className="h-3 w-3 text-sage-500 sm:h-3.5 sm:w-3.5" />
-            {item.availableFrom}–{item.availableTo}
+            {item.availableFrom}â€“{item.availableTo}
           </span>
         </div>
 

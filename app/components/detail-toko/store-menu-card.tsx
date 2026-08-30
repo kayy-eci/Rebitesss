@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { Check, Clock, Plus, Star } from 'lucide-react';
@@ -39,7 +39,7 @@ export function StoreMenuCard({ menu }: { menu: StoreMenu }) {
 
         <div className="flex items-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1 font-medium">
-            <Star className="h-3.5 w-3.5 fill-gold-500 text-gold-500" />
+            <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
             {menu.rating.toFixed(1)}
           </span>
           <span>{menu.stock} porsi tersisa</span>
@@ -47,7 +47,7 @@ export function StoreMenuCard({ menu }: { menu: StoreMenu }) {
 
         <p className="flex items-center gap-1 text-xs text-charcoal-500">
           <Clock className="h-3.5 w-3.5 text-primary" />
-          Tersedia {menu.availableFrom}–{menu.availableTo}
+          Tersedia {menu.availableFrom}â€“{menu.availableTo}
         </p>
 
         <div className="mt-auto flex items-baseline gap-2 pt-1">

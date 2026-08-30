@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -78,8 +78,8 @@ export function StoreClosedModal({
             </button>
 
             {}
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
-              <Clock className="h-8 w-8 text-amber-600" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-caramel-100">
+              <Clock className="h-8 w-8 text-caramel-dark" />
             </div>
 
             {}
@@ -91,7 +91,7 @@ export function StoreClosedModal({
             <p className="mt-3 text-sm leading-relaxed text-charcoal-500">
               Makanan ini belum tersedia saat ini. Kembali lagi{" "}
               <span className="font-semibold text-charcoal-900">
-                besok di jam {availableFrom}–{availableTo}
+                besok di jam {availableFrom}â€“{availableTo}
               </span>{" "}
               untuk menikmatinya.
             </p>

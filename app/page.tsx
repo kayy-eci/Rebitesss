@@ -447,7 +447,7 @@ export default function Home() {
                           {Array.from({ length: t.rating }).map((_, s) => (
                             <Star
                               key={s}
-                              className="h-4 w-4 fill-amber text-amber"
+                              className="h-4 w-4 fill-caramel text-caramel"
                             />
                           ))}
                         </div>

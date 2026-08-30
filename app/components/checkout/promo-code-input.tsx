@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -22,7 +22,7 @@ export function PromoCodeInput() {
           <div className="flex items-center gap-2">
             <BadgePercent className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-primary">
-              {promo.code} berlaku · diskon {promo.percentOff}%
+              {promo.code} berlaku Â· diskon {promo.percentOff}%
             </span>
           </div>
           <button
@@ -83,7 +83,7 @@ export function PromoCodeInput() {
                 {promoError ? (
                   <p
                     role="alert"
-                    className="mt-2 flex items-center gap-1.5 text-xs font-medium text-[#DC2626]"
+                    className="mt-2 flex items-center gap-1.5 text-xs font-medium text-destructive"
                   >
                     <X className="h-3.5 w-3.5" strokeWidth={2.5} />
                     {promoError}

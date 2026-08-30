@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -88,9 +88,9 @@ export default function VendorDashboardPage() {
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-100 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
-                    <Crown className="h-3.5 w-3.5 text-gold-500" />
-                    Paket Aktif · {plan.label}
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-caramel/15 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+                    <Crown className="h-3.5 w-3.5 text-caramel" />
+                    Paket Aktif Â· {plan.label}
                   </span>
                   { }
                   <Link

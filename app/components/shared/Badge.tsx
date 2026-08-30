@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+﻿import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const badgeVariants = cva(
@@ -7,7 +7,7 @@ const badgeVariants = cva(
     variants: {
       variant: {
         green: 'bg-primary text-white',
-        gold: 'bg-gold-500 text-charcoal-900',
+        gold: 'bg-caramel text-charcoal-900',
         glass: 'bg-white/10 text-cream-50 backdrop-blur-sm',
         cream: 'bg-cream-100 text-charcoal-900',
         outline: 'border border-sage-100 bg-white text-charcoal-500',

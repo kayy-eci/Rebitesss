@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useRef } from "react";
 import { ArrowRight, Star } from "lucide-react";
@@ -71,7 +71,7 @@ export function CategoryRow({
           {items.map((item) => (
             <div key={item.id} className="relative snap-start">
               {featuredIds?.has(item.id) && (
-                <span className="absolute left-3 top-12 z-20 inline-flex items-center gap-1 rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-charcoal-900 shadow-sm">
+                <span className="absolute left-3 top-12 z-20 inline-flex items-center gap-1 rounded-full bg-caramel px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-charcoal-900 shadow-sm">
                   <Star className="h-3 w-3 fill-current" />
                   Unggulan
                 </span>

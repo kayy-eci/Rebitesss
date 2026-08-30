@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { Search, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -51,7 +51,7 @@ export function OrderToolbar({
                 className={cn(
                   'inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors',
                   active
-                    ? 'border-[#7A1C1C] bg-white text-[#7A1C1C] shadow-sm'
+                    ? 'border-primary bg-white text-primary shadow-sm'
                     : 'border-zinc-200 bg-white text-charcoal-500 hover:border-sage-200 hover:text-caramel'
                 )}
               >
@@ -59,7 +59,7 @@ export function OrderToolbar({
                 <span
                   className={cn(
                     'rounded-full px-1.5 py-0.5 text-[10px] tabular-nums',
-                    active ? 'bg-[#7A1C1C]/10 text-[#7A1C1C]' : 'bg-cream-100 text-charcoal-500'
+                    active ? 'bg-primary/10 text-primary' : 'bg-cream-100 text-charcoal-500'
                   )}
                 >
                   {count}
