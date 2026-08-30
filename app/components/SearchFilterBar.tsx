@@ -100,7 +100,8 @@ export function SearchFilterBar({
     let items = searchPool.filter(
       (item) =>
         item.name.toLowerCase().includes(q) ||
-        item.vendorName.toLowerCase().includes(q),
+        item.vendorName.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q),
     );
 
     const categoryFilters: FilterKey[] = [
