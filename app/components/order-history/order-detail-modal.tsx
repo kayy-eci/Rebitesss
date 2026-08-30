@@ -211,7 +211,7 @@ export function OrderDetailModal({
                 {order.discount > 0 && (
                   <Row
                     label={`Diskon promo${order.promoCode ? ` (${order.promoCode})` : ''}`}
-                    value={`âˆ’${formatRupiah(order.discount)}`}
+                    value={`−${formatRupiah(order.discount)}`}
                     accent
                   />
                 )}
@@ -222,7 +222,7 @@ export function OrderDetailModal({
                 {(order.coinUsed ?? 0) > 0 && (
                   <Row
                     label="ReBites Coin digunakan"
-                    value={`âˆ’${(order.coinUsed ?? 0).toLocaleString('id-ID')} Coin`}
+                    value={`−${(order.coinUsed ?? 0).toLocaleString('id-ID')} Coin`}
                     accent
                   />
                 )}
@@ -294,8 +294,8 @@ export function OrderDetailModal({
                 />
                 {typeof order.co2eSavedKg === 'number' && (
                   <Row
-                    label="COâ‚‚e dicegah"
-                    value={`â‰ˆ ${order.co2eSavedKg.toLocaleString('id-ID', {
+                    label="CO₂e dicegah"
+                    value={`≈ ${order.co2eSavedKg.toLocaleString('id-ID', {
                       maximumFractionDigits: 2,
                     })} kg`}
                   />
@@ -405,7 +405,7 @@ function StatusStrip({
         <span className="font-display text-base font-semibold tabular-nums text-primary">
           {remaining !== null && remaining > 0
             ? formatCountdown(remaining)
-            : 'â€”'}
+            : '-'}
         </span>
       </div>
 
@@ -452,7 +452,7 @@ function DeliveryTrackingInfo({ order }: { order: StoredOrder }) {
           <div>
             <p className="text-[10px] uppercase tracking-wider text-purple-500">Estimasi tiba</p>
             <p className="text-sm font-bold tabular-nums text-purple-700">
-              {formatTime(rangeStart)} â€“ {formatTime(rangeEnd)}
+              {formatTime(rangeStart)} – {formatTime(rangeEnd)}
             </p>
           </div>
           {typeof distance === 'number' && (
@@ -514,7 +514,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
             {isDelivery ? 'Dari toko' : 'Ambil di'}
           </p>
           <p className="text-[13px] text-charcoal-900">{order.vendorName}</p>
-          <p className="text-xs text-charcoal-500">{order.vendorAddress ?? 'â€”'}</p>
+          <p className="text-xs text-charcoal-500">{order.vendorAddress ?? '-'}</p>
           {!isDelivery && order.vendorOpenHours && (
             <p className="mt-0.5 text-xs text-charcoal-500">
               Jam operasional {order.vendorOpenHours}
@@ -558,7 +558,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
               {typeof order.distanceKm === 'number' && (
                 <p className="mt-1 inline-flex rounded-full bg-cream-100 px-2 py-0.5 text-[11px] font-semibold text-charcoal-900">
                   Jarak {order.distanceKm.toLocaleString('id-ID')} km Â· estimasi{' '}
-                  {order.estimatedMinutes ?? 'â€”'} menit
+                  {order.estimatedMinutes ?? '-'} menit
                 </p>
               )}
             </div>
@@ -686,7 +686,7 @@ function ReviewBlock({
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Ceritakan pengalamanmu (opsional)â€¦"
+          placeholder="Ceritakan pengalamanmu (opsional)…"
           rows={2}
           className="mt-2.5 w-full resize-none rounded-lg border border-hairline bg-cream-50 px-3 py-2 text-[13px] text-charcoal-900 placeholder:text-charcoal-500/60 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary"
         />

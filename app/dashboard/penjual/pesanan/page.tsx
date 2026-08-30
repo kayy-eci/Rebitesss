@@ -135,7 +135,7 @@ function OrderRow({
   const advanceLabel = order.fulfillment === 'delivery' ? 'Sedang Diantar' : 'Siap Diambil';
   const AdvanceIcon = order.fulfillment === 'delivery' ? Truck : PackageCheck;
 
-  // Legacy state-machine flow (orderStatus) â€” dipakai bila progressStatus belum ada
+  // Legacy state-machine flow (orderStatus), dipakai bila progressStatus belum ada
   const orderStatus = order.orderStatus ?? 'processing';
   const actions = getValidActions(orderStatus, order.fulfillment);
   const hasStateMachineActions = actions.length > 0 && !order.progressStatus && isOngoing;

@@ -21,9 +21,9 @@ const config: Config = {
         sm: 'calc(var(--radius) - 2px)',
       },
       fontFamily: {
-        display: ['var(--font-display)'],
+        display: ['var(--font-sans)'],
         sans: ['var(--font-sans)'],
-        inter: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        inter: ['var(--font-secondary)', 'system-ui', 'sans-serif'],
       },
       colors: {
         forest: '#3B5240',

@@ -9,7 +9,6 @@ import {
   SearchX,
 } from "lucide-react";
 import { SiteFooter } from "@/app/components/site-footer";
-import { MobileNavbar } from "@/app/components/shared/MobileNavbar";
 import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { FoodCard } from "@/app/components/shared/FoodCard";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";

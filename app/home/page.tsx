@@ -10,7 +10,7 @@ import { UrgentDealsSection } from "@/app/components/home/UrgentDealsSection";
 import { FlashSaleSection } from "@/app/components/home/FlashSaleSection";
 import { CategorySection } from "@/app/components/home/CategorySection";
 import { VendorSection } from "@/app/components/home/VendorSection";
-import { SiteFooter } from "@/app/components/shared/Footer";
+import { SiteFooter } from "@/app/components/site-footer";
 import { Reveal } from "@/app/components/shared/reveal";
 import { MagneticButton } from "@/app/components/shared/magnetic-button";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
