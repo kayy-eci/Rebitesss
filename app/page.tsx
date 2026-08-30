@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star, Quote } from "lucide-react";
@@ -80,7 +80,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Mang Teten",
     role: "Warung Mang Teten",
     quote:
-      "Dulu makanan yang tidak habis sering menjadi kebingungan. Kini saya dapat menawarkannya melalui ReBites — makanan tidak terbuang sia-sia sekaligus menambah pemasukan.",
+      "Dulu makanan yang tidak habis sering menjadi kebingungan. Kini saya dapat menawarkannya melalui ReBites sehingga makanan tidak terbuang sia-sia sekaligus menambah pemasukan.",
     rating: 5,
     initials: "SW",
     photo:
@@ -294,7 +294,7 @@ export default function Home() {
                   <span className="font-semibold text-caramel">ReBites</span>{" "}
                   adalah marketplace khusus bagi pelaku UMKM untuk menjual
                   makanan surplus yang masih layak konsumsi. Pangan yang
-                  berpotensi terbuang kembali bernilai — pelaku usaha
+                  berpotensi terbuang kembali bernilai - pelaku usaha
                   memperoleh pendapatan tambahan, pembeli menikmati makanan
                   berkualitas dengan harga yang lebih terjangkau.
                 </p>

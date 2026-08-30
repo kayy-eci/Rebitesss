@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -135,7 +135,7 @@ function OrderRow({
   const advanceLabel = order.fulfillment === 'delivery' ? 'Sedang Diantar' : 'Siap Diambil';
   const AdvanceIcon = order.fulfillment === 'delivery' ? Truck : PackageCheck;
 
-  // Legacy state-machine flow (orderStatus) — dipakai bila progressStatus belum ada
+  // Legacy state-machine flow (orderStatus) â€” dipakai bila progressStatus belum ada
   const orderStatus = order.orderStatus ?? 'processing';
   const actions = getValidActions(orderStatus, order.fulfillment);
   const hasStateMachineActions = actions.length > 0 && !order.progressStatus && isOngoing;
@@ -170,14 +170,14 @@ function OrderRow({
           <p className="text-sm font-bold text-charcoal-900">
             {order.productName}
             {order.quantity > 1 && (
-              <span className="font-medium text-sage-500"> × {order.quantity}</span>
+              <span className="font-medium text-sage-500"> Ã- {order.quantity}</span>
             )}
           </p>
           <StatusChip order={order} />
         </div>
         <p className="mt-1 truncate text-xs text-sage-500">
-          {order.orderId} ·{' '}
-          {order.fulfillment === 'delivery' ? 'Diantar' : 'Ambil sendiri'} ·{' '}
+          {order.orderId} Â·{' '}
+          {order.fulfillment === 'delivery' ? 'Diantar' : 'Ambil sendiri'} Â·{' '}
           {formatOrderDateTime(order.createdAt)}
         </p>
         {order.fulfillment === 'delivery' && order.addressSnapshot && (

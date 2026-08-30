@@ -1,4 +1,4 @@
-<p align="center">
+﻿<p align="center">
   <img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/e32b79bc-606a-40c5-ab7c-a4bc5c27831d" />
 </p>
 
@@ -13,7 +13,7 @@ ReBites aims to address food waste by giving surplus food a second opportunity t
 
 ---
 
-## 🎯 Problem
+## ðŸŽ¯ Problem
 
 Food waste remains a significant problem in Indonesia. A large amount of food is wasted throughout the food supply chain, including food from culinary businesses that remains unsold at the end of their operating hours.
 
@@ -28,7 +28,7 @@ ReBites was created as a digital solution to connect these two sides.
 
 ---
 
-## 💡 Solution
+## ðŸ’¡ Solution
 
 ReBites provides a dedicated marketplace where UMKM can list and sell surplus food within a specified selling period.
 
@@ -41,9 +41,9 @@ The system is designed around two main users:
 
 ---
 
-## ✨ Features
+## âœ¨ Features
 
-### 🛒 Buyer
+### ðŸ›’ Buyer
 
 * User registration and authentication
 * Browse and search surplus food
@@ -55,7 +55,7 @@ The system is designed around two main users:
 * Online payment
 * View order and transaction history
 
-### 🏪 UMKM
+### ðŸª UMKM
 
 * UMKM registration and authentication
 * Manage business profile
@@ -71,48 +71,48 @@ The system is designed around two main users:
 
 ---
 
-## 🧠 How ReBites Works
+## ðŸ§  How ReBites Works
 
 ```text
-                    ┌───────────────┐
-                    │     Buyer     │
-                    └───────┬───────┘
-                            │
+                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+                    â”‚     Buyer     â”‚
+                    â””â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
+                            â”‚
                      Browse & Order
-                            │
-                            ▼
-┌───────────────┐     ┌───────────────┐
-│     UMKM      │────▶│    ReBites    │
-│    Seller     │     │   Marketplace │
-└───────────────┘     └───────┬───────┘
-                              │
+                            â”‚
+                            â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚     UMKM      â”‚â”€â”€â”€â”€â–¶â”‚    ReBites    â”‚
+â”‚    Seller     â”‚     â”‚   Marketplace â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â””â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
+                              â”‚
                          Payment
-                              │
-                               ▼
-                        ┌─────────────┐
-                        │   Xendit    │
-                        └─────────────┘
+                              â”‚
+                               â–¼
+                        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+                        â”‚   Xendit    â”‚
+                        â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ### UMKM Flow
 
 ```text
 Register
-   ↓
+   â†“
 Login
-   ↓
+   â†“
 Trial / Subscription
-   ↓
+   â†“
 Complete Business Profile
-   ↓
+   â†“
 Add Surplus Food
-   ↓
+   â†“
 Set Price, Stock & Selling Period
-   ↓
+   â†“
 Receive Orders
-   ↓
+   â†“
 Process Orders
-   ↓
+   â†“
 Update Order Status
 ```
 
@@ -120,27 +120,27 @@ Update Order Status
 
 ```text
 Register
-   ↓
+   â†“
 Login
-   ↓
+   â†“
 Find Surplus Food
-   ↓
+   â†“
 View Product
-   ↓
+   â†“
 Choose Quantity
-   ↓
+   â†“
 Choose Address
-   ↓
+   â†“
 Choose Delivery / Pickup
-   ↓
+   â†“
 Payment
-   ↓
+   â†“
 Track Order
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## ðŸ› ï¸ Tech Stack
 
 | Category           | Technology     |
 | ------------------ | -------------- |
@@ -159,35 +159,35 @@ Track Order
 
 ---
 
-## 🏗️ System Architecture
+## ðŸ-ï¸ System Architecture
 
 ```text
-┌─────────────────────────────────────────┐
-│                 CLIENT                  │
-│            Next.js + React              │
-│          TypeScript + Tailwind          │
-└───────────────────┬─────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────┐
-│              APPLICATION                │
-│           Next.js Application           │
-│                                         │
-│  Authentication │ Business Logic │ API │
-└───────────┬─────────────────┬───────────┘
-            │                 │
-            ▼                 ▼
-┌───────────────────┐   ┌────────────────┐
-│     Supabase      │   │    Xendit      │
-│                   │   │                │
-│ Database          │   │ Payment        │
-│ Authentication    │   │ Processing     │
-└───────────────────┘   └────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                 CLIENT                  â”‚
+â”‚            Next.js + React              â”‚
+â”‚          TypeScript + Tailwind          â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                    â”‚
+                    â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              APPLICATION                â”‚
+â”‚           Next.js Application           â”‚
+â”‚                                         â”‚
+â”‚  Authentication â”‚ Business Logic â”‚ API â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+            â”‚                 â”‚
+            â–¼                 â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚     Supabase      â”‚   â”‚    Xendit      â”‚
+â”‚                   â”‚   â”‚                â”‚
+â”‚ Database          â”‚   â”‚ Payment        â”‚
+â”‚ Authentication    â”‚   â”‚ Processing     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## 👥 User Roles
+## ðŸ‘¥ User Roles
 
 ### UMKM
 
@@ -199,7 +199,7 @@ Uses the platform to discover and purchase surplus food at more affordable price
 
 ---
 
-## 🌱 Impact
+## ðŸŒ± Impact
 
 ReBites is designed to create value across three areas:
 
@@ -217,7 +217,7 @@ Provides consumers with access to affordable food while encouraging more efficie
 
 ---
 
-## 🔐 System Scope
+## ðŸ” System Scope
 
 ReBites currently focuses on:
 
@@ -232,7 +232,7 @@ The platform does not cover food production, raw-material procurement, or indepe
 
 ---
 
-## 🚧 Limitations
+## ðŸš§ Limitations
 
 * ReBites is currently available as a web application.
 * No dedicated Android or iOS application is provided.
@@ -243,7 +243,7 @@ The platform does not cover food production, raw-material procurement, or indepe
 
 ---
 
-## 👨‍💻 Team Sixquit
+## ðŸ‘¨â€ðŸ’» Team Sixquit
 
 Developed for **Web Dev OSCAR 3.0 2026**.
 
@@ -256,11 +256,11 @@ Developed for **Web Dev OSCAR 3.0 2026**.
 
 **School:** SMK Taruna Bhakti
 **Team:** Sixquit
-**Competition:** Web Dev OSCAR 3.0 — 2026
+**Competition:** Web Dev OSCAR 3.0 â€” 2026
 
 ---
 
-## 📌 Project Goals
+## ðŸ“Œ Project Goals
 
 ReBites aims to:
 
@@ -272,7 +272,7 @@ ReBites aims to:
 
 ---
 
-## 🚀 Getting Started
+## ðŸš€ Getting Started
 
 ### Prerequisites
 
@@ -321,7 +321,7 @@ http://localhost:3000
 
 ---
 
-## 🔑 Environment Variables
+## ðŸ”‘ Environment Variables
 
 Example (see `.env.example`):
 
@@ -330,7 +330,7 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 XENDIT_SECRET_KEY= # dari https://dashboard.xendit.co/settings/developers#api-keys
-XENDIT_CALLBACK_TOKEN= # dari Xendit Dashboard → Callbacks
+XENDIT_CALLBACK_TOKEN= # dari Xendit Dashboard â†’ Callbacks
 NEXT_PUBLIC_SITE_URL=https://rebites.vercel.app
 ```
 
@@ -338,7 +338,7 @@ NEXT_PUBLIC_SITE_URL=https://rebites.vercel.app
 
 ---
 
-## 🧪 Testing
+## ðŸ§ª Testing
 
 ReBites uses **Black Box Testing** to verify that system functionality works according to its expected inputs and outputs.
 
@@ -358,13 +358,13 @@ Testing covers the major functionality of:
 
 ---
 
-## 📖 Project Documentation
+## ðŸ“– Project Documentation
 
 The complete project proposal contains the system background, requirements analysis, development methodology, system design, features, technology stack, and system limitations.
 
 ---
 
-## 🌍 Vision
+## ðŸŒ Vision
 
 > **Turning surplus into value.**
 
@@ -374,7 +374,7 @@ By connecting UMKM and consumers through technology, ReBites aims to make surplu
 
 ---
 
-## 📄 License
+## ðŸ“„ License
 
 This project was developed for **Web Dev OSCAR 3.0 2026** as a competition project by Team Sixquit.
 

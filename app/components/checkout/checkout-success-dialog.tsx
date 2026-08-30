@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useRouter } from 'next/navigation';
 import {
@@ -72,7 +72,7 @@ export function CheckoutSuccessDialog() {
                 </p>
                 <p className="mt-0.5 text-xs text-charcoal-500">
                   {successOrder.vendorName} · {successOrder.quantity} porsi ·{' '}
-                  {PAYMENT_NAMES[successOrder.paymentMethodId] ?? '—'}
+                  {PAYMENT_NAMES[successOrder.paymentMethodId] ?? '-'}
                 </p>
               </div>
             </div>

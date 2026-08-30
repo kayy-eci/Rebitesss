@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient, getUserFromBearer } from '@/lib/server/supabase';
 
 export const runtime = 'nodejs';
@@ -7,10 +7,10 @@ export const runtime = 'nodejs';
  * CRUD alamat pengiriman user (tabel `addresses`).
  * Auth: Authorization: Bearer <supabase access_token>
  *
- * GET    /api/profile/addresses          — list alamat (created_at asc)
- * POST   /api/profile/addresses          — tambah alamat
- * PUT    /api/profile/addresses          — update alamat (body: { id, ...fields })
- * DELETE /api/profile/addresses?id=...   — hapus alamat milik sendiri
+ * GET    /api/profile/addresses          - list alamat (created_at asc)
+ * POST   /api/profile/addresses          - tambah alamat
+ * PUT    /api/profile/addresses          - update alamat (body: { id, ...fields })
+ * DELETE /api/profile/addresses?id=...   - hapus alamat milik sendiri
  *
  * Kolom sesuai skema DB: label, receiver_name, phone, province, city,
  * district, full_address, note, is_selected.

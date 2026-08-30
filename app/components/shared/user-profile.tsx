@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -256,19 +256,19 @@ function ProfileSidebar() {
           <InfoRow
             icon={Mail}
             label="Email"
-            value={email || "—"}
+            value={email || "-"}
             chip="bg-primary/10 text-primary"
           />
           <InfoRow
             icon={Phone}
             label="No. HP"
-            value={addressLoading ? "Memuat…" : selectedAddress?.phone || "—"}
+            value={addressLoading ? "Memuat…" : selectedAddress?.phone || "-"}
             chip="bg-sage-100 text-sage-600"
           />
           <InfoRow
             icon={Package}
             label="Tanggal Bergabung"
-            value={joinedAt || "—"}
+            value={joinedAt || "-"}
             chip="bg-gold-100 text-gold-600"
           />
         </ul>
@@ -990,7 +990,7 @@ export function UserProfile() {
     : selectedAddress?.city
       ? `${selectedAddress.city}, Indonesia`
       : "Depok, Indonesia";
-  const phoneLabel = addressLoading ? "Memuat…" : selectedAddress?.phone || "—";
+  const phoneLabel = addressLoading ? "Memuat…" : selectedAddress?.phone || "-";
 
   return (
     <div className="relative min-h-screen bg-[#F8F9FA] lg:bg-cream-50">
@@ -1099,7 +1099,7 @@ export function UserProfile() {
                   {displayName}
                 </h2>
                 <p className="mt-0.5 font-inter text-sm text-stone">
-                  {email || "—"}
+                  {email || "-"}
                 </p>
                 <p className="mt-1 flex items-center gap-1.5 font-inter text-xs text-stone">
                   <MapPin className="h-3.5 w-3.5 text-sage-500" />
@@ -1374,7 +1374,7 @@ export function UserProfile() {
               <div>
                 <p className="font-inter text-xs text-stone">Email Address</p>
                 <p className="mt-1 break-all font-inter text-sm font-semibold text-charcoal-900">
-                  {email || "—"}
+                  {email || "-"}
                 </p>
               </div>
               <div>
@@ -1382,7 +1382,7 @@ export function UserProfile() {
                   Tanggal Bergabung
                 </p>
                 <p className="mt-1 font-inter text-sm font-semibold text-charcoal-900">
-                  {joinedAt || "—"}
+                  {joinedAt || "-"}
                 </p>
               </div>
               <div>
@@ -1396,7 +1396,7 @@ export function UserProfile() {
                 <p className="mt-1 font-inter text-sm font-semibold leading-relaxed text-charcoal-900">
                   {addressLoading
                     ? "Memuat…"
-                    : selectedAddress?.fullAddress || "—"}
+                    : selectedAddress?.fullAddress || "-"}
                 </p>
                 {!addressLoading && selectedAddress?.city && (
                   <p className="mt-1 font-inter text-xs text-stone">

@@ -9,7 +9,7 @@ import { Reveal } from './reveal';
 const FAQS = [
   {
     q: 'Apa itu ReBites?',
-    a: 'ReBites adalah marketplace khusus penjualan makanan surplus yang masih layak konsumsi, yang mempertemukan pelaku UMKM dengan pembeli di Kota Depok. Makanan yang berpotensi menjadi food waste dijual dengan harga yang lebih terjangkau — mengurangi pemborosan pangan sekaligus menambah pendapatan UMKM.',
+    a: 'ReBites adalah marketplace khusus penjualan makanan surplus yang masih layak konsumsi, yang mempertemukan pelaku UMKM dengan pembeli di Kota Depok. Makanan yang berpotensi menjadi food waste dijual dengan harga yang lebih terjangkau, sehingga mengurangi pemborosan pangan sekaligus menambah pendapatan UMKM.',
   },
   {
     q: 'Bagaimana cara memesan makanan di ReBites?',
@@ -17,7 +17,7 @@ const FAQS = [
   },
   {
     q: 'Apakah makanan surplus aman dikonsumsi?',
-    a: 'Aman. Makanan yang dijual adalah makanan surplus yang masih memenuhi standar kelayakan konsumsi — biasanya kelebihan produksi atau belum habis pada akhir waktu operasional. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
+    a: 'Aman. Makanan yang dijual adalah makanan surplus yang masih memenuhi standar kelayakan konsumsi, biasanya kelebihan produksi atau belum habis pada akhir waktu operasional. Setiap penjual mencantumkan deskripsi dan jendela waktu pengambilan agar makanan dinikmati dalam kondisi terbaik.',
   },
   {
     q: 'Bagaimana cara UMKM mulai berjualan?',
@@ -87,7 +87,7 @@ export function FaqSection() {
         </div>
 
         <div className="mt-14 grid items-start gap-8 lg:grid-cols-[55fr_45fr] lg:items-stretch lg:gap-10">
-          {/* Left — contact form */}
+          {/* Left - contact form */}
           <Reveal delay={0.15} className="h-full">
             <div className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-border bg-white p-6 shadow-[0_10px_30px_-24px_rgba(27,77,50,0.3)] transition-all duration-300 hover:-translate-y-1 hover:border-caramel/40 hover:shadow-[0_30px_60px_-28px_rgba(27,77,50,0.35)] sm:p-8 lg:p-9">
               <div>
@@ -162,7 +162,7 @@ export function FaqSection() {
                       exit={{ opacity: 0 }}
                       className="font-sans text-sm font-medium text-forest"
                     >
-                      Terima kasih! Pesan Anda sudah terkirim — tim kami akan
+                      Terima kasih! Pesan Anda sudah terkirim. Tim kami akan
                       segera menghubungi Anda.
                     </motion.p>
                   )}
@@ -182,7 +182,7 @@ export function FaqSection() {
             </div>
           </Reveal>
 
-          {/* Right — FAQ card */}
+          {/* Right - FAQ card */}
           <Reveal delay={0.1} className="h-full">
             <div className="flex h-full flex-col sm:p-2">
               {/* Accordion bars */}

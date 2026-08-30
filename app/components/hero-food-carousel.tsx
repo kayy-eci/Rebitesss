@@ -190,7 +190,7 @@ function foodItemToPlate(food: FoodItem): PlateFood {
     rating: food.rating,
     reviewCount,
     stockLabel: food.stockLabel,
-    description: `${food.name} dari ${food.vendorName} — menu surplus berkualitas dengan harga yang lebih hemat.`,
+    description: `${food.name} dari ${food.vendorName} adalah menu surplus berkualitas dengan harga yang lebih hemat.`,
   };
 }
 

@@ -1,5 +1,5 @@
--- ============================================================================
--- 0019: Order State Machine — Pickup/Delivery Flow
+﻿-- ============================================================================
+-- 0019: Order State Machine - Pickup/Delivery Flow
 --
 -- - Expand order_status CHECK to support: paid, processing, ready_for_pickup,
 --   out_for_delivery, completed, cancelled
@@ -40,7 +40,7 @@ ALTER TABLE public.orders
   ));
 
 -- ============================================================================
--- 2. order_status_history — audit trail for every status change
+-- 2. order_status_history - audit trail for every status change
 -- ============================================================================
 
 CREATE TABLE IF NOT EXISTS public.order_status_history (
@@ -78,7 +78,7 @@ TO authenticated
 WITH CHECK (true);
 
 -- ============================================================================
--- 3. seller_transactions — balance / revenue tracking per seller
+-- 3. seller_transactions - balance / revenue tracking per seller
 -- ============================================================================
 
 CREATE TABLE IF NOT EXISTS public.seller_transactions (
@@ -214,7 +214,7 @@ ON CONFLICT DO NOTHING;
 
 -- ============================================================================
 -- 7. Backfill: set existing 'preparing' orders to 'processing' if they're
---    ongoing and paid — to align with new state machine
+--    ongoing and paid - to align with new state machine
 -- ============================================================================
 
 UPDATE public.orders

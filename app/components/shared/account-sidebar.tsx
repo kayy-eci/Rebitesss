@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect } from 'react';
 import Image from 'next/image';
@@ -131,7 +131,7 @@ export function AccountSidebar({
                   {displayName}
                 </p>
                 <p className="truncate font-inter text-sm text-stone">
-                  {user?.email || '—'}
+                  {user?.email || '-'}
                 </p>
               </div>
             </div>

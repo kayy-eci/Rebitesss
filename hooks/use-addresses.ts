@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -123,7 +123,7 @@ export function useAddresses() {
             body: JSON.stringify({ id, is_selected: true }),
           });
         } catch {
-          // Optimistic UI — biarkan state lokal yang dipakai
+          // Optimistic UI - biarkan state lokal yang dipakai
         }
       })();
     },

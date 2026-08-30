@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -147,7 +147,7 @@ export function ProductDetailModal({
                 >
                   <Image
                     src={product.images[imageIdx]}
-                    alt={`${product.title} — foto ${imageIdx + 1}`}
+                    alt={`${product.title} - foto ${imageIdx + 1}`}
                     fill
                     sizes="(max-width: 1024px) 100vw, 45vw"
                     priority

@@ -119,7 +119,7 @@ export function UrgentDealsSection({
                 Menu <span className="text-caramel">unggulan</span> hari ini
               </>
             }
-            subtitle="Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat — diperbarui setiap hari."
+            subtitle="Pilihan makanan surplus dengan rating terbaik dari UMKM terdekat yang diperbarui setiap hari."
           />
           <a
             href="/cari"

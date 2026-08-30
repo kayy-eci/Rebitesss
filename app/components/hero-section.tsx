@@ -333,7 +333,7 @@ export function HeroSection() {
 
             <p className="mt-8 max-w-2xl font-sans text-base leading-[1.85] text-muted-foreground sm:text-lg">
               ReBites menghubungkan Anda dengan makanan surplus berkualitas
-              dari pelaku UMKM Kota Depok — lebih hemat, tetap layak konsumsi,
+              dari pelaku UMKM Kota Depok - lebih hemat, tetap layak konsumsi,
               dan bebas food waste.
             </p>
 

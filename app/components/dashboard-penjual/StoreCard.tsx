@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import {
@@ -158,7 +158,7 @@ export function StoreCard() {
               </span>
               <div>
                 <p className="text-[10px] font-medium uppercase tracking-wider text-cream-50/50">Pemilik</p>
-                <p className="text-xs font-semibold text-cream-50">{displayedOwner || '—'}</p>
+                <p className="text-xs font-semibold text-cream-50">{displayedOwner || '-'}</p>
               </div>
             </div>
             <div className="flex items-center gap-2.5">

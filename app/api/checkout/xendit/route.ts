@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createAnonServerClient, createServiceClient, getSiteUrl, getUserFromBearer } from '@/lib/server/supabase';
 import { createXenditInvoice } from '@/lib/server/xendit';
 import { calculatePricing } from '@/lib/server/pricing';
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
     let vendorName = 'Toko';
     let vendorAddress: string | null = null;
     let vendorOpenHours: string | null = null;
-    // products tidak punya kolom vendor_slug — slug toko wajib diambil dari
+    // products tidak punya kolom vendor_slug - slug toko wajib diambil dari
     // umkm_profiles agar pesanan tercatat ke penjual yang tepat dan muncul
     // di dashboard "Pesanan Masuk" miliknya.
     let vendorSlug = (product as Record<string, unknown>).vendor_slug as string | undefined ?? '';
@@ -363,7 +363,7 @@ export async function POST(req: NextRequest) {
       console.error('[checkout/xendit] insert order error', insertErr.message);
 
       if (insertErr.message.includes('umkm_id') || insertErr.message.includes('product_id')) {
-        // Skema DB lama tanpa kolom umkm_id/product_id — coba ulang tanpa snapshot relasi.
+        // Skema DB lama tanpa kolom umkm_id/product_id - coba ulang tanpa snapshot relasi.
         // PENTING: stok TIDAK dilepas dulu di sini. Jika retry berhasil, stok yang
         // sudah dikunci reserve_stock tetap terpakai (mencegah oversell).
         const retry = { ...insertPayload };
@@ -376,7 +376,7 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ error: 'Gagal membuat pesanan (DB).' }, { status: 500 });
         }
       } else {
-        // Insert gagal total — kembalikan stok yang sudah dikunci agar tidak bocor.
+        // Insert gagal total - kembalikan stok yang sudah dikunci agar tidak bocor.
         await serviceClient.rpc('release_stock', { p_slug: body.productSlug, p_quantity: quantity });
         return NextResponse.json({ error: 'Gagal membuat pesanan.' }, { status: 500 });
       }

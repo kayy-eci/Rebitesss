@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -65,7 +65,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
             </div>
           )}
           <span className="text-sm font-bold text-charcoal-900">
-            {storeName || '—'}
+            {storeName || '-'}
           </span>
         </Link>
 

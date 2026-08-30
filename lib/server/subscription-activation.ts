@@ -1,12 +1,12 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+﻿import type { SupabaseClient } from '@supabase/supabase-js';
 import { computePeriodEnd, type BillingCycle } from '@/lib/subscription-plans';
 
 /**
- * Helper aktivasi langganan — server only.
+ * Helper aktivasi langganan - server only.
  *
  * Dipakai bersama oleh:
- * - Webhook Xendit (app/api/webhooks/xendit) — jalur utama.
- * - Endpoint verify (app/api/subscriptions/xendit/verify) — fallback saat
+ * - Webhook Xendit (app/api/webhooks/xendit) - jalur utama.
+ * - Endpoint verify (app/api/subscriptions/xendit/verify) - fallback saat
  *   webhook tidak terjangkau (mis. dev lokal / callback belum terpasang).
  *
  * Idempoten: subscription yang sudah active tidak diubah lagi.

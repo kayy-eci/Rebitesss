@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -237,7 +237,7 @@ export function OrderSuccessView() {
 
   const estimasiText = order.estimatedMinutes
     ? `${order.estimatedMinutes} menit`
-    : '—';
+    : '-';
   const jarakText = typeof order.distanceKm === 'number' ? `${order.distanceKm} km` : null;
   const prepText = typeof order.preparationMinutes === 'number' ? `${order.preparationMinutes} menit persiapan` : null;
 
@@ -324,7 +324,7 @@ export function OrderSuccessView() {
                 <dt className="font-display font-medium text-charcoal-900">Total</dt>
                 <dd className="font-display text-lg font-semibold tabular-nums text-primary">{formatRupiah(order.total)}</dd>
               </div>
-              <Row label="Metode pembayaran" value={PAYMENT_NAMES[order.paymentMethodId] ?? '—'} />
+              <Row label="Metode pembayaran" value={PAYMENT_NAMES[order.paymentMethodId] ?? '-'} />
               {order.estimatedMinutes && <Row label="Estimasi selesai" value={estimasiText} />}
               {jarakText && order.fulfillment === 'delivery' && <Row label="Jarak toko" value={jarakText} />}
             </dl>

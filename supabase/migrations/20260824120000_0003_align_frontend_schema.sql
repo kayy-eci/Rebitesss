@@ -1,4 +1,4 @@
--- ============================================================================
+﻿-- ============================================================================
 -- 0003: Align schema dengan data model frontend ReBites
 -- Sumber acuan: lib/types.ts, lib/data.ts, lib/product-storage.ts,
 --   lib/order-storage.ts, lib/notification-storage.ts, lib/review-storage.ts,
@@ -283,7 +283,7 @@ USING (EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.rol
 WITH CHECK (EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin'));
 
 -- ----------------------------------------------------------------------------
--- 10. RPC: reserve_stock — kurangi stok secara atomik (anti oversell)
+-- 10. RPC: reserve_stock - kurangi stok secara atomik (anti oversell)
 -- ----------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.reserve_stock(p_product_id uuid, p_quantity integer)
 RETURNS boolean

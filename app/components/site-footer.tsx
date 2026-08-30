@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -138,7 +138,7 @@ export function SiteFooter() {
 
       <div className="mx-auto max-w-7xl px-4 pb-10 pt-32 sm:px-6 lg:px-8 lg:pt-36">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr] lg:gap-8 lg:items-end">
-          {/* Brand — widest column */}
+          {/* Brand - widest column */}
           <div className="text-center sm:text-left">
             <Link href="/" className="inline-flex items-center gap-3">
               <Image
@@ -270,7 +270,7 @@ export function SiteFooter() {
         >
           <p className="text-center font-sans text-xs" style={{ color: SAGE }}>
             © {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
-            <span style={{ color: CREAM }}>Tim Sixquit</span> — SMK Taruna Bhakti.
+            <span style={{ color: CREAM }}>Tim Sixquit</span> - SMK Taruna Bhakti.
           </p>
         </div>
       </div>

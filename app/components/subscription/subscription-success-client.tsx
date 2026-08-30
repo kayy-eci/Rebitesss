@@ -33,7 +33,6 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
   );
   const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Saat langganan aktif → redirect otomatis ke dashboard toko
   useEffect(() => {
     if (status !== 'active') return;
     redirectTimer.current = setTimeout(() => {
@@ -50,7 +49,6 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
     let elapsed = 0;
     let interval: ReturnType<typeof setInterval>;
 
-    /** Fallback: baca status langsung dari DB (jalur lama via RLS) */
     const checkDb = async (): Promise<'active' | 'pending' | 'failed' | null> => {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user.id;
@@ -84,8 +82,6 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
     };
 
     const check = async () => {
-      // Jalur utama: server verify — cek invoice ke Xendit & aktivasi instan
-      // (fallback saat webhook Xendit tidak terjangkau, mis. dev lokal)
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData.session?.access_token;
@@ -115,10 +111,8 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
           }
         }
       } catch {
-        // Gagal jaringan — lanjut ke fallback DB
       }
 
-      // Fallback DB (webhook mungkin sudah mengaktifkan)
       const dbStatus = await checkDb();
       if (cancelled || !dbStatus) return;
       setStatus(dbStatus);

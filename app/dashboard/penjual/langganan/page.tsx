@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -92,7 +92,7 @@ export default function LanggananPenjualPage() {
                 Siklus Tagihan
               </dt>
               <dd className="mt-1 text-sm font-bold text-charcoal-900">
-                {subscription ? (subscription.billing === 'yearly' ? 'Tahunan' : 'Bulanan') : '—'}
+                {subscription ? (subscription.billing === 'yearly' ? 'Tahunan' : 'Bulanan') : '-'}
               </dd>
             </div>
             <div className="rounded-2xl bg-cream-50 p-4">
@@ -100,7 +100,7 @@ export default function LanggananPenjualPage() {
                 Mulai Berlangganan
               </dt>
               <dd className="mt-1 text-sm font-bold text-charcoal-900">
-                {subscription ? formatDate(subscription.startedAt) : '—'}
+                {subscription ? formatDate(subscription.startedAt) : '-'}
               </dd>
             </div>
             <div className="rounded-2xl bg-cream-50 p-4">

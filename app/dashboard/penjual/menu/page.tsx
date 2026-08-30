@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -499,7 +499,7 @@ function FlashSalePanel({
             </div>
           </div>
 
-          {/* Pilih Waktu Flash Sale: Pagi/Siang/Sore/Malam — produk akan tampil di slot ini di home */}
+          {/* Pilih Waktu Flash Sale: Pagi/Siang/Sore/Malam - produk akan tampil di slot ini di home */}
           <div className="rounded-xl bg-white p-2.5">
             <label className="block text-[10px] font-semibold uppercase tracking-wider text-charcoal-900">
               Waktu Flash Sale

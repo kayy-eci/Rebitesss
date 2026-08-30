@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useState } from "react";
 import Image from "next/image";
@@ -122,7 +122,7 @@ export function ProductGallery({
               >
                 <Image
                   src={product.images[index]}
-                  alt={`${product.title} — foto ${index + 1}`}
+                  alt={`${product.title} - foto ${index + 1}`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority={index === 0}

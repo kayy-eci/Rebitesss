@@ -226,7 +226,7 @@ export async function saveSellerProduct(
     const { getActiveSubscription } = await import('@/lib/subscription-storage');
     const sub = await getActiveSubscription();
     if (!sub) {
-      console.warn('[product-storage] belum berlangganan aktif — tolak tambah produk');
+      console.warn('[product-storage] belum berlangganan aktif - tolak tambah produk');
       return null;
     }
   } catch {}

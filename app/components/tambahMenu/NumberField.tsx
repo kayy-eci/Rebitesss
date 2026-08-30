@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -7,7 +7,7 @@ const inputCls =
   'w-full rounded-xl border border-sage-100 bg-white px-4 py-3 text-sm text-charcoal-900 placeholder:text-sage-500 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20';
 
 interface NumberFieldProps {
-  /** Nilai dari parent (number) — sinkronisasi dua arah. */
+  /** Nilai dari parent (number) - sinkronisasi dua arah. */
   value: number | undefined;
   /** Dipanggil saat nilai angka berubah (untuk submit / stepper). */
   onChange: (value: number) => void;

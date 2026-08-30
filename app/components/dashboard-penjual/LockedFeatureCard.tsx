@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { Lock, ShieldCheck } from 'lucide-react';
@@ -32,7 +32,7 @@ export function LockedFeatureCard({
           ? 'flex items-center gap-4 border-dashed border-sage-100 bg-cream-50/60'
           : 'border-dashed border-sage-100 bg-cream-50/60'
       }
-      aria-label={`${title} — butuh ${requiredPlanLabel}`}
+      aria-label={`${title} - butuh ${requiredPlanLabel}`}
     >
       <div className={compact ? 'shrink-0' : 'flex flex-col gap-3'}>
         <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-100 text-charcoal-500">
