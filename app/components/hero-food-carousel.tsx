@@ -328,13 +328,13 @@ export function HeroFoodCarousel() {
                   </span>
                 </div>
 
-                <div className="inline-flex translate-x-1.5 items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-primary shadow-[0_14px_28px_-18px_rgba(27,77,50,0.5)] sm:text-[11px]">
+                <div className="inline-flex translate-x-4 items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-primary shadow-[0_14px_28px_-18px_rgba(27,77,50,0.5)] sm:text-[11px]">
                   <ShieldCheck className="h-3.5 w-3.5 text-caramel" strokeWidth={2.2} />
                   Kualitas Terjamin
                 </div>
               </div>
 
-              <div className="absolute bottom-3 right-7 z-30 flex items-center gap-3 sm:bottom-4 sm:right-14">
+              <div className="absolute bottom-3 right-3 z-30 flex items-center gap-3 sm:bottom-4 sm:right-9">
                 <button
                   type="button"
                   aria-label="Makanan sebelumnya"

@@ -15,13 +15,13 @@ import FoldText from "@/app/components/FoldText";
 import RotatingText from "@/app/components/RotatingText";
 
 const NAV_LINKS = [
-  { href: "/#top", label: "Beranda" },
-  { href: "/#about", label: "Tentang" },
-  { href: "/#rekomendasi", label: "Rekomendasi" },
-  { href: "/#cara-kerja", label: "Cara Kerja" },
-  { href: "/#langganan", label: "Langganan" },
-  { href: "/#testimoni", label: "Testimoni" },
-  { href: "/#faq", label: "FAQ" },
+  { href: "/#top", label: "Beranda", target: "top" },
+  { href: "/#about", label: "Tentang", target: "about" },
+  { href: "/#rekomendasi", label: "Rekomendasi", target: "rekomendasi" },
+  { href: "/#cara-kerja", label: "Cara Kerja", target: "cara-kerja" },
+  { href: "/#langganan", label: "Langganan", target: "langganan" },
+  { href: "/#testimoni", label: "Testimoni", target: "testimoni" },
+  { href: "/#faq", label: "FAQ", target: "faq" },
 ];
 
 const FOCUS_RING =
@@ -69,13 +69,18 @@ export function HeroSection() {
       setOverDark(current?.dataset.nav === "green");
 
       let label = NAV_LINKS[0].label;
+      let labelTarget: HTMLElement | null = null;
       for (const link of NAV_LINKS) {
-        const hash = link.href.split("#")[1];
-        const el = hash ? document.getElementById(hash) : null;
+        const el = link.target
+          ? document.getElementById(link.target)
+          : null;
         if (!el) continue;
         const rect = el.getBoundingClientRect();
         if (rect.top <= probeY && rect.bottom > probeY) {
-          label = link.label;
+          if (!labelTarget || rect.top >= labelTarget.getBoundingClientRect().top) {
+            label = link.label;
+            labelTarget = el;
+          }
         }
       }
       setActiveNav(label);
@@ -96,46 +101,17 @@ export function HeroSection() {
   const scrollToSection = (
     e: React.MouseEvent<HTMLAnchorElement>,
     label: string,
-    href: string,
+    target: string,
   ) => {
     e.preventDefault();
     setActiveNav(label);
     setOpen(false);
-    const hash = href.split("#")[1];
-
-    // Mulai dari paling atas adalah halaman teratas.
-    if (hash === "top") {
-      const lenis = window.__lenis;
-      if (lenis) lenis.scrollTo(0, { duration: 1.1 });
-      else window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-
-    const target = hash ? document.getElementById(hash) : null;
-    if (!target) return;
-
-    // Tinggi navbar aktual (mengikuti ukuran viewport) sebagai garis judul.
-    const headerEl = document.querySelector("header");
-    const navBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 80;
-
-    // Judul section = heading pertama (h2/h3) di dalam section.
-    const heading =
-      target.querySelector<HTMLElement>("h1, h2, h3") ??
-      (target as HTMLElement);
-
-    // Posisi layout heading (bebas transform Reveal) untuk mendarat presisi.
-    let layoutTop = 0;
-    let node: HTMLElement | null = heading;
-    while (node) {
-      layoutTop += node.offsetTop;
-      node = node.offsetParent as HTMLElement | null;
-    }
-
-    const targetY = Math.max(0, layoutTop - navBottom);
+    const el = target ? document.getElementById(target) : null;
+    if (!el) return;
 
     const lenis = window.__lenis;
-    if (lenis) lenis.scrollTo(targetY, { duration: 1.1 });
-    else window.scrollTo({ top: targetY, behavior: "smooth" });
+    if (lenis) lenis.scrollTo(el, { offset: -88, duration: 1.1 });
+    else el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -189,7 +165,7 @@ export function HeroSection() {
                   <li key={link.label} className="relative">
                     <Link
                       href={link.href}
-                      onClick={(e) => scrollToSection(e, link.label, link.href)}
+                      onClick={(e) => scrollToSection(e, link.label, link.target)}
                       aria-current={
                         activeNav === link.label ? "page" : undefined
                       }
@@ -263,9 +239,7 @@ export function HeroSection() {
                       <li key={link.label}>
                         <Link
                           href={link.href}
-                          onClick={(e) =>
-                            scrollToSection(e, link.label, link.href)
-                          }
+                          onClick={(e) => scrollToSection(e, link.label, link.target)}
                           className={cn(
                             "flex items-center justify-between rounded-2xl px-4 py-3 font-inter text-sm transition-colors duration-300",
                             activeNav === link.label

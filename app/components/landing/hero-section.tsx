@@ -22,12 +22,12 @@ const FOODS = [
 ];
 
 const NAV_LINKS = [
-  { href: "/#top", label: "Beranda" },
-  { href: "/#rekomendasi", label: "Rekomendasi" },
-  { href: "/#about", label: "Tentang Kami" },
-  { href: "/#cara-kerja", label: "Cara Kerja" },
-  { href: "/#langganan", label: "Langganan" },
-  { href: "/#testimoni", label: "Testimoni" },
+  { href: "/#top", label: "Beranda", target: "top" },
+  { href: "/#rekomendasi", label: "Rekomendasi", target: "rekomendasi" },
+  { href: "/#about", label: "Tentang Kami", target: "about" },
+  { href: "/#cara-kerja", label: "Cara Kerja", target: "cara-kerja" },
+  { href: "/#langganan", label: "Langganan", target: "langganan" },
+  { href: "/#testimoni", label: "Testimoni", target: "testimoni" },
 ];
 
 const FOCUS_RING =
@@ -73,13 +73,16 @@ export function HeroSection() {
       setOverDark(current?.dataset.nav === "green");
 
       let label = NAV_LINKS[0].label;
+      let labelTarget: HTMLElement | null = null;
       for (const link of NAV_LINKS) {
-        const hash = link.href.split("#")[1];
-        const el = hash ? document.getElementById(hash) : null;
+        const el = link.target ? document.getElementById(link.target) : null;
         if (!el) continue;
         const rect = el.getBoundingClientRect();
         if (rect.top <= probeY && rect.bottom > probeY) {
-          label = link.label;
+          if (!labelTarget || rect.top >= labelTarget.getBoundingClientRect().top) {
+            label = link.label;
+            labelTarget = el;
+          }
         }
       }
       setActiveNav(label);
@@ -100,21 +103,17 @@ export function HeroSection() {
   const scrollToSection = (
     e: React.MouseEvent<HTMLAnchorElement>,
     label: string,
-    href: string,
+    target: string,
   ) => {
     e.preventDefault();
     setActiveNav(label);
     setOpen(false);
-    const hash = href.split("#")[1];
-    const target = hash ? document.getElementById(hash) : null;
-    if (!target) return;
+    const el = target ? document.getElementById(target) : null;
+    if (!el) return;
 
     const lenis = window.__lenis;
-    if (lenis) {
-      lenis.scrollTo(target, { offset: -88, duration: 1.1 });
-    } else {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (lenis) lenis.scrollTo(el, { offset: -88, duration: 1.1 });
+    else el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -163,7 +162,6 @@ export function HeroSection() {
                 <li key={link.label} className="relative">
                   <Link
                     href={link.href}
-                    onClick={(e) => scrollToSection(e, link.label, link.href)}
                     aria-current={activeNav === link.label ? "page" : undefined}
                     className={cn(
                       "relative py-1 font-inter text-sm transition-colors duration-300",
@@ -247,9 +245,7 @@ export function HeroSection() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        onClick={(e) =>
-                          scrollToSection(e, link.label, link.href)
-                        }
+                        onClick={() => setOpen(false)}
                         className={cn(
                           "flex items-center justify-between rounded-2xl px-4 py-3 font-inter text-sm transition-colors duration-300",
                           activeNav === link.label

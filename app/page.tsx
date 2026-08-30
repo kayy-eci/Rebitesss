@@ -12,7 +12,6 @@ import HowItWorks from "@/app/components/HowItWorks";
 import { HeroSection } from "@/app/components/hero-section";
 import { HeroFoodCarousel } from "@/app/components/hero-food-carousel";
 import { SmartImage } from "@/app/components/SmartImage";
-import CircularText from "@/app/components/ui/circular-text/CircularText";
 import { SubscriptionSection } from "@/app/components/subscription/subscription-section";
 import { FaqSection } from "@/app/components/faq-section";
 import { FlashSaleGrid } from "@/app/components/flash-sale-grid";
@@ -226,12 +225,6 @@ export default function Home() {
               aria-hidden
               className="pointer-events-none absolute inset-0 rounded-full border border-caramel/30"
             />
-            <CircularText
-              text="REBITES*REBITES*REBITES*"
-              spinDuration={20}
-              onHover="slowDown"
-              className="!h-28 !w-28 cursor-pointer"
-            />
             <span className="pointer-events-none absolute left-1/2 top-1/2 flex h-[4.5rem] w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border border-caramel/40 bg-primary shadow-[0_16px_32px_-16px_rgba(0,0,0,0.55)]">
               <Image
                 src="/logo.png"
@@ -394,9 +387,11 @@ export default function Home() {
         </div>
       </section>
 
-      <HeroFoodCarousel />
+      <div id="rekomendasi">
+        <HeroFoodCarousel />
 
-      <FlashSaleGrid />
+        <FlashSaleGrid />
+      </div>
 
       <HowItWorks />
 
