@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: 'Area mana saja yang sudah dilayani?',
-    a: 'Saat ini ReBites beroperasi khusus di Kota Depok sebagai langkah awal membangun ekosistem penyelamatan makanan berbasis komunitas sebelum meluas ke kota lain.',
+    a: 'Saat ini ReBites beroperasi khusus di Kota Depok sebagai langkah awal membangun ekosistem penyelamatan makanan sebelum meluas ke kota lain.',
   },
 ];
 

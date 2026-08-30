@@ -239,9 +239,13 @@ export default function Home() {
             <div>
               <Reveal delay={0.15}>
                 <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] font-light leading-[1.02] tracking-[-0.02em] text-primary-foreground">
-                  <RevealWords text="Bukan sekadar" />{" "}
-                  <RevealWords text="menyelamatkan" />{" "}
-                  <RevealWords text="makanan." />
+                  <span className="block whitespace-nowrap">
+                    <RevealWords text="Bukan sekadar" />
+                  </span>
+                  <span className="block whitespace-nowrap">
+                    <RevealWords text="menyelamatkan" />{" "}
+                    <RevealWords text="makanan." />
+                  </span>
                 </h2>
               </Reveal>
 
@@ -267,11 +271,14 @@ export default function Home() {
                       value: "29–47%",
                       unit: "populasi",
                       label: "Bisa diberi makan dari pangan terbuang",
+                      cream: true,
                     },
                     {
-                      value: "7,29%",
-                      unit: "emisi GRK",
-                      label: "Kontribusi pada emisi nasional",
+                      value: "Rp213–551",
+                      unit: "triliun per tahun",
+                      label:
+                        "Perkiraan kerugian ekonomi dari food waste",
+                      gold: true,
                     },
                   ].map((stat) => (
                     <div
@@ -279,7 +286,17 @@ export default function Home() {
                       className="border-t border-primary-foreground/15 pt-4"
                     >
                       <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-primary-foreground">
-                        {stat.value}
+                        <span
+                          className={
+                            stat.gold
+                              ? "text-gold"
+                              : stat.cream
+                                ? "text-cream"
+                                : undefined
+                          }
+                        >
+                          {stat.value}
+                        </span>
                       </p>
                       <p className="mt-1 font-sans text-xs font-medium uppercase tracking-wide text-primary-foreground/80">
                         {stat.unit}
@@ -358,7 +375,7 @@ export default function Home() {
                     Kota Depok
                   </span>{" "}
                   sebagai langkah awal menghadirkan ekosistem penyelamatan
-                  pangan berbasis komunitas, sebelum meluas ke kota lain.
+                  pangan, sebelum meluas ke kota lain.
                 </p>
               </Reveal>
             </div>

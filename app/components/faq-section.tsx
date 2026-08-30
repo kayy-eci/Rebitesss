@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Mail, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
+import { SmartImage } from "@/app/components/SmartImage";
 
 const FAQS = [
   {
@@ -34,7 +35,7 @@ const FAQS = [
 
   {
     q: "Area mana saja yang sudah dilayani ReBites?",
-    a: "Saat ini, ReBites beroperasi khusus di Kota Depok. Depok menjadi langkah awal untuk membangun ekosistem penyelamatan makanan berbasis komunitas sebelum ReBites berkembang ke wilayah lainnya.",
+    a: "Saat ini, ReBites beroperasi khusus di Kota Depok. Depok menjadi langkah awal untuk membangun ekosistem penyelamatan makanan sebelum ReBites berkembang ke wilayah lainnya.",
   },
 ];
 
@@ -85,7 +86,7 @@ export function FaqSection() {
             <h2 className="mt-6 font-display font-light leading-[1.05] tracking-[-0.02em] text-forest-dark [font-size:clamp(1.9rem,3.8vw,2.9rem)]">
               Pertanyaan yang Sering
             </h2>
-            <p className="mt-1 font-display italic leading-[1.05] text-primary [font-size:clamp(2.4rem,5vw,4rem)]">
+            <p className="mt-1 font-display italic leading-[1.05] text-caramel [font-size:clamp(2.4rem,5vw,4rem)]">
               Diajukan
             </p>
           </Reveal>
@@ -256,7 +257,7 @@ export function FaqSection() {
         {/* Signature */}
         <Reveal delay={0.15}>
           <div className="mt-16 text-center lg:mt-20">
-            <p className="font-script text-primary [font-size:clamp(2.2rem,4vw,3.2rem)]">
+            <p className="font-script text-caramel [font-size:clamp(2.2rem,4vw,3.2rem)]">
               dibuat dengan rasa
             </p>
             <p className="mt-3 font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">
