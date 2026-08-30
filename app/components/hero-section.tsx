@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState, useId } from "react";
 import Link from "next/link";
-import { ArrowRight, Star, User, Menu, X, MapPin } from "lucide-react";
+import { ArrowRight, User, Menu, X, MapPin } from "lucide-react";
 import {
   AnimatePresence,
   motion,
@@ -13,7 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import FoldText from "@/app/components/FoldText";
 import RotatingText from "@/app/components/RotatingText";
-import { DashedDivider } from "@/app/components/ornaments";
+import SpecularButton from "@/app/components/SpecularButton";
 
 const NAV_LINKS = [
   { href: "/#top", label: "Beranda" },
@@ -108,7 +108,7 @@ export function HeroSection() {
 
     const lenis = window.__lenis;
     if (lenis) {
-      lenis.scrollTo(target, { offset: -88, duration: 1.1 });
+      lenis.scrollTo(target, { offset: -104, duration: 1.1 });
     } else {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -124,7 +124,7 @@ export function HeroSection() {
                 "flex h-16 min-w-fit items-center justify-between px-5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] sm:px-6 lg:px-8",
                 scrolled
                   ? cn(
-                      "mx-auto w-full max-w-4xl rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(27,77,50,0.45)] backdrop-blur-xl sm:px-6 xl:max-w-5xl",
+                      "mx-auto w-full max-w-4xl rounded-full border px-6 shadow-[0_20px_44px_-26px_rgba(27,77,50,0.45)] backdrop-blur-xl sm:px-7 xl:max-w-5xl",
                       navIsDark
                         ? "border-white/15 bg-forest-dark/70 text-white"
                         : "border-hairline/70 bg-white/85 text-forest-dark",
@@ -162,12 +162,7 @@ export function HeroSection() {
                 </span>
               </Link>
 
-              <ul
-                className={cn(
-                  "hidden items-center gap-5 lg:flex",
-                  scrolled && "lg:gap-4",
-                )}
-              >
+              <ul className="hidden items-center gap-5 lg:flex">
                 {NAV_LINKS.map((link) => (
                   <li key={link.label} className="relative">
                     <Link
@@ -175,8 +170,7 @@ export function HeroSection() {
                       onClick={(e) => scrollToSection(e, link.label, link.href)}
                       aria-current={activeNav === link.label ? "page" : undefined}
                       className={cn(
-                        "relative py-1 font-inter transition-colors duration-300",
-                        scrolled ? "text-[13px] xl:text-sm" : "text-sm",
+                        "relative py-1 font-inter text-sm transition-colors duration-300",
                         activeNav === link.label
                           ? navIsDark
                             ? "font-semibold text-white"
@@ -280,23 +274,38 @@ export function HeroSection() {
 
       <section
         id="top"
-        className="relative flex min-h-[78vh] flex-col items-center justify-center overflow-hidden bg-cream px-4 pb-20 pt-32 sm:px-6 lg:min-h-[88vh] lg:px-8 lg:pt-36"
+        className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-cream px-4 pb-14 pt-24 sm:px-6 lg:px-8 lg:pt-24"
       >
         <HeroFoodBackdrop />
 
         <div className="relative w-full max-w-7xl">
-          <DashedDivider
-            className="mx-auto mb-8 max-w-[26rem] text-caramel"
-            tone="soft"
-          />
-
           <div className="mx-auto flex w-full max-w-6xl flex-col items-center text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-caramel/40 bg-caramel/10 px-5 py-2 font-sans text-xs font-bold uppercase tracking-[0.22em] text-caramel-dark sm:text-sm">
+            <SpecularButton
+              as="div"
+              size="sm"
+              radius={999}
+              tint="#ffffff"
+              tintOpacity={0.45}
+              blur={14}
+              textColor="#6F4529"
+              lineColor="#6E9077"
+              baseColor="#2F4235"
+              intensity={0.5}
+              shineSize={14}
+              shineFade={48}
+              thickness={1.1}
+              speed={0.42}
+              followMouse
+              proximity={320}
+              autoAnimate
+              className="specular-button--outer-green !cursor-default !px-8 !py-2.5 font-sans !text-sm font-semibold uppercase tracking-[0.18em]"
+              onClick={() => undefined}
+            >
               <MapPin className="h-4 w-4" />
               {t("Khusus Wilayah Kota Depok", "Only in Depok City")}
-            </span>
+            </SpecularButton>
 
-            <div className="mt-8 flex w-full flex-col items-center">
+            <div className="mt-6 flex w-full flex-col items-center">
               <FoldText
                 text="Ubah cara Anda menyelamatkan"
                 hinge="top"
@@ -331,13 +340,13 @@ export function HeroSection() {
               </div>
             </div>
 
-            <p className="mt-8 max-w-2xl font-sans text-base leading-[1.85] text-muted-foreground sm:text-lg">
+            <p className="mt-6 max-w-2xl font-sans text-base leading-[1.8] text-muted-foreground sm:text-lg">
               ReBites menghubungkan Anda dengan makanan surplus berkualitas
               dari pelaku UMKM Kota Depok — lebih hemat, tetap layak konsumsi,
               dan bebas food waste.
             </p>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
               <Link
                 href="/auth/register"
                 className={cn(
@@ -346,27 +355,10 @@ export function HeroSection() {
                 )}
               >
                 Mulai Sekarang
-                <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-forest-dark shadow-sm transition-all duration-300 group-hover:translate-x-1">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
               </Link>
-
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <div className="flex items-center gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber text-amber" />
-                    ))}
-                  </div>
-                  <span className="font-sans text-base font-bold text-forest-dark">
-                    5.0
-                  </span>
-                </div>
-                <p className="font-sans text-xs leading-tight text-muted-foreground">
-                  dari{" "}
-                  <span className="font-semibold text-forest-dark">500+</span>
-                  <br />
-                  ulasan pengguna
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -393,7 +385,7 @@ function HeroOrganicArt() {
         -translate-x-1/2
         overflow-visible
         text-forest
-        opacity-20
+        opacity-50
       "
     >
       <g
@@ -439,216 +431,212 @@ function HeroOrganicArt() {
           opacity="0.34"
         />
 
-        <path
-          d="
-            M 115 260
-            C 77 220, 30 225, 12 267
-            C 51 297, 94 292, 115 260Z
-          "
-          strokeWidth="2"
-          opacity="0.62"
-        />
+        {/* Hanging stems, each with 3 leaves hanging below the top thread */}
 
+        {/* Stem 1 */}
         <path
-          d="
-            M 19 268
-            C 48 266, 81 262, 112 260
-          "
-          strokeWidth="1.3"
-          opacity="0.48"
+          d="M 160 4 C 158 30, 161 62, 160 98"
+          strokeWidth="2.6"
+          opacity="0.6"
         />
-
-        <path
-          d="
-            M 175 243
-            C 184 195, 225 171, 260 196
-            C 258 239, 222 266, 175 243Z
-          "
-          strokeWidth="1.9"
-          opacity="0.56"
-        />
-
-        <path
-          d="
-            M 180 241
-            C 207 228, 234 211, 257 198
-          "
-          strokeWidth="1.2"
-          opacity="0.42"
-        />
-
-        <path
-          d="
-            M 325 210
-            C 289 178, 298 142, 336 133
-            C 362 162, 351 197, 325 210Z
-          "
-          strokeWidth="1.8"
-          opacity="0.50"
-        />
-
-        <path
-          d="
-            M 327 206
-            C 333 180, 336 154, 336 135
-          "
-          strokeWidth="1"
-          opacity="0.38"
-        />
-
         <ellipse
-          cx="590"
-          cy="330"
-          rx="88"
-          ry="43"
-          strokeWidth="2"
-          opacity="0.56"
-        />
-
-        <ellipse
-          cx="590"
-          cy="330"
-          rx="62"
+          cx="160"
+          cy="124"
+          rx="9"
           ry="27"
-          strokeWidth="1.2"
-          opacity="0.40"
-        />
-
-        <path
-          d="
-            M 535 330
-            C 551 304, 580 302, 595 321
-            C 611 299, 640 305, 655 330
-          "
-          strokeWidth="1.7"
-          opacity="0.50"
-        />
-
-        <path
-          d="
-            M 540 334
-            C 548 359, 570 370, 590 368
-            C 614 371, 638 358, 647 334
-          "
-          strokeWidth="1.3"
-          opacity="0.40"
-        />
-
-        <path
-          d="
-            M 580 317
-            C 565 294, 575 274, 598 270
-            C 616 288, 609 310, 580 317Z
-          "
-          strokeWidth="1.4"
-          opacity="0.44"
-        />
-
-        <path
-          d="
-            M 582 314
-            C 588 297, 593 282, 597 271
-          "
-          strokeWidth="1"
-          opacity="0.32"
-        />
-
-        <path
-          d="
-            M 760 352
-            C 726 321, 690 334, 694 371
-            C 700 410, 731 434, 760 443
-            C 790 432, 820 410, 826 371
-            C 831 334, 796 321, 760 352Z
-          "
-          strokeWidth="1.8"
-          opacity="0.48"
-        />
-
-        <path
-          d="
-            M 760 351
-            C 766 334, 783 324, 799 328
-          "
-          strokeWidth="1.2"
-          opacity="0.38"
-        />
-
-        <path
-          d="
-            M 880 220
-            C 864 180, 884 150, 920 150
-            C 942 181, 925 216, 880 220Z
-          "
-          strokeWidth="1.8"
-          opacity="0.46"
-        />
-
-        <path
-          d="
-            M 884 216
-            C 895 193, 909 169, 919 152
-          "
-          strokeWidth="1"
-          opacity="0.34"
-        />
-
-        <path
-          d="
-            M 1015 320
-            C 992 290, 996 258, 1020 236
-          "
+          transform="rotate(0 160 124)"
           strokeWidth="2"
-          opacity="0.48"
+          opacity="0.6"
         />
-
-        <path d="M 1020 236 L 1007 238" strokeWidth="1.4" opacity="0.42" />
-
-        <path d="M 1020 236 L 1018 249" strokeWidth="1.4" opacity="0.42" />
-
-        <path
-          d="
-            M 1020 236
-            C 1049 234, 1072 249, 1083 270
-          "
+        <ellipse
+          cx="143"
+          cy="108"
+          rx="8"
+          ry="22"
+          transform="rotate(-45 143 108)"
           strokeWidth="2"
-          opacity="0.48"
+          opacity="0.55"
         />
-
-        <path d="M 1083 270 L 1085 256" strokeWidth="1.4" opacity="0.42" />
-
-        <path d="M 1083 270 L 1069 268" strokeWidth="1.4" opacity="0.42" />
-
-        <path
-          d="
-            M 1083 270
-            C 1077 301, 1052 320, 1021 321
-          "
+        <ellipse
+          cx="177"
+          cy="108"
+          rx="8"
+          ry="22"
+          transform="rotate(45 177 108)"
           strokeWidth="2"
-          opacity="0.48"
+          opacity="0.5"
         />
 
-        <path d="M 1021 321 L 1033 315" strokeWidth="1.4" opacity="0.42" />
-
-        <path d="M 1021 321 L 1024 308" strokeWidth="1.4" opacity="0.42" />
-
-        <path d="M 1180 150 L 1180 320" strokeWidth="1.8" opacity="0.34" />
-
-        <path d="M 1170 150 L 1170 214" strokeWidth="1.2" opacity="0.30" />
-
-        <path d="M 1180 150 L 1180 214" strokeWidth="1.2" opacity="0.30" />
-
-        <path d="M 1190 150 L 1190 214" strokeWidth="1.2" opacity="0.30" />
-
+        {/* Stem 2 */}
         <path
-          d="
-            M 1170 215
-            C 1170 230, 1175 237, 1180 240
-            C 1185 237, 1190 230, 1190 215
-          "
-          strokeWidth="1.2"
-          opacity="0.30"
+          d="M 360 8 C 362 34, 359 66, 360 102"
+          strokeWidth="2.6"
+          opacity="0.6"
         />
+        <ellipse
+          cx="360"
+          cy="128"
+          rx="9"
+          ry="27"
+          transform="rotate(0 360 128)"
+          strokeWidth="2"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="343"
+          cy="112"
+          rx="8"
+          ry="22"
+          transform="rotate(-45 343 112)"
+          strokeWidth="2"
+          opacity="0.55"
+        />
+        <ellipse
+          cx="377"
+          cy="112"
+          rx="8"
+          ry="22"
+          transform="rotate(45 377 112)"
+          strokeWidth="2"
+          opacity="0.5"
+        />
+
+        {/* Stem 3 */}
+        <path
+          d="M 565 4 C 567 30, 564 60, 565 96"
+          strokeWidth="2.6"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="565"
+          cy="120"
+          rx="9"
+          ry="27"
+          transform="rotate(0 565 120)"
+          strokeWidth="2"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="548"
+          cy="105"
+          rx="8"
+          ry="22"
+          transform="rotate(-45 548 105)"
+          strokeWidth="2"
+          opacity="0.55"
+        />
+        <ellipse
+          cx="582"
+          cy="105"
+          rx="8"
+          ry="22"
+          transform="rotate(45 582 105)"
+          strokeWidth="2"
+          opacity="0.5"
+        />
+
+        {/* Stem 4 */}
+        <path
+          d="M 770 10 C 768 34, 771 62, 770 98"
+          strokeWidth="2.6"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="770"
+          cy="124"
+          rx="9"
+          ry="27"
+          transform="rotate(0 770 124)"
+          strokeWidth="2"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="753"
+          cy="108"
+          rx="8"
+          ry="22"
+          transform="rotate(-45 753 108)"
+          strokeWidth="2"
+          opacity="0.55"
+        />
+        <ellipse
+          cx="787"
+          cy="108"
+          rx="8"
+          ry="22"
+          transform="rotate(45 787 108)"
+          strokeWidth="2"
+          opacity="0.5"
+        />
+
+        {/* Stem 5 */}
+        <path
+          d="M 985 6 C 987 32, 984 62, 985 100"
+          strokeWidth="2.6"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="985"
+          cy="126"
+          rx="9"
+          ry="27"
+          transform="rotate(0 985 126)"
+          strokeWidth="2"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="968"
+          cy="110"
+          rx="8"
+          ry="22"
+          transform="rotate(-45 968 110)"
+          strokeWidth="2"
+          opacity="0.55"
+        />
+        <ellipse
+          cx="1002"
+          cy="110"
+          rx="8"
+          ry="22"
+          transform="rotate(45 1002 110)"
+          strokeWidth="2"
+          opacity="0.5"
+        />
+
+        {/* Stem 6 */}
+        <path
+          d="M 1200 10 C 1202 34, 1199 62, 1200 96"
+          strokeWidth="2.6"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="1200"
+          cy="120"
+          rx="9"
+          ry="27"
+          transform="rotate(0 1200 120)"
+          strokeWidth="2"
+          opacity="0.6"
+        />
+        <ellipse
+          cx="1183"
+          cy="105"
+          rx="8"
+          ry="22"
+          transform="rotate(-45 1183 105)"
+          strokeWidth="2"
+          opacity="0.55"
+        />
+        <ellipse
+          cx="1217"
+          cy="105"
+          rx="8"
+          ry="22"
+          transform="rotate(45 1217 105)"
+          strokeWidth="2"
+          opacity="0.5"
+        />
+
 
         <circle
           cx="255"
