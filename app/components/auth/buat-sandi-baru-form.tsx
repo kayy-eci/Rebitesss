@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
@@ -52,8 +52,8 @@ function FieldBox({
       >
         {label}
       </label>
-      <div className="group flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 transition-colors duration-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/15">
-        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground/55 transition-colors duration-200 group-focus-within:text-primary" />
+      <div className="group flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 transition-colors duration-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-[hsl(var(--primary))]/15">
+        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground/55 transition-colors duration-200 group-focus-within:text-[hsl(var(--primary))]" />
         {children}
         {trailing}
       </div>
@@ -132,7 +132,7 @@ export default function BuatSandiBaruForm() {
       <div className="flex h-full flex-col items-center justify-center gap-3 py-10 text-center">
         <span className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         <p className="font-sans text-[13px] text-muted-foreground">
-          Memverifikasi tautan resetâ€¦
+          Memverifikasi tautan reset…
         </p>
       </div>
     );
@@ -143,7 +143,7 @@ export default function BuatSandiBaruForm() {
       <motion.div variants={itemVariants} className="mb-3 flex-shrink-0">
         <Link
           href="/auth/login"
-          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
+          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-[hsl(var(--primary))]"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
           Kembali
@@ -161,7 +161,7 @@ export default function BuatSandiBaruForm() {
           height={28}
           className="h-7 w-7 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
         />
-        <span className="font-display text-lg font-semibold tracking-tight text-primary">
+        <span className="font-display text-lg font-semibold tracking-tight text-[hsl(var(--primary))]">
           ReBites
         </span>
       </motion.div>
@@ -169,17 +169,17 @@ export default function BuatSandiBaruForm() {
       {success ? (
         <motion.div
           variants={itemVariants}
-          className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-border bg-secondary px-6 py-8 text-center"
+          className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-border bg-[#FCFCF9] px-6 py-8 text-center"
         >
           <motion.span
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--primary))] text-white"
           >
             <CheckCircle2 className="h-6 w-6" />
           </motion.span>
-          <h1 className="mt-4 font-display text-[22px] font-bold tracking-[-0.02em] text-primary">
+          <h1 className="mt-4 font-display text-[22px] font-bold tracking-[-0.02em] text-[#14261E]">
             Kata Sandi Diperbarui
           </h1>
           <p className="mt-2 font-sans text-[13px] leading-relaxed text-muted-foreground">
@@ -198,7 +198,7 @@ export default function BuatSandiBaruForm() {
         <>
           <motion.h1
             variants={itemVariants}
-            className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-primary flex-shrink-0"
+            className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-[#14261E] flex-shrink-0"
           >
             Buat Kata
             <br />
@@ -228,7 +228,7 @@ export default function BuatSandiBaruForm() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
-                    className="shrink-0 rounded-sm p-0.5 text-muted-foreground/55 hover:text-primary"
+                    className="shrink-0 rounded-sm p-0.5 text-muted-foreground/55 hover:text-[hsl(var(--primary))]"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -239,10 +239,10 @@ export default function BuatSandiBaruForm() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-primary outline-none placeholder:text-muted-foreground"
+                  className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-[#1B3F2C] outline-none placeholder:text-muted-foreground"
                 />
               </FieldBox>
 
@@ -255,7 +255,7 @@ export default function BuatSandiBaruForm() {
                     type="button"
                     onClick={() => setShowConfirmPassword((v) => !v)}
                     aria-label={showConfirmPassword ? "Sembunyikan password" : "Tampilkan password"}
-                    className="shrink-0 rounded-sm p-0.5 text-muted-foreground/55 hover:text-primary"
+                    className="shrink-0 rounded-sm p-0.5 text-muted-foreground/55 hover:text-[hsl(var(--primary))]"
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -266,10 +266,10 @@ export default function BuatSandiBaruForm() {
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-primary outline-none placeholder:text-muted-foreground"
+                  className="w-full bg-transparent py-1 font-sans text-[14px] leading-none text-[#1B3F2C] outline-none placeholder:text-muted-foreground"
                 />
               </FieldBox>
 

@@ -119,7 +119,7 @@ export function UrgentDealsSection({
         <motion.span
           key={i}
           aria-hidden
-          className="pointer-events-none absolute text-white/50"
+          className="pointer-events-none absolute"
           style={pos}
           animate={{
             y: [0, -12, 0],
@@ -133,8 +133,8 @@ export function UrgentDealsSection({
             delay: i * 0.5,
           }}
         >
-          âœ¦
-        </motion.span>
+            <span className="block h-2.5 w-2.5 bg-white/50" style={{ clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)" }} />
+          </motion.span>
       ))}
 
       <div className="relative mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

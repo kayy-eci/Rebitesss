@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,7 +18,7 @@ function CallbackStatus({ failed }: { failed: boolean }) {
         <p className="font-sans text-sm text-muted-foreground">
           {failed
             ? "Verifikasi gagal. Silakan masuk kembali."
-            : "Memverifikasi email kamuâ€¦"}
+            : "Memverifikasi email kamu…"}
         </p>
       </div>
     </div>

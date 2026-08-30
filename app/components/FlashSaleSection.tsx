@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Heart, MapPin, Star } from "lucide-react";
+import { ArrowRight, Heart, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRupiah } from "@/lib/data";
 import { useCatalog } from "@/lib/catalog";
@@ -31,10 +31,10 @@ const SLOTS: {
   range: string;
   name: string;
 }[] = [
-  { key: "09-12", start: 9, end: 12, range: "09.00â€“12.00", name: "Pagi" },
-  { key: "12-15", start: 12, end: 15, range: "12.00â€“15.00", name: "Siang" },
-  { key: "15-18", start: 15, end: 18, range: "15.00â€“18.00", name: "Sore" },
-  { key: "18-21", start: 18, end: 21, range: "18.00â€“21.00", name: "Malam" },
+  { key: "09-12", start: 9, end: 12, range: "09.00–12.00", name: "Pagi" },
+  { key: "12-15", start: 12, end: 15, range: "12.00–15.00", name: "Siang" },
+  { key: "15-18", start: 15, end: 18, range: "15.00–18.00", name: "Sore" },
+  { key: "18-21", start: 18, end: 21, range: "18.00–21.00", name: "Malam" },
 ];
 
 function getWibParts() {
@@ -431,7 +431,7 @@ export function FlashSaleSection({
           <motion.span
             key={i}
             aria-hidden
-            className="pointer-events-none absolute text-white/60"
+            className="pointer-events-none absolute"
             style={pos}
             animate={{
               y: [0, -12, 0],
@@ -445,7 +445,7 @@ export function FlashSaleSection({
               delay: i * 0.5,
             }}
           >
-            âœ¦
+            <span className="block h-2.5 w-2.5 bg-white/60" style={{ clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)" }} />
           </motion.span>
         ))}
 
@@ -529,13 +529,13 @@ export function FlashSaleSection({
               href="/cari"
               className="hidden items-center gap-1.5 whitespace-nowrap font-sans text-sm font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex"
             >
-              Lihat Semua <span aria-hidden>â†’</span>
+              Lihat Semua <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </div>
         <div className="mt-3 flex justify-end sm:hidden">
           <a href="/cari" className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-white/90">
-            Lihat Semua <span aria-hidden>â†’</span>
+            Lihat Semua <ArrowRight className="h-4 w-4" />
           </a>
         </div>
 

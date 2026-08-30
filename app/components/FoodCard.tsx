@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Clock, Heart, MapPin, Star } from "lucide-react";
 import { formatRupiah } from "@/lib/data";
@@ -78,11 +78,11 @@ export function FoodCard({ item, onViewDetail }: { item: FoodItem; onViewDetail?
           </span>
           <span className="flex items-center gap-1">
             <Clock className="h-3.5 w-3.5 text-sage-500" />
-            {item.availableFrom}â€“{item.availableTo}
+            {item.availableFrom}–{item.availableTo}
           </span>
         </div>
 
-        <span className="mt-2.5 w-fit rounded-full bg-cream-100 px-3 py-1 text-[11px] font-medium text-charcoal-600">
+        <span className="mt-2.5 w-fit rounded-full bg-secondary-100 px-3 py-1 text-[11px] font-medium text-charcoal-600">
           {item.stockLabel}
         </span>
 

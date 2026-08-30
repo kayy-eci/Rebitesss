@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -54,8 +54,8 @@ function FieldBox({
       >
         {label}
       </label>
-      <div className="group flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 transition-colors duration-200 focus-within:border-primary focus-within:bg-white focus-within:ring-1 focus-within:ring-primary/15">
-        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground/55 transition-colors duration-200 group-focus-within:text-primary" />
+      <div className="group flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 transition-colors duration-200 focus-within:border-primary focus-within:bg-white focus-within:ring-1 focus-within:ring-[hsl(var(--primary))]/15">
+        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground/55 transition-colors duration-200 group-focus-within:text-[hsl(var(--primary))]" />
         {children}
         {trailing}
       </div>
@@ -76,7 +76,7 @@ function PasswordVisibilityButton({
       onClick={onToggle}
       aria-label={visible ? "Sembunyikan password" : "Tampilkan password"}
       aria-pressed={visible}
-      className="shrink-0 rounded-sm p-0.5 text-muted-foreground/55 transition-colors duration-200 hover:text-primary focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+      className="shrink-0 rounded-sm p-0.5 text-muted-foreground/55 transition-colors duration-200 hover:text-[hsl(var(--primary))] focus-visible:text-[hsl(var(--primary))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--primary))]/30"
     >
       {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
     </button>
@@ -84,7 +84,7 @@ function PasswordVisibilityButton({
 }
 
 function inputClass(additional?: string) {
-  return `w-full bg-transparent py-1 font-sans text-[14px] leading-none text-primary outline-none placeholder:text-muted-foreground ${additional ?? ""}`;
+  return `w-full bg-transparent py-1 font-sans text-[14px] leading-none text-[#1B3F2C] outline-none placeholder:text-muted-foreground ${additional ?? ""}`;
 }
 
 export default function PenjualLoginForm() {
@@ -199,7 +199,7 @@ export default function PenjualLoginForm() {
       <motion.div variants={itemVariants} className="mb-3 flex-shrink-0">
         <Link
           href="/auth/register/penjual"
-          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
+          className="group inline-flex items-center gap-1.5 rounded-full py-1 pr-2 font-sans text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-[hsl(var(--primary))]"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
           Kembali
@@ -217,14 +217,14 @@ export default function PenjualLoginForm() {
           height={28}
           className="h-7 w-7 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
         />
-        <span className="font-display text-lg font-semibold tracking-tight text-primary">
+        <span className="font-display text-lg font-semibold tracking-tight text-[hsl(var(--primary))]">
           ReBites
         </span>
       </motion.div>
 
       <motion.h1
         variants={itemVariants}
-        className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-primary flex-shrink-0"
+        className="font-display text-[22px] font-bold leading-[1.1] tracking-[-0.02em] text-[#14261E] flex-shrink-0"
       >
         Masuk sebagai Penjual
       </motion.h1>
@@ -281,7 +281,7 @@ export default function PenjualLoginForm() {
             id="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
-            placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className={inputClass()}
@@ -291,7 +291,7 @@ export default function PenjualLoginForm() {
         <div className="flex items-center justify-between">
           <Link
             href="/auth/forgotPassword"
-            className="font-sans text-[12px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-primary"
+            className="font-sans text-[12px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-[hsl(var(--primary))]"
           >
             Lupa password?
           </Link>
@@ -309,7 +309,7 @@ export default function PenjualLoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-1 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-1 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm transition-colors duration-200 hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--primary))] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? "Memverifikasi..." : "Masuk"}
         </button>
@@ -322,7 +322,7 @@ export default function PenjualLoginForm() {
         Belum punya toko?{" "}
         <Link
           href="/auth/register/penjual"
-          className="font-semibold text-primary underline underline-offset-4 transition-colors hover:text-primary"
+          className="font-semibold text-[hsl(var(--primary))] underline underline-offset-4 transition-colors hover:text-[#1B3F2C]"
         >
           Daftar sebagai penjual
         </Link>

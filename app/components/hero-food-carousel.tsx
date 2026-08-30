@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useMemo, useState, useRef, useId, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -20,7 +20,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan1.jpeg",
     merchant: "Warung Geprek Bu Ati",
     category: "Makanan Berat",
-    hours: "09.00â€“21.00",
+    hours: "09.00–21.00",
     price: 12000,
     originalPrice: 15000,
     badge: "Menu Favorit",
@@ -35,7 +35,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan2.jpeg",
     merchant: "Kampung Rasa",
     category: "Nasi Goreng",
-    hours: "10.00â€“21.00",
+    hours: "10.00–21.00",
     price: 15000,
     originalPrice: 18000,
     badge: "Menu Favorit",
@@ -50,7 +50,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan3.jpeg",
     merchant: "Soto Mie Mang Aji",
     category: "Soto Mie",
-    hours: "08.00â€“16.00",
+    hours: "08.00–16.00",
     price: 18000,
     originalPrice: 22000,
     badge: "Menu Favorit",
@@ -65,7 +65,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan4.jpeg",
     merchant: "Sate Pak Tigiset",
     category: "Sate Ayam",
-    hours: "15.00â€“22.00",
+    hours: "15.00–22.00",
     price: 20000,
     originalPrice: 25000,
     badge: "Menu Favorit",
@@ -80,7 +80,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan5.jpeg",
     merchant: "RM Padang Karindang",
     category: "Rendang",
-    hours: "10.00â€“21.00",
+    hours: "10.00–21.00",
     price: 25000,
     originalPrice: 30000,
     badge: "Menu Favorit",
@@ -95,7 +95,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan6.jpeg",
     merchant: "Pancong Lumer Depok",
     category: "Jajanan",
-    hours: "14.00â€“21.00",
+    hours: "14.00–21.00",
     price: 10000,
     originalPrice: 13000,
     badge: "Menu Favorit",
@@ -110,7 +110,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan7.jpg",
     merchant: "Martabak Gombret 45",
     category: "Martabak",
-    hours: "17.00â€“23.00",
+    hours: "17.00–23.00",
     price: 22000,
     originalPrice: 28000,
     badge: "Menu Favorit",
@@ -125,7 +125,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan8.webp",
     merchant: "Bakso Jono",
     category: "Bakso",
-    hours: "09.00â€“21.00",
+    hours: "09.00–21.00",
     price: 18000,
     originalPrice: 23000,
     badge: "Menu Favorit",
@@ -140,7 +140,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan9.webp",
     merchant: "Ketoprak Sedap",
     category: "Ketoprak",
-    hours: "08.00â€“17.00",
+    hours: "08.00–17.00",
     price: 13000,
     originalPrice: 16000,
     badge: "Menu Favorit",
@@ -155,7 +155,7 @@ const FOODS: FeaturedFood[] = [
     image: "/makanan10.webp",
     merchant: "Mie Ayam Balap 12",
     category: "Mie Ayam",
-    hours: "10.00â€“22.00",
+    hours: "10.00–22.00",
     price: 15000,
     originalPrice: 18000,
     badge: "Menu Favorit",
@@ -180,7 +180,7 @@ function foodItemToPlate(food: FoodItem): PlateFood {
     image: food.image,
     merchant: food.vendorName,
     category: food.category,
-    hours: `${food.availableFrom}â€“${food.availableTo}`,
+    hours: `${food.availableFrom}–${food.availableTo}`,
     price: food.discountedPrice,
     originalPrice: food.originalPrice,
     badge:
@@ -266,7 +266,7 @@ export function HeroFoodCarousel() {
     <section
       id="rekomendasi"
       data-nav="cream"
-      className="grain-overlay relative scroll-mt-28 overflow-hidden bg-cream pt-24 pb-20 lg:scroll-mt-32 lg:pt-36 lg:pb-28"
+      className="grain-overlay relative scroll-mt-28 overflow-hidden bg-secondary pt-24 pb-20 lg:scroll-mt-32 lg:pt-36 lg:pb-28"
     >
       <div className="relative z-10 mx-auto w-full max-w-[min(100vw,1600px)] px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-3xl text-center">
@@ -382,7 +382,7 @@ export function HeroFoodCarousel() {
 
                   <div
                     aria-hidden
-                    className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 rounded-full bg-sale px-4 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-[0_10px_20px_-10px_rgba(229,57,53,0.7)]"
+                    className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[#E53935] px-4 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-[0_10px_20px_-10px_rgba(229,57,53,0.7)]"
                   >
                     Flash Sale
                   </div>
