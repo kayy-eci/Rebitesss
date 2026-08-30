@@ -266,7 +266,7 @@ export function HeroFoodCarousel() {
     <section
       id="rekomendasi"
       data-nav="cream"
-      className="grain-overlay relative overflow-hidden bg-cream py-20 lg:py-28"
+      className="grain-overlay relative overflow-hidden bg-cream pt-24 pb-20 lg:pt-36 lg:pb-28"
     >
       <div className="relative z-10 mx-auto w-full max-w-[min(100vw,1600px)] px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-3xl text-center">
@@ -276,7 +276,7 @@ export function HeroFoodCarousel() {
               Rekomendasi Makanan
             </span>
           </div>
-          <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-primary">
+          <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] font-light leading-[1.05] tracking-[-0.02em] text-forest-dark">
             Pilihan terbaik untukmu hari ini
           </h2>
           <p className="mx-auto mt-4 max-w-xl font-sans text-sm leading-[1.8] text-muted-foreground sm:text-base">

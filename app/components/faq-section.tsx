@@ -77,7 +77,7 @@ export function FaqSection() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <h2 className="mt-6 font-sans font-bold leading-[1.05] tracking-[-0.02em] text-primary [font-size:clamp(1.9rem,3.8vw,2.9rem)]">
+            <h2 className="mt-6 font-display font-light leading-[1.05] tracking-[-0.02em] text-forest-dark [font-size:clamp(1.9rem,3.8vw,2.9rem)]">
               Pertanyaan yang Sering
             </h2>
             <p className="mt-1 font-display italic leading-[1.05] text-primary [font-size:clamp(2.4rem,5vw,4rem)]">

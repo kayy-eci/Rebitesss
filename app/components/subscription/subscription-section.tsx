@@ -15,7 +15,7 @@ export function SubscriptionSection() {
     <SectionShell id="langganan" dataNav="cream" tone="cream">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal delay={0.1}>
-          <h2 className="mt-6 font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-primary">
+          <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-light leading-[1.02] tracking-[-0.02em] text-forest-dark">
             Kembangkan usaha bersama <span className="text-caramel">ReBites.</span>
           </h2>
         </Reveal>

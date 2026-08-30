@@ -39,7 +39,7 @@ export default function HowItWorks() {
     >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal delay={0.05}>
-          <h2 className="text-center font-display text-[clamp(2rem,4vw,3.375rem)] font-medium leading-[1.1] tracking-[-0.01em] text-primary-foreground">
+          <h2 className="text-center font-display text-[clamp(2rem,4vw,3.375rem)] font-light leading-[1.1] tracking-[-0.01em] text-primary-foreground">
             Cara Kerja ReBites
           </h2>
         </Reveal>

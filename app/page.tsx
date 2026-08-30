@@ -210,7 +210,7 @@ export default function Home() {
       <section
         id="about"
         data-nav="green"
-        className="grain-overlay relative overflow-hidden bg-primary py-16 text-primary-foreground lg:py-20"
+        className="grain-overlay relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-primary py-14 text-primary-foreground lg:py-16"
       >
         <div
           aria-hidden
@@ -223,6 +223,17 @@ export default function Home() {
         />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal delay={0.05}>
+            <div className="mb-10 text-center lg:mb-14">
+              <h2 className="font-display text-[clamp(2.25rem,5vw,3.5rem)] font-light leading-[1.05] tracking-[-0.02em] text-primary-foreground">
+                Kenali <span className="italic text-caramel">ReBites</span>
+              </h2>
+              <p className="mt-2 font-display text-[clamp(1.25rem,2.2vw,1.75rem)] font-light italic tracking-[-0.01em] text-caramel/90">
+                lebih dalam
+              </p>
+            </div>
+          </Reveal>
+
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
             <div>
               <Reveal delay={0.15}>
@@ -234,12 +245,49 @@ export default function Home() {
               </Reveal>
 
               <Reveal delay={0.1}>
-                <div className="relative mt-7 aspect-[4/3] overflow-hidden rounded-3xl shadow-[0_20px_40px_-24px_rgba(0,0,0,0.55)]">
+                <div className="relative mt-6 h-[21rem] w-full max-w-[34rem] overflow-hidden rounded-3xl shadow-[0_20px_40px_-24px_rgba(0,0,0,0.55)]">
                   <SmartImage
                     src="https://images.pexels.com/photos/30684081/pexels-photo-30684081.jpeg?auto=compress&cs=tinysrgb&w=1200"
                     alt="Makanan terbuang yang seharusnya bisa diselamatkan dari food waste"
-                    sizes="(min-width: 1024px) 45vw, 100vw"
+                    sizes="(min-width: 1024px) 30vw, 100vw"
                   />
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.15}>
+                <div className="mt-8 grid w-full max-w-[34rem] grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3">
+                  {[
+                    {
+                      value: "23–48",
+                      unit: "juta ton",
+                      label: "Food loss & waste setiap tahun",
+                    },
+                    {
+                      value: "29–47%",
+                      unit: "populasi",
+                      label: "Bisa diberi makan dari pangan terbuang",
+                    },
+                    {
+                      value: "7,29%",
+                      unit: "emisi GRK",
+                      label: "Kontribusi pada emisi nasional",
+                    },
+                  ].map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="border-t border-primary-foreground/15 pt-4"
+                    >
+                      <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-none tracking-[-0.02em] text-caramel">
+                        {stat.value}
+                      </p>
+                      <p className="mt-1 font-sans text-xs font-medium uppercase tracking-wide text-primary-foreground/60">
+                        {stat.unit}
+                      </p>
+                      <p className="mt-2 font-sans text-xs leading-[1.6] text-primary-foreground/70">
+                        {stat.label}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </Reveal>
             </div>
@@ -314,77 +362,6 @@ export default function Home() {
               </Reveal>
             </div>
           </div>
-
-          <Reveal delay={0.1}>
-            <div className="relative mt-14 overflow-hidden rounded-3xl bg-primary px-6 py-10 text-cream shadow-[0_30px_60px_-30px_rgba(27,77,50,0.5)] sm:px-10 lg:mt-16 lg:px-14">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/[0.08] blur-3xl"
-              />
-
-              <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <div>
-                  <Reveal delay={0.15}>
-                    <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-caramel">
-                      Data Food Loss & Waste
-                    </span>
-                  </Reveal>
-
-                  <Reveal delay={0.2}>
-                    <h3 className="mt-3 font-display text-[clamp(1.5rem,2.6vw,2.2rem)] font-light leading-[1.1] tracking-[-0.02em]">
-                      Indonesia menghasilkan{" "}
-                      <span className="text-caramel">
-                        23–48 juta ton
-                      </span>{" "}
-                      food loss &amp; waste setiap tahun.
-                    </h3>
-                  </Reveal>
-                </div>
-
-                <Reveal delay={0.25}>
-                  <p className="max-w-xs font-sans text-sm leading-[1.8] text-cream/60">
-                    Sumber: Kajian Food Loss and Waste Indonesia 2000–2019,
-                    Kementerian PPN/ Badan Perencanaan Pembangunan Nasional
-                    (Bappenas).
-                  </p>
-                </Reveal>
-              </div>
-
-              <div className="relative mt-10 grid grid-cols-2 gap-x-6 gap-y-9 sm:mt-12 md:grid-cols-3">
-                {[
-                  {
-                    value: "23–48",
-                    unit: "juta ton",
-                    label: "Food loss & waste dihasilkan setiap tahun",
-                  },
-                  {
-                    value: "29–47%",
-                    unit: "populasi",
-                    label: "Dapat diberi makan dari pangan yang terbuang",
-                  },
-                  {
-                    value: "7,29%",
-                    unit: "emisi GRK",
-                    label: "Kontribusi pada emisi gas rumah kaca nasional",
-                  },
-                ].map((stat, i) => (
-                  <Reveal key={stat.label} delay={0.1 + i * 0.06}>
-                    <div className="border-t border-cream/10 pt-5">
-                      <p className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-light leading-none tracking-[-0.02em] text-white">
-                        {stat.value}{" "}
-                        <span className="font-sans text-base font-medium leading-none text-caramel">
-                          {stat.unit}
-                        </span>
-                      </p>
-                      <p className="mt-3 font-sans text-xs leading-[1.7] text-cream/60">
-                        {stat.label}
-                      </p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          </Reveal>
         </div>
       </section>
 
