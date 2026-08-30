@@ -8,8 +8,8 @@ export default function DiscountCoupoun() {
                       <div className="flex items-center justify-between gap-3 border-b border-white/15 pb-2.5 text-[0.75rem] tracking-[0.02em] text-primary-foreground/80">
                         <span>Kupon Diskon</span>
                         <div className="flex items-center gap-3.5 text-[0.7rem]">
-                          <button type="button" className="bg-transparent p-0 text-primary-foreground/80">â€¹ Sebelumnya</button>
-                          <button type="button" className="bg-transparent p-0 text-primary-foreground/80">Berikutnya â€º</button>
+                          <button type="button" className="bg-transparent p-0 text-primary-foreground/80"> Sebelumnya</button>
+                          <button type="button" className="bg-transparent p-0 text-primary-foreground/80">Berikutnya </button>
                         </div>
                       </div>
 

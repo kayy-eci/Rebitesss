@@ -33,7 +33,7 @@ export function OrderHeader({ onOpenMenu }: HeaderProps) {
           <Search className="pointer-events-none absolute left-4 h-4 w-4 text-charcoal-500" />
           <input
             type="search"
-            placeholder="Cari makanan surplus atau tokoâ€¦"
+            placeholder="Cari makanan surplus atau toko"
             className="h-11 w-full rounded-full border border-hairline bg-white pl-11 pr-4 text-sm text-charcoal-900 placeholder:text-charcoal-500/60 outline-none transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary"
           />
         </label>

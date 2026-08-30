@@ -303,7 +303,7 @@ export function SearchFilterBar({
                               />
                             </p>
                             <p className="mt-0.5 truncate font-inter text-[11px] text-charcoal-500">
-                              {item.stockLabel} Â· {item.distanceKm} km
+                              {item.stockLabel} · {item.distanceKm} km
                             </p>
                           </div>
 

@@ -67,16 +67,16 @@ function ReviewItem({ review }: { review: SellerReview }) {
           </p>
           <Stars rating={review.rating} />
           <span className="text-xs text-sage-500">
-            Â· {formatReviewDate(review.createdAt)}
+            · {formatReviewDate(review.createdAt)}
           </span>
         </div>
         <p className="mt-1 text-xs font-medium text-sage-500">
-          {review.menuName || "Menu"} Â·{" "}
+          {review.menuName || "Menu"} ·{" "}
           <span className="font-mono">#{review.orderCode}</span>
         </p>
         {review.comment ? (
           <p className="mt-2 break-words rounded-xl bg-cream-50 px-3 py-2 text-[13px] leading-relaxed text-charcoal-900">
-            â€œ{review.comment}â€
+            {review.comment}
           </p>
         ) : (
           <p className="mt-2 text-xs italic text-sage-400">Tanpa komentar</p>
@@ -106,7 +106,7 @@ export default function UlasanPage() {
     load();
     const onUpdate = () => load();
     window.addEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
-    // Polling â†’ ulasan dari pembeli lain juga terlihat tanpa reload
+    // Polling  ulasan dari pembeli lain juga terlihat tanpa reload
     const intervalId = setInterval(load, POLL_INTERVAL_MS);
     return () => {
       window.removeEventListener(REVIEWS_UPDATED_EVENT, onUpdate);
@@ -160,7 +160,7 @@ export default function UlasanPage() {
                       : "border border-sage-100 bg-white text-charcoal-500 hover:text-charcoal-900",
                   )}
                 >
-                  {f === "all" ? "Semua" : `${f}â˜…`}
+                  {f === "all" ? "Semua" : `${f}˜…`}
                 </button>
               ))}
             </div>

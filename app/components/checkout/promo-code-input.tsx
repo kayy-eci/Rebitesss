@@ -22,7 +22,7 @@ export function PromoCodeInput() {
           <div className="flex items-center gap-2">
             <BadgePercent className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-primary">
-              {promo.code} berlaku Â· diskon {promo.percentOff}%
+              {promo.code} berlaku · diskon {promo.percentOff}%
             </span>
           </div>
           <button

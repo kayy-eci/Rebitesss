@@ -151,7 +151,7 @@ export function StoreHeroCard({ vendor, openNow }: StoreHeroCardProps) {
                       <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
                       {vendor.rating.toFixed(1)}
                       <span className="font-normal text-charcoal-500">
-                        Â· {vendor.distanceKm} km dari kamu
+                        · {vendor.distanceKm} km dari kamu
                       </span>
                     </span>
                     <span className="flex items-center gap-1">

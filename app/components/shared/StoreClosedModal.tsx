@@ -91,7 +91,7 @@ export function StoreClosedModal({
             <p className="mt-3 text-sm leading-relaxed text-charcoal-500">
               Makanan ini belum tersedia saat ini. Kembali lagi{" "}
               <span className="font-semibold text-charcoal-900">
-                besok di jam {availableFrom}â€“{availableTo}
+                besok di jam {availableFrom} - {availableTo}
               </span>{" "}
               untuk menikmatinya.
             </p>

@@ -176,8 +176,8 @@ function OrderRow({
           <StatusChip order={order} />
         </div>
         <p className="mt-1 truncate text-xs text-sage-500">
-          {order.orderId} Â·{' '}
-          {order.fulfillment === 'delivery' ? 'Diantar' : 'Ambil sendiri'} Â·{' '}
+          {order.orderId} ·{' '}
+          {order.fulfillment === 'delivery' ? 'Diantar' : 'Ambil sendiri'} ·{' '}
           {formatOrderDateTime(order.createdAt)}
         </p>
         {order.fulfillment === 'delivery' && order.addressSnapshot && (

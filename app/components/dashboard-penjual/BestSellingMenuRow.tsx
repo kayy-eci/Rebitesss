@@ -131,10 +131,10 @@ export function BestSellingMenuRow() {
             <div
               key={menu.menuId}
               className="group relative flex flex-col items-center gap-1.5"
-              aria-label={`${menu.name} Â· ${menu.terjual} terjual`}
+              aria-label={`${menu.name} · ${menu.terjual} terjual`}
             >
               <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-charcoal-900 px-2 py-1 text-[11px] font-medium text-cream-50 opacity-0 shadow-sm transition-opacity group-hover:opacity-100">
-                {menu.name} Â· {menu.terjual} terjual
+                {menu.name} · {menu.terjual} terjual
               </span>
               <span className="relative block h-12 w-12 overflow-hidden rounded-2xl ring-2 ring-sage-100 transition-transform duration-150 group-hover:scale-105">
                 <SmartImage src={menu.image} alt={`Foto ${menu.name}`} />

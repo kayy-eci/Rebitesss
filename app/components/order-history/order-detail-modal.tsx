@@ -190,9 +190,9 @@ export function OrderDetailModal({
                   <p className="mt-0.5 text-xs text-charcoal-500">
                     Ã-{order.quantity}
                     {typeof order.unitPrice === 'number'
-                      ? ` Â· ${formatRupiah(order.unitPrice)} / porsi`
+                      ? ` · ${formatRupiah(order.unitPrice)} / porsi`
                       : ''}
-                    {' Â· '}
+                    {' · '}
                     Total sementara {formatRupiah(order.subtotal)}
                   </p>
                 </div>
@@ -395,7 +395,7 @@ function StatusStrip({
           {statusLabel}
           {remaining !== null && remaining > 0 && (
             <span className="text-charcoal-500">
-              Â·{' '}
+              ·{' '}
               {order.fulfillment === 'delivery'
                 ? `Perkiraan tiba dalam ${Math.max(1, Math.ceil(remaining / 60))} menit`
                 : `Siap diambil dalam ${Math.max(1, Math.ceil(remaining / 60))} menit`}
@@ -544,7 +544,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
                 Ke {order.addressSnapshot.label}
               </p>
               <p className="text-[13px] text-charcoal-900">
-                {order.addressSnapshot.receiverName} Â· {order.addressSnapshot.phone}
+                {order.addressSnapshot.receiverName} · {order.addressSnapshot.phone}
               </p>
               <p className="break-words text-xs text-charcoal-500">
                 {order.addressSnapshot.fullAddress}, {order.addressSnapshot.district},{' '}
@@ -557,7 +557,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
               )}
               {typeof order.distanceKm === 'number' && (
                 <p className="mt-1 inline-flex rounded-full bg-cream-100 px-2 py-0.5 text-[11px] font-semibold text-charcoal-900">
-                  Jarak {order.distanceKm.toLocaleString('id-ID')} km Â· estimasi{' '}
+                  Jarak {order.distanceKm.toLocaleString('id-ID')} km · estimasi{' '}
                   {order.estimatedMinutes ?? '-'} menit
                 </p>
               )}
@@ -568,7 +568,7 @@ function FulfillmentSection({ order }: { order: StoredOrder }) {
 
       {!isDelivery && typeof order.preparationMinutes === 'number' && (
         <p className="rounded-lg bg-cream-50 px-3 py-2 text-xs text-charcoal-500">
-          Estimasi siap diambil Â± {order.preparationMinutes} menit setelah pesanan dibuat.
+          Estimasi siap diambil ± {order.preparationMinutes} menit setelah pesanan dibuat.
         </p>
       )}
     </div>

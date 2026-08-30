@@ -195,7 +195,7 @@ export function ProductDetailModal({
                 {product.rating.toFixed(1)}
               </span>
               <span className="text-sm text-charcoal-500">
-                Â· {product.reviewCount} ulasan
+                · {product.reviewCount} ulasan
               </span>
             </div>
 

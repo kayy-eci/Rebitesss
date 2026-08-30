@@ -119,7 +119,7 @@ export function SalesActivityChartCard() {
               {value}
             </span>
             <span className="text-sm font-medium text-charcoal-900">
-              porsi terjual Â· {periodLabel}
+              porsi terjual · {periodLabel}
             </span>
           </div>
           <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-sage-500">

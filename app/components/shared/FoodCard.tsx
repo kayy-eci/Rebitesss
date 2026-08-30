@@ -122,7 +122,7 @@ export function FoodCard({
           </span>
           <span className="inline-flex items-center gap-1">
             <Clock className="h-3 w-3 text-sage-500 sm:h-3.5 sm:w-3.5" />
-            {item.availableFrom}â€“{item.availableTo}
+            {item.availableFrom} {item.availableTo}
           </span>
         </div>
 

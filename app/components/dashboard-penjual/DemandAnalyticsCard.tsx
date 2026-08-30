@@ -91,7 +91,7 @@ export function DemandAnalyticsCard() {
           <li key={insight.name}>
             <div className="flex items-baseline justify-between gap-2 text-xs">
               <span className="font-semibold text-charcoal-900">{insight.name}</span>
-              <span className="font-medium text-sage-500">Â±{insight.demand} porsi/minggu</span>
+              <span className="font-medium text-sage-500">±{insight.demand} porsi/minggu</span>
             </div>
             <div className="mt-1.5 flex items-center gap-2">
               <div className="h-2 flex-1 overflow-hidden rounded-full bg-cream-100">

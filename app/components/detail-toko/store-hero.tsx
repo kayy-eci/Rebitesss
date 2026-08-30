@@ -72,7 +72,7 @@ export function StoreHero() {
                       <Star className="h-3.5 w-3.5 fill-caramel text-caramel" />
                       {STORE.rating.toFixed(1)}
                       <span className="font-normal text-charcoal-500">
-                        Â· {STORE.reviewCount} ulasan
+                        · {STORE.reviewCount} ulasan
                       </span>
                     </span>
                     <span className="flex items-center gap-1">

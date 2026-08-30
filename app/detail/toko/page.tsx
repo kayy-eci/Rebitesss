@@ -76,7 +76,7 @@ function sellerProductToFoodItem(
 function isOpenNow(openHours: string): boolean {
   // Deprecated: gunakan isOpenNow dari lib/store-status untuk konsistensi
   const match = openHours.match(
-    /(\d{1,2})\.(\d{2})\s*[â€“-]\s*(\d{1,2})\.(\d{2})/,
+    /(\d{1,2})\.(\d{2})\s*[-]\s*(\d{1,2})\.(\d{2})/,
   );
   if (!match) return true;
 

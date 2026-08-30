@@ -140,7 +140,7 @@ export function SiteFooter() {
 
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-primary-foreground/15 pt-6 sm:mt-16 sm:flex-row sm:items-center sm:pt-8">
           <p className="font-sans text-xs text-primary-foreground/50">
-            Â© {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
+             {new Date().getFullYear()} ReBites. Dibuat oleh{' '}
             <span className="text-primary-foreground/80">Tim Sixquit</span> -
             SMK Taruna Bhakti.
           </p>

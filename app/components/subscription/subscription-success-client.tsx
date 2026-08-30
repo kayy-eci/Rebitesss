@@ -170,7 +170,7 @@ export function SubscriptionSuccessClient({ planSlug, billingParam, externalId }
             </p>
             <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-caramel-50 px-3 py-1 text-xs font-semibold text-caramel-700">
               <span className="h-2 w-2 animate-pulse rounded-full bg-caramel" />
-              Memverifikasiâ€¦
+              Memverifikasi
             </p>
             <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
               <Link href="/dashboard/penjual/langganan" className="inline-flex h-11 flex-1 items-center justify-center rounded-full border border-hairline px-5 text-sm font-semibold text-charcoal-700">

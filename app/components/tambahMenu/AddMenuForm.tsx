@@ -214,7 +214,7 @@ export function AddMenuForm() {
             Menu Berhasil Ditambahkan
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-sage-500">
-            â€œ{savedName}â€ telah masuk ke daftar menu tokomu dan siap dipesan pembeli.
+            {savedName} telah masuk ke daftar menu tokomu dan siap dipesan pembeli.
           </p>
           <div className="mt-6 grid gap-3">
             <Link
@@ -310,7 +310,7 @@ export function AddMenuForm() {
                       ))}
                     </select>
                     <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-sage-500">
-                      â–¼
+                      –¼
                     </span>
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export function AddMenuForm() {
                     rows={3}
                     value={form.description}
                     onChange={(event) => set('description', event.target.value)}
-                    placeholder="Contoh: Nasi uduk hangat dengan ayam suwir, telur balado, dan sambal khasâ€¦"
+                    placeholder="Contoh: Nasi uduk hangat dengan ayam suwir, telur balado, dan sambal khas"
                     className={cn(inputCls, 'resize-none')}
                   />
                 </div>
@@ -445,8 +445,8 @@ export function AddMenuForm() {
                 </button>
                 <p className="text-center text-[11px] text-sage-500">
                   {plan.maxProducts !== null
-                    ? `Kuota terpakai ${productCount}/${plan.maxProducts} produk Â· paket ${plan.label}`
-                    : `Kuota produk tanpa batas Â· paket ${plan.label}`}
+                    ? `Kuota terpakai ${productCount}/${plan.maxProducts} produk · paket ${plan.label}`
+                    : `Kuota produk tanpa batas · paket ${plan.label}`}
                 </p>
               </div>
             </div>

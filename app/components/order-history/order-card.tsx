@@ -93,7 +93,7 @@ export function OrderCard({
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 rounded-full bg-caramel/15 px-2 py-0.5 text-caramel-700">
-                  <Star className="h-3 w-3" /> Belum dinilai Â· Beri ulasan
+                  <Star className="h-3 w-3" /> Belum dinilai · Beri ulasan
                 </span>
               )}
             </p>

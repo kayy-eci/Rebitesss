@@ -42,7 +42,7 @@ function ReviewCard({ review }: { review: StoreReview }) {
         {review.menu}
       </span>
       <p className="mt-2.5 text-sm leading-relaxed text-charcoal-500">
-        â€œ{review.comment}â€
+        {review.comment}
       </p>
     </article>
   );

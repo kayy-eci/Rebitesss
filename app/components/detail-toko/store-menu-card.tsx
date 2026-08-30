@@ -47,7 +47,7 @@ export function StoreMenuCard({ menu }: { menu: StoreMenu }) {
 
         <p className="flex items-center gap-1 text-xs text-charcoal-500">
           <Clock className="h-3.5 w-3.5 text-primary" />
-          Tersedia {menu.availableFrom}â€“{menu.availableTo}
+          Tersedia {menu.availableFrom} {menu.availableTo}
         </p>
 
         <div className="mt-auto flex items-baseline gap-2 pt-1">

@@ -162,7 +162,7 @@ function SubscriptionContent({
                 <span className="font-display text-2xl font-bold text-primary">{formatRupiah(pPrice)}</span>
                 <span className="ml-1 text-xs text-muted-foreground">/ {billing === 'yearly' ? 'tahun' : 'bulan'}</span>
               </p>
-              <p className="mt-1 text-[11px] text-muted-foreground">+ Pajak 12% â†’ {formatRupiah(pTotal)}</p>
+              <p className="mt-1 text-[11px] text-muted-foreground">+ Pajak 12% {formatRupiah(pTotal)}</p>
               <ul className="mt-3 space-y-1.5">
                 {p.features.slice(0, 3).map((f) => (
                   <li key={f} className="flex gap-1.5 text-[12px] leading-snug text-primary">
@@ -187,7 +187,7 @@ function SubscriptionContent({
         <div className="rounded-2xl border border-border bg-white p-6 shadow-sm sm:p-7 lg:col-span-3">
           <h2 className="font-display text-[18px] font-semibold tracking-tight text-primary">Rincian Pembayaran</h2>
           <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-            ReBites {currentPlan.name} {billing === 'yearly' ? 'Tahunan' : 'Bulanan'} â€¢ berlaku s.d. {periodEndLabel}
+            ReBites {currentPlan.name} {billing === 'yearly' ? 'Tahunan' : 'Bulanan'}  berlaku s.d. {periodEndLabel}
           </p>
 
           {userEmail && (
@@ -252,7 +252,7 @@ function SubscriptionContent({
             {processing ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Memprosesâ€¦
+                Memproses
               </>
             ) : (
               `Bayar ${formatRupiah(total)} via Xendit`

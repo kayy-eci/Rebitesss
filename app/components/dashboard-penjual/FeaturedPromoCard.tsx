@@ -72,7 +72,7 @@ export function FeaturedPromoCard() {
                   {product.name}
                 </span>
                 <span className="block text-[11px] text-sage-500">
-                  {product.featured ? 'Unggulan Â· tampil paling atas' : 'Menu reguler'}
+                  {product.featured ? 'Unggulan · tampil paling atas' : 'Menu reguler'}
                 </span>
               </span>
               <Star
