@@ -154,13 +154,19 @@ export default function UlasanPage() {
                   type="button"
                   onClick={() => setFilter(f)}
                   className={cn(
-                    "rounded-full px-4 py-2 text-xs font-semibold transition-colors",
+                    "inline-flex items-center gap-1 rounded-full px-4 py-2 text-xs font-semibold transition-colors",
                     filter === f
                       ? "bg-primary text-white"
                       : "border border-sage-100 bg-white text-charcoal-500 hover:text-charcoal-900",
                   )}
                 >
-                  {f === "all" ? "Semua" : `${f}˜…`}
+                  {f === "all" ? (
+                    "Semua"
+                  ) : (
+                    <>
+                      {f} <Star className="h-3 w-3 fill-caramel text-caramel" />
+                    </>
+                  )}
                 </button>
               ))}
             </div>

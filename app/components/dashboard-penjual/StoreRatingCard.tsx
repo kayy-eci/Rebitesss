@@ -6,7 +6,6 @@ import { Card } from './Card';
 import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
 import { getSellerUmkm } from '@/lib/product-storage';
 import { supabase } from '@/lib/supabase';
-import { useCountUp } from './useCountUp';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
 import { REVIEWS_UPDATED_EVENT } from '@/lib/review-storage';
 
@@ -70,8 +69,6 @@ export function StoreRatingCard() {
 
   const loading = !hydrated || !reviewsLoaded;
 
-  const { ref, value } = useCountUp(average, 1200, 1);
-
   return (
     <Card>
       <div className="flex items-center justify-between gap-2">
@@ -93,7 +90,7 @@ export function StoreRatingCard() {
           <>
       <div className="flex items-center gap-4">
         <p className="font-display text-[38px] font-medium leading-none tracking-tight text-primary">
-          <span ref={ref}>{value.toFixed(1)}</span>
+          <span>{average.toFixed(1)}</span>
           <span className="ml-1 align-middle text-xs font-medium text-sage-500">/ 5.0</span>
         </p>
         <div>

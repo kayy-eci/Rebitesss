@@ -16,7 +16,6 @@ import { BarChart2, Download, LineChart as LineChartIcon, MoreVertical } from 'l
 import { cn } from '@/lib/utils';
 import { Card } from './Card';
 import { FilterDropdown } from './FilterDropdown';
-import { useCountUp } from './useCountUp';
 import { SalesEmptyState, CardLinesSkeleton } from './SalesEmptyState';
 import { useSellerOrders } from '@/hooks/use-seller-orders';
 import { formatRupiah } from '@/lib/data';
@@ -118,8 +117,9 @@ export function SalesStatsCard({
     [data]
   );
 
-  const porsiCount = useCountUp(totalTerjual);
-  const revenueCount = useCountUp(revenue);
+  // Langsung tampilkan angka tanpa animasi inView agar tidak stuck di 0 (bug countUp di screenshot)
+  const porsiCountValue = totalTerjual;
+  const revenueCountValue = revenue;
 
   return (
     <Card>
@@ -229,7 +229,7 @@ export function SalesStatsCard({
                 Pendapatan
               </p>
               <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-primary">
-                <span ref={revenueCount.ref}>{formatRupiah(revenueCount.value)}</span>
+                <span>{formatRupiah(revenueCountValue)}</span>
               </p>
             </div>
             <div className="rounded-2xl bg-cream-50 p-4">
@@ -237,7 +237,7 @@ export function SalesStatsCard({
                 Porsi Terjual
               </p>
               <p className="mt-1.5 truncate font-display text-[28px] font-medium leading-none tracking-tight text-primary">
-                <span ref={porsiCount.ref}>{porsiCount.value}</span>{' '}
+                <span>{porsiCountValue}</span>{' '}
                 <span className="text-sm font-medium text-charcoal-500">porsi</span>
               </p>
             </div>
