@@ -258,7 +258,7 @@ export function OrderSuccessView() {
           className="w-full max-w-md overflow-hidden rounded-[28px] border border-sage-100 bg-white shadow-[0_40px_80px_-30px_rgba(47,66,53,0.25)]"
         >
           {}
-          <div className="bg-sage-50 px-5 pb-10 pt-9 text-center sm:px-8">
+          <div className="bg-sage-50 px-5 pb-8 pt-9 text-center sm:px-8">
             <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-sage-400 shadow">
               <ReceiptText className="h-8 w-8" />
             </span>
@@ -271,7 +271,7 @@ export function OrderSuccessView() {
             )}
           </div>
 
-          <div className="-mt-5 px-6">
+          <div className="relative z-10 -mt-3 px-6">
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
@@ -366,7 +366,7 @@ export function OrderSuccessView() {
               </p>
             </div>
           ) : (
-            <div className="relative overflow-hidden bg-primary px-5 pb-10 pt-9 text-center text-white sm:px-8">
+            <div className="relative overflow-hidden bg-primary px-5 pb-8 pt-9 text-center text-white sm:px-8">
               <motion.span
                 initial={{ scale: 0, rotate: -30 }}
                 animate={{ scale: 1, rotate: 0 }}
@@ -392,7 +392,7 @@ export function OrderSuccessView() {
 
           {}
           {!isFailed && (
-            <div className="px-6 -mt-5">
+            <div className="relative z-10 -mt-3 px-6">
               <div className="flex items-center gap-3 rounded-2xl border border-caramel/40 bg-caramel/15 px-4 py-3.5 shadow-md shadow-caramel/10">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow">
                   <Coins className="h-5 w-5" />

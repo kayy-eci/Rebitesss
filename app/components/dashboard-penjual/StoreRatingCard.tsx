@@ -13,7 +13,7 @@ import { REVIEWS_UPDATED_EVENT } from '@/lib/review-storage';
 const POLL_INTERVAL_MS = 20_000; // 20 detik
 
 export function StoreRatingCard() {
-  const { hasOrders, hydrated } = useSellerOrders();
+  const { hydrated } = useSellerOrders();
   const [reviewsLoaded, setReviewsLoaded] = useState(false);
   const [ratings, setRatings] = useState<number[]>([]);
 
@@ -84,7 +84,7 @@ export function StoreRatingCard() {
       <div className="mt-4">
         {loading ? (
           <CardLinesSkeleton />
-        ) : !hasOrders || reviews.length === 0 ? (
+        ) : reviews.length === 0 ? (
           <SalesEmptyState
             title="Belum ada rating"
             description="Rating dan ulasan pembeli akan muncul setelah ada pesanan yang diselesaikan di tokomu."
