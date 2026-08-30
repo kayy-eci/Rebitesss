@@ -191,11 +191,11 @@ export function ProfileNavbar({
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 px-3 pt-2 sm:px-8 sm:pt-3 lg:px-5 lg:pt-4">
+      <header className="hidden fixed inset-x-0 top-0 z-50 px-5 pt-3 sm:px-8 sm:pt-4 lg:block lg:px-5 lg:pt-4">
         <div className="mx-auto w-full max-w-[1400px]">
           <nav
             className={cn(
-              "flex h-12 min-w-fit items-center justify-between rounded-full border px-3 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 sm:h-14 sm:px-5 sm:pt-0 lg:h-16 lg:px-6",
+              "flex min-w-fit items-center justify-between rounded-full border px-5 shadow-[0_20px_44px_-26px_rgba(47,66,53,0.45)] backdrop-blur-xl transition-colors duration-500 lg:h-16 lg:px-6",
               overDark
                 ? "border-white/15 bg-primary/75 text-white"
                 : "border-hairline/70 bg-cream/80 text-primary",
@@ -213,11 +213,11 @@ export function ProfileNavbar({
                 alt="ReBites"
                 width={36}
                 height={36}
-                className="h-7 w-7 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5 sm:h-8 sm:w-8 lg:h-9 lg:w-9"
+                className="h-9 w-9 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5"
               />
               <span
                 className={cn(
-                  "font-sans text-base font-bold tracking-tight transition-colors duration-500 sm:text-lg lg:text-xl",
+                  "font-sans text-xl font-bold tracking-tight transition-colors duration-500",
                   overDark ? "text-white" : "text-primary",
                 )}
               >
@@ -255,7 +255,7 @@ export function ProfileNavbar({
 
             <div className="flex items-center gap-0.5 sm:gap-1 lg:gap-0.5">
               {showLocationDropdown && (
-                <div className="relative hidden lg:block">
+                <div className="relative">
                   <button
                     type="button"
                     aria-label="Pilih lokasi"
@@ -328,7 +328,7 @@ export function ProfileNavbar({
                 </div>
               )}
 
-              <div className="hidden items-center gap-2 lg:flex">
+              <div className="flex items-center gap-2">
                 <IconButton
                   label="Notifikasi"
                   onClick={() => {
@@ -364,7 +364,7 @@ export function ProfileNavbar({
                 aria-expanded={drawerOpen}
                 onClick={() => setDrawerOpen((v) => !v)}
                 className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
+                  "hidden h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 lg:hidden",
                   overDark ? "text-white" : "text-primary",
                   FOCUS_RING,
                 )}

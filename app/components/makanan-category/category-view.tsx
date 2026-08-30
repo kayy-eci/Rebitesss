@@ -9,6 +9,7 @@ import {
   SearchX,
 } from "lucide-react";
 import { SiteFooter } from "@/app/components/shared/Footer";
+import { MobileNavbar } from "@/app/components/shared/MobileNavbar";
 import { MobileBottomNav } from "@/app/components/shared/MobileBottomNav";
 import { FoodCard } from "@/app/components/shared/FoodCard";
 import { ProductDetailModal } from "@/app/components/shared/ProductDetailModalLazy";
@@ -178,7 +179,7 @@ export default function CategoryView({
         </section>
 
         {}
-        <section className="mx-auto max-w-7xl px-4 pb-24 pt-6 sm:px-6 sm:pt-8 lg:px-8">
+        <section className="mx-auto max-w-7xl px-4 pb-24 pt-4 sm:px-6 sm:pt-8 lg:px-8">
           {isLoading ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 sm:gap-5 xl:grid-cols-4">
               {Array.from({ length: 8 }).map((_, index) => (
@@ -205,7 +206,7 @@ export default function CategoryView({
                 Coba pilih kategori lain atau cek kembali beberapa saat lagi.
               </p>
               <Link
-                href="/cari"
+                href="/toko"
                 className={cn(
                   "mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98]",
                   FOCUS_RING,

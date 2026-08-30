@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { ProfileSidebarNav } from '@/app/components/shared/profile-sidebar-nav';
+import { MobileNavbar } from '@/app/components/shared/MobileNavbar';
 import { MobileBottomNav } from '@/app/components/shared/MobileBottomNav';
 
 export function RiwayatSidebarShell({ children }: { children: React.ReactNode }) {
@@ -10,7 +11,10 @@ export function RiwayatSidebarShell({ children }: { children: React.ReactNode })
 
   return (
     <div className="relative min-h-screen bg-[#F8F9FA] lg:bg-cream-50">
-      <ProfileSidebarNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="lg:hidden"><MobileNavbar /></div>
+      <div className="hidden lg:block">
+        <ProfileSidebarNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      </div>
 
       <div className="lg:pl-[280px]">
         <MobileBottomNav />
@@ -27,7 +31,7 @@ export function RiwayatSidebarShell({ children }: { children: React.ReactNode })
           <span className="font-display text-base font-semibold text-primary">Riwayat Transaksi</span>
         </div>
 
-        <main className="mx-auto max-w-[1100px] px-4 pb-24 pt-4 sm:pb-20 sm:pt-6 lg:px-8 lg:pt-8">
+        <main className="mx-auto max-w-[1100px] px-4 pb-24 pt-[120px] sm:pb-20 sm:pt-6 lg:px-8 lg:pt-8">
           {}
           <div className="hidden lg:block">
             <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">Riwayat Transaksi</h1>

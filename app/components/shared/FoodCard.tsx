@@ -62,28 +62,26 @@ export function FoodCard({
           handleOpen();
         }
       }}
-      className="group flex cursor-pointer overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50 sm:h-full sm:flex-col sm:hover:-translate-y-1"
+      className="group flex cursor-pointer overflow-hidden rounded-2xl border border-zinc-200 bg-white outline-none transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-lg hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50 sm:flex-col sm:h-full sm:hover:-translate-y-1"
     >
-      {/* Mobile: horizontal layout | Desktop: vertical layout */}
-      <div className="relative h-24 w-24 shrink-0 overflow-hidden bg-sage-100 sm:h-auto sm:w-auto sm:block sm:aspect-[4/3]">
+      {/* Image: fixed 96x96 di mobile (horizontal), aspect 4/3 di desktop (vertical) */}
+      <div className="relative h-28 w-28 shrink-0 overflow-hidden bg-sage-100 sm:h-auto sm:w-full sm:aspect-[4/3]">
         <SmartImage
           src={item.image}
           alt={`Foto ${item.name} dari ${item.vendorName}`}
-          sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 96px"
+          sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 112px"
           className={cn(
             "transition-transform duration-500 group-hover:scale-105",
             isUnavailable && "grayscale-[40%]",
           )}
         />
-        {/* Overlay tidak tersedia (stok habis / di luar jam jual) */}
         {isUnavailable && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/40">
-            <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-charcoal-900 shadow-lg sm:text-xs">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/40 p-2 text-center">
+            <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold leading-none text-charcoal-900 shadow-lg sm:px-3 sm:py-1 sm:text-xs">
               {item.stockLabel === "Habis" ? "Stok Habis" : "Tidak Tersedia"}
             </span>
           </div>
         )}
-        {/* Badge - top left - reference style */}
         {item.discountPercent > 0 && (
           <div className="absolute left-2 top-2 z-20 rounded-full bg-[#E53935] px-2 py-0.5 text-[10px] font-bold leading-none text-white shadow-md sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[11px]">
             Hemat {item.discountPercent}%
@@ -108,46 +106,51 @@ export function FoodCard({
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
-        <h3 className="line-clamp-1 font-sans text-[13px] font-bold leading-snug text-charcoal-900 sm:text-[15px]">
+        <h3 className="line-clamp-1 font-sans text-[13px] font-bold leading-snug text-charcoal-900 sm:text-[15px] sm:line-clamp-2">
           {item.name}
         </h3>
         <p className="mt-0.5 line-clamp-1 font-sans text-[11px] text-charcoal-500 sm:text-[13px]">{item.vendorName}</p>
 
-        <div className="mt-1.5 flex items-center gap-2 text-[11px] text-charcoal-500 sm:mt-2 sm:gap-3 sm:text-xs">
-          <span className="flex items-center gap-1 font-medium text-charcoal-900">
+        <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-charcoal-500 sm:mt-2 sm:gap-2 sm:text-xs">
+          <span className="inline-flex items-center gap-1 font-medium text-charcoal-900">
             <Star className="h-3 w-3 fill-amber text-amber sm:h-3.5 sm:w-3.5" />
             {item.rating.toFixed(1)}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="inline-flex items-center gap-1">
             <MapPin className="h-3 w-3 text-sage-500 sm:h-3.5 sm:w-3.5" />
             {item.distanceKm} km
           </span>
-          <span className="hidden items-center gap-1 sm:flex">
-            <Clock className="h-3.5 w-3.5 text-sage-500" />
+          <span className="inline-flex items-center gap-1">
+            <Clock className="h-3 w-3 text-sage-500 sm:h-3.5 sm:w-3.5" />
             {item.availableFrom}–{item.availableTo}
           </span>
         </div>
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
-          <div>
-            <span className="hidden w-fit rounded-full bg-cream-100 px-3 py-1 text-[11px] font-medium text-charcoal-600 sm:inline-block">
-              {item.stockLabel}
-            </span>
-            <div className="flex items-baseline gap-1.5 sm:mt-1 sm:gap-2">
+        {/* Mobile: stock pill terlihat, Desktop: sama */}
+        <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-2.5">
+          <span className="inline-flex w-fit rounded-full bg-cream-100 px-2.5 py-1 text-[10px] font-medium leading-none text-charcoal-600 sm:px-3 sm:py-1 sm:text-[11px]">
+            {item.stockLabel}
+          </span>
+        </div>
+
+        {/* Harga + CTA: mobile row, desktop column full-width button */}
+        <div className="mt-auto flex items-end justify-between gap-2 pt-2 sm:mt-3 sm:flex-col sm:items-stretch sm:justify-start sm:gap-2">
+          <div className="flex flex-col gap-0.5 sm:gap-1">
+            <div className="flex flex-wrap items-baseline gap-1 sm:gap-1.5">
               {item.originalPrice > item.discountedPrice && (
-                <span className="text-[11px] text-charcoal-500 line-through sm:text-xs">
+                <span className="text-[11px] leading-none text-charcoal-500 line-through sm:text-xs">
                   {formatRupiah(item.originalPrice)}
                 </span>
               )}
-              <span className="text-sm font-bold leading-none text-primary sm:text-[16px]">
+              <span className="text-[14px] font-bold leading-none text-primary sm:text-[16px]">
                 {formatRupiah(item.discountedPrice)}
               </span>
             </div>
           </div>
 
           {isUnavailable ? (
-            <div className="hidden items-center justify-center rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-400 sm:inline-flex sm:w-full sm:px-4 sm:py-2.5 sm:text-sm">
-              {item.stockLabel === "Habis" ? "Stok Habis" : "Di Luar Jam Jual"}
+            <div className="inline-flex shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-[11px] font-semibold leading-none text-zinc-400 sm:mt-3 sm:w-full sm:px-4 sm:py-2.5 sm:text-sm">
+              {item.stockLabel === "Habis" ? "Habis" : "Tutup"}
             </div>
           ) : (
             <button
@@ -157,7 +160,7 @@ export function FoodCard({
                 handleOpen();
               }}
               className={cn(
-                "inline-flex shrink-0 items-center justify-center rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold text-white shadow-sm transition-colors hover:bg-caramel focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 sm:mt-3 sm:w-full sm:px-4 sm:py-2.5 sm:text-sm",
+                "inline-flex shrink-0 items-center justify-center rounded-full bg-primary px-3.5 py-1.5 text-[11px] font-semibold leading-none text-white shadow-sm transition-colors hover:bg-caramel focus-visible:ring-2 focus-visible:ring-caramel focus-visible:ring-offset-2 sm:mt-3 sm:w-full sm:px-4 sm:py-2.5 sm:text-sm",
                 FOCUS_RING,
               )}
             >

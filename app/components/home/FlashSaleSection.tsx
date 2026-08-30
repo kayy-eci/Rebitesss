@@ -610,7 +610,7 @@ export function FlashSaleSection({
               variants={{
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.07 } },
-              }}                  className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4"
+              }}                  className="grid grid-flow-col auto-cols-[75%] snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4 sm:grid-flow-row sm:auto-cols-auto sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:pb-0 lg:grid-cols-3 xl:grid-cols-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {visibleItems.map((item) => (
                 <motion.div
@@ -623,6 +623,7 @@ export function FlashSaleSection({
                       transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
                     },
                   }}
+                  className="min-w-0 snap-start"
                 >
                   <UrgentCard
                     item={item}

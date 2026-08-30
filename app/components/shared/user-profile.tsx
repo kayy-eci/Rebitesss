@@ -43,6 +43,7 @@ import { formatRupiah } from "@/lib/data";
 import type { StoredOrder } from "@/lib/types";
 import { SmartImage } from "./SmartImage";
 import { ProfileSidebarNav } from "./profile-sidebar-nav";
+import { MobileNavbar } from "./MobileNavbar";
 import { MobileBottomNav } from "./MobileBottomNav";
 import {
   Dialog,
@@ -833,10 +834,10 @@ function LikedFoodsSection() {
             </p>
           </div>
           <Link
-            href="/cari"
+            href="/home"
             className="inline-flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-caramel hover:text-white"
           >
-            Cari Makanan
+            Jelajahi Makanan
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -855,7 +856,7 @@ function LikedFoodsSection() {
               ? `/detail/product?id=${detail.id}`
               : fav.productId
                 ? `/detail/product?id=${fav.productId}`
-                : "/cari";
+                : "/home";
             return (
               <li key={fav.id}>
                 <Link
@@ -994,10 +995,13 @@ export function UserProfile() {
   return (
     <div className="relative min-h-screen bg-[#F8F9FA] lg:bg-cream-50">
       {}
-      <ProfileSidebarNav
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
+      <div className="lg:hidden"><MobileNavbar /></div>
+      <div className="hidden lg:block">
+        <ProfileSidebarNav
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+      </div>
 
       <div className="lg:pl-[280px]">
         <MobileBottomNav />
@@ -1016,7 +1020,7 @@ export function UserProfile() {
           </span>
         </div>
 
-        <main className="relative mx-auto max-w-[1100px] px-4 pb-24 pt-4 sm:pb-20 sm:pt-6 lg:px-8 lg:pt-8">
+        <main className="relative mx-auto max-w-[1100px] px-4 pb-24 pt-[120px] sm:pb-20 sm:pt-6 lg:px-8 lg:pt-8">
           {}
           <div className="hidden lg:block">
             <h1 className="mt-1 font-display text-2xl font-semibold tracking-tight text-primary">

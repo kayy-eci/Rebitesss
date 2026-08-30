@@ -46,6 +46,7 @@ import {
   getFlashDiscountPercent,
 } from "@/lib/flash-sale";
 import { STORE_SETTINGS_UPDATED_EVENT } from "@/lib/store-settings-storage";
+import { isVendorReallyOpen } from "@/lib/store-status";
 
 function sellerProductToFoodItem(
   sp: SellerProduct,
@@ -73,6 +74,7 @@ function sellerProductToFoodItem(
 }
 
 function isOpenNow(openHours: string): boolean {
+  // Deprecated: gunakan isOpenNow dari lib/store-status untuk konsistensi
   const match = openHours.match(
     /(\d{1,2})\.(\d{2})\s*[–-]\s*(\d{1,2})\.(\d{2})/,
   );
@@ -377,8 +379,8 @@ function StoreDetailContent() {
   }, [storeId]);
 
   useEffect(() => {
-    if (vendor) setOpenNow(vendor.isOpen);
-  }, [vendor?.isOpen]);
+    if (vendor) setOpenNow(isVendorReallyOpen({ isOpen: vendor.isOpen, openHours: vendor.openHours }));
+  }, [vendor?.isOpen, vendor?.openHours]);
 
   const featuredIds = useMemo(
     () => new Set(storeProducts.filter((sp) => sp.featured).map((sp) => sp.id)),

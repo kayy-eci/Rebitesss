@@ -9,6 +9,7 @@ import { VendorCard } from '@/app/components/home/VendorCard';
 import { SoftBlob } from '@/app/components/shared/ornaments';
 import { SELLER_VENDOR_SLUG } from '@/lib/product-storage';
 import { useSellerPlan } from '@/lib/seller-plan';
+import { isVendorReallyOpen } from '@/lib/store-status';
 
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
@@ -20,13 +21,12 @@ export function VendorSection() {
   const { plan } = useSellerPlan();
   const { vendors, loading } = useCatalog();
 
-  // Rekomendasi hanya tampilkan toko dengan badge Buka (isOpen). Badge hanya ikut setting isOpen penjual, bukan jam operasional.
+  // Logic buka/tutup: isOpen (toggle penjual) DAN isOpenNow(openHours) harus true
   const sortedVendors = useMemo(() => {
-    const openOnly = vendors.filter((v) => v.isOpen);
+    const openOnly = vendors.filter((v) => isVendorReallyOpen(v));
     if (!plan.priorityListing) return openOnly;
     return [...openOnly].sort(
-      (a, b) =>
-        Number(b.id === SELLER_VENDOR_SLUG) - Number(a.id === SELLER_VENDOR_SLUG)
+      (a, b) => Number(b.id === SELLER_VENDOR_SLUG) - Number(a.id === SELLER_VENDOR_SLUG)
     );
   }, [vendors, plan.priorityListing]);
 

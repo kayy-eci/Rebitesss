@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils';
 import { SmartImage } from '@/app/components/shared/SmartImage';
 import type { Vendor } from '@/lib/types';
 
+import { isVendorReallyOpen, isOpenNow } from '@/lib/store-status';
+
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50';
 
@@ -20,9 +22,8 @@ export function VendorCard({
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    // Badge Buka/Tutup hanya ikut setting isOpen penjual, bukan jam operasional
-    setIsOpen(vendor.isOpen);
-  }, [vendor.isOpen]);
+    setIsOpen(isVendorReallyOpen({ isOpen: vendor.isOpen, openHours: vendor.openHours }));
+  }, [vendor.isOpen, vendor.openHours]);
 
   return (
     <div
