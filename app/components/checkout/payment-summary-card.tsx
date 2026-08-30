@@ -47,9 +47,7 @@ export function PaymentSummaryCard() {
       ref={cardRef}
       className={cn(
         "relative overflow-hidden rounded-3xl bg-cream-100 p-5 transition-shadow duration-300 sm:p-6",
-        stuck
-          ? "shadow-xl shadow-primary/10"
-          : "shadow-md shadow-primary/5"
+        stuck ? "shadow-xl shadow-primary/10" : "shadow-md shadow-primary/5",
       )}
     >
       <DotPattern className="pointer-events-none absolute inset-0 h-full w-full text-primary/[0.05]" />
@@ -59,14 +57,14 @@ export function PaymentSummaryCard() {
           Ringkasan Pesanan
         </p>
 
-        { }
+        {}
         <div className="mt-4 flex items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-charcoal-900">
               {draft.productName}
             </p>
             <p className="mt-0.5 text-xs text-charcoal-500">
-              {draft.vendorName} Â· x{quantity}
+              {draft.vendorName} · x{quantity}
             </p>
           </div>
           <p className="shrink-0 text-right text-sm font-medium tabular-nums text-charcoal-900">
@@ -74,10 +72,12 @@ export function PaymentSummaryCard() {
           </p>
         </div>
 
-        { }
+        {}
         <dl className="mt-5 space-y-3 border-t border-sage-500/20 pt-4 text-sm">
           <div className="flex items-center justify-between gap-4">
-            <dt className="text-charcoal-500">Total sementara ({quantity} porsi)</dt>
+            <dt className="text-charcoal-500">
+              Total sementara ({quantity} porsi)
+            </dt>
             <dd className="font-medium tabular-nums text-charcoal-900">
               <AnimatedNumber value={summary.subtotal} format={formatRupiah} />
             </dd>
@@ -87,7 +87,10 @@ export function PaymentSummaryCard() {
             <div className="flex items-center justify-between gap-4">
               <dt className="text-primary">Diskon ({promo.code})</dt>
               <dd className="font-semibold tabular-nums text-primary">
-                âˆ’<AnimatedNumber value={summary.discount} format={formatRupiah} />
+                <AnimatedNumber
+                  value={summary.discount}
+                  format={formatRupiah}
+                />
               </dd>
             </div>
           )}
@@ -114,7 +117,7 @@ export function PaymentSummaryCard() {
             </div>
           )}
 
-          { }
+          {}
           <AnimatePresence initial={false}>
             {summary.coinUsed > 0 && (
               <motion.div
@@ -128,7 +131,10 @@ export function PaymentSummaryCard() {
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-primary">ReBites Coin</dt>
                   <dd className="font-semibold tabular-nums text-primary">
-                    <AnimatedNumber value={summary.coinDiscount} format={formatRupiah} />
+                    <AnimatedNumber
+                      value={summary.coinDiscount}
+                      format={formatRupiah}
+                    />
                   </dd>
                 </div>
               </motion.div>
@@ -136,7 +142,7 @@ export function PaymentSummaryCard() {
           </AnimatePresence>
         </dl>
 
-        { }
+        {}
         <div className="mt-5 flex items-center gap-3 rounded-xl border border-caramel/30 bg-caramel/10 px-3.5 py-2.5">
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-caramel text-white shadow-sm">
             <Coins className="h-4 w-4" />
@@ -144,7 +150,10 @@ export function PaymentSummaryCard() {
           <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold text-charcoal-900">
               Dapatkan +
-              <AnimatedNumber value={summary.coinEarned} format={(v) => v.toLocaleString('id-ID')} />{" "}
+              <AnimatedNumber
+                value={summary.coinEarned}
+                format={(v) => v.toLocaleString("id-ID")}
+              />{" "}
               ReBites Coin
             </p>
             <p className="text-[11px] leading-snug text-charcoal-500">
@@ -179,12 +188,12 @@ export function PaymentSummaryCard() {
             "mx-auto mt-6 flex w-fit items-center whitespace-nowrap rounded-full px-8 py-3.5 text-sm font-semibold transition-colors duration-200",
             canPay
               ? "bg-primary text-white shadow-lg shadow-primary/25 hover:bg-caramel"
-              : "cursor-not-allowed bg-sage-100 text-sage-500"
+              : "cursor-not-allowed bg-sage-100 text-sage-500",
           )}
         >
           {submitting
-            ? "Memproses pesananâ€¦"
-            : `Pesan Sekarang Â· ${formatRupiah(summary.total)}`}
+            ? "Memproses pesanan"
+            : `Pesan Sekarang · ${formatRupiah(summary.total)}`}
         </motion.button>
 
         {!canPay && !submitting && missingRequirement && (
@@ -195,7 +204,7 @@ export function PaymentSummaryCard() {
 
         <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-charcoal-500">
           <Lock className="h-3.5 w-3.5 text-primary" />
-          Transaksi terenkripsi Â· Dana ditahan sampai pesanan diterima
+          Transaksi terenkripsi · Dana ditahan sampai pesanan diterima
         </p>
       </div>
     </div>
