@@ -219,24 +219,6 @@ export default function Home() {
           className="pointer-events-none absolute -right-32 -top-32 h-[32rem] w-[32rem] rounded-full bg-primary-foreground/[0.06] blur-3xl"
         />
 
-        <div className="absolute right-10 top-24 hidden lg:block">
-          <div className="relative h-28 w-28">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-full border border-caramel/30"
-            />
-            <span className="pointer-events-none absolute left-1/2 top-1/2 flex h-[4.5rem] w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border border-caramel/40 bg-primary shadow-[0_16px_32px_-16px_rgba(0,0,0,0.55)]">
-              <Image
-                src="/logo.png"
-                alt="Logo ReBites"
-                width={72}
-                height={72}
-                className="h-full w-full object-cover"
-              />
-            </span>
-          </div>
-        </div>
-
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal delay={0.05}>
             <div className="mb-10 text-center lg:mb-14">
