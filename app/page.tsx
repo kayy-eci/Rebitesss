@@ -13,6 +13,7 @@ import { HeroFoodCarousel } from "@/app/components/hero-food-carousel";
 import { SmartImage } from "@/app/components/SmartImage";
 import { SubscriptionSection } from "@/app/components/subscription/subscription-section";
 import { FaqSection } from "@/app/components/faq-section";
+import { FlashSaleGrid } from "@/app/components/flash-sale-grid";
 import {
   Carousel,
   CarouselContent,
@@ -366,6 +367,8 @@ export default function Home() {
       </section>
 
       <HeroFoodCarousel />
+
+      <FlashSaleGrid />
 
       <HowItWorks />
 

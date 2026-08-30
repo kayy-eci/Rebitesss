@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState, useRef, useId, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -190,23 +190,9 @@ function foodItemToPlate(food: FoodItem): PlateFood {
     rating: food.rating,
     reviewCount,
     stockLabel: food.stockLabel,
-    description: `${food.name} dari ${food.vendorName} adalah menu surplus berkualitas dengan harga yang lebih hemat.`,
+    description: `${food.name} dari ${food.vendorName}, menu berkualitas dengan harga yang terjangkau.`,
   };
 }
-
-const BADGE_CLIP = (() => {
-  const teeth = 36;
-  const points: string[] = [];
-  for (let t = 0; t < teeth; t++) {
-    const a = (t / teeth) * Math.PI * 2;
-    const b = ((t + 0.5) / teeth) * Math.PI * 2;
-    points.push(
-      `${(50 + 50 * Math.cos(a)).toFixed(3)}% ${(50 + 50 * Math.sin(a)).toFixed(3)}%`,
-      `${(50 + 45 * Math.cos(b)).toFixed(3)}% ${(50 + 45 * Math.sin(b)).toFixed(3)}%`
-    );
-  }
-  return `polygon(${points.join(", ")})`;
-})();
 
 export function HeroFoodCarousel() {
   const [foodIndex, setFoodIndex] = useState(0);
@@ -215,14 +201,14 @@ export function HeroFoodCarousel() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFilter, setSearchFilter] = useState<FilterKey>("terdekat");
   const wheelApi = useRef<OptionWheelApi | null>(null);
-  const { urgentItems } = useCatalog();
+  const { foodItems } = useCatalog();
 
   const displayFoods: PlateFood[] = useMemo(
     () =>
-      urgentItems.length > 0
-        ? urgentItems.map(foodItemToPlate)
+      foodItems.length > 0
+        ? foodItems.map(foodItemToPlate)
         : (FOODS as PlateFood[]),
-    [urgentItems],
+    [foodItems],
   );
 
   const safeIndex = Math.min(
@@ -266,7 +252,7 @@ export function HeroFoodCarousel() {
     <section
       id="rekomendasi"
       data-nav="cream"
-      className="grain-overlay relative scroll-mt-28 overflow-hidden bg-secondary pt-24 pb-20 lg:scroll-mt-32 lg:pt-36 lg:pb-28"
+      className="grain-overlay relative flex min-h-[100svh] flex-col overflow-hidden bg-secondary pt-20 pb-12 lg:pt-20 lg:pb-16"
     >
       <div className="relative z-10 mx-auto w-full max-w-[min(100vw,1600px)] px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-3xl text-center">
@@ -280,8 +266,8 @@ export function HeroFoodCarousel() {
             Pilihan terbaik untukmu hari ini
           </h2>
           <p className="mx-auto mt-4 max-w-xl font-sans text-sm leading-[1.8] text-muted-foreground sm:text-base">
-            Putar piring dan temukan menu surplus pilihan dari UMKM terbaik di
-            Kota Depok.
+            Putar piring dan temukan makanan favorit dari UMKM terbaik di Kota
+            Depok.
           </p>
         </Reveal>
 
@@ -296,7 +282,7 @@ export function HeroFoodCarousel() {
             showInlineResults
             onSelectResult={handleSelectResult}
             variant="light"
-            items={urgentItems}
+            items={foodItems}
           />
         </Reveal>
 
@@ -321,7 +307,7 @@ export function HeroFoodCarousel() {
               <div className="relative mx-auto w-full max-w-[15rem] sm:max-w-[30rem] lg:mr-[-2rem] lg:max-w-[42rem]">
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -inset-y-2 left-0 right-0 z-0 rounded-l-full border-2 border-white bg-primary shadow-[0_44px_80px_-42px_rgba(63,107,74,0.75)] ring-1 ring-inset ring-caramel/30"
+                  className="pointer-events-none absolute -inset-y-2 left-0 right-0 z-0 rounded-l-full border-2 border-white bg-green-700 shadow-[0_44px_80px_-42px_rgba(63,107,74,0.75)] ring-1 ring-inset ring-caramel/30"
                 />
                 <div className="relative overflow-hidden rounded-l-full" style={{ height: plateSize + 10 }}>
                   <div
@@ -355,36 +341,16 @@ export function HeroFoodCarousel() {
                     />
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-primary to-transparent"
+                      className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-green-700 to-transparent"
                     />
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-primary to-transparent"
+                      className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-green-700 to-transparent"
                     />
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-primary to-transparent"
+                      className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-green-700 to-transparent"
                     />
-                  </div>
-
-                  <div
-                    aria-hidden
-                    className="absolute right-20 top-1/2 z-20 hidden h-16 w-16 -translate-y-1/2 flex-col items-center justify-center bg-caramel text-white [filter:drop-shadow(0_16px_22px_rgba(192,138,62,0.55))] sm:h-24 sm:w-24 lg:flex lg:h-32 lg:w-32"
-                    style={{ clipPath: BADGE_CLIP }}
-                  >
-                    <span className="font-display text-base font-bold leading-none text-white sm:text-2xl lg:text-3xl">
-                      30%
-                    </span>
-                    <span className="mt-1 font-sans text-[8px] font-bold uppercase tracking-[0.18em] text-white sm:text-[10px] lg:text-xs">
-                      OFF
-                    </span>
-                  </div>
-
-                  <div
-                    aria-hidden
-                    className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[#E53935] px-4 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-[0_10px_20px_-10px_rgba(229,57,53,0.7)]"
-                  >
-                    Flash Sale
                   </div>
 
                   <div
@@ -423,8 +389,8 @@ function FoodPlate({ image }: { image: string }) {
       <defs>
         <radialGradient id={gradId} cx="50%" cy="42%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="72%" stopColor="hsl(var(--secondary))" />
-          <stop offset="100%" stopColor="hsl(var(--border))" />
+          <stop offset="72%" stopColor="#F4F1E9" />
+          <stop offset="100%" stopColor="#DFDAC8" />
         </radialGradient>
 
         <clipPath id={clipId}>
@@ -439,7 +405,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="92"
         fill="none"
-        stroke="hsl(var(--border))"
+        stroke="#DEDACF"
         strokeWidth="2.5"
       />
 
@@ -448,11 +414,11 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="88"
         fill="none"
-        stroke="hsl(var(--border))"
+        stroke="#E6E1D1"
         strokeWidth="1.5"
       />
 
-      <circle cx="100" cy="100" r="86" fill="hsl(var(--secondary))" />
+      <circle cx="100" cy="100" r="86" fill="#F7F5EF" />
 
       <image
         href={image}
@@ -469,7 +435,7 @@ function FoodPlate({ image }: { image: string }) {
         cy="100"
         r="84"
         fill="none"
-        stroke="hsl(var(--secondary))"
+        stroke="#F7F5EF"
         strokeWidth="4"
       />
 
