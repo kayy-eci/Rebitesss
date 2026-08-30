@@ -153,9 +153,7 @@ export function HeroSection() {
                     navIsDark ? "text-white" : "text-primary",
                   )}
                 >
-                  <span className="font-display text-2xl font-medium">
-                    Re
-                  </span>
+                  <span className="font-display text-2xl font-medium">Re</span>
                   <span className="font-display text-2xl font-light italic">
                     Bites
                   </span>
@@ -168,7 +166,9 @@ export function HeroSection() {
                     <Link
                       href={link.href}
                       onClick={(e) => scrollToSection(e, link.label, link.href)}
-                      aria-current={activeNav === link.label ? "page" : undefined}
+                      aria-current={
+                        activeNav === link.label ? "page" : undefined
+                      }
                       className={cn(
                         "relative py-1 font-inter text-sm transition-colors duration-300",
                         activeNav === link.label
@@ -301,7 +301,6 @@ export function HeroSection() {
               className="specular-button--outer-green !cursor-default !px-8 !py-2.5 font-sans !text-sm font-semibold uppercase tracking-[0.18em]"
               onClick={() => undefined}
             >
-              <MapPin className="h-4 w-4" />
               {t("Khusus Wilayah Kota Depok", "Only in Depok City")}
             </SpecularButton>
 
@@ -341,9 +340,9 @@ export function HeroSection() {
             </div>
 
             <p className="mt-6 max-w-2xl font-sans text-base leading-[1.8] text-muted-foreground sm:text-lg">
-              ReBites menghubungkan Anda dengan makanan surplus berkualitas
-              dari pelaku UMKM Kota Depok - lebih hemat, tetap layak konsumsi,
-              dan bebas food waste.
+              Nikmati makanan surplus berkualitas dari UMKM Kota Depok dengan
+              harga lebih hemat, tetap layak konsumsi, dan tanpa membuang
+              makanan.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
@@ -385,7 +384,6 @@ export function HeroSection() {
             </div>
           </div>
         </div>
-
       </section>
     </div>
   );
@@ -659,7 +657,6 @@ function HeroOrganicArt() {
           strokeWidth="2"
           opacity="0.5"
         />
-
 
         <circle
           cx="255"
@@ -942,4 +939,3 @@ function FoodPlate({ image }: { image: string }) {
     </svg>
   );
 }
-

@@ -9,7 +9,7 @@ import {
 } from "react";
 import type { MouseEventHandler } from "react";
 import { Renderer, Program, Mesh, Triangle, Color } from "ogl";
-
+import "./SpecularButton.css";
 type SpecularButtonProps = {
   children?: ReactNode;
   as?: "button" | "span" | "div";

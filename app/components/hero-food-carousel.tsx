@@ -257,7 +257,6 @@ export function HeroFoodCarousel() {
       <div className="relative z-10 mx-auto w-full max-w-[min(100vw,1600px)] px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-3xl text-center">
           <div className="flex items-center justify-center gap-2">
-            <Leaf className="h-4 w-4 text-caramel" />
             <span className="font-sans text-[11px] font-bold uppercase tracking-[0.22em] text-caramel">
               Rekomendasi Makanan
             </span>
