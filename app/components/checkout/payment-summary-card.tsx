@@ -128,7 +128,7 @@ export function PaymentSummaryCard() {
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-primary">ReBites Coin</dt>
                   <dd className="font-semibold tabular-nums text-primary">
-                    âˆ’<AnimatedNumber value={summary.coinDiscount} format={formatRupiah} />
+                    <AnimatedNumber value={summary.coinDiscount} format={formatRupiah} />
                   </dd>
                 </div>
               </motion.div>

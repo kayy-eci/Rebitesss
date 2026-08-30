@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ProfileNavbar } from "@/app/components/shared/navbar";
 import { MobileNavbar } from "@/app/components/shared/MobileNavbar";
@@ -18,15 +18,30 @@ import { StoreClosedModal } from "@/app/components/shared/StoreClosedModal";
 import { useStoreClosedModal } from "@/lib/store-closed-modal-store";
 import { useProductDetail } from "@/app/components/detail-product/use-product-detail";
 import { SUBSCRIPTION_PLANS } from "@/lib/subscription-plans";
+import { useCurrentUser } from "@/lib/current-user";
+import { getSellerStoreSettings } from "@/lib/store-settings-storage";
 
 import { ArrowRight } from "lucide-react";
 
 export default function HomePage() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+  const [hasStore, setHasStore] = useState(false);
+  const { userId } = useCurrentUser();
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null,
   );
   const storeClosedModal = useStoreClosedModal();
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const settings = await getSellerStoreSettings();
+      if (mounted) setHasStore(!!settings);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [userId]);
 
   const handleViewDetail = useCallback((id: string) => {
     setSelectedProductId(id);
@@ -257,7 +272,11 @@ export default function HomePage() {
 
                       <div className="relative mt-auto pt-8">
                         <MagneticButton
-                          href={`/langganan/pembayaran?plan=${plan.slug}&billing=${billing}`}
+                          href={
+                            userId && hasStore
+                              ? `/langganan/pembayaran?plan=${plan.slug}&billing=${billing}`
+                              : `/auth/register/penjual?plan=${plan.slug}&billing=${billing}`
+                          }
                           variant="outline"
                           className="group w-full bg-white"
                         >

@@ -215,19 +215,25 @@ async function fetchLocalFollowedStores(): Promise<FollowedStore[]> {
         }
       }
       
+      const prettyName = key
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
       results.push({
         umkmId: key,
         slug: key,
-        name: key,
+        name: prettyName,
         logoUrl: null,
         category: null,
         rating: 5,
       });
     } catch {
+      const prettyName = key
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
       results.push({
         umkmId: key,
         slug: key,
-        name: key,
+        name: prettyName,
         logoUrl: null,
         category: null,
         rating: 5,
@@ -245,7 +251,7 @@ export async function getFollowedStores(): Promise<FollowedStore[]> {
     }
     const { data, error } = await supabase
       .from('store_follows')
-      .select('created_at, umkm_profiles(id, slug, business_name, logo_url, category, rating)')
+      .select('umkm_id, created_at, umkm_profiles(id, slug, business_name, logo_url, category, rating)')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
     if (error || !data) {
@@ -254,19 +260,23 @@ export async function getFollowedStores(): Promise<FollowedStore[]> {
       if (local.length > 0) return local;
       return [];
     }
-    const remote = data.map((row: FollowRow) => {
-      const umkm = row.umkm_profiles as
-        | { id: string; slug: string | null; business_name: string | null; logo_url: string | null; category: string | null; rating: number | null }
-        | null;
-      return {
-        umkmId: umkm?.id ?? '',
-        slug: umkm?.slug ?? null,
-        name: umkm?.business_name ?? 'Toko',
-        logoUrl: umkm?.logo_url ?? null,
-        category: umkm?.category ?? null,
-        rating: Number(umkm?.rating ?? 5),
-      };
-    });
+    const remote = data
+      .map((row: FollowRow) => {
+        const umkm = row.umkm_profiles as
+          | { id: string; slug: string | null; business_name: string | null; logo_url: string | null; category: string | null; rating: number | null }
+          | null;
+        const umkmId = umkm?.id ?? String(row.umkm_id ?? '');
+        if (!umkmId) return null;
+        return {
+          umkmId,
+          slug: umkm?.slug ?? null,
+          name: umkm?.business_name ?? umkm?.slug ?? umkmId,
+          logoUrl: umkm?.logo_url ?? null,
+          category: umkm?.category ?? null,
+          rating: Number(umkm?.rating ?? 5),
+        };
+      })
+      .filter(Boolean) as FollowedStore[];
     
     const localKeys = getLocalFollowedKeys();
     const remoteIds = new Set(remote.map((r) => r.umkmId).concat(remote.map((r) => r.slug).filter(Boolean) as string[]));
@@ -277,9 +287,13 @@ export async function getFollowedStores(): Promise<FollowedStore[]> {
           const umkmId = await resolveUmkmId(key);
           if (umkmId) {
             const { data } = await supabase.from('umkm_profiles').select('id, slug, business_name, logo_url, category, rating').eq('id', umkmId).maybeSingle();
-            if (data) return { umkmId: data.id, slug: data.slug ?? key, name: data.business_name ?? key, logoUrl: data.logo_url ?? null, category: data.category ?? null, rating: Number(data.rating ?? 5) } as FollowedStore;
+            if (data) {
+              const prettyFromKey = key.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+              return { umkmId: data.id, slug: data.slug ?? key, name: data.business_name ?? prettyFromKey, logoUrl: data.logo_url ?? null, category: data.category ?? null, rating: Number(data.rating ?? 5) } as FollowedStore;
+            }
           }
-          return { umkmId: key, slug: key, name: key, logoUrl: null, category: null, rating: 5 } as FollowedStore;
+          const prettyName = key.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+          return { umkmId: key, slug: key, name: prettyName, logoUrl: null, category: null, rating: 5 } as FollowedStore;
         })
       );
       return [...remote, ...extra];

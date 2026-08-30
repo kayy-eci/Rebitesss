@@ -187,7 +187,7 @@ export function SubscriptionSection() {
 
                 <div className="relative mt-auto pt-8">
                   <MagneticButton
-                    href={`/langganan/pembayaran?plan=${plan.slug}&billing=${billing}`}
+                    href={`/auth/register?plan=${plan.slug}&billing=${billing}`}
                     variant="outline"
                     className="group w-full bg-white"
                   >

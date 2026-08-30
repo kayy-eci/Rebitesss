@@ -745,12 +745,12 @@ function FollowedStoresSection() {
       ) : (
         <ul className="mt-4 grid gap-2 sm:grid-cols-1">
           {stores.map((store) => (
-            <li key={store.umkmId}>
+            <li key={store.umkmId || store.slug || store.name}>
               <Link
                 href={`/detail/toko?id=${store.slug ?? store.umkmId}`}
                 className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
+                <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
                   {store.logoUrl ? (
                     <SmartImage
                       src={store.logoUrl}
@@ -758,7 +758,7 @@ function FollowedStoresSection() {
                     />
                   ) : (
                     <span className="font-display text-lg font-semibold text-primary">
-                      {store.name.charAt(0).toUpperCase()}
+                      {(store.name || "?").charAt(0).toUpperCase()}
                     </span>
                   )}
                 </span>
@@ -788,7 +788,13 @@ function FollowedStoresSection() {
 function LikedFoodsSection() {
   const { foods, hydrated } = useLikedFoods();
   const { foodItems } = useCatalog();
-  const catalogMap = new Map((foodItems || []).map((f: any) => [f.id, f]));
+  // catalog id bisa slug atau uuid -> index semua kunci agar foto tidak hilang (bug slug vs uuid)
+  const catalogMap = new Map<string, any>();
+  for (const f of (foodItems || []) as any[]) {
+    if (f.id) catalogMap.set(String(f.id), f);
+    if (f.slug) catalogMap.set(String(f.slug), f);
+    if (f.rawId) catalogMap.set(String(f.rawId), f);
+  }
 
   return (
     <motion.section
@@ -858,17 +864,17 @@ function LikedFoodsSection() {
                 ? `/detail/product?id=${fav.productId}`
                 : "/home";
             return (
-              <li key={fav.id}>
+              <li key={fav.id || fav.productId}>
                 <Link
                   href={href}
                   className="group flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-white p-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-caramel/40 hover:shadow-sm hover:shadow-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
+                  <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-sage-100 ring-1 ring-sage-100">
                     {image ? (
                       <SmartImage src={image} alt={name} />
                     ) : (
                       <span className="font-display text-lg font-semibold text-primary">
-                        {name.charAt(0).toUpperCase()}
+                        {(name || "?").charAt(0).toUpperCase()}
                       </span>
                     )}
                   </span>

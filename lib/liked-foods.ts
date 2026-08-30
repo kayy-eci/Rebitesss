@@ -167,19 +167,19 @@ export async function getLikedFoods(): Promise<LikedFood[]> {
     try {
       const { data, error } = await supabase
         .from('product_favorites')
-        .select('product_id, created_at, products(id, name, image_url, price)')
+        .select('product_id, created_at, products(id, slug, name, image_url, surplus_price, original_price)')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(100);
       if (!error && data) {
         return data.map((row: any) => {
-          const prod = row.products as { id: string; name: string | null; image_url: string | null; price: number | null } | null;
+          const prod = row.products as { id: string; slug: string | null; name: string | null; image_url: string | null; surplus_price: number | null; original_price: number | null } | null;
           return {
             id: String(row.product_id),
             productId: String(row.product_id),
             name: prod?.name ?? undefined,
             image: prod?.image_url ?? null,
-            price: prod?.price ?? null,
+            price: prod?.surplus_price ?? prod?.original_price ?? null,
           };
         });
       }

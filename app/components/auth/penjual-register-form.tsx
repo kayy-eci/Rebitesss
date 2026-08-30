@@ -299,6 +299,18 @@ export default function PenjualRegisterForm() {
             setDirection(1);
             setStep(3);
           }
+          const planParam = params.get("plan");
+          if (
+            planParam === "basic" ||
+            planParam === "standar" ||
+            planParam === "premium"
+          ) {
+            setSelectedPlan(planParam);
+          }
+          const billingParam = params.get("billing");
+          if (billingParam === "monthly" || billingParam === "yearly") {
+            setBilling(billingParam);
+          }
         }
 
         setSessionReady(true);

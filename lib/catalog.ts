@@ -45,7 +45,10 @@ function productToFoodItem(row: ProductRow): FoodItem {
     discountedPrice: row.surplus_price ?? 0,
     discountPercent: row.discount_percent ?? 0,
     expiresAt: row.expires_at ?? undefined,
-  };
+    // tambahan untuk lookup robust foto makanan disukai (id slug vs uuid)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...({ slug: row.slug ?? row.id, rawId: row.id } as any),
+  } as FoodItem;
 }
 
 function umkmToVendor(row: UmkmRow, itemCount: number): Vendor {

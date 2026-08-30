@@ -197,7 +197,16 @@ export default function AuthForm({
       }
 
       const params = new URLSearchParams(window.location.search);
-      window.location.href = params.get("redirect") || redirectTo;
+      const planParam = params.get("plan");
+      const billingParam = params.get("billing");
+      const penjualRegisterTarget =
+        planParam === "basic" || planParam === "standar" || planParam === "premium"
+          ? `/auth/register/penjual?plan=${planParam}&billing=${
+              billingParam === "yearly" ? "yearly" : "monthly"
+            }`
+          : null;
+      window.location.href =
+        params.get("redirect") || penjualRegisterTarget || redirectTo;
     } catch (err) {
       const message = err instanceof Error ? err.message : "";
       if (message.includes("Supabase env")) {
