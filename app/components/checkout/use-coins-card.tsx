@@ -66,7 +66,7 @@ export function UseCoinsCard() {
                 <span className="font-semibold tabular-nums text-charcoal-900">
                   {coinBalance.toLocaleString('id-ID')} Coin
                 </span>{' '}
-                Â· 1 Coin = Rp1
+                · 1 Coin = Rp1
               </>
             ) : (
               'Kamu belum memiliki Coin.'
