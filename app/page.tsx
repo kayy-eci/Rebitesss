@@ -73,7 +73,7 @@ const TESTIMONIALS: Testimonial[] = [
     role: "Pelanggan rutin",
     quote:
       "Saya kerap memesan ketika tidak sempat keluar rumah. Soto Mie Bogornya lezat dengan harga yang wajar. Sudah beberapa kali membeli dan selalu merasa puas.",
-    rating: 5,
+    rating: 4,
     initials: "AF",
     photo:
       "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop",
